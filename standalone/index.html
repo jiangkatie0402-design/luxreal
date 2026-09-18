@@ -113,8 +113,8 @@ button { font-family: inherit; }
 .footer-brand .nav-logo img { height: 30px; }
 .nav-links { display: flex; align-items: center; gap: 6px; }
 .nav-links a {
-  font-size: 14px; color: var(--text-dim); padding: 8px 14px; border-radius: 100px;
-  transition: color .2s, background .2s;
+  font-size: 14px; color: var(--text-dim); padding: 8px 12px; border-radius: 100px;
+  transition: color .2s, background .2s; white-space: nowrap;
 }
 .nav-links a:hover { color: var(--text); background: rgba(255,255,255,0.05); }
 .nav-right { display: flex; align-items: center; gap: 14px; }
@@ -475,7 +475,7 @@ button { font-family: inherit; }
 .privacy-body a.link { color: var(--blue-pale); border-bottom: 1px solid rgba(26,122,248,0.45); }
 
 /* ---------- responsive ---------- */
-@media (max-width: 980px) {
+@media (max-width: 900px) {
   .nav-links { display: none; }
   .nav-burger { display: flex; }
   .hero-panel-inner { grid-template-columns: 1fr; }
