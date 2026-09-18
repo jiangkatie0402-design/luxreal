@@ -26,6 +26,9 @@
   --wine:          #7c3346;
   --grad-line:     linear-gradient(90deg, transparent, var(--amber), transparent);
   --grad-text:     linear-gradient(120deg, #f0cd9a 0%, #cd8f4e 45%, #e8b877 100%);
+  --blue:          #0049f5;
+  --blue-light:    #1a7af8;
+  --grad-btn:      linear-gradient(90deg, #0049f5 0%, #1a7af8 100%);
   --radius-lg:     22px;
   --radius-md:     14px;
   --radius-sm:     9px;
@@ -85,14 +88,14 @@ button { font-family: inherit; }
   white-space: nowrap;
 }
 .btn-primary {
-  background: linear-gradient(135deg, var(--amber-light), var(--amber));
-  color: #12100c;
+  background: var(--grad-btn);
+  color: #fff;
 }
-.btn-primary:hover { transform: translateY(-2px); }
+.btn-primary:hover { transform: translateY(-2px); filter: brightness(1.08); }
 .btn-ghost {
   background: transparent; border-color: var(--border-2); color: var(--text);
 }
-.btn-ghost:hover { border-color: var(--amber); color: var(--amber-light); transform: translateY(-2px); }
+.btn-ghost:hover { border-color: var(--blue-light); color: var(--blue-light); transform: translateY(-2px); }
 .btn-sm { padding: 9px 18px; font-size: 13px; }
 
 /* ---------- nav ---------- */
@@ -129,7 +132,7 @@ button { font-family: inherit; }
   background: transparent; color: var(--text-dim); display: flex; align-items: center; justify-content: center;
   cursor: pointer; transition: all .25s var(--ease);
 }
-.icon-btn:hover { color: var(--text); border-color: var(--amber); background: rgba(205,143,78,0.08); }
+.icon-btn:hover { color: var(--text); border-color: var(--blue-light); background: rgba(26,122,248,0.10); }
 .nav-burger { display: none; width: 40px; height: 40px; border-radius: 50%; border: 1px solid var(--border-2); background: none; align-items: center; justify-content: center; cursor: pointer; color: var(--text); }
 
 .mobile-panel {
@@ -356,13 +359,13 @@ button { font-family: inherit; }
   border: 1px solid var(--border-2); background: none; color: var(--text-dim); cursor: pointer;
   display: flex; align-items: center; justify-content: center; transition: all .2s;
 }
-.modal-close:hover { color: var(--text); border-color: var(--amber); }
+.modal-close:hover { color: var(--text); border-color: var(--blue-light); }
 .modal-tabs { display: flex; gap: 4px; background: var(--surface); border-radius: 100px; padding: 4px; margin-bottom: 28px; }
 .modal-tab {
   flex: 1; text-align: center; padding: 9px 0; border-radius: 100px; font-size: 13px; font-weight: 600;
   color: var(--text-dim); cursor: pointer; transition: all .25s;
 }
-.modal-tab.active { background: var(--grad-text); color: #12100c; }
+.modal-tab.active { background: var(--grad-btn); color: #fff; }
 .modal-title { font-family: 'Fraunces', serif; font-size: 24px; margin-bottom: 6px; }
 .modal-sub { font-size: 13px; color: var(--text-faint); margin-bottom: 28px; }
 .field { margin-bottom: 16px; }
@@ -372,7 +375,7 @@ button { font-family: inherit; }
   background: var(--surface); color: var(--text); font-size: 14px; font-family: inherit; outline: none;
   transition: border-color .2s;
 }
-.field input:focus { border-color: var(--amber); }
+.field input:focus { border-color: var(--blue-light); }
 .modal-submit { width: 100%; margin-top: 10px; }
 .modal-note { text-align: center; font-size: 12px; color: var(--text-faint); margin-top: 20px; }
 .modal-toast {
