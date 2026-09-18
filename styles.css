@@ -99,12 +99,9 @@ button { font-family: inherit; }
   padding: 13px 32px; background: rgba(8,9,10,0.78); backdrop-filter: blur(18px) saturate(140%);
   border-bottom: 1px solid var(--border);
 }
-.nav-logo { display: flex; align-items: center; gap: 10px; font-weight: 700; font-size: 19px; letter-spacing: -0.01em; z-index: 2; font-family: 'Plus Jakarta Sans', sans-serif; }
-.nav-mark {
-  width: 28px; height: 26px; flex-shrink: 0;
-  display: flex; align-items: center; justify-content: center;
-}
-.nav-mark svg { width: 100%; height: 100%; }
+.nav-logo { display: flex; align-items: center; z-index: 2; }
+.nav-logo img { height: 26px; width: auto; display: block; }
+.footer-brand .nav-logo img { height: 30px; }
 .nav-links { display: flex; align-items: center; gap: 6px; }
 .nav-links a {
   font-size: 14px; color: var(--text-dim); padding: 8px 14px; border-radius: 100px;
