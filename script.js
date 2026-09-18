@@ -7,6 +7,16 @@ function onScroll() {
 window.addEventListener('scroll', onScroll, { passive: true });
 onScroll();
 
+// ---------- language toggle (visual only) ----------
+document.querySelectorAll('.lang-toggle').forEach(group => {
+  group.querySelectorAll('button').forEach(btn => {
+    btn.addEventListener('click', () => {
+      group.querySelectorAll('button').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+    });
+  });
+});
+
 // ---------- mobile menu ----------
 const burger = document.querySelector('.nav-burger');
 const mobilePanel = document.querySelector('.mobile-panel');
