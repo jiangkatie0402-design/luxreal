@@ -1,0 +1,818 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>关于我们 — LuxReal</title>
+<meta name="description" content="了解 LuxReal 的品牌故事、核心价值观与发展历程。">
+<link rel="icon" href="data:,">
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,400;0,9..144,500;0,9..144,600;1,9..144,300;1,9..144,400;1,9..144,500&family=Manrope:wght@300;400;500;600;700;800&display=swap');
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --bg:            #08090a;
+  --bg-soft:       #0d0f10;
+  --surface:       #121416;
+  --surface-2:     #17191c;
+  --border:        rgba(245,243,238,0.09);
+  --border-2:      rgba(245,243,238,0.16);
+  --text:          #f5f3ee;
+  --text-dim:      rgba(245,243,238,0.62);
+  --text-faint:    rgba(245,243,238,0.36);
+  --amber:         #cd8f4e;
+  --amber-light:   #f0cd9a;
+  --wine:          #7c3346;
+  --grad-line:     linear-gradient(90deg, transparent, var(--amber), transparent);
+  --grad-text:     linear-gradient(120deg, #f0cd9a 0%, #cd8f4e 45%, #e8b877 100%);
+  --radius-lg:     22px;
+  --radius-md:     14px;
+  --radius-sm:     9px;
+  --ease:          cubic-bezier(.16,.8,.24,1);
+}
+
+html { scroll-behavior: smooth; }
+html, body { background: var(--bg); color: var(--text); }
+body {
+  font-family: 'Manrope', sans-serif;
+  font-size: 16px;
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+  overflow-x: hidden;
+  position: relative;
+}
+
+/* film-grain / noise texture */
+body::after {
+  content: '';
+  position: fixed; inset: 0; z-index: 2; pointer-events: none;
+  opacity: 0.035; mix-blend-mode: overlay;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+
+a { color: inherit; text-decoration: none; }
+ul { list-style: none; }
+img, svg { display: block; max-width: 100%; }
+button { font-family: inherit; }
+::selection { background: var(--amber); color: #100b06; }
+
+.serif { font-family: 'Fraunces', serif; }
+.italic { font-style: italic; }
+
+.container {
+  width: 100%; max-width: 1200px; margin: 0 auto; padding: 0 32px;
+}
+
+.eyebrow {
+  display: inline-flex; align-items: center; gap: 10px;
+  font-size: 12px; letter-spacing: 0.22em; text-transform: uppercase;
+  color: var(--amber-light); font-weight: 600; margin-bottom: 20px;
+}
+.eyebrow::before { content: ''; width: 22px; height: 1px; background: var(--amber); }
+
+.grad-text {
+  background: var(--grad-text); -webkit-background-clip: text; background-clip: text;
+  -webkit-text-fill-color: transparent; color: transparent;
+}
+
+/* ---------- buttons ---------- */
+.btn {
+  display: inline-flex; align-items: center; justify-content: center; gap: 8px;
+  padding: 14px 30px; border-radius: 100px; font-size: 14px; font-weight: 600;
+  letter-spacing: 0.02em; cursor: pointer; border: 1px solid transparent;
+  font-family: inherit; transition: transform .35s var(--ease), border-color .3s, background .3s, color .3s;
+  white-space: nowrap;
+}
+.btn-primary {
+  background: linear-gradient(135deg, var(--amber-light), var(--amber));
+  color: #12100c;
+}
+.btn-primary:hover { transform: translateY(-2px); }
+.btn-ghost {
+  background: transparent; border-color: var(--border-2); color: var(--text);
+}
+.btn-ghost:hover { border-color: var(--amber); color: var(--amber-light); transform: translateY(-2px); }
+.btn-sm { padding: 9px 18px; font-size: 13px; }
+
+/* ---------- nav ---------- */
+.nav {
+  position: fixed; top: 0; left: 0; right: 0; z-index: 200;
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 20px 32px; transition: padding .35s var(--ease), background .35s, border-color .35s;
+  border-bottom: 1px solid transparent;
+}
+.nav.scrolled {
+  padding: 13px 32px; background: rgba(8,9,10,0.78); backdrop-filter: blur(18px) saturate(140%);
+  border-bottom: 1px solid var(--border);
+}
+.nav-logo { display: flex; align-items: center; gap: 10px; font-weight: 700; font-size: 17px; letter-spacing: 0.02em; z-index: 2; }
+.nav-mark {
+  width: 30px; height: 30px; border-radius: 8px; position: relative; flex-shrink: 0;
+  background: linear-gradient(150deg, #1c1a16, #0a0908);
+  border: 1px solid var(--border-2);
+  display: flex; align-items: center; justify-content: center;
+}
+.nav-mark span {
+  width: 10px; height: 10px; border-radius: 50%;
+  background: var(--grad-text);
+}
+.nav-links { display: flex; align-items: center; gap: 6px; }
+.nav-links a {
+  font-size: 14px; color: var(--text-dim); padding: 8px 14px; border-radius: 100px;
+  transition: color .2s, background .2s;
+}
+.nav-links a:hover { color: var(--text); background: rgba(255,255,255,0.05); }
+.nav-right { display: flex; align-items: center; gap: 10px; }
+.icon-btn {
+  width: 40px; height: 40px; border-radius: 50%; border: 1px solid var(--border-2);
+  background: transparent; color: var(--text-dim); display: flex; align-items: center; justify-content: center;
+  cursor: pointer; transition: all .25s var(--ease);
+}
+.icon-btn:hover { color: var(--text); border-color: var(--amber); background: rgba(205,143,78,0.08); }
+.nav-burger { display: none; width: 40px; height: 40px; border-radius: 50%; border: 1px solid var(--border-2); background: none; align-items: center; justify-content: center; cursor: pointer; color: var(--text); }
+
+.mobile-panel {
+  position: fixed; inset: 0; z-index: 190; background: var(--bg);
+  display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 8px;
+  opacity: 0; pointer-events: none; transition: opacity .3s var(--ease);
+}
+.mobile-panel.show { opacity: 1; pointer-events: auto; }
+.mobile-panel a { font-family: 'Fraunces', serif; font-size: 30px; padding: 12px 0; color: var(--text); }
+
+/* ---------- hero ---------- */
+.hero {
+  position: relative; min-height: 100vh; display: flex; flex-direction: column;
+  justify-content: center; padding: 160px 0 100px; overflow: hidden;
+}
+.hero-glow {
+  position: absolute; z-index: 0; pointer-events: none; inset: -20% -10% auto -10%; height: 900px;
+  background:
+    radial-gradient(ellipse 42% 55% at 22% 20%, rgba(205,143,78,0.16) 0%, transparent 70%),
+    radial-gradient(ellipse 38% 45% at 82% 8%, rgba(124,51,70,0.20) 0%, transparent 70%),
+    radial-gradient(ellipse 50% 40% at 50% 90%, rgba(205,143,78,0.08) 0%, transparent 70%);
+  filter: blur(10px);
+}
+.hero-grid {
+  position: absolute; inset: 0; z-index: 0; opacity: 0.35;
+  background-image: linear-gradient(var(--border) 1px, transparent 1px), linear-gradient(90deg, var(--border) 1px, transparent 1px);
+  background-size: 64px 64px;
+  mask-image: radial-gradient(ellipse 60% 50% at 50% 20%, black 0%, transparent 75%);
+}
+.hero-inner { position: relative; z-index: 1; }
+.hero-title {
+  font-family: 'Fraunces', serif; font-weight: 400; font-size: clamp(40px, 6.4vw, 84px);
+  line-height: 1.06; letter-spacing: -0.02em; max-width: 920px; margin-bottom: 28px;
+}
+.hero-title em { font-style: italic; font-weight: 400; }
+.hero-sub {
+  font-size: 18px; color: var(--text-dim); max-width: 560px; margin-bottom: 44px; font-weight: 400; line-height: 1.7;
+}
+.hero-cta { display: flex; align-items: center; gap: 16px; margin-bottom: 72px; flex-wrap: wrap; }
+.hero-cta .btn-ghost { gap: 10px; }
+
+.hero-trust { display: flex; align-items: center; gap: 20px; flex-wrap: wrap; }
+.trust-avatars { display: flex; }
+.trust-avatars span {
+  width: 30px; height: 30px; border-radius: 50%; border: 2px solid var(--bg);
+  margin-left: -8px; background: linear-gradient(140deg, #2a241c, #14110d);
+  display:flex; align-items:center; justify-content:center; font-size: 10px; color: var(--amber-light);
+}
+.trust-avatars span:first-child { margin-left: 0; }
+.hero-trust-text { font-size: 13px; color: var(--text-faint); }
+
+.hero-panel-wrap { position: relative; z-index: 1; margin-top: 20px; }
+.hero-panel {
+  border: 1px solid var(--border-2); border-radius: var(--radius-lg);
+  background: linear-gradient(165deg, rgba(255,255,255,0.03), rgba(255,255,255,0));
+  padding: 4px; backdrop-filter: blur(6px);
+}
+.hero-panel-inner {
+  border-radius: calc(var(--radius-lg) - 4px);
+  background: var(--bg-soft);
+  min-height: 380px; position: relative; overflow: hidden;
+  display: grid; grid-template-columns: 1.1fr 0.9fr;
+}
+.hero-panel-mesh {
+  position: absolute; inset: 0;
+  background:
+    radial-gradient(circle at 30% 30%, rgba(205,143,78,0.35), transparent 45%),
+    radial-gradient(circle at 75% 65%, rgba(124,51,70,0.4), transparent 50%),
+    conic-gradient(from 200deg at 50% 50%, #1a140d, #221316, #16110c, #1a140d);
+  opacity: .8; animation: meshmove 18s linear infinite;
+}
+@keyframes meshmove { 0%{filter:hue-rotate(0deg);} 100%{filter:hue-rotate(20deg);} }
+.hero-panel-left { position: relative; padding: 30px; display: flex; flex-direction: column; justify-content: flex-end; }
+.hero-scene-tag {
+  position: relative; align-self: flex-start; font-size: 12px; padding: 6px 14px; border-radius: 100px;
+  background: rgba(8,9,10,0.55); border: 1px solid var(--border-2); backdrop-filter: blur(6px); margin-bottom: auto;
+}
+.hero-scene-caption { position: relative; font-family:'Fraunces',serif; font-style: italic; font-size: 22px; color: #fff; }
+.hero-panel-right {
+  border-left: 1px solid var(--border); padding: 26px; display: flex; flex-direction: column; gap: 18px; justify-content: center;
+}
+.hero-stat-row { display: flex; align-items: baseline; justify-content: space-between; }
+.hero-stat-row .n { font-family: 'Fraunces', serif; font-size: 26px; }
+.hero-stat-row .l { font-size: 12px; color: var(--text-faint); }
+.hero-divider { height: 1px; background: var(--border); }
+
+/* ---------- section shell ---------- */
+.section { padding: 130px 0; position: relative; }
+.section-tight { padding: 90px 0; }
+.section-head { max-width: 640px; margin-bottom: 64px; }
+.section-title { font-family: 'Fraunces', serif; font-weight: 400; font-size: clamp(30px, 4vw, 46px); line-height: 1.16; letter-spacing: -0.01em; }
+.section-desc { color: var(--text-dim); font-size: 16px; margin-top: 16px; line-height: 1.8; max-width: 560px; }
+.section-foot-line { display: flex; align-items: flex-end; justify-content: space-between; gap: 24px; flex-wrap: wrap; }
+
+/* reveal-on-scroll */
+.reveal { opacity: 0; transform: translateY(28px); transition: opacity .9s var(--ease), transform .9s var(--ease); }
+.reveal.in { opacity: 1; transform: none; }
+.stagger > * { transition-delay: calc(var(--i, 0) * 90ms); }
+
+/* ---------- scenario cards ---------- */
+.scenario-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1px; background: var(--border); border: 1px solid var(--border); border-radius: var(--radius-lg); overflow: hidden; }
+.scenario-card {
+  background: var(--bg-soft); padding: 40px 32px; position: relative; overflow: hidden;
+  transition: background .4s var(--ease);
+  min-height: 260px; display: flex; flex-direction: column;
+}
+.scenario-card:hover { background: var(--surface); }
+.scenario-card::before {
+  content: ''; position: absolute; top: -60px; right: -60px; width: 160px; height: 160px; border-radius: 50%;
+  background: radial-gradient(circle, rgba(205,143,78,0.16), transparent 70%); opacity: 0; transition: opacity .4s;
+}
+.scenario-card:hover::before { opacity: 1; }
+.scenario-icon {
+  width: 44px; height: 44px; border-radius: 12px; border: 1px solid var(--border-2);
+  display: flex; align-items: center; justify-content: center; margin-bottom: 26px; color: var(--amber-light);
+}
+.scenario-num { position: absolute; top: 30px; right: 32px; font-family: 'Fraunces', serif; font-style: italic; color: var(--text-faint); font-size: 14px; }
+.scenario-card h3 { font-size: 19px; font-weight: 600; margin-bottom: 10px; letter-spacing: -0.01em; }
+.scenario-card p { color: var(--text-dim); font-size: 14px; line-height: 1.75; margin-top: auto; }
+
+/* ---------- advantages ---------- */
+.adv-layout { display: grid; grid-template-columns: 1fr 1fr; gap: 70px; align-items: start; }
+.adv-list { display: flex; flex-direction: column; }
+.adv-item { display: flex; gap: 22px; padding: 30px 0; border-top: 1px solid var(--border); }
+.adv-item:last-child { border-bottom: 1px solid var(--border); }
+.adv-index { font-family: 'Fraunces', serif; font-style: italic; font-size: 20px; color: var(--amber-light); flex-shrink: 0; width: 34px; }
+.adv-item h3 { font-size: 18px; font-weight: 600; margin-bottom: 8px; }
+.adv-item p { color: var(--text-dim); font-size: 14px; line-height: 1.75; }
+
+.stat-card {
+  border: 1px solid var(--border-2); border-radius: var(--radius-lg); padding: 44px 36px;
+  background: linear-gradient(160deg, rgba(205,143,78,0.06), transparent 60%);
+  display: grid; grid-template-columns: 1fr 1fr; gap: 36px;
+}
+.stat-block .n { font-family: 'Fraunces', serif; font-size: 40px; }
+.stat-block .l { font-size: 13px; color: var(--text-faint); margin-top: 6px; }
+
+/* ---------- features ---------- */
+.feature-row { display: grid; grid-template-columns: 0.9fr 1.1fr; gap: 60px; align-items: center; padding: 70px 0; border-top: 1px solid var(--border); }
+.feature-row:last-child { border-bottom: 1px solid var(--border); }
+.feature-row.rev { grid-template-columns: 1.1fr 0.9fr; }
+.feature-row.rev .feature-visual { order: 2; }
+.feature-tag { display: inline-block; font-size: 12px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--amber-light); margin-bottom: 16px; }
+.feature-row h3 { font-family: 'Fraunces', serif; font-weight: 400; font-size: 30px; margin-bottom: 16px; letter-spacing: -0.01em; }
+.feature-row p { color: var(--text-dim); font-size: 15px; line-height: 1.85; margin-bottom: 22px; max-width: 460px; }
+.feature-points { display: flex; flex-direction: column; gap: 10px; }
+.feature-points li { display: flex; align-items: center; gap: 10px; font-size: 14px; color: var(--text-dim); }
+.feature-points li svg { color: var(--amber); flex-shrink: 0; }
+
+.feature-visual {
+  aspect-ratio: 4/3; border-radius: var(--radius-lg); border: 1px solid var(--border-2);
+  position: relative; overflow: hidden; background: var(--surface);
+}
+.fv-1 { background: radial-gradient(circle at 30% 20%, rgba(205,143,78,0.35), transparent 55%), radial-gradient(circle at 80% 80%, rgba(124,51,70,0.4), transparent 55%), #100e0b; }
+.fv-2 { background: repeating-linear-gradient(115deg, rgba(255,255,255,0.03) 0 2px, transparent 2px 22px), #0d0f10; }
+.fv-3 { background: conic-gradient(from 120deg at 50% 50%, #17110c, #241a12, #17110c); }
+.fv-grid-lines { position: absolute; inset: 18px; border: 1px solid var(--border-2); border-radius: 12px; }
+.fv-badge {
+  position: absolute; bottom: 18px; left: 18px; font-size: 12px; padding: 6px 12px; border-radius: 100px;
+  background: rgba(8,9,10,0.6); border: 1px solid var(--border-2); backdrop-filter: blur(6px);
+}
+.fv-ratio-set { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; gap: 14px; }
+.fv-ratio { border: 1px solid var(--border-2); border-radius: 6px; background: rgba(8,9,10,0.4); }
+.fv-r-916 { width: 46px; height: 82px; }
+.fv-r-11 { width: 64px; height: 64px; }
+.fv-r-169 { width: 96px; height: 54px; }
+.fv-wave { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; gap: 3px; padding: 0 30%; }
+.fv-wave span { width: 3px; background: var(--amber-light); border-radius: 2px; opacity: .8; }
+
+/* ---------- quickstart ---------- */
+.steps { display: grid; grid-template-columns: repeat(4, 1fr); gap: 24px; position: relative; }
+.steps::before {
+  content: ''; position: absolute; top: 26px; left: 6%; right: 6%; height: 1px;
+  background: repeating-linear-gradient(90deg, var(--border-2) 0 8px, transparent 8px 16px);
+  z-index: 0;
+}
+.step { position: relative; z-index: 1; }
+.step-num {
+  width: 54px; height: 54px; border-radius: 50%; background: var(--bg-soft); border: 1px solid var(--border-2);
+  display: flex; align-items: center; justify-content: center; font-family: 'Fraunces', serif; font-style: italic;
+  font-size: 18px; margin-bottom: 24px; color: var(--amber-light);
+}
+.step h3 { font-size: 17px; font-weight: 600; margin-bottom: 10px; }
+.step p { font-size: 14px; color: var(--text-dim); line-height: 1.75; }
+
+/* ---------- cta banner ---------- */
+.cta-banner {
+  border-radius: var(--radius-lg); border: 1px solid var(--border-2); padding: 84px 60px; text-align: center;
+  position: relative; overflow: hidden;
+  background: radial-gradient(ellipse 60% 90% at 50% 0%, rgba(205,143,78,0.14), transparent 70%), var(--bg-soft);
+}
+.cta-banner h2 { font-family: 'Fraunces', serif; font-weight: 400; font-size: clamp(28px, 4vw, 44px); margin-bottom: 18px; letter-spacing: -0.01em; }
+.cta-banner p { color: var(--text-dim); max-width: 480px; margin: 0 auto 36px; }
+.cta-btns { display: flex; align-items: center; justify-content: center; gap: 16px; flex-wrap: wrap; }
+
+/* ---------- footer ---------- */
+.footer { border-top: 1px solid var(--border); padding: 80px 0 32px; }
+.footer-top { display: grid; grid-template-columns: 1.4fr repeat(3, 1fr); gap: 40px; margin-bottom: 70px; }
+.footer-brand p { color: var(--text-dim); font-size: 14px; max-width: 280px; margin-top: 18px; line-height: 1.8; }
+.footer-col h4 { font-size: 13px; letter-spacing: 0.08em; text-transform: uppercase; color: var(--text-faint); margin-bottom: 18px; }
+.footer-col a { display: block; font-size: 14px; color: var(--text-dim); margin-bottom: 12px; transition: color .2s; }
+.footer-col a:hover { color: var(--amber-light); }
+.footer-social { display: flex; gap: 10px; margin-top: 20px; }
+.footer-bottom {
+  display: flex; align-items: center; justify-content: space-between; padding-top: 28px; border-top: 1px solid var(--border);
+  font-size: 13px; color: var(--text-faint); flex-wrap: wrap; gap: 12px;
+}
+
+/* ---------- auth modal ---------- */
+.modal-overlay {
+  position: fixed; inset: 0; z-index: 300; background: rgba(6,6,7,0.7); backdrop-filter: blur(6px);
+  display: flex; align-items: center; justify-content: center; opacity: 0; pointer-events: none;
+  transition: opacity .3s var(--ease); padding: 20px;
+}
+.modal-overlay.show { opacity: 1; pointer-events: auto; }
+.modal-card {
+  width: 100%; max-width: 400px; background: var(--bg-soft); border: 1px solid var(--border-2);
+  border-radius: var(--radius-lg); padding: 40px 36px; position: relative;
+  transform: translateY(16px) scale(.98); transition: transform .35s var(--ease);
+}
+.modal-overlay.show .modal-card { transform: none; }
+.modal-close {
+  position: absolute; top: 18px; right: 18px; width: 32px; height: 32px; border-radius: 50%;
+  border: 1px solid var(--border-2); background: none; color: var(--text-dim); cursor: pointer;
+  display: flex; align-items: center; justify-content: center; transition: all .2s;
+}
+.modal-close:hover { color: var(--text); border-color: var(--amber); }
+.modal-tabs { display: flex; gap: 4px; background: var(--surface); border-radius: 100px; padding: 4px; margin-bottom: 28px; }
+.modal-tab {
+  flex: 1; text-align: center; padding: 9px 0; border-radius: 100px; font-size: 13px; font-weight: 600;
+  color: var(--text-dim); cursor: pointer; transition: all .25s;
+}
+.modal-tab.active { background: var(--grad-text); color: #12100c; }
+.modal-title { font-family: 'Fraunces', serif; font-size: 24px; margin-bottom: 6px; }
+.modal-sub { font-size: 13px; color: var(--text-faint); margin-bottom: 28px; }
+.field { margin-bottom: 16px; }
+.field label { display: block; font-size: 12px; color: var(--text-faint); margin-bottom: 8px; letter-spacing: 0.03em; }
+.field input {
+  width: 100%; padding: 13px 15px; border-radius: var(--radius-sm); border: 1px solid var(--border-2);
+  background: var(--surface); color: var(--text); font-size: 14px; font-family: inherit; outline: none;
+  transition: border-color .2s;
+}
+.field input:focus { border-color: var(--amber); }
+.modal-submit { width: 100%; margin-top: 10px; }
+.modal-note { text-align: center; font-size: 12px; color: var(--text-faint); margin-top: 20px; }
+.modal-toast {
+  margin-top: 16px; font-size: 12.5px; text-align: center; color: var(--amber-light);
+  padding: 10px; border-radius: var(--radius-sm); background: rgba(205,143,78,0.08); border: 1px solid rgba(205,143,78,0.2);
+  display: none;
+}
+.modal-toast.show { display: block; }
+
+/* ---------- page hero (about / privacy) ---------- */
+.page-hero { padding: 170px 0 90px; position: relative; }
+.page-hero h1 { font-family: 'Fraunces', serif; font-weight: 400; font-size: clamp(36px, 5.6vw, 64px); max-width: 780px; letter-spacing: -0.02em; line-height: 1.12; }
+.page-hero p { color: var(--text-dim); max-width: 540px; margin-top: 22px; font-size: 17px; line-height: 1.8; }
+
+/* about page */
+.values-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1px; background: var(--border); border: 1px solid var(--border); border-radius: var(--radius-lg); overflow: hidden; }
+.value-card { background: var(--bg-soft); padding: 34px 26px; }
+.value-card svg { color: var(--amber-light); margin-bottom: 20px; }
+.value-card h3 { font-size: 16px; font-weight: 600; margin-bottom: 8px; }
+.value-card p { font-size: 13.5px; color: var(--text-dim); line-height: 1.7; }
+
+.timeline { display: flex; flex-direction: column; }
+.tl-item { display: grid; grid-template-columns: 140px 1fr; gap: 30px; padding: 34px 0; border-top: 1px solid var(--border); }
+.tl-item:last-child { border-bottom: 1px solid var(--border); }
+.tl-year { font-family: 'Fraunces', serif; font-style: italic; font-size: 22px; color: var(--amber-light); }
+.tl-body h3 { font-size: 17px; font-weight: 600; margin-bottom: 8px; }
+.tl-body p { font-size: 14px; color: var(--text-dim); line-height: 1.8; max-width: 560px; }
+
+.about-quote { border-left: 2px solid var(--amber); padding: 4px 0 4px 32px; margin: 10px 0; }
+.about-quote p { font-family: 'Fraunces', serif; font-style: italic; font-size: clamp(22px, 3vw, 30px); line-height: 1.5; color: var(--text); }
+.about-quote span { display: block; margin-top: 18px; font-size: 13px; color: var(--text-faint); font-family: 'Manrope', sans-serif; font-style: normal; }
+
+.team-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 24px; }
+.team-card { text-align: center; }
+.team-avatar {
+  width: 100%; aspect-ratio: 1; border-radius: var(--radius-md); margin-bottom: 16px;
+  background: linear-gradient(150deg, #201a12, #0d0b08); border: 1px solid var(--border-2);
+  display: flex; align-items: center; justify-content: center; font-family: 'Fraunces', serif; font-style: italic; font-size: 26px; color: var(--amber-light);
+}
+.team-card h4 { font-size: 14.5px; font-weight: 600; }
+.team-card span { font-size: 12.5px; color: var(--text-faint); }
+
+/* privacy page */
+.privacy-layout { display: grid; grid-template-columns: 260px 1fr; gap: 64px; align-items: start; }
+.privacy-nav { position: sticky; top: 110px; display: flex; flex-direction: column; gap: 4px; }
+.privacy-nav a { font-size: 13.5px; color: var(--text-faint); padding: 9px 14px; border-radius: var(--radius-sm); border-left: 2px solid transparent; transition: all .2s; }
+.privacy-nav a:hover, .privacy-nav a.active { color: var(--text); border-left-color: var(--amber); background: rgba(255,255,255,0.03); }
+.privacy-updated { font-size: 13px; color: var(--text-faint); margin-bottom: 50px; padding-bottom: 30px; border-bottom: 1px solid var(--border); }
+.privacy-body h2 { font-family: 'Fraunces', serif; font-weight: 400; font-size: 26px; margin: 54px 0 18px; letter-spacing: -0.01em; }
+.privacy-body h2:first-child { margin-top: 0; }
+.privacy-body p { color: var(--text-dim); font-size: 15px; line-height: 1.9; margin-bottom: 16px; }
+.privacy-body ul { margin: 0 0 16px 0; display: flex; flex-direction: column; gap: 10px; }
+.privacy-body li { color: var(--text-dim); font-size: 15px; line-height: 1.8; padding-left: 22px; position: relative; }
+.privacy-body li::before { content: ''; position: absolute; left: 0; top: 9px; width: 6px; height: 1px; background: var(--amber); }
+.privacy-body a.link { color: var(--amber-light); border-bottom: 1px solid rgba(205,143,78,0.4); }
+
+/* ---------- responsive ---------- */
+@media (max-width: 980px) {
+  .nav-links { display: none; }
+  .nav-burger { display: flex; }
+  .hero-panel-inner { grid-template-columns: 1fr; }
+  .hero-panel-right { border-left: none; border-top: 1px solid var(--border); }
+  .scenario-grid { grid-template-columns: repeat(2, 1fr); }
+  .adv-layout { grid-template-columns: 1fr; gap: 40px; }
+  .feature-row, .feature-row.rev { grid-template-columns: 1fr; }
+  .feature-row.rev .feature-visual { order: 0; }
+  .steps { grid-template-columns: repeat(2, 1fr); row-gap: 40px; }
+  .steps::before { display: none; }
+  .values-grid { grid-template-columns: repeat(2, 1fr); }
+  .team-grid { grid-template-columns: repeat(2, 1fr); }
+  .privacy-layout { grid-template-columns: 1fr; }
+  .privacy-nav { position: static; flex-direction: row; flex-wrap: wrap; margin-bottom: 20px; }
+  .footer-top { grid-template-columns: 1fr 1fr; }
+}
+@media (max-width: 640px) {
+  .container { padding: 0 20px; }
+  .scenario-grid { grid-template-columns: 1fr; }
+  .stat-card { grid-template-columns: 1fr; }
+  .steps { grid-template-columns: 1fr; }
+  .values-grid { grid-template-columns: 1fr; }
+  .team-grid { grid-template-columns: 1fr; }
+  .footer-top { grid-template-columns: 1fr; gap: 30px; }
+  .cta-banner { padding: 56px 26px; }
+  .hero { padding: 130px 0 70px; }
+}
+
+</style>
+</head>
+<body>
+
+<nav class="nav">
+  <a href="index.html" class="nav-logo">
+    <span class="nav-mark"><span></span></span>
+    LUXREAL
+  </a>
+  <div class="nav-links">
+    <a href="index.html#home">首页</a>
+    <a href="index.html#scenarios">应用场景</a>
+    <a href="index.html#advantages">核心优势</a>
+    <a href="index.html#features">产品特点</a>
+    <a href="index.html#quickstart">快速上手</a>
+    <a href="about.html">关于我们</a>
+  </div>
+  <div class="nav-right">
+    <button class="icon-btn" data-open-auth="login" aria-label="登录 / 注册">
+      <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4.4 3.6-7 8-7s8 2.6 8 7"/></svg>
+    </button>
+    <button class="btn btn-primary btn-sm" data-open-auth="register">开始创作</button>
+    <button class="nav-burger" aria-label="菜单">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 6h18M3 12h18M3 18h18"/></svg>
+    </button>
+  </div>
+</nav>
+
+<div class="mobile-panel">
+  <a href="index.html#home">首页</a>
+  <a href="index.html#scenarios">应用场景</a>
+  <a href="index.html#advantages">核心优势</a>
+  <a href="index.html#features">产品特点</a>
+  <a href="index.html#quickstart">快速上手</a>
+  <a href="about.html">关于我们</a>
+  <a href="privacy.html">隐私政策</a>
+</div>
+
+<header class="page-hero">
+  <div class="hero-glow" style="height:600px;"></div>
+  <div class="container" style="position:relative;">
+    <div class="eyebrow reveal">OUR STORY</div>
+    <h1 class="reveal">我们相信，<em class="serif italic grad-text">真实</em>本身<br>就是最高级的美学</h1>
+    <p class="reveal">LuxReal 成立的初衷很简单——让每一个拥有出色产品的品牌，都不必再为影像制作的门槛而妥协。我们把电影摄制团队的审美标准，交给了 AI。</p>
+  </div>
+</header>
+
+<section class="section-tight">
+  <div class="container">
+    <div class="about-quote reveal">
+      <p>"技术应该是隐形的。真正被记住的，永远是画面背后那份未经修饰的情感与质感。"</p>
+      <span>— LuxReal 创作团队</span>
+    </div>
+  </div>
+</section>
+
+<section class="section">
+  <div class="container">
+    <div class="section-head reveal">
+      <div class="eyebrow">我们的价值观</div>
+      <h2 class="section-title">驱动我们前行的四件事</h2>
+    </div>
+    <div class="values-grid stagger">
+      <div class="value-card reveal">
+        <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M12 2l2.6 6.6L21 11l-6.4 2.4L12 20l-2.6-6.6L3 11l6.4-2.4z"/></svg>
+        <h3>极致美学</h3>
+        <p>对光影、色彩与节奏的每一处细节，抱以近乎苛刻的追求。</p>
+      </div>
+      <div class="value-card reveal">
+        <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M12 3l7 3v6c0 4.5-3 7.6-7 9-4-1.4-7-4.5-7-9V6z"/></svg>
+        <h3>技术信任</h3>
+        <p>以企业级的安全标准，守护每一份品牌资产与创作内容。</p>
+      </div>
+      <div class="value-card reveal">
+        <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 3"/></svg>
+        <h3>真实表达</h3>
+        <p>拒绝千篇一律的模板感，让每个品牌保有独一无二的声音。</p>
+      </div>
+      <div class="value-card reveal">
+        <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M3 12h4l2-7 4 14 2-7h6"/></svg>
+        <h3>持续创新</h3>
+        <p>保持对新技术、新表达方式的敏感，不断突破生成的边界。</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section">
+  <div class="container">
+    <div class="section-head reveal">
+      <div class="eyebrow">发展历程</div>
+      <h2 class="section-title">从一个想法，到品牌的创作伙伴</h2>
+    </div>
+    <div class="timeline reveal">
+      <div class="tl-item">
+        <div class="tl-year">2023</div>
+        <div class="tl-body">
+          <h3>LuxReal 成立</h3>
+          <p>由一群来自影像与人工智能领域的创作者共同发起，希望重新定义品牌视觉内容的生产方式。</p>
+        </div>
+      </div>
+      <div class="tl-item">
+        <div class="tl-year">2024</div>
+        <div class="tl-body">
+          <h3>服务突破千家品牌</h3>
+          <p>核心生成引擎完成三次迭代，画面质感与品牌调性还原度获得客户广泛认可。</p>
+        </div>
+      </div>
+      <div class="tl-item">
+        <div class="tl-year">2025</div>
+        <div class="tl-body">
+          <h3>全球化扩展</h3>
+          <p>上线多语言支持与本地化模板库，服务范围拓展至亚洲、欧洲与北美市场。</p>
+        </div>
+      </div>
+      <div class="tl-item">
+        <div class="tl-year">2026</div>
+        <div class="tl-body">
+          <h3>新一代影像引擎发布</h3>
+          <p>推出面向高端场景的电影级渲染引擎，进一步缩短创作到发布的时间。</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section">
+  <div class="container">
+    <div class="section-head reveal">
+      <div class="eyebrow">创作团队</div>
+      <h2 class="section-title">来自影像、设计与技术的跨界组合</h2>
+    </div>
+    <div class="team-grid stagger">
+      <div class="team-card reveal">
+        <div class="team-avatar">M</div>
+        <h4>Mia Chen</h4>
+        <span>创意总监</span>
+      </div>
+      <div class="team-card reveal">
+        <div class="team-avatar">V</div>
+        <h4>Victor Lin</h4>
+        <span>技术负责人</span>
+      </div>
+      <div class="team-card reveal">
+        <div class="team-avatar">K</div>
+        <h4>Kai Sato</h4>
+        <span>视觉美学顾问</span>
+      </div>
+      <div class="team-card reveal">
+        <div class="team-avatar">S</div>
+        <h4>Sofia Reyes</h4>
+        <span>品牌策略负责人</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section section-tight">
+  <div class="container">
+    <div class="cta-banner reveal">
+      <h2>与我们一起，<br>重新定义品牌影像</h2>
+      <p>无论是加入团队，还是成为我们的下一位客户，我们都期待与你对话。</p>
+      <div class="cta-btns">
+        <button class="btn btn-primary" data-open-auth="register">开始创作</button>
+        <a href="#" class="btn btn-ghost">联系我们</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer class="footer">
+  <div class="container">
+    <div class="footer-top">
+      <div class="footer-brand">
+        <a href="index.html" class="nav-logo"><span class="nav-mark"><span></span></span>LUXREAL</a>
+        <p>LuxReal 是新一代 AI 影像创作平台，为高端品牌打造电影质感的视觉内容。</p>
+        <div class="footer-social">
+          <a class="icon-btn" href="#" aria-label="Instagram"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1"/></svg></a>
+          <a class="icon-btn" href="#" aria-label="X"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M4 4l16 16M20 4L4 20"/></svg></a>
+          <a class="icon-btn" href="#" aria-label="LinkedIn"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="3" y="3" width="18" height="18" rx="3"/><path d="M8 11v5M8 8v.01M12 16v-5M12 11c0-1.5 3-2.5 4-1v5"/></svg></a>
+        </div>
+      </div>
+      <div class="footer-col">
+        <h4>产品</h4>
+        <a href="index.html#scenarios">应用场景</a>
+        <a href="index.html#advantages">核心优势</a>
+        <a href="index.html#features">产品特点</a>
+        <a href="index.html#quickstart">快速上手</a>
+      </div>
+      <div class="footer-col">
+        <h4>公司</h4>
+        <a href="about.html">关于我们</a>
+        <a href="privacy.html">隐私政策</a>
+        <a href="#">联系我们</a>
+      </div>
+      <div class="footer-col">
+        <h4>账户</h4>
+        <a href="#" data-open-auth="login">登录</a>
+        <a href="#" data-open-auth="register">注册</a>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <span>© 2026 LuxReal. All rights reserved.</span>
+      <span>Crafted for brands who see the difference.</span>
+    </div>
+  </div>
+</footer>
+
+<div class="modal-overlay" id="auth-modal">
+  <div class="modal-card">
+    <button class="modal-close" data-close-auth aria-label="关闭">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 6l12 12M18 6L6 18"/></svg>
+    </button>
+    <div class="modal-tabs">
+      <div class="modal-tab active" data-mode="login">登录</div>
+      <div class="modal-tab" data-mode="register">注册</div>
+    </div>
+    <h3 class="modal-title" id="modal-title">欢迎回来</h3>
+    <p class="modal-sub" id="modal-sub">登录以继续你的创作</p>
+    <form id="auth-form">
+      <div class="field" id="register-only" style="display:none;">
+        <label>品牌 / 姓名</label>
+        <input type="text" placeholder="你的品牌或姓名">
+      </div>
+      <div class="field">
+        <label>邮箱地址</label>
+        <input type="email" placeholder="you@brand.com" required>
+      </div>
+      <div class="field">
+        <label>密码</label>
+        <input type="password" placeholder="••••••••" required>
+      </div>
+      <button type="submit" class="btn btn-primary modal-submit" id="modal-submit-btn">登录</button>
+      <div class="modal-toast" id="auth-toast">演示环境 · 表单交互已就绪，实际账户系统即将上线</div>
+    </form>
+    <p class="modal-note">继续即表示你同意 LuxReal 的 <a href="privacy.html" class="link" style="color:var(--amber-light);">隐私政策</a></p>
+  </div>
+</div>
+
+<script>
+// ---------- nav scroll state ----------
+const nav = document.querySelector('.nav');
+function onScroll() {
+  if (!nav) return;
+  nav.classList.toggle('scrolled', window.scrollY > 20);
+}
+window.addEventListener('scroll', onScroll, { passive: true });
+onScroll();
+
+// ---------- mobile menu ----------
+const burger = document.querySelector('.nav-burger');
+const mobilePanel = document.querySelector('.mobile-panel');
+if (burger && mobilePanel) {
+  burger.addEventListener('click', () => mobilePanel.classList.toggle('show'));
+  mobilePanel.querySelectorAll('a').forEach(a => a.addEventListener('click', () => mobilePanel.classList.remove('show')));
+}
+
+// ---------- reveal on scroll ----------
+const revealEls = document.querySelectorAll('.reveal');
+if ('IntersectionObserver' in window && revealEls.length) {
+  const io = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('in');
+        io.unobserve(entry.target);
+      }
+    });
+  }, { threshold: 0.14, rootMargin: '0px 0px -60px 0px' });
+  revealEls.forEach(el => io.observe(el));
+} else {
+  revealEls.forEach(el => el.classList.add('in'));
+}
+
+// stagger index assignment
+document.querySelectorAll('.stagger').forEach(group => {
+  [...group.children].forEach((child, i) => child.style.setProperty('--i', i));
+});
+
+// ---------- auth modal ----------
+const modalOverlay = document.getElementById('auth-modal');
+const openTriggers = document.querySelectorAll('[data-open-auth]');
+const closeTriggers = document.querySelectorAll('[data-close-auth]');
+const modalTabs = document.querySelectorAll('.modal-tab');
+const authForm = document.getElementById('auth-form');
+const authToast = document.getElementById('auth-toast');
+const registerFields = document.getElementById('register-only');
+const modalTitle = document.getElementById('modal-title');
+const modalSub = document.getElementById('modal-sub');
+const modalSubmitBtn = document.getElementById('modal-submit-btn');
+
+function openAuth(mode) {
+  if (!modalOverlay) return;
+  modalOverlay.classList.add('show');
+  document.body.style.overflow = 'hidden';
+  setAuthMode(mode || 'login');
+}
+function closeAuth() {
+  if (!modalOverlay) return;
+  modalOverlay.classList.remove('show');
+  document.body.style.overflow = '';
+  if (authToast) authToast.classList.remove('show');
+}
+function setAuthMode(mode) {
+  modalTabs.forEach(t => t.classList.toggle('active', t.dataset.mode === mode));
+  if (registerFields) registerFields.style.display = mode === 'register' ? 'block' : 'none';
+  if (modalTitle) modalTitle.textContent = mode === 'register' ? '创建账户' : '欢迎回来';
+  if (modalSub) modalSub.textContent = mode === 'register' ? '注册 LuxReal，开启电影级影像创作' : '登录以继续你的创作';
+  if (modalSubmitBtn) modalSubmitBtn.textContent = mode === 'register' ? '创建账户' : '登录';
+  if (authToast) authToast.classList.remove('show');
+}
+
+openTriggers.forEach(el => el.addEventListener('click', (e) => {
+  e.preventDefault();
+  openAuth(el.dataset.openAuth || 'login');
+}));
+closeTriggers.forEach(el => el.addEventListener('click', closeAuth));
+modalTabs.forEach(tab => tab.addEventListener('click', () => setAuthMode(tab.dataset.mode)));
+if (modalOverlay) {
+  modalOverlay.addEventListener('click', (e) => { if (e.target === modalOverlay) closeAuth(); });
+}
+document.addEventListener('keydown', (e) => { if (e.key === 'Escape') closeAuth(); });
+if (authForm) {
+  authForm.addEventListener('submit', (e) => {
+    e.preventDefault();
+    if (authToast) authToast.classList.add('show');
+  });
+}
+
+// ---------- hero waveform bars ----------
+document.querySelectorAll('.fv-wave').forEach(wave => {
+  const bars = 24;
+  for (let i = 0; i < bars; i++) {
+    const bar = document.createElement('span');
+    const h = 14 + Math.round(Math.sin(i / 2) * 10 + Math.random() * 14);
+    bar.style.height = h + 'px';
+    wave.appendChild(bar);
+  }
+});
+
+// ---------- privacy scroll-spy ----------
+const privacyLinks = document.querySelectorAll('.privacy-nav a');
+if (privacyLinks.length) {
+  const sections = [...privacyLinks].map(a => document.querySelector(a.getAttribute('href')));
+  const spy = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        const id = '#' + entry.target.id;
+        privacyLinks.forEach(a => a.classList.toggle('active', a.getAttribute('href') === id));
+      }
+    });
+  }, { rootMargin: '-20% 0px -70% 0px' });
+  sections.forEach(s => s && spy.observe(s));
+}
+
+</script>
+</body>
+</html>
