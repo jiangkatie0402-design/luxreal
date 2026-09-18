@@ -38,24 +38,52 @@
   .topbar {
     position: fixed; top: 0; left: 0; right: 0; z-index: 100;
     display: flex; align-items: center; justify-content: space-between;
-    padding: 14px 24px;
+    padding: 14px 32px; gap: 24px;
     border-bottom: 1px solid var(--border);
     background: rgba(12,12,14,0.8); backdrop-filter: blur(16px);
   }
-  .topbar-logo { display: flex; align-items: center; gap: 9px; font-size: 15px; font-weight: 600; letter-spacing: -0.3px; }
+  .topbar-logo { display: flex; align-items: center; gap: 9px; font-size: 17px; font-weight: 700; letter-spacing: -0.3px; flex-shrink: 0; }
   .logo-mark {
-    width: 36px; height: 36px; border-radius: 10px;
-    background: #fff; display: flex; align-items: center; justify-content: center;
+    width: 26px; height: 26px; flex-shrink: 0;
+    display: flex; align-items: center; justify-content: center;
     overflow: hidden;
   }
-  .topbar-right { display: flex; gap: 8px; }
-  .tb-btn {
-    padding: 6px 14px; border-radius: 20px; font-size: 13px; font-weight: 500;
-    border: 1px solid var(--border2); background: transparent; color: var(--text2);
+  .logo-mark svg { width: 100%; height: 100%; }
+
+  .topbar-nav { display: flex; align-items: center; gap: 30px; }
+  .nav-link {
+    font-size: 14px; font-weight: 500; color: var(--text2); text-decoration: none;
+    white-space: nowrap; transition: color .15s;
+  }
+  .nav-link:hover { color: var(--text); }
+
+  .topbar-right { display: flex; align-items: center; gap: 14px; flex-shrink: 0; }
+
+  .lang-toggle {
+    display: flex; align-items: center; gap: 2px; padding: 3px;
+    background: var(--surface2); border: 1px solid var(--border2); border-radius: 20px;
+  }
+  .lang-opt {
+    border: none; background: transparent; color: var(--text2);
+    font-size: 12px; font-weight: 500; padding: 5px 13px; border-radius: 16px;
     cursor: pointer; font-family: inherit; transition: all .15s;
   }
-  .tb-btn:hover { color: var(--text); border-color: rgba(255,255,255,0.25); }
-  .tb-btn.upgrade { background: rgba(108,143,255,0.18); border-color: rgba(108,143,255,0.4); color: #a8bfff; font-weight: 600; }
+  .lang-opt.active { background: #fff; color: #0c0c0e; }
+  .lang-opt:not(.active):hover { color: var(--text); }
+
+  .avatar-btn {
+    width: 32px; height: 32px; border-radius: 50%; flex-shrink: 0;
+    border: 1px solid var(--border2); cursor: pointer;
+    background: linear-gradient(135deg,#ff8a6c,#ff5c8a);
+    display: flex; align-items: center; justify-content: center;
+    transition: transform .15s;
+  }
+  .avatar-btn:hover { transform: scale(1.06); }
+  .avatar-btn svg { width: 18px; height: 18px; }
+
+  @media (max-width: 900px) {
+    .topbar-nav { display: none; }
+  }
 
   /* PAGE 1 */
   #page-input {
@@ -336,10 +364,38 @@
 <body>
 
 <div class="topbar">
-  <div class="topbar-logo">LuxReal</div>
+  <div class="topbar-logo">
+    <div class="logo-mark">
+      <svg viewBox="0 0 24 24" fill="none">
+        <path d="M4 9L8.5 3.5H15.5L20 9L12 20.5L4 9Z" stroke="#f0f0f2" stroke-width="1.4" stroke-linejoin="round"/>
+        <path d="M4 9H20M8.5 3.5L11 9M15.5 3.5L13 9M11 9L12 20.5M13 9L12 20.5" stroke="#f0f0f2" stroke-width="1" stroke-linejoin="round" opacity="0.55"/>
+      </svg>
+    </div>
+    LuxReal
+  </div>
+
+  <nav class="topbar-nav">
+    <a href="#" class="nav-link">首页</a>
+    <a href="#" class="nav-link">应用场景</a>
+    <a href="#" class="nav-link">核心优势</a>
+    <a href="#" class="nav-link">用户反馈</a>
+    <a href="#" class="nav-link">开始创作</a>
+    <a href="#" class="nav-link">产品价格</a>
+  </nav>
+
   <div class="topbar-right">
-    <div class="tb-btn">65 credits</div>
-    <div class="tb-btn upgrade">Upgrade</div>
+    <div class="lang-toggle">
+      <button class="lang-opt" onclick="setLang(this,'en')">English</button>
+      <button class="lang-opt active" onclick="setLang(this,'zh')">中文</button>
+    </div>
+    <div class="avatar-btn" title="Assistant">
+      <svg viewBox="0 0 24 24" fill="none">
+        <circle cx="12" cy="11" r="6.5" fill="#fff" opacity="0.95"/>
+        <circle cx="9.6" cy="10.6" r="1.15" fill="#ff5c8a"/>
+        <circle cx="14.4" cy="10.6" r="1.15" fill="#ff5c8a"/>
+        <path d="M9.3 13.4c1.1 1 4.3 1 5.4 0" stroke="#ff5c8a" stroke-width="1.2" stroke-linecap="round" fill="none"/>
+      </svg>
+    </div>
   </div>
 </div>
 
@@ -652,6 +708,10 @@ function onGo() {
   startAnalyze();
 }
 function tp(el) { el.classList.toggle('on'); }
+function setLang(el, lang) {
+  el.parentElement.querySelectorAll('.lang-opt').forEach(o => o.classList.remove('active'));
+  el.classList.add('active');
+}
 
 async function startAnalyze() {
   document.getElementById('card-footer').classList.remove('show');
