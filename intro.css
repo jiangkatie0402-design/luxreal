@@ -1,0 +1,113 @@
+/* ============================================================
+   LuxReal cinematic intro — styles only.
+   Deleting intro.css + intro.js and their two <link>/<script>
+   references in index.html fully restores the page.
+   ============================================================ */
+
+/* Elements hidden until intro.js reveals them (landing / reveal phases).
+   Default state assumes the intro WILL run; intro.js adds
+   html.introSkip immediately (before body paints) when it decides not
+   to run, which the override block below makes instantly visible. */
+html:not(.introSkip) .nav .nav-logo,
+html:not(.introSkip) .nav-links,
+html:not(.introSkip) .nav-right,
+html:not(.introSkip) .hero-cinematic-content,
+html:not(.introSkip) .hero-cinematic-chip {
+  opacity: 0;
+}
+
+html.introSkip .nav .nav-logo,
+html.introSkip .nav-links,
+html.introSkip .nav-right,
+html.introSkip .hero-cinematic-content,
+html.introSkip .hero-cinematic-chip {
+  opacity: 1;
+}
+
+/* Redundant safety net: even if JS never runs at all, reduced-motion
+   users must never see a stuck-hidden page. */
+@media (prefers-reduced-motion: reduce) {
+  .nav .nav-logo, .nav-links, .nav-right, .hero-cinematic-content, .hero-cinematic-chip {
+    opacity: 1 !important;
+  }
+}
+
+/* Pre-paint safety net: covers the page before intro.js has even had a
+   chance to run (script parse/exec delay, slow network). Pure CSS, so it
+   applies before first paint. Handed off to #intro-root's own animated
+   mask the instant JS takes over (html.introRunning), and removed
+   outright once html.introSkip is set (intro decided not to run, or
+   finished). Without the :not(.introRunning) guard this would stay
+   opaque for the whole ~5s animation and hide the video reveal. */
+html:not(.introSkip):not(.introRunning)::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: 899;
+  background: #050505;
+}
+
+#intro-root {
+  position: fixed;
+  inset: 0;
+  z-index: 900;
+  pointer-events: none;
+  overflow: hidden;
+}
+
+#intro-mask {
+  position: absolute;
+  inset: 0;
+  background: #050505;
+  opacity: 1;
+}
+
+#intro-beam-svg {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  mix-blend-mode: screen;
+}
+
+#intro-dust-canvas {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  mix-blend-mode: screen;
+}
+
+#intro-grain {
+  position: absolute;
+  inset: 0;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  mix-blend-mode: overlay;
+  opacity: 0;
+}
+
+#intro-vignette {
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(ellipse 75% 75% at 50% 50%, transparent 45%, rgba(0,0,0,0.6) 100%);
+  opacity: 0;
+}
+
+#intro-landing-flash {
+  position: fixed;
+  z-index: 901;
+  pointer-events: none;
+  opacity: 0;
+}
+#intro-landing-flash svg { display: block; width: 100%; height: 100%; }
+#intro-landing-flash path { fill: #fff; opacity: 0; filter: drop-shadow(0 0 6px rgba(255,233,196,0.9)); }
+
+#intro-logo-glow {
+  position: fixed;
+  z-index: 901;
+  pointer-events: none;
+  border-radius: 30%;
+  opacity: 0;
+  background: radial-gradient(circle, rgba(255,233,196,0.9), transparent 70%);
+  filter: blur(6px);
+}
