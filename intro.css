@@ -70,14 +70,6 @@ html:not(.introSkip):not(.introRunning)::before {
   mix-blend-mode: screen;
 }
 
-#intro-dust-canvas {
-  position: absolute;
-  inset: 0;
-  width: 100%;
-  height: 100%;
-  mix-blend-mode: screen;
-}
-
 #intro-grain {
   position: absolute;
   inset: 0;

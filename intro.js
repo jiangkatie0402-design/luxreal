@@ -25,13 +25,11 @@
     SWEEP_DURATION: 1700,   // ms, 1.3s -> 3.0s
     RETURN_DURATION: 1200,  // ms, 3.0s -> 4.2s
     CONTENT_DELAY: 4500,    // ms from intro start
-    BEAM_INTENSITY: 1,
-    HAZE_LEVEL: 0.05,
-    BLUR_HALO: 30,
-    BLUR_BODY: 11,
-    BLUR_CORE: 3,
+    BEAM_INTENSITY: 1.2,
+    HAZE_LEVEL: 0.035,
+    BLUR_BODY: 6,
+    BLUR_CORE: 1.4,
     FLICKER_STRENGTH: 0.025,
-    PARTICLE_COUNT: 150,
     GRAIN_LEVEL: 0.05,
     VIGNETTE_LEVEL: 0.35,
     QUALITY: 'high'
@@ -68,7 +66,6 @@
   var isMobile = window.matchMedia && window.matchMedia('(max-width: 640px)').matches;
   if (isMobile) {
     CONFIG.QUALITY = 'low';
-    CONFIG.PARTICLE_COUNT = Math.round(CONFIG.PARTICLE_COUNT / 2);
   }
 
   // Overall failsafe: whatever happens, never leave the page stuck.
@@ -83,7 +80,7 @@
     boot();
   }
 
-  var root, maskEl, svg, dustCanvas, dustCtx, grainEl, vignetteEl;
+  var root, maskEl, svg, grainEl, vignetteEl;
   var navLogoIcon, navLogoText, navLogo, navLinks, navRight, heroContent, heroChip, video;
   var W = 0, H = 0, DIAG = 0;
   var rafId = null;
@@ -94,8 +91,6 @@
   var currentOrigin = { x: 0, y: 0 };
   var currentLength = 0;
   var currentBrightness = 1;
-  var particles = [];
-  var dustSprite = null;
   var svgLoadedOK = false;
 
   function boot() {
@@ -120,8 +115,6 @@
 
     buildDOM();
     measure();
-    buildDustSprite();
-    initParticles();
     window.addEventListener('resize', measure);
 
     window.addEventListener('pointerdown', onSkip, { passive: true });
@@ -162,10 +155,8 @@
     svg.setAttribute('id', 'intro-beam-svg');
     svg.innerHTML =
       '<defs>' +
-      '  <filter id="ib-blur-halo" x="-50%" y="-50%" width="200%" height="200%"><feGaussianBlur stdDeviation="' + CONFIG.BLUR_HALO + '"/></filter>' +
       '  <filter id="ib-blur-body" x="-50%" y="-50%" width="200%" height="200%"><feGaussianBlur stdDeviation="' + CONFIG.BLUR_BODY + '"/></filter>' +
       '  <filter id="ib-blur-core" x="-50%" y="-50%" width="200%" height="200%"><feGaussianBlur stdDeviation="' + CONFIG.BLUR_CORE + '"/></filter>' +
-      '  <filter id="ib-blur-glow" x="-100%" y="-100%" width="300%" height="300%"><feGaussianBlur stdDeviation="18"/></filter>' +
       '  <radialGradient id="ib-fade" gradientUnits="userSpaceOnUse">' +
       '    <stop offset="0%" stop-color="#FFE9C4" stop-opacity="1"/>' +
       '    <stop offset="14%" stop-color="#FFE9C4" stop-opacity="0.85"/>' +
@@ -174,33 +165,25 @@
       '    <stop offset="100%" stop-color="#FAE8C8" stop-opacity="0.10"/>' +
       '  </radialGradient>' +
       '  <radialGradient id="ib-core-glow" gradientUnits="userSpaceOnUse">' +
-      '    <stop offset="0%" stop-color="#FFF6E4" stop-opacity="0.95"/>' +
+      '    <stop offset="0%" stop-color="#FFFFFF" stop-opacity="1"/>' +
+      '    <stop offset="40%" stop-color="#FFF3D6" stop-opacity="0.7"/>' +
       '    <stop offset="100%" stop-color="#FFE9C4" stop-opacity="0"/>' +
       '  </radialGradient>' +
       '  <radialGradient id="ib-wide-glow" gradientUnits="userSpaceOnUse">' +
-      '    <stop offset="0%" stop-color="#FFE9C4" stop-opacity="0.5"/>' +
+      '    <stop offset="0%" stop-color="#FFF3D6" stop-opacity="0.75"/>' +
+      '    <stop offset="60%" stop-color="#FFE9C4" stop-opacity="0.25"/>' +
       '    <stop offset="100%" stop-color="#FFE9C4" stop-opacity="0"/>' +
       '  </radialGradient>' +
       '</defs>' +
       '<g id="ib-source-glow"><circle id="ib-wide-circle" fill="url(#ib-wide-glow)"/><circle id="ib-core-circle" fill="url(#ib-core-glow)"/></g>' +
       '<path id="ib-haze" fill="url(#ib-fade)" opacity="' + CONFIG.HAZE_LEVEL + '"/>' +
-      (CONFIG.QUALITY === 'low' ? '' :
-      '<g id="ib-halo" filter="url(#ib-blur-halo)" opacity="0.15">' +
-      '  <polygon id="ib-halo-a"/><polygon id="ib-halo-b"/><polygon id="ib-halo-c"/><polygon id="ib-halo-d"/>' +
-      '</g>') +
-      '<g id="ib-body" filter="url(#ib-blur-body)" opacity="0.35">' +
+      '<g id="ib-body" filter="url(#ib-blur-body)" opacity="0.4">' +
       '  <polygon id="ib-body-a"/><polygon id="ib-body-b"/><polygon id="ib-body-c"/><polygon id="ib-body-d"/>' +
       '</g>' +
-      '<g id="ib-core" filter="url(#ib-blur-core)" opacity="0.5">' +
+      '<g id="ib-core" filter="url(#ib-blur-core)" opacity="0.85">' +
       '  <polygon id="ib-core-a"/><polygon id="ib-core-b"/><polygon id="ib-core-c"/><polygon id="ib-core-d"/>' +
       '</g>';
     root.appendChild(svg);
-
-    // Dust stays on low quality too (spec: halved count on mobile, not removed).
-    dustCanvas = document.createElement('canvas');
-    dustCanvas.id = 'intro-dust-canvas';
-    root.appendChild(dustCanvas);
-    dustCtx = dustCanvas.getContext('2d');
 
     if (CONFIG.QUALITY !== 'low') {
       grainEl = document.createElement('div');
@@ -222,47 +205,6 @@
     svg.setAttribute('viewBox', '0 0 ' + W + ' ' + H);
     svg.setAttribute('width', W);
     svg.setAttribute('height', H);
-    if (dustCanvas) {
-      var dpr = Math.min(window.devicePixelRatio || 1, 2);
-      dustCanvas.width = W * dpr;
-      dustCanvas.height = H * dpr;
-      dustCtx.setTransform(dpr, 0, 0, dpr, 0, 0);
-    }
-  }
-
-  function buildDustSprite() {
-    var s = 64;
-    var c = document.createElement('canvas');
-    c.width = c.height = s;
-    var ctx = c.getContext('2d');
-    var g = ctx.createRadialGradient(s / 2, s / 2, 0, s / 2, s / 2, s / 2);
-    g.addColorStop(0, 'rgba(255,240,214,0.9)');
-    g.addColorStop(0.5, 'rgba(255,233,196,0.35)');
-    g.addColorStop(1, 'rgba(255,233,196,0)');
-    ctx.fillStyle = g;
-    ctx.fillRect(0, 0, s, s);
-    dustSprite = c;
-  }
-
-  function initParticles() {
-    var count = CONFIG.PARTICLE_COUNT;
-    var envMin = CONFIG.BLADES.D.min - 10;
-    var envMax = CONFIG.BLADES.A.max + 10;
-    for (var i = 0; i < count; i++) {
-      var layer = i % 3; // 0 near, 1 mid, 2 far
-      var dist = Math.random() * DIAG * 1.1;
-      var ang = envMin + Math.random() * (envMax - envMin);
-      var ox0 = ORIGIN_PX().x, oy0 = ORIGIN_PX().y;
-      var v = angleToVec(ang);
-      particles.push({
-        x: ox0 + v.x * dist,
-        y: oy0 + v.y * dist,
-        vx: (Math.random() - 0.5) * 0.06,
-        vy: (Math.random() - 0.5) * 0.06 - 0.02, // slight upward convection
-        layer: layer,
-        size: layer === 0 ? (3 + Math.random() * 3) : layer === 1 ? (1.6 + Math.random() * 2) : (0.6 + Math.random() * 1)
-      });
-    }
   }
 
   // ---------------------------------------------------------------
@@ -302,19 +244,20 @@
   function draw(rotation, origin, length, brightness, flicker, opacityMul) {
     var names = ['A', 'B', 'C', 'D'];
     var suffixes = ['a', 'b', 'c', 'd'];
-    var hasHalo = CONFIG.QUALITY !== 'low';
     for (var i = 0; i < 4; i++) {
       var base = CONFIG.BLADES[names[i]];
       var min = base.min + rotation, max = base.max + rotation;
       var center = (min + max) / 2, half = (max - min) / 2;
 
-      if (hasHalo) {
-        var haloMin = center - half * 1.45, haloMax = center + half * 1.45;
-        document.getElementById('ib-halo-' + suffixes[i]).setAttribute('points', bladePts(origin.x, origin.y, haloMin, haloMax, length));
-      }
-      var coreMin = center - half * 0.32, coreMax = center + half * 0.32;
+      // Core is a bright, fairly narrow ray so the 4 blades stay visually
+      // distinct with real dark gaps between them (the logo's defining
+      // feature); body is slightly narrower than the full wedge (not the
+      // full min..max) so its blur doesn't bleed all the way into the
+      // neighboring gap and wash the fan into one hazy mass.
+      var coreMin = center - half * 0.4, coreMax = center + half * 0.4;
+      var bodyMin = center - half * 0.82, bodyMax = center + half * 0.82;
 
-      document.getElementById('ib-body-' + suffixes[i]).setAttribute('points', bladePts(origin.x, origin.y, min, max, length));
+      document.getElementById('ib-body-' + suffixes[i]).setAttribute('points', bladePts(origin.x, origin.y, bodyMin, bodyMax, length));
       document.getElementById('ib-core-' + suffixes[i]).setAttribute('points', bladePts(origin.x, origin.y, coreMin, coreMax, length));
     }
 
@@ -325,7 +268,9 @@
     var hazeMax = CONFIG.BLADES.A.max + rotation + 4;
     document.getElementById('ib-haze').setAttribute('d', fanPath(origin.x, origin.y, hazeMin, hazeMax, length, 16));
 
-    var wideR = length * 0.16, coreR = length * 0.05;
+    // Big, hot source glow — the light should read as a projector bulb
+    // that just switched on, not a faint point.
+    var wideR = length * 0.26, coreR = length * 0.11;
     var wideGlow = document.getElementById('ib-wide-glow');
     wideGlow.setAttribute('cx', origin.x); wideGlow.setAttribute('cy', origin.y); wideGlow.setAttribute('r', wideR);
     var coreGlow = document.getElementById('ib-core-glow');
@@ -338,67 +283,13 @@
     document.getElementById('ib-core-circle').setAttribute('cy', origin.y);
 
     var b = brightness * flicker * opacityMul * CONFIG.BEAM_INTENSITY;
-    if (hasHalo) document.getElementById('ib-halo').setAttribute('opacity', 0.15 * b);
-    document.getElementById('ib-body').setAttribute('opacity', 0.35 * b);
-    document.getElementById('ib-core').setAttribute('opacity', 0.5 * b);
+    document.getElementById('ib-body').setAttribute('opacity', 0.22 * b);
+    document.getElementById('ib-core').setAttribute('opacity', Math.min(1, 0.85 * b));
     document.getElementById('ib-haze').setAttribute('opacity', CONFIG.HAZE_LEVEL * b);
-    document.getElementById('ib-source-glow').setAttribute('opacity', Math.min(1, b * 1.1));
+    document.getElementById('ib-source-glow').setAttribute('opacity', Math.min(1, b * 1.25));
 
     if (grainEl) grainEl.style.opacity = CONFIG.GRAIN_LEVEL * Math.min(1, brightness);
     if (vignetteEl) vignetteEl.style.opacity = CONFIG.VIGNETTE_LEVEL * Math.min(1, brightness);
-
-    drawDust(rotation, origin, length, b);
-  }
-
-  function drawDust(rotation, origin, length, brightness) {
-    if (!dustCtx) return;
-    dustCtx.clearRect(0, 0, W, H);
-    if (brightness <= 0.01) return;
-    var names = ['A', 'B', 'C', 'D'];
-    var ranges = names.map(function (n) {
-      var b = CONFIG.BLADES[n];
-      return [b.min + rotation - 1.5, b.max + rotation + 1.5];
-    });
-
-    var now = performance.now() * 0.001;
-    for (var i = 0; i < particles.length; i++) {
-      var p = particles[i];
-      // brownian drift + gentle convection
-      p.vx += (Math.random() - 0.5) * 0.01;
-      p.vy += (Math.random() - 0.5) * 0.01 - 0.0008;
-      p.vx *= 0.98; p.vy *= 0.98;
-      p.x += p.vx; p.y += p.vy;
-
-      var dx = p.x - origin.x, dy = p.y - origin.y;
-      var dist = Math.sqrt(dx * dx + dy * dy);
-      if (dist > length || dist < 4) continue;
-      var ang = Math.atan2(-dy, dx) * 180 / Math.PI;
-
-      var inside = false, distToCenter = 999;
-      for (var r = 0; r < ranges.length; r++) {
-        if (ang >= ranges[r][0] && ang <= ranges[r][1]) {
-          inside = true;
-          var c = (ranges[r][0] + ranges[r][1]) / 2;
-          distToCenter = Math.abs(ang - c) / ((ranges[r][1] - ranges[r][0]) / 2 + 0.001);
-          break;
-        }
-      }
-      if (!inside) continue;
-
-      var proximity = 1 - Math.min(1, distToCenter);
-      var depthAlpha = p.layer === 0 ? 0.5 : p.layer === 1 ? 0.35 : 0.2;
-      var twinkle = 0.85 + 0.15 * Math.sin(now * 2 + i);
-      var alpha = brightness * depthAlpha * (0.3 + 0.7 * proximity) * twinkle;
-      if (alpha <= 0.02) continue;
-
-      // dustCtx already has an explicit devicePixelRatio transform applied
-      // in measure(), so drawing coordinates/sizes here are plain CSS px.
-      var sz = p.size * 6;
-      dustCtx.globalAlpha = Math.min(1, alpha);
-      dustCtx.globalCompositeOperation = 'lighter';
-      dustCtx.drawImage(dustSprite, p.x - sz / 2, p.y - sz / 2, sz, sz);
-    }
-    dustCtx.globalAlpha = 1;
   }
 
   // ---------------------------------------------------------------
