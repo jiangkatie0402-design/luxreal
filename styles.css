@@ -365,8 +365,9 @@ button { font-family: inherit; }
 
 /* ---------- footer ---------- */
 .footer { border-top: 1px solid var(--border); padding: 80px 0 32px; }
-.footer-top { display: grid; grid-template-columns: 1.4fr repeat(3, 1fr); gap: 40px; margin-bottom: 70px; }
+.footer-top { display: grid; grid-template-columns: 1.2fr repeat(4, 1fr); gap: 32px; margin-bottom: 70px; }
 .footer-brand p { color: var(--text-dim); font-size: 14px; max-width: 280px; margin-top: 18px; line-height: 1.8; }
+.footer-cta { margin: 20px 0 22px; }
 .footer-col h4 { font-size: 13px; letter-spacing: 0.02em; color: var(--text-faint); font-weight: 600; margin-bottom: 18px; }
 .footer-col a { display: block; font-size: 14px; color: var(--text-dim); margin-bottom: 12px; transition: color .2s; }
 .footer-col a:hover { color: var(--blue-pale); }
