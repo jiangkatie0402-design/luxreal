@@ -339,19 +339,16 @@ button { font-family: inherit; }
 /* ---------- advantages v3 (top step tabs) ---------- */
 .adv3-head { text-align: center; margin-bottom: 40px; }
 .adv3-steps {
-  display: flex; align-items: center; justify-content: center; gap: 4px; flex-wrap: wrap;
-  width: fit-content; margin: 0 auto 56px; padding: 6px;
-  border: 1px solid var(--border-2); border-radius: 100px; background: var(--bg-soft);
+  display: flex; align-items: center; justify-content: center;
+  margin: 0 auto 56px; padding: 0;
 }
 .adv3-step {
-  display: flex; align-items: center; gap: 8px; padding: 10px 18px; border-radius: 100px;
-  border: none; background: none; color: var(--text-faint); font-size: 14px; font-weight: 600;
-  cursor: pointer; font-family: inherit; white-space: nowrap; transition: all .3s var(--ease);
+  display: block; flex: 0 0 auto; padding: 0; border: none; background: none;
+  color: var(--text-faint); font-size: 15px; font-weight: 500;
+  cursor: pointer; font-family: inherit; white-space: nowrap; transition: color .3s var(--ease);
 }
-.adv3-step-icon { display: flex; opacity: .7; transition: opacity .3s var(--ease); }
-.adv3-step.active { background: rgba(26,122,248,0.14); color: var(--blue-pale); }
-.adv3-step.active .adv3-step-icon { opacity: 1; }
-.adv3-step-sep { color: var(--border-2); font-size: 13px; }
+.adv3-step.active { color: var(--text); font-weight: 700; }
+.adv3-step-line { flex: 1 1 120px; max-width: 160px; height: 1px; background: var(--border-2); margin: 0 24px; }
 
 .adv3-panel { display: grid; grid-template-columns: 0.75fr 1.25fr; gap: 64px; align-items: center; }
 .adv3-text-slide { display: none; }
@@ -372,9 +369,8 @@ button { font-family: inherit; }
   .adv3-panel { grid-template-columns: 1fr; gap: 32px; }
 }
 @media (max-width: 640px) {
-  .adv3-steps { gap: 2px; padding: 4px; }
-  .adv3-step { padding: 8px 12px; font-size: 13px; }
-  .adv3-step-sep { display: none; }
+  .adv3-step { font-size: 12px; }
+  .adv3-step-line { flex-basis: 16px; margin: 0 10px; }
 }
 
 /* ---------- features ---------- */
