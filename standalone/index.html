@@ -238,16 +238,17 @@ button { font-family: inherit; }
 /* ---------- showcase (scenarios) ---------- */
 .showcase-head { max-width: 680px; margin: 0 auto 48px; text-align: center; }
 .showcase-head .section-desc { margin-left: auto; margin-right: auto; }
+.showcase-scroll { position: relative; height: calc(100vh * var(--slides, 2)); }
 .showcase-media {
-  position: relative;
+  position: sticky; top: 96px;
   max-width: 1100px; margin: 0 auto; aspect-ratio: 16 / 9;
   border-radius: var(--radius-lg); border: 1px solid var(--border-2); background: var(--surface);
   overflow: hidden;
 }
 .showcase-slide {
-  position: absolute; inset: 0; opacity: 0; transition: opacity .6s var(--ease); pointer-events: none;
+  position: absolute; inset: 0; opacity: 0; transform: scale(0.94); pointer-events: none;
 }
-.showcase-slide.active { opacity: 1; pointer-events: auto; z-index: 1; }
+.showcase-slide.active { opacity: 1; transform: scale(1); pointer-events: auto; z-index: 1; }
 .showcase-slide video { width: 100%; height: 100%; object-fit: cover; display: block; }
 .showcase-overlay-gradient {
   position: absolute; inset: 0;
@@ -259,9 +260,15 @@ button { font-family: inherit; }
 .showcase-dots { position: absolute; left: 50%; bottom: 18px; transform: translateX(-50%); display: flex; gap: 8px; z-index: 3; }
 .showcase-dot {
   width: 8px; height: 8px; border-radius: 50%; border: none; padding: 0; cursor: pointer;
-  background: rgba(255,255,255,.35); transition: all .25s var(--ease);
+  background: rgba(255,255,255,.35); transition: background .25s var(--ease), transform .25s var(--ease);
 }
 .showcase-dot.active { background: #fff; transform: scale(1.3); }
+@media (max-width: 640px) {
+  .showcase-scroll { height: calc(65vh * var(--slides, 2)); }
+}
+@media (prefers-reduced-motion: reduce) {
+  .showcase-slide { transform: none !important; }
+}
 
 /* reveal-on-scroll */
 .reveal { opacity: 0; transform: translateY(28px); transition: opacity .9s var(--ease), transform .9s var(--ease); }
@@ -608,25 +615,27 @@ button { font-family: inherit; }
       <p class="section-desc">互动影游 × AI 短剧，一键成片</p>
     </div>
 
-    <div class="showcase-media reveal">
-      <div class="showcase-slide active" data-slide="0">
-        <!-- video omitted from the portable single-file build -->
-        <div class="showcase-overlay-gradient"></div>
-        <div class="showcase-overlay-text">
-          <h3 class="showcase-title">巴黎情缘</h3>
-          <p class="showcase-subtitle">LuxReal 精选短片</p>
+    <div class="showcase-scroll" id="showcase-scroll">
+      <div class="showcase-media">
+        <div class="showcase-slide active" data-slide="0">
+          <!-- video omitted from the portable single-file build -->
+          <div class="showcase-overlay-gradient"></div>
+          <div class="showcase-overlay-text">
+            <h3 class="showcase-title">巴黎情缘</h3>
+            <p class="showcase-subtitle">LuxReal 精选短片</p>
+          </div>
         </div>
-      </div>
-      <div class="showcase-slide" data-slide="1">
-        <div class="showcase-overlay-gradient"></div>
-        <div class="showcase-overlay-text">
-          <h3 class="showcase-title">***</h3>
-          <p class="showcase-subtitle">LuxReal 精选互动影游</p>
+        <div class="showcase-slide" data-slide="1">
+          <div class="showcase-overlay-gradient"></div>
+          <div class="showcase-overlay-text">
+            <h3 class="showcase-title">***</h3>
+            <p class="showcase-subtitle">LuxReal 精选互动影游</p>
+          </div>
         </div>
-      </div>
-      <div class="showcase-dots">
-        <button class="showcase-dot active" type="button" data-slide-to="0" aria-label="第 1 项"></button>
-        <button class="showcase-dot" type="button" data-slide-to="1" aria-label="第 2 项"></button>
+        <div class="showcase-dots">
+          <button class="showcase-dot active" type="button" data-slide-to="0" aria-label="第 1 项"></button>
+          <button class="showcase-dot" type="button" data-slide-to="1" aria-label="第 2 项"></button>
+        </div>
       </div>
     </div>
   </div>
@@ -1097,20 +1106,89 @@ if (privacyLinks.length) {
   sections.forEach(s => s && spy.observe(s));
 }
 
-// ---------- showcase slider ----------
+// ---------- showcase scroll-linked slider ----------
+const showcaseScroll = document.getElementById('showcase-scroll');
 const showcaseDots = document.querySelectorAll('.showcase-dot');
 const showcaseSlides = document.querySelectorAll('.showcase-slide');
-if (showcaseDots.length && showcaseSlides.length) {
+if (showcaseScroll && showcaseDots.length && showcaseSlides.length) {
+  const slideCount = showcaseSlides.length;
+  showcaseScroll.style.setProperty('--slides', slideCount);
+  const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  const easeInOutCubic = t => (t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2);
+
+  let showcaseTicking = false;
+  function updateShowcase() {
+    showcaseTicking = false;
+    const rect = showcaseScroll.getBoundingClientRect();
+    const scrollable = showcaseScroll.offsetHeight - window.innerHeight;
+    const progress = scrollable > 0 ? Math.min(1, Math.max(0, -rect.top / scrollable)) : 0;
+
+    if (reduceMotion) {
+      // No scrubbed crossfade: jump straight to whichever slide owns this
+      // segment of the scroll range (segment k = [k/N, (k+1)/N)).
+      const activeIndex = Math.min(slideCount - 1, Math.floor(progress * slideCount));
+      showcaseSlides.forEach((slide, i) => {
+        const opacity = i === activeIndex ? 1 : 0;
+        slide.style.opacity = opacity;
+        slide.style.transform = 'none';
+        slide.classList.toggle('active', i === activeIndex);
+        const video = slide.querySelector('video');
+        if (video) { if (opacity > 0) video.play().catch(() => {}); else video.pause(); }
+      });
+      showcaseDots.forEach((dot, i) => dot.classList.toggle('active', i === activeIndex));
+      return;
+    }
+
+    const scaled = progress * slideCount;
+    const currentIndex = Math.min(slideCount - 1, Math.floor(scaled));
+    const nextIndex = Math.min(slideCount - 1, currentIndex + 1);
+    const localT = Math.min(1, Math.max(0, scaled - currentIndex));
+    const eased = easeInOutCubic(localT);
+
+    showcaseSlides.forEach((slide, i) => {
+      let opacity = 0;
+      let scale = 0.94;
+      if (currentIndex === nextIndex) {
+        opacity = i === currentIndex ? 1 : 0;
+        scale = i === currentIndex ? 1 : 0.94;
+      } else if (i === currentIndex) {
+        opacity = 1 - eased;
+        scale = 1 - 0.06 * eased;
+      } else if (i === nextIndex) {
+        opacity = eased;
+        scale = 0.94 + 0.06 * eased;
+      }
+      slide.style.opacity = opacity;
+      slide.style.transform = `scale(${scale})`;
+      slide.classList.toggle('active', opacity > 0.5 || currentIndex === nextIndex && i === currentIndex);
+      const video = slide.querySelector('video');
+      if (video) { if (opacity > 0) video.play().catch(() => {}); else video.pause(); }
+    });
+
+    const activeDotIndex = eased < 0.5 ? currentIndex : nextIndex;
+    showcaseDots.forEach((dot, i) => dot.classList.toggle('active', i === activeDotIndex));
+  }
+
+  function onShowcaseScroll() {
+    if (!showcaseTicking) {
+      showcaseTicking = true;
+      requestAnimationFrame(updateShowcase);
+    }
+  }
+  window.addEventListener('scroll', onShowcaseScroll, { passive: true });
+  window.addEventListener('resize', onShowcaseScroll);
+  updateShowcase();
+
   showcaseDots.forEach(dot => {
     dot.addEventListener('click', () => {
-      const target = dot.dataset.slideTo;
-      showcaseSlides.forEach(slide => {
-        const active = slide.dataset.slide === target;
-        slide.classList.toggle('active', active);
-        const video = slide.querySelector('video');
-        if (video) { if (active) video.play().catch(() => {}); else video.pause(); }
-      });
-      showcaseDots.forEach(d => d.classList.toggle('active', d === dot));
+      const idx = parseInt(dot.dataset.slideTo, 10);
+      const scrollable = showcaseScroll.offsetHeight - window.innerHeight;
+      if (scrollable <= 0) return;
+      const rect = showcaseScroll.getBoundingClientRect();
+      const targetProgress = (idx + 0.001) / slideCount;
+      const targetY = window.scrollY + rect.top + targetProgress * scrollable;
+      window.scrollTo({ top: targetY, behavior: reduceMotion ? 'auto' : 'smooth' });
     });
   });
 }
