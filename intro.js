@@ -1,22 +1,36 @@
 /* ============================================================
-   LuxReal hero intro v3 — "logo-ray fan / converge / reveal".
+   LuxReal hero intro v4 — real logo-ray asset, "sharp fan / blur into
+   fog / reveal".
    Self-contained: deleting intro.css + intro.js and their two
    <link>/<script> references in index.html fully restores the page.
+
+   The "light" shape is never redrawn in code — it's the actual brand
+   icon's ray artwork (assets/logo-ray-mask.png, cropped straight from
+   the source design file, alpha = the 4 rays), used as a CSS mask over
+   a radial-gradient fill. Only transform (scale/rotate) and filter
+   (blur) are animated; the shape data itself is untouched.
 
    Sequence:
    1. Two black masks (split by a line through ORIGIN at CONVERGE_ANGLE)
       fully cover the hero.
-   2. 5 tapered, curved "logo ray" shapes shoot from ORIGIN (bottom-left
-      of the hero) and fan out to their individual angles (elastic ease).
-   3. The 5 rays converge back into one, aligned with CONVERGE_ANGLE —
-      the same angle the masks are split along (decelerate ease).
-   4. The masks slide apart along that angle, revealing the video; the
-      rays fade out at the same time.
+   2. The ray graphic (3 stacked copies, for the fog layering in step 3)
+      scales in from 0 and fades in at EXPAND_ROTATION, sharp and
+      crisp — elastic ease.
+   3. It rotates to CONVERGE_ROTATION (aligned with the mask split)
+      while each layer's blur ramps up from 0 to its own target,
+      turning the crisp fan into a diffuse glowing fog rather than
+      collapsing it into a beam — decelerate ease.
+   4. The masks slide apart along CONVERGE_ANGLE, revealing the video;
+      the fog fades out at the same time.
    5. Title, subtitle, then the CTA button fade + rise in, staggered.
 
-   Angle convention throughout: degrees, 0 = pointing right, 90 =
-   pointing straight up, measured counter-clockwise — i.e. screen
-   direction vector (cos(deg), -sin(deg)).
+   Angle convention for CONVERGE_ANGLE/mask geometry: degrees, 0 =
+   pointing right, 90 = pointing straight up, counter-clockwise — i.e.
+   screen direction vector (cos(deg), -sin(deg)). EXPAND_ROTATION /
+   CONVERGE_ROTATION on the ray graphic itself are plain CSS
+   rotate()-style values (clockwise-positive); CONVERGE_ROTATION is
+   kept equal to the CSS-equivalent of CONVERGE_ANGLE so the ray
+   actually aligns with the mask split at the end of phase 3.
    ============================================================ */
 (function () {
   'use strict';
@@ -25,30 +39,28 @@
   // CONFIG
   // ---------------------------------------------------------------
   var CONFIG = {
-    ORIGIN_X_PCT: 6.5,   // % of viewport width — ray/mask-split origin
-    ORIGIN_Y_PCT: 93.5,  // % of viewport height
+    ORIGIN_X_PCT: 75,  // % of viewport width — ray/mask-split origin
+    ORIGIN_Y_PCT: 0,   // % of viewport height (top of the hero)
 
-    // The 5 logo rays: uneven angles and widths, not a symmetric fan.
-    // angle: ray center direction (deg). halfWidth: angular half-width
-    // at the flared/widest point (deg) — bigger = a thicker ray.
-    RAYS: [
-      { angle: 7,  halfWidth: 2.2 },
-      { angle: 24, halfWidth: 3.6 },
-      { angle: 41, halfWidth: 2.6 },
-      { angle: 60, halfWidth: 4.4 },
-      { angle: 82, halfWidth: 2.4 }
+    RAY_ASSET: 'assets/logo-ray-mask.png', // native 658x658, alpha = the rays
+    RAY_SIZE_VMAX: 140,     // rendered size (at scale=1) of the ray graphic
+    EXPAND_ROTATION: 150,   // deg, CSS rotate() at rest after the fan appears
+    CONVERGE_ANGLE: 126,    // deg (screen-angle convention, see header) —
+                            // the mask split/slide direction
+    // CONVERGE_ROTATION is derived from CONVERGE_ANGLE below so the ray
+    // graphic actually lines up with the mask split at the end of phase 3.
+
+    LAYERS: [ // sharp core -> soft -> hazy, stacked to build up the fog
+      { opacity: 0.4,  blurEnd: 0 },
+      { opacity: 0.55, blurEnd: 10 },
+      { opacity: 0.4,  blurEnd: 25 }
     ],
-    CONVERGE_ANGLE: 41,     // deg — where the rays merge to, and the
-                            // angle the mask split/slide is aligned to
-    RAY_LENGTH_FACTOR: 1.3, // multiple of the viewport diagonal
-    BOW_RADIUS_FRAC: 0.62,  // where along the ray the edge-curve control point sits
-    BOW_OVERSHOOT: 1.35,    // how far past the wedge's own edge the curve bulges
 
-    INITIAL_HOLD_MS: 150,   // masks-only pause before the rays appear
-    EXPAND_DURATION: 600,   // ms, fan-out
-    CONVERGE_DURATION: 600, // ms, fan-in
+    INITIAL_HOLD_MS: 150,   // masks-only pause before the ray appears
+    EXPAND_DURATION: 600,   // ms, scale/opacity in, sharp
+    CONVERGE_DURATION: 550, // ms, rotate + blur into fog
     REVEAL_DURATION: 1100,  // ms, masks slide apart
-    RAY_FADE_DURATION: 600, // ms, ray opacity fade during reveal
+    RAY_FADE_DURATION: 600, // ms, fog opacity fade during reveal
     TITLE_FADE_DURATION: 1000, // ms, each text element's own fade/rise
     SUBTITLE_DELAY: 200,    // ms, after masks finish sliding
     BUTTON_DELAY: 400,      // ms, after masks finish sliding
@@ -72,9 +84,13 @@
 
   var failsafeTimer = setTimeout(function () { finish(); }, TOTAL_FAILSAFE_MS);
 
-  var root, leftMask, rightMask, svg, rayPaths = [];
+  // CSS rotate() is clockwise-positive; CONVERGE_ANGLE above is
+  // counter-clockwise-positive, so converting always flips sign.
+  function cssRotateFor(deg) { return -deg; }
+  var CONVERGE_ROTATION = cssRotateFor(CONFIG.CONVERGE_ANGLE);
+
+  var root, leftMask, rightMask, rayWrap, rayLayers = [];
   var heroTitle, heroSub, heroBtn, video;
-  var W = 0, H = 0, DIAG = 0, originX = 0, originY = 0;
   var timers = [];
   var finished = false;
 
@@ -104,44 +120,7 @@
     }
 
     buildDOM();
-    measure();
-    window.addEventListener('resize', measure);
     timers.push(setTimeout(startExpand, CONFIG.INITIAL_HOLD_MS));
-  }
-
-  // ---------------------------------------------------------------
-  // Math helpers (shared angle convention — see header comment)
-  // ---------------------------------------------------------------
-  function dirVec(deg) {
-    var r = deg * Math.PI / 180;
-    return { x: Math.cos(r), y: -Math.sin(r) };
-  }
-  function pt(ox, oy, deg, radius) {
-    var d = dirVec(deg);
-    return { x: (ox + d.x * radius).toFixed(1), y: (oy + d.y * radius).toFixed(1) };
-  }
-  // CSS/SVG rotate() is clockwise-positive; our angle convention above is
-  // counter-clockwise-positive, so converting between them always flips sign.
-  function cssRotateFor(deg) { return -deg; }
-
-  // ---------------------------------------------------------------
-  // A tapered "logo ray": a sharp point at the origin, widening as it
-  // extends, spreading into its full width at the far end — like the
-  // real logo's rays. Each side is a quadratic-bezier curve that bows
-  // outward past the wedge's own straight edge, rather than a flat
-  // polygon side.
-  // ---------------------------------------------------------------
-  function rayPathD(ox, oy, angleDeg, halfWidthDeg, length) {
-    var farLeft = pt(ox, oy, angleDeg - halfWidthDeg, length);
-    var farRight = pt(ox, oy, angleDeg + halfWidthDeg, length);
-    var bowR = length * CONFIG.BOW_RADIUS_FRAC;
-    var cLeft = pt(ox, oy, angleDeg - halfWidthDeg * CONFIG.BOW_OVERSHOOT, bowR);
-    var cRight = pt(ox, oy, angleDeg + halfWidthDeg * CONFIG.BOW_OVERSHOOT, bowR);
-    var o = ox.toFixed(1) + ',' + oy.toFixed(1);
-    return 'M ' + o +
-      ' Q ' + cLeft.x + ',' + cLeft.y + ' ' + farLeft.x + ',' + farLeft.y +
-      ' L ' + farRight.x + ',' + farRight.y +
-      ' Q ' + cRight.x + ',' + cRight.y + ' ' + o + ' Z';
   }
 
   // ---------------------------------------------------------------
@@ -155,135 +134,90 @@
     root = document.createElement('div');
     root.id = 'intro-root';
 
-    // Two large rectangles, each rotated to CONVERGE_ANGLE, anchored at
-    // ORIGIN from opposite corners (top-left vs. bottom-left) so together
-    // they tile the whole plane split exactly along the line through
-    // ORIGIN at that angle — a pure-CSS diagonal split with no per-frame
-    // JS math, and (since CSS rotate() operates in true, isotropic
-    // pixels) correct at any aspect ratio.
-    var svgRotateDeg = cssRotateFor(CONFIG.CONVERGE_ANGLE);
-
+    // Two large squares, both CENTERED on ORIGIN (via negative margins),
+    // both rotated to CONVERGE_ANGLE, then each pushed off-center along
+    // its own local Y axis (still inside the same transform, so the push
+    // happens *before* the rotation and ends up perpendicular to the
+    // split line regardless of the angle's sign/quadrant) — robust for
+    // any origin position or angle, unlike anchoring at a box corner.
     leftMask = document.createElement('div');
     leftMask.className = 'intro-mask';
     leftMask.style.left = CONFIG.ORIGIN_X_PCT + '%';
     leftMask.style.top = CONFIG.ORIGIN_Y_PCT + '%';
-    leftMask.style.transformOrigin = '0 0';
-    leftMask.style.transform = 'rotate(' + svgRotateDeg + 'deg)';
+    leftMask.style.transform = 'rotate(' + CONVERGE_ROTATION + 'deg) translateY(-200vmax)';
 
     rightMask = document.createElement('div');
     rightMask.className = 'intro-mask';
     rightMask.style.left = CONFIG.ORIGIN_X_PCT + '%';
-    rightMask.style.top = 'calc(' + CONFIG.ORIGIN_Y_PCT + '% - 400vmax)';
-    rightMask.style.transformOrigin = '0 100%';
-    rightMask.style.transform = 'rotate(' + svgRotateDeg + 'deg)';
+    rightMask.style.top = CONFIG.ORIGIN_Y_PCT + '%';
+    rightMask.style.transform = 'rotate(' + CONVERGE_ROTATION + 'deg) translateY(200vmax)';
 
     root.appendChild(leftMask);
     root.appendChild(rightMask);
 
-    svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
-    svg.setAttribute('id', 'intro-ray-svg');
-    svg.innerHTML =
-      '<defs>' +
-      '  <filter id="ray-soft" x="-50%" y="-50%" width="200%" height="200%">' +
-      '    <feGaussianBlur stdDeviation="1.1"/>' +
-      '  </filter>' +
-      '</defs>' +
-      '<g id="ray-group" filter="url(#ray-soft)"></g>';
-    root.appendChild(svg);
+    // The ray graphic: a wrapper positioned at ORIGIN, holding 3 stacked
+    // copies of the same masked-gradient shape (see header). All 3 share
+    // the wrapper's scale/rotate; only their own opacity/blur differ.
+    rayWrap = document.createElement('div');
+    rayWrap.id = 'intro-ray-wrap';
+    rayWrap.style.left = CONFIG.ORIGIN_X_PCT + '%';
+    rayWrap.style.top = CONFIG.ORIGIN_Y_PCT + '%';
+    rayWrap.style.opacity = '0';
+    rayWrap.style.transform = 'scale(0) rotate(' + CONFIG.EXPAND_ROTATION + 'deg)';
 
-    var rayGroup = svg.querySelector('#ray-group');
-    CONFIG.RAYS.forEach(function (ray, i) {
-      var grad = document.createElementNS('http://www.w3.org/2000/svg', 'linearGradient');
-      grad.setAttribute('id', 'ray-grad-' + i);
-      grad.setAttribute('gradientUnits', 'userSpaceOnUse');
-      grad.innerHTML =
-        '<stop offset="0%" stop-color="#d8c8d8" stop-opacity="0.65"/>' +
-        '<stop offset="14%" stop-color="#f0f0f2" stop-opacity="0.6"/>' +
-        '<stop offset="100%" stop-color="#f0f0f2" stop-opacity="0"/>';
-      svg.querySelector('defs').appendChild(grad);
-
-      var path = document.createElementNS('http://www.w3.org/2000/svg', 'path');
-      path.setAttribute('fill', 'url(#ray-grad-' + i + ')');
-      path.style.opacity = '0';
-      rayGroup.appendChild(path);
-      rayPaths.push({ el: path, grad: grad, cfg: ray });
+    CONFIG.LAYERS.forEach(function (layerCfg) {
+      var layer = document.createElement('div');
+      layer.className = 'intro-ray-layer';
+      layer.style.width = CONFIG.RAY_SIZE_VMAX + 'vmax';
+      layer.style.height = CONFIG.RAY_SIZE_VMAX + 'vmax';
+      layer.style.top = 'calc(-1 * ' + CONFIG.RAY_SIZE_VMAX + 'vmax)';
+      layer.style.maskImage = 'url(' + CONFIG.RAY_ASSET + ')';
+      layer.style.webkitMaskImage = 'url(' + CONFIG.RAY_ASSET + ')';
+      layer.style.opacity = String(layerCfg.opacity);
+      layer.style.filter = 'blur(0px)';
+      rayWrap.appendChild(layer);
+      rayLayers.push({ el: layer, cfg: layerCfg });
     });
 
+    root.appendChild(rayWrap);
     document.body.appendChild(root);
   }
 
-  function measure() {
-    W = window.innerWidth;
-    H = window.innerHeight;
-    DIAG = Math.sqrt(W * W + H * H);
-    originX = CONFIG.ORIGIN_X_PCT / 100 * W;
-    originY = CONFIG.ORIGIN_Y_PCT / 100 * H;
-    svg.setAttribute('viewBox', '0 0 ' + W + ' ' + H);
-    svg.setAttribute('width', W);
-    svg.setAttribute('height', H);
-    drawRays(currentAngles());
-  }
-
-  // Angles currently in effect per ray, so a resize mid-animation redraws
-  // at the same visual phase instead of snapping back to rest.
-  var phaseAngle = null; // null = not yet started (use each ray's own fan angle at rest)
-  function currentAngles() {
-    if (phaseAngle === 'converged') return CONFIG.RAYS.map(function () { return CONFIG.CONVERGE_ANGLE; });
-    if (phaseAngle === 'expanded') return CONFIG.RAYS.map(function (r) { return r.angle; });
-    return CONFIG.RAYS.map(function () { return CONFIG.CONVERGE_ANGLE; });
-  }
-
-  function drawRays(angles) {
-    var length = DIAG * CONFIG.RAY_LENGTH_FACTOR;
-    rayPaths.forEach(function (r, i) {
-      var d = rayPathD(originX, originY, angles[i], r.cfg.halfWidth, length);
-      r.el.style.d = "path('" + d + "')";
-      r.el.setAttribute('d', d); // fallback for browsers that don't animate CSS `d`
-      var tip = pt(originX, originY, angles[i], length);
-      r.grad.setAttribute('x1', originX);
-      r.grad.setAttribute('y1', originY);
-      r.grad.setAttribute('x2', tip.x);
-      r.grad.setAttribute('y2', tip.y);
-    });
-  }
-
   // ---------------------------------------------------------------
-  // Phase 2: fan out to each ray's own angle (elastic ease)
+  // Phase 2: scale + fade the (still sharp) ray graphic in — elastic ease
   // ---------------------------------------------------------------
   function startExpand() {
-    drawRays(currentAngles()); // ensure the merged starting shape is committed
-    rayPaths.forEach(function (r) {
-      void r.el.getBoundingClientRect(); // force layout before changing transition
-      r.el.style.transition = 'd ' + CONFIG.EXPAND_DURATION + 'ms ' + CONFIG.EXPAND_EASE +
-        ', opacity 200ms linear';
-      r.el.style.opacity = '1';
-    });
-    phaseAngle = 'expanded';
-    drawRays(currentAngles());
+    void rayWrap.getBoundingClientRect(); // force layout before transitioning
+    rayWrap.style.transition = 'transform ' + CONFIG.EXPAND_DURATION + 'ms ' + CONFIG.EXPAND_EASE +
+      ', opacity ' + CONFIG.EXPAND_DURATION + 'ms linear';
+    rayWrap.style.opacity = '1';
+    rayWrap.style.transform = 'scale(1) rotate(' + CONFIG.EXPAND_ROTATION + 'deg)';
     timers.push(setTimeout(startConverge, CONFIG.EXPAND_DURATION));
   }
 
   // ---------------------------------------------------------------
-  // Phase 3: converge back to one, aligned with CONVERGE_ANGLE
-  // (decelerate ease)
+  // Phase 3: rotate to align with the mask split, while each layer
+  // blurs up from sharp to its own target — turning the crisp fan into
+  // a diffuse fog instead of collapsing it into a beam.
   // ---------------------------------------------------------------
   function startConverge() {
-    rayPaths.forEach(function (r) {
-      r.el.style.transition = 'd ' + CONFIG.CONVERGE_DURATION + 'ms ' + CONFIG.CONVERGE_EASE;
+    rayWrap.style.transition = 'transform ' + CONFIG.CONVERGE_DURATION + 'ms ' + CONFIG.CONVERGE_EASE;
+    rayWrap.style.transform = 'scale(1) rotate(' + CONVERGE_ROTATION + 'deg)';
+    rayLayers.forEach(function (layer) {
+      layer.el.style.transition = 'filter ' + CONFIG.CONVERGE_DURATION + 'ms ' + CONFIG.CONVERGE_EASE;
+      layer.el.style.filter = 'blur(' + layer.cfg.blurEnd + 'px)';
     });
-    phaseAngle = 'converged';
-    drawRays(currentAngles());
     timers.push(setTimeout(startRevealPhase, CONFIG.CONVERGE_DURATION));
   }
 
   // ---------------------------------------------------------------
-  // Phase 4: masks slide apart along CONVERGE_ANGLE; rays fade out;
+  // Phase 4: masks slide apart along CONVERGE_ANGLE; the fog fades out;
   // video starts playing.
   // ---------------------------------------------------------------
   function startRevealPhase() {
-    var v = dirVec(CONFIG.CONVERGE_ANGLE);
+    var rad = CONFIG.CONVERGE_ANGLE * Math.PI / 180;
+    var vx = Math.cos(rad), vy = -Math.sin(rad);
     var d = CONFIG.SLIDE_DISTANCE;
-    var svgRotateDeg = cssRotateFor(CONFIG.CONVERGE_ANGLE);
 
     // translate() here is the outermost transform function, so it moves
     // the (already-rotated) mask in real screen-space vw/vh directions —
@@ -291,13 +225,11 @@
     // double doors parting along the diagonal.
     leftMask.style.transition = 'transform ' + CONFIG.REVEAL_DURATION + 'ms ' + CONFIG.CONVERGE_EASE;
     rightMask.style.transition = 'transform ' + CONFIG.REVEAL_DURATION + 'ms ' + CONFIG.CONVERGE_EASE;
-    leftMask.style.transform = 'translate(' + (v.x * d) + 'vw, ' + (v.y * d) + 'vh) rotate(' + svgRotateDeg + 'deg)';
-    rightMask.style.transform = 'translate(' + (-v.x * d) + 'vw, ' + (-v.y * d) + 'vh) rotate(' + svgRotateDeg + 'deg)';
+    leftMask.style.transform = 'translate(' + (vx * d) + 'vw, ' + (vy * d) + 'vh) rotate(' + CONVERGE_ROTATION + 'deg) translateY(-200vmax)';
+    rightMask.style.transform = 'translate(' + (-vx * d) + 'vw, ' + (-vy * d) + 'vh) rotate(' + CONVERGE_ROTATION + 'deg) translateY(200vmax)';
 
-    rayPaths.forEach(function (r) {
-      r.el.style.transition = 'opacity ' + CONFIG.RAY_FADE_DURATION + 'ms linear';
-      r.el.style.opacity = '0';
-    });
+    rayWrap.style.transition = 'opacity ' + CONFIG.RAY_FADE_DURATION + 'ms linear';
+    rayWrap.style.opacity = '0';
 
     if (video) tryPlayVideo();
 
@@ -344,7 +276,6 @@
     finished = true;
     clearTimeout(failsafeTimer);
     timers.forEach(clearTimeout);
-    window.removeEventListener('resize', measure);
     if (root && root.parentNode) root.parentNode.removeChild(root);
     [heroTitle, heroSub, heroBtn].forEach(function (el) {
       if (el) { el.style.opacity = ''; el.style.transform = ''; el.style.transition = ''; }
