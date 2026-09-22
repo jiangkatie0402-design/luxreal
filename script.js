@@ -228,3 +228,21 @@ if (adv3Steps.length && adv3Slides.length) {
     });
   });
 }
+
+// ---------- skills (core skill points) ----------
+const skillsItems = document.querySelectorAll('.skills-item');
+const skillsSlides = document.querySelectorAll('.skills-slide');
+if (skillsItems.length && skillsSlides.length) {
+  skillsItems.forEach(item => {
+    item.addEventListener('click', () => {
+      const target = item.dataset.skill;
+      skillsItems.forEach(i => i.classList.toggle('active', i === item));
+      skillsSlides.forEach(slide => {
+        const active = slide.dataset.skillSlide === target;
+        slide.classList.toggle('active', active);
+        const video = slide.querySelector('video');
+        if (video) { if (active) video.play().catch(() => {}); else video.pause(); }
+      });
+    });
+  });
+}
