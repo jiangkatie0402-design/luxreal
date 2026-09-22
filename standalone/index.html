@@ -314,6 +314,32 @@ button { font-family: inherit; }
 .stat-block .n { font-family: var(--font-serif); font-size: 40px; font-variant-numeric: tabular-nums; }
 .stat-block .l { font-size: 13px; color: var(--text-faint); margin-top: 6px; }
 
+/* ---------- advantages v2 (tabbed showcase) ---------- */
+.adv2-head { text-align: center; margin-bottom: 64px; }
+.adv2-layout { display: grid; grid-template-columns: 0.8fr 1.2fr; gap: 64px; align-items: start; }
+.adv2-list { display: flex; flex-direction: column; }
+.adv2-item {
+  display: block; width: 100%; text-align: left; background: none; border: none; cursor: pointer;
+  padding: 22px 0 22px 24px; border-left: 2px solid var(--border-2); font-family: inherit;
+  transition: border-color .3s var(--ease);
+}
+.adv2-item h3 { font-size: 17px; font-weight: 600; color: var(--text-faint); transition: color .3s var(--ease); }
+.adv2-item.active { border-left-color: var(--blue-light); }
+.adv2-item.active h3 { color: var(--text); }
+.adv2-media {
+  position: relative; aspect-ratio: 16 / 9;
+  border-radius: var(--radius-lg); border: 1px solid var(--border-2); background: var(--surface);
+  overflow: hidden;
+}
+.adv2-slide {
+  position: absolute; inset: 0; opacity: 0; transition: opacity .5s var(--ease); pointer-events: none;
+}
+.adv2-slide.active { opacity: 1; pointer-events: auto; z-index: 1; }
+.adv2-slide video { width: 100%; height: 100%; object-fit: cover; display: block; }
+@media (max-width: 1024px) {
+  .adv2-layout { grid-template-columns: 1fr; gap: 32px; }
+}
+
 /* ---------- features ---------- */
 .feature-row { display: grid; grid-template-columns: 0.9fr 1.1fr; gap: 60px; align-items: center; padding: 70px 0; border-top: 1px solid var(--border); }
 .feature-row:last-child { border-bottom: 1px solid var(--border); }
@@ -646,51 +672,27 @@ button { font-family: inherit; }
 <!-- ADVANTAGES -->
 <section class="section" id="advantages">
   <div class="container">
-    <div class="section-head reveal">
-      <div class="eyebrow">核心优势</div>
-      <h2 class="section-title">为什么高端品牌选择 LuxReal</h2>
-      <p class="section-desc">我们把电影摄制团队的审美标准，压缩进一个可持续调用的智能引擎。</p>
+    <div class="adv2-head reveal">
+      <h2 class="section-title">完整剧集一键生成</h2>
     </div>
 
-    <div class="adv-layout">
-      <div class="adv-list reveal">
-        <div class="adv-item">
-          <div class="adv-index">01</div>
-          <div>
-            <h3>电影级视觉质感</h3>
-            <p>由专业视觉美学模型驱动，从光影、构图到调色，输出媲美专业摄制组的画面质感。</p>
-          </div>
-        </div>
-        <div class="adv-item">
-          <div class="adv-index">02</div>
-          <div>
-            <h3>品牌调性还原</h3>
-            <p>智能识别品牌的视觉语言，色彩体系、字体气质与叙事氛围保持高度一致。</p>
-          </div>
-        </div>
-        <div class="adv-item">
-          <div class="adv-index">03</div>
-          <div>
-            <h3>极速创作流程</h3>
-            <p>从灵感输入到成片导出，最快 10 分钟内完成，让创意不再被制作周期拖慢。</p>
-          </div>
-        </div>
-        <div class="adv-item">
-          <div class="adv-index">04</div>
-          <div>
-            <h3>企业级安全保障</h3>
-            <p>全流程加密处理，内容版权与数据隐私受到严格保护，可放心用于商业投放。</p>
-          </div>
-        </div>
+    <div class="adv2-layout">
+      <div class="adv2-list reveal">
+        <button class="adv2-item active" type="button" data-adv="0">
+          <h3>剧本拆分</h3>
+        </button>
+        <button class="adv2-item" type="button" data-adv="1">
+          <h3>AI 资产生成</h3>
+        </button>
+        <button class="adv2-item" type="button" data-adv="2">
+          <h3>视频生成</h3>
+        </button>
       </div>
 
-      <div class="reveal">
-        <div class="stat-card">
-          <div class="stat-block"><div class="n grad-text">10,000+</div><div class="l">品牌信赖之选</div></div>
-          <div class="stat-block"><div class="n grad-text">98%</div><div class="l">客户满意度</div></div>
-          <div class="stat-block"><div class="n grad-text">4K</div><div class="l">电影级输出画质</div></div>
-          <div class="stat-block"><div class="n grad-text">&lt;10min</div><div class="l">平均生成时长</div></div>
-        </div>
+      <div class="adv2-media reveal">
+        <div class="adv2-slide active" data-adv-slide="0"></div>
+        <div class="adv2-slide" data-adv-slide="1"></div>
+        <div class="adv2-slide" data-adv-slide="2"></div>
       </div>
     </div>
   </div>
@@ -1191,6 +1193,24 @@ if (showcaseScroll && showcaseDots.length && showcaseSlides.length) {
       const targetProgress = (idx + 0.001) / slideCount;
       const targetY = window.scrollY + rect.top + targetProgress * scrollable;
       window.scrollTo({ top: targetY, behavior: reduceMotion ? 'auto' : 'smooth' });
+    });
+  });
+}
+
+// ---------- advantages tabbed showcase ----------
+const adv2Items = document.querySelectorAll('.adv2-item');
+const adv2Slides = document.querySelectorAll('.adv2-slide');
+if (adv2Items.length && adv2Slides.length) {
+  adv2Items.forEach(item => {
+    item.addEventListener('click', () => {
+      const target = item.dataset.adv;
+      adv2Items.forEach(i => i.classList.toggle('active', i === item));
+      adv2Slides.forEach(slide => {
+        const active = slide.dataset.advSlide === target;
+        slide.classList.toggle('active', active);
+        const video = slide.querySelector('video');
+        if (video) { if (active) video.play().catch(() => {}); else video.pause(); }
+      });
     });
   });
 }

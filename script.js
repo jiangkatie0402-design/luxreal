@@ -208,3 +208,21 @@ if (showcaseScroll && showcaseDots.length && showcaseSlides.length) {
     });
   });
 }
+
+// ---------- advantages tabbed showcase ----------
+const adv2Items = document.querySelectorAll('.adv2-item');
+const adv2Slides = document.querySelectorAll('.adv2-slide');
+if (adv2Items.length && adv2Slides.length) {
+  adv2Items.forEach(item => {
+    item.addEventListener('click', () => {
+      const target = item.dataset.adv;
+      adv2Items.forEach(i => i.classList.toggle('active', i === item));
+      adv2Slides.forEach(slide => {
+        const active = slide.dataset.advSlide === target;
+        slide.classList.toggle('active', active);
+        const video = slide.querySelector('video');
+        if (video) { if (active) video.play().catch(() => {}); else video.pause(); }
+      });
+    });
+  });
+}

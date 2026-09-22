@@ -305,6 +305,32 @@ button { font-family: inherit; }
 .stat-block .n { font-family: var(--font-serif); font-size: 40px; font-variant-numeric: tabular-nums; }
 .stat-block .l { font-size: 13px; color: var(--text-faint); margin-top: 6px; }
 
+/* ---------- advantages v2 (tabbed showcase) ---------- */
+.adv2-head { text-align: center; margin-bottom: 64px; }
+.adv2-layout { display: grid; grid-template-columns: 0.8fr 1.2fr; gap: 64px; align-items: start; }
+.adv2-list { display: flex; flex-direction: column; }
+.adv2-item {
+  display: block; width: 100%; text-align: left; background: none; border: none; cursor: pointer;
+  padding: 22px 0 22px 24px; border-left: 2px solid var(--border-2); font-family: inherit;
+  transition: border-color .3s var(--ease);
+}
+.adv2-item h3 { font-size: 17px; font-weight: 600; color: var(--text-faint); transition: color .3s var(--ease); }
+.adv2-item.active { border-left-color: var(--blue-light); }
+.adv2-item.active h3 { color: var(--text); }
+.adv2-media {
+  position: relative; aspect-ratio: 16 / 9;
+  border-radius: var(--radius-lg); border: 1px solid var(--border-2); background: var(--surface);
+  overflow: hidden;
+}
+.adv2-slide {
+  position: absolute; inset: 0; opacity: 0; transition: opacity .5s var(--ease); pointer-events: none;
+}
+.adv2-slide.active { opacity: 1; pointer-events: auto; z-index: 1; }
+.adv2-slide video { width: 100%; height: 100%; object-fit: cover; display: block; }
+@media (max-width: 1024px) {
+  .adv2-layout { grid-template-columns: 1fr; gap: 32px; }
+}
+
 /* ---------- features ---------- */
 .feature-row { display: grid; grid-template-columns: 0.9fr 1.1fr; gap: 60px; align-items: center; padding: 70px 0; border-top: 1px solid var(--border); }
 .feature-row:last-child { border-bottom: 1px solid var(--border); }
