@@ -364,7 +364,7 @@ button { font-family: inherit; }
 .cta-btns { display: flex; align-items: center; justify-content: center; gap: 16px; flex-wrap: wrap; }
 
 /* ---------- footer ---------- */
-.footer { border-top: 1px solid var(--border); padding: 64px 0 172px; }
+.footer { border-top: 1px solid var(--border); padding: 64px 0 48px; }
 .footer-top { display: flex; flex-wrap: wrap; gap: 48px; margin-bottom: 64px; }
 .footer-brand { flex: 0 1 300px; }
 .footer-brand p { color: var(--text-dim); font-size: 14px; max-width: 280px; margin-top: 18px; line-height: 1.8; }
@@ -374,7 +374,7 @@ button { font-family: inherit; }
 .footer-col a:hover { color: var(--blue-pale); }
 .footer-social { display: flex; gap: 10px; margin-top: 24px; }
 .footer-bottom {
-  display: flex; align-items: center; justify-content: space-between; padding-top: 36px; border-top: 1px solid var(--border);
+  display: flex; align-items: center; justify-content: space-between; padding-top: 160px; border-top: 1px solid var(--border);
   font-size: 13px; color: var(--text-faint); flex-wrap: wrap; gap: 12px;
 }
 
