@@ -307,16 +307,18 @@ button { font-family: inherit; }
 
 /* ---------- advantages v2 (tabbed showcase) ---------- */
 .adv2-head { text-align: center; margin-bottom: 64px; }
-.adv2-layout { display: grid; grid-template-columns: 0.8fr 1.2fr; gap: 64px; align-items: stretch; }
-.adv2-list { display: flex; flex-direction: column; justify-content: space-between; padding: 12px 0; }
+.adv2-layout { display: grid; grid-template-columns: 0.8fr 1.2fr; gap: 64px; align-items: start; }
+.adv2-list { display: flex; flex-direction: column; gap: 56px; padding: 12px 0; }
 .adv2-item {
   display: block; width: 100%; text-align: left; background: none; border: none; cursor: pointer;
   padding: 10px 0 10px 24px; border-left: 2px solid var(--border-2); font-family: inherit;
   transition: border-color .3s var(--ease);
 }
-.adv2-item h3 { font-size: 17px; font-weight: 600; color: var(--text-faint); transition: color .3s var(--ease); }
+.adv2-item h3 { font-size: 17px; font-weight: 600; color: var(--text-faint); line-height: 1.4; transition: color .3s var(--ease); }
+.adv2-item p { font-size: 14px; color: var(--text-dim); line-height: 1.75; margin-top: 12px; display: none; }
 .adv2-item.active { border-left-color: var(--blue-light); }
 .adv2-item.active h3 { color: var(--text); }
+.adv2-item.active p { display: block; }
 .adv2-media {
   position: relative; aspect-ratio: 16 / 9;
   border-radius: var(--radius-lg); border: 1px solid var(--border-2); background: var(--surface);
