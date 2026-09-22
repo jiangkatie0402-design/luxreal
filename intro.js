@@ -52,12 +52,12 @@
     if (window.__introFailsafe) { clearTimeout(window.__introFailsafe); window.__introFailsafe = null; }
   }
 
+  // Plays on every visit (no session-scoped "seen it already" skip) —
+  // still respects prefers-reduced-motion, since that's an accessibility
+  // preference rather than a repeat-visit convenience.
   var reducedMotion = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-  var alreadyPlayed = false;
-  try { alreadyPlayed = sessionStorage.getItem('luxreal_intro_played') === '1'; } catch (e) { /* private mode etc. */ }
-  var forceReplay = /[?&]replay\b/.test(location.search);
 
-  if (reducedMotion || (alreadyPlayed && !forceReplay)) {
+  if (reducedMotion) {
     reveal();
     return;
   }
@@ -536,6 +536,5 @@
     setOpacity(navLogo, 1); setOpacity(navLinks, 1); setOpacity(navRight, 1);
     setOpacity(heroContent, 1); setOpacity(heroChip, 1);
     reveal();
-    try { sessionStorage.setItem('luxreal_intro_played', '1'); } catch (e) {}
   }
 })();
