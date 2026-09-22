@@ -209,15 +209,17 @@ if (showcaseScroll && showcaseDots.length && showcaseSlides.length) {
   });
 }
 
-// ---------- advantages tabbed showcase ----------
-const adv2Items = document.querySelectorAll('.adv2-item');
-const adv2Slides = document.querySelectorAll('.adv2-slide');
-if (adv2Items.length && adv2Slides.length) {
-  adv2Items.forEach(item => {
-    item.addEventListener('click', () => {
-      const target = item.dataset.adv;
-      adv2Items.forEach(i => i.classList.toggle('active', i === item));
-      adv2Slides.forEach(slide => {
+// ---------- advantages step tabs ----------
+const adv3Steps = document.querySelectorAll('.adv3-step');
+const adv3TextSlides = document.querySelectorAll('.adv3-text-slide');
+const adv3Slides = document.querySelectorAll('.adv3-slide');
+if (adv3Steps.length && adv3Slides.length) {
+  adv3Steps.forEach(step => {
+    step.addEventListener('click', () => {
+      const target = step.dataset.step;
+      adv3Steps.forEach(s => s.classList.toggle('active', s === step));
+      adv3TextSlides.forEach(slide => slide.classList.toggle('active', slide.dataset.textSlide === target));
+      adv3Slides.forEach(slide => {
         const active = slide.dataset.advSlide === target;
         slide.classList.toggle('active', active);
         const video = slide.querySelector('video');
