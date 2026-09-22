@@ -383,8 +383,13 @@ button { font-family: inherit; }
 .footer-col a:hover { color: var(--blue-pale); }
 .footer-social { display: flex; gap: 10px; margin-top: 24px; }
 .footer-bottom {
-  display: flex; align-items: center; justify-content: space-between; padding-top: 160px; border-top: 1px solid var(--border);
+  position: relative;
+  display: flex; align-items: center; justify-content: space-between; padding-top: 160px;
   font-size: 13px; color: var(--text-faint); flex-wrap: wrap; gap: 12px;
+}
+.footer-bottom::before {
+  content: ""; position: absolute; top: 0; left: 50%; width: 100vw; height: 1px;
+  background: var(--border); transform: translateX(-50%);
 }
 
 /* ---------- auth modal ---------- */
