@@ -121,3 +121,21 @@ if (privacyLinks.length) {
   }, { rootMargin: '-20% 0px -70% 0px' });
   sections.forEach(s => s && spy.observe(s));
 }
+
+// ---------- showcase slider ----------
+const showcaseDots = document.querySelectorAll('.showcase-dot');
+const showcaseSlides = document.querySelectorAll('.showcase-slide');
+if (showcaseDots.length && showcaseSlides.length) {
+  showcaseDots.forEach(dot => {
+    dot.addEventListener('click', () => {
+      const target = dot.dataset.slideTo;
+      showcaseSlides.forEach(slide => {
+        const active = slide.dataset.slide === target;
+        slide.classList.toggle('active', active);
+        const video = slide.querySelector('video');
+        if (video) { if (active) video.play().catch(() => {}); else video.pause(); }
+      });
+      showcaseDots.forEach(d => d.classList.toggle('active', d === dot));
+    });
+  });
+}
