@@ -404,7 +404,7 @@ button { font-family: inherit; }
 .skills-item h3 { font-size: 17px; font-weight: 600; color: var(--text-faint); line-height: 1.4; transition: color .3s var(--ease); }
 .skills-item p { font-size: 14px; color: var(--text-dim); line-height: 1.75; margin-top: 12px; display: none; }
 .skills-points { display: none; flex-direction: column; gap: 10px; margin-top: 14px; }
-.skills-points li { display: flex; align-items: flex-start; justify-content: flex-end; gap: 10px; font-size: 14px; color: var(--text-dim); line-height: 1.6; }
+.skills-points li { display: flex; flex-direction: row-reverse; align-items: flex-start; justify-content: flex-end; gap: 10px; font-size: 14px; color: var(--text-dim); line-height: 1.6; }
 .skills-points li svg { color: var(--blue-light); flex-shrink: 0; margin-top: 3px; }
 .skills-item.active::after { background: var(--blue-light); }
 .skills-item.active h3 { color: var(--text); }
