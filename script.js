@@ -246,3 +246,16 @@ if (skillsItems.length && skillsSlides.length) {
     });
   });
 }
+
+// ---------- partners (creator feedback) ----------
+const partnersAvatars = document.querySelectorAll('.partners-avatar');
+const partnersSlides = document.querySelectorAll('.partners-slide');
+if (partnersAvatars.length && partnersSlides.length) {
+  partnersAvatars.forEach(avatar => {
+    avatar.addEventListener('click', () => {
+      const target = avatar.dataset.partner;
+      partnersAvatars.forEach(a => a.classList.toggle('active', a === avatar));
+      partnersSlides.forEach(slide => slide.classList.toggle('active', slide.dataset.partnerSlide === target));
+    });
+  });
+}

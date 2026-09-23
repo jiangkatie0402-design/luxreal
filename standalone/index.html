@@ -413,6 +413,33 @@ button { font-family: inherit; }
   .skills-layout { grid-template-columns: 1fr; gap: 32px; }
 }
 
+/* ---------- partners (creator feedback) ---------- */
+.partners-head { text-align: center; margin-bottom: 48px; }
+.partners-sub { color: var(--text-dim); margin-top: 12px; max-width: 560px; margin-left: auto; margin-right: auto; }
+.partners-avatars {
+  display: flex; align-items: center; justify-content: center; flex-wrap: wrap;
+  gap: 18px; margin-bottom: 56px;
+}
+.partners-avatar {
+  width: 60px; height: 60px; border-radius: 50%; padding: 0; cursor: pointer;
+  background: linear-gradient(135deg, var(--surface), var(--bg-soft));
+  border: 1px solid var(--border-2); opacity: .5; transition: all .3s var(--ease);
+}
+.partners-avatar.active { width: 92px; height: 92px; opacity: 1; border-color: var(--blue-light); }
+.partners-detail { max-width: 560px; margin: 0 auto; text-align: center; }
+.partners-slide { display: none; }
+.partners-slide.active { display: block; }
+.partners-name { font-size: 20px; font-weight: 700; margin-bottom: 10px; }
+.partners-role { color: var(--text-dim); margin-bottom: 16px; }
+.partners-showcase { color: var(--text-dim); margin-bottom: 16px; }
+.partners-showcase strong { color: var(--text); font-weight: 600; }
+.partners-quote { color: var(--text-faint); line-height: 1.75; }
+@media (max-width: 640px) {
+  .partners-avatars { gap: 10px; }
+  .partners-avatar { width: 44px; height: 44px; }
+  .partners-avatar.active { width: 68px; height: 68px; }
+}
+
 /* ---------- features ---------- */
 .feature-row { display: grid; grid-template-columns: 0.9fr 1.1fr; gap: 60px; align-items: center; padding: 70px 0; border-top: 1px solid var(--border); }
 .feature-row:last-child { border-bottom: 1px solid var(--border); }
@@ -819,6 +846,92 @@ button { font-family: inherit; }
   </div>
 </section>
 
+<!-- PARTNERS -->
+<section class="section" id="partners">
+  <div class="container">
+    <div class="partners-head reveal">
+      <h2 class="section-title">创作者说</h2>
+      <p class="partners-sub">他们用 LuxReal 完成了自己的作品，也想把真实的创作体验分享给你。</p>
+    </div>
+
+    <div class="partners-avatars reveal" role="tablist">
+      <button class="partners-avatar active" type="button" data-partner="0" aria-label="创作者 1"></button>
+      <button class="partners-avatar" type="button" data-partner="1" aria-label="创作者 2"></button>
+      <button class="partners-avatar" type="button" data-partner="2" aria-label="创作者 3"></button>
+      <button class="partners-avatar" type="button" data-partner="3" aria-label="创作者 4"></button>
+      <button class="partners-avatar" type="button" data-partner="4" aria-label="创作者 5"></button>
+      <button class="partners-avatar" type="button" data-partner="5" aria-label="创作者 6"></button>
+      <button class="partners-avatar" type="button" data-partner="6" aria-label="创作者 7"></button>
+      <button class="partners-avatar" type="button" data-partner="7" aria-label="创作者 8"></button>
+      <button class="partners-avatar" type="button" data-partner="8" aria-label="创作者 9"></button>
+      <button class="partners-avatar" type="button" data-partner="9" aria-label="创作者 10"></button>
+    </div>
+
+    <div class="partners-detail reveal">
+      <div class="partners-slide active" data-partner-slide="0">
+        <h3 class="partners-name">创作者 1 · 姓名待补充</h3>
+        <p class="partners-role">身份介绍待补充</p>
+        <p class="partners-showcase">代表作：<strong>作品名称待补充</strong></p>
+        <p class="partners-quote">评价文案待补充，后续替换为真实创作者的使用感受。</p>
+      </div>
+      <div class="partners-slide" data-partner-slide="1">
+        <h3 class="partners-name">创作者 2 · 姓名待补充</h3>
+        <p class="partners-role">身份介绍待补充</p>
+        <p class="partners-showcase">代表作：<strong>作品名称待补充</strong></p>
+        <p class="partners-quote">评价文案待补充，后续替换为真实创作者的使用感受。</p>
+      </div>
+      <div class="partners-slide" data-partner-slide="2">
+        <h3 class="partners-name">创作者 3 · 姓名待补充</h3>
+        <p class="partners-role">身份介绍待补充</p>
+        <p class="partners-showcase">代表作：<strong>作品名称待补充</strong></p>
+        <p class="partners-quote">评价文案待补充，后续替换为真实创作者的使用感受。</p>
+      </div>
+      <div class="partners-slide" data-partner-slide="3">
+        <h3 class="partners-name">创作者 4 · 姓名待补充</h3>
+        <p class="partners-role">身份介绍待补充</p>
+        <p class="partners-showcase">代表作：<strong>作品名称待补充</strong></p>
+        <p class="partners-quote">评价文案待补充，后续替换为真实创作者的使用感受。</p>
+      </div>
+      <div class="partners-slide" data-partner-slide="4">
+        <h3 class="partners-name">创作者 5 · 姓名待补充</h3>
+        <p class="partners-role">身份介绍待补充</p>
+        <p class="partners-showcase">代表作：<strong>作品名称待补充</strong></p>
+        <p class="partners-quote">评价文案待补充，后续替换为真实创作者的使用感受。</p>
+      </div>
+      <div class="partners-slide" data-partner-slide="5">
+        <h3 class="partners-name">创作者 6 · 姓名待补充</h3>
+        <p class="partners-role">身份介绍待补充</p>
+        <p class="partners-showcase">代表作：<strong>作品名称待补充</strong></p>
+        <p class="partners-quote">评价文案待补充，后续替换为真实创作者的使用感受。</p>
+      </div>
+      <div class="partners-slide" data-partner-slide="6">
+        <h3 class="partners-name">创作者 7 · 姓名待补充</h3>
+        <p class="partners-role">身份介绍待补充</p>
+        <p class="partners-showcase">代表作：<strong>作品名称待补充</strong></p>
+        <p class="partners-quote">评价文案待补充，后续替换为真实创作者的使用感受。</p>
+      </div>
+      <div class="partners-slide" data-partner-slide="7">
+        <h3 class="partners-name">创作者 8 · 姓名待补充</h3>
+        <p class="partners-role">身份介绍待补充</p>
+        <p class="partners-showcase">代表作：<strong>作品名称待补充</strong></p>
+        <p class="partners-quote">评价文案待补充，后续替换为真实创作者的使用感受。</p>
+      </div>
+      <div class="partners-slide" data-partner-slide="8">
+        <h3 class="partners-name">创作者 9 · 姓名待补充</h3>
+        <p class="partners-role">身份介绍待补充</p>
+        <p class="partners-showcase">代表作：<strong>作品名称待补充</strong></p>
+        <p class="partners-quote">评价文案待补充，后续替换为真实创作者的使用感受。</p>
+      </div>
+      <div class="partners-slide" data-partner-slide="9">
+        <h3 class="partners-name">创作者 10 · 姓名待补充</h3>
+        <p class="partners-role">身份介绍待补充</p>
+        <p class="partners-showcase">代表作：<strong>作品名称待补充</strong></p>
+        <p class="partners-quote">评价文案待补充，后续替换为真实创作者的使用感受。</p>
+      </div>
+    </div>
+  </div>
+</section>
+
 <!-- CTA -->
 <section class="section section-tight">
   <div class="container">
@@ -1158,6 +1271,19 @@ if (skillsItems.length && skillsSlides.length) {
         const video = slide.querySelector('video');
         if (video) { if (active) video.play().catch(() => {}); else video.pause(); }
       });
+    });
+  });
+}
+
+// ---------- partners (creator feedback) ----------
+const partnersAvatars = document.querySelectorAll('.partners-avatar');
+const partnersSlides = document.querySelectorAll('.partners-slide');
+if (partnersAvatars.length && partnersSlides.length) {
+  partnersAvatars.forEach(avatar => {
+    avatar.addEventListener('click', () => {
+      const target = avatar.dataset.partner;
+      partnersAvatars.forEach(a => a.classList.toggle('active', a === avatar));
+      partnersSlides.forEach(slide => slide.classList.toggle('active', slide.dataset.partnerSlide === target));
     });
   });
 }
