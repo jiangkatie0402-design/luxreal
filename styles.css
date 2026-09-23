@@ -376,7 +376,7 @@ button { font-family: inherit; }
 /* ---------- skills (core skill points) ---------- */
 .skills-head { text-align: center; margin-bottom: 64px; }
 .skills-scroll { position: relative; height: calc(100vh * var(--skills-slides, 3)); }
-.skills-pin { position: sticky; top: 50%; transform: translateY(-50%); }
+.skills-pin { position: sticky; top: 160px; }
 .skills-layout { display: grid; grid-template-columns: 1.2fr 0.8fr; gap: 64px; align-items: stretch; }
 .skills-media {
   position: relative; aspect-ratio: 16 / 9;
