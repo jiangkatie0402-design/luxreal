@@ -186,23 +186,27 @@ button { font-family: inherit; }
 .hero-cinematic-content { position: relative; z-index: 2; max-width: 900px; }
 .hero-cinematic-title {
   position: relative;
-  font-family: "Smiley Sans", "PingFang SC", sans-serif; font-weight: 600; font-synthesis: none; color: #fff;
-  font-size: clamp(44px, 5.6vw, 88px); white-space: nowrap; letter-spacing: 0.02em; line-height: 1.1; margin-bottom: 16px;
+  font-family: "PingFang SC", "Microsoft YaHei", sans-serif; font-weight: 600; font-style: normal; color: #fff;
+  font-size: clamp(44px, 4.8vw, 76px); white-space: nowrap; letter-spacing: 0.02em; line-height: 1.1; margin-bottom: 16px;
 }
 .hero-cinematic-title::before {
   content: '';
   position: absolute; inset: -20% -10%; z-index: -1; pointer-events: none;
   background: radial-gradient(ellipse 50% 40% at 50% 50%, rgba(0,0,0,.45), transparent 70%);
 }
-/* Smiley Sans font not embedded in the portable single-file build; falls back to PingFang SC */
+.hero-serif {
+  font-family: "Playfair Display", Georgia, "Times New Roman", serif;
+  font-style: italic; font-weight: 800; font-size: 1.12em; font-synthesis: none;
+}
 .hero-cinematic-sub {
-  font-size: 17px; letter-spacing: 0.02em; color: rgba(255,255,255,.82); font-weight: 400; margin-bottom: 32px;
+  font-size: clamp(16px, 1.4vw, 22px); letter-spacing: 0.02em; color: rgba(255,255,255,.82); font-weight: 400;
+  margin-top: 20px; margin-bottom: 32px;
 }
 .pill-cta {
   display: inline-flex; align-items: center; justify-content: center;
-  padding: 14px 36px; border-radius: 100px; border: 1.5px solid rgba(255,255,255,.7);
+  padding: 14px 40px; border-radius: 100px; border: 1.5px solid rgba(255,255,255,.7);
   background: rgba(255,255,255,.06); backdrop-filter: blur(6px);
-  color: #fff; font-size: 14px; font-weight: 600; letter-spacing: 0.02em;
+  color: #fff; font-size: 16px; font-weight: 600; letter-spacing: 0.02em; margin-top: 36px;
   cursor: pointer; font-family: inherit; transition: all .25s var(--ease);
 }
 .pill-cta:hover { background: #fff; color: #0a0a0c; transform: translateY(-2px); }
