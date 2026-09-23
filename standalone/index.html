@@ -402,7 +402,7 @@ button { font-family: inherit; }
   content: ''; position: absolute; z-index: 0; left: 0; top: 0; bottom: 0; width: 2px; background: var(--border-2);
 }
 .skills-item {
-  display: block; width: 100%; text-align: left; background: none; border: none; cursor: pointer;
+  display: block; width: 100%; text-align: right; background: none; border: none; cursor: pointer;
   padding: 10px 0 10px 24px; font-family: inherit;
   position: relative; z-index: 1;
 }
@@ -413,7 +413,7 @@ button { font-family: inherit; }
 .skills-item h3 { font-size: 17px; font-weight: 600; color: var(--text-faint); line-height: 1.4; transition: color .3s var(--ease); }
 .skills-item p { font-size: 14px; color: var(--text-dim); line-height: 1.75; margin-top: 12px; display: none; }
 .skills-points { display: none; flex-direction: column; gap: 10px; margin-top: 14px; }
-.skills-points li { display: flex; align-items: flex-start; gap: 10px; font-size: 14px; color: var(--text-dim); line-height: 1.6; }
+.skills-points li { display: flex; align-items: flex-start; justify-content: flex-end; gap: 10px; font-size: 14px; color: var(--text-dim); line-height: 1.6; }
 .skills-points li svg { color: var(--blue-light); flex-shrink: 0; margin-top: 3px; }
 .skills-item.active::after { background: var(--blue-light); }
 .skills-item.active h3 { color: var(--text); }
