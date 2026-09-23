@@ -401,12 +401,16 @@ button { font-family: inherit; }
 }
 .skills-item {
   display: block; width: 100%; text-align: left; background: none; border: none; cursor: pointer;
-  padding: 10px 0 10px 24px; border-left: 2px solid transparent; font-family: inherit;
-  position: relative; z-index: 1; transition: border-color .3s var(--ease);
+  padding: 10px 0 10px 24px; font-family: inherit;
+  position: relative; z-index: 1;
+}
+.skills-item::after {
+  content: ''; position: absolute; left: 6px; top: -6px; bottom: -6px; width: 2px;
+  background: transparent; transition: background-color .3s var(--ease);
 }
 .skills-item h3 { font-size: 17px; font-weight: 600; color: var(--text-faint); line-height: 1.4; transition: color .3s var(--ease); }
 .skills-item p { font-size: 14px; color: var(--text-dim); line-height: 1.75; margin-top: 12px; display: none; }
-.skills-item.active { border-left-color: var(--blue-light); }
+.skills-item.active::after { background: var(--blue-light); }
 .skills-item.active h3 { color: var(--text); }
 .skills-item.active p { display: block; }
 @media (max-width: 1024px) {
