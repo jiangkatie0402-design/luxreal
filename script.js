@@ -230,21 +230,47 @@ if (adv3Steps.length && adv3Slides.length) {
 }
 
 // ---------- skills (core skill points) ----------
+const skillsScroll = document.getElementById('skills-scroll');
 const skillsItems = document.querySelectorAll('.skills-item');
 const skillsSlides = document.querySelectorAll('.skills-slide');
 if (skillsItems.length && skillsSlides.length) {
-  skillsItems.forEach(item => {
-    item.addEventListener('click', () => {
-      const target = item.dataset.skill;
-      skillsItems.forEach(i => i.classList.toggle('active', i === item));
-      skillsSlides.forEach(slide => {
-        const active = slide.dataset.skillSlide === target;
-        slide.classList.toggle('active', active);
-        const video = slide.querySelector('video');
-        if (video) { if (active) video.play().catch(() => {}); else video.pause(); }
-      });
+  function setActiveSkill(target) {
+    skillsItems.forEach(i => i.classList.toggle('active', i.dataset.skill === target));
+    skillsSlides.forEach(slide => {
+      const active = slide.dataset.skillSlide === target;
+      slide.classList.toggle('active', active);
+      const video = slide.querySelector('video');
+      if (video) { if (active) video.play().catch(() => {}); else video.pause(); }
     });
+  }
+
+  skillsItems.forEach(item => {
+    item.addEventListener('click', () => setActiveSkill(item.dataset.skill));
   });
+
+  if (skillsScroll) {
+    const skillCount = skillsItems.length;
+    skillsScroll.style.setProperty('--skills-slides', skillCount);
+
+    let skillsTicking = false;
+    function updateSkillsScroll() {
+      skillsTicking = false;
+      const rect = skillsScroll.getBoundingClientRect();
+      const scrollable = skillsScroll.offsetHeight - window.innerHeight;
+      const progress = scrollable > 0 ? Math.min(1, Math.max(0, -rect.top / scrollable)) : 0;
+      const activeIndex = Math.min(skillCount - 1, Math.floor(progress * skillCount));
+      setActiveSkill(String(activeIndex));
+    }
+    function onSkillsScroll() {
+      if (!skillsTicking) {
+        skillsTicking = true;
+        requestAnimationFrame(updateSkillsScroll);
+      }
+    }
+    window.addEventListener('scroll', onSkillsScroll, { passive: true });
+    window.addEventListener('resize', onSkillsScroll);
+    updateSkillsScroll();
+  }
 }
 
 // ---------- partners (creator feedback) ----------
