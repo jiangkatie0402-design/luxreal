@@ -410,9 +410,13 @@ button { font-family: inherit; }
 }
 .skills-item h3 { font-size: 17px; font-weight: 600; color: var(--text-faint); line-height: 1.4; transition: color .3s var(--ease); }
 .skills-item p { font-size: 14px; color: var(--text-dim); line-height: 1.75; margin-top: 12px; display: none; }
+.skills-points { display: none; flex-direction: column; gap: 10px; margin-top: 14px; }
+.skills-points li { display: flex; align-items: flex-start; gap: 10px; font-size: 14px; color: var(--text-dim); line-height: 1.6; }
+.skills-points li svg { color: var(--blue-light); flex-shrink: 0; margin-top: 3px; }
 .skills-item.active::after { background: var(--blue-light); }
 .skills-item.active h3 { color: var(--text); }
 .skills-item.active p { display: block; }
+.skills-item.active .skills-points { display: flex; }
 @media (max-width: 1024px) {
   .skills-layout { grid-template-columns: 1fr; gap: 32px; }
 }
@@ -834,8 +838,13 @@ button { font-family: inherit; }
 
       <div class="skills-list reveal">
         <button class="skills-item active" type="button" data-skill="0">
-          <h3>3D 片场</h3>
-          <p>详细介绍文案待补充。</p>
+          <h3>智能创作 Agent｜放大创意的专业创作引擎</h3>
+          <ul class="skills-points">
+            <li><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>输入创意灵感，快速完成影视级剧本框架设定</li>
+            <li><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>梳理故事结构，完善角色弧线、场景设定与人物对白</li>
+            <li><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>自动拆解剧情节点，规划多线分支与叙事走向</li>
+            <li><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>一键生成视觉提示词，衔接后续视频创作流程</li>
+          </ul>
         </button>
         <button class="skills-item" type="button" data-skill="1">
           <h3>Agent</h3>
