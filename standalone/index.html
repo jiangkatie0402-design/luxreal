@@ -185,10 +185,16 @@ button { font-family: inherit; }
 }
 .hero-cinematic-content { position: relative; z-index: 2; max-width: 900px; }
 .hero-cinematic-title {
-  font-family: var(--font-sans); font-weight: 600; color: #fff;
-  font-size: clamp(28px, 4.4vw, 58px); line-height: 1.25; letter-spacing: 0; margin-bottom: 16px;
+  position: relative;
+  font-family: "Smiley Sans", "PingFang SC", sans-serif; font-weight: normal; color: #fff;
+  font-size: clamp(56px, 8vw, 128px); line-height: 1.1; letter-spacing: 0.02em; margin-bottom: 16px;
 }
-.hero-cinematic-title em { font-style: italic; font-weight: 600; }
+.hero-cinematic-title::before {
+  content: '';
+  position: absolute; inset: -20% -10%; z-index: -1; pointer-events: none;
+  background: radial-gradient(ellipse 50% 40% at 50% 50%, rgba(0,0,0,.45), transparent 70%);
+}
+/* Smiley Sans font not embedded in the portable single-file build; falls back to PingFang SC */
 .hero-cinematic-sub {
   font-size: 17px; letter-spacing: 0.02em; color: rgba(255,255,255,.82); font-weight: 400; margin-bottom: 32px;
 }
@@ -689,7 +695,6 @@ button { font-family: inherit; }
   .footer-top { gap: 30px; }
   .footer-links { grid-template-columns: 1fr; gap: 30px; }
   .cta-banner { padding: 56px 26px; }
-  .hero-cinematic-title { font-size: clamp(24px, 8vw, 40px); }
   .hero-cinematic-chip { left: 16px; bottom: 16px; }
   .hero-cinematic-chip span { max-width: 46vw; }
 }
@@ -740,7 +745,7 @@ button { font-family: inherit; }
   </div>
   <div class="hero-cinematic-overlay"></div>
   <div class="hero-cinematic-content">
-    <h1 class="hero-cinematic-title">专业级 <em>AI</em> 影视 Agent</h1>
+    <h1 class="hero-cinematic-title">专业级AI影视Agent</h1>
     <p class="hero-cinematic-sub">线上影视工业化，从 LuxReal 开始</p>
     <button class="pill-cta" data-open-auth="register">开始创作</button>
   </div>
