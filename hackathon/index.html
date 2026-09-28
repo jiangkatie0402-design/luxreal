@@ -220,7 +220,7 @@ html[lang="zh-CN"] .sec-title { letter-spacing: .02em; line-height: 1.22; }
 .stat b { font-size: clamp(38px, 4.2vw, 54px); font-weight: 600; letter-spacing: -.03em; line-height: 1; font-variant-numeric: tabular-nums; }
 .stat > span { font-size: 14px; color: var(--text-muted); }
 .stat b small { font-size: .42em; font-weight: 600; margin-left: 6px; letter-spacing: 0; }
-.perks { display: grid; grid-template-columns: repeat(4, 1fr); gap: 24px; margin-top: 24px; }
+.perks { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; margin-top: 24px; }
 .perk { padding: 28px 24px; border: 1px solid var(--border-subtle); border-radius: var(--radius-sm); transition: border-color .25s; }
 .perk:hover { border-color: var(--border-strong); }
 .perk svg { width: 22px; height: 22px; stroke: var(--ice); margin-bottom: 18px; }
@@ -388,7 +388,7 @@ footer { padding: 72px 0 40px; margin-top: var(--section-y); border-top: 1px sol
   .sec-head { grid-template-columns: 1fr; gap: 20px; margin-bottom: 48px; }
   .about-grid, .faq-wrap { grid-template-columns: 1fr; gap: 24px; }
   .faq-wrap { gap: 32px; }
-  .perks { grid-template-columns: repeat(2, 1fr); }
+  .perks { grid-template-columns: 1fr; }
   .awards { grid-template-columns: 1fr; }
   .prizes { grid-template-columns: 1fr 1fr; }
   .prize.grand { grid-column: span 2; }
@@ -540,10 +540,9 @@ footer { padding: 72px 0 40px; margin-top: var(--section-y); border-top: 1px sol
     </div>
 
     <div class="perks">
-      <div class="perk reveal"><svg viewBox="0 0 24 24" fill="none" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2 3 7v10l9 5 9-5V7l-9-5Z"/><path d="m3 7 9 5 9-5M12 12v10"/></svg><h4 data-i18n="perk1.t">Lux3D 额度</h4><p data-i18n="perk1.d">每支队伍获赠 Aholo Lux3D 生成额度</p></div>
-      <div class="perk reveal d1"><svg viewBox="0 0 24 24" fill="none" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="m16 18 6-6-6-6M8 6l-6 6 6 6"/></svg><h4 data-i18n="perk2.t">API 与工作流接入</h4><p data-i18n="perk2.d">Lux3D API、Skill 与插件，接入 Blender 等创作工具</p></div>
-      <div class="perk reveal d2"><svg viewBox="0 0 24 24" fill="none" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="8" r="4"/><path d="M2 21a7 7 0 0 1 14 0M17 4a4 4 0 0 1 0 8M22 21a7 7 0 0 0-4-6.3"/></svg><h4 data-i18n="perk3.t">线上导师</h4><p data-i18n="perk3.d">开发期内线上答疑与 1v1 辅导</p></div>
-      <div class="perk reveal d3"><svg viewBox="0 0 24 24" fill="none" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M13 2 3 14h9l-1 8 10-12h-9l1-8Z"/></svg><h4 data-i18n="perk4.t">22 个奖项</h4><p data-i18n="perk4.d">一二三等奖、应用方向奖、有意思奖与人气奖</p></div>
+      <div class="perk reveal"><svg viewBox="0 0 24 24" fill="none" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="m16 18 6-6-6-6M8 6l-6 6 6 6"/></svg><h4 data-i18n="perk2.t">API 与工作流接入</h4><p data-i18n="perk2.d">Lux3D API、Skill 与插件，接入 Blender 等创作工具</p></div>
+      <div class="perk reveal d1"><svg viewBox="0 0 24 24" fill="none" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="8" r="4"/><path d="M2 21a7 7 0 0 1 14 0M17 4a4 4 0 0 1 0 8M22 21a7 7 0 0 0-4-6.3"/></svg><h4 data-i18n="perk3.t">线上导师</h4><p data-i18n="perk3.d">开发期内线上答疑与 1v1 辅导</p></div>
+      <div class="perk reveal d2"><svg viewBox="0 0 24 24" fill="none" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M13 2 3 14h9l-1 8 10-12h-9l1-8Z"/></svg><h4 data-i18n="perk4.t">22 个奖项</h4><p data-i18n="perk4.d">一二三等奖、应用方向奖、有意思奖与人气奖</p></div>
     </div>
   </div>
 </section>
@@ -615,7 +614,7 @@ footer { padding: 72px 0 40px; margin-top: var(--section-y); border-top: 1px sol
     </div>
 
     <div class="timeline reveal" id="tl">
-      <div class="tl-item" data-date="2026-10-14"><div class="tl-dot"></div><div class="tl-date mono">10.14</div><h4 data-i18n="tl1.t">报名开启</h4><p data-i18n="tl1.d">个人或团队报名，加入参赛社群，领取 Lux3D 额度</p></div>
+      <div class="tl-item" data-date="2026-10-14"><div class="tl-dot"></div><div class="tl-date mono">10.14</div><h4 data-i18n="tl1.t">报名开启</h4><p data-i18n="tl1.d">个人或团队报名，加入参赛社群</p></div>
       <div class="tl-item" data-date="2026-10-15"><div class="tl-dot"></div><div class="tl-date mono">10.14 – 11.16</div><h4 data-i18n="tl2.t">1 个月线上开发</h4><p data-i18n="tl2.d">自由创作，导师线上答疑与 1v1 辅导</p></div>
       <div class="tl-item" data-date="2026-11-16"><div class="tl-dot"></div><div class="tl-date mono">11.16</div><h4 data-i18n="tl3.t">作品提交 &amp; 组队截止</h4><p data-i18n="tl3.d">提交可运行的作品与演示，团队成员同步锁定</p></div>
       <div class="tl-item" data-date="2026-11-17"><div class="tl-dot"></div><div class="tl-date mono">11.16 10:00 – 11.22 17:00</div><h4 data-i18n="tl4.t">作品评选</h4><p data-i18n="tl4.d">评委对全部有效作品进行线上评审</p></div>
@@ -817,7 +816,6 @@ const EN = {
   'about.p3':'Make a game, bring a city’s memory back to life, create an explorable cultural-tourism space, design a new 3D-printed product prototype — or bring a form of spatial interaction we haven’t imagined yet.',
   'about.p4':'Any format, no creative limits. What matters: 3D isn’t decoration, AI isn’t a sticker — the technology genuinely shapes the work, and the final result actually runs.',
   'stat.unit':'month','stat.hours':'of focused building','stat.tracks':'No limits on format','stat.pool':'RMB in prizes','stat.hackers':'Expected hackers',
-  'perk1.t':'Lux3D credits','perk1.d':'Aholo Lux3D generation credits for every team',
   'perk2.t':'API & workflow access','perk2.d':'Lux3D API, Skills and plugins that plug into tools like Blender',
   'perk3.t':'Online mentors','perk3.d':'Online office hours and 1:1 mentoring throughout',
   'perk4.t':'22 awards','perk4.d':'Top prizes plus application, fun and people’s choice awards',
@@ -833,7 +831,7 @@ const EN = {
   'aw3':'People’s Choice','aw3.d':'4 in China · 2 international, decided by public likes on the project video.',
   'awr.t':'People’s Choice rules','awr.d':'Within the set period, teams must publish their project video on the designated public platform (China: Xiaohongshu; international: X) with the official event hashtag, and register that single entry link in the submission system. At the deadline the organizers record the post’s public like count; the valid, authenticity-verified projects with the most likes win.',
   'tl.title':'Five steps<br>from sign-up to results.','tl.desc':'All times in Beijing Time (UTC+8). Fully online and open worldwide — no travel needed.',
-  'tl1.t':'Registration opens','tl1.d':'Sign up solo or as a team, join the community and claim your Lux3D credits',
+  'tl1.t':'Registration opens','tl1.d':'Sign up solo or as a team and join the community',
   'tl2.t':'One month of online building','tl2.d':'Build freely, with online office hours and 1:1 mentoring',
   'tl3.t':'Submissions & team lock','tl3.d':'Submit a working project and demo; team rosters are finalized',
   'tl4.t':'Judging','tl4.d':'Judges review all valid submissions online',
