@@ -235,9 +235,6 @@ html[lang="zh-CN"] .sec-title { letter-spacing: .02em; line-height: 1.22; }
 .res-badge { display: inline-block; padding: 5px 12px; border-radius: 6px; background: var(--primary); color: var(--primary-contrast); font-size: 12.5px; font-weight: 700; letter-spacing: .02em; }
 .res-name { font-size: clamp(44px, 5vw, 64px); font-weight: 700; letter-spacing: -.03em; line-height: 1; margin: 22px 0 18px; }
 .res-main p { color: var(--text-soft); font-size: 16px; line-height: 1.75; }
-.res-actions { display: flex; align-items: center; gap: 24px; margin-top: 32px; flex-wrap: wrap; }
-.res-link { font-size: 14px; font-weight: 600; color: var(--text-soft); transition: color .2s; }
-.res-link:hover { color: #fff; }
 .res-art { width: clamp(150px, 16vw, 220px); height: auto; flex-shrink: 0; filter: drop-shadow(0 20px 40px rgba(69,87,255,.25)); }
 .res-side { display: grid; gap: 20px; }
 .res-item { display: flex; align-items: center; gap: 20px; padding: 24px; border: 1px solid var(--border); border-radius: var(--radius); background: var(--surface); transition: border-color .25s; }
@@ -245,8 +242,7 @@ html[lang="zh-CN"] .sec-title { letter-spacing: .02em; line-height: 1.22; }
 .res-thumb { width: 64px; height: 78px; flex-shrink: 0; border-radius: 6px; border: 1px solid var(--border); }
 .res-item h4 { display: flex; align-items: baseline; gap: 10px; font-size: 18px; font-weight: 600; }
 .res-item h4 em { font-style: normal; font-size: 12px; font-weight: 600; color: var(--text-muted); padding: 2px 8px; border: 1px solid var(--border-strong); border-radius: var(--radius-pill); }
-.res-item p { font-size: 14px; color: var(--text-muted); margin: 4px 0 12px; }
-.res-links { display: flex; gap: 20px; }
+.res-item p { font-size: 14px; color: var(--text-muted); margin-top: 4px; }
 .res-banner { margin-top: 20px; display: flex; align-items: center; justify-content: space-between; gap: 24px; padding: 26px 32px; border: 1px solid var(--border); border-radius: var(--radius); background: linear-gradient(90deg, rgba(106,72,255,.14), rgba(69,87,255,.05) 50%, transparent), var(--surface); }
 .res-banner h4 { font-size: 18px; font-weight: 600; margin-bottom: 4px; }
 .res-banner p { font-size: 14px; color: var(--text-muted); }
@@ -633,10 +629,6 @@ footer { padding: 72px 0 40px; margin-top: var(--section-y); border-top: 1px sol
           <span class="res-badge" data-i18n="res.must">参赛必须使用</span>
           <h3 class="res-name">Lux3D</h3>
           <p data-i18n="res.lux.d">以 Lux3D 为核心构建参赛作品，<br>将你的创意转化为 3D 内容。</p>
-          <div class="res-actions">
-            <a href="https://www.aholo3d.cn/" target="_blank" rel="noopener" class="btn btn-primary"><span data-i18n="res.lux.try">体验 Lux3D</span><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M3 8h10M9 4l4 4-4 4"/></svg></a>
-            <a href="#" class="res-link" data-i18n="res.tutorial">查看教程</a>
-          </div>
         </div>
         <svg class="res-art" viewBox="0 0 220 220" aria-hidden="true">
           <defs>
@@ -658,7 +650,6 @@ footer { padding: 72px 0 40px; margin-top: var(--section-y); border-top: 1px sol
           <div>
             <h4><span data-i18n="res.r1.t">实景重建</span><em data-i18n="res.opt">可选</em></h4>
             <p data-i18n="res.r1.d">从真实世界构建 3D 场景</p>
-            <div class="res-links"><a href="https://studio.aholo3d.cn/" target="_blank" rel="noopener" class="res-link"><span data-i18n="res.try">体验产品</span> →</a><a href="#" class="res-link" data-i18n="res.tutorial">查看教程</a></div>
           </div>
         </article>
         <article class="res-item reveal d2">
@@ -666,7 +657,6 @@ footer { padding: 72px 0 40px; margin-top: var(--section-y); border-top: 1px sol
           <div>
             <h4><span data-i18n="res.r2.t">空间生成</span><em data-i18n="res.opt">可选</em></h4>
             <p data-i18n="res.r2.d">使用 AI 探索更多空间内容</p>
-            <div class="res-links"><a href="https://www.aholo3d.cn/" target="_blank" rel="noopener" class="res-link"><span data-i18n="res.try">体验产品</span> →</a><a href="#" class="res-link" data-i18n="res.tutorial">查看教程</a></div>
           </div>
         </article>
       </div>
@@ -804,8 +794,8 @@ const EN = {
   
   
   'res.title':'Products & resources','res.desc':'Every project must use Lux3D; other products are optional, as your work needs.',
-  'res.must':'Required','res.lux.d':'Build your project around Lux3D<br>and turn your ideas into 3D content.','res.lux.try':'Try Lux3D','res.tutorial':'Tutorials',
-  'res.opt':'Optional','res.try':'Try it','res.r1.t':'Reality capture','res.r1.d':'Build 3D scenes from the real world','res.r2.t':'Spatial generation','res.r2.d':'Explore more spatial content with AI',
+  'res.must':'Required','res.lux.d':'Build your project around Lux3D<br>and turn your ideas into 3D content.',
+  'res.opt':'Optional','res.r1.t':'Reality capture','res.r1.d':'Build 3D scenes from the real world','res.r2.t':'Spatial generation','res.r2.d':'Explore more spatial content with AI',
   'res.b.t':'Sign up to get creation credits and start your project','res.b.d':'Join the hackathon and explore new possibilities with your teammates.',
   'prizes.title2':'total prize pool','prizes.desc':'22 awards in total: beyond first, second and third prizes, there are application, fun and people’s choice awards.',
   'p1.r':'First Prize','p1.c':'1 winner','p2.r':'Second Prize','p2.c':'2 winners · per team','p2.t':'¥60,000 in total','p3.r':'Third Prize','p3.c':'3 winners · per team','p3.t':'¥60,000 in total',
