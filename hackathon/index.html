@@ -310,17 +310,6 @@ html[lang="zh-CN"] .rules-title { font-family: var(--font-title); font-weight: 4
 .rule-arrow { color: var(--text-muted); padding-top: 22px; }
 .rule-arrow svg { width: 20px; height: 20px; }
 
-/* ---------- Judges ---------- */
-.people { display: grid; grid-template-columns: repeat(4, 1fr); gap: 20px; }
-.person { border-radius: var(--radius); overflow: hidden; border: 1px solid var(--border-subtle); background: var(--surface); }
-.person-photo { aspect-ratio: 1 / 1.05; position: relative; background: var(--bg-2); display: grid; place-items: center; overflow: hidden; }
-.person-photo::before { content: ''; position: absolute; inset: -30%; background: conic-gradient(from var(--a, 0deg), rgba(106,72,255,.22), rgba(69,87,255,.08), rgba(172,199,252,.14), rgba(106,72,255,.22)); filter: blur(40px); }
-.person-photo svg { position: relative; width: 44%; height: auto; opacity: .38; }
-.person-body { padding: 20px 22px 24px; }
-.person-body h4 { font-size: 16px; font-weight: 600; }
-.person-body p { font-size: 13.5px; color: var(--text-muted); }
-.people-note { margin-top: 28px; font-size: 14px; color: var(--text-muted); display: flex; align-items: center; gap: 10px; }
-
 /* ---------- Partners ---------- */
 .partners { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1px; background: var(--border-subtle); border: 1px solid var(--border-subtle); border-radius: var(--radius); overflow: hidden; }
 .partner { background: var(--bg); min-height: 132px; display: grid; place-items: center; padding: 24px; text-align: center; transition: background .25s; }
@@ -396,7 +385,6 @@ footer { padding: 72px 0 40px; margin-top: var(--section-y); border-top: 1px sol
   .timeline::before { top: 0; bottom: 0; left: 7px; right: auto; width: 1px; height: auto; }
   .timeline::after { top: 0; left: 7px; width: 1px; height: var(--progress, 0%); transition: height 1.4s var(--ease); }
   .tl-dot { position: absolute; left: -36px; top: 4px; margin: 0; }
-  .people { grid-template-columns: repeat(2, 1fr); }
   .rule-steps { grid-template-columns: 1fr; gap: 0; }
   .rule-step { display: grid; grid-template-columns: 52px 1fr; column-gap: 16px; text-align: left; align-items: center; }
   .rule-icon { width: 52px; height: 52px; margin: 0; grid-row: span 2; }
@@ -425,8 +413,6 @@ footer { padding: 72px 0 40px; margin-top: var(--section-y); border-top: 1px sol
   .theme { padding: 28px; min-height: 0; }
   .theme h3 { margin-top: 40px; }
   .stat { min-height: 130px; padding: 24px 20px; }
-  .people { gap: 12px; }
-  .person-body { padding: 14px 16px 18px; }
   .partner-host { grid-column: span 2; }
   .faq-list summary { font-size: 16px; padding: 22px 0; }
   .faq-list details p { padding-right: 0; }
@@ -456,7 +442,6 @@ footer { padding: 72px 0 40px; margin-top: var(--section-y); border-top: 1px sol
       <li><a href="#themes" data-i18n="nav.themes">赛道</a></li>
       <li><a href="#timeline" data-i18n="nav.timeline">日程</a></li>
       <li><a href="#prizes" data-i18n="nav.prizes">奖项</a></li>
-      <li><a href="#judges" data-i18n="nav.judges">评委导师</a></li>
       <li><a href="#partners" data-i18n="nav.partners">合作伙伴</a></li>
       <li><a href="#faq" data-i18n="nav.faq">FAQ</a></li>
     </ul>
@@ -683,32 +668,12 @@ footer { padding: 72px 0 40px; margin-top: var(--section-y); border-top: 1px sol
   </div>
 </section>
 
-<!-- ======================= JUDGES ======================= -->
-<section class="block" id="judges" style="padding-top:0">
-  <div class="container">
-    <div class="sec-head">
-      <div class="reveal">
-        <div class="sec-index">05 — <span data-i18n="nav.judges">评委导师</span></div>
-        <h2 class="sec-title" data-i18n="j.title">与行业先锋，<br>线上共创。</h2>
-      </div>
-      <p class="sec-desc reveal d1" data-i18n="j.desc">评审团由 Aholo 技术专家、学术研究者、投资人与产业伙伴组成，从技术深度、创新性、完成度与商业潜力四个维度评审。</p>
-    </div>
-    <div class="people">
-      <div class="person reveal"><div class="person-photo" style="--a:0deg"><svg viewBox="0 0 64 64" fill="none" stroke="#ededf0" stroke-width="1.5"><circle cx="32" cy="24" r="11"/><path d="M12 58c0-11 9-20 20-20s20 9 20 20"/></svg></div><div class="person-body"><h4 data-i18n="j.tba">即将公布</h4><p data-i18n="j.r1">Aholo 技术专家</p></div></div>
-      <div class="person reveal d1"><div class="person-photo" style="--a:90deg"><svg viewBox="0 0 64 64" fill="none" stroke="#ededf0" stroke-width="1.5"><circle cx="32" cy="24" r="11"/><path d="M12 58c0-11 9-20 20-20s20 9 20 20"/></svg></div><div class="person-body"><h4 data-i18n="j.tba">即将公布</h4><p data-i18n="j.r2">学术研究者</p></div></div>
-      <div class="person reveal d2"><div class="person-photo" style="--a:180deg"><svg viewBox="0 0 64 64" fill="none" stroke="#ededf0" stroke-width="1.5"><circle cx="32" cy="24" r="11"/><path d="M12 58c0-11 9-20 20-20s20 9 20 20"/></svg></div><div class="person-body"><h4 data-i18n="j.tba">即将公布</h4><p data-i18n="j.r3">投资人</p></div></div>
-      <div class="person reveal d3"><div class="person-photo" style="--a:270deg"><svg viewBox="0 0 64 64" fill="none" stroke="#ededf0" stroke-width="1.5"><circle cx="32" cy="24" r="11"/><path d="M12 58c0-11 9-20 20-20s20 9 20 20"/></svg></div><div class="person-body"><h4 data-i18n="j.tba">即将公布</h4><p data-i18n="j.r4">产业合作伙伴</p></div></div>
-    </div>
-    <p class="people-note reveal"><span class="mono" style="color:var(--ice)">●</span><span data-i18n="j.note">完整评委与导师阵容将于报名开启前后陆续揭晓。</span></p>
-  </div>
-</section>
-
 <!-- ======================= PARTNERS ======================= -->
 <section class="block" id="partners" style="padding-top:0">
   <div class="container">
     <div class="sec-head">
       <div class="reveal">
-        <div class="sec-index">06 — <span data-i18n="nav.partners">合作伙伴</span></div>
+        <div class="sec-index">05 — <span data-i18n="nav.partners">合作伙伴</span></div>
         <h2 class="sec-title" data-i18n="pt.title">共建空间智能生态。</h2>
       </div>
       <p class="sec-desc reveal d1" data-i18n="pt.desc">感谢每一位伙伴的支持，让更多创造者站上空间计算的前沿。</p>
@@ -738,7 +703,7 @@ footer { padding: 72px 0 40px; margin-top: var(--section-y); border-top: 1px sol
 <section class="block" id="faq" style="padding-top:0">
   <div class="container faq-wrap">
     <div class="reveal">
-      <div class="sec-index">07 — FAQ</div>
+      <div class="sec-index">06 — FAQ</div>
       <h2 class="sec-title" data-i18n="faq.title">常见问题</h2>
       <p class="sec-desc" style="margin-top:20px" data-i18n="faq.desc">没有找到答案？欢迎发送邮件至 hackathon@aholo3d.cn</p>
     </div>
@@ -801,7 +766,7 @@ footer { padding: 72px 0 40px; margin-top: var(--section-y); border-top: 1px sol
    i18n
    ============================================================ */
 const EN = {
-  'nav.about':'Challenge','nav.themes':'Themes','nav.prizes':'Prizes','nav.timeline':'Schedule','nav.judges':'Judges','nav.partners':'Partners','nav.faq':'FAQ',
+  'nav.about':'Challenge','nav.themes':'Themes','nav.prizes':'Prizes','nav.timeline':'Schedule','nav.partners':'Partners','nav.faq':'FAQ',
   'cta.register':'Register now','cta.explore':'Explore ideas','cta.aholo':'Discover Aholo',
   'hero.eyebrow':'Aholo Spatial Hackathon 2026 · Registration opens Oct 14',
   'hero.t1':'Reconstruct the world.','hero.t2':'Generate new space.',
@@ -838,8 +803,6 @@ const EN = {
   'rules.title':'Rules & process','rules.desc':'From idea to finished work — explore what 3D and spatial intelligence can do, together with your teammates. Every participant first registers individually, then creates or joins a team.',
   'rule1.t':'Register','rule1.d':'Sign up and register for the event','rule2.t':'Form a team','rule2.d':'Team up with others, or go solo','rule3.t':'Submit','rule3.d':'Submit your team’s work during the open window','rule4.t':'Judging & results','rule4.d':'Show your ideas and share what you made',
   'tl5.t':'Results announced','tl5.d':'Winners announced on the official event site and social channels','tl5.date':'Late Nov',
-  'j.title':'Build alongside<br>industry pioneers.','j.desc':'Our panel brings together Aholo engineers, academic researchers, investors and industry partners, judging on technical depth, innovation, completeness and impact.',
-  'j.tba':'To be announced','j.r1':'Aholo Technical Expert','j.r2':'Academic Researcher','j.r3':'Investor','j.r4':'Industry Partner','j.note':'The full lineup of judges and mentors will be revealed around registration opening.',
   'pt.title':'Building the spatial<br>intelligence ecosystem.','pt.desc':'Thanks to every partner helping more creators reach the frontier of spatial computing.',
   'pt.host':'Host','pt.mc':'Manycore Tech','pt.ph':'Partner','pt.cta':'Interested in sponsoring or partnering?','pt.contact':'Get in touch',
   'faq.title':'FAQ','faq.desc':'Can’t find your answer? Email us at hackathon@aholo3d.cn',
