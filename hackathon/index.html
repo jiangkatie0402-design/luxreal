@@ -129,8 +129,6 @@ button { font: inherit; color: inherit; background: none; border: 0; cursor: poi
   font-size: 14.5px; font-weight: 600; color: var(--text-soft); transition: color .2s, background .2s;
 }
 .nav-links a:hover { color: var(--text); background: rgba(255,255,255,.04); }
-.nav-links .nav-my { color: var(--ice); }
-.nav-links .nav-my.active, .nav-links .nav-my:hover { color: #fff; background: rgba(69,87,255,.18); }
 .nav-actions { display: flex; align-items: center; gap: 10px; justify-self: end; }
 .lang-toggle {
   display: inline-flex; height: 38px; padding: 3px; border-radius: var(--radius-pill);
@@ -378,7 +376,6 @@ footer { padding: 72px 0 40px; margin-top: var(--section-y); border-top: 1px sol
 html[lang="zh-CN"] .my-sec-title, html[lang="zh-CN"] .my-title { font-family: var(--font-title); font-weight: 400; letter-spacing: .02em; }
 .my-sec-desc { color: var(--text-soft); margin: -8px 0 20px; }
 .my-card { padding: clamp(22px, 3vw, 32px); border: 1px solid var(--border); border-radius: var(--radius); background: var(--surface); }
-.my-gate { margin-top: 28px; }
 
 /* registration & credits */
 .reg-row { display: flex; align-items: center; gap: 20px; flex-wrap: wrap; }
@@ -895,15 +892,6 @@ body.modal-open { overflow: hidden; }
       </div>
     </div>
 
-    <div class="my-card my-gate" id="myGate" hidden>
-      <div class="empty">
-        <span class="empty-icon"><svg viewBox="0 0 24 24" fill="none" stroke="url(#g1)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="10" width="16" height="11" rx="2"/><path d="M8 10V7a4 4 0 0 1 8 0v3"/></svg></span>
-        <h3 data-i18n="my.gateT">登录后查看我的参赛</h3>
-        <p data-i18n="my.gateD">登录 Aholo 账号后，即可查看报名状态、积分与团队。</p>
-        <button type="button" class="btn btn-primary" id="gateLogin" data-i18n="m.loginBtn">登录 Aholo 账号</button>
-      </div>
-    </div>
-
     <div id="myBody">
       <section class="my-sec">
         <h2 class="my-sec-title" data-i18n="my.reg">报名与积分</h2>
@@ -1313,7 +1301,7 @@ document.querySelectorAll('.res-main').forEach(card => card.addEventListener('po
 
   let afterLogin = 'register';           // what the login pane leads to: registration, or just close (nav 登录)
   function startRegister() {
-    if (registered()) { location.hash = '#/my'; return; }
+    if (registered()) { goMy(); return; }
     afterLogin = 'register';
     openModal(state.loggedIn ? 'register' : 'login');
   }
@@ -1335,7 +1323,6 @@ document.querySelectorAll('.res-main').forEach(card => card.addEventListener('po
     try { state = await api.logout(); toast(T('toast.logout')); } catch (e) { toast(T('err.net')); }
     finally { busy = false; refreshAll(); }
   });
-  $('#gateLogin').addEventListener('click', e => doLogin(e.currentTarget, refreshAll));
 
   /* ---------------- registration form ---------------- */
   const form = $('#regForm');
@@ -1368,7 +1355,7 @@ document.querySelectorAll('.res-main').forEach(card => card.addEventListener('po
     try {
       state = await api.register(v);
       busy = false; closeModal(); form.reset(); refreshAll();
-      location.hash = '#/my'; toast(T('toast.reg'));
+      goMy(); toast(T('toast.reg'));
     } catch (err) { toast(T('err.net')); }
     finally { busy = false; btn.disabled = false; btn.innerHTML = (isEN() ? EN : ZH)['m.regSubmit']; }
   });
@@ -1399,7 +1386,7 @@ document.querySelectorAll('.res-main').forEach(card => card.addEventListener('po
 
   /* ---------------- 我的参赛 rendering ---------------- */
   function renderReg() {
-    const p = state.profile;
+    const p = registered() ? state.profile : null;
     const chips = p
       ? `<div class="chip"><strong>${T('rw.reg')} · <b>${T('rw.pending')}</b></strong><span>${T('rw.acct')}</span></div>
          <div class="chip"><strong>${T('rw.team')} · ${p.teamReward ? '<b>' + T('rw.pending') + '</b>' : T('rw.none')}</strong><span>${p.teamReward ? T('rw.split') : T('rw.onConfirm')}</span></div>`
@@ -1418,7 +1405,7 @@ document.querySelectorAll('.res-main').forEach(card => card.addEventListener('po
   }
 
   function renderTeam() {
-    const el = $('#myTeam'), p = state.profile, tm = state.team;
+    const el = $('#myTeam'), p = registered() ? state.profile : null, tm = p ? state.team : null;
     if (!p) {
       el.innerHTML = `<div class="empty"><span class="empty-icon"><svg viewBox="0 0 24 24" fill="none" stroke="url(#g1)" stroke-width="1.5" stroke-linejoin="round"><path d="m12 3 9 9-9 9-9-9 9-9Z"/></svg></span>
         <h3>${T('team.emptyT')}</h3><p>${T('team.emptyD')}</p><a href="#register" class="btn btn-primary" data-start-reg>${(isEN() ? EN : ZH)['cta.register']}</a></div>`;
@@ -1478,24 +1465,33 @@ document.querySelectorAll('.res-main').forEach(card => card.addEventListener('po
     }
   });
 
-  function renderMy() {
-    $('#myGate').hidden = state.loggedIn;
-    $('#myBody').hidden = !state.loggedIn;
-    if (state.loggedIn) { renderReg(); renderTeam(); }
-  }
+  // Visible to everyone: guests and unregistered users see the 尚未报名 state
+  function renderMy() { renderReg(); renderTeam(); }
 
-  /* ---------------- router: intro ⇄ #/my ---------------- */
-  function route() {
-    const onMy = location.hash === '#/my';
-    $('#top').hidden = onMy; $('#my').hidden = !onMy;
-    document.querySelector('.nav-my').classList.toggle('active', onMy);
-    if (onMy) { renderMy(); window.scrollTo(0, 0); }
-    else if (location.hash.length > 1) { const t = document.getElementById(location.hash.slice(1)); if (t) requestAnimationFrame(() => t.scrollIntoView()); }
+  /* ---------------- router: intro ⇄ 我的参赛 ---------------- */
+  let view = 'intro';
+  function show(v, anchor) {
+    view = v;
+    $('#top').hidden = v === 'my'; $('#my').hidden = v !== 'my';
+    if (v === 'my') { renderMy(); window.scrollTo(0, 0); }
+    else if (anchor) { const t = document.getElementById(anchor); if (t) requestAnimationFrame(() => t.scrollIntoView()); }
+    const want = v === 'my' ? '#/my' : (anchor ? '#' + anchor : '');
+    try { if (location.hash !== want) history.pushState(null, '', want || location.pathname + location.search); } catch (e) {}
   }
+  const goMy = () => show('my');
+  function route() { location.hash === '#/my' ? show('my') : show('intro', location.hash.slice(1)); }
   window.addEventListener('hashchange', route);
-  document.addEventListener('langchange', () => { refreshCtas(); if (location.hash === '#/my') renderMy(); });
+  window.addEventListener('popstate', route);
+  document.addEventListener('click', e => {
+    const a = e.target.closest('a[href^="#"]'); if (!a || e.defaultPrevented) return;
+    const href = a.getAttribute('href');
+    if (href === '#/my') { e.preventDefault(); show('my'); }
+    else if (a.hasAttribute('data-home')) { e.preventDefault(); show('intro'); window.scrollTo(0, 0); }
+    else if (view === 'my' && href.length > 1 && document.getElementById(href.slice(1))) { e.preventDefault(); show('intro', href.slice(1)); }
+  });
+  document.addEventListener('langchange', () => { refreshCtas(); if (view === 'my') renderMy(); });
 
-  function refreshAll() { refreshCtas(); if (location.hash === '#/my') renderMy(); }
+  function refreshAll() { refreshCtas(); if (view === 'my') renderMy(); }
   refreshCtas(); route();
 })();
 
