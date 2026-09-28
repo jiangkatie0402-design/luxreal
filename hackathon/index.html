@@ -572,7 +572,7 @@ body.modal-open { overflow: hidden; }
       <li><a href="#prizes" data-i18n="nav.prizes">奖项</a></li>
       <li><a href="#resources" data-i18n="nav.res">产品资源</a></li>
       <li><a href="#faq" data-i18n="nav.faq">FAQ</a></li>
-      <li id="navMy" hidden><a href="#/my" class="nav-my" data-i18n="nav.my">我的参赛</a></li>
+      <li id="navMy"><a href="#/my" class="nav-my" data-i18n="nav.my">我的参赛</a></li>
     </ul>
     <div class="nav-actions">
       <div class="lang-toggle" role="group" aria-label="Language">
@@ -1381,11 +1381,10 @@ document.querySelectorAll('.res-main').forEach(card => card.addEventListener('po
       lab.dataset.i18n = k; lab.innerHTML = (isEN() ? EN : ZH)[k];
       el.setAttribute('href', registered() ? '#/my' : '#register');
     });
-    // nav: 登录 ⇄ 退出登录, and 我的参赛 appears once registration is complete
+    // nav: 登录 ⇄ 退出登录 (我的参赛 is always in the nav)
     const auth = $('#navAuth'), ak = state.loggedIn ? 'nav.logout' : 'nav.login';
     auth.dataset.i18n = ak; auth.innerHTML = (isEN() ? EN : ZH)[ak];
     auth.classList.toggle('btn-primary', !state.loggedIn); auth.classList.toggle('btn-ghost', state.loggedIn);
-    $('#navMy').hidden = !registered();
   }
 
 
