@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Aholo Spatial Hackathon 2026 · 空间智能黑客松</title>
-<meta name="description" content="Aholo 空间智能黑客松 —— 用 3D 高斯泼溅重建世界，用 AI 生成空间。48 小时，与顶尖开发者一起构建下一代空间智能应用。">
+<meta name="description" content="Aholo 空间智能黑客松 —— 用 3D 高斯泼溅重建世界，用 AI 生成空间。1 个月，与顶尖开发者一起构建下一代空间智能应用。">
 <meta name="theme-color" content="#050506">
 <link rel="icon" href="assets/favicon.ico">
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -212,11 +212,14 @@ html[lang="zh-CN"] .sec-title { letter-spacing: .02em; line-height: 1.22; }
 .about-lead::before { content: ''; position: absolute; inset: 0; background: var(--grad-soft); pointer-events: none; }
 .about-lead > * { position: relative; }
 .about-lead p { font-size: clamp(20px, 2.1vw, 26px); line-height: 1.55; font-weight: 500; color: var(--text); }
-.about-lead p + p { margin-top: 20px; font-size: 16px; color: var(--text-soft); line-height: 1.75; }
+.about-lead p + p { margin-top: 18px; font-size: 16px; color: var(--text-soft); line-height: 1.8; }
+.about-lead p strong { font-weight: 700; }
+.about-lead p.punch { margin-top: 28px; padding-top: 24px; border-top: 1px solid var(--border); color: var(--text); font-weight: 600; }
 .stats { display: grid; grid-template-columns: 1fr 1fr; gap: 1px; background: var(--border); border: 1px solid var(--border); border-radius: var(--radius); overflow: hidden; }
 .stat { background: var(--surface); padding: 32px 28px; display: flex; flex-direction: column; justify-content: space-between; min-height: 170px; }
 .stat b { font-size: clamp(38px, 4.2vw, 54px); font-weight: 600; letter-spacing: -.03em; line-height: 1; font-variant-numeric: tabular-nums; }
 .stat > span { font-size: 14px; color: var(--text-muted); }
+.stat b small { font-size: .42em; font-weight: 600; margin-left: 6px; letter-spacing: 0; }
 .perks { display: grid; grid-template-columns: repeat(4, 1fr); gap: 24px; margin-top: 24px; }
 .perk { padding: 28px 24px; border: 1px solid var(--border-subtle); border-radius: var(--radius-sm); transition: border-color .25s; }
 .perk:hover { border-color: var(--border-strong); }
@@ -414,7 +417,7 @@ footer { padding: 72px 0 40px; margin-top: var(--section-y); border-top: 1px sol
       <span class="brand-tag">Hackathon ’26</span>
     </a>
     <ul class="nav-links" id="navLinks">
-      <li><a href="#about" data-i18n="nav.about">关于</a></li>
+      <li><a href="#about" data-i18n="nav.about">赛题</a></li>
       <li><a href="#themes" data-i18n="nav.themes">赛道</a></li>
       <li><a href="#prizes" data-i18n="nav.prizes">奖项</a></li>
       <li><a href="#timeline" data-i18n="nav.timeline">日程</a></li>
@@ -445,7 +448,7 @@ footer { padding: 72px 0 40px; margin-top: var(--section-y); border-top: 1px sol
         <span class="line" data-i18n="hero.t1">重建世界，</span>
         <span class="line grad-text" data-i18n="hero.t2">生成空间。</span>
       </h1>
-      <p class="hero-sub reveal d2" data-i18n="hero.sub">48 小时，基于 Aholo 3D 高斯泼溅重建、AI 空间生成与实时渲染能力，与全球开发者、设计师和研究者一起，构建下一代空间智能应用。</p>
+      <p class="hero-sub reveal d2" data-i18n="hero.sub">用 1 个月时间，基于 Aholo 3D 高斯泼溅重建、AI 空间生成与实时渲染能力，与全球开发者、设计师和研究者一起，构建下一代空间智能应用。</p>
       <div class="hero-cta reveal d3">
         <a href="#register" class="btn btn-primary"><span data-i18n="cta.register">立即报名</span><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M3 8h10M9 4l4 4-4 4"/></svg></a>
         <a href="#themes" class="btn btn-ghost" data-i18n="cta.explore">探索赛道</a>
@@ -453,7 +456,7 @@ footer { padding: 72px 0 40px; margin-top: var(--section-y); border-top: 1px sol
       <dl class="hero-meta reveal d3">
         <div><dt data-i18n="meta.date">日期</dt><dd data-i18n="meta.dateV">2026.12.12 – 12.14</dd></div>
         <div><dt data-i18n="meta.loc">地点</dt><dd data-i18n="meta.locV">杭州 · 线下 + 线上</dd></div>
-        <div><dt data-i18n="meta.format">形式</dt><dd data-i18n="meta.formatV">48h · 1–5 人组队</dd></div>
+        <div><dt data-i18n="meta.format">形式</dt><dd data-i18n="meta.formatV">1 个月 · 1–5 人组队</dd></div>
         <div><dt data-i18n="meta.pool">总奖池</dt><dd data-i18n="meta.poolV">¥ 300,000+</dd></div>
       </dl>
     </div>
@@ -479,7 +482,7 @@ footer { padding: 72px 0 40px; margin-top: var(--section-y); border-top: 1px sol
   <div class="container">
     <div class="sec-head">
       <div class="reveal">
-        <div class="sec-index">01 — <span data-i18n="nav.about">关于</span></div>
+        <div class="sec-index">01 — <span data-i18n="nav.about">赛题</span></div>
         <h2 class="sec-title" data-i18n="about.title">把真实世界，<br>带进可计算的空间。</h2>
       </div>
       <p class="sec-desc reveal d1" data-i18n="about.desc">Aholo 空间智能黑客松由 Aholo 发起，面向所有对 3D、AI 与空间计算充满热情的创造者。无论你是开发者、设计师还是研究者，都可以在这里把想法变成可交互的空间体验。</p>
@@ -487,11 +490,14 @@ footer { padding: 72px 0 40px; margin-top: var(--section-y); border-top: 1px sol
 
     <div class="about-grid">
       <div class="about-lead reveal">
-        <p data-i18n="about.lead">从一段手机视频到一个可漫游、可编辑、可被 Agent 理解的 3D 世界——空间智能正在重写我们与物理世界交互的方式。</p>
-        <p data-i18n="about.body">参赛者将获得 Aholo 平台的完整能力：高保真 3DGS 实景重建、AI 空间生成、云端实时编辑，以及开源的 Aholo Viewer Web 渲染引擎，支持百亿级高斯点的城市级场景在移动端流畅直渲。</p>
+        <p data-i18n="about.lead">别只让 AI 生成一张图。<br>让它变成立体的、能进入、能互动、真正派得上用场的作品。</p>
+        <p data-i18n="about.p1">这次不设赛道，也不押标准答案。我们只想看一件事：当 AI 开始理解并创造 3D 空间，你能拿它做出什么有趣的新东西？</p>
+        <p data-i18n="about.p2">请使用 <strong class="grad-text">Aholo Lux3D</strong> 围绕空间智能概念完成一个可体验、可演示的作品。</p>
+        <p data-i18n="about.p3">你可以做一款游戏，复活一段城市记忆，创造一个可探索的文旅空间，设计新的 3D 打印产品原型，也可以带来一种我们还没想过的空间交互方式。</p>
+        <p class="punch" data-i18n="about.p4">作品形态不限，创意不设边界。重要的是：3D 不是装饰，AI 不是贴纸，技术真正参与了作品的诞生，最终成果也真的能跑起来。</p>
       </div>
       <div class="stats reveal d1">
-        <div class="stat"><b class="grad-text" data-count="48">48</b><span data-i18n="stat.hours">小时极限开发</span></div>
+        <div class="stat"><b class="grad-text"><span data-count="1">1</span><small data-i18n="stat.unit">个月</small></b><span data-i18n="stat.hours">时间细致开发</span></div>
         <div class="stat"><b data-count="4">4</b><span data-i18n="stat.tracks">大核心赛道</span></div>
         <div class="stat"><b><span data-count="300">300</span>K+</b><span data-i18n="stat.pool">人民币总奖池</span></div>
         <div class="stat"><b><span data-count="500">500</span>+</b><span data-i18n="stat.hackers">预计参赛开发者</span></div>
@@ -752,18 +758,21 @@ footer { padding: 72px 0 40px; margin-top: var(--section-y); border-top: 1px sol
    i18n
    ============================================================ */
 const EN = {
-  'nav.about':'About','nav.themes':'Themes','nav.prizes':'Prizes','nav.timeline':'Schedule','nav.judges':'Judges','nav.partners':'Partners','nav.faq':'FAQ',
+  'nav.about':'Challenge','nav.themes':'Themes','nav.prizes':'Prizes','nav.timeline':'Schedule','nav.judges':'Judges','nav.partners':'Partners','nav.faq':'FAQ',
   'cta.register':'Register now','cta.explore':'Explore themes','cta.aholo':'Discover Aholo',
   'hero.eyebrow':'Aholo Spatial Hackathon 2026 · Registration open',
   'hero.t1':'Reconstruct the world.','hero.t2':'Generate new space.',
-  'hero.sub':'48 hours to build the next generation of spatial intelligence — powered by Aholo’s 3D Gaussian Splatting reconstruction, AI spatial generation and real-time rendering, alongside developers, designers and researchers worldwide.',
-  'meta.date':'Date','meta.dateV':'Dec 12 – 14, 2026','meta.loc':'Location','meta.locV':'Hangzhou · On-site + Online','meta.format':'Format','meta.formatV':'48h · Teams of 1–5','meta.pool':'Prize pool','meta.poolV':'¥ 300,000+',
+  'hero.sub':'One month to build the next generation of spatial intelligence — powered by Aholo’s 3D Gaussian Splatting reconstruction, AI spatial generation and real-time rendering, alongside developers, designers and researchers worldwide.',
+  'meta.date':'Date','meta.dateV':'Dec 12 – 14, 2026','meta.loc':'Location','meta.locV':'Hangzhou · On-site + Online','meta.format':'Format','meta.formatV':'1 month · Teams of 1–5','meta.pool':'Prize pool','meta.poolV':'¥ 300,000+',
   'cd.title':'Registration closes in','cd.deadline':'Deadline: Nov 30, 2026, 23:59 (Beijing Time, UTC+8)','cd.d':'Days','cd.h':'Hrs','cd.m':'Min','cd.s':'Sec',
   'about.title':'Bring the real world<br>into computable space.',
   'about.desc':'Hosted by Aholo, the Spatial Hackathon is open to anyone passionate about 3D, AI and spatial computing. Developers, designers and researchers alike — turn your ideas into interactive spatial experiences.',
-  'about.lead':'From a single phone video to a 3D world you can walk through, edit, and that AI agents can understand — spatial intelligence is rewriting how we interact with the physical world.',
-  'about.body':'Participants get the full Aholo stack: high-fidelity 3DGS reconstruction, AI spatial generation, real-time cloud editing, and the open-source Aholo Viewer web engine — rendering city-scale scenes with billions of Gaussians smoothly, even on mobile.',
-  'stat.hours':'Hours of building','stat.tracks':'Core themes','stat.pool':'RMB in prizes','stat.hackers':'Expected hackers',
+  'about.lead':'Don’t just have AI generate an image.<br>Turn it into something three-dimensional — a work you can step into, interact with, and actually put to use.',
+  'about.p1':'No tracks this time, and no single right answer. We only want to see one thing: as AI begins to understand and create 3D space, what fun new things can you build with it?',
+  'about.p2':'Use <strong class="grad-text">Aholo Lux3D</strong> to build an experienceable, demo-ready project around the idea of spatial intelligence.',
+  'about.p3':'Make a game, bring a city’s memory back to life, create an explorable cultural-tourism space, design a new 3D-printed product prototype — or bring a form of spatial interaction we haven’t imagined yet.',
+  'about.p4':'Any format, no creative limits. What matters: 3D isn’t decoration, AI isn’t a sticker — the technology genuinely shapes the work, and the final result actually runs.',
+  'stat.unit':'month','stat.hours':'of focused building','stat.tracks':'Core themes','stat.pool':'RMB in prizes','stat.hackers':'Expected hackers',
   'perk1.t':'Platform credits','perk1.d':'Aholo reconstruction & generation API credits for every team',
   'perk2.t':'Open-source SDK','perk2.d':'Aholo Viewer source, examples and docs',
   'perk3.t':'Expert mentors','perk3.d':'1:1 technical and product mentoring throughout',
