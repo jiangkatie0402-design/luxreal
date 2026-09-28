@@ -29,8 +29,9 @@
   --bg-2: #0a0a0b;
   --surface: #0e0e10;
   --surface-2: #18181b;
-  --border: #2e2e33;
-  --border-subtle: #1a1a1d;
+  --border: #3f3f46;
+  --border-subtle: #2a2a2f;
+  --border-strong: #55555e;
   --text: #f4f4f5;
   --text-soft: #d4d4d8;
   --text-muted: #a8a8b3;
@@ -97,8 +98,8 @@ button { font: inherit; color: inherit; background: none; border: 0; cursor: poi
 .btn:hover svg { transform: translateX(3px); }
 .btn-primary { background: var(--primary); color: var(--primary-contrast); box-shadow: 0 0 0 0 rgba(172,199,252,0); }
 .btn-primary:hover { background: #fff; box-shadow: 0 8px 40px -8px rgba(106,72,255,.55); }
-.btn-ghost { border: 1px solid var(--border); color: var(--text); background: rgba(255,255,255,.02); }
-.btn-ghost:hover { border-color: #3a3a40; background: rgba(255,255,255,.05); }
+.btn-ghost { border: 1px solid var(--border-strong); color: var(--text); background: rgba(255,255,255,.02); }
+.btn-ghost:hover { border-color: #71717a; background: rgba(255,255,255,.05); }
 .btn-sm { height: 38px; padding: 0 18px; font-size: 14px; }
 
 /* ---------- Aholo logo: official icon + wordmark ---------- */
@@ -131,12 +132,12 @@ button { font: inherit; color: inherit; background: none; border: 0; cursor: poi
 .nav-actions { display: flex; align-items: center; gap: 10px; justify-self: end; }
 .lang-toggle {
   display: inline-flex; height: 38px; padding: 3px; border-radius: var(--radius-pill);
-  border: 1px solid var(--border); font-family: var(--font-mono); font-size: 12px;
+  border: 1px solid var(--border-strong); font-family: var(--font-mono); font-size: 12px;
 }
 .lang-toggle button { padding: 0 12px; border-radius: var(--radius-pill); font-weight: 600; color: var(--text-soft); transition: all .2s; min-width: 40px; }
 .lang-toggle button[aria-pressed="true"] { background: #2a2a30; color: #fff; }
 .lang-toggle button:hover { color: #fff; }
-.menu-btn { display: none; width: 40px; height: 40px; border-radius: 50%; border: 1px solid var(--border); align-items: center; justify-content: center; }
+.menu-btn { display: none; width: 40px; height: 40px; border-radius: 50%; border: 1px solid var(--border-strong); align-items: center; justify-content: center; }
 .menu-btn span { display: block; width: 16px; height: 1.5px; background: var(--text); position: relative; transition: transform .3s var(--ease); }
 .menu-btn span::before, .menu-btn span::after { content: ''; position: absolute; left: 0; width: 16px; height: 1.5px; background: var(--text); transition: transform .3s var(--ease), top .3s var(--ease); }
 .menu-btn span::before { top: -5px; } .menu-btn span::after { top: 5px; }
@@ -218,7 +219,7 @@ html[lang="zh-CN"] .sec-title { letter-spacing: .02em; line-height: 1.22; }
 .stat > span { font-size: 14px; color: var(--text-muted); }
 .perks { display: grid; grid-template-columns: repeat(4, 1fr); gap: 24px; margin-top: 24px; }
 .perk { padding: 28px 24px; border: 1px solid var(--border-subtle); border-radius: var(--radius-sm); transition: border-color .25s; }
-.perk:hover { border-color: var(--border); }
+.perk:hover { border-color: var(--border-strong); }
 .perk svg { width: 22px; height: 22px; stroke: var(--ice); margin-bottom: 18px; }
 .perk h4 { font-size: 16px; font-weight: 600; margin-bottom: 6px; }
 .perk p { font-size: 14px; color: var(--text-muted); line-height: 1.65; }
@@ -236,7 +237,7 @@ html[lang="zh-CN"] .sec-title { letter-spacing: .02em; line-height: 1.22; }
   content: ''; position: absolute; inset: 0; opacity: 0; transition: opacity .35s var(--ease); pointer-events: none;
   background: radial-gradient(420px circle at var(--mx) var(--my), rgba(106,72,255,.16), rgba(69,87,255,.06) 40%, transparent 70%);
 }
-.theme:hover { border-color: #34343a; }
+.theme:hover { border-color: var(--border-strong); }
 .theme:hover::before { opacity: 1; }
 .theme > * { position: relative; }
 .theme-top { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: auto; }
@@ -272,7 +273,7 @@ html[lang="zh-CN"] .sec-title { letter-spacing: .02em; line-height: 1.22; }
 .timeline::before { content: ''; position: absolute; top: 7px; left: 0; right: 0; height: 1px; background: var(--border); }
 .timeline::after { content: ''; position: absolute; top: 7px; left: 0; height: 1px; width: var(--progress, 0%); background: var(--grad); transition: width 1.4s var(--ease); }
 .tl-item { position: relative; padding-right: 24px; }
-.tl-dot { width: 15px; height: 15px; border-radius: 50%; background: var(--bg); border: 1px solid #55555e; position: relative; z-index: 1; margin-bottom: 32px; }
+.tl-dot { width: 15px; height: 15px; border-radius: 50%; background: var(--bg); border: 1px solid #71717a; position: relative; z-index: 1; margin-bottom: 32px; }
 .tl-item.done .tl-dot, .tl-item.now .tl-dot { border-color: var(--ice); }
 .tl-item.done .tl-dot::after, .tl-item.now .tl-dot::after { content: ''; position: absolute; inset: 3px; border-radius: 50%; background: var(--ice); }
 .tl-item.now .tl-dot { box-shadow: 0 0 0 6px rgba(172,199,252,.12), 0 0 24px rgba(106,72,255,.6); }
