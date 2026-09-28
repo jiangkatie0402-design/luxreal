@@ -129,6 +129,8 @@ button { font: inherit; color: inherit; background: none; border: 0; cursor: poi
   font-size: 14.5px; font-weight: 600; color: var(--text-soft); transition: color .2s, background .2s;
 }
 .nav-links a:hover { color: var(--text); background: rgba(255,255,255,.04); }
+.nav-links .nav-my { color: var(--ice); }
+.nav-links .nav-my.active, .nav-links .nav-my:hover { color: #fff; background: rgba(69,87,255,.18); }
 .nav-actions { display: flex; align-items: center; gap: 10px; justify-self: end; }
 .lang-toggle {
   display: inline-flex; height: 38px; padding: 3px; border-radius: var(--radius-pill);
@@ -516,7 +518,9 @@ body.modal-open { overflow: hidden; }
   .foot-brand { grid-column: span 2; }
 }
 @media (max-width: 640px) {
-  .brand-tag, .nav-actions .btn { display: none; }
+  .brand-tag { display: none; }
+  .nav-actions { gap: 8px; }
+  #navAuth { padding: 0 14px; }
   .hero { padding-top: 104px; }
   .hero-meta { grid-template-columns: 1fr 1fr; width: 100%; }
   .hero-meta div { padding: 16px 12px 16px 0; margin: 0; border-right: 0; border-bottom: 1px solid var(--border-subtle); }
@@ -568,13 +572,14 @@ body.modal-open { overflow: hidden; }
       <li><a href="#prizes" data-i18n="nav.prizes">奖项</a></li>
       <li><a href="#resources" data-i18n="nav.res">产品资源</a></li>
       <li><a href="#faq" data-i18n="nav.faq">FAQ</a></li>
+      <li id="navMy" hidden><a href="#/my" class="nav-my" data-i18n="nav.my">我的参赛</a></li>
     </ul>
     <div class="nav-actions">
       <div class="lang-toggle" role="group" aria-label="Language">
         <button type="button" data-lang="zh-CN" aria-pressed="true">中</button>
         <button type="button" data-lang="en" aria-pressed="false">EN</button>
       </div>
-      <a href="#register" class="btn btn-primary btn-sm" data-reg-cta data-i18n="cta.register">立即报名</a>
+      <button type="button" class="btn btn-primary btn-sm" id="navAuth" data-i18n="nav.login">登录</button>
       <button type="button" class="menu-btn" id="menuBtn" aria-label="Menu" aria-expanded="false" aria-controls="navLinks"><span></span></button>
     </div>
   </div>
@@ -977,7 +982,7 @@ body.modal-open { overflow: hidden; }
     <div class="modal-pane" data-pane="login">
       <span class="modal-icon"><svg viewBox="0 0 24 24" fill="none" stroke="url(#g1)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="4"/><path d="M4 21a8 8 0 0 1 16 0"/></svg></span>
       <h3 class="modal-title" data-i18n="m.loginT">登录 Aholo 账号</h3>
-      <p class="modal-desc" data-i18n="m.loginD">报名需要先登录 Aholo 账号，登录后将继续报名。</p>
+      <p class="modal-desc" data-i18n="m.loginD">登录 Aholo 账号，报名参赛并管理你的团队。</p>
       <button type="button" class="btn btn-primary btn-block" id="loginBtn" data-i18n="m.loginBtn">登录 Aholo 账号</button>
     </div>
 
@@ -1107,7 +1112,7 @@ const EN = {
   'hero.tagline':'Create new possibilities with spatial intelligence','faq.more':'Still have questions? Ask in the community.',
   'my.title':'My entry','my.back':'Back to event','my.cur':'Current stage: Registration & teams','my.curD':'Meet teammates and prepare your idea','my.next':'Next: Project submission','my.nextD':'Opening time will be announced','my.dl':'Key dates · Oct 14 registration opens · Nov 16 submissions & team lock',
   'my.gateT':'Log in to see your entry','my.gateD':'Log in with your Aholo account to view your registration, credits and team.','my.reg':'Registration & credits','my.tools':'Creation tools','my.toolsD':'Build your project with Lux3D, and add other products as you need.','my.team':'My team','my.works':'My project','my.worksT':'Submissions are not open yet','my.worksD':'Once open, you can edit and submit your team’s project here.','my.worksBtn':'Submit project',
-  'm.loginT':'Log in to Aholo','m.loginD':'You need an Aholo account to register. Registration continues right after you log in.','m.loginBtn':'Log in with Aholo',
+  'nav.login':'Log in','nav.logout':'Log out','nav.my':'My entry','m.loginT':'Log in to Aholo','m.loginD':'Log in with your Aholo account to register and manage your team.','m.loginBtn':'Log in with Aholo',
   'm.regT':'Register','m.regD':'Every participant registers individually first, then creates or joins a team.','f.name':'Nickname','f.email':'Contact email','f.role':'Role','f.roleNone':'Select','f.role1':'Developer','f.role2':'Designer','f.role3':'Creator','f.role4':'Student','f.role5':'Other','f.region':'Region','f.cn':'China','f.intl':'International','f.agree':'I have read and agree to the event rules','m.regSubmit':'Submit registration',
   'm.comT':'Join the community','m.comD':'Scan the code or use the invite link to join the official group for announcements, team matching and Q&A.','m.comQr':'QR code coming soon','m.comLink':'Invite link','m.comLinkSoon':'Coming soon','m.comR1':'You can join before registering to learn about the event and find teammates.','m.comR2':'Post what you’re looking for and team up with others.',
   'foot.tag':'Spatial intelligence platform — reconstruct, generate, edit and understand space.','foot.event':'Event','foot.product':'Product','foot.platform':'Aholo Platform','foot.contact':'Contact','foot.rights':'All rights reserved'
@@ -1250,11 +1255,11 @@ document.querySelectorAll('.res-main').forEach(card => card.addEventListener('po
     'err.teamName': ['请输入 2–20 个字符的团队名称', 'Enter a team name of 2–20 characters'], 'err.code': ['团队编号格式为 T + 6 位字母或数字', 'Team codes are T + 6 letters or digits'],
     'err.net': ['网络异常，请稍后重试', 'Something went wrong, please try again'],
     'busy': ['提交中…', 'Submitting…'], 'loggingIn': ['登录中…', 'Logging in…'],
-    'toast.reg': ['报名成功，欢迎加入！', 'You’re registered — welcome!'], 'toast.login': ['已登录', 'Logged in'],
+    'toast.reg': ['报名成功，欢迎加入！', 'You’re registered — welcome!'], 'toast.login': ['已登录', 'Logged in'], 'toast.logout': ['已退出登录', 'Logged out'],
     'toast.team': ['团队已创建', 'Team created'], 'toast.join': ['已加入团队', 'Joined the team'], 'toast.confirm': ['组队已确认', 'Team confirmed'],
   };
   const T = (k, vars) => { let v = D[k] ? D[k][isEN() ? 1 : 0] : k; if (vars) for (const n in vars) v = v.replace('{' + n + '}', vars[n]); return v; };
-  ZH['cta.my'] = '我的参赛';
+  ZH['cta.my'] = '我的参赛'; ZH['nav.logout'] = '退出登录';
 
   /* ---------------- api (mock) ---------------- */
   const KEY = 'aholo-hack-demo-v1';
@@ -1267,6 +1272,8 @@ document.querySelectorAll('.res-main').forEach(card => card.addEventListener('po
     async getState() { return load(); },
     // TODO: open the Aholo main-site login component and resolve once the user is logged in
     async login() { await wait(500); const s = load(); s.loggedIn = true; return save(s); },
+    // TODO: main-site logout
+    async logout() { await wait(200); const s = load(); s.loggedIn = false; return save(s); },
     // TODO: POST registration; server must be idempotent (one registration per account)
     async register(f) { await wait(700); const s = load(); if (!s.profile) s.profile = { name: f.name, email: f.email, role: f.role, region: f.region, id: 'AH26-' + rid(5, '0123456789'), teamReward: false }; return save(s); },
     async createTeam(name) { await wait(400); const s = load(); s.team = { id: 'T' + rid(6, 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789'), name, captain: true, confirmed: false, rewarded: false, members: [{ name: s.profile.name, me: true, captain: true }] }; return save(s); },
@@ -1279,6 +1286,7 @@ document.querySelectorAll('.res-main').forEach(card => card.addEventListener('po
 
   let state = load();
   let busy = false;
+  const registered = () => !!(state.loggedIn && state.profile);
 
   /* ---------------- toast ---------------- */
   let toastT;
@@ -1303,18 +1311,31 @@ document.querySelectorAll('.res-main').forEach(card => card.addEventListener('po
   }
   document.addEventListener('keydown', e => { if (e.key === 'Escape' && !modal.hidden) closeModal(); });
 
+  let afterLogin = 'register';           // what the login pane leads to: registration, or just close (nav 登录)
   function startRegister() {
-    if (state.profile) { location.hash = '#/my'; return; }
+    if (registered()) { location.hash = '#/my'; return; }
+    afterLogin = 'register';
     openModal(state.loggedIn ? 'register' : 'login');
   }
   async function doLogin(btn, then) {
     if (busy) return; busy = true; btn.disabled = true; const label = btn.innerHTML; btn.textContent = T('loggingIn');
-    try { state = await api.login(); toast(T('toast.login')); then(); }
-    catch (e) { toast(T('err.net')); }
-    finally { busy = false; btn.disabled = false; btn.innerHTML = label; }
+    let ok = false;
+    try { state = await api.login(); ok = true; } catch (e) { toast(T('err.net')); }
+    busy = false; btn.disabled = false; btn.innerHTML = label;   // release before `then` so it can close/switch the modal
+    if (ok) { toast(T('toast.login')); then(); }
   }
-  $('#loginBtn').addEventListener('click', e => doLogin(e.currentTarget, () => openModal('register')));
-  $('#gateLogin').addEventListener('click', e => doLogin(e.currentTarget, renderMy));
+  $('#loginBtn').addEventListener('click', e => doLogin(e.currentTarget, () => {
+    refreshAll();
+    if (afterLogin === 'register' && !state.profile) openModal('register'); else closeModal();
+  }));
+  $('#navAuth').addEventListener('click', async () => {
+    if (busy) return;
+    if (!state.loggedIn) { afterLogin = 'close'; openModal('login'); return; }
+    busy = true;
+    try { state = await api.logout(); toast(T('toast.logout')); } catch (e) { toast(T('err.net')); }
+    finally { busy = false; refreshAll(); }
+  });
+  $('#gateLogin').addEventListener('click', e => doLogin(e.currentTarget, refreshAll));
 
   /* ---------------- registration form ---------------- */
   const form = $('#regForm');
@@ -1346,7 +1367,7 @@ document.querySelectorAll('.res-main').forEach(card => card.addEventListener('po
     const btn = $('#regSubmit'); busy = true; btn.disabled = true; btn.textContent = T('busy');
     try {
       state = await api.register(v);
-      busy = false; closeModal(); form.reset(); refreshCtas();
+      busy = false; closeModal(); form.reset(); refreshAll();
       location.hash = '#/my'; toast(T('toast.reg'));
     } catch (err) { toast(T('err.net')); }
     finally { busy = false; btn.disabled = false; btn.innerHTML = (isEN() ? EN : ZH)['m.regSubmit']; }
@@ -1354,13 +1375,19 @@ document.querySelectorAll('.res-main').forEach(card => card.addEventListener('po
 
   /* ---------------- CTAs: 立即报名 ⇄ 我的参赛 ---------------- */
   function refreshCtas() {
-    const k = state.profile ? 'cta.my' : 'cta.register';
+    const k = registered() ? 'cta.my' : 'cta.register';
     document.querySelectorAll('[data-reg-cta]').forEach(el => {
       const lab = el.querySelector('[data-i18n]') || el;
       lab.dataset.i18n = k; lab.innerHTML = (isEN() ? EN : ZH)[k];
-      el.setAttribute('href', state.profile ? '#/my' : '#register');
+      el.setAttribute('href', registered() ? '#/my' : '#register');
     });
+    // nav: 登录 ⇄ 退出登录, and 我的参赛 appears once registration is complete
+    const auth = $('#navAuth'), ak = state.loggedIn ? 'nav.logout' : 'nav.login';
+    auth.dataset.i18n = ak; auth.innerHTML = (isEN() ? EN : ZH)[ak];
+    auth.classList.toggle('btn-primary', !state.loggedIn); auth.classList.toggle('btn-ghost', state.loggedIn);
+    $('#navMy').hidden = !registered();
   }
+
 
   document.addEventListener('click', e => {
     const t = e.target;
@@ -1462,12 +1489,14 @@ document.querySelectorAll('.res-main').forEach(card => card.addEventListener('po
   function route() {
     const onMy = location.hash === '#/my';
     $('#top').hidden = onMy; $('#my').hidden = !onMy;
+    document.querySelector('.nav-my').classList.toggle('active', onMy);
     if (onMy) { renderMy(); window.scrollTo(0, 0); }
     else if (location.hash.length > 1) { const t = document.getElementById(location.hash.slice(1)); if (t) requestAnimationFrame(() => t.scrollIntoView()); }
   }
   window.addEventListener('hashchange', route);
   document.addEventListener('langchange', () => { refreshCtas(); if (location.hash === '#/my') renderMy(); });
 
+  function refreshAll() { refreshCtas(); if (location.hash === '#/my') renderMy(); }
   refreshCtas(); route();
 })();
 
