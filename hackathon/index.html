@@ -52,7 +52,7 @@
   --radius: 20px;
   --radius-sm: 12px;
   --radius-pill: 999px;
-  --container: 1200px;
+  --container: 1440px;
   --gutter: clamp(16px, 4vw, 40px);
   --section-y: clamp(88px, 12vw, 160px);
   --ease: cubic-bezier(.2, .7, .2, 1);
@@ -113,20 +113,20 @@ button { font: inherit; color: inherit; background: none; border: 0; cursor: poi
   border-bottom: 1px solid transparent;
 }
 .nav.scrolled { background: rgba(5,5,6,.72); backdrop-filter: blur(18px) saturate(140%); -webkit-backdrop-filter: blur(18px) saturate(140%); border-bottom-color: var(--border-subtle); }
-.nav-inner { display: flex; align-items: center; justify-content: space-between; height: 72px; gap: 24px; }
+.nav-inner { display: flex; align-items: center; height: 64px; gap: 24px; padding: 0 var(--gutter); }
 .brand { display: flex; align-items: center; gap: 14px; flex-shrink: 0; }
 .brand .aholo-logo { --h: 26px; }
 .brand-tag {
   font-family: var(--font-mono); font-size: 11px; letter-spacing: .14em; text-transform: uppercase;
   color: var(--text-muted); padding-left: 14px; border-left: 1px solid var(--border);
 }
-.nav-links { display: flex; align-items: center; gap: 4px; list-style: none; }
+.nav-links { display: flex; align-items: center; gap: clamp(0px, .6vw, 12px); list-style: none; margin-left: clamp(24px, 3.5vw, 64px); }
 .nav-links a {
   display: block; padding: 8px 14px; border-radius: var(--radius-pill);
   font-size: 14px; color: var(--text-soft); transition: color .2s, background .2s;
 }
 .nav-links a:hover { color: var(--text); background: rgba(255,255,255,.04); }
-.nav-actions { display: flex; align-items: center; gap: 10px; }
+.nav-actions { display: flex; align-items: center; gap: 10px; margin-left: auto; }
 .lang-toggle {
   display: inline-flex; height: 38px; padding: 3px; border-radius: var(--radius-pill);
   border: 1px solid var(--border); font-family: var(--font-mono); font-size: 12px;
@@ -348,7 +348,7 @@ footer { padding: 72px 0 40px; margin-top: var(--section-y); border-top: 1px sol
   .nav.open { background: rgba(5,5,6,.96); backdrop-filter: blur(18px); -webkit-backdrop-filter: blur(18px); }
   .nav.open .nav-links {
     display: flex; flex-direction: column; align-items: stretch; gap: 0;
-    position: absolute; top: 72px; left: 0; right: 0; padding: 8px var(--gutter) 24px;
+    position: absolute; top: 64px; left: 0; right: 0; padding: 8px var(--gutter) 24px;
     background: rgba(5,5,6,.96); border-bottom: 1px solid var(--border-subtle);
   }
   .nav.open .nav-links a { padding: 14px 0; font-size: 17px; border-radius: 0; border-bottom: 1px solid var(--border-subtle); }
@@ -404,7 +404,7 @@ footer { padding: 72px 0 40px; margin-top: var(--section-y); border-top: 1px sol
 
 <!-- ======================= NAV ======================= -->
 <header class="nav" id="nav">
-  <div class="container nav-inner">
+  <div class="nav-inner">
     <a href="#top" class="brand" aria-label="Aholo Hackathon">
       <span class="aholo-logo" role="img" aria-label="Aholo"><span class="al-icon"></span><span class="al-word"></span></span>
       <span class="brand-tag">Hackathon ’26</span>
