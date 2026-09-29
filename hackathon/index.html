@@ -437,10 +437,30 @@ html[lang="zh-CN"] .my-sec-title, html[lang="zh-CN"] .my-title { font-family: va
 .btn-danger { border: 1px solid rgba(248,113,113,.45); color: #fca5a5; background: transparent; }
 .btn-danger:hover { background: rgba(248,113,113,.1); }
 
+/* works */
+.work-head { display: flex; justify-content: space-between; align-items: flex-start; gap: 12px 20px; flex-wrap: wrap; padding-bottom: 18px; margin-bottom: 22px; border-bottom: 1px solid var(--border-subtle); }
+.work-head h3 { font-size: 18px; font-weight: 700; display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
+.work-head p { font-size: 13px; color: var(--text-muted); margin-top: 4px; }
+.work-form .grid2 { display: grid; grid-template-columns: 1fr 1fr; gap: 0 16px; }
+.field .hint { display: block; font-size: 12.5px; color: var(--text-muted); margin-top: 6px; }
+.field .opt { font-weight: 500; color: var(--text-muted); margin-left: 6px; }
+textarea { width: 100%; min-height: 120px; padding: 12px 14px; border-radius: 12px; border: 1px solid var(--border-strong); background: var(--bg-2); color: var(--text); font: inherit; font-size: 15px; line-height: 1.6; resize: vertical; transition: border-color .2s, box-shadow .2s; }
+textarea:focus { outline: none; border-color: var(--ice); box-shadow: 0 0 0 3px rgba(172,199,252,.15); }
+.work-actions { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; margin-top: 20px; }
+.work-actions .saved { font-size: 13px; color: var(--text-muted); margin-left: auto; }
+.receipt-title { font-size: 22px; font-weight: 700; margin-bottom: 4px; }
+.receipt-tagline { color: var(--text-soft); margin-bottom: 14px; }
+.receipt-links { display: grid; gap: 8px; margin: 16px 0 4px; font-size: 14px; }
+.receipt-links a { color: var(--ice); word-break: break-all; }
+.receipt-links a:hover { color: #fff; }
+.receipt-links div { display: grid; grid-template-columns: 150px 1fr; gap: 16px; }
+.receipt-links span { color: var(--text-muted); }
+.receipt-desc { font-size: 14.5px; color: var(--text-soft); white-space: pre-wrap; margin-top: 12px; }
+
 /* form fields */
 .field { display: block; border: 0; margin-bottom: 16px; }
 .field > span, .field > legend { display: block; font-size: 13.5px; font-weight: 600; color: var(--text-soft); margin-bottom: 8px; padding: 0; }
-input[type=text], input[type=email], select {
+input[type=text], input[type=email], input[type=url], select {
   width: 100%; height: 46px; padding: 0 14px; border-radius: 12px; border: 1px solid var(--border-strong);
   background: var(--bg-2); color: var(--text); font: inherit; font-size: 15px; transition: border-color .2s, box-shadow .2s;
 }
@@ -558,6 +578,10 @@ body.modal-open { overflow: hidden; }
   .chip { flex: 1 1 100%; }
   .reg-row > .btn { width: 100%; }
   .team-box .row { flex-direction: column; }
+  .work-form .grid2 { grid-template-columns: 1fr; }
+  .receipt-links div { grid-template-columns: 1fr; gap: 2px; }
+  .work-actions .btn { flex: 1 1 100%; }
+  .work-actions .saved { margin-left: 0; }
   .team-btns { width: 100%; }
   .team-btns .btn { flex: 1 1 30%; padding: 0 10px; }
   .modal-card { padding: 32px 22px 24px; }
@@ -619,7 +643,7 @@ body.modal-open { overflow: hidden; }
       <div class="hero-cta reveal d3">
         <a href="#register" class="btn btn-primary" data-reg-cta><span data-i18n="cta.register">立即报名</span><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M3 8h10M9 4l4 4-4 4"/></svg></a>
         <button type="button" class="btn btn-ghost" data-open-community data-i18n="cta.community">进入社群</button>
-        <button type="button" class="btn btn-disabled" disabled aria-disabled="true" data-i18n="cta.submitSoon">提交作品 · 暂未开放</button>
+        <a href="#register" class="btn btn-ghost" data-submit-cta data-i18n="cta.submit">提交作品</a>
       </div>
       <dl class="hero-meta reveal d3">
         <div><dt data-i18n="meta.date">日期</dt><dd data-i18n="meta.dateV">2026.10.14 – 11.16</dd></div>
@@ -899,10 +923,10 @@ body.modal-open { overflow: hidden; }
     <div class="my-stage">
       <div class="my-stage-item">
         <span class="my-stage-icon"><svg viewBox="0 0 24 24" fill="none" stroke="url(#g1)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg></span>
-        <div><strong data-i18n="my.cur">当前阶段：报名与组队</strong><span data-i18n="my.curD">组队交流，准备你的创意方案</span></div>
+        <div><strong data-i18n="my.cur">当前阶段：报名、组队与作品提交</strong><span data-i18n="my.curD">组队交流，打磨并提交你的作品</span></div>
       </div>
       <div class="my-stage-item my-stage-next">
-        <div><strong data-i18n="my.next">下一阶段：作品提交</strong><span data-i18n="my.nextD">开放时间以赛事公告为准</span></div>
+        <div><strong data-i18n="my.next">下一阶段：作品评选</strong><span data-i18n="my.nextD">11.16 10:00 – 11.22 17:00</span></div>
       </div>
       <div class="my-stage-foot">
         <span class="mono" data-i18n="my.dl">关键时间 · 10.14 报名开启 · 11.16 作品提交与组队截止</span>
@@ -964,16 +988,9 @@ body.modal-open { overflow: hidden; }
         <div class="my-card" id="myTeam"></div>
       </section>
 
-      <section class="my-sec">
+      <section class="my-sec" id="myWorksSec">
         <h2 class="my-sec-title" data-i18n="my.works">我的作品</h2>
-        <div class="my-card">
-          <div class="empty">
-            <span class="empty-icon"><svg viewBox="0 0 24 24" fill="none" stroke="url(#g1)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="3" width="14" height="18" rx="2"/><path d="M9 8h6M9 12h6M9 16h4"/></svg></span>
-            <h3 data-i18n="my.worksT">作品提交通道暂未开放</h3>
-            <p data-i18n="my.worksD">开放后可在这里编辑并提交团队作品。</p>
-            <button type="button" class="btn btn-disabled" disabled aria-disabled="true" data-i18n="my.worksBtn">提交作品</button>
-          </div>
-        </div>
+        <div class="my-card" id="myWorks"></div>
       </section>
     </div>
   </div>
@@ -1131,9 +1148,9 @@ const EN = {
   'q3':'Can I change members after confirming my team?','a3':'You can edit the team, change members or disband it. Team rewards are granted only on the first confirmation; members who join later do not receive them retroactively.',
   'q4':'How do I earn creation credits?','a4':'You receive a one-time registration reward once your individual sign-up succeeds. When a team is confirmed for the first time, the team reward is split evenly among its members at that moment; leaving or switching teams does not earn the reward again.',
   'final.title':'The next space<br>is yours to create.','final.desc':'Registration opens Oct 14, 2026, submissions are due Nov 16, and results are announced in late November. Build your first spatial project with Aholo Lux3D.',
-  'nav.rules':'Rules & schedule','nav.res':'Resources','cta.my':'My entry','cta.community':'Join community','cta.communityFull':'Join the community','cta.submitSoon':'Submit project · Not yet open',
+  'nav.rules':'Rules & schedule','nav.res':'Resources','cta.my':'My entry','cta.community':'Join community','cta.communityFull':'Join the community','cta.submitSoon':'Submit project · Not yet open','cta.submit':'Submit project',
   'hero.tagline':'Create new possibilities with spatial intelligence','faq.more':'Still have questions? Ask in the community.',
-  'my.title':'My entry','my.back':'Back to event','my.cur':'Current stage: Registration & teams','my.curD':'Meet teammates and prepare your idea','my.next':'Next: Project submission','my.nextD':'Opening time will be announced','my.dl':'Key dates · Oct 14 registration opens · Nov 16 submissions & team lock',
+  'my.title':'My entry','my.back':'Back to event','my.cur':'Current stage: Registration, teams & submission','my.curD':'Team up, polish and submit your project','my.next':'Next: Judging','my.nextD':'Nov 16 10:00 – Nov 22 17:00','my.dl':'Key dates · Oct 14 registration opens · Nov 16 submissions & team lock',
   'my.gateT':'Log in to see your entry','my.gateD':'Log in with your Aholo account to view your registration, credits and team.','my.reg':'Registration & credits','my.tools':'Creation tools','my.toolsD':'Build your project with Lux3D, and add other products as you need.','my.team':'My team','my.works':'My project','my.worksT':'Submissions are not open yet','my.worksD':'Once open, you can edit and submit your team’s project here.','my.worksBtn':'Submit project',
   'nav.login':'Log in','nav.logout':'Log out','nav.my':'My entry','m.loginT':'Log in to Aholo','m.loginD':'Log in with your Aholo account to register and manage your team.','m.loginBtn':'Log in with Aholo',
   'm.regT':'Register','m.regD':'Every participant registers individually first, then creates or joins a team.','f.name':'Nickname','f.email':'Contact email','f.role':'Role','f.roleNone':'Select','f.role1':'Developer','f.role2':'Designer','f.role3':'Creator','f.role4':'Student','f.role5':'Other','f.region':'Region','f.cn':'China','f.intl':'International','f.agree':'I have read and agree to the event rules','m.regSubmit':'Submit registration',
@@ -1278,6 +1295,22 @@ document.querySelectorAll('.res-main').forEach(card => card.addEventListener('po
     'team.rewardPending': ['团队奖励发放中，将发放给 {n} 名成员', 'Team reward processing for {n} member(s)'],
     'team.rewardTip': ['团队奖励仅在首次确认时发放给当时的队员；后续加入的成员不补发，退出或换队不会重复获得。', 'Team rewards are granted only at the first confirmation to the members at that time; later members don’t receive them, and leaving or switching teams doesn’t earn them again.'],
     'team.pendingTip': ['到账后这里会显示发放日期。', 'The grant date will appear here once it arrives.'],
+    'w.lockedT': ['报名后即可提交作品', 'Register to submit your project'], 'w.lockedD': ['完成个人报名后，就能在这里编辑并提交你的作品。', 'Once registered, you can edit and submit your project here.'],
+    'w.closedT': ['作品提交已截止', 'Submissions are closed'], 'w.closedD': ['评审将以截止前最后一次成功提交的版本为准。', 'Judging uses your last successful submission before the deadline.'],
+    'w.formT': ['提交你的作品', 'Submit your project'], 'w.owner': ['提交身份：', 'Submitting as: '], 'w.ownerTeam': ['团队「{t}」', 'team “{t}”'], 'w.ownerSolo': ['个人（尚未组队）', 'individual (no team yet)'],
+    'w.rule': ['截止前可多次提交，评审以 11 月 16 日 10:00 前最后一次成功提交的版本为准。', 'You can resubmit until the deadline; judging uses the last successful submission before Nov 16, 10:00.'],
+    'w.title': ['作品名称', 'Project name'], 'w.tagline': ['一句话介绍', 'One-line pitch'], 'w.track': ['应用方向', 'Application area'], 'w.trackNone': ['请选择', 'Select'],
+    'w.t.game': ['游戏', 'Games'], 'w.t.culture': ['文旅', 'Culture & tourism'], 'w.t.film': ['影视创作', 'Film & video'], 'w.t.print': ['3D 打印', '3D printing'], 'w.t.embodied': ['具身智能', 'Embodied AI'], 'w.t.other': ['其他', 'Other'],
+    'w.desc': ['作品介绍', 'Description'], 'w.descPh': ['作品创意、Lux3D 在其中发挥的作用、实现方式与使用场景…', 'Your idea, how Lux3D is used, how it works and who it’s for…'],
+    'w.demo': ['演示视频链接', 'Demo video link'], 'w.link': ['体验链接 / 下载地址', 'Try-it link / download'], 'w.linkHint': ['作品需要真的能跑起来，请提供可访问的体验或下载地址。', 'Your project must actually run — share a link people can open or download.'],
+    'w.social': ['人气奖参评链接', 'People’s Choice entry link'], 'w.optional': ['选填', 'optional'], 'w.socialHint': ['国内：小红书；海外：X。须带赛事官方话题标签，每件作品仅可登记一个。', 'China: Xiaohongshu; international: X. Must use the official hashtag; one link per project.'],
+    'w.lux': ['我确认作品使用 Aholo Lux3D 完成，且可运行、可演示', 'I confirm the project is built with Aholo Lux3D and can run and be demoed'],
+    'w.save': ['保存草稿', 'Save draft'], 'w.submit': ['提交作品', 'Submit project'], 'w.resubmit': ['提交新版本', 'Submit new version'], 'w.cancel': ['取消', 'Cancel'],
+    'w.savedAt': ['草稿已保存 · {t}', 'Draft saved · {t}'], 'w.draftToast': ['草稿已保存', 'Draft saved'], 'w.submitToast': ['作品已提交', 'Project submitted'],
+    'w.done': ['已提交', 'Submitted'], 'w.version': ['第 {v} 版 · 提交于 {t}', 'Version {v} · submitted {t}'], 'w.edit': ['编辑并重新提交', 'Edit & resubmit'],
+    'w.e.title': ['请输入 2–40 个字符的作品名称', 'Enter a project name of 2–40 characters'], 'w.e.tagline': ['请输入 4–60 个字符的一句话介绍', 'Enter a pitch of 4–60 characters'],
+    'w.e.track': ['请选择应用方向', 'Choose an application area'], 'w.e.desc': ['请输入 10–1000 个字符的作品介绍', 'Enter a description of 10–1000 characters'],
+    'w.e.url': ['请输入以 http:// 或 https:// 开头的有效链接', 'Enter a valid link starting with http:// or https://'], 'w.e.lux': ['提交前请确认作品使用 Aholo Lux3D 完成', 'Please confirm the project uses Aholo Lux3D'],
     'team.noReward': ['未获团队奖励', 'No team reward'], 'rw.done': ['已发放', 'granted'],
     'team.confirm': ['确认组队', 'Confirm team'], 'team.confirmD': ['确认后即成为正式团队，之后仍可换人或解散。', 'Confirming makes the team official; you can still change members or disband later.'],
     'team.wait': ['等待队长确认组队。', 'Waiting for the captain to confirm the team.'],
@@ -1322,6 +1355,9 @@ document.querySelectorAll('.res-main').forEach(card => card.addEventListener('po
     async confirmTeam() { await wait(400); const s = load(); s.team.confirmed = true; if (!s.team.rewarded) { const now = Date.now(); s.team.rewarded = true; s.team.rewardCount = s.team.members.length; s.team.rewardSince = now; s.team.members.forEach(m => { m.rewarded = true; }); if (!s.profile.teamReward) { s.profile.teamReward = true; s.profile.teamRewardSince = now; } } return save(s); },
     async updateTeam(name) { await wait(300); const s = load(); if (s.team && s.team.captain) s.team.name = name; return save(s); },
     async removeMember(i) { await wait(300); const s = load(); if (s.team && s.team.captain && !s.team.members[i].me) s.team.members.splice(i, 1); return save(s); },
+    // TODO: real endpoints; judging uses the last successful submission before the deadline
+    async saveDraft(d) { await wait(300); const s = load(); s.work = s.work || {}; s.work.draft = d; s.work.draftAt = Date.now(); return save(s); },
+    async submitWork(d) { await wait(600); const s = load(); s.work = s.work || {}; const v = ((s.work.submitted && s.work.submitted.version) || 0) + 1; s.work.submitted = Object.assign({}, d, { version: v, at: Date.now() }); s.work.draft = null; s.work.draftAt = null; return save(s); },
     async leaveTeam() { await wait(300); const s = load(); s.team = null; return save(s); },
   };
 
@@ -1434,7 +1470,10 @@ document.querySelectorAll('.res-main').forEach(card => card.addEventListener('po
     if (cta) { e.preventDefault(); startRegister(); return; }
     if (t.closest('[data-open-community]')) { e.preventDefault(); openModal('community'); return; }
     if (t.closest('[data-close-modal]')) { closeModal(); return; }
-    const act = t.closest('[data-act]'); if (act) teamAction(act);
+    if (t.closest('[data-submit-cta]')) { e.preventDefault(); goSubmit(); return; }
+    const act = t.closest('[data-act]');
+    if (act && ['saveDraft', 'editWork', 'cancelEdit'].includes(act.dataset.act)) { workAction(act.dataset.act); return; }
+    if (act) teamAction(act);
   });
 
   /* ---------------- 我的参赛 rendering ---------------- */
@@ -1561,7 +1600,99 @@ document.querySelectorAll('.res-main').forEach(card => card.addEventListener('po
   });
 
   // Visible to everyone: guests and unregistered users see the 尚未报名 state
-  function renderMy() { renderReg(); renderTeam(); }
+  /* ---------- 我的作品: any registered participant can submit ---------- */
+  let editingWork = false;
+  const TRACKS = ['game', 'culture', 'film', 'print', 'embodied', 'other'];
+  const fmtTime = t => { const d = new Date(t), hm = String(d.getHours()).padStart(2, '0') + ':' + String(d.getMinutes()).padStart(2, '0'); return fmtDate(t) + ' ' + hm; };
+  const safeUrl = u => /^https?:\/\//i.test(u || '') ? esc(u) : '#';
+  function renderWorks() {
+    const el = $('#myWorks'), w = state.work || {}, sub = w.submitted;
+    const icon = '<span class="empty-icon"><svg viewBox="0 0 24 24" fill="none" stroke="url(#g1)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="3" width="14" height="18" rx="2"/><path d="M9 8h6M9 12h6M9 16h4"/></svg></span>';
+    if (!registered()) {
+      el.innerHTML = `<div class="empty">${icon}<h3>${T('w.lockedT')}</h3><p>${T('w.lockedD')}</p><a href="#register" class="btn btn-primary" data-start-reg>${(isEN() ? EN : ZH)['cta.register']}</a></div>`;
+      return;
+    }
+    const closed = Date.now() >= DEADLINE;
+    if (sub && (!editingWork || closed)) {
+      const links = [['w.demo', sub.demo], ['w.link', sub.link], sub.social ? ['w.social', sub.social] : null].filter(Boolean)
+        .map(([k, u]) => `<div><span>${T(k)}</span><a href="${safeUrl(u)}" target="_blank" rel="noopener noreferrer">${esc(u)}</a></div>`).join('');
+      el.innerHTML = `<div class="work-head"><div><h3><span class="badge ok">${T('w.done')}</span> <span style="font-size:13px;font-weight:500;color:var(--text-muted)">${T('w.version', { v: sub.version, t: fmtTime(sub.at) })}</span></h3></div>
+          ${closed ? '' : `<button type="button" class="btn btn-ghost btn-sm" data-act="editWork">${T('w.edit')}</button>`}</div>
+        <p class="receipt-title">${esc(sub.title)}</p><p class="receipt-tagline">${esc(sub.tagline)}</p>
+        <span class="badge">${T('w.t.' + sub.track)}</span>
+        <p class="receipt-desc">${esc(sub.desc)}</p>
+        <div class="receipt-links">${links}</div>
+        <p class="reg-note">${T(closed ? 'w.closedD' : 'w.rule')}</p>`;
+      return;
+    }
+    if (closed) { el.innerHTML = `<div class="empty">${icon}<h3>${T('w.closedT')}</h3><p>${T('w.closedD')}</p></div>`; return; }
+    const d = w.draft || (editingWork && sub) || {};
+    const v = k => esc(d[k] || '');
+    const owner = state.team ? T('w.ownerTeam', { t: esc(state.team.name) }) : T('w.ownerSolo');
+    el.innerHTML = `<form class="work-form" id="workForm" novalidate>
+      <div class="work-head"><div><h3>${T('w.formT')}</h3><p>${T('w.owner')}${owner}</p></div></div>
+      <div class="grid2">
+        <label class="field"><span>${T('w.title')}</span><input type="text" name="title" maxlength="40" value="${v('title')}"><em class="field-error"></em></label>
+        <label class="field"><span>${T('w.track')}</span><select name="track"><option value="">${T('w.trackNone')}</option>${TRACKS.map(t => `<option value="${t}"${d.track === t ? ' selected' : ''}>${T('w.t.' + t)}</option>`).join('')}</select><em class="field-error"></em></label>
+      </div>
+      <label class="field"><span>${T('w.tagline')}</span><input type="text" name="tagline" maxlength="60" value="${v('tagline')}"><em class="field-error"></em></label>
+      <label class="field"><span>${T('w.desc')}</span><textarea name="desc" maxlength="1000" placeholder="${T('w.descPh')}">${v('desc')}</textarea><em class="field-error"></em></label>
+      <div class="grid2">
+        <label class="field"><span>${T('w.demo')}</span><input type="url" name="demo" placeholder="https://" value="${v('demo')}"><em class="field-error"></em></label>
+        <label class="field"><span>${T('w.link')}</span><input type="url" name="link" placeholder="https://" value="${v('link')}"><em class="field-error"></em><small class="hint">${T('w.linkHint')}</small></label>
+      </div>
+      <label class="field"><span>${T('w.social')}<em class="opt">${T('w.optional')}</em></span><input type="url" name="social" placeholder="https://" value="${v('social')}"><em class="field-error"></em><small class="hint">${T('w.socialHint')}</small></label>
+      <label class="check"><input type="checkbox" name="lux"${d.lux ? ' checked' : ''}><span>${T('w.lux')}</span></label><em class="field-error" data-for="lux"></em>
+      <div class="work-actions">
+        <button type="submit" class="btn btn-primary">${T(sub ? 'w.resubmit' : 'w.submit')}</button>
+        <button type="button" class="btn btn-ghost" data-act="saveDraft">${T('w.save')}</button>
+        ${editingWork && sub ? `<button type="button" class="link-btn" data-act="cancelEdit">${T('w.cancel')}</button>` : ''}
+        <span class="saved">${w.draftAt ? T('w.savedAt', { t: fmtTime(w.draftAt) }) : ''}</span>
+      </div>
+      <p class="reg-note">${T('w.rule')}</p>
+    </form>`;
+  }
+  const workData = f => ({ title: f.elements.title.value.trim(), track: f.elements.track.value, tagline: f.elements.tagline.value.trim(), desc: f.elements.desc.value.trim(), demo: f.elements.demo.value.trim(), link: f.elements.link.value.trim(), social: f.elements.social.value.trim(), lux: f.elements.lux.checked });
+  function validateWork(f, d) {
+    const url = u => /^https?:\/\/[^\s/$.?#].[^\s]*$/i.test(u);
+    const errs = {
+      title: d.title.length < 2 || d.title.length > 40 ? T('w.e.title') : '', track: d.track ? '' : T('w.e.track'),
+      tagline: d.tagline.length < 4 || d.tagline.length > 60 ? T('w.e.tagline') : '', desc: d.desc.length < 10 || d.desc.length > 1000 ? T('w.e.desc') : '',
+      demo: url(d.demo) ? '' : T('w.e.url'), link: url(d.link) ? '' : T('w.e.url'), social: !d.social || url(d.social) ? '' : T('w.e.url'), lux: d.lux ? '' : T('w.e.lux'),
+    };
+    Object.keys(errs).forEach(k => {
+      const input = f.elements[k], holder = k === 'lux' ? f.querySelector('[data-for="lux"]') : input.closest('.field').querySelector('.field-error');
+      holder.textContent = errs[k]; input.setAttribute('aria-invalid', errs[k] ? 'true' : 'false');
+    });
+    const first = Object.keys(errs).find(k => errs[k]); if (first) { f.elements[first].focus(); return false; }
+    return true;
+  }
+  async function workRun(fn, msg) {
+    if (busy) return; busy = true;
+    document.querySelectorAll('#myWorks button').forEach(b => b.disabled = true);
+    try { state = await fn(); toast(msg); return true; } catch (e) { toast(T('err.net')); return false; }
+    finally { busy = false; }
+  }
+  document.addEventListener('submit', async e => {
+    if (e.target.id !== 'workForm') return;
+    e.preventDefault();
+    const f = e.target, d = workData(f);
+    if (!validateWork(f, d)) return;
+    if (await workRun(() => api.submitWork(d), T('w.submitToast'))) editingWork = false;
+    renderWorks();
+  });
+  document.addEventListener('input', e => { const f = e.target.closest && e.target.closest('#workForm'); if (f && e.target.getAttribute('aria-invalid') === 'true') { e.target.setAttribute('aria-invalid', 'false'); const h = e.target.name === 'lux' ? f.querySelector('[data-for="lux"]') : e.target.closest('.field').querySelector('.field-error'); if (h) h.textContent = ''; } });
+  function workAction(a) {
+    if (a === 'saveDraft') { const f = $('#workForm'); workRun(() => api.saveDraft(workData(f)), T('w.draftToast')).then(renderWorks); }
+    else if (a === 'editWork') { editingWork = true; renderWorks(); $('#workForm').elements.title.focus(); }
+    else if (a === 'cancelEdit') { editingWork = false; renderWorks(); }
+  }
+  function goSubmit() {
+    if (!registered()) { startRegister(); return; }
+    show('my'); requestAnimationFrame(() => $('#myWorksSec').scrollIntoView());
+  }
+
+  function renderMy() { renderReg(); renderTeam(); renderWorks(); }
 
   /* ---------------- router: intro ⇄ 我的参赛 ---------------- */
   let view = 'intro';
@@ -1592,7 +1723,7 @@ document.querySelectorAll('.res-main').forEach(card => card.addEventListener('po
     if (busy) return;
     try { sessionStorage.removeItem(KEY); } catch (e) {}
     mem = { loggedIn: false, profile: null, team: null }; state = load();
-    clearTimeout(rewardTimer); if (!modal.hidden) closeModal(); form.reset();
+    clearTimeout(rewardTimer); editingWork = false; if (!modal.hidden) closeModal(); form.reset();
     refreshAll(); show('intro'); window.scrollTo(0, 0); toast(T('toast.reset'));
   });
   refreshCtas(); route();
