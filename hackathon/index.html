@@ -413,7 +413,6 @@ html[lang="zh-CN"] .my-sec-title, html[lang="zh-CN"] .my-title { font-family: va
 .team-head h3 { font-size: 20px; font-weight: 700; display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
 .team-code { display: block; margin-top: 6px; font-size: 13.5px; color: var(--text-muted); }
 .team-btns { display: flex; gap: 10px; flex-wrap: wrap; }
-.team-reward { margin-top: 20px; padding: 14px 18px; border-radius: var(--radius-sm); background: var(--bg-2); border: 1px solid var(--border-subtle); font-size: 13.5px; color: var(--text-soft); }
 .invite-code { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 16px 18px; border-radius: 12px; border: 1px solid var(--border-strong); background: var(--bg-2); }
 .invite-code .mono { font-size: 24px; font-weight: 700; letter-spacing: .12em; }
 .invite-seats { margin: 12px 0 20px; font-size: 13.5px; color: var(--text-muted); }
@@ -425,9 +424,16 @@ html[lang="zh-CN"] .my-sec-title, html[lang="zh-CN"] .my-title { font-family: va
 .members .reg-avatar { width: 38px; height: 38px; font-size: 15px; }
 .members .who { flex: 1; font-weight: 600; font-size: 15px; }
 .members .who em { font-style: normal; font-size: 12.5px; color: var(--text-muted); font-weight: 500; margin-left: 8px; }
-.team-meta { display: flex; justify-content: space-between; gap: 12px; margin-top: 14px; font-size: 13px; color: var(--text-muted); }
+.team-meta { display: flex; align-items: center; flex-wrap: wrap; gap: 4px 6px; margin-top: 14px; font-size: 13px; color: var(--text-muted); }
 .team-actions { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; margin-top: 22px; }
-.team-actions p { font-size: 13.5px; color: var(--text-soft); flex: 1 1 260px; }
+.team-actions p { font-size: 13px; color: var(--text-muted); flex: 1 1 260px; }
+.members .tag-muted { font-style: normal; font-size: 11.5px; font-weight: 600; color: var(--text-muted); padding: 1px 8px; border-radius: var(--radius-pill); background: rgba(255,255,255,.05); border: 1px solid var(--border); margin-left: 8px; }
+/* ⓘ info tooltip */
+.tip { position: relative; display: inline-grid; place-items: center; width: 18px; height: 18px; vertical-align: -4px; margin-left: 2px; color: var(--text-muted); cursor: help; border-radius: 50%; }
+.tip:hover, .tip:focus-visible { color: var(--text); }
+.tip svg { width: 15px; height: 15px; }
+.tip-body { position: absolute; left: 50%; bottom: calc(100% + 8px); transform: translateX(-50%); width: max-content; max-width: min(300px, 80vw); padding: 10px 12px; border-radius: 10px; background: var(--surface-2); border: 1px solid var(--border-strong); box-shadow: 0 12px 32px rgba(0,0,0,.5); color: var(--text-soft); font-size: 12.5px; line-height: 1.6; font-weight: 500; text-align: left; opacity: 0; visibility: hidden; transition: opacity .15s; z-index: 20; pointer-events: none; }
+.tip:hover .tip-body, .tip:focus .tip-body, .tip:focus-within .tip-body { opacity: 1; visibility: visible; }
 .btn-danger { border: 1px solid rgba(248,113,113,.45); color: #fca5a5; background: transparent; }
 .btn-danger:hover { background: rgba(248,113,113,.1); }
 
@@ -1260,6 +1266,14 @@ document.querySelectorAll('.res-main').forEach(card => card.addEventListener('po
     'team.code': ['团队编号：', 'Team code: '], 'team.copy': ['复制', 'Copy'], 'team.copied': ['团队编号已复制', 'Team code copied'],
     'team.captain': ['队长', 'Captain'], 'team.you': ['你', 'you'], 'team.remove': ['移除', 'Remove'],
     'team.count': ['成员 {n}/5', 'Members {n}/5'], 'team.share': ['分享团队编号，邀请伙伴加入', 'Share the code to invite teammates'],
+    'team.confirmHint': ['确认后，团队奖励将发放给当前 {n} 名成员，之后加入的不补发', 'Once confirmed, the team reward goes to the current {n} member(s); anyone who joins later won’t receive it'],
+    'team.confirmTip': ['确认后仍可换人或解散；退出或换队不会重复获得团队奖励。', 'You can still change members or disband after confirming. Leaving or switching teams won’t earn the reward again.'],
+    'team.waitHint': ['等待队长确认组队。确认时在队的成员将获得团队奖励', 'Waiting for the captain to confirm. Members on the team at that moment receive the team reward'],
+    'team.rewardDone': ['团队奖励已于 {d}发放给 {n} 名成员', 'Team reward granted to {n} member(s) on {d}'],
+    'team.rewardPending': ['团队奖励发放中，将发放给 {n} 名成员', 'Team reward processing for {n} member(s)'],
+    'team.rewardTip': ['团队奖励仅在首次确认时发放给当时的队员；后续加入的成员不补发，退出或换队不会重复获得。', 'Team rewards are granted only at the first confirmation to the members at that time; later members don’t receive them, and leaving or switching teams doesn’t earn them again.'],
+    'team.pendingTip': ['到账后这里会显示发放日期。', 'The grant date will appear here once it arrives.'],
+    'team.noReward': ['未获团队奖励', 'No team reward'], 'rw.done': ['已发放', 'granted'],
     'team.confirm': ['确认组队', 'Confirm team'], 'team.confirmD': ['确认后即成为正式团队，之后仍可换人或解散。', 'Confirming makes the team official; you can still change members or disband later.'],
     'team.wait': ['等待队长确认组队。', 'Waiting for the captain to confirm the team.'],
     'team.okD': ['团队已确认，仍可调整成员或解散。', 'Team confirmed. You can still change members or disband.'],
@@ -1296,7 +1310,8 @@ document.querySelectorAll('.res-main').forEach(card => card.addEventListener('po
     async createTeam(name) { await wait(400); const s = load(); s.team = { id: 'T' + rid(6, 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789'), name, captain: true, confirmed: false, rewarded: false, members: [{ name: s.profile.name, me: true, captain: true }] }; return save(s); },
     // Demo only: a real join looks the code up on the server
     async joinTeam(code) { await wait(400); const s = load(); s.team = { id: code, name: T('team.demoName') + code, captain: false, confirmed: false, rewarded: false, members: [{ name: T('team.demoCaptain'), captain: true }, { name: s.profile.name, me: true }] }; return save(s); },
-    async confirmTeam() { await wait(400); const s = load(); s.team.confirmed = true; if (!s.team.rewarded) { s.team.rewarded = true; if (!s.profile.teamReward) s.profile.teamReward = true; } return save(s); },
+    // First confirmation grants the team reward to the members at that moment. The real status (processing → granted + date) comes from the server.
+    async confirmTeam() { await wait(400); const s = load(); s.team.confirmed = true; if (!s.team.rewarded) { const now = Date.now(); s.team.rewarded = true; s.team.rewardCount = s.team.members.length; s.team.rewardSince = now; s.team.members.forEach(m => { m.rewarded = true; }); if (!s.profile.teamReward) { s.profile.teamReward = true; s.profile.teamRewardSince = now; } } return save(s); },
     async updateTeam(name) { await wait(300); const s = load(); if (s.team && s.team.captain) s.team.name = name; return save(s); },
     async removeMember(i) { await wait(300); const s = load(); if (s.team && s.team.captain && !s.team.members[i].me) s.team.members.splice(i, 1); return save(s); },
     async leaveTeam() { await wait(300); const s = load(); s.team = null; return save(s); },
@@ -1415,11 +1430,20 @@ document.querySelectorAll('.res-main').forEach(card => card.addEventListener('po
   });
 
   /* ---------------- 我的参赛 rendering ---------------- */
+  const MOCK_ARRIVAL_MS = 8000;   // mock only: reward "arrives" 8s after confirmation
+  const rewardStatus = since => (Date.now() - since >= MOCK_ARRIVAL_MS ? { done: true, at: since + MOCK_ARRIVAL_MS } : { done: false, left: since + MOCK_ARRIVAL_MS - Date.now() });
+  const fmtDate = t => { const d = new Date(t); return isEN() ? d.toLocaleDateString('en-US', { month: 'short', day: 'numeric' }) : `${d.getMonth() + 1} 月 ${d.getDate()} 日`; };
+  const tip = text => `<span class="tip" tabindex="0" role="button" aria-label="${esc(text)}"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.3"><circle cx="8" cy="8" r="6.5"/><path d="M8 7.2v4M8 4.9v.1" stroke-linecap="round"/></svg><span class="tip-body" role="tooltip">${esc(text)}</span></span>`;
+  let rewardTimer;
+  function scheduleRewardRefresh(since) {
+    clearTimeout(rewardTimer);
+    const st = rewardStatus(since); if (!st.done) rewardTimer = setTimeout(() => { if (view === 'my') renderMy(); }, st.left + 50);
+  }
   function renderReg() {
     const p = registered() ? state.profile : null;
     const chips = p
       ? `<div class="chip"><strong>${T('rw.reg')} · <b>${T('rw.pending')}</b></strong><span>${T('rw.acct')}</span></div>
-         <div class="chip"><strong>${T('rw.team')} · ${p.teamReward ? '<b>' + T('rw.pending') + '</b>' : T('rw.none')}</strong><span>${p.teamReward ? T('rw.split') : T('rw.onConfirm')}</span></div>`
+         <div class="chip"><strong>${T('rw.team')} · ${p.teamReward ? '<b>' + T(rewardStatus(p.teamRewardSince || 0).done ? 'rw.done' : 'rw.pending') + '</b>' : T('rw.none')}</strong><span>${p.teamReward ? T('rw.split') : T('rw.onConfirm')}</span></div>`
       : `<div class="chip"><strong>${T('rw.reg')} · ${T('rw.afterReg')}</strong><span>${T('rw.once')}</span></div>
          <div class="chip"><strong>${T('rw.team')} · ${T('rw.none')}</strong><span>${T('rw.onConfirm')}</span></div>`;
     $('#myReg').innerHTML = p
@@ -1451,11 +1475,20 @@ document.querySelectorAll('.res-main').forEach(card => card.addEventListener('po
       return;
     }
     const members = tm.members.map((m, i) => `<li><span class="reg-avatar${m.me ? ' on' : ''}">${esc(m.name.slice(0, 1).toUpperCase())}</span>
-      <span class="who">${esc(m.name)}${m.captain ? `<em>${T('team.captain')}</em>` : ''}${m.me ? `<em>${T('team.you')}</em>` : ''}</span>
+      <span class="who">${esc(m.name)}${m.captain ? `<em>${T('team.captain')}</em>` : ''}${m.me ? `<em>${T('team.you')}</em>` : ''}${tm.rewarded && !m.rewarded ? `<span class="tag-muted">${T('team.noReward')}</span>` : ''}</span>
       ${tm.captain && !m.me ? `<button type="button" class="link-btn" data-act="remove" data-i="${i}">${T('team.remove')}</button>` : ''}</li>`).join('');
-    const confirmRow = tm.confirmed
-      ? `<p>${T('team.okD')}</p>`
-      : (tm.captain ? `<button type="button" class="btn btn-primary" data-act="confirm">${T('team.confirm')}</button><p>${T('team.confirmD')}</p>` : `<p>${T('team.wait')}</p>`);
+    // Unconfirmed: the rule sits next to the decision. Confirmed: status lives on the member-count row.
+    const confirmRow = tm.confirmed ? '' : (tm.captain
+      ? `<div class="team-actions"><button type="button" class="btn btn-primary" data-act="confirm">${T('team.confirm')}</button><p>${T('team.confirmHint', { n: tm.members.length })} ${tip(T('team.confirmTip'))}</p></div>`
+      : `<div class="team-actions"><p>${T('team.waitHint')} ${tip(T('team.rewardTip'))}</p></div>`);
+    let rewardLine = '';
+    if (tm.rewarded) {
+      const st = rewardStatus(tm.rewardSince || 0), n = tm.rewardCount || tm.members.length;
+      rewardLine = st.done
+        ? ` · ${T('team.rewardDone', { d: fmtDate(st.at), n })} ${tip(T('team.rewardTip'))}`
+        : ` · ${T('team.rewardPending', { n })} ${tip(T('team.rewardTip') + ' ' + T('team.pendingTip'))}`;
+      scheduleRewardRefresh(tm.rewardSince || 0);
+    }
     el.innerHTML = `<div class="team-head">
         <div><h3>${esc(tm.name)} <span class="badge${tm.confirmed ? ' ok' : ''}">${T(tm.confirmed ? 'team.ok' : 'team.pending')}</span></h3>
           <span class="team-code">${T('team.code')}<span class="mono">${esc(tm.id)}</span></span></div>
@@ -1465,9 +1498,8 @@ document.querySelectorAll('.res-main').forEach(card => card.addEventListener('po
           <button type="button" class="btn btn-danger btn-sm" data-act="${tm.captain ? 'disband' : 'leave'}">${T(tm.captain ? 'team.disband' : 'team.leave')}</button>
         </div></div>
       <ul class="members">${members}</ul>
-      <div class="team-meta"><span>${T('team.count', { n: tm.members.length })}</span></div>
-      <p class="team-reward">${T('team.rewardNote')}</p>
-      <div class="team-actions">${confirmRow}</div>`;
+      <div class="team-meta">${T('team.count', { n: tm.members.length })}${rewardLine}</div>
+      ${confirmRow}`;
   }
 
   async function run(fn, okMsg) {
