@@ -621,7 +621,7 @@ body.modal-open { overflow: hidden; }
       <dl class="hero-meta reveal d3">
         <div><dt data-i18n="meta.date">日期</dt><dd data-i18n="meta.dateV">2026.10.14 – 11.16</dd></div>
         <div><dt data-i18n="meta.loc">参赛方式</dt><dd data-i18n="meta.locV">全程线上 · 全球开放</dd></div>
-        <div><dt data-i18n="meta.format">形式</dt><dd data-i18n="meta.formatV">1 个月 · 1–5 人组队</dd></div>
+        <div><dt data-i18n="meta.format">形式</dt><dd data-i18n="meta.formatV">1 个月 · 1–3 人组队</dd></div>
         <div><dt data-i18n="meta.pool">总奖池</dt><dd data-i18n="meta.poolV">¥ 300,000</dd></div>
       </dl>
     </div>
@@ -1082,7 +1082,7 @@ const EN = {
   'hero.eyebrow':'AHOLO HACKATHON',
   'hero.t1':'3D Creation','hero.t2':'Hackathon',
   'hero.sub':'Connecting the physical and digital worlds.<br>Build what you imagine in 3D, together with developers and creators.',
-  'meta.date':'Date','meta.dateV':'Oct 14 – Nov 16, 2026','meta.loc':'Where','meta.locV':'Fully online · Open worldwide','meta.format':'Format','meta.formatV':'1 month · Teams of 1–5','meta.pool':'Prize pool','meta.poolV':'¥ 300,000',
+  'meta.date':'Date','meta.dateV':'Oct 14 – Nov 16, 2026','meta.loc':'Where','meta.locV':'Fully online · Open worldwide','meta.format':'Format','meta.formatV':'1 month · Teams of 1–3','meta.pool':'Prize pool','meta.poolV':'¥ 300,000',
   'cd.title':'Registration opens in','cd.deadline':'Oct 14, 2026 (Beijing Time, UTC+8)','cd.d':'Days','cd.h':'Hrs','cd.m':'Min','cd.s':'Sec',
   'about.title':'Bring the real world<br>into computable space.',
   'about.desc':'Hosted by Aholo, the Spatial Hackathon is open to anyone passionate about 3D, AI and spatial computing. Developers, designers and researchers alike — turn your ideas into interactive spatial experiences.',
@@ -1260,12 +1260,12 @@ document.querySelectorAll('.res-main').forEach(card => card.addEventListener('po
     'team.solo': ['单人参赛也需要创建团队。', 'Solo participants also need to create a team.'],
     'team.pending': ['组队中', 'Forming'], 'team.ok': ['已确认', 'Confirmed'],
     'team.invite': ['邀请队员', 'Invite'], 'team.edit': ['编辑团队', 'Edit team'], 'team.saved': ['团队信息已更新', 'Team updated'],
-    'team.seats': ['当前 {n}/5 人，还可邀请 {r} 人', '{n}/5 members — {r} more can join'], 'team.fullSeats': ['团队已满 5 人', 'Team is full (5/5)'],
+    'team.seats': ['当前 {n}/{max} 人，还可邀请 {r} 人', '{n}/{max} members — {r} more can join'], 'team.fullSeats': ['团队已满 {max} 人', 'Team is full ({max}/{max})'],
     'team.inviteText': ['我在 Aholo 3D 创作黑客松组队，一起来吧！团队编号：{code}。完成报名后，在「我的参赛 · 我的团队」输入编号即可加入。', 'Join my team for the Aholo 3D Creation Hackathon! Team code: {code}. After registering, enter it under My entry · My team.'],
     'team.inviteCopied': ['邀请文案已复制', 'Invitation copied'],
     'team.code': ['团队编号：', 'Team code: '], 'team.copy': ['复制', 'Copy'], 'team.copied': ['团队编号已复制', 'Team code copied'],
     'team.captain': ['队长', 'Captain'], 'team.you': ['你', 'you'], 'team.remove': ['移除', 'Remove'],
-    'team.count': ['成员 {n}/5', 'Members {n}/5'], 'team.share': ['分享团队编号，邀请伙伴加入', 'Share the code to invite teammates'],
+    'team.count': ['成员 {n}/{max}', 'Members {n}/{max}'], 'team.share': ['分享团队编号，邀请伙伴加入', 'Share the code to invite teammates'],
     'team.confirmHint': ['确认后，团队奖励将发放给当前 {n} 名成员，之后加入的不补发', 'Once confirmed, the team reward goes to the current {n} member(s); anyone who joins later won’t receive it'],
     'team.confirmTip': ['确认后仍可换人或解散；退出或换队不会重复获得团队奖励。', 'You can still change members or disband after confirming. Leaving or switching teams won’t earn the reward again.'],
     'team.waitHint': ['等待队长确认组队。确认时在队的成员将获得团队奖励', 'Waiting for the captain to confirm. Members on the team at that moment receive the team reward'],
@@ -1289,7 +1289,8 @@ document.querySelectorAll('.res-main').forEach(card => card.addEventListener('po
     'toast.reg': ['报名成功，欢迎加入！', 'You’re registered — welcome!'], 'toast.login': ['已登录', 'Logged in'], 'toast.logout': ['已退出登录', 'Logged out'],
     'toast.team': ['团队已创建', 'Team created'], 'toast.join': ['已加入团队', 'Joined the team'], 'toast.confirm': ['组队已确认', 'Team confirmed'],
   };
-  const T = (k, vars) => { let v = D[k] ? D[k][isEN() ? 1 : 0] : k; if (vars) for (const n in vars) v = v.replace('{' + n + '}', vars[n]); return v; };
+  const TEAM_MAX = 3;   // team size limit (1–3 people)
+  const T = (k, vars) => { let v = D[k] ? D[k][isEN() ? 1 : 0] : k; vars = Object.assign({ max: TEAM_MAX }, vars); for (const n in vars) v = v.split('{' + n + '}').join(vars[n]); return v; };
   ZH['cta.my'] = '我的参赛'; ZH['nav.logout'] = '退出登录';
 
   /* ---------------- api (mock) ---------------- */
@@ -1519,7 +1520,7 @@ document.querySelectorAll('.res-main').forEach(card => card.addEventListener('po
     else if (a === 'invite') {
       const n = state.team.members.length;
       $('#invCode').textContent = state.team.id;
-      $('#invSeats').textContent = n >= 5 ? T('team.fullSeats') : T('team.seats', { n, r: 5 - n });
+      $('#invSeats').textContent = n >= TEAM_MAX ? T('team.fullSeats') : T('team.seats', { n, r: TEAM_MAX - n });
       openModal('invite');
     } else if (a === 'edit') {
       const f = modal.querySelector('[data-form=editTeam]');
