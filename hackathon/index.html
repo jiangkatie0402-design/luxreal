@@ -480,6 +480,9 @@ html[lang="zh-CN"] .modal-title { font-family: var(--font-title); font-weight: 4
 body.modal-open { overflow: hidden; }
 
 /* toast */
+.demo-reset { position: fixed; left: 16px; bottom: 16px; z-index: 90; display: inline-flex; align-items: center; gap: 8px; height: 32px; padding: 0 14px; border-radius: var(--radius-pill); border: 1px dashed var(--border-strong); background: rgba(14,14,16,.85); backdrop-filter: blur(8px); font-size: 12px; font-weight: 600; color: var(--text-muted); transition: color .2s, border-color .2s; }
+.demo-reset:hover { color: var(--text); border-color: var(--ice); }
+.demo-reset .dot { width: 6px; height: 6px; border-radius: 50%; background: #fbbf24; }
 .toast { position: fixed; left: 50%; bottom: 28px; z-index: 120; transform: translate(-50%, 20px); opacity: 0; pointer-events: none; padding: 12px 20px; border-radius: var(--radius-pill); background: #f4f4f5; color: #101012; font-size: 14px; font-weight: 700; box-shadow: 0 12px 40px rgba(0,0,0,.5); transition: opacity .25s, transform .25s; }
 .toast.show { opacity: 1; transform: translate(-50%, 0); }
 
@@ -1043,6 +1046,8 @@ body.modal-open { overflow: hidden; }
   </div>
 </div>
 <div class="toast" id="toast" role="status" aria-live="polite"></div>
+<!-- DEMO ONLY — remove before launch -->
+<button type="button" class="demo-reset" id="demoReset"><span class="dot"></span><span data-i18n="demo.reset">演示模式 · 重置流程</span></button>
 
 <!-- ======================= FOOTER ======================= -->
 <footer>
@@ -1133,7 +1138,7 @@ const EN = {
   'nav.login':'Log in','nav.logout':'Log out','nav.my':'My entry','m.loginT':'Log in to Aholo','m.loginD':'Log in with your Aholo account to register and manage your team.','m.loginBtn':'Log in with Aholo',
   'm.regT':'Register','m.regD':'Every participant registers individually first, then creates or joins a team.','f.name':'Nickname','f.email':'Contact email','f.role':'Role','f.roleNone':'Select','f.role1':'Developer','f.role2':'Designer','f.role3':'Creator','f.role4':'Student','f.role5':'Other','f.region':'Region','f.cn':'China','f.intl':'International','f.agree':'I have read and agree to the event rules','m.regSubmit':'Submit registration',
   'm.invT':'Invite teammates','m.invD':'Share your team code. Once they’ve registered, they can join by entering it under My entry · My team.','m.invCopyCode':'Copy code','m.invCopyText':'Copy invitation','m.editT':'Edit team','m.editD':'Change the team name. Members are managed on the team card.','m.editName':'Team name','m.editSave':'Save',
-  'm.comT':'Join the community','m.comD':'Scan the code or use the invite link to join the official group for announcements, team matching and Q&A.','m.comQr':'QR code coming soon','m.comLink':'Invite link','m.comLinkSoon':'Coming soon','m.comR1':'You can join before registering to learn about the event and find teammates.','m.comR2':'Post what you’re looking for and team up with others.',
+  'demo.reset':'Demo mode · Reset flow','m.comT':'Join the community','m.comD':'Scan the code or use the invite link to join the official group for announcements, team matching and Q&A.','m.comQr':'QR code coming soon','m.comLink':'Invite link','m.comLinkSoon':'Coming soon','m.comR1':'You can join before registering to learn about the event and find teammates.','m.comR2':'Post what you’re looking for and team up with others.',
   'foot.tag':'Spatial intelligence platform — reconstruct, generate, edit and understand space.','foot.event':'Event','foot.product':'Product','foot.platform':'Aholo Platform','foot.contact':'Contact','foot.rights':'All rights reserved'
 };
 const ZH = {};
@@ -1286,7 +1291,7 @@ document.querySelectorAll('.res-main').forEach(card => card.addEventListener('po
     'err.teamName': ['请输入 2–20 个字符的团队名称', 'Enter a team name of 2–20 characters'], 'err.code': ['团队编号格式为 T + 6 位字母或数字', 'Team codes are T + 6 letters or digits'],
     'err.net': ['网络异常，请稍后重试', 'Something went wrong, please try again'],
     'busy': ['提交中…', 'Submitting…'], 'loggingIn': ['登录中…', 'Logging in…'],
-    'toast.reg': ['报名成功，欢迎加入！', 'You’re registered — welcome!'], 'toast.login': ['已登录', 'Logged in'], 'toast.logout': ['已退出登录', 'Logged out'],
+    'toast.reg': ['报名成功，欢迎加入！', 'You’re registered — welcome!'], 'toast.login': ['已登录', 'Logged in'], 'toast.logout': ['已退出登录', 'Logged out'], 'toast.reset': ['已重置为未登录、未报名状态', 'Reset to logged-out, unregistered'],
     'toast.team': ['团队已创建', 'Team created'], 'toast.join': ['已加入团队', 'Joined the team'], 'toast.confirm': ['组队已确认', 'Team confirmed'],
   };
   const TEAM_MAX = 3;   // team size limit (1–3 people)
@@ -1294,10 +1299,12 @@ document.querySelectorAll('.res-main').forEach(card => card.addEventListener('po
   ZH['cta.my'] = '我的参赛'; ZH['nav.logout'] = '退出登录';
 
   /* ---------------- api (mock) ---------------- */
-  const KEY = 'aholo-hack-demo-v1';
+  // Demo state lives only in this tab (sessionStorage): every fresh open starts logged out & unregistered.
+  const KEY = 'aholo-hack-demo-v2';
+  try { localStorage.removeItem('aholo-hack-demo-v1'); } catch (e) {}
   let mem = { loggedIn: false, profile: null, team: null };
-  const load = () => { try { const v = JSON.parse(localStorage.getItem(KEY) || 'null'); if (v) return v; } catch (e) {} return JSON.parse(JSON.stringify(mem)); };
-  const save = st => { mem = st; try { localStorage.setItem(KEY, JSON.stringify(st)); } catch (e) {} return st; };
+  const load = () => { try { const v = JSON.parse(sessionStorage.getItem(KEY) || 'null'); if (v) return v; } catch (e) {} return JSON.parse(JSON.stringify(mem)); };
+  const save = st => { mem = st; try { sessionStorage.setItem(KEY, JSON.stringify(st)); } catch (e) {} return st; };
   const wait = ms => new Promise(r => setTimeout(r, ms));
   const rid = (n, set) => Array.from({ length: n }, () => set[Math.floor(Math.random() * set.length)]).join('');
   const api = {
@@ -1580,6 +1587,14 @@ document.querySelectorAll('.res-main').forEach(card => card.addEventListener('po
   document.addEventListener('langchange', () => { refreshCtas(); if (view === 'my') renderMy(); });
 
   function refreshAll() { refreshCtas(); if (view === 'my') renderMy(); }
+  // DEMO ONLY: wipe the mock state so the full login → registration flow can be replayed
+  $('#demoReset').addEventListener('click', () => {
+    if (busy) return;
+    try { sessionStorage.removeItem(KEY); } catch (e) {}
+    mem = { loggedIn: false, profile: null, team: null }; state = load();
+    clearTimeout(rewardTimer); if (!modal.hidden) closeModal(); form.reset();
+    refreshAll(); show('intro'); window.scrollTo(0, 0); toast(T('toast.reset'));
+  });
   refreshCtas(); route();
 })();
 
