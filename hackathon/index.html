@@ -53,8 +53,8 @@
   --radius: 20px;
   --radius-sm: 12px;
   --radius-pill: 999px;
-  --container: 1440px;
-  --gutter: clamp(16px, 4vw, 40px);
+  --content: 1360px;                 /* max width of the content itself */
+  --gutter: clamp(16px, 6vw, 88px);  /* side margin grows with the screen: ~86px on a 13" laptop */
   --section-y: clamp(88px, 12vw, 160px);
   --ease: cubic-bezier(.2, .7, .2, 1);
 }
@@ -79,7 +79,7 @@ button { font: inherit; color: inherit; background: none; border: 0; cursor: poi
 :focus-visible { outline: 2px solid var(--ice); outline-offset: 3px; border-radius: 6px; }
 ::selection { background: rgba(106,72,255,.45); color: #fff; }
 
-.container { width: 100%; max-width: var(--container); margin: 0 auto; padding: 0 var(--gutter); }
+.container { width: 100%; max-width: calc(var(--content) + 2 * var(--gutter)); margin: 0 auto; padding: 0 var(--gutter); }
 .grad-text {
   background: var(--grad);
   -webkit-background-clip: text; background-clip: text;
@@ -555,6 +555,7 @@ body.modal-open { overflow: hidden; }
   .award { padding: 22px 18px; }
   .award b { font-size: 18px; white-space: nowrap; }
 }
+@media (max-height: 960px) { .scroll-hint { display: none; } }
 @media (prefers-reduced-motion: reduce) {
   html { scroll-behavior: auto; }
   *, *::before, *::after { animation: none !important; transition: none !important; }
