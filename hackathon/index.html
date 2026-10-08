@@ -253,7 +253,20 @@ html[lang="zh-CN"] .sec-title { letter-spacing: .02em; line-height: 1.22; }
 .res-name { font-size: clamp(44px, 5vw, 64px); font-weight: 700; letter-spacing: -.03em; line-height: 1; margin: 22px 0 18px; }
 .res-main p { color: var(--text-soft); font-size: 16px; line-height: 1.75; }
 .res-art { width: clamp(150px, 16vw, 220px); height: auto; flex-shrink: 0; filter: drop-shadow(0 20px 40px rgba(69,87,255,.25)); }
-.res-side { display: grid; gap: 16px; grid-auto-rows: 1fr; }
+.res-side { display: grid; gap: 16px; grid-template-rows: 1fr auto; }
+.res-api { padding: 22px 24px; border: 1px solid var(--border); border-radius: var(--radius); background: radial-gradient(90% 80% at 100% 0%, rgba(69,87,255,.12), transparent 60%), var(--surface); transition: border-color .25s; display: flex; flex-direction: column; }
+.res-api:hover { border-color: var(--border-strong); }
+.api-head { display: flex; align-items: center; gap: 12px; margin-bottom: 16px; }
+.api-icon { width: 40px; height: 40px; border-radius: 12px; display: grid; place-items: center; border: 1px solid var(--border-strong); background: var(--bg-2); }
+.api-icon svg { width: 20px; height: 20px; }
+.res-api h4 { display: flex; align-items: baseline; gap: 10px; font-size: 20px; font-weight: 700; }
+.res-api h4 em { font-style: normal; font-size: 12px; font-weight: 600; color: var(--text-muted); padding: 2px 8px; border: 1px solid var(--border-strong); border-radius: var(--radius-pill); }
+.api-caps { list-style: none; display: grid; gap: 10px; flex: 1; align-content: center; }
+.api-caps li { display: flex; align-items: center; gap: 16px; padding: 12px 14px; border-radius: 14px; border: 1px solid var(--border-subtle); background: var(--bg-2); transition: border-color .25s, transform .25s var(--ease); }
+.api-caps li:hover { border-color: var(--border-strong); transform: translateX(3px); }
+.api-caps .res-thumb { width: 44px; height: 54px; }
+.api-caps strong { display: block; font-size: 16px; font-weight: 700; }
+.api-caps p { font-size: 13.5px; color: var(--text-muted); margin-top: 2px; }
 .res-item { display: flex; align-items: center; gap: 20px; padding: 18px 24px; border: 1px solid var(--border); border-radius: var(--radius); background: var(--surface); transition: border-color .25s; }
 .res-item:hover { border-color: var(--border-strong); }
 .res-thumb { width: 56px; height: 68px; flex-shrink: 0; border-radius: 6px; border: 1px solid var(--border); }
@@ -1085,21 +1098,14 @@ body.modal-open { overflow: hidden; }
       </article>
 
       <div class="res-side">
-        <article class="res-item reveal d1">
-          <svg class="res-thumb" viewBox="0 0 64 78" aria-hidden="true"><defs><linearGradient id="rth1" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#ACC7FC"/><stop offset="1" stop-color="#4557FF"/></linearGradient></defs><rect width="64" height="78" rx="6" fill="#18181b"/><path d="M0 0h40L22 78H0Z" fill="url(#rth1)" opacity=".85"/><path d="M40 0h24v78H22Z" fill="#6A48FF" opacity=".28"/></svg>
-          <div>
-            <h4><span data-i18n="res.r1.t">实景重建</span><em data-i18n="res.opt">可选</em></h4>
-            <p data-i18n="res.r1.d">从真实世界构建 3D 场景</p>
-          </div>
+        <article class="res-api reveal d1">
+          <div class="api-head"><span class="api-icon"><svg viewBox="0 0 24 24" fill="none" stroke="url(#g1)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="m8 7-5 5 5 5M16 7l5 5-5 5M13.5 4l-3 16"/></svg></span><h4><span data-i18n="res.api.t">Aholo API</span><em data-i18n="res.opt">可选</em></h4></div>
+          <ul class="api-caps">
+            <li><svg class="res-thumb" viewBox="0 0 64 78" aria-hidden="true"><defs><linearGradient id="rth1" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#ACC7FC"/><stop offset="1" stop-color="#4557FF"/></linearGradient></defs><rect width="64" height="78" rx="6" fill="#18181b"/><path d="M0 0h40L22 78H0Z" fill="url(#rth1)" opacity=".85"/><path d="M40 0h24v78H22Z" fill="#6A48FF" opacity=".28"/></svg><div><strong data-i18n="res.r1.t">空间重建能力</strong><p data-i18n="res.r1.d">从真实世界构建 3D 场景</p></div></li>
+            <li><svg class="res-thumb" viewBox="0 0 64 78" aria-hidden="true"><defs><radialGradient id="rth2" cx="30%" cy="35%" r="80%"><stop offset="0" stop-color="#F2F7D7"/><stop offset=".45" stop-color="#ACC7FC"/><stop offset="1" stop-color="#4557FF"/></radialGradient></defs><rect width="64" height="78" rx="6" fill="#18181b"/><circle cx="46" cy="44" r="34" fill="url(#rth2)" opacity=".9"/></svg><div><strong data-i18n="res.r2.t">空间生成能力</strong><p data-i18n="res.r2.d">使用 AI 探索更多空间内容</p></div></li>
+          </ul>
         </article>
-        <article class="res-item reveal d2">
-          <svg class="res-thumb" viewBox="0 0 64 78" aria-hidden="true"><defs><radialGradient id="rth2" cx="30%" cy="35%" r="80%"><stop offset="0" stop-color="#F2F7D7"/><stop offset=".45" stop-color="#ACC7FC"/><stop offset="1" stop-color="#4557FF"/></radialGradient></defs><rect width="64" height="78" rx="6" fill="#18181b"/><circle cx="46" cy="44" r="34" fill="url(#rth2)" opacity=".9"/></svg>
-          <div>
-            <h4><span data-i18n="res.r2.t">空间生成</span><em data-i18n="res.opt">可选</em></h4>
-            <p data-i18n="res.r2.d">使用 AI 探索更多空间内容</p>
-          </div>
-        </article>
-        <article class="res-item reveal d3">
+        <article class="res-item res-lux reveal d2">
           <svg class="res-thumb" viewBox="0 0 64 78" aria-hidden="true"><defs><linearGradient id="rth3" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#6A48FF"/><stop offset=".6" stop-color="#4557FF"/><stop offset="1" stop-color="#ACC7FC"/></linearGradient></defs><rect width="64" height="78" rx="6" fill="#18181b"/><rect x="8" y="20" width="48" height="38" rx="5" fill="url(#rth3)" opacity=".9"/><path d="M8 26h48M8 52h48" stroke="#18181b" stroke-width="1.5" stroke-dasharray="3 3"/><path d="M28 32v14l12-7Z" fill="#F2F7D7"/></svg>
           <div>
             <h4><span data-i18n="res.r3.t">LuxReal</span><em data-i18n="res.opt">可选</em></h4>
@@ -1239,21 +1245,14 @@ body.modal-open { overflow: hidden; }
       </article>
 
       <div class="res-side">
-        <article class="res-item">
-          <svg class="res-thumb" viewBox="0 0 64 78" aria-hidden="true"><defs><linearGradient id="mrth1" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#ACC7FC"/><stop offset="1" stop-color="#4557FF"/></linearGradient></defs><rect width="64" height="78" rx="6" fill="#18181b"/><path d="M0 0h40L22 78H0Z" fill="url(#mrth1)" opacity=".85"/><path d="M40 0h24v78H22Z" fill="#6A48FF" opacity=".28"/></svg>
-          <div>
-            <h4><span data-i18n="res.r1.t">实景重建</span><em data-i18n="res.opt">可选</em></h4>
-            <p data-i18n="res.r1.d">从真实世界构建 3D 场景</p>
-          </div>
+        <article class="res-api">
+          <div class="api-head"><span class="api-icon"><svg viewBox="0 0 24 24" fill="none" stroke="url(#g1)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="m8 7-5 5 5 5M16 7l5 5-5 5M13.5 4l-3 16"/></svg></span><h4><span data-i18n="res.api.t">Aholo API</span><em data-i18n="res.opt">可选</em></h4></div>
+          <ul class="api-caps">
+            <li><svg class="res-thumb" viewBox="0 0 64 78" aria-hidden="true"><defs><linearGradient id="mrth1" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#ACC7FC"/><stop offset="1" stop-color="#4557FF"/></linearGradient></defs><rect width="64" height="78" rx="6" fill="#18181b"/><path d="M0 0h40L22 78H0Z" fill="url(#mrth1)" opacity=".85"/><path d="M40 0h24v78H22Z" fill="#6A48FF" opacity=".28"/></svg><div><strong data-i18n="res.r1.t">空间重建能力</strong><p data-i18n="res.r1.d">从真实世界构建 3D 场景</p></div></li>
+            <li><svg class="res-thumb" viewBox="0 0 64 78" aria-hidden="true"><defs><radialGradient id="mrth2" cx="30%" cy="35%" r="80%"><stop offset="0" stop-color="#F2F7D7"/><stop offset=".45" stop-color="#ACC7FC"/><stop offset="1" stop-color="#4557FF"/></radialGradient></defs><rect width="64" height="78" rx="6" fill="#18181b"/><circle cx="46" cy="44" r="34" fill="url(#mrth2)" opacity=".9"/></svg><div><strong data-i18n="res.r2.t">空间生成能力</strong><p data-i18n="res.r2.d">使用 AI 探索更多空间内容</p></div></li>
+          </ul>
         </article>
-        <article class="res-item">
-          <svg class="res-thumb" viewBox="0 0 64 78" aria-hidden="true"><defs><radialGradient id="mrth2" cx="30%" cy="35%" r="80%"><stop offset="0" stop-color="#F2F7D7"/><stop offset=".45" stop-color="#ACC7FC"/><stop offset="1" stop-color="#4557FF"/></radialGradient></defs><rect width="64" height="78" rx="6" fill="#18181b"/><circle cx="46" cy="44" r="34" fill="url(#mrth2)" opacity=".9"/></svg>
-          <div>
-            <h4><span data-i18n="res.r2.t">空间生成</span><em data-i18n="res.opt">可选</em></h4>
-            <p data-i18n="res.r2.d">使用 AI 探索更多空间内容</p>
-          </div>
-        </article>
-        <article class="res-item">
+        <article class="res-item res-lux">
           <svg class="res-thumb" viewBox="0 0 64 78" aria-hidden="true"><defs><linearGradient id="mrth3" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#6A48FF"/><stop offset=".6" stop-color="#4557FF"/><stop offset="1" stop-color="#ACC7FC"/></linearGradient></defs><rect width="64" height="78" rx="6" fill="#18181b"/><rect x="8" y="20" width="48" height="38" rx="5" fill="url(#mrth3)" opacity=".9"/><path d="M8 26h48M8 52h48" stroke="#18181b" stroke-width="1.5" stroke-dasharray="3 3"/><path d="M28 32v14l12-7Z" fill="#F2F7D7"/></svg>
           <div>
             <h4><span data-i18n="res.r3.t">LuxReal</span><em data-i18n="res.opt">可选</em></h4>
@@ -1405,7 +1404,7 @@ const EN = {
   
   'res.title':'Products & resources','res.desc':'Every project must use Lux3D; other products are optional, as your work needs.',
   'res.must':'Required','res.lux.d':'Build your project around Lux3D<br>and turn your ideas into 3D content.',
-  'res.opt':'Optional','res.r1.t':'Reality capture','res.r1.d':'Build 3D scenes from the real world','res.r2.t':'Spatial generation','res.r2.d':'Explore more spatial content with AI','res.r3.t':'LuxReal','res.r3.d':'Generate videos with AI',
+  'res.opt':'Optional','res.api.t':'Aholo API','res.r1.t':'Spatial reconstruction','res.r1.d':'Build 3D scenes from the real world','res.r2.t':'Spatial generation','res.r2.d':'Explore more spatial content with AI','res.r3.t':'LuxReal','res.r3.d':'Generate videos with AI',
   'res.b.t':'Sign up to get creation credits and start your project','res.b.d':'Join the hackathon and explore new possibilities with your teammates.',
   'dv.title':'What to submit','dv.desc':'Every project submits the materials below: all required items, plus bonus items where you can.','dv.must':'Required','dv.bonus':'Bonus','dv.mustD':'All three are needed','dv.bonusD':'Encouraged','dv1.t':'Project report (PDF or PPT)','dv1.d':'Document the journey from idea to result — <b>including process screenshots, key asset iterations or key result shots</b> — so judges quickly see what you built, how, and why it’s worth trying.','dv2.t':'Full demo link','dv2.d':'A link that lets people try or run the complete core flow — <b>a web page, online app, downloadable program, installer or any other verifiable form.</b>','dv3.t':'Promo video','dv3.d':'A demo video — edits, voice-over and captions are fine, but it must include real running footage.','dv4.t':'Social media post link','dv4.d':'Publish a project introduction on a public social platform and submit the link; the post must stay public until results are announced.','dv5.t':'Source code','dv5.d':'A Git repository or a zipped codebase is encouraged.','cr.title':'Judging criteria','cr.desc':'Judges score each project across five dimensions totalling 100%.','cr1.t':'Use of Manycore tech stack','cr1.d':'Manycore’s technology plays a core role in the project.','cr2.t':'Fun factor','cr2.d':'Gameplay and spatial interaction are creative and fun; the video clearly shows the highlights and has the potential to spark public discussion.','cr3.t':'Innovation','cr3.d':'The approach, interaction or concept is fresh and different from common existing products.','cr4.t':'Completeness','cr4.d':'The core experience is complete, the demo runs reliably, and the materials match the result.','cr5.t':'Reach','cr5.d':'The project video is posted with the official hashtag on Xiaohongshu (China) / X (international).','cr.total':'Score breakdown','sp.hint':'Tap to reveal the breakdown','sp.reset':'Collapse','sp.rule':'How it is scored','jg.title':'Judges','jg.pro':'Expert judges','jg.player':'Player judges','jg.tba':'To be announced',
   'prizes.title2':'total prize pool','prizes.desc':'22 awards in total: beyond first, second and third prizes, there are application, fun and people’s choice awards.',
