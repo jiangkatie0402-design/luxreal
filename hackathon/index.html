@@ -324,60 +324,37 @@ html[lang="zh-CN"] .rules-title { font-family: var(--font-title); font-weight: 4
 /* ---------- Judging: deliverables / criteria / judges ---------- */
 .jr-block { margin-top: clamp(64px, 8vw, 104px); }
 .jr-head { margin-bottom: 28px; max-width: 900px; }
-/* 提交内容 */
-.dv-group { display: grid; grid-template-columns: 200px 1fr; gap: 24px; align-items: start; }
-.dv-group + .dv-group { margin-top: 20px; padding-top: 20px; border-top: 1px dashed var(--border); }
-.dv-ghead { display: flex; align-items: center; gap: 14px; position: sticky; top: 96px; }
-.dv-count { font-size: 52px; font-weight: 700; line-height: 1; letter-spacing: -.04em; background: var(--grad); -webkit-background-clip: text; background-clip: text; color: transparent; }
-.dv-group-bonus .dv-count { font-size: 40px; background: none; color: var(--text-muted); -webkit-text-fill-color: currentColor; }
-.dv-ghead strong { display: block; font-size: 17px; font-weight: 700; }
-.dv-ghead span:not(.dv-count) { display: block; font-size: 13px; color: var(--text-muted); }
-.dv-must { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
-.dv-bonus { display: grid; grid-template-columns: repeat(2, 1fr); gap: 16px; }
-.dv-item { position: relative; padding: 26px 24px 28px; border-radius: var(--radius); border: 1px solid var(--border); overflow: hidden; isolation: isolate;
-  background: radial-gradient(120% 80% at 0% 0%, rgba(106,72,255,.14), transparent 55%), var(--surface); transition: border-color .25s, transform .3s var(--ease); }
-.dv-item::before { content: ''; position: absolute; left: 0; right: 0; top: 0; height: 2px; background: var(--grad); opacity: .85; }
-.dv-item:hover { border-color: var(--border-strong); transform: translateY(-2px); }
-.dv-top { display: flex; justify-content: space-between; align-items: center; margin-bottom: 26px; }
-.dv-icon { width: 48px; height: 48px; border-radius: 14px; display: grid; place-items: center; border: 1px solid var(--border-strong); background: var(--bg-2); flex-shrink: 0; }
-.dv-icon svg { width: 24px; height: 24px; }
-.dv-no { font-size: 13px; font-weight: 600; color: var(--text-muted); letter-spacing: .1em; }
-.dv-item h4 { font-size: 17.5px; font-weight: 700; line-height: 1.35; margin-bottom: 10px; letter-spacing: -.01em; }
-.dv-item p { font-size: 14px; color: var(--text-muted); line-height: 1.75; }
-.dv-item p b { color: var(--text-soft); font-weight: 600; }
-.dv-item-row { display: flex; gap: 18px; align-items: flex-start; padding: 22px 24px; background: transparent; border-style: dashed; }
-.dv-item-row::before { display: none; }
-.dv-item-row h4 { font-size: 17px; margin-bottom: 4px; }
-
-/* 评审规则 — bento sized by weight */
-.cr-bento { display: grid; grid-template-columns: 1.3fr 1fr 1fr; grid-template-areas: "a b b" "a c d" "e e e"; gap: 16px; }
-.cr-card { position: relative; display: flex; flex-direction: column; padding: 28px; border-radius: var(--radius); border: 1px solid var(--border); background: var(--surface); overflow: hidden; isolation: isolate; transition: border-color .25s; }
-.cr-card:hover { border-color: var(--border-strong); }
-.cr-a { grid-area: a; padding: 34px; background: radial-gradient(90% 70% at 100% 0%, rgba(106,72,255,.28), transparent 60%), radial-gradient(70% 60% at 0% 100%, rgba(69,87,255,.14), transparent 60%), var(--surface); border-color: rgba(172,199,252,.22); }
-.cr-b { grid-area: b; background: radial-gradient(80% 90% at 100% 0%, rgba(69,87,255,.14), transparent 60%), var(--surface); }
-.cr-c { grid-area: c; } .cr-d { grid-area: d; }
-.cr-e { grid-area: e; display: grid; grid-template-columns: auto auto 1fr 200px; align-items: center; column-gap: 28px; padding: 22px 28px; }
-.cr-e .cr-idx { display: none; }
-.cr-num { display: flex; align-items: baseline; gap: 2px; line-height: .9; font-variant-numeric: tabular-nums; margin-bottom: 22px; }
-.cr-num b { font-size: 56px; font-weight: 700; letter-spacing: -.045em; }
-.cr-num small { font-size: 22px; font-weight: 600; color: var(--text-muted); }
-.cr-a .cr-num b { font-size: clamp(88px, 9vw, 128px); background: var(--grad); -webkit-background-clip: text; background-clip: text; color: transparent; }
-.cr-a .cr-num small { font-size: 34px; }
-.cr-b .cr-num b { font-size: 72px; }
-.cr-e .cr-num { margin: 0; } .cr-e .cr-num b { font-size: 40px; }
-.cr-idx { position: absolute; top: 24px; right: 26px; font-size: 12px; font-weight: 600; letter-spacing: .12em; color: var(--text-muted); }
-.cr-a .cr-idx { top: auto; bottom: 30px; }
-.cr-card h4 { font-size: 20px; font-weight: 700; margin-bottom: 8px; }
-.cr-a h4 { font-size: 26px; margin-top: auto; }
-.cr-card p { font-size: 14px; color: var(--text-muted); line-height: 1.75; }
-.cr-a p { font-size: 15px; color: var(--text-soft); max-width: 360px; margin-bottom: 26px; }
-.cr-e h4 { margin: 0; white-space: nowrap; } .cr-e p { margin: 0; }
-.cr-meter { display: block; height: 4px; border-radius: 2px; background: rgba(255,255,255,.06); overflow: hidden; margin-top: auto; padding-top: 0; }
-.cr-card:not(.cr-a):not(.cr-e) .cr-meter { margin-top: 22px; }
-.cr-a .cr-meter { display: none; }
-.cr-e .cr-meter { margin: 0; }
-.cr-meter span { display: block; height: 100%; border-radius: 2px; background: var(--grad); }
-.cr-ring { position: absolute; top: 28px; right: 28px; width: clamp(96px, 10vw, 132px); height: auto; }
+.dv-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
+.dv-card { padding: 26px 26px 28px; border: 1px solid var(--border); border-radius: var(--radius); background: var(--surface); display: flex; flex-direction: column; gap: 10px; transition: border-color .25s; }
+.dv-card:hover { border-color: var(--border-strong); }
+.dv-card h4 { font-size: 20px; font-weight: 700; line-height: 1.35; letter-spacing: -.01em; }
+.dv-card p { font-size: 14px; color: var(--text-muted); line-height: 1.75; }
+.dv-card p b { color: var(--text-soft); font-weight: 600; }
+.dv-tag { align-self: flex-start; font-size: 12px; font-weight: 700; padding: 3px 10px; border-radius: var(--radius-pill); background: var(--primary); color: var(--primary-contrast); }
+.dv-bonus { border-style: dashed; background: transparent; }
+.dv-bonus .dv-tag { background: rgba(69,87,255,.16); color: var(--ice); border: 1px solid rgba(172,199,252,.35); }
+/* 评审规则 — ring + legend */
+.cr-panel { display: grid; grid-template-columns: minmax(260px, 380px) 1fr; gap: clamp(32px, 5vw, 72px); align-items: center; padding: clamp(28px, 4vw, 48px); border: 1px solid var(--border); border-radius: var(--radius);
+  background: radial-gradient(60% 90% at 0% 50%, rgba(106,72,255,.16), transparent 60%), var(--surface); }
+.cr-chart { position: relative; width: 100%; max-width: 380px; aspect-ratio: 1; justify-self: center; }
+.cr-chart svg { width: 100%; height: 100%; overflow: visible; }
+.cr-arc { transition: stroke-width .25s var(--ease), opacity .25s; }
+.cr-panel.hovering .cr-arc { opacity: .25; }
+.cr-panel.hovering .cr-arc.on { opacity: 1; stroke-width: 24; }
+.cr-center { position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; }
+.cr-center b { font-size: clamp(48px, 5vw, 68px); font-weight: 700; letter-spacing: -.04em; line-height: 1; background: var(--grad); -webkit-background-clip: text; background-clip: text; color: transparent; }
+.cr-center b small { font-size: .42em; }
+.cr-center span { margin-top: 8px; font-size: 13px; font-weight: 600; color: var(--text-muted); letter-spacing: .08em; }
+.cr-legend { list-style: none; }
+.cr-item { display: grid; grid-template-columns: 36px 1fr auto; gap: 18px; align-items: center; padding: 20px 4px; border-bottom: 1px solid var(--border); transition: background .25s; cursor: default; }
+.cr-item:first-child { border-top: 1px solid var(--border); }
+.cr-no { position: relative; font-size: 12px; font-weight: 600; color: var(--text-muted); padding-left: 16px; }
+.cr-no::before { content: ''; position: absolute; left: 0; top: 50%; width: 8px; height: 8px; margin-top: -4px; border-radius: 50%; background: var(--c); box-shadow: 0 0 12px var(--c); }
+.cr-txt h4 { font-size: 18px; font-weight: 700; margin-bottom: 4px; }
+.cr-txt p { font-size: 13.5px; color: var(--text-muted); line-height: 1.7; }
+.cr-pct { font-size: 34px; font-weight: 700; letter-spacing: -.03em; line-height: 1; color: var(--text); font-variant-numeric: tabular-nums; min-width: 84px; text-align: right; transition: color .25s; }
+.cr-pct small { font-size: .45em; color: var(--text-muted); margin-left: 1px; }
+.cr-item:hover .cr-pct, .cr-item.on .cr-pct { color: var(--c); }
 
 .jg-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
 .jg-card { display: flex; align-items: center; gap: 18px; padding: 26px; border: 1px solid var(--border); border-radius: var(--radius); background: var(--surface); }
@@ -611,12 +588,9 @@ body.modal-open { overflow: hidden; }
   .about-grid, .faq-wrap { grid-template-columns: 1fr; gap: 24px; }
   .faq-wrap { gap: 32px; }
   .perks { grid-template-columns: 1fr; }
-  .dv-group { grid-template-columns: 1fr; gap: 16px; }
-  .dv-ghead { position: static; }
-  .dv-must { grid-template-columns: 1fr 1fr 1fr; }
-  .cr-e { grid-template-columns: auto 1fr 160px; }
-  .cr-e .cr-idx { display: none; }
-  .cr-e p { grid-column: 1 / -1; grid-row: 2; margin-top: 6px; }
+  .dv-grid { grid-template-columns: 1fr 1fr; }
+  .cr-panel { grid-template-columns: 1fr; }
+  .cr-chart { max-width: 300px; }
   .team-split { grid-template-columns: 1fr; }
   .my-stage { grid-template-columns: 1fr; }
   .my-stage-next { text-align: left; justify-content: flex-start; padding-left: 36px; }
@@ -668,16 +642,13 @@ body.modal-open { overflow: hidden; }
   .cd-unit { min-width: 0; flex: 1; }
   .prizes { grid-template-columns: 1fr; }
   .jg-grid { grid-template-columns: 1fr; }
-  .dv-must, .dv-bonus { grid-template-columns: 1fr; }
-  .cr-bento { grid-template-columns: 1fr 1fr; grid-template-areas: "a a" "b b" "c d" "e e"; gap: 12px; }
-  .cr-card { padding: 22px 20px; }
-  .cr-a { padding: 26px 22px; min-height: 300px; }
-  .cr-num b { font-size: 44px; } .cr-b .cr-num b { font-size: 56px; }
-  .cr-c h4, .cr-d h4 { font-size: 17px; }
-  .cr-c p, .cr-d p { font-size: 13px; }
-  .cr-e { grid-template-columns: auto 1fr; row-gap: 8px; column-gap: 16px; }
-  .cr-e .cr-idx { display: none; }
-  .cr-e p, .cr-e .cr-meter { grid-column: 1 / -1; }
+  .dv-grid { grid-template-columns: 1fr; }
+  .cr-panel { padding: 24px 18px; gap: 24px; }
+  .cr-chart { max-width: 240px; }
+  .cr-item { grid-template-columns: 1fr auto; gap: 4px 14px; padding: 16px 0; }
+  .cr-no { grid-column: 1 / -1; }
+  .cr-txt h4 { font-size: 16px; }
+  .cr-pct { font-size: 26px; min-width: 0; align-self: start; }
   .res-main { flex-direction: column; align-items: flex-start; }
   .res-art { align-self: center; width: 150px; }
   .res-banner { flex-direction: column; align-items: flex-start; padding: 24px; }
@@ -982,32 +953,28 @@ body.modal-open { overflow: hidden; }
     <!-- 提交内容 -->
     <div class="jr-block reveal" id="deliverables">
       <div class="jr-head"><h3 class="rules-title" data-i18n="dv.title">提交内容</h3><p class="rules-desc" data-i18n="dv.desc">每件作品需提交以下材料：必交项缺一不可，加分项鼓励提交。</p></div>
-      <div class="dv-group">
-        <div class="dv-ghead"><span class="dv-count">3</span><div><strong data-i18n="dv.must">必交项</strong><span data-i18n="dv.mustD">缺一不可</span></div></div>
-        <div class="dv-must">
-          <article class="dv-item"><div class="dv-top"><span class="dv-icon"><svg viewBox="0 0 24 24" fill="none" stroke="url(#g1)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="3" width="14" height="18" rx="2"/><path d="M9 16v-3M12 16v-7M15 16v-4"/></svg></span><span class="dv-no mono">01</span></div><h4 data-i18n="dv1.t">项目报告书（PDF 或 PPT 二选一）</h4><p data-i18n="dv1.d">报告书需要完整记录从创意到成果的过程，<b>包含过程截图、关键资产迭代对比或一些关键效果截图</b>，让评委可以快速看懂项目做了什么、怎么做、为什么值得体验。</p></article>
-          <article class="dv-item"><div class="dv-top"><span class="dv-icon"><svg viewBox="0 0 24 24" fill="none" stroke="url(#g1)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 4l6.5 16 2.3-6.7L20.5 11Z"/><path d="m14 14 5 5"/></svg></span><span class="dv-no mono">02</span></div><h4 data-i18n="dv2.t">完整 Demo 链接</h4><p data-i18n="dv2.d">提交一个能够体验或运行完整核心流程的 Demo 链接，<b>可以是网页、在线应用、可下载程序、安装包或其他可验证形式。</b></p></article>
-          <article class="dv-item"><div class="dv-top"><span class="dv-icon"><svg viewBox="0 0 24 24" fill="none" stroke="url(#g1)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="2.5" y="6" width="13.5" height="12" rx="2.5"/><path d="m16 10.5 5.5-3v9l-5.5-3Z"/></svg></span><span class="dv-no mono">03</span></div><h4 data-i18n="dv3.t">宣传视频</h4><p data-i18n="dv3.d">提交一段 Demo 视频，视频可以剪辑、配音或加字幕，但必须包含真实运行画面。</p></article>
-        </div>
-      </div>
-      <div class="dv-group dv-group-bonus">
-        <div class="dv-ghead"><span class="dv-count">+2</span><div><strong data-i18n="dv.bonus">加分项</strong><span data-i18n="dv.bonusD">鼓励提交</span></div></div>
-        <div class="dv-bonus">
-          <article class="dv-item dv-item-row"><span class="dv-icon"><svg viewBox="0 0 24 24" fill="none" stroke="url(#g1)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="18" cy="5.5" r="2.5"/><circle cx="6" cy="12" r="2.5"/><circle cx="18" cy="18.5" r="2.5"/><path d="m8.3 13.2 7.4 4.1M15.7 6.7l-7.4 4.1"/></svg></span><div><h4 data-i18n="dv4.t">社交媒体发布链接</h4><p data-i18n="dv4.d">在公开社交媒体平台发布项目介绍，并提交对应链接，帖子需在结果公布前保持公开可访问。</p></div></article>
-          <article class="dv-item dv-item-row"><span class="dv-icon"><svg viewBox="0 0 24 24" fill="none" stroke="url(#g1)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="m16 18 6-6-6-6M8 6l-6 6 6 6"/></svg></span><div><h4 data-i18n="dv5.t">项目源代码</h4><p data-i18n="dv5.d">鼓励提交 Git 仓库或代码压缩包。</p></div></article>
-        </div>
+      <div class="dv-grid">
+        <article class="dv-card dv-must"><span class="dv-tag" data-i18n="dv.must">必交项</span><h4 data-i18n="dv1.t">项目报告书（PDF 或 PPT 二选一）</h4><p data-i18n="dv1.d">报告书需要完整记录从创意到成果的过程，<b>包含过程截图、关键资产迭代对比或一些关键效果截图</b>，让评委可以快速看懂项目做了什么、怎么做、为什么值得体验。</p></article>
+        <article class="dv-card dv-must"><span class="dv-tag" data-i18n="dv.must">必交项</span><h4 data-i18n="dv2.t">完整 Demo 链接</h4><p data-i18n="dv2.d">提交一个能够体验或运行完整核心流程的 Demo 链接，<b>可以是网页、在线应用、可下载程序、安装包或其他可验证形式。</b></p></article>
+        <article class="dv-card dv-must"><span class="dv-tag" data-i18n="dv.must">必交项</span><h4 data-i18n="dv3.t">宣传视频</h4><p data-i18n="dv3.d">提交一段 Demo 视频，视频可以剪辑、配音或加字幕，但必须包含真实运行画面。</p></article>
+        <article class="dv-card dv-bonus"><span class="dv-tag" data-i18n="dv.bonus">加分项</span><h4 data-i18n="dv4.t">社交媒体发布链接</h4><p data-i18n="dv4.d">在公开社交媒体平台发布项目介绍，并提交对应链接，帖子需在结果公布前保持公开可访问。</p></article>
+        <article class="dv-card dv-bonus"><span class="dv-tag" data-i18n="dv.bonus">加分项</span><h4 data-i18n="dv5.t">项目源代码</h4><p data-i18n="dv5.d">鼓励提交 Git 仓库或代码压缩包。</p></article>
       </div>
     </div>
 
     <!-- 评审规则 -->
     <div class="jr-block reveal" id="criteria">
       <div class="jr-head"><h3 class="rules-title" data-i18n="cr.title">评审规则</h3><p class="rules-desc" data-i18n="cr.desc">评委从五个维度对作品打分，总分 100%。</p></div>
-      <div class="cr-bento">
-        <article class="cr-card cr-a"><svg class="cr-ring" viewBox="0 0 120 120" aria-hidden="true"><defs><linearGradient id="crg" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#6A48FF"/><stop offset=".6" stop-color="#4557FF"/><stop offset="1" stop-color="#ACC7FC"/></linearGradient></defs><circle cx="60" cy="60" r="52" fill="none" stroke="rgba(255,255,255,.06)" stroke-width="10"/><circle cx="60" cy="60" r="52" fill="none" stroke="url(#crg)" stroke-width="10" stroke-linecap="round" stroke-dasharray="98.0 326.7" transform="rotate(-90 60 60)"/></svg><div class="cr-num"><b>30</b><small>%</small></div><span class="cr-idx mono">01</span><h4 data-i18n="cr1.t">群核技术栈应用</h4><p data-i18n="cr1.d">群核技术栈在项目中承担核心作用。</p><i class="cr-meter"><span style="width:30%"></span></i></article>
-        <article class="cr-card cr-b"><div class="cr-num"><b>25</b><small>%</small></div><span class="cr-idx mono">02</span><h4 data-i18n="cr2.t">作品有趣程度</h4><p data-i18n="cr2.d">作品玩法、空间交互富有创意趣味性，体验感吸引人；提交视频清晰呈现趣味亮点，具备对外展示、引发大众讨论的传播潜力。</p><i class="cr-meter"><span style="width:25%"></span></i></article>
-        <article class="cr-card cr-c"><div class="cr-num"><b>20</b><small>%</small></div><span class="cr-idx mono">03</span><h4 data-i18n="cr3.t">创新性</h4><p data-i18n="cr3.d">方案、交互、概念具备新意，区别于现有常见产品思路。</p><i class="cr-meter"><span style="width:20%"></span></i></article>
-        <article class="cr-card cr-d"><div class="cr-num"><b>20</b><small>%</small></div><span class="cr-idx mono">04</span><h4 data-i18n="cr4.t">完成度</h4><p data-i18n="cr4.d">核心体验完整，Demo 稳定可运行，材料与成果匹配。</p><i class="cr-meter"><span style="width:20%"></span></i></article>
-        <article class="cr-card cr-e"><div class="cr-num"><b>5</b><small>%</small></div><span class="cr-idx mono">05</span><h4 data-i18n="cr5.t">传播</h4><p data-i18n="cr5.d">作品视频带指定标签发布至小红书（国内）/ X（海外）。</p><i class="cr-meter"><span style="width:5%"></span></i></article>
+      <div class="cr-panel">
+        <div class="cr-chart" aria-hidden="true"><svg viewBox="0 0 200 200"><circle cx="100" cy="100" r="80" fill="none" stroke="rgba(255,255,255,.04)" stroke-width="18"/><circle class="cr-arc" data-i="0" cx="100" cy="100" r="80" fill="none" stroke="#6A48FF" stroke-width="18" stroke-dasharray="147.80 502.65" stroke-dashoffset="-0.00" transform="rotate(-90 100 100)"/><circle class="cr-arc" data-i="1" cx="100" cy="100" r="80" fill="none" stroke="#5A52FF" stroke-width="18" stroke-dasharray="122.66 502.65" stroke-dashoffset="-150.80" transform="rotate(-90 100 100)"/><circle class="cr-arc" data-i="2" cx="100" cy="100" r="80" fill="none" stroke="#4557FF" stroke-width="18" stroke-dasharray="97.53 502.65" stroke-dashoffset="-276.46" transform="rotate(-90 100 100)"/><circle class="cr-arc" data-i="3" cx="100" cy="100" r="80" fill="none" stroke="#7F9BFD" stroke-width="18" stroke-dasharray="97.53 502.65" stroke-dashoffset="-376.99" transform="rotate(-90 100 100)"/><circle class="cr-arc" data-i="4" cx="100" cy="100" r="80" fill="none" stroke="#C9D9FD" stroke-width="18" stroke-dasharray="22.13 502.65" stroke-dashoffset="-477.52" transform="rotate(-90 100 100)"/></svg>
+          <div class="cr-center"><b>100<small>%</small></b><span data-i18n="cr.total">评分构成</span></div></div>
+        <ol class="cr-legend">
+          <li class="cr-item" data-i="0" style="--c:#6A48FF"><span class="cr-no mono">01</span><div class="cr-txt"><h4 data-i18n="cr1.t">群核技术栈应用</h4><p data-i18n="cr1.d">群核技术栈在项目中承担核心作用。</p></div><b class="cr-pct">30<small>%</small></b></li>
+          <li class="cr-item" data-i="1" style="--c:#5A52FF"><span class="cr-no mono">02</span><div class="cr-txt"><h4 data-i18n="cr2.t">作品有趣程度</h4><p data-i18n="cr2.d">作品玩法、空间交互富有创意趣味性，体验感吸引人；提交视频清晰呈现趣味亮点，具备对外展示、引发大众讨论的传播潜力。</p></div><b class="cr-pct">25<small>%</small></b></li>
+          <li class="cr-item" data-i="2" style="--c:#4557FF"><span class="cr-no mono">03</span><div class="cr-txt"><h4 data-i18n="cr3.t">创新性</h4><p data-i18n="cr3.d">方案、交互、概念具备新意，区别于现有常见产品思路。</p></div><b class="cr-pct">20<small>%</small></b></li>
+          <li class="cr-item" data-i="3" style="--c:#7F9BFD"><span class="cr-no mono">04</span><div class="cr-txt"><h4 data-i18n="cr4.t">完成度</h4><p data-i18n="cr4.d">核心体验完整，Demo 稳定可运行，材料与成果匹配。</p></div><b class="cr-pct">20<small>%</small></b></li>
+          <li class="cr-item" data-i="4" style="--c:#C9D9FD"><span class="cr-no mono">05</span><div class="cr-txt"><h4 data-i18n="cr5.t">传播</h4><p data-i18n="cr5.d">作品视频带指定标签发布至小红书（国内）/ X（海外）。</p></div><b class="cr-pct">5<small>%</small></b></li>
+        </ol>
       </div>
     </div>
 
@@ -1377,7 +1344,7 @@ const EN = {
   'res.must':'Required','res.lux.d':'Build your project around Lux3D<br>and turn your ideas into 3D content.',
   'res.opt':'Optional','res.r1.t':'Reality capture','res.r1.d':'Build 3D scenes from the real world','res.r2.t':'Spatial generation','res.r2.d':'Explore more spatial content with AI','res.r3.t':'LuxReal','res.r3.d':'Generate videos with AI',
   'res.b.t':'Sign up to get creation credits and start your project','res.b.d':'Join the hackathon and explore new possibilities with your teammates.',
-  'dv.title':'What to submit','dv.desc':'Every project submits the materials below: all required items, plus bonus items where you can.','dv.must':'Required','dv.bonus':'Bonus','dv.mustD':'All three are needed','dv.bonusD':'Encouraged','dv1.t':'Project report (PDF or PPT)','dv1.d':'Document the journey from idea to result — <b>including process screenshots, key asset iterations or key result shots</b> — so judges quickly see what you built, how, and why it’s worth trying.','dv2.t':'Full demo link','dv2.d':'A link that lets people try or run the complete core flow — <b>a web page, online app, downloadable program, installer or any other verifiable form.</b>','dv3.t':'Promo video','dv3.d':'A demo video — edits, voice-over and captions are fine, but it must include real running footage.','dv4.t':'Social media post link','dv4.d':'Publish a project introduction on a public social platform and submit the link; the post must stay public until results are announced.','dv5.t':'Source code','dv5.d':'A Git repository or a zipped codebase is encouraged.','cr.title':'Judging criteria','cr.desc':'Judges score each project across five dimensions totalling 100%.','cr1.t':'Use of Manycore tech stack','cr1.d':'Manycore’s technology plays a core role in the project.','cr2.t':'Fun factor','cr2.d':'Gameplay and spatial interaction are creative and fun; the video clearly shows the highlights and has the potential to spark public discussion.','cr3.t':'Innovation','cr3.d':'The approach, interaction or concept is fresh and different from common existing products.','cr4.t':'Completeness','cr4.d':'The core experience is complete, the demo runs reliably, and the materials match the result.','cr5.t':'Reach','cr5.d':'The project video is posted with the official hashtag on Xiaohongshu (China) / X (international).','jg.title':'Judges','jg.pro':'Expert judges','jg.player':'Player judges','jg.tba':'To be announced',
+  'dv.title':'What to submit','dv.desc':'Every project submits the materials below: all required items, plus bonus items where you can.','dv.must':'Required','dv.bonus':'Bonus','dv.mustD':'All three are needed','dv.bonusD':'Encouraged','dv1.t':'Project report (PDF or PPT)','dv1.d':'Document the journey from idea to result — <b>including process screenshots, key asset iterations or key result shots</b> — so judges quickly see what you built, how, and why it’s worth trying.','dv2.t':'Full demo link','dv2.d':'A link that lets people try or run the complete core flow — <b>a web page, online app, downloadable program, installer or any other verifiable form.</b>','dv3.t':'Promo video','dv3.d':'A demo video — edits, voice-over and captions are fine, but it must include real running footage.','dv4.t':'Social media post link','dv4.d':'Publish a project introduction on a public social platform and submit the link; the post must stay public until results are announced.','dv5.t':'Source code','dv5.d':'A Git repository or a zipped codebase is encouraged.','cr.title':'Judging criteria','cr.desc':'Judges score each project across five dimensions totalling 100%.','cr1.t':'Use of Manycore tech stack','cr1.d':'Manycore’s technology plays a core role in the project.','cr2.t':'Fun factor','cr2.d':'Gameplay and spatial interaction are creative and fun; the video clearly shows the highlights and has the potential to spark public discussion.','cr3.t':'Innovation','cr3.d':'The approach, interaction or concept is fresh and different from common existing products.','cr4.t':'Completeness','cr4.d':'The core experience is complete, the demo runs reliably, and the materials match the result.','cr5.t':'Reach','cr5.d':'The project video is posted with the official hashtag on Xiaohongshu (China) / X (international).','cr.total':'Score breakdown','jg.title':'Judges','jg.pro':'Expert judges','jg.player':'Player judges','jg.tba':'To be announced',
   'prizes.title2':'total prize pool','prizes.desc':'22 awards in total: beyond first, second and third prizes, there are application, fun and people’s choice awards.',
   'p1.r':'First Prize','p1.c':'1 winner','p2.r':'Second Prize','p2.c':'2 winners · per team','p2.t':'¥60,000 in total','p3.r':'Third Prize','p3.c':'3 winners · per team','p3.t':'¥60,000 in total',
   'aw1':'Application Award','aw1.d':'For projects that put Lux3D to real use in games, culture & tourism, film, 3D printing, embodied AI and more.',
@@ -1951,6 +1918,13 @@ document.querySelectorAll('.res-main').forEach(card => card.addEventListener('po
   }
 
   function renderMy() { renderReg(); renderTeam(); renderWorks(); }
+
+  /* 评审规则: hovering a row highlights its ring segment */
+  const crPanel = document.querySelector('.cr-panel');
+  if (crPanel) {
+    const setOn = i => { crPanel.classList.toggle('hovering', i != null); crPanel.querySelectorAll('[data-i]').forEach(e => e.classList.toggle('on', e.dataset.i === String(i))); };
+    crPanel.querySelectorAll('.cr-item').forEach(li => { li.addEventListener('mouseenter', () => setOn(li.dataset.i)); li.addEventListener('mouseleave', () => setOn(null)); });
+  }
 
   /* ⓘ tooltips: tap to toggle on touch screens, and keep the bubble inside the viewport */
   function placeTip(t) {
