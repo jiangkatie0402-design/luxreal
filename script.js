@@ -96,6 +96,27 @@ if (authForm) {
   });
 }
 
+// ---------- hero background video sequence ----------
+const heroBgVideos = document.querySelectorAll('.hero-bg-video');
+if (heroBgVideos.length > 1) {
+  function playHeroBgVideo(index) {
+    heroBgVideos.forEach((video, i) => {
+      video.classList.toggle('active', i === index);
+      if (i === index) {
+        video.currentTime = 0;
+        video.play().catch(() => {});
+      } else {
+        video.pause();
+      }
+    });
+  }
+  heroBgVideos.forEach((video, i) => {
+    video.addEventListener('ended', () => {
+      playHeroBgVideo((i + 1) % heroBgVideos.length);
+    });
+  });
+}
+
 // ---------- hero waveform bars ----------
 document.querySelectorAll('.fv-wave').forEach(wave => {
   const bars = 24;
