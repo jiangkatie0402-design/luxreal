@@ -176,7 +176,7 @@ html[lang="zh-CN"] .hero h1 { font-size: clamp(32px, 6.2vw, 84px); letter-spacin
 .hero-sub { max-width: 620px; font-size: clamp(16px, 1.6vw, 19px); color: var(--text-soft); font-weight: 500; }
 .hero-cta { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 40px; }
 .hero-meta {
-  display: grid; grid-template-columns: repeat(4, auto); gap: 0; margin-top: 64px;
+  display: grid; grid-template-columns: repeat(3, auto); gap: 0; margin-top: 64px;
   border-top: 1px solid var(--border); width: fit-content; max-width: 100%;
 }
 .hero-meta div { padding: 20px 40px 0 0; margin-right: 40px; border-right: 1px solid var(--border-subtle); }
@@ -576,6 +576,7 @@ body.modal-open { overflow: hidden; }
   .demo-reset { bottom: calc(12px + env(safe-area-inset-bottom)); left: 12px; }
   .hero { padding-top: 104px; }
   .hero-meta { grid-template-columns: 1fr 1fr; width: 100%; }
+  .hero-meta div:last-child { grid-column: 1 / -1; }
   .hero-meta div { padding: 16px 12px 16px 0; margin: 0; border-right: 0; border-bottom: 1px solid var(--border-subtle); }
   .hero-cta .btn { flex: 1 1 100%; }
   .strip-inner { flex-direction: column; align-items: stretch; }
@@ -671,7 +672,6 @@ body.modal-open { overflow: hidden; }
       <dl class="hero-meta reveal d3">
         <div><dt data-i18n="meta.date">日期</dt><dd data-i18n="meta.dateV">2026.10.14 – 11.16</dd></div>
         <div><dt data-i18n="meta.loc">参赛方式</dt><dd data-i18n="meta.locV">全程线上 · 全球开放</dd></div>
-        <div><dt data-i18n="meta.format">形式</dt><dd data-i18n="meta.formatV">1 个月 · 1–3 人组队</dd></div>
         <div><dt data-i18n="meta.pool">总奖池</dt><dd data-i18n="meta.poolV">¥ 300,000</dd></div>
       </dl>
     </div>
