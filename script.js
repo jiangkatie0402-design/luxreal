@@ -115,6 +115,13 @@ if (heroBgVideos.length > 1) {
       playHeroBgVideo((i + 1) % heroBgVideos.length);
     });
   });
+  // explicit play() as a fallback: the autoplay attribute can silently fail
+  // to fire when several <video> elements compete for bandwidth on load
+  const activeHeroVideo = heroBgVideos[0];
+  activeHeroVideo.play().catch(() => {});
+  activeHeroVideo.addEventListener('canplay', () => {
+    if (activeHeroVideo.paused) activeHeroVideo.play().catch(() => {});
+  }, { once: true });
 }
 
 // ---------- hero waveform bars ----------
