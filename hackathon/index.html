@@ -325,7 +325,13 @@ html[lang="zh-CN"] .sec-title { letter-spacing: .02em; line-height: 1.22; }
 .res-badge { display: inline-block; padding: 5px 12px; border-radius: 6px; background: var(--primary); color: var(--primary-contrast); font-size: 12.5px; font-weight: 700; letter-spacing: .02em; }
 .res-name { white-space: nowrap; font-size: clamp(40px, 4.4vw, 60px); font-weight: 700; letter-spacing: -.03em; line-height: 1; margin: 22px 0 18px; }
 .res-main p { color: var(--text-soft); font-size: 16px; line-height: 1.75; }
-.res-art { width: clamp(150px, 16vw, 220px); height: auto; flex-shrink: 0; filter: drop-shadow(0 20px 40px rgba(69,87,255,.25)); }
+/* Lux3D card: product video (remote); the shapes stay underneath as the fallback until it plays */
+.res-media { position: relative; flex-shrink: 0; width: clamp(200px, 24vw, 340px); aspect-ratio: 1; display: grid; place-items: center; }
+.res-media .res-vid { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: contain; opacity: 0; transition: opacity .6s;
+  -webkit-mask-image: radial-gradient(closest-side, #000 72%, transparent); mask-image: radial-gradient(closest-side, #000 72%, transparent); }
+.res-media.playing .res-vid { opacity: 1; }
+.res-media.playing .res-art { opacity: 0; }
+.res-art { transition: opacity .4s; width: clamp(150px, 16vw, 220px); height: auto; flex-shrink: 0; filter: drop-shadow(0 20px 40px rgba(69,87,255,.25)); }
 .res-side { display: grid; gap: 16px; grid-template-rows: 1fr auto; }
 .res-api { padding: 22px 24px; border: 1px solid var(--border); border-radius: var(--radius); background: radial-gradient(90% 80% at 100% 0%, rgba(69,87,255,.12), transparent 60%), var(--surface); transition: border-color .25s; display: flex; flex-direction: column; }
 .res-api:hover { border-color: var(--border-strong); }
@@ -911,7 +917,8 @@ body.modal-open { overflow: hidden; }
   .sp-stage.split .sp-tile.on { transform: none; }
   .sp-reset { right: 12px; top: 12px; }
   .res-main { flex-direction: column; align-items: flex-start; }
-  .res-art { align-self: center; width: 150px; }
+  .res-media { align-self: center; width: min(280px, 100%); }
+  .res-art { width: 150px; }
   .res-banner { flex-direction: column; align-items: flex-start; padding: 24px; }
   .res-banner .btn { width: 100%; }
   .perks { gap: 12px; grid-template-columns: 1fr; }
@@ -1366,7 +1373,7 @@ body.modal-open { overflow: hidden; }
           <h3 class="res-name">Aholo Lux3D</h3>
           <p data-i18n="res.lux.d">Aholo Lux3D 是群核科技自主研发的 3D 生成模型。<br>上传图片或文字，即可快速生成可预览、可编辑的全套 3D 资产。</p>
         </div>
-        <svg class="res-art" viewBox="0 0 220 220" aria-hidden="true">
+        <div class="res-media"><video class="res-vid" src="https://holo-cos.aholo3d.cn/resource/video/2026/08/12/NJ6EKR5MDSDUUAABAAAAAAI8.webm" muted loop playsinline autoplay preload="metadata" aria-hidden="true"></video><svg class="res-art" viewBox="0 0 220 220" aria-hidden="true">
           <defs>
             <radialGradient id="rsph" cx="35%" cy="30%" r="75%"><stop offset="0" stop-color="#F2F7D7"/><stop offset=".3" stop-color="#ACC7FC"/><stop offset=".72" stop-color="#4557FF"/><stop offset="1" stop-color="#1a1440"/></radialGradient>
             <linearGradient id="rtri1" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#ACC7FC"/><stop offset=".55" stop-color="#6A48FF"/><stop offset="1" stop-color="#2a1d6e"/></linearGradient>
@@ -1377,7 +1384,7 @@ body.modal-open { overflow: hidden; }
           <polygon points="128,78 196,196 150,182" fill="url(#rtri2)"/>
           <polygon points="128,78 150,182 62,166" fill="url(#rtri1)"/>
           <circle cx="92" cy="58" r="36" fill="url(#rsph)"/>
-        </svg>
+        </svg></div>
       </article>
 
       <div class="res-side">
@@ -1480,7 +1487,7 @@ body.modal-open { overflow: hidden; }
           <h3 class="res-name">Aholo Lux3D</h3>
           <p data-i18n="res.lux.d">Aholo Lux3D 是群核科技自主研发的 3D 生成模型。<br>上传图片或文字，即可快速生成可预览、可编辑的全套 3D 资产。</p>
         </div>
-        <svg class="res-art" viewBox="0 0 220 220" aria-hidden="true">
+        <div class="res-media"><video class="res-vid" src="https://holo-cos.aholo3d.cn/resource/video/2026/08/12/NJ6EKR5MDSDUUAABAAAAAAI8.webm" muted loop playsinline autoplay preload="metadata" aria-hidden="true"></video><svg class="res-art" viewBox="0 0 220 220" aria-hidden="true">
           <defs>
             <radialGradient id="mrsph" cx="35%" cy="30%" r="75%"><stop offset="0" stop-color="#F2F7D7"/><stop offset=".3" stop-color="#ACC7FC"/><stop offset=".72" stop-color="#4557FF"/><stop offset="1" stop-color="#1a1440"/></radialGradient>
             <linearGradient id="mrtri1" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#ACC7FC"/><stop offset=".55" stop-color="#6A48FF"/><stop offset="1" stop-color="#2a1d6e"/></linearGradient>
@@ -1491,7 +1498,7 @@ body.modal-open { overflow: hidden; }
           <polygon points="128,78 196,196 150,182" fill="url(#mrtri2)"/>
           <polygon points="128,78 150,182 62,166" fill="url(#mrtri1)"/>
           <circle cx="92" cy="58" r="36" fill="url(#mrsph)"/>
-        </svg>
+        </svg></div>
       </article>
 
       <div class="res-side">
@@ -1801,6 +1808,11 @@ const JUDGES = [];
   document.getElementById('jgPro').classList.add('has-judges');
   render(); document.addEventListener('langchange', render);
 })();
+
+document.querySelectorAll('.res-vid').forEach(v => {
+  v.addEventListener('playing', () => v.parentElement.classList.add('playing'), { once: true });
+  if (reduceMotion) { v.autoplay = false; v.pause(); }
+});
 
 const io = new IntersectionObserver(entries => entries.forEach(e => {
   if (!e.isIntersecting) return;
