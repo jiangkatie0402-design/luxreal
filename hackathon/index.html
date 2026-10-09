@@ -320,9 +320,7 @@ html[lang="zh-CN"] .sec-title { letter-spacing: .02em; line-height: 1.22; }
 
 /* ---------- Resources ---------- */
 .res-grid { display: grid; grid-template-columns: 1.55fr 1fr; gap: 20px; }
-.res-main { position: relative; display: flex; align-items: center; justify-content: space-between; gap: 24px; padding: clamp(32px, 4vw, 52px); border: 1px solid var(--border); border-radius: var(--radius); background: var(--surface); overflow: hidden; isolation: isolate; }
-.res-main::before { content: ''; position: absolute; inset: 0; z-index: -1; background: var(--grad-soft); }
-.res-main::after { content: ''; position: absolute; right: -10%; top: -20%; width: 60%; height: 140%; z-index: -1; background: radial-gradient(closest-side, rgba(106,72,255,.28), transparent); }
+.res-main { position: relative; display: flex; align-items: center; justify-content: space-between; gap: 24px; padding: clamp(32px, 4vw, 52px); border: 1px solid var(--border); border-radius: var(--radius); background: #030407; overflow: hidden; isolation: isolate; }   /* matches the logo video's own near-black, no purple glow */
 .res-badge { display: inline-block; padding: 5px 12px; border-radius: 6px; background: var(--primary); color: var(--primary-contrast); font-size: 12.5px; font-weight: 700; letter-spacing: .02em; }
 .res-name { white-space: nowrap; font-size: clamp(34px, 3.5vw, 60px); font-weight: 700; letter-spacing: -.03em; line-height: 1; margin: 22px 0 18px; }
 .res-main p { color: var(--text-soft); font-size: 16px; line-height: 1.75; }
