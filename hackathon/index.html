@@ -673,18 +673,33 @@ textarea { width: 100%; min-height: 120px; padding: 12px 14px; border-radius: 12
 textarea:focus { outline: none; border-color: var(--ice); box-shadow: 0 0 0 3px rgba(172,199,252,.15); }
 .work-actions { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; margin-top: 20px; }
 .work-actions .saved { font-size: 13px; color: var(--text-muted); margin-left: auto; }
-.seg.seg-sm span { height: 38px; line-height: 36px; font-size: 13.5px; }
-.wf-block > span:first-child { display: block; }
-.wf-block .seg { margin: 2px 0 10px; }
-.wf-pane .hint { display: block; margin-top: 8px; }
+.wf-group { border: 1px solid var(--border); border-radius: var(--radius-sm); background: var(--bg-2); padding: 4px 22px; margin-bottom: 16px; }
+.wf-gh { display: flex; align-items: baseline; justify-content: space-between; gap: 12px; padding: 16px 0 14px; }
+.wf-gh b { font-size: 15px; font-weight: 700; }
+.wf-gh span { font-size: 12.5px; color: var(--text-muted); }
+.wf-group:not(.wf-bonus) .wf-gh span { color: var(--ice); font-weight: 600; }
+.field.wf-item { display: grid; grid-template-columns: minmax(0, 340px) 1fr; gap: 12px 32px; margin: 0; padding: 18px 0; border-top: 1px solid var(--border-subtle); }
+.wf-label { display: flex; gap: 12px; align-items: flex-start; }
+.wf-label strong { display: block; font-size: 14.5px; font-weight: 700; color: var(--text); margin-bottom: 4px; }
+.wf-label p { font-size: 12.5px; color: var(--text-muted); line-height: 1.6; }
+.wf-num { flex-shrink: 0; width: 22px; height: 22px; margin-top: 1px; border-radius: 50%; display: grid; place-items: center; font: 600 11.5px var(--font-mono); color: var(--text-muted); border: 1px solid var(--border-strong); transition: all .25s; }
+.wf-item.done .wf-num { font-size: 0; background: var(--blue); border-color: var(--blue); }
+.wf-item.done .wf-num::after { content: '✓'; font-size: 12px; color: #fff; }
+.wf-ctrl { min-width: 0; display: flex; flex-direction: column; gap: 10px; }
+.wf-ctrl .field-error { margin-top: 0; }
+.seg.seg-sm { display: inline-flex; align-self: flex-start; gap: 2px; padding: 3px; border-radius: var(--radius-pill); border: 1px solid var(--border); background: var(--surface); }
+.seg.seg-sm label { flex: none; }
+.seg.seg-sm span { height: 30px; line-height: 30px; padding: 0 14px; border: 0; border-radius: var(--radius-pill); background: transparent; font-size: 13px; font-weight: 600; color: var(--text-muted); }
+.seg.seg-sm input:checked + span { background: var(--surface-2); color: #fff; box-shadow: inset 0 0 0 1px var(--border-strong); }
+@media (max-width: 760px) { .field.wf-item { grid-template-columns: 1fr; } .wf-group { padding: 4px 16px; } }
 .drop { position: relative; border: 1px dashed var(--border-strong); border-radius: var(--radius-sm); background: var(--bg-2); transition: border-color .2s, background .2s; }
 .drop.over { border-color: var(--ice); background: rgba(69,87,255,.08); }
-.drop-empty { display: flex; flex-direction: column; align-items: center; gap: 6px; padding: 22px 16px; cursor: pointer; text-align: center; font-size: 14px; color: var(--text-soft); outline: none; }
+.drop-empty { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; padding: 12px 16px; min-height: 48px; cursor: pointer; font-size: 14px; color: var(--text-soft); outline: none; }
 .drop-empty:focus-visible { box-shadow: 0 0 0 2px var(--ice); border-radius: var(--radius-sm); }
-.drop-empty svg { width: 26px; height: 26px; color: var(--ice); }
+.drop-empty svg { width: 20px; height: 20px; color: var(--ice); flex-shrink: 0; }
 .drop-empty b { color: var(--ice); font-weight: 600; }
-.drop-empty small { font-size: 12.5px; color: var(--text-muted); }
-.drop-file { display: none; align-items: center; gap: 10px; padding: 14px 16px; font-size: 14px; }
+.drop-empty small { font-size: 12.5px; color: var(--text-muted); margin-left: auto; }
+.drop-file { display: none; align-items: center; gap: 10px; padding: 12px 16px; min-height: 48px; font-size: 14px; }
 .drop-file svg { width: 22px; height: 22px; flex-shrink: 0; }
 .drop-file .nm { font-weight: 600; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 .drop-file .sz { color: var(--text-muted); font-size: 13px; margin-right: auto; white-space: nowrap; }
@@ -1870,16 +1885,17 @@ document.querySelectorAll('.res-main').forEach(card => card.addEventListener('po
     'w.formT': ['提交你的作品', 'Submit your project'], 'w.owner': ['提交身份：', 'Submitting as: '], 'w.ownerTeam': ['团队「{t}」', 'team “{t}”'], 'w.ownerSolo': ['个人（尚未组队）', 'individual (no team yet)'],
     'w.rule': ['截止前可多次提交，评审以 11 月 19 日 19:00 前最后一次成功提交的版本为准。', 'You can resubmit until the deadline; judging uses the last successful submission before Nov 19, 19:00.'],
     'w.track': ['应用方向', 'Application area'], 'w.trackNone': ['请选择', 'Select'],
-    'w.t.game': ['游戏', 'Games'], 'w.t.culture': ['文旅', 'Culture & tourism'], 'w.t.film': ['影视创作', 'Film & video'], 'w.t.print': ['3D 打印', '3D printing'], 'w.t.embodied': ['具身智能', 'Embodied AI'], 'w.t.other': ['其他', 'Other'],
-    'w.demoHint': ['须包含真实运行画面，可剪辑、配音或加字幕。', 'Must include real running footage; edits, voice-over and captions are fine.'], 
+    'w.t.game': ['游戏', 'Games'], 'w.t.culture': ['文旅', 'Culture & tourism'], 'w.t.film': ['影视创作', 'Film & video'], 'w.t.print': ['3D 打印', '3D printing'], 'w.t.embodied': ['具身智能', 'Embodied AI'], 'w.t.other': ['其他', 'Other'], 
     'w.report': ['项目报告书（PDF 或 PPT）', 'Project report (PDF or PPT)'], 'w.reportHint': ['需包含过程截图、关键资产迭代对比或关键效果截图。', 'Include process screenshots, key asset iterations or key result shots.'],
-    'w.repo': ['项目源代码', 'Source code'], 'w.repoHint': ['Git 仓库或网盘分享链接。', 'A Git repository or cloud-drive share link.'], 'w.bonus': ['加分项', 'bonus'], 'w.either': ['二选一', 'either one'], 'w.linkHint': ['可直接体验或运行的作品链接，或包含真实运行画面的 Demo 视频链接。', 'A link where the project can be tried or run, or a demo video link showing real running footage.'],
+    'w.repo': ['项目源代码', 'Source code'], 'w.repoHint': ['Git 仓库、网盘链接或代码压缩包。', 'A Git repo, a cloud-drive link or a code archive.'], 'w.bonus': ['加分项', 'bonus'], 'w.either': ['二选一', 'either one'],
     'w.social': ['社交媒体发布链接', 'Social media post link'], 'w.socialHint': ['国内：小红书；海外：X。须带赛事官方话题标签，每件作品仅可登记一个。', 'China: Xiaohongshu; international: X. Must use the official hashtag; one link per project.'],
     'w.lux': ['我确认作品使用 Aholo Lux3D 完成，且可运行、可演示', 'I confirm the project is built with Aholo Lux3D and can run and be demoed'],
     'w.save': ['保存草稿', 'Save draft'], 'w.submit': ['提交作品', 'Submit project'], 'w.resubmit': ['提交新版本', 'Submit new version'], 'w.cancel': ['取消', 'Cancel'],
     'w.savedAt': ['草稿已保存 · {t}', 'Draft saved · {t}'], 'w.draftToast': ['草稿已保存', 'Draft saved'], 'w.submitToast': ['作品已提交', 'Project submitted'],
     'w.done': ['已提交', 'Submitted'], 'w.version': ['第 {v} 版 · 提交于 {t}', 'Version {v} · submitted {t}'], 'w.edit': ['修改提交', 'Edit submission'],
     'w.e.track': ['请选择应用方向', 'Choose an application area'], 
+    'w.must': ['必交项', 'Required'], 'w.mustCount': ['已完成 {n}/2', '{n}/2 done'], 'w.bonusT': ['加分项', 'Bonus'], 'w.bonusD': ['选填，提交后可获得额外加分', 'Optional — earns extra credit'],
+    'w.dvD': ['可直接体验或运行的作品链接，或包含真实运行画面的 Demo 视频（链接或上传）。', 'A link where the project can be tried or run, or a demo video with real running footage (link or upload).'],
     'w.dvT': ['完整 Demo / 宣传视频', 'Full demo / promo video'], 'w.m.link': ['Demo / 视频链接', 'Demo / video link'], 'w.m.videoFile': ['上传视频', 'Upload video'], 'w.videoFileR': ['宣传视频文件', 'Promo video file'],
     'w.m.repoLink': ['链接', 'Link'], 'w.m.repoFile': ['上传压缩包', 'Upload archive'],
     'w.up.click': ['点击上传', 'Click to upload'], 'w.up.or': ['或拖拽文件到此处', ' or drag a file here'], 'w.up.replace': ['更换', 'Replace'], 'w.up.remove': ['移除', 'Remove'],
@@ -2332,20 +2348,34 @@ document.querySelectorAll('.res-main').forEach(card => card.addEventListener('po
     const tabs = (name, cur, opts) => `<div class="seg seg-sm" role="radiogroup">${opts.map(o => `<label><input type="radio" name="${name}" value="${o}"${cur === o ? ' checked' : ''}><span>${T('w.m.' + o)}</span></label>`).join('')}</div>`;
     el.innerHTML = `<form class="work-form" id="workForm" novalidate>
       <div class="work-head"><div><h3>${T('w.formT')}</h3><p>${T('w.owner')}${owner}</p></div></div>
-      <div class="field wf-block" data-block="dv"><span>${T('w.dvT')}<em class="opt">${T('w.either')}</em></span>
-        ${tabs('dv', dv, ['link', 'videoFile'])}
-        <div class="wf-pane" data-pane-of="dv" data-v="link"${dv === 'link' ? '' : ' hidden'}><input type="url" name="link" placeholder="https://" aria-label="${T('w.m.link')}" value="${v('link') || v('demo')}"><small class="hint">${T('w.linkHint')}</small></div>
-        <div class="wf-pane" data-pane-of="dv" data-v="videoFile"${dv === 'videoFile' ? '' : ' hidden'}>${drop('videoFile')}<small class="hint">${T('w.demoHint')}</small></div>
-        <em class="field-error" data-err="dv"></em></div>
-      <div class="field wf-block" data-block="report"><span>${T('w.report')}</span>${drop('reportFile')}<em class="field-error" data-err="report"></em><small class="hint">${T('w.reportHint')}</small></div>
-      <div class="grid2">
-        <label class="field"><span>${T('w.social')}<em class="opt">${T('w.bonus')}</em></span><input type="url" name="social" placeholder="https://" value="${v('social')}"><em class="field-error"></em><small class="hint">${T('w.socialHint')}</small></label>
-        <div class="field wf-block" data-block="repo"><span>${T('w.repo')}<em class="opt">${T('w.bonus')}</em></span>
-          <div class="seg seg-sm" role="radiogroup"><label><input type="radio" name="repoMode" value="link"${rm === 'link' ? ' checked' : ''}><span>${T('w.m.repoLink')}</span></label><label><input type="radio" name="repoMode" value="file"${rm === 'file' ? ' checked' : ''}><span>${T('w.m.repoFile')}</span></label></div>
-          <div class="wf-pane" data-pane-of="repoMode" data-v="link"${rm === 'link' ? '' : ' hidden'}><input type="url" name="repo" placeholder="https://" aria-label="${T('w.repo')}" value="${v('repo')}"><small class="hint">${T('w.repoHint')}</small></div>
-          <div class="wf-pane" data-pane-of="repoMode" data-v="file"${rm === 'file' ? '' : ' hidden'}>${drop('repoFile')}</div>
-          <em class="field-error" data-err="repo"></em></div>
-      </div>
+      <section class="wf-group">
+        <header class="wf-gh"><b>${T('w.must')}</b><span id="wfCount"></span></header>
+        <div class="field wf-block wf-item" data-block="dv">
+          <div class="wf-label"><i class="wf-num">1</i><div><strong>${T('w.dvT')}<em class="opt">${T('w.either')}</em></strong><p>${T('w.dvD')}</p></div></div>
+          <div class="wf-ctrl">${tabs('dv', dv, ['link', 'videoFile'])}
+            <div class="wf-pane" data-pane-of="dv" data-v="link"${dv === 'link' ? '' : ' hidden'}><input type="url" name="link" placeholder="https://" aria-label="${T('w.m.link')}" value="${v('link') || v('demo')}"></div>
+            <div class="wf-pane" data-pane-of="dv" data-v="videoFile"${dv === 'videoFile' ? '' : ' hidden'}>${drop('videoFile')}</div>
+            <em class="field-error" data-err="dv"></em></div>
+        </div>
+        <div class="field wf-block wf-item" data-block="report">
+          <div class="wf-label"><i class="wf-num">2</i><div><strong>${T('w.report')}</strong><p>${T('w.reportHint')}</p></div></div>
+          <div class="wf-ctrl">${drop('reportFile')}<em class="field-error" data-err="report"></em></div>
+        </div>
+      </section>
+      <section class="wf-group wf-bonus">
+        <header class="wf-gh"><b>${T('w.bonusT')}</b><span>${T('w.bonusD')}</span></header>
+        <div class="field wf-item">
+          <div class="wf-label"><i class="wf-num">+</i><div><strong>${T('w.social')}</strong><p>${T('w.socialHint')}</p></div></div>
+          <div class="wf-ctrl"><input type="url" name="social" placeholder="https://" aria-label="${T('w.social')}" value="${v('social')}"><em class="field-error"></em></div>
+        </div>
+        <div class="field wf-block wf-item" data-block="repo">
+          <div class="wf-label"><i class="wf-num">+</i><div><strong>${T('w.repo')}</strong><p>${T('w.repoHint')}</p></div></div>
+          <div class="wf-ctrl"><div class="seg seg-sm" role="radiogroup"><label><input type="radio" name="repoMode" value="link"${rm === 'link' ? ' checked' : ''}><span>${T('w.m.repoLink')}</span></label><label><input type="radio" name="repoMode" value="file"${rm === 'file' ? ' checked' : ''}><span>${T('w.m.repoFile')}</span></label></div>
+            <div class="wf-pane" data-pane-of="repoMode" data-v="link"${rm === 'link' ? '' : ' hidden'}><input type="url" name="repo" placeholder="https://" aria-label="${T('w.repo')}" value="${v('repo')}"></div>
+            <div class="wf-pane" data-pane-of="repoMode" data-v="file"${rm === 'file' ? '' : ' hidden'}>${drop('repoFile')}</div>
+            <em class="field-error" data-err="repo"></em></div>
+        </div>
+      </section>
       <label class="check"><input type="checkbox" name="lux"${d.lux ? ' checked' : ''}><span>${T('w.lux')}</span></label><em class="field-error" data-for="lux"></em>
       <div class="work-actions">
         <button type="submit" class="btn btn-primary">${T(sub ? 'w.resubmit' : 'w.submit')}</button>
@@ -2355,6 +2385,15 @@ document.querySelectorAll('.res-main').forEach(card => card.addEventListener('po
       </div>
       <p class="reg-note">${T('w.rule')}</p>
     </form>`;
+    wfProgress($('#workForm'));
+  }
+  // 必交项 progress: tick each required item as it's filled
+  function wfProgress(f) {
+    if (!f) return;
+    const dv = (f.querySelector('[name=dv]:checked') || {}).value;
+    const done = { dv: dv === 'videoFile' ? !!picked.videoFile : /^https?:\/\/\S+\.\S+/i.test(f.elements.link.value.trim()), report: !!picked.reportFile };
+    Object.keys(done).forEach(k => f.querySelector(`[data-block="${k}"]`).classList.toggle('done', done[k]));
+    f.querySelector('#wfCount').textContent = T('w.mustCount', { n: Object.values(done).filter(Boolean).length });
   }
   /* ---------- uploads: the demo keeps only file name + size; a real build uploads to storage and keeps the URL ---------- */
   let picked = {}, viewingWork = false;
@@ -2386,6 +2425,7 @@ document.querySelectorAll('.res-main').forEach(card => card.addEventListener('po
     box.classList.toggle('has-file', !!file);
     box.querySelector('.nm').textContent = file ? file.name : ''; box.querySelector('.sz').textContent = file ? fmtSize(file.size) : '';
     box.querySelector('input').value = '';
+    wfProgress(form);
   }
   function receiptRows(sub) {
     const a = u => `<a href="${safeUrl(u)}" target="_blank" rel="noopener noreferrer">${esc(u)}</a>`, f = x => `<b>${esc(x.name)}</b> · ${fmtSize(x.size)}`;
@@ -2441,6 +2481,7 @@ document.querySelectorAll('.res-main').forEach(card => card.addEventListener('po
     if (n === 'dv' || n === 'repoMode') {
       f.querySelectorAll(`[data-pane-of="${n}"]`).forEach(p => { p.hidden = p.dataset.v !== e.target.value; });
       const blk = f.querySelector(`[data-block="${n === 'dv' ? 'dv' : 'repo'}"] .field-error`); if (blk) blk.textContent = '';
+      wfProgress(f);
     } else if (FILES[n] && e.target.files && e.target.files[0]) setFile(f, n, e.target.files[0]);
   });
   // drag & drop onto an upload box
@@ -2449,6 +2490,7 @@ document.querySelectorAll('.res-main').forEach(card => card.addEventListener('po
     e.preventDefault(); box.classList.toggle('over', t === 'dragover');
     if (t === 'drop' && e.dataTransfer.files[0]) setFile(box.closest('form'), box.dataset.drop, e.dataTransfer.files[0]);
   }));
+  document.addEventListener('input', e => { if (e.target.name === 'link' && e.target.form && e.target.form.id === 'workForm') wfProgress(e.target.form); });
   document.addEventListener('input', e => { const f = e.target.closest && e.target.closest('#workForm'); if (f && e.target.getAttribute('aria-invalid') === 'true') { e.target.setAttribute('aria-invalid', 'false'); const h = e.target.name === 'lux' ? f.querySelector('[data-for="lux"]') : e.target.closest('.field').querySelector('.field-error'); if (h) h.textContent = ''; } });
   function workAction(a) {
     if (a === 'saveDraft') { const f = $('#workForm'); workRun(() => api.saveDraft(workData(f)), T('w.draftToast')).then(renderWorks); }
