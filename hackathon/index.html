@@ -625,6 +625,16 @@ html[lang="zh-CN"] .my-sec-title, html[lang="zh-CN"] .my-title { font-family: va
 .members .reg-avatar { width: 38px; height: 38px; font-size: 15px; }
 .members .who { flex: 1; font-weight: 600; font-size: 15px; }
 .members .who em { font-style: normal; font-size: 12.5px; color: var(--text-muted); font-weight: 500; margin-left: 8px; }
+.icon-btn { display: inline-grid; place-items: center; width: 28px; height: 28px; border-radius: 8px; color: var(--text-muted); transition: color .2s, background .2s; }
+.icon-btn:hover { color: #fff; background: rgba(255,255,255,.06); }
+.icon-btn svg { width: 15px; height: 15px; }
+.team-meta.team-meta-2 { flex-direction: column; align-items: flex-start; gap: 6px; }
+.team-meta-2 > span { display: inline-flex; align-items: center; gap: 6px; flex-wrap: wrap; }
+.mb-list { margin: 4px 0 18px; }
+.mb-list li:last-child { border-bottom: 0; }
+.mb-add .row { display: flex; gap: 10px; } .mb-add .row input { flex: 1; min-width: 0; }
+.mb-full { font-size: 13.5px; color: var(--text-muted); margin-bottom: 18px; }
+#membersPane > .btn-block { margin-top: 6px; }
 .team-meta { display: flex; align-items: center; flex-wrap: wrap; gap: 4px 6px; margin-top: 14px; font-size: 13px; color: var(--text-muted); }
 .team-actions { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; margin-top: 22px; }
 .team-actions p { font-size: 13px; color: var(--text-muted); flex: 1 1 260px; }
@@ -1523,13 +1533,15 @@ html[lang="zh-CN"] .eco-head h2 { font-family: var(--font-title); font-weight: 4
     </div>
 
     <form class="modal-pane" data-pane="editTeam" data-form="editTeam" novalidate>
-      <h3 class="modal-title" data-i18n="m.editT">编辑团队</h3>
-      <p class="modal-desc" data-i18n="m.editD">修改团队名称。成员可在团队卡片中管理。</p>
+      <h3 class="modal-title" data-i18n="m.editT">修改团队名称</h3>
+      <p class="modal-desc" data-i18n="m.editD">团队名称会展示给队员与评审，2–20 个字。</p>
       <label class="field"><span data-i18n="m.editName">团队名称</span><input type="text" name="teamName" maxlength="20"><em class="field-error"></em></label>
       <button type="submit" class="btn btn-primary btn-block" data-i18n="m.editSave">保存</button>
     </form>
 
     <form class="modal-pane" data-pane="topic" id="topicForm" novalidate></form>
+
+    <div class="modal-pane" data-pane="members" id="membersPane"></div>
 
     <div class="modal-pane" data-pane="community">
       <h3 class="modal-title" data-i18n="m.comT">加入赛事社群</h3>
@@ -1634,7 +1646,7 @@ const EN = {
   'my.gateT':'Log in to see your entry','my.gateD':'Log in with your Aholo account to view your registration, credits and team.','my.reg':'Registration & credits','my.tools':'Open tools','my.toolsD':'Build your project with Lux3D, and add other products as you need.','my.team':'My team','my.works':'My project','my.worksT':'Submissions are not open yet','my.worksD':'Once open, you can edit and submit your team’s project here.','my.worksBtn':'Submit project',
   'nav.login':'Log in','nav.logout':'Log out','nav.my':'My entry','m.loginT':'Log in to Aholo','m.loginD':'Log in with your Aholo account to register and manage your team.','m.loginBtn':'Log in with Aholo',
   'm.regT':'Register','m.regD':'Every participant registers individually first, then creates or joins a team.','f.name':'Full name','f.email':'Contact email','f.role':'Role','f.roleNone':'Select','f.role1':'Developer','f.role2':'Designer','f.role3':'Creator','f.role4':'Student','f.role5':'Other','f.agree':'I have read and agree to the ','f.rules':'Event Rules','f.loc':'Current location','f.country':'Country / region','f.province':'Province / state','f.city':'City','f.social':'Social media ID','f.optional':'optional','f.xhs':'Xiaohongshu ID','f.x':'X handle (e.g. @aholo)','c.cn':'Chinese mainland','c.hk':'Hong Kong, China','c.mo':'Macao, China','c.tw':'Taiwan, China','c.us':'United States','c.ca':'Canada','c.gb':'United Kingdom','c.de':'Germany','c.fr':'France','c.jp':'Japan','c.kr':'South Korea','c.sg':'Singapore','c.my':'Malaysia','c.au':'Australia','c.other':'Other','m.regSubmit':'Submit registration',
-  'm.invT':'Invite teammates','m.invD':'Share your team code. Once they’ve registered, they can join by entering it under My entry · My team.','m.invCopyCode':'Copy code','m.invCopyText':'Copy invitation','m.editT':'Edit team','m.editD':'Change the team name. Members are managed on the team card.','m.editName':'Team name','m.editSave':'Save',
+  'm.invT':'Invite teammates','m.invD':'Share your team code. Once they’ve registered, they can join by entering it under My entry · My team.','m.invCopyCode':'Copy code','m.invCopyText':'Copy invitation','m.editT':'Rename team','m.editD':'Your team name is shown to teammates and judges (2–20 characters).','m.editName':'Team name','m.editSave':'Save',
   'demo.reset':'Demo mode · Reset flow','m.comT':'Join the community','m.comD':'Scan the code or use the invite link to join the official group for announcements, team matching and Q&A.','m.comQr':'QR code coming soon','m.comLink':'Invite link','m.comLinkSoon':'Coming soon','m.comR1':'You can join before registering to learn about the event and find teammates.','m.comR2':'Post what you’re looking for and team up with others.',
   'foot.tag':'Spatial intelligence platform — reconstruct, generate, edit and understand space.','foot.event':'Event','foot.product':'Product','foot.platform':'Aholo Platform','foot.contact':'Contact','foot.rights':'All rights reserved'
 };
@@ -1790,6 +1802,15 @@ document.querySelectorAll('.res-main').forEach(card => card.addEventListener('po
     'team.codePh': ['团队编号，如 T8K2M4Q', 'Team code, e.g. T8K2M4Q'], 'team.joinBtn': ['加入', 'Join'],
     'team.solo': ['单人参赛也需要创建团队。', 'Solo participants also need to create a team.'],
     'team.pending': ['组队中', 'Forming'], 'team.ok': ['已确认', 'Confirmed'],
+    'team.rename': ['修改团队名称', 'Rename team'], 'team.removed': ['已移除该成员', 'Member removed'],
+    'team.okNote': ['团队已经确认，仍可调整成员或解散；作品提交与组队截止后成员锁定', 'Team confirmed. You can still change members or disband; members lock at the submission and team deadline'],
+    'mb.t': ['编辑团队成员', 'Edit members'], 'mb.d': ['当前 {n}/{max} 人。可添加或移除成员，作品提交与组队截止后成员锁定。', '{n}/{max} members. Add or remove members; the roster locks at the submission and team deadline.'],
+    'mb.add': ['添加成员', 'Add a member'], 'mb.ph': ['输入对方的参赛编号，如 AH26-12345', 'Their participant ID, e.g. AH26-12345'], 'mb.addBtn': ['添加', 'Add'],
+    'mb.hint': ['对方需先完成个人报名，可在「我的参赛」查看参赛编号。', 'They need to register first; the ID is shown under My entry.'],
+    'mb.hintLate': ['对方需先完成个人报名。团队已确认，新加入的成员不补发团队奖励。', 'They need to register first. The team is confirmed, so new members won’t receive the team reward.'],
+    'mb.full': ['团队已满员，如需更换请先移除成员。', 'The team is full. Remove a member to make room.'], 'mb.done': ['完成', 'Done'],
+    'mb.eFmt': ['请输入正确的参赛编号，如 AH26-12345', 'Enter a valid participant ID, e.g. AH26-12345'], 'mb.eDup': ['该选手已在团队中', 'This participant is already on the team'],
+    'mb.added': ['已添加成员', 'Member added'], 'mb.demoName': ['选手 ', 'Player '],
     'team.invite': ['邀请队员', 'Invite'], 'team.edit': ['编辑团队', 'Edit team'], 'team.saved': ['团队信息已更新', 'Team updated'],
     'team.seats': ['当前 {n}/{max} 人，还可邀请 {r} 人', '{n}/{max} members — {r} more can join'], 'team.fullSeats': ['团队已满 {max} 人', 'Team is full ({max}/{max})'],
     'team.inviteText': ['我在 Aholo 3D 创作黑客松组队，一起来吧！团队编号：{code}。完成报名后，在「我的参赛 · 我的团队」输入编号即可加入。', 'Join my team for the Aholo 3D Creation Hackathon! Team code: {code}. After registering, enter it under My entry · My team.'],
@@ -1883,6 +1904,8 @@ document.querySelectorAll('.res-main').forEach(card => card.addEventListener('po
     async confirmTeam() { await wait(400); const s = load(); s.team.confirmed = true; if (!s.team.rewarded) { const now = Date.now(); s.team.rewarded = true; s.team.rewardCount = s.team.members.length; s.team.rewardSince = now; s.team.members.forEach(m => { m.rewarded = true; }); if (!s.profile.teamReward) { s.profile.teamReward = true; s.profile.teamRewardSince = now; } } return save(s); },
     async submitTopic(t) { await wait(400); const s = load(); if (s.team && s.team.captain && s.team.confirmed) s.team.topic = t; return save(s); },
     async updateTeam(name) { await wait(300); const s = load(); if (s.team && s.team.captain) s.team.name = name; return save(s); },
+    // Demo only: a real add looks the participant up by ID and notifies them
+    async addMember(pid) { await wait(400); const s = load(); if (s.team && s.team.captain && s.team.members.length < TEAM_MAX) s.team.members.push({ name: T('mb.demoName') + pid.slice(-3), pid }); return save(s); },
     async removeMember(i) { await wait(300); const s = load(); if (s.team && s.team.captain && !s.team.members[i].me) s.team.members.splice(i, 1); return save(s); },
     // TODO: real endpoints; judging uses the last successful submission before the deadline
     async saveDraft(d) { await wait(300); const s = load(); s.work = s.work || {}; s.work.draft = d; s.work.draftAt = Date.now(); return save(s); },
@@ -2108,7 +2131,7 @@ document.querySelectorAll('.res-main').forEach(card => card.addEventListener('po
     }
     const members = tm.members.map((m, i) => `<li><span class="reg-avatar${m.me ? ' on' : ''}">${esc(m.name.slice(0, 1).toUpperCase())}</span>
       <span class="who">${esc(m.name)}${m.captain ? `<em>${T('team.captain')}</em>` : ''}${m.me ? `<em>${T('team.you')}</em>` : ''}${tm.rewarded && !m.rewarded ? `<span class="tag-muted">${T('team.noReward')}</span>` : ''}</span>
-      ${tm.captain && !m.me ? `<button type="button" class="link-btn" data-act="remove" data-i="${i}">${T('team.remove')}</button>` : ''}</li>`).join('');
+</li>`).join('');
     // Unconfirmed: the rule sits next to the decision. Confirmed: status lives on the member-count row.
     const confirmRow = tm.confirmed ? '' : (tm.captain
       ? `<div class="team-actions"><button type="button" class="btn btn-primary" data-act="confirm">${T('team.confirm')}</button><p>${T('team.confirmHint', { n: tm.members.length })} ${tip(T('team.confirmTip'))}</p></div>`
@@ -2117,12 +2140,12 @@ document.querySelectorAll('.res-main').forEach(card => card.addEventListener('po
     if (tm.rewarded) {
       const st = rewardStatus(tm.rewardSince || 0), n = tm.rewardCount || tm.members.length;
       rewardLine = st.done
-        ? ` · ${T('team.rewardDone', { d: fmtDate(st.at), n })} ${tip(T('team.rewardTip'))}`
-        : ` · ${T('team.rewardPending', { n })} ${tip(T('team.rewardTip') + ' ' + T('team.pendingTip'))}`;
+        ? `${T('team.rewardDone', { d: fmtDate(st.at), n })} ${tip(T('team.rewardTip'))}`
+        : `${T('team.rewardPending', { n })} ${tip(T('team.rewardTip') + ' ' + T('team.pendingTip'))}`;
       scheduleRewardRefresh(tm.rewardSince || 0);
     }
     el.innerHTML = `<div class="team-head">
-        <div><h3>${esc(tm.name)} <span class="badge${tm.confirmed ? ' ok' : ''}">${T(tm.confirmed ? 'team.ok' : 'team.pending')}</span></h3>
+        <div><h3>${esc(tm.name)}${tm.captain ? ` <button type="button" class="icon-btn" data-act="rename" aria-label="${T('team.rename')}" title="${T('team.rename')}"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><path d="M10.5 2.5l3 3L6 13H3v-3l7.5-7.5Z"/><path d="M9 4l3 3"/></svg></button>` : ''} <span class="badge${tm.confirmed ? ' ok' : ''}">${T(tm.confirmed ? 'team.ok' : 'team.pending')}</span></h3>
           <span class="team-code">${T('team.code')}<span class="mono">${esc(tm.id)}</span></span></div>
         <div class="team-btns">
           <button type="button" class="btn btn-ghost btn-sm" data-act="invite">${T('team.invite')}</button>
@@ -2130,15 +2153,30 @@ document.querySelectorAll('.res-main').forEach(card => card.addEventListener('po
           <button type="button" class="btn btn-danger btn-sm" data-act="${tm.captain ? 'disband' : 'leave'}">${T(tm.captain ? 'team.disband' : 'team.leave')}</button>
         </div></div>
       <ul class="members">${members}</ul>
-      <div class="team-meta">${T('team.count', { n: tm.members.length })}${rewardLine}</div>
+      ${tm.confirmed ? `<div class="team-meta team-meta-2"><span>${T('team.okNote')}</span>${rewardLine ? `<span>${rewardLine}</span>` : ''}</div>` : `<div class="team-meta">${T('team.count', { n: tm.members.length })}</div>`}
       ${confirmRow}`;
+  }
+
+  /* ---------- 编辑团队: captain adds members by participant ID or removes them ---------- */
+  const membersPane = $('#membersPane');
+  function renderMembers() {
+    const tm = state.team; if (!tm) { closeModal(); return; }
+    const full = tm.members.length >= TEAM_MAX;
+    membersPane.innerHTML = `<h3 class="modal-title">${T('mb.t')}</h3><p class="modal-desc">${T('mb.d', { n: tm.members.length })}</p>
+      <ul class="members mb-list">${tm.members.map((m, i) => `<li><span class="reg-avatar${m.me ? ' on' : ''}">${esc(m.name.slice(0, 1).toUpperCase())}</span>
+        <span class="who">${esc(m.name)}${m.captain ? `<em>${T('team.captain')}</em>` : ''}${m.me ? `<em>${T('team.you')}</em>` : ''}</span>
+        ${!m.me ? `<button type="button" class="link-btn" data-act="remove" data-i="${i}">${T('team.remove')}</button>` : ''}</li>`).join('')}</ul>
+      ${full ? `<p class="mb-full">${T('mb.full')}</p>` : `<form class="mb-add" data-form="addMember" novalidate><label class="field"><span>${T('mb.add')}</span>
+        <div class="row"><input type="text" name="pid" maxlength="10" placeholder="${T('mb.ph')}" aria-label="${T('mb.ph')}" style="text-transform:uppercase"><button class="btn btn-primary btn-sm" type="submit">${T('mb.addBtn')}</button></div>
+        <em class="field-error"></em><small class="hint">${T(tm.rewarded ? 'mb.hintLate' : 'mb.hint')}</small></label></form>`}
+      <button type="button" class="btn btn-ghost btn-block" data-close-modal>${T('mb.done')}</button>`;
   }
 
   async function run(fn, okMsg) {
     if (busy) return; busy = true;
     document.querySelectorAll('#myTeam button').forEach(b => b.disabled = true);
     try { state = await fn(); if (okMsg) toast(okMsg); } catch (e) { toast(T('err.net')); }
-    finally { busy = false; renderMy(); }
+    finally { busy = false; renderMy(); if (!modal.hidden && !membersPane.hidden) renderMembers(); }
   }
   function copyText(text, okMsg) {
     const fallback = () => { const ta = document.createElement('textarea'); ta.value = text; ta.style.position = 'fixed'; ta.style.opacity = '0'; document.body.appendChild(ta); ta.select(); let ok = false; try { ok = document.execCommand('copy'); } catch (e) {} ta.remove(); toast(ok ? okMsg : text); };
@@ -2153,12 +2191,13 @@ document.querySelectorAll('.res-main').forEach(card => card.addEventListener('po
       $('#invCode').textContent = state.team.id;
       $('#invSeats').textContent = n >= TEAM_MAX ? T('team.fullSeats') : T('team.seats', { n, r: TEAM_MAX - n });
       openModal('invite');
-    } else if (a === 'edit') {
+    } else if (a === 'edit') { renderMembers(); openModal('members'); }
+    else if (a === 'rename') {
       const f = modal.querySelector('[data-form=editTeam]');
       f.elements.teamName.value = state.team.name; f.querySelector('.field-error').textContent = ''; f.elements.teamName.removeAttribute('aria-invalid');
       openModal('editTeam');
     } else if (a === 'confirm') run(() => api.confirmTeam(), T('toast.confirm'));
-    else if (a === 'remove') { if (confirm(T('team.removeQ'))) run(() => api.removeMember(+btn.dataset.i)); }
+    else if (a === 'remove') { if (confirm(T('team.removeQ'))) run(() => api.removeMember(+btn.dataset.i), T('team.removed')); }
     else if (a === 'topic') openTopic();
     else if (a === 'disband') { if (confirm(T('team.disbandQ'))) run(() => api.leaveTeam()); }
     else if (a === 'leave') { if (confirm(T('team.leaveQ'))) run(() => api.leaveTeam()); }
@@ -2172,6 +2211,13 @@ document.querySelectorAll('.res-main').forEach(card => card.addEventListener('po
       if (name.length < 2 || name.length > 20) { err.textContent = T('err.teamName'); input.setAttribute('aria-invalid', 'true'); input.focus(); return; }
       if (busy) return; busy = true;
       api.updateTeam(name).then(st => { state = st; busy = false; closeModal(); toast(T('team.saved')); renderMy(); }, () => { busy = false; toast(T('err.net')); });
+      return;
+    }
+    if (f.dataset.form === 'addMember') {
+      const pid = input.value.trim().toUpperCase(), tm = state.team;
+      const bad = !/^AH26-\d{5}$/.test(pid) ? 'mb.eFmt' : (pid === state.profile.id || tm.members.some(m => m.pid === pid)) ? 'mb.eDup' : '';
+      if (bad) { err.textContent = T(bad); input.setAttribute('aria-invalid', 'true'); input.focus(); return; }
+      run(() => api.addMember(pid), T('mb.added'));
       return;
     }
     if (f.dataset.form === 'create') {
