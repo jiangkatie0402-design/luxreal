@@ -22,7 +22,7 @@
 /* ================================================================
    Design tokens — derived from Aholo brand
    · Neutral base: Aholo zinc scale (bg #050506 / surface #0e0e10)
-   · Accent: Aholo logo gradient (#6A48FF → #4557FF → #ACC7FC → #F2F7D7)
+   · Accent: Aholo logo gradient (#6A48FF → #7B5CFF → #B5ACFF → #D6D0FF)
    ================================================================ */
 :root {
   --bg: #050506;
@@ -40,11 +40,11 @@
   --primary-contrast: #101012;
 
   --violet: #6A48FF;
-  --blue: #4557FF;
-  --ice: #ACC7FC;
-  --cream: #F2F7D7;
-  --grad: linear-gradient(100deg, #6A48FF 0%, #4557FF 30%, #ACC7FC 78%, #F2F7D7 100%);
-  --grad-soft: linear-gradient(135deg, rgba(106,72,255,.18), rgba(69,87,255,.10) 45%, rgba(172,199,252,.06));
+  --blue: #7B5CFF;
+  --ice: #B5ACFF;
+  --cream: #D6D0FF;
+  --grad: linear-gradient(90deg, #988DFF, #988DFF);   /* brand purple from the KV title — flat, no multi-hue gradient */
+  --grad-soft: linear-gradient(135deg, rgba(123,92,255,.16), rgba(123,92,255,.05));
 
   --font-sans: 'Inter', 'PingFang SC', 'HarmonyOS Sans SC', 'Microsoft YaHei', 'Noto Sans SC', system-ui, sans-serif;
   --font-title: 'PMZD Title', 'Inter', 'PingFang SC', 'Microsoft YaHei', sans-serif;
@@ -99,7 +99,7 @@ button { font: inherit; color: inherit; background: none; border: 0; cursor: poi
 }
 .btn svg { width: 16px; height: 16px; transition: transform .2s var(--ease); }
 .btn:hover svg { transform: translateX(3px); }
-.btn-primary { background: var(--primary); color: var(--primary-contrast); box-shadow: 0 0 0 0 rgba(172,199,252,0); }
+.btn-primary { background: var(--primary); color: var(--primary-contrast); box-shadow: 0 0 0 0 rgba(181,172,255,0); }
 .btn-primary:hover { background: #fff; box-shadow: 0 8px 40px -8px rgba(106,72,255,.55); }
 .btn-ghost { border: 1px solid var(--border-strong); color: var(--text); background: rgba(255,255,255,.02); }
 .btn-ghost:hover { border-color: #71717a; background: rgba(255,255,255,.05); }
@@ -292,7 +292,7 @@ html[lang="zh-CN"] .sec-title { letter-spacing: .02em; line-height: 1.22; }
 .about-lead p.punch { margin-top: 28px; padding-top: 24px; border-top: 1px solid var(--border); color: var(--text); font-weight: 600; }
 .demo-wall { position: relative; display: flex; flex-direction: column; min-height: 460px; border: 1px solid var(--border); border-radius: var(--radius); background: var(--surface); overflow: hidden; }
 .demo-head { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; padding: 18px 22px; border-bottom: 1px solid var(--border-subtle); font-size: 14px; font-weight: 600; position: relative; z-index: 2; background: var(--surface); }
-.demo-head .mono { font-size: 11.5px; letter-spacing: .14em; color: var(--ice); padding: 2px 8px; border: 1px solid rgba(172,199,252,.35); border-radius: 6px; }
+.demo-head .mono { font-size: 11.5px; letter-spacing: .14em; color: var(--ice); padding: 2px 8px; border: 1px solid rgba(181,172,255,.35); border-radius: 6px; }
 .demo-head em { font-style: normal; font-weight: 500; font-size: 12px; color: var(--text-muted); margin-left: auto; }
 .demo-cols { position: relative; flex: 1 1 0; min-height: 0; contain: size; display: grid; grid-template-columns: 1fr 1fr; gap: 12px; padding: 0 12px; overflow: hidden;
   -webkit-mask-image: linear-gradient(transparent, #000 12%, #000 88%, transparent); mask-image: linear-gradient(transparent, #000 12%, #000 88%, transparent); }
@@ -332,9 +332,9 @@ html[lang="zh-CN"] .sec-title { letter-spacing: .02em; line-height: 1.22; }
   -webkit-mask-image: radial-gradient(ellipse closest-side, #000 62%, transparent); mask-image: radial-gradient(ellipse closest-side, #000 62%, transparent); }
 .res-media.playing .res-vid { opacity: 1; }
 .res-media.playing .res-art { opacity: 0; }
-.res-art { transition: opacity .4s; width: clamp(150px, 16vw, 220px); height: auto; flex-shrink: 0; filter: drop-shadow(0 20px 40px rgba(69,87,255,.25)); }
+.res-art { transition: opacity .4s; width: clamp(150px, 16vw, 220px); height: auto; flex-shrink: 0; filter: drop-shadow(0 20px 40px rgba(123,92,255,.25)); }
 .res-side { display: grid; gap: 16px; grid-template-rows: 1fr auto; }
-.res-api { padding: 22px 24px; border: 1px solid var(--border); border-radius: var(--radius); background: radial-gradient(90% 80% at 100% 0%, rgba(69,87,255,.12), transparent 60%), var(--surface); transition: border-color .25s; display: flex; flex-direction: column; }
+.res-api { padding: 22px 24px; border: 1px solid var(--border); border-radius: var(--radius); background: radial-gradient(90% 80% at 100% 0%, rgba(123,92,255,.12), transparent 60%), var(--surface); transition: border-color .25s; display: flex; flex-direction: column; }
 .res-api:hover { border-color: var(--border-strong); }
 .api-head { display: flex; align-items: center; gap: 12px; margin-bottom: 16px; }
 .api-icon { width: 40px; height: 40px; border-radius: 12px; display: grid; place-items: center; border: 1px solid var(--border-strong); background: var(--bg-2); }
@@ -348,7 +348,7 @@ html[lang="zh-CN"] .sec-title { letter-spacing: .02em; line-height: 1.22; }
 .res-item h4 { display: flex; align-items: baseline; gap: 10px; font-size: 18px; font-weight: 600; }
 .res-item h4 em { font-style: normal; font-size: 12px; font-weight: 600; color: var(--text-muted); padding: 2px 8px; border: 1px solid var(--border-strong); border-radius: var(--radius-pill); }
 .res-item p { font-size: 14px; color: var(--text-muted); margin-top: 4px; }
-.res-banner { margin-top: 20px; display: flex; align-items: center; justify-content: space-between; gap: 24px; padding: 26px 32px; border: 1px solid var(--border); border-radius: var(--radius); background: linear-gradient(90deg, rgba(106,72,255,.14), rgba(69,87,255,.05) 50%, transparent), var(--surface); }
+.res-banner { margin-top: 20px; display: flex; align-items: center; justify-content: space-between; gap: 24px; padding: 26px 32px; border: 1px solid var(--border); border-radius: var(--radius); background: linear-gradient(90deg, rgba(106,72,255,.14), rgba(123,92,255,.05) 50%, transparent), var(--surface); }
 .res-banner h4 { font-size: 18px; font-weight: 600; margin-bottom: 4px; }
 .res-banner p { font-size: 14px; color: var(--text-muted); }
 
@@ -357,7 +357,7 @@ html[lang="zh-CN"] .sec-title { letter-spacing: .02em; line-height: 1.22; }
   background: linear-gradient(var(--surface), var(--surface)) padding-box, var(--grad) border-box; border: 1px solid transparent; }
 .pz-special::after { content: ''; position: absolute; inset: 0; z-index: -1; background: radial-gradient(60% 120% at 100% 50%, rgba(106,72,255,.28), transparent 70%), var(--grad-soft); }
 .pz-sp-main { display: flex; align-items: center; gap: 18px; }
-.pz-icon { width: 56px; height: 56px; border-radius: 16px; display: grid; place-items: center; border: 1px solid rgba(172,199,252,.35); background: var(--bg-2); flex-shrink: 0; }
+.pz-icon { width: 56px; height: 56px; border-radius: 16px; display: grid; place-items: center; border: 1px solid rgba(181,172,255,.35); background: var(--bg-2); flex-shrink: 0; }
 .pz-icon svg { width: 28px; height: 28px; }
 .pz-sp-note { font-size: clamp(18px, 1.8vw, 24px); font-weight: 700; color: var(--text); margin-top: 8px; }
 .pz-sp-amt { text-align: right; }
@@ -398,17 +398,17 @@ html[lang="zh-CN"] .sec-title { letter-spacing: .02em; line-height: 1.22; }
 .tl2-ev b { display: grid; place-items: center; width: 24px; height: 24px; border-radius: 50%; font-size: 12px; font-weight: 700; color: var(--text); background: var(--surface-2); border: 1px solid var(--border-strong); transition: all .3s; }
 .tl2-ev::after { content: ''; width: 1px; height: 12px; background: var(--border-strong); }
 .tl2-ev.past b { color: var(--text-muted); background: var(--bg-2); border-color: var(--border); }
-.tl2-ev.next b, .tl2-ev.live b { background: #4557FF; border-color: #4557FF; color: #fff; box-shadow: 0 0 0 4px rgba(69,87,255,.25); }
+.tl2-ev.next b, .tl2-ev.live b { background: #7B5CFF; border-color: #7B5CFF; color: #fff; box-shadow: 0 0 0 4px rgba(123,92,255,.25); }
 .tl2-rail { position: relative; height: 40px; border-radius: 12px; overflow: hidden; border: 1px solid rgba(106,72,255,.35);
   /* one continuous bar: phase zones are shaded inside it (run 0–59.44%, review 59.44–85.07% up to results, then awards) */
-  background: linear-gradient(90deg, rgba(106,72,255,.16) 0 59.44%, rgba(172,199,252,.09) 59.44% 85.07%, rgba(255,255,255,.02) 85.07%), var(--bg-2); }
+  background: linear-gradient(90deg, rgba(106,72,255,.16) 0 59.44%, rgba(181,172,255,.09) 59.44% 85.07%, rgba(255,255,255,.02) 85.07%), var(--bg-2); }
 .tl2-seg { position: absolute; z-index: 2; top: 0; bottom: 0; display: flex; align-items: center; padding: 0 14px; overflow: hidden; white-space: nowrap; font-size: 12.5px; font-weight: 700; }
 .tl2-run { color: var(--text); }
 .tl2-rev { color: var(--ice); }
 .tl2-rev i { font-style: normal; font-weight: 600; opacity: .8; margin-left: 4px; }
 .tl2-tbd { display: none; }
-.tl2-fill { position: absolute; z-index: 1; left: 0; top: 0; bottom: 0; width: 0; background: linear-gradient(90deg, rgba(106,72,255,.5), rgba(69,87,255,.55) 85%, rgba(120,140,255,.7)); transition: width 1.4s var(--ease); }
-.tl2-fill::after { content: ''; position: absolute; right: -14px; top: 0; bottom: 0; width: 14px; background: linear-gradient(90deg, rgba(120,140,255,.45), transparent); }
+.tl2-fill { position: absolute; z-index: 1; left: 0; top: 0; bottom: 0; width: 0; background: linear-gradient(90deg, rgba(106,72,255,.5), rgba(123,92,255,.55) 85%, rgba(150,135,255,.7)); transition: width 1.4s var(--ease); }
+.tl2-fill::after { content: ''; position: absolute; right: -14px; top: 0; bottom: 0; width: 14px; background: linear-gradient(90deg, rgba(150,135,255,.45), transparent); }
 /* phase boundaries: hairlines inside the bar */
 .tl2-dot { position: absolute; z-index: 1; top: 0; bottom: 0; width: 1px; background: rgba(255,255,255,.16); }
 .tl2-rail .tl2-dot:first-of-type, .tl2-rail .tl2-dot:last-of-type { display: none; }
@@ -432,17 +432,17 @@ html[lang="zh-CN"] .sec-title { letter-spacing: .02em; line-height: 1.22; }
 .tl2-card { position: relative; display: flex; flex-direction: column; align-items: flex-start; gap: 10px; padding: 18px; border: 1px solid var(--border); border-radius: var(--radius-sm); background: var(--surface); transition: border-color .25s, opacity .25s; }
 .tl2-card:hover { border-color: var(--border-strong); }
 .tl2-card.past { opacity: .5; }
-.tl2-card.next, .tl2-card.live { border-color: #4557FF; box-shadow: 0 0 0 1px #4557FF, 0 16px 40px -20px rgba(69,87,255,.8); background: linear-gradient(160deg, rgba(69,87,255,.14), transparent 60%), var(--surface); }
+.tl2-card.next, .tl2-card.live { border-color: #7B5CFF; box-shadow: 0 0 0 1px #7B5CFF, 0 16px 40px -20px rgba(123,92,255,.8); background: linear-gradient(160deg, rgba(123,92,255,.14), transparent 60%), var(--surface); }
 .tl2-ctop { display: flex; align-items: center; gap: 8px; width: 100%; }
 .tl2-ctop .mono { font-size: 12.5px; font-weight: 600; color: var(--ice); }
 .tl2-num { display: grid; place-items: center; width: 22px; height: 22px; border-radius: 50%; font-size: 11.5px; font-weight: 700; background: var(--surface-2); border: 1px solid var(--border-strong); }
-.tl2-card.next .tl2-num, .tl2-card.live .tl2-num { background: #4557FF; border-color: #4557FF; }
+.tl2-card.next .tl2-num, .tl2-card.live .tl2-num { background: #7B5CFF; border-color: #7B5CFF; }
 .tl2-state { margin-left: auto; font-size: 11px; font-weight: 700; padding: 2px 8px; border-radius: var(--radius-pill); }
 .tl2-state:empty { display: none; }
-.tl2-card.next .tl2-state, .tl2-card.live .tl2-state { background: #4557FF; color: #fff; }
+.tl2-card.next .tl2-state, .tl2-card.live .tl2-state { background: #7B5CFF; color: #fff; }
 .tl2-card.past .tl2-state { background: var(--surface-2); color: var(--text-muted); }
 .tl2-type { font-size: 11.5px; font-weight: 700; padding: 2px 8px; border-radius: 6px; border: 1px solid var(--border-strong); color: var(--text-soft); }
-.tl2-live { color: #fda4af; border-color: rgba(253,164,175,.4); } .tl2-on { color: var(--ice); border-color: rgba(172,199,252,.4); }
+.tl2-live { color: #fda4af; border-color: rgba(253,164,175,.4); } .tl2-on { color: var(--ice); border-color: rgba(181,172,255,.4); }
 .tl2-card h4 { font-size: 16px; font-weight: 700; line-height: 1.4; }
 .tl2-rsv { margin-top: auto; }
 .tl2-card.past .tl2-rsv { display: none; }
@@ -477,7 +477,7 @@ html[lang="zh-CN"] .rules-title { font-family: var(--font-title); font-weight: 4
 .dv-card p b { color: var(--text-soft); font-weight: 600; }
 .dv-tag { align-self: flex-start; font-size: 12px; font-weight: 700; padding: 3px 10px; border-radius: var(--radius-pill); background: var(--primary); color: var(--primary-contrast); }
 .dv-bonus { border-style: dashed; background: transparent; }
-.dv-bonus .dv-tag { background: rgba(69,87,255,.16); color: var(--ice); border: 1px solid rgba(172,199,252,.35); }
+.dv-bonus .dv-tag { background: rgba(123,92,255,.16); color: var(--ice); border: 1px solid rgba(181,172,255,.35); }
 /* 评审规则 — 100% core splits into five tiles */
 .sp-stage { position: relative; min-height: 560px; padding: clamp(28px, 4vw, 48px); border: 1px solid var(--border); border-radius: var(--radius); overflow: hidden; isolation: isolate;
   background: radial-gradient(55% 60% at 50% 50%, rgba(106,72,255,.20), transparent 70%), var(--surface); }
@@ -486,15 +486,15 @@ html[lang="zh-CN"] .rules-title { font-family: var(--font-title); font-weight: 4
 /* core */
 .sp-core { position: absolute; left: 50%; top: 50%; z-index: 3; width: clamp(240px, 30vw, 340px); aspect-ratio: 1; border-radius: 50%; transform: translate(-50%, -50%);
   display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 8px; cursor: pointer;
-  background: radial-gradient(circle at 35% 30%, rgba(172,199,252,.22), rgba(69,87,255,.16) 45%, rgba(10,10,20,.9) 75%); border: 1px solid rgba(172,199,252,.35);
-  box-shadow: 0 0 80px -10px rgba(106,72,255,.65), inset 0 0 60px rgba(69,87,255,.25);
+  background: radial-gradient(circle at 35% 30%, rgba(181,172,255,.22), rgba(123,92,255,.16) 45%, rgba(10,10,20,.9) 75%); border: 1px solid rgba(181,172,255,.35);
+  box-shadow: 0 0 80px -10px rgba(106,72,255,.65), inset 0 0 60px rgba(123,92,255,.25);
   transition: transform .7s var(--ease), opacity .5s var(--ease), filter .6s; animation: spBreath 4s ease-in-out infinite; }
 .sp-core b { font-size: clamp(64px, 8vw, 96px); font-weight: 700; letter-spacing: -.05em; line-height: 1; background: var(--grad); -webkit-background-clip: text; background-clip: text; color: transparent; }
 .sp-core b small { font-size: .38em; }
 .sp-core .mono { font-size: 12px; font-weight: 600; letter-spacing: .28em; color: var(--ice); }
 .sp-core em { font-style: normal; font-size: 12.5px; color: var(--text-muted); margin-top: 6px; }
-.sp-ring { position: absolute; inset: -14px; border-radius: 50%; border: 1px dashed rgba(172,199,252,.25); animation: spSpin 24s linear infinite; pointer-events: none; }
-.sp-core:hover { box-shadow: 0 0 110px -6px rgba(106,72,255,.8), inset 0 0 60px rgba(69,87,255,.3); }
+.sp-ring { position: absolute; inset: -14px; border-radius: 50%; border: 1px dashed rgba(181,172,255,.25); animation: spSpin 24s linear infinite; pointer-events: none; }
+.sp-core:hover { box-shadow: 0 0 110px -6px rgba(106,72,255,.8), inset 0 0 60px rgba(123,92,255,.3); }
 @keyframes spBreath { 50% { transform: translate(-50%, -50%) scale(1.035); } }
 @keyframes spSpin { to { transform: rotate(360deg); } }
 .sp-stage.split .sp-core { animation: none; transform: translate(-50%, -50%) scale(1.6); opacity: 0; filter: blur(12px); pointer-events: none; }
@@ -517,8 +517,8 @@ html[lang="zh-CN"] .rules-title { font-family: var(--font-title); font-weight: 4
 .sp-more { font-size: 14px; color: var(--text-soft); line-height: 1.75; }
 .sp-rule { display: block; font-size: 11.5px; font-weight: 600; letter-spacing: .14em; color: var(--c); margin-bottom: 4px; }
 .sp-stage.split .sp-tile:hover { border-color: var(--border-strong); box-shadow: 0 12px 40px -18px color-mix(in srgb, var(--c) 80%, transparent); }
-.sp-stage.split .sp-tile.on { transform: scale(1.035); z-index: 3; border-color: #4557FF; box-shadow: 0 0 0 1px #4557FF, 0 24px 60px -20px rgba(69,87,255,.7);
-  background: linear-gradient(160deg, color-mix(in srgb, var(--c) 26%, transparent), rgba(69,87,255,.08) 70%), var(--surface-2); transition-delay: 0s; }
+.sp-stage.split .sp-tile.on { transform: scale(1.035); z-index: 3; border-color: #7B5CFF; box-shadow: 0 0 0 1px #7B5CFF, 0 24px 60px -20px rgba(123,92,255,.7);
+  background: linear-gradient(160deg, color-mix(in srgb, var(--c) 26%, transparent), rgba(123,92,255,.08) 70%), var(--surface-2); transition-delay: 0s; }
 .sp-tile.on .sp-pct { color: #fff; }
 .sp-tile.on .sp-more { grid-template-rows: 1fr; opacity: 1; margin-top: 14px; }
 
@@ -574,7 +574,7 @@ html[lang="zh-CN"] .rules-title { font-family: var(--font-title); font-weight: 4
 
 /* ---------- Final CTA ---------- */
 .final { position: relative; padding: clamp(64px, 9vw, 120px) var(--gutter); border-radius: 28px; overflow: hidden; text-align: center; border: 1px solid var(--border); background: var(--surface); isolation: isolate; }
-.final::before { content: ''; position: absolute; inset: 0; z-index: -1; background: radial-gradient(ellipse 60% 80% at 50% 120%, rgba(106,72,255,.45), rgba(69,87,255,.18) 40%, transparent 70%), radial-gradient(ellipse 40% 40% at 80% 0%, rgba(172,199,252,.12), transparent 70%); }
+.final::before { content: ''; position: absolute; inset: 0; z-index: -1; background: radial-gradient(ellipse 60% 80% at 50% 120%, rgba(106,72,255,.45), rgba(123,92,255,.18) 40%, transparent 70%), radial-gradient(ellipse 40% 40% at 80% 0%, rgba(181,172,255,.12), transparent 70%); }
 .final::after { content: ''; position: absolute; inset: 0; z-index: -1; opacity: .35; background-image: radial-gradient(rgba(255,255,255,.18) 1px, transparent 1px); background-size: 22px 22px; mask-image: radial-gradient(ellipse 60% 60% at 50% 50%, #000, transparent); -webkit-mask-image: radial-gradient(ellipse 60% 60% at 50% 50%, #000, transparent); }
 .final-slogan img { display: block; width: min(640px, 100%); height: auto; margin: 0 auto; }
 .final h2.final-slogan { margin-bottom: 28px; }
@@ -606,7 +606,7 @@ footer { padding: 72px 0 40px; margin-top: var(--section-y); border-top: 1px sol
 .my-title { font-size: clamp(34px, 4.4vw, 52px); font-weight: 700; letter-spacing: -.02em; line-height: 1.1; }
 .my-back { display: inline-block; padding: 10px 0; font-size: 14px; font-weight: 600; color: var(--text-soft); transition: color .2s; white-space: nowrap; }
 .my-back:hover { color: #fff; }
-.my-stage { display: grid; grid-template-columns: 1fr auto; gap: 18px 24px; padding: 24px 28px; border: 1px solid var(--border); border-radius: var(--radius); background: linear-gradient(90deg, rgba(106,72,255,.14), rgba(69,87,255,.04) 60%, transparent), var(--surface); }
+.my-stage { display: grid; grid-template-columns: 1fr auto; gap: 18px 24px; padding: 24px 28px; border: 1px solid var(--border); border-radius: var(--radius); background: linear-gradient(90deg, rgba(106,72,255,.14), rgba(123,92,255,.04) 60%, transparent), var(--surface); }
 .my-steps { grid-column: 1 / -1; display: grid; grid-template-columns: repeat(6, 1fr); list-style: none; margin: 0; padding: 0; }
 .my-steps li { position: relative; padding-top: 30px; text-align: center; font-size: 13.5px; color: var(--text-muted); }
 .my-steps li::before { content: ''; position: absolute; top: 10px; left: -50%; right: 50%; height: 2px; margin-top: -0.5px; background: var(--border-subtle); }
@@ -631,7 +631,7 @@ html[lang="zh-CN"] .my-sec-title, html[lang="zh-CN"] .my-title { font-family: va
 .reg-avatar.on { background: var(--grad); color: #101012; border: 0; }
 .reg-main { flex: 1 1 220px; min-width: 0; }
 .badge { display: inline-block; padding: 2px 10px; border-radius: var(--radius-pill); font-size: 12px; font-weight: 700; border: 1px solid var(--border-strong); color: var(--text-soft); }
-.badge.ok { border-color: rgba(172,199,252,.5); color: var(--ice); background: rgba(69,87,255,.12); }
+.badge.ok { border-color: rgba(181,172,255,.5); color: var(--ice); background: rgba(123,92,255,.12); }
 .reg-main h3 { font-size: 19px; font-weight: 700; margin: 6px 0 2px; }
 .reg-main p { font-size: 14px; color: var(--text-muted); }
 .reg-main .mono { color: var(--text-soft); font-weight: 600; }
@@ -726,7 +726,7 @@ html[lang="zh-CN"] .my-sec-title, html[lang="zh-CN"] .my-title { font-family: va
 .field .hint { display: block; font-size: 12.5px; color: var(--text-muted); margin-top: 6px; }
 .field .opt { font-style: normal; font-weight: 500; color: var(--text-muted); margin-left: 6px; }
 textarea { width: 100%; min-height: 120px; padding: 12px 14px; border-radius: 12px; border: 1px solid var(--border-strong); background: var(--bg-2); color: var(--text); font: inherit; font-size: 15px; line-height: 1.6; resize: vertical; transition: border-color .2s, box-shadow .2s; }
-textarea:focus { outline: none; border-color: var(--ice); box-shadow: 0 0 0 3px rgba(172,199,252,.15); }
+textarea:focus { outline: none; border-color: var(--ice); box-shadow: 0 0 0 3px rgba(181,172,255,.15); }
 .work-actions { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; margin-top: 20px; }
 .work-actions .saved { font-size: 13px; color: var(--text-muted); margin-left: auto; }
 .wf-group { border: 1px solid var(--border); border-radius: var(--radius-sm); background: var(--bg-2); padding: 4px 22px; margin-bottom: 16px; }
@@ -749,7 +749,7 @@ textarea:focus { outline: none; border-color: var(--ice); box-shadow: 0 0 0 3px 
 .seg.seg-sm input:checked + span { background: var(--surface-2); color: #fff; box-shadow: inset 0 0 0 1px var(--border-strong); }
 @media (max-width: 760px) { .field.wf-item { grid-template-columns: 1fr; } .wf-group { padding: 4px 16px; } }
 .drop { position: relative; border: 1px dashed var(--border-strong); border-radius: var(--radius-sm); background: var(--bg-2); transition: border-color .2s, background .2s; }
-.drop.over { border-color: var(--ice); background: rgba(69,87,255,.08); }
+.drop.over { border-color: var(--ice); background: rgba(123,92,255,.08); }
 .drop-empty { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; padding: 12px 16px; min-height: 48px; cursor: pointer; font-size: 14px; color: var(--text-soft); outline: none; }
 .drop-empty:focus-visible { box-shadow: 0 0 0 2px var(--ice); border-radius: var(--radius-sm); }
 .drop-empty svg { width: 20px; height: 20px; color: var(--ice); flex-shrink: 0; }
@@ -787,7 +787,7 @@ input[type=text], input[type=email], input[type=url], select {
   background: var(--bg-2); color: var(--text); font: inherit; font-size: 15px; transition: border-color .2s, box-shadow .2s;
 }
 select { appearance: none; background-image: linear-gradient(45deg, transparent 50%, var(--text-muted) 50%), linear-gradient(135deg, var(--text-muted) 50%, transparent 50%); background-position: calc(100% - 20px) 20px, calc(100% - 15px) 20px; background-size: 5px 5px; background-repeat: no-repeat; }
-input:focus, select:focus { outline: none; border-color: var(--ice); box-shadow: 0 0 0 3px rgba(172,199,252,.15); }
+input:focus, select:focus { outline: none; border-color: var(--ice); box-shadow: 0 0 0 3px rgba(181,172,255,.15); }
 [aria-invalid="true"] { border-color: #f87171 !important; }
 .field-error { display: block; font-style: normal; font-size: 12.5px; color: #fca5a5; min-height: 0; margin-top: 6px; }
 .field-error:empty { display: none; }
@@ -795,7 +795,7 @@ input:focus, select:focus { outline: none; border-color: var(--ice); box-shadow:
 .seg label { flex: 1; }
 .seg input { position: absolute; opacity: 0; pointer-events: none; }
 .seg span { display: block; text-align: center; height: 44px; line-height: 42px; border-radius: 12px; border: 1px solid var(--border-strong); background: var(--bg-2); font-weight: 600; cursor: pointer; transition: all .2s; }
-.seg input:checked + span { border-color: var(--ice); background: rgba(69,87,255,.16); color: #fff; }
+.seg input:checked + span { border-color: var(--ice); background: rgba(123,92,255,.16); color: #fff; }
 .seg input:focus-visible + span { outline: 2px solid var(--ice); outline-offset: 2px; }
 .check { display: flex; gap: 10px; align-items: flex-start; font-size: 14px; color: var(--text-soft); cursor: pointer; margin: 4px 0 4px; }
 .check a { color: var(--ice); font-weight: 600; }
@@ -804,7 +804,7 @@ input:focus, select:focus { outline: none; border-color: var(--ice); box-shadow:
 .loc-row select { grid-column: 1 / -1; }
 .grid2-m { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
 .loc-row > *, .grid2-m > * { min-width: 0; }
-.check input { width: 18px; height: 18px; margin-top: 3px; accent-color: #4557FF; flex-shrink: 0; }
+.check input { width: 18px; height: 18px; margin-top: 3px; accent-color: #7B5CFF; flex-shrink: 0; }
 #regSubmit { margin-top: 18px; }
 
 /* modal */
@@ -1007,7 +1007,7 @@ body.modal-open { overflow: hidden; }
   </div>
 </header>
 
-<svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false"><defs><linearGradient id="g1" x1="0" y1="0" x2="24" y2="24" gradientUnits="userSpaceOnUse"><stop stop-color="#6A48FF"/><stop offset=".5" stop-color="#4557FF"/><stop offset="1" stop-color="#ACC7FC"/></linearGradient></defs></svg>
+<svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false"><defs><linearGradient id="g1" x1="0" y1="0" x2="24" y2="24" gradientUnits="userSpaceOnUse"><stop stop-color="#6A48FF"/><stop offset=".5" stop-color="#7B5CFF"/><stop offset="1" stop-color="#B5ACFF"/></linearGradient></defs></svg>
 
 <main id="top">
 
@@ -1084,78 +1084,78 @@ body.modal-open { overflow: hidden; }
         <div class="demo-cols">
           <div class="demo-col up"><div class="demo-track"><figure class="demo-tile"><svg class="demo-art" viewBox="0 0 320 200" aria-hidden="true"><defs>
 <linearGradient id="bgdemo1a" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#16123a"/><stop offset="1" stop-color="#0b0b10"/></linearGradient>
-<linearGradient id="ademo1a" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#ACC7FC"/><stop offset=".55" stop-color="#6A48FF"/><stop offset="1" stop-color="#2a1d6e"/></linearGradient>
-<linearGradient id="bdemo1a" x1="1" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#4557FF"/><stop offset="1" stop-color="#140f33"/></linearGradient>
-<radialGradient id="sdemo1a" cx="35%" cy="30%" r="75%"><stop offset="0" stop-color="#F2F7D7"/><stop offset=".35" stop-color="#ACC7FC"/><stop offset=".8" stop-color="#4557FF"/><stop offset="1" stop-color="#1a1440"/></radialGradient>
+<linearGradient id="ademo1a" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#B5ACFF"/><stop offset=".55" stop-color="#6A48FF"/><stop offset="1" stop-color="#2a1d6e"/></linearGradient>
+<linearGradient id="bdemo1a" x1="1" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#7B5CFF"/><stop offset="1" stop-color="#140f33"/></linearGradient>
+<radialGradient id="sdemo1a" cx="35%" cy="30%" r="75%"><stop offset="0" stop-color="#D6D0FF"/><stop offset=".35" stop-color="#B5ACFF"/><stop offset=".8" stop-color="#7B5CFF"/><stop offset="1" stop-color="#1a1440"/></radialGradient>
 </defs><rect width="320" height="200" fill="url(#bgdemo1a)"/>
-<g stroke="rgba(172,199,252,.10)" stroke-width="1"><path d="M20 0V200"/><path d="M60 0V200"/><path d="M100 0V200"/><path d="M140 0V200"/><path d="M180 0V200"/><path d="M220 0V200"/><path d="M260 0V200"/><path d="M300 0V200"/><path d="M0 20H320"/><path d="M0 60H320"/><path d="M0 100H320"/><path d="M0 140H320"/><path d="M0 180H320"/></g><g opacity="1"><path d="M70 110l34 -17.0l34 17.0l-34 17.0Z" fill="url(#ademo1a)"/><path d="M70 110v34l34 17.0v-34Z" fill="url(#bdemo1a)"/><path d="M138 110v34l-34 17.0v-34Z" fill="#2f2a7a"/></g><g opacity="0.9"><path d="M150 80l26 -13.0l26 13.0l-26 13.0Z" fill="url(#ademo1a)"/><path d="M150 80v26l26 13.0v-26Z" fill="url(#bdemo1a)"/><path d="M202 80v26l-26 13.0v-26Z" fill="#2f2a7a"/></g><g opacity="1"><path d="M210 120l30 -15.0l30 15.0l-30 15.0Z" fill="url(#ademo1a)"/><path d="M210 120v30l30 15.0v-30Z" fill="url(#bdemo1a)"/><path d="M270 120v30l-30 15.0v-30Z" fill="#2f2a7a"/></g><circle cx="168" cy="58" r="12" fill="url(#sdemo1a)"/><path d="M60 170h200" stroke="#6A48FF" stroke-width="2" stroke-dasharray="4 6"/></svg><figcaption><span data-i18n="demo1.t">方块世界关卡生成</span><em data-i18n="demo1.g">游戏</em></figcaption></figure><figure class="demo-tile"><svg class="demo-art" viewBox="0 0 320 200" aria-hidden="true"><defs>
+<g stroke="rgba(181,172,255,.10)" stroke-width="1"><path d="M20 0V200"/><path d="M60 0V200"/><path d="M100 0V200"/><path d="M140 0V200"/><path d="M180 0V200"/><path d="M220 0V200"/><path d="M260 0V200"/><path d="M300 0V200"/><path d="M0 20H320"/><path d="M0 60H320"/><path d="M0 100H320"/><path d="M0 140H320"/><path d="M0 180H320"/></g><g opacity="1"><path d="M70 110l34 -17.0l34 17.0l-34 17.0Z" fill="url(#ademo1a)"/><path d="M70 110v34l34 17.0v-34Z" fill="url(#bdemo1a)"/><path d="M138 110v34l-34 17.0v-34Z" fill="#2f2a7a"/></g><g opacity="0.9"><path d="M150 80l26 -13.0l26 13.0l-26 13.0Z" fill="url(#ademo1a)"/><path d="M150 80v26l26 13.0v-26Z" fill="url(#bdemo1a)"/><path d="M202 80v26l-26 13.0v-26Z" fill="#2f2a7a"/></g><g opacity="1"><path d="M210 120l30 -15.0l30 15.0l-30 15.0Z" fill="url(#ademo1a)"/><path d="M210 120v30l30 15.0v-30Z" fill="url(#bdemo1a)"/><path d="M270 120v30l-30 15.0v-30Z" fill="#2f2a7a"/></g><circle cx="168" cy="58" r="12" fill="url(#sdemo1a)"/><path d="M60 170h200" stroke="#6A48FF" stroke-width="2" stroke-dasharray="4 6"/></svg><figcaption><span data-i18n="demo1.t">方块世界关卡生成</span><em data-i18n="demo1.g">游戏</em></figcaption></figure><figure class="demo-tile"><svg class="demo-art" viewBox="0 0 320 200" aria-hidden="true"><defs>
 <linearGradient id="bgdemo2a" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#16123a"/><stop offset="1" stop-color="#0b0b10"/></linearGradient>
-<linearGradient id="ademo2a" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#ACC7FC"/><stop offset=".55" stop-color="#6A48FF"/><stop offset="1" stop-color="#2a1d6e"/></linearGradient>
-<linearGradient id="bdemo2a" x1="1" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#4557FF"/><stop offset="1" stop-color="#140f33"/></linearGradient>
-<radialGradient id="sdemo2a" cx="35%" cy="30%" r="75%"><stop offset="0" stop-color="#F2F7D7"/><stop offset=".35" stop-color="#ACC7FC"/><stop offset=".8" stop-color="#4557FF"/><stop offset="1" stop-color="#1a1440"/></radialGradient>
+<linearGradient id="ademo2a" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#B5ACFF"/><stop offset=".55" stop-color="#6A48FF"/><stop offset="1" stop-color="#2a1d6e"/></linearGradient>
+<linearGradient id="bdemo2a" x1="1" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#7B5CFF"/><stop offset="1" stop-color="#140f33"/></linearGradient>
+<radialGradient id="sdemo2a" cx="35%" cy="30%" r="75%"><stop offset="0" stop-color="#D6D0FF"/><stop offset=".35" stop-color="#B5ACFF"/><stop offset=".8" stop-color="#7B5CFF"/><stop offset="1" stop-color="#1a1440"/></radialGradient>
 </defs><rect width="320" height="200" fill="url(#bgdemo2a)"/>
-<g stroke="rgba(172,199,252,.10)" stroke-width="1"><path d="M20 0V200"/><path d="M60 0V200"/><path d="M100 0V200"/><path d="M140 0V200"/><path d="M180 0V200"/><path d="M220 0V200"/><path d="M260 0V200"/><path d="M300 0V200"/><path d="M0 20H320"/><path d="M0 60H320"/><path d="M0 100H320"/><path d="M0 140H320"/><path d="M0 180H320"/></g><g opacity="1"><path d="M40 120l22 -11.0l22 11.0l-22 11.0Z" fill="url(#ademo2a)"/><path d="M40 120v22l22 11.0v-22Z" fill="url(#bdemo2a)"/><path d="M84 120v22l-22 11.0v-22Z" fill="#2f2a7a"/></g><g opacity="1"><path d="M86 102l22 -11.0l22 11.0l-22 11.0Z" fill="url(#ademo2a)"/><path d="M86 102v22l22 11.0v-22Z" fill="url(#bdemo2a)"/><path d="M130 102v22l-22 11.0v-22Z" fill="#2f2a7a"/></g><g opacity="1"><path d="M132 84l22 -11.0l22 11.0l-22 11.0Z" fill="url(#ademo2a)"/><path d="M132 84v22l22 11.0v-22Z" fill="url(#bdemo2a)"/><path d="M176 84v22l-22 11.0v-22Z" fill="#2f2a7a"/></g><g opacity="1"><path d="M178 120l22 -11.0l22 11.0l-22 11.0Z" fill="url(#ademo2a)"/><path d="M178 120v22l22 11.0v-22Z" fill="url(#bdemo2a)"/><path d="M222 120v22l-22 11.0v-22Z" fill="#2f2a7a"/></g><g opacity="1"><path d="M224 102l22 -11.0l22 11.0l-22 11.0Z" fill="url(#ademo2a)"/><path d="M224 102v22l22 11.0v-22Z" fill="url(#bdemo2a)"/><path d="M268 102v22l-22 11.0v-22Z" fill="#2f2a7a"/></g><g opacity="1"><path d="M270 84l22 -11.0l22 11.0l-22 11.0Z" fill="url(#ademo2a)"/><path d="M270 84v22l22 11.0v-22Z" fill="url(#bdemo2a)"/><path d="M314 84v22l-22 11.0v-22Z" fill="#2f2a7a"/></g><rect x="0" y="168" width="320" height="32" fill="#0b0b10" opacity=".7"/></svg><figcaption><span data-i18n="demo2.t">老街区 3D 复原</span><em data-i18n="demo2.g">城市记忆</em></figcaption></figure><figure class="demo-tile"><svg class="demo-art" viewBox="0 0 320 200" aria-hidden="true"><defs>
+<g stroke="rgba(181,172,255,.10)" stroke-width="1"><path d="M20 0V200"/><path d="M60 0V200"/><path d="M100 0V200"/><path d="M140 0V200"/><path d="M180 0V200"/><path d="M220 0V200"/><path d="M260 0V200"/><path d="M300 0V200"/><path d="M0 20H320"/><path d="M0 60H320"/><path d="M0 100H320"/><path d="M0 140H320"/><path d="M0 180H320"/></g><g opacity="1"><path d="M40 120l22 -11.0l22 11.0l-22 11.0Z" fill="url(#ademo2a)"/><path d="M40 120v22l22 11.0v-22Z" fill="url(#bdemo2a)"/><path d="M84 120v22l-22 11.0v-22Z" fill="#2f2a7a"/></g><g opacity="1"><path d="M86 102l22 -11.0l22 11.0l-22 11.0Z" fill="url(#ademo2a)"/><path d="M86 102v22l22 11.0v-22Z" fill="url(#bdemo2a)"/><path d="M130 102v22l-22 11.0v-22Z" fill="#2f2a7a"/></g><g opacity="1"><path d="M132 84l22 -11.0l22 11.0l-22 11.0Z" fill="url(#ademo2a)"/><path d="M132 84v22l22 11.0v-22Z" fill="url(#bdemo2a)"/><path d="M176 84v22l-22 11.0v-22Z" fill="#2f2a7a"/></g><g opacity="1"><path d="M178 120l22 -11.0l22 11.0l-22 11.0Z" fill="url(#ademo2a)"/><path d="M178 120v22l22 11.0v-22Z" fill="url(#bdemo2a)"/><path d="M222 120v22l-22 11.0v-22Z" fill="#2f2a7a"/></g><g opacity="1"><path d="M224 102l22 -11.0l22 11.0l-22 11.0Z" fill="url(#ademo2a)"/><path d="M224 102v22l22 11.0v-22Z" fill="url(#bdemo2a)"/><path d="M268 102v22l-22 11.0v-22Z" fill="#2f2a7a"/></g><g opacity="1"><path d="M270 84l22 -11.0l22 11.0l-22 11.0Z" fill="url(#ademo2a)"/><path d="M270 84v22l22 11.0v-22Z" fill="url(#bdemo2a)"/><path d="M314 84v22l-22 11.0v-22Z" fill="#2f2a7a"/></g><rect x="0" y="168" width="320" height="32" fill="#0b0b10" opacity=".7"/></svg><figcaption><span data-i18n="demo2.t">老街区 3D 复原</span><em data-i18n="demo2.g">城市记忆</em></figcaption></figure><figure class="demo-tile"><svg class="demo-art" viewBox="0 0 320 200" aria-hidden="true"><defs>
 <linearGradient id="bgdemo3a" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#16123a"/><stop offset="1" stop-color="#0b0b10"/></linearGradient>
-<linearGradient id="ademo3a" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#ACC7FC"/><stop offset=".55" stop-color="#6A48FF"/><stop offset="1" stop-color="#2a1d6e"/></linearGradient>
-<linearGradient id="bdemo3a" x1="1" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#4557FF"/><stop offset="1" stop-color="#140f33"/></linearGradient>
-<radialGradient id="sdemo3a" cx="35%" cy="30%" r="75%"><stop offset="0" stop-color="#F2F7D7"/><stop offset=".35" stop-color="#ACC7FC"/><stop offset=".8" stop-color="#4557FF"/><stop offset="1" stop-color="#1a1440"/></radialGradient>
+<linearGradient id="ademo3a" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#B5ACFF"/><stop offset=".55" stop-color="#6A48FF"/><stop offset="1" stop-color="#2a1d6e"/></linearGradient>
+<linearGradient id="bdemo3a" x1="1" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#7B5CFF"/><stop offset="1" stop-color="#140f33"/></linearGradient>
+<radialGradient id="sdemo3a" cx="35%" cy="30%" r="75%"><stop offset="0" stop-color="#D6D0FF"/><stop offset=".35" stop-color="#B5ACFF"/><stop offset=".8" stop-color="#7B5CFF"/><stop offset="1" stop-color="#1a1440"/></radialGradient>
 </defs><rect width="320" height="200" fill="url(#bgdemo3a)"/>
-<g stroke="rgba(172,199,252,.10)" stroke-width="1"><path d="M20 0V200"/><path d="M60 0V200"/><path d="M100 0V200"/><path d="M140 0V200"/><path d="M180 0V200"/><path d="M220 0V200"/><path d="M260 0V200"/><path d="M300 0V200"/><path d="M0 20H320"/><path d="M0 60H320"/><path d="M0 100H320"/><path d="M0 140H320"/><path d="M0 180H320"/></g><path d="M110 160V96a50 50 0 0 1 100 0v64" fill="none" stroke="url(#ademo3a)" stroke-width="14"/><path d="M90 160h140" stroke="#4557FF" stroke-width="6"/><circle cx="160" cy="70" r="10" fill="url(#sdemo3a)"/><g opacity="0.8"><path d="M240 128l16 -8.0l16 8.0l-16 8.0Z" fill="url(#ademo3a)"/><path d="M240 128v16l16 8.0v-16Z" fill="url(#bdemo3a)"/><path d="M272 128v16l-16 8.0v-16Z" fill="#2f2a7a"/></g><g opacity="0.7"><path d="M44 132l14 -7.0l14 7.0l-14 7.0Z" fill="url(#ademo3a)"/><path d="M44 132v14l14 7.0v-14Z" fill="url(#bdemo3a)"/><path d="M72 132v14l-14 7.0v-14Z" fill="#2f2a7a"/></g></svg><figcaption><span data-i18n="demo3.t">可漫游的数字展厅</span><em data-i18n="demo3.g">文旅</em></figcaption></figure><div class="demo-dup" aria-hidden="true"><figure class="demo-tile"><svg class="demo-art" viewBox="0 0 320 200" aria-hidden="true"><defs>
+<g stroke="rgba(181,172,255,.10)" stroke-width="1"><path d="M20 0V200"/><path d="M60 0V200"/><path d="M100 0V200"/><path d="M140 0V200"/><path d="M180 0V200"/><path d="M220 0V200"/><path d="M260 0V200"/><path d="M300 0V200"/><path d="M0 20H320"/><path d="M0 60H320"/><path d="M0 100H320"/><path d="M0 140H320"/><path d="M0 180H320"/></g><path d="M110 160V96a50 50 0 0 1 100 0v64" fill="none" stroke="url(#ademo3a)" stroke-width="14"/><path d="M90 160h140" stroke="#7B5CFF" stroke-width="6"/><circle cx="160" cy="70" r="10" fill="url(#sdemo3a)"/><g opacity="0.8"><path d="M240 128l16 -8.0l16 8.0l-16 8.0Z" fill="url(#ademo3a)"/><path d="M240 128v16l16 8.0v-16Z" fill="url(#bdemo3a)"/><path d="M272 128v16l-16 8.0v-16Z" fill="#2f2a7a"/></g><g opacity="0.7"><path d="M44 132l14 -7.0l14 7.0l-14 7.0Z" fill="url(#ademo3a)"/><path d="M44 132v14l14 7.0v-14Z" fill="url(#bdemo3a)"/><path d="M72 132v14l-14 7.0v-14Z" fill="#2f2a7a"/></g></svg><figcaption><span data-i18n="demo3.t">可漫游的数字展厅</span><em data-i18n="demo3.g">文旅</em></figcaption></figure><div class="demo-dup" aria-hidden="true"><figure class="demo-tile"><svg class="demo-art" viewBox="0 0 320 200" aria-hidden="true"><defs>
 <linearGradient id="bgdemo1b" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#16123a"/><stop offset="1" stop-color="#0b0b10"/></linearGradient>
-<linearGradient id="ademo1b" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#ACC7FC"/><stop offset=".55" stop-color="#6A48FF"/><stop offset="1" stop-color="#2a1d6e"/></linearGradient>
-<linearGradient id="bdemo1b" x1="1" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#4557FF"/><stop offset="1" stop-color="#140f33"/></linearGradient>
-<radialGradient id="sdemo1b" cx="35%" cy="30%" r="75%"><stop offset="0" stop-color="#F2F7D7"/><stop offset=".35" stop-color="#ACC7FC"/><stop offset=".8" stop-color="#4557FF"/><stop offset="1" stop-color="#1a1440"/></radialGradient>
+<linearGradient id="ademo1b" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#B5ACFF"/><stop offset=".55" stop-color="#6A48FF"/><stop offset="1" stop-color="#2a1d6e"/></linearGradient>
+<linearGradient id="bdemo1b" x1="1" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#7B5CFF"/><stop offset="1" stop-color="#140f33"/></linearGradient>
+<radialGradient id="sdemo1b" cx="35%" cy="30%" r="75%"><stop offset="0" stop-color="#D6D0FF"/><stop offset=".35" stop-color="#B5ACFF"/><stop offset=".8" stop-color="#7B5CFF"/><stop offset="1" stop-color="#1a1440"/></radialGradient>
 </defs><rect width="320" height="200" fill="url(#bgdemo1b)"/>
-<g stroke="rgba(172,199,252,.10)" stroke-width="1"><path d="M20 0V200"/><path d="M60 0V200"/><path d="M100 0V200"/><path d="M140 0V200"/><path d="M180 0V200"/><path d="M220 0V200"/><path d="M260 0V200"/><path d="M300 0V200"/><path d="M0 20H320"/><path d="M0 60H320"/><path d="M0 100H320"/><path d="M0 140H320"/><path d="M0 180H320"/></g><g opacity="1"><path d="M70 110l34 -17.0l34 17.0l-34 17.0Z" fill="url(#ademo1b)"/><path d="M70 110v34l34 17.0v-34Z" fill="url(#bdemo1b)"/><path d="M138 110v34l-34 17.0v-34Z" fill="#2f2a7a"/></g><g opacity="0.9"><path d="M150 80l26 -13.0l26 13.0l-26 13.0Z" fill="url(#ademo1b)"/><path d="M150 80v26l26 13.0v-26Z" fill="url(#bdemo1b)"/><path d="M202 80v26l-26 13.0v-26Z" fill="#2f2a7a"/></g><g opacity="1"><path d="M210 120l30 -15.0l30 15.0l-30 15.0Z" fill="url(#ademo1b)"/><path d="M210 120v30l30 15.0v-30Z" fill="url(#bdemo1b)"/><path d="M270 120v30l-30 15.0v-30Z" fill="#2f2a7a"/></g><circle cx="168" cy="58" r="12" fill="url(#sdemo1b)"/><path d="M60 170h200" stroke="#6A48FF" stroke-width="2" stroke-dasharray="4 6"/></svg><figcaption><span data-i18n="demo1.t">方块世界关卡生成</span><em data-i18n="demo1.g">游戏</em></figcaption></figure><figure class="demo-tile"><svg class="demo-art" viewBox="0 0 320 200" aria-hidden="true"><defs>
+<g stroke="rgba(181,172,255,.10)" stroke-width="1"><path d="M20 0V200"/><path d="M60 0V200"/><path d="M100 0V200"/><path d="M140 0V200"/><path d="M180 0V200"/><path d="M220 0V200"/><path d="M260 0V200"/><path d="M300 0V200"/><path d="M0 20H320"/><path d="M0 60H320"/><path d="M0 100H320"/><path d="M0 140H320"/><path d="M0 180H320"/></g><g opacity="1"><path d="M70 110l34 -17.0l34 17.0l-34 17.0Z" fill="url(#ademo1b)"/><path d="M70 110v34l34 17.0v-34Z" fill="url(#bdemo1b)"/><path d="M138 110v34l-34 17.0v-34Z" fill="#2f2a7a"/></g><g opacity="0.9"><path d="M150 80l26 -13.0l26 13.0l-26 13.0Z" fill="url(#ademo1b)"/><path d="M150 80v26l26 13.0v-26Z" fill="url(#bdemo1b)"/><path d="M202 80v26l-26 13.0v-26Z" fill="#2f2a7a"/></g><g opacity="1"><path d="M210 120l30 -15.0l30 15.0l-30 15.0Z" fill="url(#ademo1b)"/><path d="M210 120v30l30 15.0v-30Z" fill="url(#bdemo1b)"/><path d="M270 120v30l-30 15.0v-30Z" fill="#2f2a7a"/></g><circle cx="168" cy="58" r="12" fill="url(#sdemo1b)"/><path d="M60 170h200" stroke="#6A48FF" stroke-width="2" stroke-dasharray="4 6"/></svg><figcaption><span data-i18n="demo1.t">方块世界关卡生成</span><em data-i18n="demo1.g">游戏</em></figcaption></figure><figure class="demo-tile"><svg class="demo-art" viewBox="0 0 320 200" aria-hidden="true"><defs>
 <linearGradient id="bgdemo2b" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#16123a"/><stop offset="1" stop-color="#0b0b10"/></linearGradient>
-<linearGradient id="ademo2b" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#ACC7FC"/><stop offset=".55" stop-color="#6A48FF"/><stop offset="1" stop-color="#2a1d6e"/></linearGradient>
-<linearGradient id="bdemo2b" x1="1" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#4557FF"/><stop offset="1" stop-color="#140f33"/></linearGradient>
-<radialGradient id="sdemo2b" cx="35%" cy="30%" r="75%"><stop offset="0" stop-color="#F2F7D7"/><stop offset=".35" stop-color="#ACC7FC"/><stop offset=".8" stop-color="#4557FF"/><stop offset="1" stop-color="#1a1440"/></radialGradient>
+<linearGradient id="ademo2b" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#B5ACFF"/><stop offset=".55" stop-color="#6A48FF"/><stop offset="1" stop-color="#2a1d6e"/></linearGradient>
+<linearGradient id="bdemo2b" x1="1" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#7B5CFF"/><stop offset="1" stop-color="#140f33"/></linearGradient>
+<radialGradient id="sdemo2b" cx="35%" cy="30%" r="75%"><stop offset="0" stop-color="#D6D0FF"/><stop offset=".35" stop-color="#B5ACFF"/><stop offset=".8" stop-color="#7B5CFF"/><stop offset="1" stop-color="#1a1440"/></radialGradient>
 </defs><rect width="320" height="200" fill="url(#bgdemo2b)"/>
-<g stroke="rgba(172,199,252,.10)" stroke-width="1"><path d="M20 0V200"/><path d="M60 0V200"/><path d="M100 0V200"/><path d="M140 0V200"/><path d="M180 0V200"/><path d="M220 0V200"/><path d="M260 0V200"/><path d="M300 0V200"/><path d="M0 20H320"/><path d="M0 60H320"/><path d="M0 100H320"/><path d="M0 140H320"/><path d="M0 180H320"/></g><g opacity="1"><path d="M40 120l22 -11.0l22 11.0l-22 11.0Z" fill="url(#ademo2b)"/><path d="M40 120v22l22 11.0v-22Z" fill="url(#bdemo2b)"/><path d="M84 120v22l-22 11.0v-22Z" fill="#2f2a7a"/></g><g opacity="1"><path d="M86 102l22 -11.0l22 11.0l-22 11.0Z" fill="url(#ademo2b)"/><path d="M86 102v22l22 11.0v-22Z" fill="url(#bdemo2b)"/><path d="M130 102v22l-22 11.0v-22Z" fill="#2f2a7a"/></g><g opacity="1"><path d="M132 84l22 -11.0l22 11.0l-22 11.0Z" fill="url(#ademo2b)"/><path d="M132 84v22l22 11.0v-22Z" fill="url(#bdemo2b)"/><path d="M176 84v22l-22 11.0v-22Z" fill="#2f2a7a"/></g><g opacity="1"><path d="M178 120l22 -11.0l22 11.0l-22 11.0Z" fill="url(#ademo2b)"/><path d="M178 120v22l22 11.0v-22Z" fill="url(#bdemo2b)"/><path d="M222 120v22l-22 11.0v-22Z" fill="#2f2a7a"/></g><g opacity="1"><path d="M224 102l22 -11.0l22 11.0l-22 11.0Z" fill="url(#ademo2b)"/><path d="M224 102v22l22 11.0v-22Z" fill="url(#bdemo2b)"/><path d="M268 102v22l-22 11.0v-22Z" fill="#2f2a7a"/></g><g opacity="1"><path d="M270 84l22 -11.0l22 11.0l-22 11.0Z" fill="url(#ademo2b)"/><path d="M270 84v22l22 11.0v-22Z" fill="url(#bdemo2b)"/><path d="M314 84v22l-22 11.0v-22Z" fill="#2f2a7a"/></g><rect x="0" y="168" width="320" height="32" fill="#0b0b10" opacity=".7"/></svg><figcaption><span data-i18n="demo2.t">老街区 3D 复原</span><em data-i18n="demo2.g">城市记忆</em></figcaption></figure><figure class="demo-tile"><svg class="demo-art" viewBox="0 0 320 200" aria-hidden="true"><defs>
+<g stroke="rgba(181,172,255,.10)" stroke-width="1"><path d="M20 0V200"/><path d="M60 0V200"/><path d="M100 0V200"/><path d="M140 0V200"/><path d="M180 0V200"/><path d="M220 0V200"/><path d="M260 0V200"/><path d="M300 0V200"/><path d="M0 20H320"/><path d="M0 60H320"/><path d="M0 100H320"/><path d="M0 140H320"/><path d="M0 180H320"/></g><g opacity="1"><path d="M40 120l22 -11.0l22 11.0l-22 11.0Z" fill="url(#ademo2b)"/><path d="M40 120v22l22 11.0v-22Z" fill="url(#bdemo2b)"/><path d="M84 120v22l-22 11.0v-22Z" fill="#2f2a7a"/></g><g opacity="1"><path d="M86 102l22 -11.0l22 11.0l-22 11.0Z" fill="url(#ademo2b)"/><path d="M86 102v22l22 11.0v-22Z" fill="url(#bdemo2b)"/><path d="M130 102v22l-22 11.0v-22Z" fill="#2f2a7a"/></g><g opacity="1"><path d="M132 84l22 -11.0l22 11.0l-22 11.0Z" fill="url(#ademo2b)"/><path d="M132 84v22l22 11.0v-22Z" fill="url(#bdemo2b)"/><path d="M176 84v22l-22 11.0v-22Z" fill="#2f2a7a"/></g><g opacity="1"><path d="M178 120l22 -11.0l22 11.0l-22 11.0Z" fill="url(#ademo2b)"/><path d="M178 120v22l22 11.0v-22Z" fill="url(#bdemo2b)"/><path d="M222 120v22l-22 11.0v-22Z" fill="#2f2a7a"/></g><g opacity="1"><path d="M224 102l22 -11.0l22 11.0l-22 11.0Z" fill="url(#ademo2b)"/><path d="M224 102v22l22 11.0v-22Z" fill="url(#bdemo2b)"/><path d="M268 102v22l-22 11.0v-22Z" fill="#2f2a7a"/></g><g opacity="1"><path d="M270 84l22 -11.0l22 11.0l-22 11.0Z" fill="url(#ademo2b)"/><path d="M270 84v22l22 11.0v-22Z" fill="url(#bdemo2b)"/><path d="M314 84v22l-22 11.0v-22Z" fill="#2f2a7a"/></g><rect x="0" y="168" width="320" height="32" fill="#0b0b10" opacity=".7"/></svg><figcaption><span data-i18n="demo2.t">老街区 3D 复原</span><em data-i18n="demo2.g">城市记忆</em></figcaption></figure><figure class="demo-tile"><svg class="demo-art" viewBox="0 0 320 200" aria-hidden="true"><defs>
 <linearGradient id="bgdemo3b" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#16123a"/><stop offset="1" stop-color="#0b0b10"/></linearGradient>
-<linearGradient id="ademo3b" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#ACC7FC"/><stop offset=".55" stop-color="#6A48FF"/><stop offset="1" stop-color="#2a1d6e"/></linearGradient>
-<linearGradient id="bdemo3b" x1="1" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#4557FF"/><stop offset="1" stop-color="#140f33"/></linearGradient>
-<radialGradient id="sdemo3b" cx="35%" cy="30%" r="75%"><stop offset="0" stop-color="#F2F7D7"/><stop offset=".35" stop-color="#ACC7FC"/><stop offset=".8" stop-color="#4557FF"/><stop offset="1" stop-color="#1a1440"/></radialGradient>
+<linearGradient id="ademo3b" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#B5ACFF"/><stop offset=".55" stop-color="#6A48FF"/><stop offset="1" stop-color="#2a1d6e"/></linearGradient>
+<linearGradient id="bdemo3b" x1="1" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#7B5CFF"/><stop offset="1" stop-color="#140f33"/></linearGradient>
+<radialGradient id="sdemo3b" cx="35%" cy="30%" r="75%"><stop offset="0" stop-color="#D6D0FF"/><stop offset=".35" stop-color="#B5ACFF"/><stop offset=".8" stop-color="#7B5CFF"/><stop offset="1" stop-color="#1a1440"/></radialGradient>
 </defs><rect width="320" height="200" fill="url(#bgdemo3b)"/>
-<g stroke="rgba(172,199,252,.10)" stroke-width="1"><path d="M20 0V200"/><path d="M60 0V200"/><path d="M100 0V200"/><path d="M140 0V200"/><path d="M180 0V200"/><path d="M220 0V200"/><path d="M260 0V200"/><path d="M300 0V200"/><path d="M0 20H320"/><path d="M0 60H320"/><path d="M0 100H320"/><path d="M0 140H320"/><path d="M0 180H320"/></g><path d="M110 160V96a50 50 0 0 1 100 0v64" fill="none" stroke="url(#ademo3b)" stroke-width="14"/><path d="M90 160h140" stroke="#4557FF" stroke-width="6"/><circle cx="160" cy="70" r="10" fill="url(#sdemo3b)"/><g opacity="0.8"><path d="M240 128l16 -8.0l16 8.0l-16 8.0Z" fill="url(#ademo3b)"/><path d="M240 128v16l16 8.0v-16Z" fill="url(#bdemo3b)"/><path d="M272 128v16l-16 8.0v-16Z" fill="#2f2a7a"/></g><g opacity="0.7"><path d="M44 132l14 -7.0l14 7.0l-14 7.0Z" fill="url(#ademo3b)"/><path d="M44 132v14l14 7.0v-14Z" fill="url(#bdemo3b)"/><path d="M72 132v14l-14 7.0v-14Z" fill="#2f2a7a"/></g></svg><figcaption><span data-i18n="demo3.t">可漫游的数字展厅</span><em data-i18n="demo3.g">文旅</em></figcaption></figure></div></div></div>
+<g stroke="rgba(181,172,255,.10)" stroke-width="1"><path d="M20 0V200"/><path d="M60 0V200"/><path d="M100 0V200"/><path d="M140 0V200"/><path d="M180 0V200"/><path d="M220 0V200"/><path d="M260 0V200"/><path d="M300 0V200"/><path d="M0 20H320"/><path d="M0 60H320"/><path d="M0 100H320"/><path d="M0 140H320"/><path d="M0 180H320"/></g><path d="M110 160V96a50 50 0 0 1 100 0v64" fill="none" stroke="url(#ademo3b)" stroke-width="14"/><path d="M90 160h140" stroke="#7B5CFF" stroke-width="6"/><circle cx="160" cy="70" r="10" fill="url(#sdemo3b)"/><g opacity="0.8"><path d="M240 128l16 -8.0l16 8.0l-16 8.0Z" fill="url(#ademo3b)"/><path d="M240 128v16l16 8.0v-16Z" fill="url(#bdemo3b)"/><path d="M272 128v16l-16 8.0v-16Z" fill="#2f2a7a"/></g><g opacity="0.7"><path d="M44 132l14 -7.0l14 7.0l-14 7.0Z" fill="url(#ademo3b)"/><path d="M44 132v14l14 7.0v-14Z" fill="url(#bdemo3b)"/><path d="M72 132v14l-14 7.0v-14Z" fill="#2f2a7a"/></g></svg><figcaption><span data-i18n="demo3.t">可漫游的数字展厅</span><em data-i18n="demo3.g">文旅</em></figcaption></figure></div></div></div>
           <div class="demo-col down"><div class="demo-track"><figure class="demo-tile"><svg class="demo-art" viewBox="0 0 320 200" aria-hidden="true"><defs>
 <linearGradient id="bgdemo4a" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#16123a"/><stop offset="1" stop-color="#0b0b10"/></linearGradient>
-<linearGradient id="ademo4a" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#ACC7FC"/><stop offset=".55" stop-color="#6A48FF"/><stop offset="1" stop-color="#2a1d6e"/></linearGradient>
-<linearGradient id="bdemo4a" x1="1" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#4557FF"/><stop offset="1" stop-color="#140f33"/></linearGradient>
-<radialGradient id="sdemo4a" cx="35%" cy="30%" r="75%"><stop offset="0" stop-color="#F2F7D7"/><stop offset=".35" stop-color="#ACC7FC"/><stop offset=".8" stop-color="#4557FF"/><stop offset="1" stop-color="#1a1440"/></radialGradient>
+<linearGradient id="ademo4a" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#B5ACFF"/><stop offset=".55" stop-color="#6A48FF"/><stop offset="1" stop-color="#2a1d6e"/></linearGradient>
+<linearGradient id="bdemo4a" x1="1" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#7B5CFF"/><stop offset="1" stop-color="#140f33"/></linearGradient>
+<radialGradient id="sdemo4a" cx="35%" cy="30%" r="75%"><stop offset="0" stop-color="#D6D0FF"/><stop offset=".35" stop-color="#B5ACFF"/><stop offset=".8" stop-color="#7B5CFF"/><stop offset="1" stop-color="#1a1440"/></radialGradient>
 </defs><rect width="320" height="200" fill="url(#bgdemo4a)"/>
-<g stroke="rgba(172,199,252,.10)" stroke-width="1"><path d="M20 0V200"/><path d="M60 0V200"/><path d="M100 0V200"/><path d="M140 0V200"/><path d="M180 0V200"/><path d="M220 0V200"/><path d="M260 0V200"/><path d="M300 0V200"/><path d="M0 20H320"/><path d="M0 60H320"/><path d="M0 100H320"/><path d="M0 140H320"/><path d="M0 180H320"/></g><path d="M110 150h100l-12-18H122Z" fill="url(#bdemo4a)"/><path d="M160 54c26 0 38 20 38 40s-14 38-38 38-38-18-38-38 12-40 38-40Z" fill="url(#sdemo4a)"/><path d="M118 132h84" stroke="#ACC7FC" stroke-width="2"/><path d="M100 40h120" stroke="#6A48FF" stroke-width="3"/><path d="M160 40v12" stroke="#ACC7FC" stroke-width="2"/></svg><figcaption><span data-i18n="demo4.t">潮玩手办打印原型</span><em data-i18n="demo4.g">3D 打印</em></figcaption></figure><figure class="demo-tile"><svg class="demo-art" viewBox="0 0 320 200" aria-hidden="true"><defs>
+<g stroke="rgba(181,172,255,.10)" stroke-width="1"><path d="M20 0V200"/><path d="M60 0V200"/><path d="M100 0V200"/><path d="M140 0V200"/><path d="M180 0V200"/><path d="M220 0V200"/><path d="M260 0V200"/><path d="M300 0V200"/><path d="M0 20H320"/><path d="M0 60H320"/><path d="M0 100H320"/><path d="M0 140H320"/><path d="M0 180H320"/></g><path d="M110 150h100l-12-18H122Z" fill="url(#bdemo4a)"/><path d="M160 54c26 0 38 20 38 40s-14 38-38 38-38-18-38-38 12-40 38-40Z" fill="url(#sdemo4a)"/><path d="M118 132h84" stroke="#B5ACFF" stroke-width="2"/><path d="M100 40h120" stroke="#6A48FF" stroke-width="3"/><path d="M160 40v12" stroke="#B5ACFF" stroke-width="2"/></svg><figcaption><span data-i18n="demo4.t">潮玩手办打印原型</span><em data-i18n="demo4.g">3D 打印</em></figcaption></figure><figure class="demo-tile"><svg class="demo-art" viewBox="0 0 320 200" aria-hidden="true"><defs>
 <linearGradient id="bgdemo5a" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#16123a"/><stop offset="1" stop-color="#0b0b10"/></linearGradient>
-<linearGradient id="ademo5a" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#ACC7FC"/><stop offset=".55" stop-color="#6A48FF"/><stop offset="1" stop-color="#2a1d6e"/></linearGradient>
-<linearGradient id="bdemo5a" x1="1" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#4557FF"/><stop offset="1" stop-color="#140f33"/></linearGradient>
-<radialGradient id="sdemo5a" cx="35%" cy="30%" r="75%"><stop offset="0" stop-color="#F2F7D7"/><stop offset=".35" stop-color="#ACC7FC"/><stop offset=".8" stop-color="#4557FF"/><stop offset="1" stop-color="#1a1440"/></radialGradient>
+<linearGradient id="ademo5a" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#B5ACFF"/><stop offset=".55" stop-color="#6A48FF"/><stop offset="1" stop-color="#2a1d6e"/></linearGradient>
+<linearGradient id="bdemo5a" x1="1" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#7B5CFF"/><stop offset="1" stop-color="#140f33"/></linearGradient>
+<radialGradient id="sdemo5a" cx="35%" cy="30%" r="75%"><stop offset="0" stop-color="#D6D0FF"/><stop offset=".35" stop-color="#B5ACFF"/><stop offset=".8" stop-color="#7B5CFF"/><stop offset="1" stop-color="#1a1440"/></radialGradient>
 </defs><rect width="320" height="200" fill="url(#bgdemo5a)"/>
-<g stroke="rgba(172,199,252,.10)" stroke-width="1"><path d="M20 0V200"/><path d="M60 0V200"/><path d="M100 0V200"/><path d="M140 0V200"/><path d="M180 0V200"/><path d="M220 0V200"/><path d="M260 0V200"/><path d="M300 0V200"/><path d="M0 20H320"/><path d="M0 60H320"/><path d="M0 100H320"/><path d="M0 140H320"/><path d="M0 180H320"/></g><g opacity="0.8"><path d="M60 120l26 -13.0l26 13.0l-26 13.0Z" fill="url(#ademo5a)"/><path d="M60 120v26l26 13.0v-26Z" fill="url(#bdemo5a)"/><path d="M112 120v26l-26 13.0v-26Z" fill="#2f2a7a"/></g><g opacity="0.8"><path d="M220 110l26 -13.0l26 13.0l-26 13.0Z" fill="url(#ademo5a)"/><path d="M220 110v26l26 13.0v-26Z" fill="url(#bdemo5a)"/><path d="M272 110v26l-26 13.0v-26Z" fill="#2f2a7a"/></g><rect x="138" y="92" width="44" height="40" rx="10" fill="url(#ademo5a)"/><circle cx="152" cy="110" r="4" fill="#F2F7D7"/><circle cx="168" cy="110" r="4" fill="#F2F7D7"/><path d="M160 92V76" stroke="#ACC7FC" stroke-width="3"/><circle cx="160" cy="72" r="5" fill="url(#sdemo5a)"/><path d="M146 132l-8 26M174 132l8 26" stroke="#4557FF" stroke-width="6" stroke-linecap="round"/><path d="M80 170c40-20 120-20 160 0" fill="none" stroke="#6A48FF" stroke-width="2" stroke-dasharray="3 5"/></svg><figcaption><span data-i18n="demo5.t">机器人训练场景</span><em data-i18n="demo5.g">具身智能</em></figcaption></figure><figure class="demo-tile"><svg class="demo-art" viewBox="0 0 320 200" aria-hidden="true"><defs>
+<g stroke="rgba(181,172,255,.10)" stroke-width="1"><path d="M20 0V200"/><path d="M60 0V200"/><path d="M100 0V200"/><path d="M140 0V200"/><path d="M180 0V200"/><path d="M220 0V200"/><path d="M260 0V200"/><path d="M300 0V200"/><path d="M0 20H320"/><path d="M0 60H320"/><path d="M0 100H320"/><path d="M0 140H320"/><path d="M0 180H320"/></g><g opacity="0.8"><path d="M60 120l26 -13.0l26 13.0l-26 13.0Z" fill="url(#ademo5a)"/><path d="M60 120v26l26 13.0v-26Z" fill="url(#bdemo5a)"/><path d="M112 120v26l-26 13.0v-26Z" fill="#2f2a7a"/></g><g opacity="0.8"><path d="M220 110l26 -13.0l26 13.0l-26 13.0Z" fill="url(#ademo5a)"/><path d="M220 110v26l26 13.0v-26Z" fill="url(#bdemo5a)"/><path d="M272 110v26l-26 13.0v-26Z" fill="#2f2a7a"/></g><rect x="138" y="92" width="44" height="40" rx="10" fill="url(#ademo5a)"/><circle cx="152" cy="110" r="4" fill="#D6D0FF"/><circle cx="168" cy="110" r="4" fill="#D6D0FF"/><path d="M160 92V76" stroke="#B5ACFF" stroke-width="3"/><circle cx="160" cy="72" r="5" fill="url(#sdemo5a)"/><path d="M146 132l-8 26M174 132l8 26" stroke="#7B5CFF" stroke-width="6" stroke-linecap="round"/><path d="M80 170c40-20 120-20 160 0" fill="none" stroke="#6A48FF" stroke-width="2" stroke-dasharray="3 5"/></svg><figcaption><span data-i18n="demo5.t">机器人训练场景</span><em data-i18n="demo5.g">具身智能</em></figcaption></figure><figure class="demo-tile"><svg class="demo-art" viewBox="0 0 320 200" aria-hidden="true"><defs>
 <linearGradient id="bgdemo6a" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#16123a"/><stop offset="1" stop-color="#0b0b10"/></linearGradient>
-<linearGradient id="ademo6a" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#ACC7FC"/><stop offset=".55" stop-color="#6A48FF"/><stop offset="1" stop-color="#2a1d6e"/></linearGradient>
-<linearGradient id="bdemo6a" x1="1" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#4557FF"/><stop offset="1" stop-color="#140f33"/></linearGradient>
-<radialGradient id="sdemo6a" cx="35%" cy="30%" r="75%"><stop offset="0" stop-color="#F2F7D7"/><stop offset=".35" stop-color="#ACC7FC"/><stop offset=".8" stop-color="#4557FF"/><stop offset="1" stop-color="#1a1440"/></radialGradient>
+<linearGradient id="ademo6a" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#B5ACFF"/><stop offset=".55" stop-color="#6A48FF"/><stop offset="1" stop-color="#2a1d6e"/></linearGradient>
+<linearGradient id="bdemo6a" x1="1" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#7B5CFF"/><stop offset="1" stop-color="#140f33"/></linearGradient>
+<radialGradient id="sdemo6a" cx="35%" cy="30%" r="75%"><stop offset="0" stop-color="#D6D0FF"/><stop offset=".35" stop-color="#B5ACFF"/><stop offset=".8" stop-color="#7B5CFF"/><stop offset="1" stop-color="#1a1440"/></radialGradient>
 </defs><rect width="320" height="200" fill="url(#bgdemo6a)"/>
-<g stroke="rgba(172,199,252,.10)" stroke-width="1"><path d="M20 0V200"/><path d="M60 0V200"/><path d="M100 0V200"/><path d="M140 0V200"/><path d="M180 0V200"/><path d="M220 0V200"/><path d="M260 0V200"/><path d="M300 0V200"/><path d="M0 20H320"/><path d="M0 60H320"/><path d="M0 100H320"/><path d="M0 140H320"/><path d="M0 180H320"/></g><rect x="70" y="50" width="180" height="104" rx="10" fill="url(#ademo6a)" opacity=".9"/><path d="M70 64h180M70 140h180" stroke="#0b0b10" stroke-width="2" stroke-dasharray="6 6"/><path d="M148 86v32l28-16Z" fill="#F2F7D7"/><path d="M70 172h180" stroke="#4557FF" stroke-width="3"/><circle cx="130" cy="172" r="5" fill="#F2F7D7"/></svg><figcaption><span data-i18n="demo6.t">3D 资产生成产品短片</span><em data-i18n="demo6.g">LuxReal 视频</em></figcaption></figure><div class="demo-dup" aria-hidden="true"><figure class="demo-tile"><svg class="demo-art" viewBox="0 0 320 200" aria-hidden="true"><defs>
+<g stroke="rgba(181,172,255,.10)" stroke-width="1"><path d="M20 0V200"/><path d="M60 0V200"/><path d="M100 0V200"/><path d="M140 0V200"/><path d="M180 0V200"/><path d="M220 0V200"/><path d="M260 0V200"/><path d="M300 0V200"/><path d="M0 20H320"/><path d="M0 60H320"/><path d="M0 100H320"/><path d="M0 140H320"/><path d="M0 180H320"/></g><rect x="70" y="50" width="180" height="104" rx="10" fill="url(#ademo6a)" opacity=".9"/><path d="M70 64h180M70 140h180" stroke="#0b0b10" stroke-width="2" stroke-dasharray="6 6"/><path d="M148 86v32l28-16Z" fill="#D6D0FF"/><path d="M70 172h180" stroke="#7B5CFF" stroke-width="3"/><circle cx="130" cy="172" r="5" fill="#D6D0FF"/></svg><figcaption><span data-i18n="demo6.t">3D 资产生成产品短片</span><em data-i18n="demo6.g">LuxReal 视频</em></figcaption></figure><div class="demo-dup" aria-hidden="true"><figure class="demo-tile"><svg class="demo-art" viewBox="0 0 320 200" aria-hidden="true"><defs>
 <linearGradient id="bgdemo4b" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#16123a"/><stop offset="1" stop-color="#0b0b10"/></linearGradient>
-<linearGradient id="ademo4b" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#ACC7FC"/><stop offset=".55" stop-color="#6A48FF"/><stop offset="1" stop-color="#2a1d6e"/></linearGradient>
-<linearGradient id="bdemo4b" x1="1" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#4557FF"/><stop offset="1" stop-color="#140f33"/></linearGradient>
-<radialGradient id="sdemo4b" cx="35%" cy="30%" r="75%"><stop offset="0" stop-color="#F2F7D7"/><stop offset=".35" stop-color="#ACC7FC"/><stop offset=".8" stop-color="#4557FF"/><stop offset="1" stop-color="#1a1440"/></radialGradient>
+<linearGradient id="ademo4b" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#B5ACFF"/><stop offset=".55" stop-color="#6A48FF"/><stop offset="1" stop-color="#2a1d6e"/></linearGradient>
+<linearGradient id="bdemo4b" x1="1" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#7B5CFF"/><stop offset="1" stop-color="#140f33"/></linearGradient>
+<radialGradient id="sdemo4b" cx="35%" cy="30%" r="75%"><stop offset="0" stop-color="#D6D0FF"/><stop offset=".35" stop-color="#B5ACFF"/><stop offset=".8" stop-color="#7B5CFF"/><stop offset="1" stop-color="#1a1440"/></radialGradient>
 </defs><rect width="320" height="200" fill="url(#bgdemo4b)"/>
-<g stroke="rgba(172,199,252,.10)" stroke-width="1"><path d="M20 0V200"/><path d="M60 0V200"/><path d="M100 0V200"/><path d="M140 0V200"/><path d="M180 0V200"/><path d="M220 0V200"/><path d="M260 0V200"/><path d="M300 0V200"/><path d="M0 20H320"/><path d="M0 60H320"/><path d="M0 100H320"/><path d="M0 140H320"/><path d="M0 180H320"/></g><path d="M110 150h100l-12-18H122Z" fill="url(#bdemo4b)"/><path d="M160 54c26 0 38 20 38 40s-14 38-38 38-38-18-38-38 12-40 38-40Z" fill="url(#sdemo4b)"/><path d="M118 132h84" stroke="#ACC7FC" stroke-width="2"/><path d="M100 40h120" stroke="#6A48FF" stroke-width="3"/><path d="M160 40v12" stroke="#ACC7FC" stroke-width="2"/></svg><figcaption><span data-i18n="demo4.t">潮玩手办打印原型</span><em data-i18n="demo4.g">3D 打印</em></figcaption></figure><figure class="demo-tile"><svg class="demo-art" viewBox="0 0 320 200" aria-hidden="true"><defs>
+<g stroke="rgba(181,172,255,.10)" stroke-width="1"><path d="M20 0V200"/><path d="M60 0V200"/><path d="M100 0V200"/><path d="M140 0V200"/><path d="M180 0V200"/><path d="M220 0V200"/><path d="M260 0V200"/><path d="M300 0V200"/><path d="M0 20H320"/><path d="M0 60H320"/><path d="M0 100H320"/><path d="M0 140H320"/><path d="M0 180H320"/></g><path d="M110 150h100l-12-18H122Z" fill="url(#bdemo4b)"/><path d="M160 54c26 0 38 20 38 40s-14 38-38 38-38-18-38-38 12-40 38-40Z" fill="url(#sdemo4b)"/><path d="M118 132h84" stroke="#B5ACFF" stroke-width="2"/><path d="M100 40h120" stroke="#6A48FF" stroke-width="3"/><path d="M160 40v12" stroke="#B5ACFF" stroke-width="2"/></svg><figcaption><span data-i18n="demo4.t">潮玩手办打印原型</span><em data-i18n="demo4.g">3D 打印</em></figcaption></figure><figure class="demo-tile"><svg class="demo-art" viewBox="0 0 320 200" aria-hidden="true"><defs>
 <linearGradient id="bgdemo5b" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#16123a"/><stop offset="1" stop-color="#0b0b10"/></linearGradient>
-<linearGradient id="ademo5b" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#ACC7FC"/><stop offset=".55" stop-color="#6A48FF"/><stop offset="1" stop-color="#2a1d6e"/></linearGradient>
-<linearGradient id="bdemo5b" x1="1" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#4557FF"/><stop offset="1" stop-color="#140f33"/></linearGradient>
-<radialGradient id="sdemo5b" cx="35%" cy="30%" r="75%"><stop offset="0" stop-color="#F2F7D7"/><stop offset=".35" stop-color="#ACC7FC"/><stop offset=".8" stop-color="#4557FF"/><stop offset="1" stop-color="#1a1440"/></radialGradient>
+<linearGradient id="ademo5b" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#B5ACFF"/><stop offset=".55" stop-color="#6A48FF"/><stop offset="1" stop-color="#2a1d6e"/></linearGradient>
+<linearGradient id="bdemo5b" x1="1" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#7B5CFF"/><stop offset="1" stop-color="#140f33"/></linearGradient>
+<radialGradient id="sdemo5b" cx="35%" cy="30%" r="75%"><stop offset="0" stop-color="#D6D0FF"/><stop offset=".35" stop-color="#B5ACFF"/><stop offset=".8" stop-color="#7B5CFF"/><stop offset="1" stop-color="#1a1440"/></radialGradient>
 </defs><rect width="320" height="200" fill="url(#bgdemo5b)"/>
-<g stroke="rgba(172,199,252,.10)" stroke-width="1"><path d="M20 0V200"/><path d="M60 0V200"/><path d="M100 0V200"/><path d="M140 0V200"/><path d="M180 0V200"/><path d="M220 0V200"/><path d="M260 0V200"/><path d="M300 0V200"/><path d="M0 20H320"/><path d="M0 60H320"/><path d="M0 100H320"/><path d="M0 140H320"/><path d="M0 180H320"/></g><g opacity="0.8"><path d="M60 120l26 -13.0l26 13.0l-26 13.0Z" fill="url(#ademo5b)"/><path d="M60 120v26l26 13.0v-26Z" fill="url(#bdemo5b)"/><path d="M112 120v26l-26 13.0v-26Z" fill="#2f2a7a"/></g><g opacity="0.8"><path d="M220 110l26 -13.0l26 13.0l-26 13.0Z" fill="url(#ademo5b)"/><path d="M220 110v26l26 13.0v-26Z" fill="url(#bdemo5b)"/><path d="M272 110v26l-26 13.0v-26Z" fill="#2f2a7a"/></g><rect x="138" y="92" width="44" height="40" rx="10" fill="url(#ademo5b)"/><circle cx="152" cy="110" r="4" fill="#F2F7D7"/><circle cx="168" cy="110" r="4" fill="#F2F7D7"/><path d="M160 92V76" stroke="#ACC7FC" stroke-width="3"/><circle cx="160" cy="72" r="5" fill="url(#sdemo5b)"/><path d="M146 132l-8 26M174 132l8 26" stroke="#4557FF" stroke-width="6" stroke-linecap="round"/><path d="M80 170c40-20 120-20 160 0" fill="none" stroke="#6A48FF" stroke-width="2" stroke-dasharray="3 5"/></svg><figcaption><span data-i18n="demo5.t">机器人训练场景</span><em data-i18n="demo5.g">具身智能</em></figcaption></figure><figure class="demo-tile"><svg class="demo-art" viewBox="0 0 320 200" aria-hidden="true"><defs>
+<g stroke="rgba(181,172,255,.10)" stroke-width="1"><path d="M20 0V200"/><path d="M60 0V200"/><path d="M100 0V200"/><path d="M140 0V200"/><path d="M180 0V200"/><path d="M220 0V200"/><path d="M260 0V200"/><path d="M300 0V200"/><path d="M0 20H320"/><path d="M0 60H320"/><path d="M0 100H320"/><path d="M0 140H320"/><path d="M0 180H320"/></g><g opacity="0.8"><path d="M60 120l26 -13.0l26 13.0l-26 13.0Z" fill="url(#ademo5b)"/><path d="M60 120v26l26 13.0v-26Z" fill="url(#bdemo5b)"/><path d="M112 120v26l-26 13.0v-26Z" fill="#2f2a7a"/></g><g opacity="0.8"><path d="M220 110l26 -13.0l26 13.0l-26 13.0Z" fill="url(#ademo5b)"/><path d="M220 110v26l26 13.0v-26Z" fill="url(#bdemo5b)"/><path d="M272 110v26l-26 13.0v-26Z" fill="#2f2a7a"/></g><rect x="138" y="92" width="44" height="40" rx="10" fill="url(#ademo5b)"/><circle cx="152" cy="110" r="4" fill="#D6D0FF"/><circle cx="168" cy="110" r="4" fill="#D6D0FF"/><path d="M160 92V76" stroke="#B5ACFF" stroke-width="3"/><circle cx="160" cy="72" r="5" fill="url(#sdemo5b)"/><path d="M146 132l-8 26M174 132l8 26" stroke="#7B5CFF" stroke-width="6" stroke-linecap="round"/><path d="M80 170c40-20 120-20 160 0" fill="none" stroke="#6A48FF" stroke-width="2" stroke-dasharray="3 5"/></svg><figcaption><span data-i18n="demo5.t">机器人训练场景</span><em data-i18n="demo5.g">具身智能</em></figcaption></figure><figure class="demo-tile"><svg class="demo-art" viewBox="0 0 320 200" aria-hidden="true"><defs>
 <linearGradient id="bgdemo6b" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#16123a"/><stop offset="1" stop-color="#0b0b10"/></linearGradient>
-<linearGradient id="ademo6b" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#ACC7FC"/><stop offset=".55" stop-color="#6A48FF"/><stop offset="1" stop-color="#2a1d6e"/></linearGradient>
-<linearGradient id="bdemo6b" x1="1" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#4557FF"/><stop offset="1" stop-color="#140f33"/></linearGradient>
-<radialGradient id="sdemo6b" cx="35%" cy="30%" r="75%"><stop offset="0" stop-color="#F2F7D7"/><stop offset=".35" stop-color="#ACC7FC"/><stop offset=".8" stop-color="#4557FF"/><stop offset="1" stop-color="#1a1440"/></radialGradient>
+<linearGradient id="ademo6b" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#B5ACFF"/><stop offset=".55" stop-color="#6A48FF"/><stop offset="1" stop-color="#2a1d6e"/></linearGradient>
+<linearGradient id="bdemo6b" x1="1" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#7B5CFF"/><stop offset="1" stop-color="#140f33"/></linearGradient>
+<radialGradient id="sdemo6b" cx="35%" cy="30%" r="75%"><stop offset="0" stop-color="#D6D0FF"/><stop offset=".35" stop-color="#B5ACFF"/><stop offset=".8" stop-color="#7B5CFF"/><stop offset="1" stop-color="#1a1440"/></radialGradient>
 </defs><rect width="320" height="200" fill="url(#bgdemo6b)"/>
-<g stroke="rgba(172,199,252,.10)" stroke-width="1"><path d="M20 0V200"/><path d="M60 0V200"/><path d="M100 0V200"/><path d="M140 0V200"/><path d="M180 0V200"/><path d="M220 0V200"/><path d="M260 0V200"/><path d="M300 0V200"/><path d="M0 20H320"/><path d="M0 60H320"/><path d="M0 100H320"/><path d="M0 140H320"/><path d="M0 180H320"/></g><rect x="70" y="50" width="180" height="104" rx="10" fill="url(#ademo6b)" opacity=".9"/><path d="M70 64h180M70 140h180" stroke="#0b0b10" stroke-width="2" stroke-dasharray="6 6"/><path d="M148 86v32l28-16Z" fill="#F2F7D7"/><path d="M70 172h180" stroke="#4557FF" stroke-width="3"/><circle cx="130" cy="172" r="5" fill="#F2F7D7"/></svg><figcaption><span data-i18n="demo6.t">3D 资产生成产品短片</span><em data-i18n="demo6.g">LuxReal 视频</em></figcaption></figure></div></div></div>
+<g stroke="rgba(181,172,255,.10)" stroke-width="1"><path d="M20 0V200"/><path d="M60 0V200"/><path d="M100 0V200"/><path d="M140 0V200"/><path d="M180 0V200"/><path d="M220 0V200"/><path d="M260 0V200"/><path d="M300 0V200"/><path d="M0 20H320"/><path d="M0 60H320"/><path d="M0 100H320"/><path d="M0 140H320"/><path d="M0 180H320"/></g><rect x="70" y="50" width="180" height="104" rx="10" fill="url(#ademo6b)" opacity=".9"/><path d="M70 64h180M70 140h180" stroke="#0b0b10" stroke-width="2" stroke-dasharray="6 6"/><path d="M148 86v32l28-16Z" fill="#D6D0FF"/><path d="M70 172h180" stroke="#7B5CFF" stroke-width="3"/><circle cx="130" cy="172" r="5" fill="#D6D0FF"/></svg><figcaption><span data-i18n="demo6.t">3D 资产生成产品短片</span><em data-i18n="demo6.g">LuxReal 视频</em></figcaption></figure></div></div></div>
         </div>
       </div>
     </div>
@@ -1309,25 +1309,25 @@ body.modal-open { overflow: hidden; }
             <span class="sp-name" data-i18n="cr1.t">群核技术栈应用</span>
             <span class="sp-more"><span class="sp-more-in"><span class="sp-rule mono" data-i18n="sp.rule">评分说明</span><span data-i18n="cr1.d">群核技术栈在项目中承担核心作用。</span></span></span>
           </button>
-          <button type="button" class="sp-tile sp-t1" data-i="1" style="--c:#5A52FF;--d:70ms" aria-expanded="false">
+          <button type="button" class="sp-tile sp-t1" data-i="1" style="--c:#7B5CFF;--d:70ms" aria-expanded="false">
             <span class="sp-no mono">02</span>
             <b class="sp-pct">25<small>%</small></b>
             <span class="sp-name" data-i18n="cr2.t">作品有趣程度</span>
             <span class="sp-more"><span class="sp-more-in"><span class="sp-rule mono" data-i18n="sp.rule">评分说明</span><span data-i18n="cr2.d">作品玩法、空间交互富有创意趣味性，体验感吸引人；提交视频清晰呈现趣味亮点，具备对外展示、引发大众讨论的传播潜力。</span></span></span>
           </button>
-          <button type="button" class="sp-tile sp-t2" data-i="2" style="--c:#4557FF;--d:140ms" aria-expanded="false">
+          <button type="button" class="sp-tile sp-t2" data-i="2" style="--c:#7B5CFF;--d:140ms" aria-expanded="false">
             <span class="sp-no mono">03</span>
             <b class="sp-pct">20<small>%</small></b>
             <span class="sp-name" data-i18n="cr3.t">创新性</span>
             <span class="sp-more"><span class="sp-more-in"><span class="sp-rule mono" data-i18n="sp.rule">评分说明</span><span data-i18n="cr3.d">方案、交互、概念具备新意，区别于现有常见产品思路。</span></span></span>
           </button>
-          <button type="button" class="sp-tile sp-t3" data-i="3" style="--c:#7F9BFD;--d:210ms" aria-expanded="false">
+          <button type="button" class="sp-tile sp-t3" data-i="3" style="--c:#988DFF;--d:210ms" aria-expanded="false">
             <span class="sp-no mono">04</span>
             <b class="sp-pct">20<small>%</small></b>
             <span class="sp-name" data-i18n="cr4.t">完成度</span>
             <span class="sp-more"><span class="sp-more-in"><span class="sp-rule mono" data-i18n="sp.rule">评分说明</span><span data-i18n="cr4.d">核心体验完整，Demo 稳定可运行，材料与成果匹配。</span></span></span>
           </button>
-          <button type="button" class="sp-tile sp-t4" data-i="4" style="--c:#C9D9FD;--d:280ms" aria-expanded="false">
+          <button type="button" class="sp-tile sp-t4" data-i="4" style="--c:#CFC8FF;--d:280ms" aria-expanded="false">
             <span class="sp-no mono">05</span>
             <b class="sp-pct">5<small>%</small></b>
             <span class="sp-name" data-i18n="cr5.t">传播</span>
@@ -1378,9 +1378,9 @@ body.modal-open { overflow: hidden; }
         </div>
         <div class="res-media"><video class="res-vid" muted loop playsinline aria-hidden="true"></video><svg class="res-art" viewBox="0 0 220 220" aria-hidden="true">
           <defs>
-            <radialGradient id="rsph" cx="35%" cy="30%" r="75%"><stop offset="0" stop-color="#F2F7D7"/><stop offset=".3" stop-color="#ACC7FC"/><stop offset=".72" stop-color="#4557FF"/><stop offset="1" stop-color="#1a1440"/></radialGradient>
-            <linearGradient id="rtri1" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#ACC7FC"/><stop offset=".55" stop-color="#6A48FF"/><stop offset="1" stop-color="#2a1d6e"/></linearGradient>
-            <linearGradient id="rtri2" x1="1" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#4557FF"/><stop offset="1" stop-color="#140f33"/></linearGradient>
+            <radialGradient id="rsph" cx="35%" cy="30%" r="75%"><stop offset="0" stop-color="#D6D0FF"/><stop offset=".3" stop-color="#B5ACFF"/><stop offset=".72" stop-color="#7B5CFF"/><stop offset="1" stop-color="#1a1440"/></radialGradient>
+            <linearGradient id="rtri1" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#B5ACFF"/><stop offset=".55" stop-color="#6A48FF"/><stop offset="1" stop-color="#2a1d6e"/></linearGradient>
+            <linearGradient id="rtri2" x1="1" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#7B5CFF"/><stop offset="1" stop-color="#140f33"/></linearGradient>
             <radialGradient id="rglow"><stop offset="0" stop-color="#6A48FF" stop-opacity=".45"/><stop offset="1" stop-color="#6A48FF" stop-opacity="0"/></radialGradient>
           </defs>
           <ellipse cx="120" cy="200" rx="90" ry="14" fill="url(#rglow)"/>
@@ -1396,7 +1396,7 @@ body.modal-open { overflow: hidden; }
           <p class="api-desc" data-i18n="res.api.d">Aholo API 集成了 3D 物体生成、世界生成、云端渲染与重建等多套 API。</p>
         </article>
         <article class="res-item res-lux reveal d2">
-          <svg class="res-thumb" viewBox="0 0 64 78" aria-hidden="true"><defs><linearGradient id="rth3" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#6A48FF"/><stop offset=".6" stop-color="#4557FF"/><stop offset="1" stop-color="#ACC7FC"/></linearGradient></defs><rect width="64" height="78" rx="6" fill="#18181b"/><rect x="8" y="20" width="48" height="38" rx="5" fill="url(#rth3)" opacity=".9"/><path d="M8 26h48M8 52h48" stroke="#18181b" stroke-width="1.5" stroke-dasharray="3 3"/><path d="M28 32v14l12-7Z" fill="#F2F7D7"/></svg>
+          <svg class="res-thumb" viewBox="0 0 64 78" aria-hidden="true"><defs><linearGradient id="rth3" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#6A48FF"/><stop offset=".6" stop-color="#7B5CFF"/><stop offset="1" stop-color="#B5ACFF"/></linearGradient></defs><rect width="64" height="78" rx="6" fill="#18181b"/><rect x="8" y="20" width="48" height="38" rx="5" fill="url(#rth3)" opacity=".9"/><path d="M8 26h48M8 52h48" stroke="#18181b" stroke-width="1.5" stroke-dasharray="3 3"/><path d="M28 32v14l12-7Z" fill="#D6D0FF"/></svg>
           <div>
             <h4><span data-i18n="res.r3.t">LuxReal</span><em data-i18n="res.opt">可选</em></h4>
             <p data-i18n="res.r3.d">LuxReal 是群核科技基于 3D 技术打造的 AI 视频创作 Agent。在保证时空一致性的前提下，快速生成高度可控且富有创意的视频内容。</p>
@@ -1492,9 +1492,9 @@ body.modal-open { overflow: hidden; }
         </div>
         <div class="res-media"><video class="res-vid" muted loop playsinline aria-hidden="true"></video><svg class="res-art" viewBox="0 0 220 220" aria-hidden="true">
           <defs>
-            <radialGradient id="mrsph" cx="35%" cy="30%" r="75%"><stop offset="0" stop-color="#F2F7D7"/><stop offset=".3" stop-color="#ACC7FC"/><stop offset=".72" stop-color="#4557FF"/><stop offset="1" stop-color="#1a1440"/></radialGradient>
-            <linearGradient id="mrtri1" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#ACC7FC"/><stop offset=".55" stop-color="#6A48FF"/><stop offset="1" stop-color="#2a1d6e"/></linearGradient>
-            <linearGradient id="mrtri2" x1="1" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#4557FF"/><stop offset="1" stop-color="#140f33"/></linearGradient>
+            <radialGradient id="mrsph" cx="35%" cy="30%" r="75%"><stop offset="0" stop-color="#D6D0FF"/><stop offset=".3" stop-color="#B5ACFF"/><stop offset=".72" stop-color="#7B5CFF"/><stop offset="1" stop-color="#1a1440"/></radialGradient>
+            <linearGradient id="mrtri1" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#B5ACFF"/><stop offset=".55" stop-color="#6A48FF"/><stop offset="1" stop-color="#2a1d6e"/></linearGradient>
+            <linearGradient id="mrtri2" x1="1" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#7B5CFF"/><stop offset="1" stop-color="#140f33"/></linearGradient>
             <radialGradient id="mrglow"><stop offset="0" stop-color="#6A48FF" stop-opacity=".45"/><stop offset="1" stop-color="#6A48FF" stop-opacity="0"/></radialGradient>
           </defs>
           <ellipse cx="120" cy="200" rx="90" ry="14" fill="url(#mrglow)"/>
@@ -1510,7 +1510,7 @@ body.modal-open { overflow: hidden; }
           <p class="api-desc" data-i18n="res.api.d">Aholo API 集成了 3D 物体生成、世界生成、云端渲染与重建等多套 API。</p>
         </article>
         <article class="res-item res-lux">
-          <svg class="res-thumb" viewBox="0 0 64 78" aria-hidden="true"><defs><linearGradient id="mrth3" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#6A48FF"/><stop offset=".6" stop-color="#4557FF"/><stop offset="1" stop-color="#ACC7FC"/></linearGradient></defs><rect width="64" height="78" rx="6" fill="#18181b"/><rect x="8" y="20" width="48" height="38" rx="5" fill="url(#mrth3)" opacity=".9"/><path d="M8 26h48M8 52h48" stroke="#18181b" stroke-width="1.5" stroke-dasharray="3 3"/><path d="M28 32v14l12-7Z" fill="#F2F7D7"/></svg>
+          <svg class="res-thumb" viewBox="0 0 64 78" aria-hidden="true"><defs><linearGradient id="mrth3" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#6A48FF"/><stop offset=".6" stop-color="#7B5CFF"/><stop offset="1" stop-color="#B5ACFF"/></linearGradient></defs><rect width="64" height="78" rx="6" fill="#18181b"/><rect x="8" y="20" width="48" height="38" rx="5" fill="url(#mrth3)" opacity=".9"/><path d="M8 26h48M8 52h48" stroke="#18181b" stroke-width="1.5" stroke-dasharray="3 3"/><path d="M28 32v14l12-7Z" fill="#D6D0FF"/></svg>
           <div>
             <h4><span data-i18n="res.r3.t">LuxReal</span><em data-i18n="res.opt">可选</em></h4>
             <p data-i18n="res.r3.d">LuxReal 是群核科技基于 3D 技术打造的 AI 视频创作 Agent。在保证时空一致性的前提下，快速生成高度可控且富有创意的视频内容。</p>
