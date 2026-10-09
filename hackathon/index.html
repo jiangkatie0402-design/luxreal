@@ -392,7 +392,7 @@ html[lang="zh-CN"] .sec-title { letter-spacing: .02em; line-height: 1.22; }
 /* ---------- Timeline ---------- */
 /* 日程 — proportional rail with phases, live "today" cursor, numbered events */
 .tl2-track { position: relative; padding: 0 2px; }
-.tl2-top { position: relative; height: 92px; }   /* room for the today pill above the event markers */
+.tl2-top { position: relative; height: 90px; }   /* today pill + short arrow, then the event numbers above the bar */
 .tl2-ev { position: absolute; z-index: 4; bottom: 0; transform: translateX(-50%); display: flex; flex-direction: column; align-items: center; }
 .tl2-ev b { display: grid; place-items: center; width: 24px; height: 24px; border-radius: 50%; font-size: 12px; font-weight: 700; color: var(--text); background: var(--surface-2); border: 1px solid var(--border-strong); transition: all .3s; }
 .tl2-ev::after { content: ''; width: 1px; height: 12px; background: var(--border-strong); }
@@ -416,9 +416,9 @@ html[lang="zh-CN"] .sec-title { letter-spacing: .02em; line-height: 1.22; }
 .tl2-ms .mono { font-size: 12.5px; font-weight: 600; color: var(--ice); }
 .tl2-ms strong { font-size: 15px; font-weight: 700; }
 .tl2-c { transform: translateX(-50%); align-items: center; } .tl2-r { transform: translateX(-100%); align-items: flex-end; }
-.tl2-today { position: absolute; top: 0; bottom: 2px; left: 0; z-index: 3; pointer-events: none; transition: left 1.4s var(--ease); }
-/* today = a speech-bubble pill with a small caret; the bright edge of the progress fill marks the exact spot on the bar */
-.tl2-today::before { content: ''; position: absolute; left: -5px; top: 26px; border: 5px solid transparent; border-top: 6px solid #fff; border-bottom: 0; }
+.tl2-today { position: absolute; top: 0; height: 50px;   /* arrow stops just above the event numbers */ left: 0; z-index: 3; pointer-events: none; transition: left 1.4s var(--ease); }
+.tl2-today::after { content: ''; position: absolute; left: 0; top: 26px; bottom: 6px; width: 2px; margin-left: -1px; background: #fff; box-shadow: 0 0 10px rgba(255,255,255,.6); }
+.tl2-today::before { content: ''; position: absolute; left: -5px; bottom: 0; border: 5px solid transparent; border-top: 6px solid #fff; border-bottom: 0; }
 .tl2-pill { position: absolute; top: 0; left: 0; transform: translateX(-50%); padding: 4px 10px; border-radius: var(--radius-pill); background: #fff; color: #101012; font-size: 12px; font-weight: 700; white-space: nowrap; }
 .tl2-pill b { font-weight: 700; }
 .tl2-today.edge-l .tl2-pill { transform: none; left: -12px; } .tl2-today.edge-r .tl2-pill { transform: translateX(-100%); left: 8px; }
