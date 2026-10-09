@@ -1831,11 +1831,13 @@ document.querySelectorAll('.res-main').forEach(card => card.addEventListener('po
     'st.work': ['作品提交', 'Submission'], 'st.workD': ['完成创作，让想法成为真实作品', 'Finish your build and turn the idea into a real project'],
     'st.review': ['作品评审', 'Judging'], 'st.reviewD': ['专业评委与玩家评委共同评审参赛作品', 'Expert and player judges review the projects'],
     'st.show': ['结果公示 · 作品展示', 'Results & showcase'], 'st.showD': ['公布获奖名单，展示全部参赛作品', 'Winners are announced and all projects are showcased'],
+    'tp.title': ['选题名称', 'Topic title'], 'tp.desc': ['选题简介', 'Topic summary'], 'tp.descPh': ['想做什么、为谁而做、Lux3D 在其中如何发挥作用…', 'What you’ll build, who it’s for and how Lux3D fits in…'],
+    'tp.e.title': ['请输入 2–40 个字符的选题名称', 'Enter a topic title of 2–40 characters'], 'tp.e.desc': ['请输入 10–500 个字符的选题简介', 'Enter a summary of 10–500 characters'],
     'tp.btn': ['提交选题', 'Submit topic'], 'tp.edit': ['修改选题', 'Edit topic'], 'tp.saved': ['选题已提交', 'Topic submitted'], 'tp.save': ['提交选题', 'Submit topic'],
     'tp.modalD': ['选题信息会自动带入作品提交表单，作品提交截止前可随时修改。', 'Your topic is carried into the submission form and can be edited until the submission deadline.'],
     'tp.needTeam': ['请先在下方创建或加入团队，并完成组队确认', 'Create or join a team below and confirm it first'], 'tp.captainOnly': ['选题由队长提交', 'The team captain submits the topic'],
     'tp.done': ['已提交选题：', 'Topic submitted: '], 'w.trackOtherPh': ['请填写应用方向', 'Describe the application area'], 'w.e.trackOther': ['请填写应用方向', 'Describe your application area'],
-    'reg.waitTeam': ['待组队', 'Team pending'], 'reg.teamed': ['已组队', 'Team formed'], 'reg.topicT': ['组队并提交选题', 'Form a team & submit your topic'],
+    'reg.waitTeam': ['待组队', 'Team pending'], 'reg.teamed': ['已组队', 'Team formed'], 'reg.topicT': ['提交选题并领取积分', 'Submit your topic & claim credits'],
     'reg.topicD': ['完善团队信息并提交选题，领取第二轮足量创作积分', 'Complete your team info and submit a topic to receive the second, full round of creation credits'],
     'rw.got': ['已领取', 'received'], 'rw.teamOnce': ['每个团队仅发放一次，按首次确认时的队员平均分配', 'Granted once per team, split evenly among the members at first confirmation'],
     'team.confirm': ['确认组队', 'Confirm team'], 'team.confirmD': ['确认后即成为正式团队，之后仍可换人或解散。', 'Confirming makes the team official; you can still change members or disband later.'],
@@ -2021,16 +2023,27 @@ document.querySelectorAll('.res-main').forEach(card => card.addEventListener('po
     const st = rewardStatus(since); if (!st.done) rewardTimer = setTimeout(() => { if (view === 'my') renderMy(); }, st.left + 50);
   }
   function renderReg() {
-    const p = registered() ? state.profile : null;
-    if (!p) {
-      $('#myReg').innerHTML = `<div class="reg-row"><span class="reg-avatar"></span>
-          <div class="reg-main"><span class="badge">${T('reg.none')}</span><h3>${T('reg.startT')}</h3><p>${T('reg.startD')}</p></div>
-          <a href="#register" class="btn btn-primary" data-start-reg>${(isEN() ? EN : ZH)['cta.register']}</a></div>
-        <div class="reg-tips"><div><strong>${T('rw.reg')} · ${T('rw.none')}</strong><span>${T('rw.once')}</span></div>
-          <div><strong>${T('rw.team')} · ${T('rw.none')}</strong><span>${T('rw.teamOnce')}</span></div></div>`;
+    const p = registered() ? state.profile : null, tm = p ? state.team : null;
+    // Before the team is confirmed: the registration summary. After: the topic step takes over this card.
+    if (!tm || !tm.confirmed) {
+      const chips = p
+        ? `<div class="chip"><strong>${T('rw.reg')} · <b>${T('rw.pending')}</b></strong><span>${T('rw.acct')}</span></div>
+           <div class="chip"><strong>${T('rw.team')} · ${T('rw.none')}</strong><span>${T('rw.onConfirm')}</span></div>`
+        : `<div class="chip"><strong>${T('rw.reg')} · ${T('rw.afterReg')}</strong><span>${T('rw.once')}</span></div>
+           <div class="chip"><strong>${T('rw.team')} · ${T('rw.none')}</strong><span>${T('rw.onConfirm')}</span></div>`;
+      $('#myReg').innerHTML = p
+        ? `<div class="reg-row"><span class="reg-avatar on">${esc(p.name.slice(0, 1).toUpperCase())}</span>
+            <div class="reg-main"><span class="badge ok">${T('reg.done')}</span><h3>${esc(p.name)}</h3>
+            <p>${T('reg.id')} <span class="mono">${esc(p.id)}</span> · ${T('role.' + p.role)}${p.city ? ' · ' + esc(p.city) : ''}</p></div>
+            <div class="chips">${chips}</div></div>
+           <p class="reg-note">${T('reg.note')}</p>`
+        : `<div class="reg-row"><span class="reg-avatar"></span>
+            <div class="reg-main"><span class="badge">${T('reg.none')}</span><h3>${T('reg.startT')}</h3><p>${T('reg.startD')}</p></div>
+            <div class="chips">${chips}</div>
+            <a href="#register" class="btn btn-primary" data-start-reg>${(isEN() ? EN : ZH)['cta.register']}</a></div>`;
       return;
     }
-    const tm = state.team, teamed = !!(tm && tm.confirmed), topic = tm && tm.topic, open = Date.now() < DEADLINE;
+    const teamed = true, topic = tm.topic, open = Date.now() < DEADLINE;
     const btn = open && !(topic && !tm.captain) ? `<button type="button" class="btn ${topic ? 'btn-ghost' : 'btn-primary'}" data-act="topic">${T(topic ? 'tp.edit' : 'tp.btn')}</button>` : '';
     $('#myReg').innerHTML = `<div class="reg-row"><span class="reg-avatar on">${esc(p.name.slice(0, 1).toUpperCase())}</span>
         <div class="reg-main"><span class="badge${teamed ? ' ok' : ''}">${T(teamed ? 'reg.teamed' : 'reg.waitTeam')}</span><h3>${T('reg.topicT')}</h3>
@@ -2049,11 +2062,10 @@ document.querySelectorAll('.res-main').forEach(card => card.addEventListener('po
     if (!tm.captain) { toast(T('tp.captainOnly')); return; }
     const d = tm.topic || {}, v = k => esc(d[k] || '');
     topicForm.innerHTML = `<h3 class="modal-title">${T(tm.topic ? 'tp.edit' : 'tp.btn')}</h3><p class="modal-desc">${T('tp.modalD')}</p>
-      <label class="field"><span>${T('w.title')}</span><input type="text" name="title" maxlength="40" value="${v('title')}"><em class="field-error"></em></label>
+      <label class="field"><span>${T('tp.title')}</span><input type="text" name="title" maxlength="40" value="${v('title')}"><em class="field-error"></em></label>
       <label class="field"><span>${T('w.track')}</span><select name="track"><option value="">${T('w.trackNone')}</option>${TRACKS.map(t => `<option value="${t}"${d.track === t ? ' selected' : ''}>${T('w.t.' + t)}</option>`).join('')}</select>
         <input type="text" name="trackOther" maxlength="20" placeholder="${T('w.trackOtherPh')}" aria-label="${T('w.trackOtherPh')}" value="${v('trackOther')}"${d.track === 'other' ? '' : ' hidden'} style="margin-top:8px"><em class="field-error"></em></label>
-      <label class="field"><span>${T('w.tagline')}</span><input type="text" name="tagline" maxlength="60" value="${v('tagline')}"><em class="field-error"></em></label>
-      <label class="field"><span>${T('w.desc')}</span><textarea name="desc" maxlength="1000" placeholder="${T('w.descPh')}">${v('desc')}</textarea><em class="field-error"></em></label>
+      <label class="field"><span>${T('tp.desc')}</span><textarea name="desc" maxlength="500" placeholder="${T('tp.descPh')}">${v('desc')}</textarea><em class="field-error"></em></label>
       <button type="submit" class="btn btn-primary btn-block">${T('tp.save')}</button>`;
     openModal('topic');
   }
@@ -2065,12 +2077,11 @@ document.querySelectorAll('.res-main').forEach(card => card.addEventListener('po
   topicForm.addEventListener('submit', e => {
     e.preventDefault(); if (busy) return;
     const g = k => topicForm.elements[k].value.trim();
-    const d = { title: g('title'), track: g('track'), trackOther: g('track') === 'other' ? g('trackOther') : '', tagline: g('tagline'), desc: g('desc') };
+    const d = { title: g('title'), track: g('track'), trackOther: g('track') === 'other' ? g('trackOther') : '', desc: g('desc') };
     const errs = {
-      title: d.title.length < 2 || d.title.length > 40 ? T('w.e.title') : '',
+      title: d.title.length < 2 || d.title.length > 40 ? T('tp.e.title') : '',
       track: !d.track ? T('w.e.track') : d.track === 'other' && !d.trackOther ? T('w.e.trackOther') : '',
-      tagline: d.tagline.length < 4 || d.tagline.length > 60 ? T('w.e.tagline') : '',
-      desc: d.desc.length < 10 || d.desc.length > 1000 ? T('w.e.desc') : '',
+      desc: d.desc.length < 10 || d.desc.length > 500 ? T('tp.e.desc') : '',
     };
     Object.keys(errs).forEach(k => { const el = topicForm.elements[k === 'track' && d.track === 'other' ? 'trackOther' : k]; el.closest('.field').querySelector('.field-error').textContent = errs[k]; el.setAttribute('aria-invalid', errs[k] ? 'true' : 'false'); });
     const first = Object.keys(errs).find(k => errs[k]);
