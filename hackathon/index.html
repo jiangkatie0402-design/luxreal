@@ -475,11 +475,33 @@ html[lang="zh-CN"] .rules-title { font-family: var(--font-title); font-weight: 4
 .sp-stage.split .sp-grid { padding-top: 34px; }
 
 .jg-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
-.jg-card { display: flex; align-items: center; gap: 18px; padding: 26px; border: 1px solid var(--border); border-radius: var(--radius); background: var(--surface); }
-.jg-icon { width: 56px; height: 56px; border-radius: 50%; display: grid; place-items: center; border: 1px solid var(--border-strong); background: var(--bg-2); flex-shrink: 0; }
-.jg-icon svg { width: 26px; height: 26px; }
-.jg-card h4 { font-size: 20px; font-weight: 700; margin-bottom: 2px; }
-.jg-card p { font-size: 14px; color: var(--text-muted); }
+.jg-card { display: flex; flex-direction: column; gap: 22px; padding: 28px; border: 1px solid var(--border); border-radius: var(--radius); background: var(--surface); }
+.jg-head { display: flex; align-items: center; gap: 16px; }
+.jg-icon { width: 52px; height: 52px; border-radius: 50%; display: grid; place-items: center; border: 1px solid var(--border-strong); background: var(--bg-2); flex-shrink: 0; }
+.jg-icon svg { width: 24px; height: 24px; }
+.jg-card h4 { font-size: 20px; font-weight: 700; margin-bottom: 4px; }
+.jg-head p { font-size: 14px; color: var(--text-muted); line-height: 1.6; }
+.jg-pro.has-judges, .jg-pro.has-judges + .jg-player { grid-column: 1 / -1; }
+.jg-list { display: grid; grid-template-columns: repeat(auto-fill, minmax(min(300px, 100%), 1fr)); gap: 12px; }
+.jg-person { display: flex; gap: 14px; padding: 18px; border: 1px solid var(--border-subtle); border-radius: var(--radius-sm); background: var(--bg-2); }
+.jg-ava { width: 56px; height: 56px; border-radius: 50%; flex-shrink: 0; display: grid; place-items: center; overflow: hidden; background: var(--surface-2); color: var(--text-muted); }
+.jg-ava svg { width: 30px; height: 30px; } .jg-ava img { width: 100%; height: 100%; object-fit: cover; }
+.jg-info { min-width: 0; display: flex; flex-direction: column; gap: 4px; }
+.jg-info h5 { font-size: 16px; font-weight: 700; }
+.jg-role { font-size: 13px; color: var(--ice); }
+.jg-bio { font-size: 13px; color: var(--text-muted); line-height: 1.65; margin-top: 4px; }
+.jg-focus { font-size: 13px; color: var(--text-soft); line-height: 1.6; } .jg-focus em { font-style: normal; color: var(--text-muted); margin-right: 6px; }
+.jg-person.is-tba { border-style: dashed; border-color: var(--border); background: transparent; align-items: center; }
+.jg-person.is-tba .jg-ava { border: 1px dashed var(--border-strong); background: transparent; }
+.jg-person.is-tba .jg-role { color: var(--text-muted); }
+.jg-sk { display: block; height: 8px; width: 82%; margin-top: 8px; border-radius: 4px; background: linear-gradient(90deg, var(--surface-2) 0%, #26262b 50%, var(--surface-2) 100%); background-size: 200% 100%; animation: jgSk 2.4s linear infinite; }
+.jg-sk.s2 { width: 56%; margin-top: 2px; }
+@keyframes jgSk { from { background-position: 100% 0; } to { background-position: -100% 0; } }
+@media (prefers-reduced-motion: reduce) { .jg-sk { animation: none; } }
+.jg-stat { display: flex; align-items: baseline; gap: 12px; padding: 18px 0 0; border-top: 1px solid var(--border-subtle); }
+.jg-stat b { font-family: var(--font-title); font-size: 64px; line-height: 1; background: var(--grad); -webkit-background-clip: text; background-clip: text; color: transparent; }
+.jg-stat span { font-size: 16px; font-weight: 600; color: var(--text-soft); }
+.jg-note { font-size: 14px; color: var(--text-muted); line-height: 1.75; margin-top: -10px; }
 
 
 /* ---------- FAQ ---------- */
@@ -1207,8 +1229,18 @@ html[lang="zh-CN"] .eco-head h2 { font-family: var(--font-title); font-weight: 4
     <div class="jr-block reveal" id="judges">
       <div class="jr-head"><h3 class="rules-title" data-i18n="jg.title">评委</h3></div>
       <div class="jg-grid">
-        <article class="jg-card"><span class="jg-icon"><svg viewBox="0 0 24 24" fill="none" stroke="url(#g1)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3 4 7v5c0 4.5 3.4 8.3 8 9 4.6-.7 8-4.5 8-9V7l-8-4Z"/><path d="m9 12 2 2 4-4"/></svg></span><div><h4 data-i18n="jg.pro">专业评委</h4><p data-i18n="jg.tba">名单即将公布</p></div></article>
-        <article class="jg-card"><span class="jg-icon"><svg viewBox="0 0 24 24" fill="none" stroke="url(#g1)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="7" width="20" height="11" rx="5"/><path d="M7 11v3M5.5 12.5h3M15.5 12h.01M18 14h.01"/></svg></span><div><h4 data-i18n="jg.player">玩家评委</h4><p data-i18n="jg.tba">名单即将公布</p></div></article>
+        <article class="jg-card jg-pro" id="jgPro">
+          <header class="jg-head"><span class="jg-icon"><svg viewBox="0 0 24 24" fill="none" stroke="url(#g1)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3 4 7v5c0 4.5 3.4 8.3 8 9 4.6-.7 8-4.5 8-9V7l-8-4Z"/><path d="m9 12 2 2 4-4"/></svg></span><div><h4 data-i18n="jg.pro">专业评委</h4><p data-i18n="jg.proD">用专业视角选出最具实力与应用场景的作品</p></div></header>
+          <!-- Filled from JUDGES in the script below; while it is empty, one placeholder profile is shown. -->
+          <div class="jg-list" id="jgList">
+            <div class="jg-person is-tba"><span class="jg-ava"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"><circle cx="12" cy="9" r="3.6"/><path d="M5 20c1.2-3.6 3.8-5.4 7-5.4s5.8 1.8 7 5.4"/></svg></span><div class="jg-info"><h5 data-i18n="jg.tbaName">评委阵容陆续公布</h5><p class="jg-role" data-i18n="jg.tbaD">敬请期待…</p><span class="jg-sk"></span><span class="jg-sk s2"></span></div></div>
+          </div>
+        </article>
+        <article class="jg-card jg-player">
+          <header class="jg-head"><span class="jg-icon"><svg viewBox="0 0 24 24" fill="none" stroke="url(#g1)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="7" width="20" height="11" rx="5"/><path d="M7 11v3M5.5 12.5h3M15.5 12h.01M18 14h.01"/></svg></span><div><h4 data-i18n="jg.player">玩家评委</h4><p data-i18n="jg.playerD">用真实互动选出最心仪与最有意思的作品</p></div></header>
+          <div class="jg-stat"><b>50</b><span data-i18n="jg.playerN">名资深 AI 从业者</span></div>
+          <p class="jg-note" data-i18n="jg.playerNote">组成玩家评委团，从大众角度参与奖项评选。</p>
+        </article>
       </div>
     </div>
   </div>
@@ -1526,7 +1558,7 @@ const EN = {
   'res.must':'Required','res.lux.d':'Build your project around Lux3D<br>and turn your ideas into 3D content.',
   'res.opt':'Optional','res.api.t':'Aholo API','res.r1.t':'Spatial reconstruction','res.r1.d':'Build 3D scenes from the real world','res.r2.t':'Spatial generation','res.r2.d':'Explore more spatial content with AI','res.r3.t':'LuxReal','res.r3.d':'Generate videos with AI',
   'res.b.t':'Sign up to get creation credits and start your project','res.b.d':'Join the hackathon and explore new possibilities with your teammates.',
-  'dv.title':'What to submit','dv.desc':'Every project submits the materials below: all required items, plus bonus items where you can.','dv.must':'Required','dv.bonus':'Bonus','dv.mustD':'All three are needed','dv.bonusD':'Encouraged','dv1.t':'Project report (PDF or PPT)','dv1.d':'Document the journey from idea to result — <b>including process screenshots, key asset iterations or key result shots</b> — so judges quickly see what you built, how, and why it’s worth trying.','dv2.t':'Full demo link / promo video (either one)','dv2.d':'Submit a link where the project can be tried or run directly; or submit a demo video — edits, voice-over and captions are fine, but it must include real running footage','dv4.t':'Social media post link','dv4.d':'Publish a project introduction on a public social platform and submit the link; the post must stay public until results are announced.','dv5.t':'Source code','dv5.d':'A Git repository or a zipped codebase is encouraged.','cr.title':'Judging criteria','cr.desc':'Judges score each project across five dimensions totalling 100%.','cr1.t':'Use of Manycore tech stack','cr1.d':'Manycore’s technology plays a core role in the project.','cr2.t':'Fun factor','cr2.d':'Gameplay and spatial interaction are creative and fun; the video clearly shows the highlights and has the potential to spark public discussion.','cr3.t':'Innovation','cr3.d':'The approach, interaction or concept is fresh and different from common existing products.','cr4.t':'Completeness','cr4.d':'The core experience is complete, the demo runs reliably, and the materials match the result.','cr5.t':'Reach','cr5.d':'The project video is posted with the official hashtag on Xiaohongshu (China) / X (international).','cr.total':'Score breakdown','sp.hint':'Tap to reveal the breakdown','sp.reset':'Collapse','sp.rule':'How it is scored','jg.title':'Judges','jg.pro':'Expert judges','jg.player':'Player judges','jg.tba':'To be announced',
+  'dv.title':'What to submit','dv.desc':'Every project submits the materials below: all required items, plus bonus items where you can.','dv.must':'Required','dv.bonus':'Bonus','dv.mustD':'All three are needed','dv.bonusD':'Encouraged','dv1.t':'Project report (PDF or PPT)','dv1.d':'Document the journey from idea to result — <b>including process screenshots, key asset iterations or key result shots</b> — so judges quickly see what you built, how, and why it’s worth trying.','dv2.t':'Full demo link / promo video (either one)','dv2.d':'Submit a link where the project can be tried or run directly; or submit a demo video — edits, voice-over and captions are fine, but it must include real running footage','dv4.t':'Social media post link','dv4.d':'Publish a project introduction on a public social platform and submit the link; the post must stay public until results are announced.','dv5.t':'Source code','dv5.d':'A Git repository or a zipped codebase is encouraged.','cr.title':'Judging criteria','cr.desc':'Judges score each project across five dimensions totalling 100%.','cr1.t':'Use of Manycore tech stack','cr1.d':'Manycore’s technology plays a core role in the project.','cr2.t':'Fun factor','cr2.d':'Gameplay and spatial interaction are creative and fun; the video clearly shows the highlights and has the potential to spark public discussion.','cr3.t':'Innovation','cr3.d':'The approach, interaction or concept is fresh and different from common existing products.','cr4.t':'Completeness','cr4.d':'The core experience is complete, the demo runs reliably, and the materials match the result.','cr5.t':'Reach','cr5.d':'The project video is posted with the official hashtag on Xiaohongshu (China) / X (international).','cr.total':'Score breakdown','sp.hint':'Tap to reveal the breakdown','sp.reset':'Collapse','sp.rule':'How it is scored','jg.title':'Judges','jg.pro':'Expert judges','jg.proD':'A professional lens to pick the strongest projects with real-world use','jg.tbaName':'Judges to be announced','jg.tbaD':'More names coming soon…','jg.player':'Player judges','jg.playerD':'Real hands-on play to pick the most loved and most fun projects','jg.playerN':'seasoned AI practitioners','jg.playerNote':'form the player jury and help choose the awards from a public point of view.',
   'prizes.title2':'total prize pool','prizes.desc':'23 awards in total: a special award and first, second and third prizes, plus application, fun and people’s choice awards.',
   'p0.r':'Special Award','p0.n':'Award name TBA','p0.c':'1 winner','p1.r':'First Prize','p1.c':'1 winner','p2.r':'Second Prize','p2.c':'2 winners · per team','p2.t':'¥60,000 in total','p3.r':'Third Prize','p3.c':'3 winners · per team','p3.t':'¥30,000 in total',
   'aw1':'Application Award','aw1.d':'For projects that put Lux3D to real use in games, culture & tourism, film, 3D printing, embodied AI and more. Chosen from the TOP 50 by the expert judges.',
@@ -1637,6 +1669,25 @@ const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').match
   document.addEventListener('langchange', () => document.querySelectorAll('.tl2-card [data-state]').forEach(st => { if (st.dataset.k) st.textContent = T_('tl.' + st.dataset.k); }));
   const go = () => { today.style.left = pct + '%'; document.getElementById('tlFill').style.width = pct + '%'; };
   if (reduceMotion) go(); else new IntersectionObserver((es, o) => es.forEach(e => { if (e.isIntersecting) { go(); o.disconnect(); } }), { threshold: .3 }).observe(track);
+})();
+
+/* ============================================================
+   Expert judges — add people here as they are confirmed. Each field is [中文, English].
+   { name: ['张三', 'Zhang San'], role: ['…', '…'], bio: ['…', '…'], focus: ['…', '…'], photo: 'data:image/…' (optional) }
+   While the list is empty, the single "陆续公布" placeholder stays.
+   ============================================================ */
+const JUDGES = [];
+(function () {
+  const list = document.getElementById('jgList'); if (!list || !JUDGES.length) return;
+  const e = v => String(v).replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' })[c]);
+  const PERSON = list.querySelector('.jg-ava').innerHTML;
+  const render = () => {
+    const i = document.documentElement.lang === 'en' ? 1 : 0, L = f => e((f || [])[i] || (f || [])[0] || '');
+    list.innerHTML = JUDGES.map(j => `<div class="jg-person"><span class="jg-ava">${j.photo ? `<img src="${e(j.photo)}" alt="">` : PERSON}</span><div class="jg-info">
+      <h5>${L(j.name)}</h5><p class="jg-role">${L(j.role)}</p>${j.bio ? `<p class="jg-bio">${L(j.bio)}</p>` : ''}${j.focus ? `<p class="jg-focus"><em>${i ? 'Focus' : '评审关注点'}</em>${L(j.focus)}</p>` : ''}</div></div>`).join('');
+  };
+  document.getElementById('jgPro').classList.add('has-judges');
+  render(); document.addEventListener('langchange', render);
 })();
 
 const io = new IntersectionObserver(entries => entries.forEach(e => {
