@@ -212,6 +212,13 @@ html[lang="zh-CN"] .hero h1 { font-size: clamp(32px, 6.2vw, 84px); letter-spacin
 .kv-meta dt { font-size: clamp(11.5px, .7vw, 13px); color: var(--text-muted); margin-bottom: 8px; white-space: nowrap; }
 .kv-meta dd { margin: 0; font-size: clamp(14px, .95vw, 18px); font-weight: 600; color: var(--text); white-space: nowrap; }
 .kv-cta { position: absolute; z-index: 2; left: 4.41%; top: 72.5%; margin: 0; gap: 12px; }
+/* desktop: nudge the lotus and its side panels up-right so the title and the bottom row both stay clear */
+@media (min-width: 1200px) {
+  .kv-ov { left: 4%; top: 7.4074%; }
+  .kv-flower { left: 30.0417%; top: 25.5556%;
+    -webkit-mask-image: linear-gradient(90deg, transparent, #000 7%, #000 93%, transparent), linear-gradient(180deg, transparent, #000 9%, #000 86%, transparent);
+    mask-image: linear-gradient(90deg, transparent, #000 7%, #000 93%, transparent), linear-gradient(180deg, transparent, #000 9%, #000 86%, transparent); }
+}
 @media (min-width: 1200px) { .kv-cta .btn { height: clamp(44px, 2.7vw, 54px); padding: 0 clamp(18px, 1.35vw, 28px); font-size: clamp(14px, .82vw, 16px); } }
 @media (max-width: 1199px) {
   .kv { padding: 92px 0 0; }
