@@ -267,6 +267,8 @@ section.block { padding-block: var(--section-y); position: relative; }
 .sec-index::before { content: ''; width: 24px; height: 1px; background: var(--grad); }
 .sec-title { font-size: clamp(34px, 4.6vw, 60px); font-weight: 600; line-height: 1.08; letter-spacing: -.03em; }
 html[lang="zh-CN"] .sec-title { letter-spacing: .02em; line-height: 1.22; }
+.sec-head-stack { display: block; }
+.sec-head-stack .sec-desc { margin-top: 22px; max-width: 900px; }
 .sec-desc { font-size: 17px; color: var(--text-soft); font-weight: 500; max-width: 520px; }
 
 /* ---------- About ---------- */
@@ -1381,10 +1383,10 @@ html[lang="zh-CN"] .eco-head h2 { font-family: var(--font-title); font-weight: 4
 <!-- ======================= RESOURCES ======================= -->
 <section class="block" id="resources" style="padding-top:0">
   <div class="container">
-    <div class="sec-head">
+    <div class="sec-head sec-head-stack">
       <div class="reveal">
-        <div class="sec-index">04 — <span data-i18n="nav.resources">产品与资源</span></div>
-        <h2 class="sec-title" data-i18n="res.title">产品与资源</h2>
+        <div class="sec-index">04 — <span data-i18n="nav.resources">开放工具</span></div>
+        <h2 class="sec-title" data-i18n="res.title">开放工具</h2>
       </div>
       <p class="sec-desc reveal d1" data-i18n="res.desc">参赛即领海量积分：报名即可获得第一笔积分，完成组队及提交选题后即可获得超额积分，助你完成项目。</p>
     </div>
@@ -1666,7 +1668,7 @@ html[lang="zh-CN"] .eco-head h2 { font-family: var(--font-title); font-weight: 4
       </div>
       <div>
         <h5 data-i18n="foot.event">赛事</h5>
-        <ul><li><a href="#timeline" data-i18n="nav.timeline">赛程细则</a></li><li><a href="#prizes" data-i18n="nav.prizes">奖项与评审</a></li><li><a href="#resources" data-i18n="nav.resources">产品与资源</a></li><li><a href="#faq">FAQ</a></li></ul>
+        <ul><li><a href="#timeline" data-i18n="nav.timeline">赛程细则</a></li><li><a href="#prizes" data-i18n="nav.prizes">奖项与评审</a></li><li><a href="#resources" data-i18n="nav.resources">开放工具</a></li><li><a href="#faq">FAQ</a></li></ul>
       </div>
       <div>
         <h5 data-i18n="foot.product">产品</h5>
@@ -1691,7 +1693,7 @@ html[lang="zh-CN"] .eco-head h2 { font-family: var(--font-title); font-weight: 4
 const EN = {
   'pk1.t':'Full access to Manycore 3D technology','pk1.d0':'Participants get access to Manycore 3D tools and compute. The core model Aholo Lux3D balances quality and speed, and can be combined with agents into workflows for game development, web building, 3D printing and more.','pk2.t':'Online & offline support','pk2.d0':'During the event, the organizers will run offline workshops with universities in Beijing, Shenzhen and Shanghai, with on-site coaching from university experts.','pk2.d1':'Online learning resources, livestreams and community Q&A help participants of every level finish their 3D AI project.','pk3.t':'Industry experts, scholars & ecosystem partners','pk3.d0':'Tech experts, university scholars, tech creators and partner companies form the expert panel, with AI practitioners invited as player judges.','pk3.d1':'Judging covers innovation, completeness, technical depth and fun, so great ideas get seen.','pk4.t':'Rewards for everyone to reach for','pk4.d0':'A ¥320,000 prize pool and a varied honours system give every participant a shot at the podium.',
   'tl.today':'Today','tl.run':'Build period','tl.rev':'Judging','tl.tbd':'TBA','ms1':'Registration opens','ms2':'Submission deadline','ms3':'Results','ms4':'Award ceremony','tl.events':'Events','tl.eventsD':'Workshops and livestreams are open to all; numbers match the timeline above.','tl.reserve':'Book livestream','tl.past':'Ended','tl.live':'Live now','tl.next':'Up next','ev1.type':'Offline workshop','ev1.t':'Shenzhen','ev2.type':'Livestream','ev2.t':'Kickoff livestream (name TBA)','ev3.type':'Offline workshop','ev3.t':'Beijing','ev4.type':'Offline workshop','ev4.t':'Shanghai','ev5.type':'Online workshop','ev5.t':'Online session',
-  'eco.title':'Ecosystem partners','eco.host':'Organizer','eco.co':'Co-organizers','eco.support':'Ecosystem supporters','eco.note':'Listed in no particular order','eco.manycore':'Manycore Tech','eco.guancha':'Guancha','eco.modelscope':'ModelScope','eco.xhs':'Xiaohongshu Tech','eco.gxr':'Silicon Star','nav.about':'About','nav.resources':'Resources','nav.prizes':'Prizes & judging','nav.timeline':'Schedule details','nav.faq':'FAQ',
+  'eco.title':'Ecosystem partners','eco.host':'Organizer','eco.co':'Co-organizers','eco.support':'Ecosystem supporters','eco.note':'Listed in no particular order','eco.manycore':'Manycore Tech','eco.guancha':'Guancha','eco.modelscope':'ModelScope','eco.xhs':'Xiaohongshu Tech','eco.gxr':'Silicon Star','nav.about':'About','nav.resources':'Open tools','nav.prizes':'Prizes & judging','nav.timeline':'Schedule details','nav.faq':'FAQ',
   'cta.register':'Register now','km.time':'Dates','km.timeV':'Oct 19 – Nov 19','km.pool':'Prize pool','km.format':'Format','km.formatV':'Online · open worldwide','km.team':'Teams','km.teamV':'Solo or teams of up to 3','cta.explore':'Discover Lux3D','cta.aholo':'Discover Aholo',
   'hero.eyebrow':'AHOLO HACKATHON',
   'hero.t1':'Aholo','hero.t2':' Global 3D AI Hackathon',
@@ -1712,7 +1714,7 @@ const EN = {
   
   
   
-  'res.title':'Products & resources','res.desc':'Join and get plenty of credits: your first batch arrives when you register, and a much larger one once your team is formed and your topic submitted — enough to finish your project.',
+  'res.title':'Open tools','res.desc':'Join and get plenty of credits: your first batch arrives when you register, and a much larger one once your team is formed and your topic submitted — enough to finish your project.',
   'res.must':'Required','res.lux.d':'Aholo Lux3D is a 3D generation model built in-house by Manycore.<br>Upload an image or text and quickly generate a full set of previewable, editable 3D assets.',
   'res.opt':'Optional','res.api.t':'Aholo API','res.api.d':'Aholo API brings together APIs for 3D object generation, world generation, cloud rendering, reconstruction and more.','res.r1.t':'Spatial reconstruction','res.r1.d':'Build 3D scenes from the real world','res.r2.t':'Spatial generation','res.r2.d':'Explore more spatial content with AI','res.r3.t':'LuxReal','res.r3.d':'LuxReal is Manycore’s AI video-creation agent built on 3D technology. It keeps space and time consistent while quickly producing highly controllable, creative video.',
   'res.b.t':'Sign up to get creation credits and start your project','res.b.d':'Join the hackathon and explore new possibilities with your teammates.',
