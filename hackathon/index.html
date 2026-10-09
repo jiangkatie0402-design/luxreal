@@ -416,8 +416,9 @@ html[lang="zh-CN"] .sec-title { letter-spacing: .02em; line-height: 1.22; }
 .tl2-ms .mono { font-size: 12.5px; font-weight: 600; color: var(--ice); }
 .tl2-ms strong { font-size: 15px; font-weight: 700; }
 .tl2-c { transform: translateX(-50%); align-items: center; } .tl2-r { transform: translateX(-100%); align-items: flex-end; }
-.tl2-today { position: absolute; top: 0; height: 50px;   /* arrow stops just above the event numbers */ left: 0; z-index: 3; pointer-events: none; transition: left 1.4s var(--ease); }
+.tl2-today { position: absolute; top: 0; height: 90px;   /* arrow runs to the bar … */ left: 0; z-index: 3; pointer-events: none; transition: left 1.4s var(--ease); }
 .tl2-today::after { content: ''; position: absolute; left: 0; top: 26px; bottom: 6px; width: 2px; margin-left: -1px; background: #fff; box-shadow: 0 0 10px rgba(255,255,255,.6); }
+.tl2-today.on-ev { height: 50px; }   /* … unless today sits on an event number: then it stops right above it */
 .tl2-today::before { content: ''; position: absolute; left: -5px; bottom: 0; border: 5px solid transparent; border-top: 6px solid #fff; border-bottom: 0; }
 .tl2-pill { position: absolute; top: 0; left: 0; transform: translateX(-50%); padding: 4px 10px; border-radius: var(--radius-pill); background: #fff; color: #101012; font-size: 12px; font-weight: 700; white-space: nowrap; }
 .tl2-pill b { font-weight: 700; }
@@ -1788,6 +1789,8 @@ const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').match
   });
   function T_(k) { const zh = { 'tl.past': '已结束', 'tl.live': '进行中', 'tl.next': '下一场' }; return document.documentElement.lang === 'en' ? EN[k] : (ZH[k] || zh[k]); }
   document.addEventListener('langchange', () => document.querySelectorAll('.tl2-card [data-state]').forEach(st => { if (st.dataset.k) st.textContent = T_('tl.' + st.dataset.k); }));
+  const onEv = () => { const w = track.getBoundingClientRect().width; today.classList.toggle('on-ev', [...document.querySelectorAll('.tl2-ev')].some(e => Math.abs(parseFloat(e.style.left) - pct) * w / 100 < 16)); };
+  onEv(); addEventListener('resize', onEv);
   const go = () => { today.style.left = pct + '%'; document.getElementById('tlFill').style.width = pct + '%'; };
   if (reduceMotion) go(); else new IntersectionObserver((es, o) => es.forEach(e => { if (e.isIntersecting) { go(); o.disconnect(); } }), { threshold: .3 }).observe(track);
 })();
