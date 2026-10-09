@@ -1957,7 +1957,7 @@ document.querySelectorAll('.res-main').forEach(card => card.addEventListener('po
     'err.net': ['网络异常，请稍后重试', 'Something went wrong, please try again'],
     'busy': ['提交中…', 'Submitting…'], 'loggingIn': ['登录中…', 'Logging in…'],
     'toast.reg': ['报名成功，欢迎加入！', 'You’re registered — welcome!'], 'toast.login': ['已登录', 'Logged in'], 'toast.logout': ['已退出登录', 'Logged out'], 'toast.reset': ['已重置为未登录、未报名状态', 'Reset to logged-out, unregistered'],
-    'toast.team': ['团队已创建', 'Team created'], 'toast.join': ['已加入团队', 'Joined the team'], 'toast.joinReq': ['已提交入队申请，等待队长确认', 'Request sent — waiting for the captain'], 'toast.confirm': ['组队已确认', 'Team confirmed'],
+    'toast.team': ['团队已创建', 'Team created'], 'toast.join': ['已加入团队', 'Joined the team'], 'toast.joinReq': ['已提交入队申请，等待队长确认', 'Request sent — waiting for the captain'], 'jr.declined': ['队长未通过你的入队申请', 'The captain declined your request'], 'team.lost': ['你已不在该团队中', 'You’re no longer on that team'], 'jr.incoming': ['收到新的入队申请', 'New join request'], 'toast.confirm': ['组队已确认', 'Team confirmed'],
   };
   const TEAM_MAX = 3;   // team size limit (1–3 people)
   const T = (k, vars) => { let v = D[k] ? D[k][isEN() ? 1 : 0] : k; vars = Object.assign({ max: TEAM_MAX }, vars); for (const n in vars) v = v.split('{' + n + '}').join(vars[n]); return v; };
@@ -1968,8 +1968,41 @@ document.querySelectorAll('.res-main').forEach(card => card.addEventListener('po
   const KEY = 'aholo-hack-demo-v2';
   try { localStorage.removeItem('aholo-hack-demo-v1'); } catch (e) {}
   let mem = { loggedIn: false, profile: null, team: null };
-  const load = () => { try { const v = JSON.parse(sessionStorage.getItem(KEY) || 'null'); if (v) return v; } catch (e) {} return JSON.parse(JSON.stringify(mem)); };
+  const loadRaw = () => { try { const v = JSON.parse(sessionStorage.getItem(KEY) || 'null'); if (v) return v; } catch (e) {} return JSON.parse(JSON.stringify(mem)); };
+  const load = () => sync(loadRaw());
   const save = st => { mem = st; try { sessionStorage.setItem(KEY, JSON.stringify(st)); } catch (e) {} return st; };
+  /* Demo stand-in for the server's team records, shared by every tab of this browser (localStorage), so a
+     captain and an applicant can be tested in two tabs. Each tab keeps its own login/profile (sessionStorage). */
+  const BOARD = 'aholo-hack-demo-board';
+  const getBoard = () => { try { return JSON.parse(localStorage.getItem(BOARD) || '{"teams":{}}'); } catch (e) { return { teams: {} }; } };
+  const setBoard = b => { try { localStorage.setItem(BOARD, JSON.stringify(b)); } catch (e) {} };
+  const myPid = s => s.profile && s.profile.id;
+  // write this tab's view of its team to the board (captain-side changes)
+  const pub = s => {
+    const tm = s.team; if (!tm || !tm.shared) return;
+    const b = getBoard(), cur = b.teams[tm.id] || { requests: [], rejected: [] };
+    b.teams[tm.id] = Object.assign(cur, { name: tm.name, confirmed: tm.confirmed, rewarded: tm.rewarded, rewardCount: tm.rewardCount, rewardSince: tm.rewardSince, topic: tm.topic || null,
+      members: tm.members.map(m => ({ name: m.name, pid: m.pid, captain: !!m.captain, rewarded: !!m.rewarded })) });
+    setBoard(b);
+  };
+  // read the board into this tab's state: team changes made elsewhere, and the outcome of a pending join request
+  const sync = s => {
+    const b = getBoard(), pid = myPid(s);
+    if (s.team && s.team.shared) {
+      const bt = b.teams[s.team.id];
+      if (!bt || !bt.members.some(m => m.pid === pid)) { s.team = null; s.lostTeam = true; }
+      else s.team = { id: s.team.id, shared: true, name: bt.name, confirmed: bt.confirmed, rewarded: bt.rewarded, rewardCount: bt.rewardCount, rewardSince: bt.rewardSince, topic: bt.topic || null,
+        captain: bt.members.some(m => m.pid === pid && m.captain), requests: bt.requests || [],
+        members: bt.members.map(m => Object.assign({}, m, { me: m.pid === pid })) };
+    }
+    if (s.joinReq && !s.team) {
+      const bt = b.teams[s.joinReq.code];
+      if (bt && bt.members.some(m => m.pid === pid)) { s.joinReq = null; s.team = { id: Object.keys(b.teams).find(k => b.teams[k] === bt), shared: true }; return sync(s); }
+      if (bt && (bt.rejected || []).includes(pid)) { s.joinReq = null; s.joinRejected = true; bt.rejected = bt.rejected.filter(x => x !== pid); setBoard(b); }
+    }
+    return s;
+  };
+  const boardOp = (code, fn) => { const b = getBoard(); if (b.teams[code]) { fn(b.teams[code]); setBoard(b); } };
   const wait = ms => new Promise(r => setTimeout(r, ms));
   const rid = (n, set) => Array.from({ length: n }, () => set[Math.floor(Math.random() * set.length)]).join('');
   const api = {
@@ -1980,26 +2013,26 @@ document.querySelectorAll('.res-main').forEach(card => card.addEventListener('po
     async logout() { await wait(200); const s = load(); s.loggedIn = false; return save(s); },
     // TODO: POST registration; server must be idempotent (one registration per account)
     async register(f) { await wait(700); const s = load(); if (!s.profile) s.profile = { name: f.name, email: f.email, role: f.role, country: f.country, province: f.province, city: f.city, xhs: f.xhs, x: f.x, id: 'AH26-' + rid(5, '0123456789'), teamReward: false }; return save(s); },
-    async createTeam(name) { await wait(400); const s = load(); s.team = { id: 'T' + rid(6, 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789'), name, captain: true, confirmed: false, rewarded: false, members: [{ name: s.profile.name, me: true, captain: true }] }; return save(s); },
+    async createTeam(name) { await wait(400); const s = load(); s.team = { id: 'T' + rid(6, 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789'), shared: true, name, captain: true, confirmed: false, rewarded: false, members: [{ name: s.profile.name, pid: myPid(s), me: true, captain: true }] }; pub(s); return save(sync(s)); },
     // Demo only: a real join looks the code up on the server
     // Joining is a request: the captain approves it, the applicant doesn't confirm again
-    async joinTeam(code) { await wait(400); const s = load(); s.joinReq = { code, at: Date.now() }; return save(s); },
-    async cancelJoin() { await wait(300); const s = load(); s.joinReq = null; return save(s); },
+    async joinTeam(code) { await wait(400); const s = load(); s.joinReq = { code, at: Date.now() }; boardOp(code, t => { t.requests = (t.requests || []).filter(r => r.pid !== myPid(s)); t.requests.push({ name: s.profile.name, pid: myPid(s) }); }); return save(s); },
+    async cancelJoin() { await wait(300); const s = load(); if (s.joinReq) boardOp(s.joinReq.code, t => { t.requests = (t.requests || []).filter(r => r.pid !== myPid(s)); }); s.joinReq = null; return save(s); },
     // Demo only: stands in for the captain approving on their side
     async demoApprove() { await wait(400); const s = load(); const code = s.joinReq && s.joinReq.code; if (!code) return s; s.joinReq = null; s.team = { id: code, name: T('team.demoName') + code, captain: false, confirmed: false, rewarded: false, members: [{ name: T('team.demoCaptain'), captain: true }, { name: s.profile.name, me: true, pid: s.profile.id }] }; return save(s); },
     // Demo only: a real request arrives from another participant
-    async demoRequest() { await wait(300); const s = load(); if (s.team && s.team.captain) { s.team.requests = s.team.requests || []; const pid = 'AH26-' + rid(5, '0123456789'); s.team.requests.push({ name: T('mb.demoName') + pid.slice(-3), pid }); } return save(s); },
-    async approveReq(i) { await wait(400); const s = load(); const tm = s.team; if (tm && tm.captain && tm.requests && tm.requests[i] && tm.members.length < TEAM_MAX) { tm.members.push(tm.requests[i]); tm.requests.splice(i, 1); } return save(s); },
-    async rejectReq(i) { await wait(300); const s = load(); const tm = s.team; if (tm && tm.captain && tm.requests) tm.requests.splice(i, 1); return save(s); },
+    async demoRequest() { await wait(300); const s = load(); if (s.team && s.team.captain) { const pid = 'AH26-' + rid(5, '0123456789'), r = { name: T('mb.demoName') + pid.slice(-3), pid }; if (s.team.shared) boardOp(s.team.id, t => { (t.requests = t.requests || []).push(r); }); else (s.team.requests = s.team.requests || []).push(r); } return save(sync(s)); },
+    async approveReq(i) { await wait(400); const s = load(); const tm = s.team; if (tm && tm.captain && tm.requests && tm.requests[i] && tm.members.length < TEAM_MAX) { const r = tm.requests[i]; if (tm.shared) boardOp(tm.id, t => { t.requests = t.requests.filter(x => x.pid !== r.pid); t.members.push({ name: r.name, pid: r.pid, captain: false, rewarded: false }); }); else { tm.members.push(r); tm.requests.splice(i, 1); } } return save(sync(s)); },
+    async rejectReq(i) { await wait(300); const s = load(); const tm = s.team; if (tm && tm.captain && tm.requests && tm.requests[i]) { const r = tm.requests[i]; if (tm.shared) boardOp(tm.id, t => { t.requests = t.requests.filter(x => x.pid !== r.pid); (t.rejected = t.rejected || []).push(r.pid); }); else tm.requests.splice(i, 1); } return save(sync(s)); },
     // First confirmation grants the team reward to the members at that moment. The real status (processing → granted + date) comes from the server.
-    async confirmTeam() { await wait(400); const s = load(); s.team.confirmed = true; if (!s.team.rewarded) { const now = Date.now(); s.team.rewarded = true; s.team.rewardCount = s.team.members.length; s.team.rewardSince = now; s.team.members.forEach(m => { m.rewarded = true; }); if (!s.profile.teamReward) { s.profile.teamReward = true; s.profile.teamRewardSince = now; } } return save(s); },
-    async submitTopic(t) { await wait(400); const s = load(); if (s.team && s.team.captain && s.team.confirmed) s.team.topic = t; return save(s); },
-    async updateTeam(name) { await wait(300); const s = load(); if (s.team && s.team.captain) s.team.name = name; return save(s); },
-    async removeMember(i) { await wait(300); const s = load(); if (s.team && s.team.captain && !s.team.members[i].me) s.team.members.splice(i, 1); return save(s); },
+    async confirmTeam() { await wait(400); const s = load(); s.team.confirmed = true; if (!s.team.rewarded) { const now = Date.now(); s.team.rewarded = true; s.team.rewardCount = s.team.members.length; s.team.rewardSince = now; s.team.members.forEach(m => { m.rewarded = true; }); if (!s.profile.teamReward) { s.profile.teamReward = true; s.profile.teamRewardSince = now; } } pub(s); return save(s); },
+    async submitTopic(t) { await wait(400); const s = load(); if (s.team && s.team.captain && s.team.confirmed) { s.team.topic = t; pub(s); } return save(s); },
+    async updateTeam(name) { await wait(300); const s = load(); if (s.team && s.team.captain) { s.team.name = name; pub(s); } return save(s); },
+    async removeMember(i) { await wait(300); const s = load(); if (s.team && s.team.captain && !s.team.members[i].me) { s.team.members.splice(i, 1); pub(s); } return save(s); },
     // TODO: real endpoints; judging uses the last successful submission before the deadline
     async saveDraft(d) { await wait(300); const s = load(); s.work = s.work || {}; s.work.draft = d; s.work.draftAt = Date.now(); return save(s); },
     async submitWork(d) { await wait(600); const s = load(); s.work = s.work || {}; const v = ((s.work.submitted && s.work.submitted.version) || 0) + 1; s.work.submitted = Object.assign({}, d, { version: v, at: Date.now() }); s.work.draft = null; s.work.draftAt = null; return save(s); },
-    async leaveTeam() { await wait(300); const s = load(); s.team = null; return save(s); },
+    async leaveTeam() { await wait(300); const s = load(); const tm = s.team; if (tm && tm.shared) { const b = getBoard(); if (tm.captain) delete b.teams[tm.id]; else if (b.teams[tm.id]) b.teams[tm.id].members = b.teams[tm.id].members.filter(m => m.pid !== myPid(s)); setBoard(b); } s.team = null; return save(s); },
   };
 
   let state = load();
@@ -2608,6 +2641,21 @@ document.querySelectorAll('.res-main').forEach(card => card.addEventListener('po
     else if (view === 'my' && href.length > 1 && document.getElementById(href.slice(1))) { e.preventDefault(); show('intro', href.slice(1)); }
   });
   document.addEventListener('langchange', () => { refreshCtas(); if (view === 'my') renderMy(); });
+  // another tab changed a team (demo): pull it in and say what happened
+  window.addEventListener('storage', e => {
+    if (e.key !== BOARD || busy) return;
+    const before = state, s = sync(JSON.parse(JSON.stringify(loadRaw())));
+    const reqs = t => (t && t.captain && t.requests ? t.requests.length : 0);
+    let msg = '';
+    if (before.joinReq && s.team) msg = T('toast.join');
+    else if (s.joinRejected) msg = T('jr.declined');
+    else if (s.lostTeam) msg = T('team.lost');
+    else if (reqs(s.team) > reqs(before.team)) msg = T('jr.incoming');
+    delete s.joinRejected; delete s.lostTeam;
+    state = save(s); renderMy(); refreshCtas();
+    if (!modal.hidden && !membersPane.hidden) renderMembers();
+    if (msg) toast(msg);
+  });
 
   function refreshAll() { refreshCtas(); if (view === 'my') renderMy(); }
   // DEMO ONLY: wipe the mock state so the full login → registration flow can be replayed
