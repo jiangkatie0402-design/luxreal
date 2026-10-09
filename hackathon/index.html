@@ -386,8 +386,8 @@ html[lang="zh-CN"] .sec-title { letter-spacing: .02em; line-height: 1.22; }
 .tl2-ev.past b { color: var(--text-muted); background: var(--bg-2); border-color: var(--border); }
 .tl2-ev.next b, .tl2-ev.live b { background: #4557FF; border-color: #4557FF; color: #fff; box-shadow: 0 0 0 4px rgba(69,87,255,.25); }
 .tl2-rail { position: relative; height: 40px; border-radius: 12px; overflow: hidden; border: 1px solid rgba(106,72,255,.35);
-  /* one continuous bar: phase zones are shaded inside it (run 0–59.44%, review 59.44–80.39%, then results/awards) */
-  background: linear-gradient(90deg, rgba(106,72,255,.16) 0 59.44%, rgba(172,199,252,.09) 59.44% 80.39%, rgba(255,255,255,.02) 80.39%), var(--bg-2); }
+  /* one continuous bar: phase zones are shaded inside it (run 0–59.44%, review 59.44–85.07% up to results, then awards) */
+  background: linear-gradient(90deg, rgba(106,72,255,.16) 0 59.44%, rgba(172,199,252,.09) 59.44% 85.07%, rgba(255,255,255,.02) 85.07%), var(--bg-2); }
 .tl2-seg { position: absolute; z-index: 2; top: 0; bottom: 0; display: flex; align-items: center; padding: 0 14px; overflow: hidden; white-space: nowrap; font-size: 12.5px; font-weight: 700; }
 .tl2-run { color: var(--text); }
 .tl2-rev { color: var(--ice); }
@@ -1169,7 +1169,7 @@ body.modal-open { overflow: hidden; }
         <div class="tl2-top"><span class="tl2-ev" data-ev="ev1" style="left:11.22%" data-start="2026-10-24T00:00:00+08:00" data-end="2026-10-26T00:00:00+08:00"><b>1</b></span><span class="tl2-ev" data-ev="ev2" style="left:19.63%" data-start="2026-10-29T00:00:00+08:00" data-end="2026-10-30T00:00:00+08:00"><b>2</b></span><span class="tl2-ev" data-ev="ev3" style="left:24.3%" data-start="2026-10-31T00:00:00+08:00" data-end="2026-11-02T00:00:00+08:00"><b>3</b></span><span class="tl2-ev" data-ev="ev4" style="left:37.39%" data-start="2026-11-07T00:00:00+08:00" data-end="2026-11-09T00:00:00+08:00"><b>4</b></span><span class="tl2-ev" data-ev="ev5" style="left:45.8%" data-start="2026-11-12T00:00:00+08:00" data-end="2026-11-13T00:00:00+08:00"><b>5</b></span><div class="tl2-today" id="tlToday"><span class="tl2-pill"><span data-i18n="tl.today">今天</span> <b class="mono" id="tlTodayD"></b></span></div></div>
         <div class="tl2-rail">
           <div class="tl2-seg tl2-run" style="left:0;width:59.44%"><span data-i18n="tl.run">参赛期</span></div>
-          <div class="tl2-seg tl2-rev" style="left:59.44%;width:20.95%"><span><span data-i18n="tl.rev">评审期</span> <i class="mono">11.20 – 11.30</i></span></div>
+          <div class="tl2-seg tl2-rev" style="left:59.44%;width:25.63%"><span><span data-i18n="tl.rev">评审期</span> <i class="mono">11.20 – 11.30</i></span></div>
           <div class="tl2-tbd" style="left:85.07%"></div>
           <div class="tl2-fill" id="tlFill"></div>
           <span class="tl2-dot" style="left:0%" data-at="2026-10-19T00:00:00+08:00"></span><span class="tl2-dot" style="left:59.44%" data-at="2026-11-19T19:00:00+08:00"></span><span class="tl2-dot" style="left:85.07%" data-at="2026-12-03T12:00:00+08:00"></span><span class="tl2-dot" style="left:100%"></span>
