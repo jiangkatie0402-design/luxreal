@@ -392,8 +392,8 @@ html[lang="zh-CN"] .sec-title { letter-spacing: .02em; line-height: 1.22; }
 /* ---------- Timeline ---------- */
 /* 日程 — proportional rail with phases, live "today" cursor, numbered events */
 .tl2-track { position: relative; padding: 0 2px; }
-.tl2-top { position: relative; height: 64px; }
-.tl2-ev { position: absolute; bottom: 0; transform: translateX(-50%); display: flex; flex-direction: column; align-items: center; }
+.tl2-top { position: relative; height: 92px; }   /* room for the today pill above the event markers */
+.tl2-ev { position: absolute; z-index: 4; bottom: 0; transform: translateX(-50%); display: flex; flex-direction: column; align-items: center; }
 .tl2-ev b { display: grid; place-items: center; width: 24px; height: 24px; border-radius: 50%; font-size: 12px; font-weight: 700; color: var(--text); background: var(--surface-2); border: 1px solid var(--border-strong); transition: all .3s; }
 .tl2-ev::after { content: ''; width: 1px; height: 12px; background: var(--border-strong); }
 .tl2-ev.past b { color: var(--text-muted); background: var(--bg-2); border-color: var(--border); }
