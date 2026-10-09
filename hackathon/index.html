@@ -579,6 +579,16 @@ html[lang="zh-CN"] .my-sec-title, html[lang="zh-CN"] .my-title { font-family: va
 .reg-main h3 { font-size: 19px; font-weight: 700; margin: 6px 0 2px; }
 .reg-main p { font-size: 14px; color: var(--text-muted); }
 .reg-main .mono { color: var(--text-soft); font-weight: 600; }
+.reg-list { list-style: none; margin: 6px 0 0; padding: 0; display: flex; flex-direction: column; gap: 4px; font-size: 14px; color: var(--text-muted); }
+.reg-list li { position: relative; padding-left: 14px; }
+.reg-list li::before { content: ''; position: absolute; left: 2px; top: .7em; width: 4px; height: 4px; border-radius: 50%; background: var(--text-muted); }
+.reg-list b { color: var(--text-soft); font-weight: 600; }
+.reg-tips { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-top: 20px; }
+.reg-tips > div { padding: 14px 16px; border-radius: var(--radius-sm); border: 1px solid var(--border-subtle); background: var(--bg-2); display: flex; flex-direction: column; gap: 4px; }
+.reg-tips strong { font-size: 14px; font-weight: 700; }
+.reg-tips strong b { color: var(--ice); font-weight: 700; }
+.reg-tips span { font-size: 12.5px; color: var(--text-muted); line-height: 1.6; }
+@media (max-width: 640px) { .reg-tips { grid-template-columns: 1fr; } }
 .chips { display: flex; gap: 12px; flex-wrap: wrap; }
 .chip { padding: 12px 16px; border-radius: var(--radius-sm); border: 1px solid var(--border); background: var(--bg-2); min-width: 176px; }
 .chip strong { display: block; font-size: 14px; font-weight: 700; }
@@ -617,12 +627,6 @@ html[lang="zh-CN"] .my-sec-title, html[lang="zh-CN"] .my-title { font-family: va
 .members .who em { font-style: normal; font-size: 12.5px; color: var(--text-muted); font-weight: 500; margin-left: 8px; }
 .team-meta { display: flex; align-items: center; flex-wrap: wrap; gap: 4px 6px; margin-top: 14px; font-size: 13px; color: var(--text-muted); }
 .team-actions { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; margin-top: 22px; }
-.team-topic { margin-top: 22px; padding: 20px 22px; border: 1px solid var(--border); border-radius: var(--radius-sm); background: var(--bg-2); display: flex; flex-direction: column; gap: 10px; }
-.team-topic .lbl { font-size: 12.5px; font-weight: 600; color: var(--ice); letter-spacing: .04em; }
-.team-topic h4 { font-size: 17px; font-weight: 700; }
-.team-topic p { font-size: 13.5px; color: var(--text-muted); line-height: 1.7; }
-.team-topic textarea { min-height: 76px; }
-.team-topic .row { display: flex; gap: 10px; align-items: center; flex-wrap: wrap; }
 .team-actions p { font-size: 13px; color: var(--text-muted); flex: 1 1 260px; }
 .members .tag-muted { font-style: normal; font-size: 11.5px; font-weight: 600; color: var(--text-muted); padding: 1px 8px; border-radius: var(--radius-pill); background: rgba(255,255,255,.05); border: 1px solid var(--border); margin-left: 8px; }
 /* ⓘ info tooltip */
@@ -1525,6 +1529,8 @@ html[lang="zh-CN"] .eco-head h2 { font-family: var(--font-title); font-weight: 4
       <button type="submit" class="btn btn-primary btn-block" data-i18n="m.editSave">保存</button>
     </form>
 
+    <form class="modal-pane" data-pane="topic" id="topicForm" novalidate></form>
+
     <div class="modal-pane" data-pane="community">
       <h3 class="modal-title" data-i18n="m.comT">加入赛事社群</h3>
       <p class="modal-desc" data-i18n="m.comD">扫码或通过邀请链接加入官方参赛群，获取赛事通知、组队信息与答疑。</p>
@@ -1769,7 +1775,7 @@ document.querySelectorAll('.res-main').forEach(card => card.addEventListener('po
     'reg.startD': ['完成报名，领取创作积分并开始组队', 'Register to receive creation credits and start forming a team'],
     'reg.done': ['已报名', 'Registered'], 'reg.id': ['参赛编号', 'Participant ID'],
     'reg.note': ['报名成功 ≠ 积分到账，请以 Aholo 账户中的积分记录为准。', 'Registration does not mean credits have arrived — check the credit history in your Aholo account.'],
-    'rw.reg': ['报名奖励', 'Registration reward'], 'rw.team': ['组队奖励', 'Team reward'],
+    'rw.reg': ['报名奖励', 'Registration reward'], 'rw.team': ['团队奖励', 'Team reward'],
     'rw.afterReg': ['报名后领取', 'after registering'], 'rw.once': ['每位选手仅发放一次', 'Granted once per participant'],
     'rw.pending': ['发放中', 'processing'], 'rw.acct': ['到账以 Aholo 账户积分记录为准', 'See your Aholo account for arrival'],
     'rw.none': ['未领取', 'not received'], 'rw.onConfirm': ['团队首次确认时发放', 'Granted when the team is first confirmed'],
@@ -1825,9 +1831,13 @@ document.querySelectorAll('.res-main').forEach(card => card.addEventListener('po
     'st.work': ['作品提交', 'Submission'], 'st.workD': ['完成创作，让想法成为真实作品', 'Finish your build and turn the idea into a real project'],
     'st.review': ['作品评审', 'Judging'], 'st.reviewD': ['专业评委与玩家评委共同评审参赛作品', 'Expert and player judges review the projects'],
     'st.show': ['结果公示 · 作品展示', 'Results & showcase'], 'st.showD': ['公布获奖名单，展示全部参赛作品', 'Winners are announced and all projects are showcased'],
-    'tp.label': ['创作选题', 'Topic'], 'tp.formD': ['用一句话说明你们要做什么，提交后可在作品截止前修改。', 'Say in a sentence what you’ll build. You can edit it until the submission deadline.'],
-    'tp.title': ['选题名称', 'Topic title'], 'tp.desc': ['选题简介（选填）', 'Short description (optional)'], 'tp.submit': ['提交选题', 'Submit topic'], 'tp.edit': ['修改选题', 'Edit topic'], 'tp.cancel': ['取消', 'Cancel'],
-    'tp.wait': ['等待队长提交创作选题。', 'Waiting for the captain to submit the topic.'], 'tp.err': ['请输入 2–30 个字的选题名称', 'Enter a topic title of 2–30 characters'], 'tp.saved': ['选题已提交', 'Topic submitted'],
+    'tp.btn': ['提交选题', 'Submit topic'], 'tp.edit': ['修改选题', 'Edit topic'], 'tp.saved': ['选题已提交', 'Topic submitted'], 'tp.save': ['提交选题', 'Submit topic'],
+    'tp.modalD': ['选题信息会自动带入作品提交表单，作品提交截止前可随时修改。', 'Your topic is carried into the submission form and can be edited until the submission deadline.'],
+    'tp.needTeam': ['请先在下方创建或加入团队，并完成组队确认', 'Create or join a team below and confirm it first'], 'tp.captainOnly': ['选题由队长提交', 'The team captain submits the topic'],
+    'tp.done': ['已提交选题：', 'Topic submitted: '], 'w.trackOtherPh': ['请填写应用方向', 'Describe the application area'], 'w.e.trackOther': ['请填写应用方向', 'Describe your application area'],
+    'reg.waitTeam': ['待组队', 'Team pending'], 'reg.teamed': ['已组队', 'Team formed'], 'reg.topicT': ['组队并提交选题', 'Form a team & submit your topic'],
+    'reg.topicD': ['完善团队信息并提交选题，领取第二轮足量创作积分', 'Complete your team info and submit a topic to receive the second, full round of creation credits'],
+    'rw.got': ['已领取', 'received'], 'rw.teamOnce': ['每个团队仅发放一次，按首次确认时的队员平均分配', 'Granted once per team, split evenly among the members at first confirmation'],
     'team.confirm': ['确认组队', 'Confirm team'], 'team.confirmD': ['确认后即成为正式团队，之后仍可换人或解散。', 'Confirming makes the team official; you can still change members or disband later.'],
     'team.wait': ['等待队长确认组队。', 'Waiting for the captain to confirm the team.'],
     'team.okD': ['团队已确认，仍可调整成员或解散。', 'Team confirmed. You can still change members or disband.'],
@@ -2012,22 +2022,62 @@ document.querySelectorAll('.res-main').forEach(card => card.addEventListener('po
   }
   function renderReg() {
     const p = registered() ? state.profile : null;
-    const chips = p
-      ? `<div class="chip"><strong>${T('rw.reg')} · <b>${T('rw.pending')}</b></strong><span>${T('rw.acct')}</span></div>
-         <div class="chip"><strong>${T('rw.team')} · ${p.teamReward ? '<b>' + T(rewardStatus(p.teamRewardSince || 0).done ? 'rw.done' : 'rw.pending') + '</b>' : T('rw.none')}</strong><span>${p.teamReward ? T('rw.split') : T('rw.onConfirm')}</span></div>`
-      : `<div class="chip"><strong>${T('rw.reg')} · ${T('rw.afterReg')}</strong><span>${T('rw.once')}</span></div>
-         <div class="chip"><strong>${T('rw.team')} · ${T('rw.none')}</strong><span>${T('rw.onConfirm')}</span></div>`;
-    $('#myReg').innerHTML = p
-      ? `<div class="reg-row"><span class="reg-avatar on">${esc(p.name.slice(0, 1).toUpperCase())}</span>
-          <div class="reg-main"><span class="badge ok">${T('reg.done')}</span><h3>${esc(p.name)}</h3>
-          <p>${T('reg.id')} <span class="mono">${esc(p.id)}</span> · ${T('role.' + p.role)}${p.city ? ' · ' + esc(p.city) : ''}</p></div>
-          <div class="chips">${chips}</div></div>
-         <p class="reg-note">${T('reg.note')}</p>`
-      : `<div class="reg-row"><span class="reg-avatar"></span>
+    if (!p) {
+      $('#myReg').innerHTML = `<div class="reg-row"><span class="reg-avatar"></span>
           <div class="reg-main"><span class="badge">${T('reg.none')}</span><h3>${T('reg.startT')}</h3><p>${T('reg.startD')}</p></div>
-          <div class="chips">${chips}</div>
-          <a href="#register" class="btn btn-primary" data-start-reg>${(isEN() ? EN : ZH)['cta.register']}</a></div>`;
+          <a href="#register" class="btn btn-primary" data-start-reg>${(isEN() ? EN : ZH)['cta.register']}</a></div>
+        <div class="reg-tips"><div><strong>${T('rw.reg')} · ${T('rw.none')}</strong><span>${T('rw.once')}</span></div>
+          <div><strong>${T('rw.team')} · ${T('rw.none')}</strong><span>${T('rw.teamOnce')}</span></div></div>`;
+      return;
+    }
+    const tm = state.team, teamed = !!(tm && tm.confirmed), topic = tm && tm.topic, open = Date.now() < DEADLINE;
+    const btn = open && !(topic && !tm.captain) ? `<button type="button" class="btn ${topic ? 'btn-ghost' : 'btn-primary'}" data-act="topic">${T(topic ? 'tp.edit' : 'tp.btn')}</button>` : '';
+    $('#myReg').innerHTML = `<div class="reg-row"><span class="reg-avatar on">${esc(p.name.slice(0, 1).toUpperCase())}</span>
+        <div class="reg-main"><span class="badge${teamed ? ' ok' : ''}">${T(teamed ? 'reg.teamed' : 'reg.waitTeam')}</span><h3>${T('reg.topicT')}</h3>
+          <ul class="reg-list"><li>${T('reg.id')} <span class="mono">${esc(p.id)}</span></li>
+            <li>${topic ? T('tp.done') + '<b>' + esc(topic.title) + '</b>' : T('reg.topicD')}</li></ul></div>
+        ${btn}</div>
+      <div class="reg-tips"><div><strong>${T('rw.reg')} · <b>${T('rw.got')}</b></strong><span>${T('rw.once')}</span></div>
+        <div><strong>${T('rw.team')} · ${p.teamReward ? '<b>' + T('rw.got') + '</b>' : T('rw.none')}</strong><span>${T('rw.teamOnce')}</span></div></div>`;
   }
+
+  /* ---------- 选题: captain submits after the team is confirmed; pre-fills the works form ---------- */
+  const topicForm = $('#topicForm');
+  function openTopic() {
+    const tm = state.team;
+    if (!tm || !tm.confirmed) { toast(T('tp.needTeam')); document.getElementById('myTeam').scrollIntoView({ behavior: 'smooth', block: 'center' }); return; }
+    if (!tm.captain) { toast(T('tp.captainOnly')); return; }
+    const d = tm.topic || {}, v = k => esc(d[k] || '');
+    topicForm.innerHTML = `<h3 class="modal-title">${T(tm.topic ? 'tp.edit' : 'tp.btn')}</h3><p class="modal-desc">${T('tp.modalD')}</p>
+      <label class="field"><span>${T('w.title')}</span><input type="text" name="title" maxlength="40" value="${v('title')}"><em class="field-error"></em></label>
+      <label class="field"><span>${T('w.track')}</span><select name="track"><option value="">${T('w.trackNone')}</option>${TRACKS.map(t => `<option value="${t}"${d.track === t ? ' selected' : ''}>${T('w.t.' + t)}</option>`).join('')}</select>
+        <input type="text" name="trackOther" maxlength="20" placeholder="${T('w.trackOtherPh')}" aria-label="${T('w.trackOtherPh')}" value="${v('trackOther')}"${d.track === 'other' ? '' : ' hidden'} style="margin-top:8px"><em class="field-error"></em></label>
+      <label class="field"><span>${T('w.tagline')}</span><input type="text" name="tagline" maxlength="60" value="${v('tagline')}"><em class="field-error"></em></label>
+      <label class="field"><span>${T('w.desc')}</span><textarea name="desc" maxlength="1000" placeholder="${T('w.descPh')}">${v('desc')}</textarea><em class="field-error"></em></label>
+      <button type="submit" class="btn btn-primary btn-block">${T('tp.save')}</button>`;
+    openModal('topic');
+  }
+  topicForm.addEventListener('change', e => {
+    if (e.target.name !== 'track') return;
+    const o = topicForm.elements.trackOther; o.hidden = e.target.value !== 'other'; if (!o.hidden) o.focus();
+  });
+  topicForm.addEventListener('input', e => { const f = e.target.closest('.field'); if (f && e.target.getAttribute('aria-invalid') === 'true') { f.querySelector('.field-error').textContent = ''; e.target.setAttribute('aria-invalid', 'false'); } });
+  topicForm.addEventListener('submit', e => {
+    e.preventDefault(); if (busy) return;
+    const g = k => topicForm.elements[k].value.trim();
+    const d = { title: g('title'), track: g('track'), trackOther: g('track') === 'other' ? g('trackOther') : '', tagline: g('tagline'), desc: g('desc') };
+    const errs = {
+      title: d.title.length < 2 || d.title.length > 40 ? T('w.e.title') : '',
+      track: !d.track ? T('w.e.track') : d.track === 'other' && !d.trackOther ? T('w.e.trackOther') : '',
+      tagline: d.tagline.length < 4 || d.tagline.length > 60 ? T('w.e.tagline') : '',
+      desc: d.desc.length < 10 || d.desc.length > 1000 ? T('w.e.desc') : '',
+    };
+    Object.keys(errs).forEach(k => { const el = topicForm.elements[k === 'track' && d.track === 'other' ? 'trackOther' : k]; el.closest('.field').querySelector('.field-error').textContent = errs[k]; el.setAttribute('aria-invalid', errs[k] ? 'true' : 'false'); });
+    const first = Object.keys(errs).find(k => errs[k]);
+    if (first) { topicForm.elements[first === 'track' && d.track === 'other' ? 'trackOther' : first].focus(); return; }
+    busy = true;
+    api.submitTopic(d).then(st => { state = st; busy = false; closeModal(); toast(T('tp.saved')); renderMy(); }, () => { busy = false; toast(T('err.net')); });
+  });
 
   function renderTeam() {
     const el = $('#myTeam'), p = registered() ? state.profile : null, tm = p ? state.team : null;
@@ -2070,20 +2120,7 @@ document.querySelectorAll('.res-main').forEach(card => card.addEventListener('po
         </div></div>
       <ul class="members">${members}</ul>
       <div class="team-meta">${T('team.count', { n: tm.members.length })}${rewardLine}</div>
-      ${confirmRow}${topicBlock(tm)}`;
-  }
-  let editingTopic = false;
-  function topicBlock(tm) {
-    if (!tm.confirmed) return '';
-    const t = tm.topic, open = Date.now() < DEADLINE;
-    if (t && !(editingTopic && tm.captain && open)) return `<div class="team-topic"><span class="lbl">${T('tp.label')}</span><h4>${esc(t.title)}</h4>${t.desc ? `<p>${esc(t.desc)}</p>` : ''}
-      ${tm.captain && open ? `<div class="row"><button type="button" class="btn btn-ghost btn-sm" data-act="editTopic">${T('tp.edit')}</button></div>` : ''}</div>`;
-    if (!tm.captain) return `<div class="team-topic"><span class="lbl">${T('tp.label')}</span><p>${T('tp.wait')}</p></div>`;
-    if (!open) return '';
-    return `<form class="team-topic" data-form="topic" novalidate><span class="lbl">${T('tp.label')}</span><p>${T('tp.formD')}</p>
-      <label class="field"><span>${T('tp.title')}</span><input type="text" name="title" maxlength="30" value="${esc((t && t.title) || '')}"><em class="field-error"></em></label>
-      <label class="field"><span>${T('tp.desc')}</span><textarea name="desc" maxlength="120">${esc((t && t.desc) || '')}</textarea></label>
-      <div class="row"><button class="btn btn-primary btn-sm" type="submit">${T('tp.submit')}</button>${t ? `<button type="button" class="btn btn-ghost btn-sm" data-act="cancelTopic">${T('tp.cancel')}</button>` : ''}</div></form>`;
+      ${confirmRow}`;
   }
 
   async function run(fn, okMsg) {
@@ -2111,8 +2148,7 @@ document.querySelectorAll('.res-main').forEach(card => card.addEventListener('po
       openModal('editTeam');
     } else if (a === 'confirm') run(() => api.confirmTeam(), T('toast.confirm'));
     else if (a === 'remove') { if (confirm(T('team.removeQ'))) run(() => api.removeMember(+btn.dataset.i)); }
-    else if (a === 'editTopic') { editingTopic = true; renderTeam(); }
-    else if (a === 'cancelTopic') { editingTopic = false; renderTeam(); }
+    else if (a === 'topic') openTopic();
     else if (a === 'disband') { if (confirm(T('team.disbandQ'))) run(() => api.leaveTeam()); }
     else if (a === 'leave') { if (confirm(T('team.leaveQ'))) run(() => api.leaveTeam()); }
   }
@@ -2125,12 +2161,6 @@ document.querySelectorAll('.res-main').forEach(card => card.addEventListener('po
       if (name.length < 2 || name.length > 20) { err.textContent = T('err.teamName'); input.setAttribute('aria-invalid', 'true'); input.focus(); return; }
       if (busy) return; busy = true;
       api.updateTeam(name).then(st => { state = st; busy = false; closeModal(); toast(T('team.saved')); renderMy(); }, () => { busy = false; toast(T('err.net')); });
-      return;
-    }
-    if (f.dataset.form === 'topic') {
-      const title = f.elements.title.value.trim(), desc = f.elements.desc.value.trim();
-      if (title.length < 2 || title.length > 30) { err.textContent = T('tp.err'); f.elements.title.setAttribute('aria-invalid', 'true'); f.elements.title.focus(); return; }
-      editingTopic = false; run(() => api.submitTopic({ title, desc }), T('tp.saved'));
       return;
     }
     if (f.dataset.form === 'create') {
@@ -2164,21 +2194,22 @@ document.querySelectorAll('.res-main').forEach(card => card.addEventListener('po
       el.innerHTML = `<div class="work-head"><div><h3><span class="badge ok">${T('w.done')}</span> <span style="font-size:13px;font-weight:500;color:var(--text-muted)">${T('w.version', { v: sub.version, t: fmtTime(sub.at) })}</span></h3></div>
           ${closed ? '' : `<button type="button" class="btn btn-ghost btn-sm" data-act="editWork">${T('w.edit')}</button>`}</div>
         <p class="receipt-title">${esc(sub.title)}</p><p class="receipt-tagline">${esc(sub.tagline)}</p>
-        <span class="badge">${T('w.t.' + sub.track)}</span>
+        <span class="badge">${sub.track === 'other' && sub.trackOther ? esc(sub.trackOther) : T('w.t.' + sub.track)}</span>
         <p class="receipt-desc">${esc(sub.desc)}</p>
         <div class="receipt-links">${links}</div>
         <p class="reg-note">${T(closed ? 'w.closedD' : 'w.rule')}</p>`;
       return;
     }
     if (closed) { el.innerHTML = `<div class="empty">${icon}<h3>${T('w.closedT')}</h3><p>${T('w.closedD')}</p></div>`; return; }
-    const d = w.draft || (editingWork && sub) || {};
+    const d = w.draft || (editingWork && sub) || (state.team && state.team.topic) || {};
     const v = k => esc(d[k] || '');
     const owner = state.team ? T('w.ownerTeam', { t: esc(state.team.name) }) : T('w.ownerSolo');
     el.innerHTML = `<form class="work-form" id="workForm" novalidate>
       <div class="work-head"><div><h3>${T('w.formT')}</h3><p>${T('w.owner')}${owner}</p></div></div>
       <div class="grid2">
         <label class="field"><span>${T('w.title')}</span><input type="text" name="title" maxlength="40" value="${v('title')}"><em class="field-error"></em></label>
-        <label class="field"><span>${T('w.track')}</span><select name="track"><option value="">${T('w.trackNone')}</option>${TRACKS.map(t => `<option value="${t}"${d.track === t ? ' selected' : ''}>${T('w.t.' + t)}</option>`).join('')}</select><em class="field-error"></em></label>
+        <label class="field"><span>${T('w.track')}</span><select name="track"><option value="">${T('w.trackNone')}</option>${TRACKS.map(t => `<option value="${t}"${d.track === t ? ' selected' : ''}>${T('w.t.' + t)}</option>`).join('')}</select>
+          <input type="text" name="trackOther" maxlength="20" placeholder="${T('w.trackOtherPh')}" aria-label="${T('w.trackOtherPh')}" value="${v('trackOther')}"${d.track === 'other' ? '' : ' hidden'} style="margin-top:8px"><em class="field-error"></em></label>
       </div>
       <label class="field"><span>${T('w.tagline')}</span><input type="text" name="tagline" maxlength="60" value="${v('tagline')}"><em class="field-error"></em></label>
       <label class="field"><span>${T('w.desc')}</span><textarea name="desc" maxlength="1000" placeholder="${T('w.descPh')}">${v('desc')}</textarea><em class="field-error"></em></label>
@@ -2201,19 +2232,19 @@ document.querySelectorAll('.res-main').forEach(card => card.addEventListener('po
       <p class="reg-note">${T('w.rule')}</p>
     </form>`;
   }
-  const workData = f => ({ title: f.elements.title.value.trim(), track: f.elements.track.value, tagline: f.elements.tagline.value.trim(), desc: f.elements.desc.value.trim(), demo: f.elements.demo.value.trim(), link: f.elements.link.value.trim(), report: f.elements.report.value.trim(), social: f.elements.social.value.trim(), repo: f.elements.repo.value.trim(), lux: f.elements.lux.checked });
+  const workData = f => ({ title: f.elements.title.value.trim(), track: f.elements.track.value, trackOther: f.elements.track.value === 'other' ? f.elements.trackOther.value.trim() : '', tagline: f.elements.tagline.value.trim(), desc: f.elements.desc.value.trim(), demo: f.elements.demo.value.trim(), link: f.elements.link.value.trim(), report: f.elements.report.value.trim(), social: f.elements.social.value.trim(), repo: f.elements.repo.value.trim(), lux: f.elements.lux.checked });
   function validateWork(f, d) {
     const url = u => /^https?:\/\/[^\s/$.?#].[^\s]*$/i.test(u);
     const errs = {
-      title: d.title.length < 2 || d.title.length > 40 ? T('w.e.title') : '', track: d.track ? '' : T('w.e.track'),
+      title: d.title.length < 2 || d.title.length > 40 ? T('w.e.title') : '', track: !d.track ? T('w.e.track') : d.track === 'other' && !d.trackOther ? T('w.e.trackOther') : '',
       tagline: d.tagline.length < 4 || d.tagline.length > 60 ? T('w.e.tagline') : '', desc: d.desc.length < 10 || d.desc.length > 1000 ? T('w.e.desc') : '',
       demo: !d.demo ? (d.link ? '' : T('w.e.either')) : url(d.demo) ? '' : T('w.e.url'), link: !d.link ? (d.demo ? '' : T('w.e.either')) : url(d.link) ? '' : T('w.e.url'), report: url(d.report) ? '' : T('w.e.url'), social: !d.social || url(d.social) ? '' : T('w.e.url'), repo: !d.repo || url(d.repo) ? '' : T('w.e.url'), lux: d.lux ? '' : T('w.e.lux'),
     };
     Object.keys(errs).forEach(k => {
-      const input = f.elements[k], holder = k === 'lux' ? f.querySelector('[data-for="lux"]') : input.closest('.field').querySelector('.field-error');
+      const input = f.elements[k === 'track' && d.track === 'other' ? 'trackOther' : k], holder = k === 'lux' ? f.querySelector('[data-for="lux"]') : input.closest('.field').querySelector('.field-error');
       holder.textContent = errs[k]; input.setAttribute('aria-invalid', errs[k] ? 'true' : 'false');
     });
-    const first = Object.keys(errs).find(k => errs[k]); if (first) { f.elements[first].focus(); return false; }
+    const first = Object.keys(errs).find(k => errs[k]); if (first) { f.elements[first === 'track' && d.track === 'other' ? 'trackOther' : first].focus(); return false; }
     return true;
   }
   async function workRun(fn, msg) {
@@ -2230,6 +2261,7 @@ document.querySelectorAll('.res-main').forEach(card => card.addEventListener('po
     if (await workRun(() => api.submitWork(d), T('w.submitToast'))) editingWork = false;
     renderWorks(); renderStage();
   });
+  document.addEventListener('change', e => { if (e.target.name === 'track' && e.target.closest('#workForm')) { const o = e.target.form.elements.trackOther; o.hidden = e.target.value !== 'other'; if (!o.hidden) o.focus(); } });
   document.addEventListener('input', e => { const f = e.target.closest && e.target.closest('#workForm'); if (f && e.target.getAttribute('aria-invalid') === 'true') { e.target.setAttribute('aria-invalid', 'false'); const h = e.target.name === 'lux' ? f.querySelector('[data-for="lux"]') : e.target.closest('.field').querySelector('.field-error'); if (h) h.textContent = ''; } });
   function workAction(a) {
     if (a === 'saveDraft') { const f = $('#workForm'); workRun(() => api.saveDraft(workData(f)), T('w.draftToast')).then(renderWorks); }
