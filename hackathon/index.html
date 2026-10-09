@@ -556,6 +556,15 @@ footer { padding: 72px 0 40px; margin-top: var(--section-y); border-top: 1px sol
 .my-stage-item span { font-size: 13.5px; color: var(--text-muted); }
 .my-stage-icon svg { width: 22px; height: 22px; margin-top: 1px; }
 .my-stage-next { text-align: right; justify-content: flex-end; }
+.my-stage-next[hidden] { display: none; }
+.my-steps { grid-column: 1 / -1; display: grid; grid-template-columns: repeat(6, 1fr); gap: 6px; list-style: none; margin: 0; padding: 0; counter-reset: st; }
+.my-steps li { position: relative; padding-top: 12px; font-size: 12.5px; color: var(--text-muted); counter-increment: st; }
+.my-steps li::before { content: ''; position: absolute; left: 0; right: 0; top: 0; height: 3px; border-radius: 2px; background: var(--border-subtle); }
+.my-steps li.done::before { background: rgba(172,199,252,.45); }
+.my-steps li.cur::before { background: var(--grad); }
+.my-steps li.done { color: var(--text-soft); }
+.my-steps li.cur { color: #fff; font-weight: 700; }
+.my-steps li.done::after { content: ' ✓'; color: var(--ice); }
 .my-stage-foot { grid-column: 1 / -1; display: flex; align-items: center; justify-content: space-between; gap: 16px; flex-wrap: wrap; padding-top: 16px; border-top: 1px solid var(--border-subtle); }
 .my-stage-foot .mono { font-size: 12.5px; font-weight: 600; color: var(--ice); letter-spacing: .04em; }
 .my-sec { margin-top: 56px; }
@@ -612,6 +621,12 @@ html[lang="zh-CN"] .my-sec-title, html[lang="zh-CN"] .my-title { font-family: va
 .members .who em { font-style: normal; font-size: 12.5px; color: var(--text-muted); font-weight: 500; margin-left: 8px; }
 .team-meta { display: flex; align-items: center; flex-wrap: wrap; gap: 4px 6px; margin-top: 14px; font-size: 13px; color: var(--text-muted); }
 .team-actions { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; margin-top: 22px; }
+.team-topic { margin-top: 22px; padding: 20px 22px; border: 1px solid var(--border); border-radius: var(--radius-sm); background: var(--bg-2); display: flex; flex-direction: column; gap: 10px; }
+.team-topic .lbl { font-size: 12.5px; font-weight: 600; color: var(--ice); letter-spacing: .04em; }
+.team-topic h4 { font-size: 17px; font-weight: 700; }
+.team-topic p { font-size: 13.5px; color: var(--text-muted); line-height: 1.7; }
+.team-topic textarea { min-height: 76px; }
+.team-topic .row { display: flex; gap: 10px; align-items: center; flex-wrap: wrap; }
 .team-actions p { font-size: 13px; color: var(--text-muted); flex: 1 1 260px; }
 .members .tag-muted { font-style: normal; font-size: 11.5px; font-weight: 600; color: var(--text-muted); padding: 1px 8px; border-radius: var(--radius-pill); background: rgba(255,255,255,.05); border: 1px solid var(--border); margin-left: 8px; }
 /* ⓘ info tooltip */
@@ -741,6 +756,7 @@ html[lang="zh-CN"] .eco-head h2 { font-family: var(--font-title); font-weight: 4
   .team-split { grid-template-columns: 1fr; }
   .my-stage { grid-template-columns: 1fr; }
   .my-stage-next { text-align: left; justify-content: flex-start; padding-left: 36px; }
+  .my-steps { grid-template-columns: repeat(3, 1fr); row-gap: 14px; }
   .res-grid { grid-template-columns: 1fr; }
   .awards { grid-template-columns: 1fr; }
   .prizes { grid-template-columns: repeat(3, 1fr); gap: 12px; }
@@ -1357,11 +1373,12 @@ html[lang="zh-CN"] .eco-head h2 { font-family: var(--font-title); font-weight: 4
     <div class="my-stage">
       <div class="my-stage-item">
         <span class="my-stage-icon"><svg viewBox="0 0 24 24" fill="none" stroke="url(#g1)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg></span>
-        <div><strong data-i18n="my.cur">当前阶段：报名、组队与作品提交</strong><span data-i18n="my.curD">组队交流，打磨并提交你的作品</span></div>
+        <div><strong id="stCur">当前阶段：个人报名</strong><span id="stCurD">加入赛事，开启你的创作之旅</span></div>
       </div>
-      <div class="my-stage-item my-stage-next">
-        <div><strong data-i18n="my.next">下一阶段：作品评选</strong><span data-i18n="my.nextD">11.20 – 11.30</span></div>
+      <div class="my-stage-item my-stage-next" id="stNextBox">
+        <div><strong id="stNext">下一阶段：组队</strong><span id="stNextD">寻找伙伴，创建或加入你的团队</span></div>
       </div>
+      <ol class="my-steps" id="mySteps" aria-label="参赛阶段"></ol>
       <div class="my-stage-foot">
         <span class="mono" data-i18n="my.dl">关键时间 · 10.19 报名开启 · 11.19 19:00 作品提交截止</span>
         <button type="button" class="btn btn-ghost btn-sm" data-open-community data-i18n="cta.communityFull">进入赛事社群</button>
@@ -1583,7 +1600,7 @@ const EN = {
   'nav.rules':'Rules & schedule','nav.res':'Resources','cta.my':'My entry','cta.community':'Join community','cta.communityFull':'Join the community','cta.submitSoon':'Submit project · Not yet open','cta.submit':'Submit project',
   'demo.head':'Made with Lux3D','demo.note':'Examples · assets to be replaced','demo1.t':'Voxel world level generator','demo1.g':'Games','demo2.t':'Old street rebuilt in 3D','demo2.g':'City memory','demo3.t':'Walkable digital exhibition','demo3.g':'Culture & tourism','demo4.t':'Collectible figure print prototype','demo4.g':'3D printing','demo5.t':'Robot training scene','demo5.g':'Embodied AI','demo6.t':'Product film from 3D assets','demo6.g':'LuxReal video',
   'hero.tagline':'Play in 3D, Create with Aholo','faq.more':'Still have questions? Ask in the community.',
-  'my.title':'My entry','my.back':'Back to event','my.cur':'Current stage: Registration, teams & submission','my.curD':'Team up, polish and submit your project','my.next':'Next: Judging','my.nextD':'Nov 20 – Nov 30','my.dl':'Key dates · Oct 19 registration opens · Nov 19, 19:00 submission deadline',
+  'my.title':'My entry','my.back':'Back to event','my.dl':'Key dates · Oct 19 registration opens · Nov 19, 19:00 submission deadline',
   'my.gateT':'Log in to see your entry','my.gateD':'Log in with your Aholo account to view your registration, credits and team.','my.reg':'Registration & credits','my.tools':'Creation tools','my.toolsD':'Build your project with Lux3D, and add other products as you need.','my.team':'My team','my.works':'My project','my.worksT':'Submissions are not open yet','my.worksD':'Once open, you can edit and submit your team’s project here.','my.worksBtn':'Submit project',
   'nav.login':'Log in','nav.logout':'Log out','nav.my':'My entry','m.loginT':'Log in to Aholo','m.loginD':'Log in with your Aholo account to register and manage your team.','m.loginBtn':'Log in with Aholo',
   'm.regT':'Register','m.regD':'Every participant registers individually first, then creates or joins a team.','f.name':'Nickname','f.email':'Contact email','f.role':'Role','f.roleNone':'Select','f.role1':'Developer','f.role2':'Designer','f.role3':'Creator','f.role4':'Student','f.role5':'Other','f.region':'Region','f.cn':'China','f.intl':'International','f.agree':'I have read and agree to the event rules','m.regSubmit':'Submit registration',
@@ -1776,6 +1793,16 @@ document.querySelectorAll('.res-main').forEach(card => card.addEventListener('po
     'w.e.url': ['请输入以 http:// 或 https:// 开头的有效链接', 'Enter a valid link starting with http:// or https://'], 'w.e.lux': ['提交前请确认作品使用 Aholo Lux3D 完成', 'Please confirm the project uses Aholo Lux3D'],
     'tl.rsvSoon': ['预约链接即将开放', 'Booking link coming soon'],
     'team.noReward': ['未获团队奖励', 'No team reward'], 'rw.done': ['已发放', 'granted'],
+    'st.cur': ['当前阶段：', 'Current stage: '], 'st.next': ['下一阶段：', 'Next: '],
+    'st.reg': ['个人报名', 'Registration'], 'st.regD': ['加入赛事，开启你的创作之旅', 'Join the event and start your creative journey'],
+    'st.team': ['组队', 'Team up'], 'st.teamD': ['寻找伙伴，创建或加入你的团队', 'Find partners — create or join a team'],
+    'st.topic': ['选题确认', 'Topic'], 'st.topicD': ['完善团队信息，提交你们的创作选题', 'Complete your team info and submit your topic'],
+    'st.work': ['作品提交', 'Submission'], 'st.workD': ['完成创作，让想法成为真实作品', 'Finish your build and turn the idea into a real project'],
+    'st.review': ['作品评审', 'Judging'], 'st.reviewD': ['专业评委与玩家评委共同评审参赛作品', 'Expert and player judges review the projects'],
+    'st.show': ['结果公示 · 作品展示', 'Results & showcase'], 'st.showD': ['公布获奖名单，展示全部参赛作品', 'Winners are announced and all projects are showcased'],
+    'tp.label': ['创作选题', 'Topic'], 'tp.formD': ['用一句话说明你们要做什么，提交后可在作品截止前修改。', 'Say in a sentence what you’ll build. You can edit it until the submission deadline.'],
+    'tp.title': ['选题名称', 'Topic title'], 'tp.desc': ['选题简介（选填）', 'Short description (optional)'], 'tp.submit': ['提交选题', 'Submit topic'], 'tp.edit': ['修改选题', 'Edit topic'], 'tp.cancel': ['取消', 'Cancel'],
+    'tp.wait': ['等待队长提交创作选题。', 'Waiting for the captain to submit the topic.'], 'tp.err': ['请输入 2–30 个字的选题名称', 'Enter a topic title of 2–30 characters'], 'tp.saved': ['选题已提交', 'Topic submitted'],
     'team.confirm': ['确认组队', 'Confirm team'], 'team.confirmD': ['确认后即成为正式团队，之后仍可换人或解散。', 'Confirming makes the team official; you can still change members or disband later.'],
     'team.wait': ['等待队长确认组队。', 'Waiting for the captain to confirm the team.'],
     'team.okD': ['团队已确认，仍可调整成员或解散。', 'Team confirmed. You can still change members or disband.'],
@@ -1817,6 +1844,7 @@ document.querySelectorAll('.res-main').forEach(card => card.addEventListener('po
     async joinTeam(code) { await wait(400); const s = load(); s.team = { id: code, name: T('team.demoName') + code, captain: false, confirmed: false, rewarded: false, members: [{ name: T('team.demoCaptain'), captain: true }, { name: s.profile.name, me: true }] }; return save(s); },
     // First confirmation grants the team reward to the members at that moment. The real status (processing → granted + date) comes from the server.
     async confirmTeam() { await wait(400); const s = load(); s.team.confirmed = true; if (!s.team.rewarded) { const now = Date.now(); s.team.rewarded = true; s.team.rewardCount = s.team.members.length; s.team.rewardSince = now; s.team.members.forEach(m => { m.rewarded = true; }); if (!s.profile.teamReward) { s.profile.teamReward = true; s.profile.teamRewardSince = now; } } return save(s); },
+    async submitTopic(t) { await wait(400); const s = load(); if (s.team && s.team.captain && s.team.confirmed) s.team.topic = t; return save(s); },
     async updateTeam(name) { await wait(300); const s = load(); if (s.team && s.team.captain) s.team.name = name; return save(s); },
     async removeMember(i) { await wait(300); const s = load(); if (s.team && s.team.captain && !s.team.members[i].me) s.team.members.splice(i, 1); return save(s); },
     // TODO: real endpoints; judging uses the last successful submission before the deadline
@@ -2011,7 +2039,20 @@ document.querySelectorAll('.res-main').forEach(card => card.addEventListener('po
         </div></div>
       <ul class="members">${members}</ul>
       <div class="team-meta">${T('team.count', { n: tm.members.length })}${rewardLine}</div>
-      ${confirmRow}`;
+      ${confirmRow}${topicBlock(tm)}`;
+  }
+  let editingTopic = false;
+  function topicBlock(tm) {
+    if (!tm.confirmed) return '';
+    const t = tm.topic, open = Date.now() < DEADLINE;
+    if (t && !(editingTopic && tm.captain && open)) return `<div class="team-topic"><span class="lbl">${T('tp.label')}</span><h4>${esc(t.title)}</h4>${t.desc ? `<p>${esc(t.desc)}</p>` : ''}
+      ${tm.captain && open ? `<div class="row"><button type="button" class="btn btn-ghost btn-sm" data-act="editTopic">${T('tp.edit')}</button></div>` : ''}</div>`;
+    if (!tm.captain) return `<div class="team-topic"><span class="lbl">${T('tp.label')}</span><p>${T('tp.wait')}</p></div>`;
+    if (!open) return '';
+    return `<form class="team-topic" data-form="topic" novalidate><span class="lbl">${T('tp.label')}</span><p>${T('tp.formD')}</p>
+      <label class="field"><span>${T('tp.title')}</span><input type="text" name="title" maxlength="30" value="${esc((t && t.title) || '')}"><em class="field-error"></em></label>
+      <label class="field"><span>${T('tp.desc')}</span><textarea name="desc" maxlength="120">${esc((t && t.desc) || '')}</textarea></label>
+      <div class="row"><button class="btn btn-primary btn-sm" type="submit">${T('tp.submit')}</button>${t ? `<button type="button" class="btn btn-ghost btn-sm" data-act="cancelTopic">${T('tp.cancel')}</button>` : ''}</div></form>`;
   }
 
   async function run(fn, okMsg) {
@@ -2039,6 +2080,8 @@ document.querySelectorAll('.res-main').forEach(card => card.addEventListener('po
       openModal('editTeam');
     } else if (a === 'confirm') run(() => api.confirmTeam(), T('toast.confirm'));
     else if (a === 'remove') { if (confirm(T('team.removeQ'))) run(() => api.removeMember(+btn.dataset.i)); }
+    else if (a === 'editTopic') { editingTopic = true; renderTeam(); }
+    else if (a === 'cancelTopic') { editingTopic = false; renderTeam(); }
     else if (a === 'disband') { if (confirm(T('team.disbandQ'))) run(() => api.leaveTeam()); }
     else if (a === 'leave') { if (confirm(T('team.leaveQ'))) run(() => api.leaveTeam()); }
   }
@@ -2051,6 +2094,12 @@ document.querySelectorAll('.res-main').forEach(card => card.addEventListener('po
       if (name.length < 2 || name.length > 20) { err.textContent = T('err.teamName'); input.setAttribute('aria-invalid', 'true'); input.focus(); return; }
       if (busy) return; busy = true;
       api.updateTeam(name).then(st => { state = st; busy = false; closeModal(); toast(T('team.saved')); renderMy(); }, () => { busy = false; toast(T('err.net')); });
+      return;
+    }
+    if (f.dataset.form === 'topic') {
+      const title = f.elements.title.value.trim(), desc = f.elements.desc.value.trim();
+      if (title.length < 2 || title.length > 30) { err.textContent = T('tp.err'); f.elements.title.setAttribute('aria-invalid', 'true'); f.elements.title.focus(); return; }
+      editingTopic = false; run(() => api.submitTopic({ title, desc }), T('tp.saved'));
       return;
     }
     if (f.dataset.form === 'create') {
@@ -2148,7 +2197,7 @@ document.querySelectorAll('.res-main').forEach(card => card.addEventListener('po
     const f = e.target, d = workData(f);
     if (!validateWork(f, d)) return;
     if (await workRun(() => api.submitWork(d), T('w.submitToast'))) editingWork = false;
-    renderWorks();
+    renderWorks(); renderStage();
   });
   document.addEventListener('input', e => { const f = e.target.closest && e.target.closest('#workForm'); if (f && e.target.getAttribute('aria-invalid') === 'true') { e.target.setAttribute('aria-invalid', 'false'); const h = e.target.name === 'lux' ? f.querySelector('[data-for="lux"]') : e.target.closest('.field').querySelector('.field-error'); if (h) h.textContent = ''; } });
   function workAction(a) {
@@ -2161,7 +2210,27 @@ document.querySelectorAll('.res-main').forEach(card => card.addEventListener('po
     show('my'); requestAnimationFrame(() => $('#myWorksSec').scrollIntoView());
   }
 
-  function renderMy() { renderReg(); renderTeam(); renderWorks(); }
+  /* ---------- 阶段状态条: follows the participant's own progress; judging and results follow the calendar ---------- */
+  const STAGES = ['reg', 'team', 'topic', 'work', 'review', 'show'];
+  const RESULTS_AT = new Date('2026-12-03T00:00:00+08:00').getTime();
+  function stageNow() {
+    const now = Date.now(), tm = state.team;
+    if (now >= RESULTS_AT) return 'show';
+    if (now >= DEADLINE) return 'review';
+    if (!registered()) return 'reg';
+    if (!tm || !tm.confirmed) return 'team';
+    if (!tm.topic) return 'topic';
+    if (!(state.work && state.work.submitted)) return 'work';
+    return 'review';
+  }
+  function renderStage() {
+    const i = STAGES.indexOf(stageNow()), cur = STAGES[i], next = STAGES[i + 1];
+    $('#stCur').textContent = T('st.cur') + T('st.' + cur); $('#stCurD').textContent = T('st.' + cur + 'D');
+    $('#stNextBox').hidden = !next;                      // last stage: nothing comes after
+    if (next) { $('#stNext').textContent = T('st.next') + T('st.' + next); $('#stNextD').textContent = T('st.' + next + 'D'); }
+    $('#mySteps').innerHTML = STAGES.map((k, j) => `<li class="${j < i ? 'done' : j === i ? 'cur' : ''}"${j === i ? ' aria-current="step"' : ''}>${T('st.' + k)}</li>`).join('');
+  }
+  function renderMy() { renderStage(); renderReg(); renderTeam(); renderWorks(); }
 
   /* 评审规则: the 100% core splits into five tiles (click it, or scroll it into view) */
   const spStage = document.getElementById('spStage');
