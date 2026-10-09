@@ -551,20 +551,16 @@ footer { padding: 72px 0 40px; margin-top: var(--section-y); border-top: 1px sol
 .my-back { display: inline-block; padding: 10px 0; font-size: 14px; font-weight: 600; color: var(--text-soft); transition: color .2s; white-space: nowrap; }
 .my-back:hover { color: #fff; }
 .my-stage { display: grid; grid-template-columns: 1fr auto; gap: 18px 24px; padding: 24px 28px; border: 1px solid var(--border); border-radius: var(--radius); background: linear-gradient(90deg, rgba(106,72,255,.14), rgba(69,87,255,.04) 60%, transparent), var(--surface); }
-.my-stage-item { display: flex; gap: 14px; align-items: flex-start; }
-.my-stage-item strong { display: block; font-size: 16px; font-weight: 700; }
-.my-stage-item span { font-size: 13.5px; color: var(--text-muted); }
-.my-stage-icon svg { width: 22px; height: 22px; margin-top: 1px; }
-.my-stage-next { text-align: right; justify-content: flex-end; }
-.my-stage-next[hidden] { display: none; }
-.my-steps { grid-column: 1 / -1; display: grid; grid-template-columns: repeat(6, 1fr); gap: 6px; list-style: none; margin: 0; padding: 0; counter-reset: st; }
-.my-steps li { position: relative; padding-top: 12px; font-size: 12.5px; color: var(--text-muted); counter-increment: st; }
-.my-steps li::before { content: ''; position: absolute; left: 0; right: 0; top: 0; height: 3px; border-radius: 2px; background: var(--border-subtle); }
-.my-steps li.done::before { background: rgba(172,199,252,.45); }
-.my-steps li.cur::before { background: var(--grad); }
+.my-steps { grid-column: 1 / -1; display: grid; grid-template-columns: repeat(6, 1fr); list-style: none; margin: 0; padding: 0; }
+.my-steps li { position: relative; padding-top: 30px; text-align: center; font-size: 13.5px; color: var(--text-muted); }
+.my-steps li::before { content: ''; position: absolute; top: 10px; left: -50%; right: 50%; height: 2px; margin-top: -0.5px; background: var(--border-subtle); }
+.my-steps li:first-child::before { display: none; }
+.my-steps li.done::before, .my-steps li.cur::before { background: linear-gradient(90deg, var(--violet), var(--blue)); }
+.my-steps li i { position: absolute; top: 4px; left: 50%; transform: translateX(-50%); width: 13px; height: 13px; border-radius: 50%; border: 1px solid var(--border-strong); background: var(--surface); z-index: 1; box-sizing: border-box; }
+.my-steps li.done i { background: var(--blue); border-color: var(--blue); }
+.my-steps li.cur i { width: 17px; height: 17px; top: 2px; background: #fff; border: 3px solid var(--violet); box-shadow: 0 0 0 5px rgba(106,72,255,.25), 0 0 18px rgba(106,72,255,.7); }
 .my-steps li.done { color: var(--text-soft); }
 .my-steps li.cur { color: #fff; font-weight: 700; }
-.my-steps li.done::after { content: ' ✓'; color: var(--ice); }
 .my-stage-foot { grid-column: 1 / -1; display: flex; align-items: center; justify-content: space-between; gap: 16px; flex-wrap: wrap; padding-top: 16px; border-top: 1px solid var(--border-subtle); }
 .my-stage-foot .mono { font-size: 12.5px; font-weight: 600; color: var(--ice); letter-spacing: .04em; }
 .my-sec { margin-top: 56px; }
@@ -755,8 +751,6 @@ html[lang="zh-CN"] .eco-head h2 { font-family: var(--font-title); font-weight: 4
   .sp-t1, .sp-t2, .sp-t3, .sp-t4 { grid-column: span 1; }
   .team-split { grid-template-columns: 1fr; }
   .my-stage { grid-template-columns: 1fr; }
-  .my-stage-next { text-align: left; justify-content: flex-start; padding-left: 36px; }
-  .my-steps { grid-template-columns: repeat(3, 1fr); row-gap: 14px; }
   .res-grid { grid-template-columns: 1fr; }
   .awards { grid-template-columns: 1fr; }
   .prizes { grid-template-columns: repeat(3, 1fr); gap: 12px; }
@@ -866,6 +860,12 @@ html[lang="zh-CN"] .eco-head h2 { font-family: var(--font-title); font-weight: 4
   html { scroll-behavior: auto; }
   *, *::before, *::after { animation: none !important; transition: none !important; }
   .reveal { opacity: 1; transform: none; }
+}
+@media (max-width: 640px) {
+  .my-stage { padding: 22px 14px; }
+  .my-stage-foot { padding-left: 6px; padding-right: 6px; }
+  .my-steps li { font-size: 10.5px; padding: 28px 0 0; line-height: 1.45; letter-spacing: 0; }
+  .my-steps .sep { display: block; height: 0; overflow: hidden; }
 }
 </style>
 </head>
@@ -1371,13 +1371,6 @@ html[lang="zh-CN"] .eco-head h2 { font-family: var(--font-title); font-weight: 4
     </div>
 
     <div class="my-stage">
-      <div class="my-stage-item">
-        <span class="my-stage-icon"><svg viewBox="0 0 24 24" fill="none" stroke="url(#g1)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg></span>
-        <div><strong id="stCur">当前阶段：个人报名</strong><span id="stCurD">加入赛事，开启你的创作之旅</span></div>
-      </div>
-      <div class="my-stage-item my-stage-next" id="stNextBox">
-        <div><strong id="stNext">下一阶段：组队</strong><span id="stNextD">寻找伙伴，创建或加入你的团队</span></div>
-      </div>
       <ol class="my-steps" id="mySteps" aria-label="参赛阶段"></ol>
       <div class="my-stage-foot">
         <span class="mono" data-i18n="my.dl">关键时间 · 10.19 报名开启 · 11.19 19:00 作品提交截止</span>
@@ -2224,11 +2217,8 @@ document.querySelectorAll('.res-main').forEach(card => card.addEventListener('po
     return 'review';
   }
   function renderStage() {
-    const i = STAGES.indexOf(stageNow()), cur = STAGES[i], next = STAGES[i + 1];
-    $('#stCur').textContent = T('st.cur') + T('st.' + cur); $('#stCurD').textContent = T('st.' + cur + 'D');
-    $('#stNextBox').hidden = !next;                      // last stage: nothing comes after
-    if (next) { $('#stNext').textContent = T('st.next') + T('st.' + next); $('#stNextD').textContent = T('st.' + next + 'D'); }
-    $('#mySteps').innerHTML = STAGES.map((k, j) => `<li class="${j < i ? 'done' : j === i ? 'cur' : ''}"${j === i ? ' aria-current="step"' : ''}>${T('st.' + k)}</li>`).join('');
+    const i = STAGES.indexOf(stageNow());
+    $('#mySteps').innerHTML = STAGES.map((k, j) => `<li class="${j < i ? 'done' : j === i ? 'cur' : ''}"${j === i ? ' aria-current="step"' : ''}><i></i>${T('st.' + k).replace(' · ', '<span class="sep"> · </span>')}</li>`).join('');
   }
   function renderMy() { renderStage(); renderReg(); renderTeam(); renderWorks(); }
 
