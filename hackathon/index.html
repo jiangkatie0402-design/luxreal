@@ -271,6 +271,7 @@ section.block { padding-block: var(--section-y); position: relative; }
 .sec-head { display: grid; grid-template-columns: 1fr 1fr; gap: 48px; align-items: end; margin-bottom: 72px; }
 .sec-index { display: flex; align-items: center; gap: 12px; font-family: var(--font-mono); font-size: 12px; font-weight: 600; letter-spacing: .16em; text-transform: uppercase; color: var(--text-muted); margin-bottom: 20px; }
 .sec-index::before { content: ''; width: 24px; height: 1px; background: var(--grad); }
+.sec-title .pool-amt { display: inline-block; font-size: clamp(44px, 14.5vw, 148px); line-height: 1; margin-bottom: 10px; }
 .sec-title { font-size: clamp(34px, 4.6vw, 60px); font-weight: 600; line-height: 1.08; letter-spacing: -.03em; }
 html[lang="zh-CN"] .sec-title { letter-spacing: .02em; line-height: 1.22; }
 .sec-head-stack { display: block; }
@@ -351,9 +352,9 @@ html[lang="zh-CN"] .sec-title { letter-spacing: .02em; line-height: 1.22; }
 .pz-sp-main { display: flex; align-items: center; gap: 18px; }
 .pz-icon { width: 56px; height: 56px; border-radius: 16px; display: grid; place-items: center; border: 1px solid rgba(172,199,252,.35); background: var(--bg-2); flex-shrink: 0; }
 .pz-icon svg { width: 28px; height: 28px; }
-.pz-sp-note { font-size: 14px; color: var(--text-muted); margin-top: 6px; }
+.pz-sp-note { font-size: clamp(18px, 1.8vw, 24px); font-weight: 700; color: var(--text); margin-top: 8px; }
 .pz-sp-amt { text-align: right; }
-.pz-special .prize-amt { font-size: clamp(52px, 6.4vw, 88px); margin: 0 0 6px; }
+.pz-special .prize-amt { font-size: clamp(44px, 6.4vw, 88px); margin: 0 0 6px; }
 .pz-special .prize-count { margin: 0; }
 .prizes { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; align-items: stretch; }
 .prize { position: relative; padding: 40px 36px; border-radius: var(--radius); border: 1px solid var(--border); background: var(--surface); display: flex; flex-direction: column; }
@@ -362,8 +363,10 @@ html[lang="zh-CN"] .sec-title { letter-spacing: .02em; line-height: 1.22; }
 .prize > * { position: relative; z-index: 1; }
 .prize-rank { font-family: var(--font-mono); font-size: 12px; font-weight: 600; letter-spacing: .14em; text-transform: uppercase; color: var(--text-muted); }
 .prize-amt { font-size: clamp(40px, 4.6vw, 64px); font-weight: 600; letter-spacing: -.03em; line-height: 1; margin: 28px 0 8px; font-variant-numeric: tabular-nums; }
+.prize-amt .pz-x { font-style: normal; font-size: .42em; font-weight: 500; color: var(--text-soft); margin-left: 10px; letter-spacing: 0; }
 .prize-amt sup { font-size: .42em; vertical-align: top; position: relative; top: .35em; margin-right: 4px; color: var(--text-soft); font-weight: 500; }
 .prize-count { font-size: 14px; color: var(--text-muted); margin-bottom: 28px; }
+.prize .prize-amt { margin-bottom: 28px; }
 .prize ul { list-style: none; margin-top: auto; border-top: 1px solid var(--border-subtle); padding-top: 20px; display: grid; gap: 10px; }
 .prize li { display: flex; gap: 10px; align-items: flex-start; font-size: 14px; color: var(--text-soft); }
 .prize li svg { width: 16px; height: 16px; flex-shrink: 0; margin-top: 4px; stroke: var(--ice); }
@@ -373,6 +376,8 @@ html[lang="zh-CN"] .sec-title { letter-spacing: .02em; line-height: 1.22; }
 .award-name { font-size: 16px; font-weight: 600; color: var(--text); }
 .award b i { font-style: normal; font-size: .7em; color: var(--text-muted); font-weight: 600; }
 .award p { font-size: 14px; color: var(--text-muted); margin-top: 4px; }
+.pz-more { margin-top: 18px; font-size: 14.5px; color: var(--text-soft); }
+.pz-more .link-btn { padding: 0 2px; font-size: inherit; }
 .prize-total { margin-top: auto; padding-top: 18px; border-top: 1px solid var(--border-subtle); font-size: 14px; color: var(--text-soft); font-weight: 600; }
 .award b { display: block; font-size: 26px; font-weight: 600; letter-spacing: -.02em; font-variant-numeric: tabular-nums; }
 
@@ -1229,44 +1234,42 @@ body.modal-open { overflow: hidden; }
   <div class="container">
     <div class="sec-head">
       <div class="reveal">
-        <h2 class="sec-title"><span class="grad-text">¥320,000</span><br><span data-i18n="prizes.title2">总奖金池</span></h2>
+        <h2 class="sec-title"><span class="grad-text pool-amt">¥320,000</span><br><span data-i18n="prizes.title2">总奖金池</span></h2>
       </div>
-      <p class="sec-desc reveal d1" data-i18n="prizes.desc">共设 23 个奖项：特别奖与一、二、三等奖之外，还有应用方向奖、有意思奖与人气奖。</p>
+      <p class="sec-desc reveal d1" data-i18n="prizes.desc">共设 23 个奖项：特别奖与一、二、三等奖之外，还有应用单项奖、创意单项奖、人气单项奖。</p>
     </div>
 
     <div class="pz-special reveal">
       <div class="pz-sp-main">
         <span class="pz-icon"><svg viewBox="0 0 24 24" fill="none" stroke="url(#g1)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M8 21h8M12 17v4M7 4h10v5a5 5 0 0 1-10 0V4Z"/><path d="M7 6H4v2a3 3 0 0 0 3 3M17 6h3v2a3 3 0 0 1-3 3"/></svg></span>
-        <div><span class="prize-rank" data-i18n="p0.r">特别奖 · Special Award</span><p class="pz-sp-note" data-i18n="p0.n">奖项名称待定</p></div>
+        <div><span class="prize-rank" data-i18n="p0.r">特别奖</span><p class="pz-sp-note" data-i18n="p0.n">空间智能生态特别奖</p></div>
       </div>
-      <div class="pz-sp-amt"><div class="prize-amt grad-text"><sup>¥</sup>100,000</div><span class="prize-count" data-i18n="p0.c">1 名</span></div>
+      <div class="pz-sp-amt"><div class="prize-amt grad-text"><sup>¥</sup>100,000</div></div>
     </div>
 
     <div class="prizes">
       <div class="prize reveal">
-        <span class="prize-rank" data-i18n="p1.r">一等奖 · First Prize</span>
+        <span class="prize-rank" data-i18n="p1.r">一等奖</span>
         <div class="prize-amt"><sup>¥</sup>50,000</div>
-        <div class="prize-count" data-i18n="p1.c">1 名</div>
       </div>
       <div class="prize reveal d1">
-        <span class="prize-rank" data-i18n="p2.r">二等奖 · Second Prize</span>
-        <div class="prize-amt"><sup>¥</sup>30,000</div>
-        <div class="prize-count" data-i18n="p2.c">2 名 · 每队奖金</div>
+        <span class="prize-rank" data-i18n="p2.r">二等奖</span>
+        <div class="prize-amt"><sup>¥</sup>30,000<i class="pz-x">× 2</i></div>
         <div class="prize-total" data-i18n="p2.t">合计 ¥60,000</div>
       </div>
       <div class="prize reveal d2">
-        <span class="prize-rank" data-i18n="p3.r">三等奖 · Third Prize</span>
-        <div class="prize-amt"><sup>¥</sup>10,000</div>
-        <div class="prize-count" data-i18n="p3.c">3 名 · 每队奖金</div>
+        <span class="prize-rank" data-i18n="p3.r">三等奖</span>
+        <div class="prize-amt"><sup>¥</sup>10,000<i class="pz-x">× 3</i></div>
         <div class="prize-total" data-i18n="p3.t">合计 ¥30,000</div>
       </div>
     </div>
 
     <div class="awards reveal">
-      <div class="award"><span class="award-name" data-i18n="aw1">应用方向奖</span><b>¥5,000 <i>× 5</i></b><p data-i18n="aw1.d">面向游戏、文旅、影视创作、3D 打印、具身智能等具体场景，奖励真正把 Lux3D 用到实处的作品。应用方向奖从 TOP 50 入围作品中由专业评审评出</p></div>
-      <div class="award"><span class="award-name" data-i18n="aw2">有意思奖</span><b>¥5,000 <i>× 5</i></b><p data-i18n="aw2.d">不同内容、不同主题，for fun——奖励最有趣、最出人意料的作品。有意思奖从 TOP 50 入围作品中由玩家评审评出</p></div>
-      <div class="award"><span class="award-name" data-i18n="aw3">人气奖</span><b>¥5,000 <i>× 6</i></b><p data-i18n="aw3.d">国内4个，国外2个，参赛团队须在规定时间内，通过指定公开平台（国内：小红书；海外：X）发布作品视频，统一带赛事官方话题标签，并在作品提交系统中登记唯一参评链接。组委会将在规定截止时间记录该帖的公开点赞数，点赞数最高且通过真实性审核的有效作品获得人气奖。<br>人气奖面向所有有效参赛作品开放，只决定对应奖项，不折算为专业评审分，也不影响一、二、三等奖和其他专业奖项的评选。</p></div>
+      <div class="award"><span class="award-name" data-i18n="aw1">应用单项奖</span><b>¥5,000 <i>× 5</i></b></div>
+      <div class="award"><span class="award-name" data-i18n="aw2">创意单项奖</span><b>¥5,000 <i>× 5</i></b></div>
+      <div class="award"><span class="award-name" data-i18n="aw3">人气单项奖</span><b>¥5,000 <i>× 6</i></b></div>
     </div>
+    <p class="pz-more reveal" data-i18n="pz.more">如需了解评审细则，请<button type="button" class="link-btn" data-open-community>加入社群</button>后查阅《选手手册》。</p>
 
 
     <!-- 提交内容 -->
@@ -1675,11 +1678,11 @@ const EN = {
   'res.opt':'Optional','res.api.t':'Aholo API','res.api.d':'Aholo API brings together APIs for 3D object generation, world generation, cloud rendering, reconstruction and more.','res.r3.t':'LuxReal','res.r3.d':'LuxReal is Manycore’s AI video-creation agent built on 3D technology. It keeps space and time consistent while quickly producing highly controllable, creative video.',
   'res.b.t':'Sign up to get creation credits and start your project','res.b.d':'Join the hackathon and explore new possibilities with your teammates.',
   'dv.title':'What to submit','dv.desc':'Every project submits the materials below: all required items, plus bonus items where you can.','dv.must':'Required','dv.bonus':'Bonus','dv.mustD':'All three are needed','dv.bonusD':'Encouraged','dv1.t':'Project report (PDF or PPT)','dv1.d':'Document the journey from idea to result — <b>including process screenshots, key asset iterations or key result shots</b> — so judges quickly see what you built, how, and why it’s worth trying.','dv2.t':'Full demo link / promo video (either one)','dv2.d':'Submit a link where the project can be tried or run directly; or submit a demo video — edits, voice-over and captions are fine, but it must include real running footage','dv4.t':'Social media post link','dv4.d':'Publish a project introduction on a public social platform and submit the link; the post must stay public until results are announced.','dv5.t':'Source code','dv5.d':'A Git repository or a zipped codebase is encouraged.','cr.title':'Judging criteria','cr.desc':'Judges score each project across five dimensions totalling 100%.','cr1.t':'Use of Manycore tech stack','cr1.d':'Manycore’s technology plays a core role in the project.','cr2.t':'Fun factor','cr2.d':'Gameplay and spatial interaction are creative and fun; the video clearly shows the highlights and has the potential to spark public discussion.','cr3.t':'Innovation','cr3.d':'The approach, interaction or concept is fresh and different from common existing products.','cr4.t':'Completeness','cr4.d':'The core experience is complete, the demo runs reliably, and the materials match the result.','cr5.t':'Reach','cr5.d':'The project video is posted with the official hashtag on Xiaohongshu (China) / X (international).','cr.total':'Score breakdown','sp.hint':'Tap to reveal the breakdown','sp.reset':'Collapse','sp.rule':'How it is scored','jg.title':'Judges','jg.pro':'Expert judges','jg.proD':'A professional lens to pick the strongest projects with real-world use','jg.tbaName':'Judges to be announced','jg.tbaD':'More names coming soon…','jg.player':'Player judges','jg.playerD':'Real hands-on play to pick the most loved and most fun projects','jg.playerN':'seasoned AI practitioners','jg.playerNote':'form the player jury and help choose the awards from a public point of view.',
-  'prizes.title2':'total prize pool','prizes.desc':'23 awards in total: a special award and first, second and third prizes, plus application, fun and people’s choice awards.',
-  'p0.r':'Special Award','p0.n':'Award name TBA','p0.c':'1 winner','p1.r':'First Prize','p1.c':'1 winner','p2.r':'Second Prize','p2.c':'2 winners · per team','p2.t':'¥60,000 in total','p3.r':'Third Prize','p3.c':'3 winners · per team','p3.t':'¥30,000 in total',
-  'aw1':'Application Award','aw1.d':'For projects that put Lux3D to real use in games, culture & tourism, film, 3D printing, embodied AI and more. Chosen from the TOP 50 by the expert judges.',
-  'aw2':'Most Fun Award','aw2.d':'Any content, any theme, just for fun — for the most delightful and surprising projects. Chosen from the TOP 50 by the player judges.',
-  'aw3':'People’s Choice','aw3.d':'4 in China, 2 international. Within the set period, teams publish their project video on the designated platform (China: Xiaohongshu; international: X) with the official hashtag and register that single entry link in the submission system. At the deadline the organizers record the post’s public likes; the valid, authenticity-verified projects with the most likes win.<br>People’s Choice is open to all valid entries and only decides its own award; it is not converted into expert scores and does not affect the first, second, third or other expert awards.',
+  'prizes.title2':'total prize pool','pz.more':'For the full judging rules, <button type="button" class="link-btn" data-open-community>join the community</button> and see the Participant Handbook.','prizes.desc':'23 awards in total: a special award and first, second and third prizes, plus single awards for application, creativity and popularity.',
+  'p0.r':'Special Award','p0.n':'Spatial Intelligence Ecosystem Special Award','p1.r':'First Prize','p2.r':'Second Prize','p2.t':'¥60,000 in total','p3.r':'Third Prize','p3.t':'¥30,000 in total',
+  'aw1':'Application Award',
+  'aw2':'Creativity Award',
+  'aw3':'Popularity Award',
   'awr.t':'People’s Choice rules','awr.d':'Within the set period, teams must publish their project video on the designated public platform (China: Xiaohongshu; international: X) with the official event hashtag, and register that single entry link in the submission system. At the deadline the organizers record the post’s public like count; the valid, authenticity-verified projects with the most likes win.','awr.d2':'People’s Choice is open to all valid entries and only decides its own award; it is not converted into expert scores and does not affect the first, second, third or other expert awards.',
   'tl.title':'Timeline','tl.desc':'All times are Beijing Time (UTC+8). Projects are submitted online; offline workshops and livestreams are open to all.',
   'tl1.t':'Registration opens','tl1.d':'Sign up solo or as a team and join the community',
