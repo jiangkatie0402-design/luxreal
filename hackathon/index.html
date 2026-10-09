@@ -383,18 +383,19 @@ html[lang="zh-CN"] .sec-title { letter-spacing: .02em; line-height: 1.22; }
 .tl2-ev::after { content: ''; width: 1px; height: 12px; background: var(--border-strong); }
 .tl2-ev.past b { color: var(--text-muted); background: var(--bg-2); border-color: var(--border); }
 .tl2-ev.next b, .tl2-ev.live b { background: #4557FF; border-color: #4557FF; color: #fff; box-shadow: 0 0 0 4px rgba(69,87,255,.25); }
-.tl2-rail { position: relative; height: 38px; }
-.tl2-seg { position: absolute; z-index: 1; top: 0; bottom: 0; border-radius: 10px; display: flex; align-items: center; padding: 0 12px; overflow: hidden; white-space: nowrap; font-size: 12.5px; font-weight: 700; }
-.tl2-run { padding-left: 16px; background: linear-gradient(90deg, #1b1446, #141a44); color: var(--text); border: 1px solid rgba(106,72,255,.5); }
-.tl2-rev { background: #141b2c; color: var(--ice); border: 1px solid rgba(172,199,252,.35); }
+.tl2-rail { position: relative; height: 40px; border-radius: 12px; overflow: hidden; border: 1px solid rgba(106,72,255,.35);
+  /* one continuous bar: phase zones are shaded inside it (run 0–59.44%, review 59.44–80.39%, then results/awards) */
+  background: linear-gradient(90deg, rgba(106,72,255,.16) 0 59.44%, rgba(172,199,252,.09) 59.44% 80.39%, rgba(255,255,255,.02) 80.39%), var(--bg-2); }
+.tl2-seg { position: absolute; z-index: 2; top: 0; bottom: 0; display: flex; align-items: center; padding: 0 14px; overflow: hidden; white-space: nowrap; font-size: 12.5px; font-weight: 700; }
+.tl2-run { color: var(--text); }
+.tl2-rev { color: var(--ice); }
 .tl2-rev i { font-style: normal; font-weight: 600; opacity: .8; margin-left: 4px; }
-.tl2-tbd { position: absolute; top: 50%; right: 0; height: 0; border-top: 1px dashed var(--border-strong); }
-.tl2-fill { position: absolute; z-index: 2; left: 0; bottom: -1px; height: 3px; width: 0; border-radius: 3px; background: linear-gradient(90deg, #6A48FF, #4557FF 60%, #ACC7FC); box-shadow: 0 0 12px rgba(106,72,255,.8); transition: width 1.4s var(--ease); }
-.tl2-fill::after { content: ''; position: absolute; right: -4px; top: 50%; width: 8px; height: 8px; margin-top: -4px; border-radius: 50%; background: #fff; box-shadow: 0 0 10px rgba(255,255,255,.9); }
-.tl2-dot { position: absolute; top: 50%; width: 14px; height: 14px; margin: -7px 0 0 -7px; border-radius: 50%; background: var(--bg); border: 2px solid #71717a; z-index: 2; }
-.tl2-dot:first-of-type { margin-left: 0; } .tl2-dot:last-of-type { margin-left: -14px; }
-.tl2-dot.done { background: var(--ice); border-color: var(--ice); }
-.tl2-rail .tl2-dot:nth-of-type(1), .tl2-rail .tl2-dot:nth-of-type(2) { display: none; }
+.tl2-tbd { display: none; }
+.tl2-fill { position: absolute; z-index: 1; left: 0; top: 0; bottom: 0; width: 0; background: linear-gradient(90deg, rgba(106,72,255,.5), rgba(69,87,255,.55) 85%, rgba(120,140,255,.7)); transition: width 1.4s var(--ease); }
+.tl2-fill::after { content: ''; position: absolute; right: -14px; top: 0; bottom: 0; width: 14px; background: linear-gradient(90deg, rgba(120,140,255,.45), transparent); }
+/* phase boundaries: hairlines inside the bar */
+.tl2-dot { position: absolute; z-index: 1; top: 0; bottom: 0; width: 1px; background: rgba(255,255,255,.16); }
+.tl2-rail .tl2-dot:first-of-type, .tl2-rail .tl2-dot:last-of-type { display: none; }
 .tl2-labels { position: relative; height: 58px; margin-top: 10px; }
 .tl2-ms { position: absolute; top: 0; display: flex; flex-direction: column; gap: 2px; white-space: nowrap; }
 .tl2-ms .mono { font-size: 12.5px; font-weight: 600; color: var(--ice); }
@@ -402,6 +403,7 @@ html[lang="zh-CN"] .sec-title { letter-spacing: .02em; line-height: 1.22; }
 .tl2-c { transform: translateX(-50%); align-items: center; } .tl2-r { transform: translateX(-100%); align-items: flex-end; }
 .tl2-today { position: absolute; top: 0; bottom: 2px; left: 0; z-index: 3; pointer-events: none; transition: left 1.4s var(--ease); }
 .tl2-today::after { content: ''; position: absolute; left: 0; top: 26px; bottom: 0; width: 2px; margin-left: -1px; background: #fff; box-shadow: 0 0 10px rgba(255,255,255,.6); }
+.tl2-today::before { content: ''; position: absolute; left: -5px; bottom: -2px; border: 5px solid transparent; border-top: 6px solid #fff; border-bottom: 0; }
 .tl2-pill { position: absolute; top: 0; left: 0; transform: translateX(-50%); padding: 4px 10px; border-radius: var(--radius-pill); background: #fff; color: #101012; font-size: 12px; font-weight: 700; white-space: nowrap; }
 .tl2-pill b { font-weight: 700; }
 .tl2-today.edge-l .tl2-pill { transform: none; left: -8px; } .tl2-today.edge-r .tl2-pill { transform: translateX(-100%); left: 8px; }
@@ -926,7 +928,7 @@ html[lang="zh-CN"] .eco-head h2 { font-family: var(--font-title); font-weight: 4
   .tl2-ctop { grid-column: 1 / -1; }
   .tl2-card h4 { font-size: 15px; }
   .tl2-rsv { grid-column: 1 / -1; justify-self: start; margin: 4px 0 0; }
-  .tl2-seg { font-size: 11px; padding: 0 6px; } .tl2-run { padding-left: 16px; } .tl2-rev i { display: none; }
+  .tl2-seg { font-size: 11px; padding: 0 8px; } .tl2-rev i { display: none; }
   .tl2-labels { display: none; }
   .tl2-mslist { display: grid; list-style: none; margin-top: 18px; border-top: 1px solid var(--border-subtle); }
   .tl2-mslist li { display: flex; justify-content: space-between; align-items: baseline; padding: 10px 0; border-bottom: 1px solid var(--border-subtle); }
@@ -1197,7 +1199,7 @@ html[lang="zh-CN"] .eco-head h2 { font-family: var(--font-title); font-weight: 4
         <div class="tl2-top"><span class="tl2-ev" data-ev="ev1" style="left:11.22%" data-start="2026-10-24T00:00:00+08:00" data-end="2026-10-26T00:00:00+08:00"><b>1</b></span><span class="tl2-ev" data-ev="ev2" style="left:19.63%" data-start="2026-10-29T00:00:00+08:00" data-end="2026-10-30T00:00:00+08:00"><b>2</b></span><span class="tl2-ev" data-ev="ev3" style="left:24.3%" data-start="2026-10-31T00:00:00+08:00" data-end="2026-11-02T00:00:00+08:00"><b>3</b></span><span class="tl2-ev" data-ev="ev4" style="left:37.39%" data-start="2026-11-07T00:00:00+08:00" data-end="2026-11-09T00:00:00+08:00"><b>4</b></span><span class="tl2-ev" data-ev="ev5" style="left:45.8%" data-start="2026-11-12T00:00:00+08:00" data-end="2026-11-13T00:00:00+08:00"><b>5</b></span><div class="tl2-today" id="tlToday"><span class="tl2-pill"><span data-i18n="tl.today">今天</span> <b class="mono" id="tlTodayD"></b></span></div></div>
         <div class="tl2-rail">
           <div class="tl2-seg tl2-run" style="left:0;width:59.44%"><span data-i18n="tl.run">参赛期</span></div>
-          <div class="tl2-seg tl2-rev" style="left:59.83%;width:20.56%"><span><span data-i18n="tl.rev">评审期</span> <i class="mono">11.20 – 11.30</i></span></div>
+          <div class="tl2-seg tl2-rev" style="left:59.44%;width:20.95%"><span><span data-i18n="tl.rev">评审期</span> <i class="mono">11.20 – 11.30</i></span></div>
           <div class="tl2-tbd" style="left:85.07%"></div>
           <div class="tl2-fill" id="tlFill"></div>
           <span class="tl2-dot" style="left:0%" data-at="2026-10-19T00:00:00+08:00"></span><span class="tl2-dot" style="left:59.44%" data-at="2026-11-19T19:00:00+08:00"></span><span class="tl2-dot" style="left:85.07%" data-at="2026-12-03T12:00:00+08:00"></span><span class="tl2-dot" style="left:100%"></span>
