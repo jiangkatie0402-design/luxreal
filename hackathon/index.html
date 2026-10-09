@@ -578,12 +578,11 @@ html[lang="zh-CN"] :is(.hero h1, .sec-title, .final h2) { font-family: var(--fon
 
 /* ---------- Footer ---------- */
 footer { padding: 72px 0 40px; margin-top: var(--section-y); border-top: 1px solid var(--border-subtle); }
-.foot-grid { display: grid; grid-template-columns: 1.5fr 1fr 1fr 1fr; gap: 40px; }
+.foot-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 40px; }
 .foot-grid h5 { font-family: var(--font-mono); font-size: 11.5px; letter-spacing: .16em; text-transform: uppercase; color: var(--text-muted); font-weight: 600; margin-bottom: 18px; }
 .foot-grid ul { list-style: none; display: grid; gap: 10px; }
 .foot-grid a { display: inline-block; padding: 6px 0; font-size: 14px; color: var(--text-soft); transition: color .2s; }
 .foot-grid a:hover { color: var(--text); }
-.foot-brand p { margin-top: 18px; font-size: 14px; color: var(--text-muted); max-width: 300px; }
 .foot-bottom { margin-top: 64px; padding-top: 24px; border-top: 1px solid var(--border-subtle); display: flex; justify-content: space-between; gap: 16px; flex-wrap: wrap; font-size: 13px; color: var(--text-muted); }
 
 /* ---------- Hero tagline / disabled button ---------- */
@@ -869,7 +868,6 @@ body.modal-open { overflow: hidden; }
   .rule-arrow { padding: 6px 0 6px 16px; }
   .rule-arrow svg { transform: rotate(90deg); }
   .foot-grid { grid-template-columns: 1fr 1fr; }
-  .foot-brand { grid-column: span 2; }
 }
 @media (max-width: 640px) {
   .brand-tag { display: none; }
@@ -1275,8 +1273,8 @@ body.modal-open { overflow: hidden; }
     <div class="jr-block reveal" id="deliverables">
       <div class="jr-head"><h3 class="rules-title" data-i18n="dv.title">提交内容</h3><p class="rules-desc" data-i18n="dv.desc">每件作品需提交以下材料：必交项缺一不可，加分项鼓励提交。</p></div>
       <div class="dv-grid">
-        <article class="dv-card dv-must"><span class="dv-tag" data-i18n="dv.must">必交项</span><h4 data-i18n="dv1.t">项目报告书（PDF 或 PPT 二选一）</h4><p data-i18n="dv1.d">报告书需要完整记录从创意到成果的过程，<b>包含过程截图、关键资产迭代对比或一些关键效果截图</b>，让评委可以快速看懂项目做了什么、怎么做、为什么值得体验。</p></article>
-        <article class="dv-card dv-must"><span class="dv-tag" data-i18n="dv.must">必交项</span><h4 data-i18n="dv2.t">完整 Demo 链接/宣传视频（二选一）</h4><p data-i18n="dv2.d">提交可直接体验或运行的作品链接；提交一段demo视频，视频可以剪辑、配音或加字幕，但必须包含真实运行画面</p></article>
+        <article class="dv-card dv-must"><span class="dv-tag" data-i18n="dv.must">必交项</span><h4 data-i18n="dv1.t">项目报告书（PDF 或 PPT）</h4><p data-i18n="dv1.d">报告书需要完整记录从创意到成果的过程，<b>包含过程截图、关键资产迭代对比或一些关键效果截图</b>，让评委可以快速看懂项目做了什么、怎么做、为什么值得体验。</p></article>
+        <article class="dv-card dv-must"><span class="dv-tag" data-i18n="dv.must">必交项</span><h4 data-i18n="dv2.t">完整 Demo（链接或视频）</h4><p data-i18n="dv2.d">提交可直接体验或运行的作品链接；提交一段demo视频，视频可以剪辑、配音或加字幕，但必须包含真实运行画面</p></article>
         <article class="dv-card dv-bonus"><span class="dv-tag" data-i18n="dv.bonus">加分项</span><h4 data-i18n="dv4.t">社交媒体发布链接</h4><p data-i18n="dv4.d">在公开社交媒体平台发布项目介绍，并提交对应链接，帖子需在结果公布前保持公开可访问。</p></article>
         <article class="dv-card dv-bonus"><span class="dv-tag" data-i18n="dv.bonus">加分项</span><h4 data-i18n="dv5.t">项目源代码</h4><p data-i18n="dv5.d">鼓励提交 Git 仓库或代码压缩包。</p></article>
       </div>
@@ -1284,7 +1282,7 @@ body.modal-open { overflow: hidden; }
 
     <!-- 评审规则 -->
     <div class="jr-block reveal" id="criteria">
-      <div class="jr-head"><h3 class="rules-title" data-i18n="cr.title">评审规则</h3><p class="rules-desc" data-i18n="cr.desc">评委从五个维度对作品打分，总分 100%。</p></div>
+      <div class="jr-head"><h3 class="rules-title" data-i18n="cr.title">评审规则</h3><p class="rules-desc" data-i18n="cr.desc">评委从五个维度对作品打分，最终得分 = 专家评委 70% + 玩家评委 30%。</p></div>
       <div class="sp-stage" id="spStage">
         <button type="button" class="sp-core" id="spCore" aria-label="HOW WE SCORE">
           <span class="sp-ring"></span>
@@ -1432,8 +1430,8 @@ body.modal-open { overflow: hidden; }
 <!-- ======================= FINAL CTA ======================= -->
 <section class="container" id="register">
   <div class="final reveal">
-    <h2 data-i18n="final.title">下一个空间，<br>由你来创造。</h2>
-    <p data-i18n="final.desc">2026 年 10 月 19 日开放报名，11 月 19 日 19:00 提交截止，12 月初公布结果。用 Aholo Lux3D 做出你的第一个空间作品。</p>
+    <h2 data-i18n="final.title">Play in 3D,<br>Create with Aholo</h2>
+    <p data-i18n="final.desc">2026 年 10 月 19 日开放报名，11 月 19 日 19:00 提交截止，12 月初公布结果。用 Aholo Lux3D 做出你的第一个作品。</p>
     <div class="hero-cta">
       <a href="#register" class="btn btn-primary" data-reg-cta><span data-i18n="cta.register">立即报名</span><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M3 8h10M9 4l4 4-4 4"/></svg></a>
       <a href="https://www.aholo3d.cn/" target="_blank" rel="noopener" class="btn btn-ghost" data-i18n="cta.aholo">了解 Aholo</a>
@@ -1472,7 +1470,7 @@ body.modal-open { overflow: hidden; }
 
       <section class="my-sec">
         <h2 class="my-sec-title" data-i18n="my.tools">开放工具</h2>
-        <p class="my-sec-desc" data-i18n="my.toolsD">使用 Lux3D 构建参赛作品，也可搭配其他产品拓展创作。</p>
+        <p class="my-sec-desc" data-i18n="my.toolsD">使用 Aholo Lux3D 构建参赛作品，也可搭配其他产品拓展创作。</p>
     <div class="res-grid">
       <article class="res-main">
         <div class="res-main-body">
@@ -1620,21 +1618,17 @@ body.modal-open { overflow: hidden; }
 <footer>
   <div class="container">
     <div class="foot-grid">
-      <div class="foot-brand">
-        <span class="aholo-logo" role="img" aria-label="Aholo"><span class="al-icon"></span><span class="al-word"></span></span>
-        <p data-i18n="foot.tag">空间智能平台 —— 空间重建、生成、编辑与理解。</p>
-      </div>
       <div>
         <h5 data-i18n="foot.event">赛事</h5>
-        <ul><li><a href="#timeline" data-i18n="nav.timeline">赛程细则</a></li><li><a href="#prizes" data-i18n="nav.prizes">奖项与评审</a></li><li><a href="#resources" data-i18n="nav.resources">开放工具</a></li><li><a href="#faq">FAQ</a></li></ul>
+        <ul><li><a href="#about" data-i18n="nav.about">关于比赛</a></li><li><a href="#timeline" data-i18n="nav.timeline">赛程细则</a></li><li><a href="#prizes" data-i18n="nav.prizes">奖项与评审</a></li><li><a href="#resources" data-i18n="nav.resources">开放工具</a></li><li><a href="#faq">FAQ</a></li></ul>
       </div>
       <div>
-        <h5 data-i18n="foot.product">产品</h5>
-        <ul><li><a href="https://www.aholo3d.cn/" target="_blank" rel="noopener" data-i18n="foot.platform">Aholo 空间智能平台</a></li><li><a href="https://www.aholo3d.cn/" target="_blank" rel="noopener">Aholo Lux3D</a></li></ul>
+        <h5 data-i18n="nav.resources">开放工具</h5>
+        <ul><li><a href="https://www.aholo3d.cn/" target="_blank" rel="noopener">Aholo Lux3D</a></li><li><a href="https://www.aholo3d.cn/" target="_blank" rel="noopener">Aholo</a></li><li><a href="https://www.aholo3d.cn/" target="_blank" rel="noopener">Aholo API</a></li><li><a href="https://www.aholo3d.cn/" target="_blank" rel="noopener">LuxReal</a></li></ul>
       </div>
       <div>
         <h5 data-i18n="foot.contact">联系</h5>
-        <ul><li><a href="mailto:hackathon@aholo3d.cn">hackathon@aholo3d.cn</a></li><li><a href="https://github.com/manycoretech" target="_blank" rel="noopener">GitHub</a></li></ul>
+        <button type="button" class="btn btn-ghost btn-sm" data-open-community data-i18n="faq.btn">加入赛事社群</button>
       </div>
     </div>
     <div class="foot-bottom">
@@ -1676,7 +1670,7 @@ const EN = {
   'res.must':'Required','res.lux.d':'Aholo Lux3D is a 3D generation model built in-house by Manycore.<br>Upload an image or text and quickly generate a full set of previewable, editable 3D assets.',
   'res.opt':'Optional','res.api.t':'Aholo API','res.api.d':'Aholo API brings together APIs for 3D object generation, world generation, cloud rendering, reconstruction and more.','res.r3.t':'LuxReal','res.r3.d':'LuxReal is Manycore’s AI video-creation agent built on 3D technology. It keeps space and time consistent while quickly producing highly controllable, creative video.',
   'res.b.t':'Sign up to get creation credits and start your project','res.b.d':'Join the hackathon and explore new possibilities with your teammates.',
-  'dv.title':'What to submit','dv.desc':'Every project submits the materials below: all required items, plus bonus items where you can.','dv.must':'Required','dv.bonus':'Bonus','dv.mustD':'All three are needed','dv.bonusD':'Encouraged','dv1.t':'Project report (PDF or PPT)','dv1.d':'Document the journey from idea to result — <b>including process screenshots, key asset iterations or key result shots</b> — so judges quickly see what you built, how, and why it’s worth trying.','dv2.t':'Full demo link / promo video (either one)','dv2.d':'Submit a link where the project can be tried or run directly; or submit a demo video — edits, voice-over and captions are fine, but it must include real running footage','dv4.t':'Social media post link','dv4.d':'Publish a project introduction on a public social platform and submit the link; the post must stay public until results are announced.','dv5.t':'Source code','dv5.d':'A Git repository or a zipped codebase is encouraged.','cr.title':'Judging criteria','cr.desc':'Judges score each project across five dimensions totalling 100%.','cr1.t':'Use of Manycore tech stack','cr1.d':'Manycore’s technology plays a core role in the project.','cr2.t':'Fun factor','cr2.d':'Gameplay and spatial interaction are creative and fun; the video clearly shows the highlights and has the potential to spark public discussion.','cr3.t':'Innovation','cr3.d':'The approach, interaction or concept is fresh and different from common existing products.','cr4.t':'Completeness','cr4.d':'The core experience is complete, the demo runs reliably, and the materials match the result.','cr5.t':'Reach','cr5.d':'The project video is posted with the official hashtag on Xiaohongshu (China) / X (international).','cr.total':'Score breakdown','sp.hint':'Tap to reveal the breakdown','sp.reset':'Collapse','sp.rule':'How it is scored','jg.title':'Judges','jg.pro':'Expert judges','jg.proD':'A professional lens to pick the strongest projects with real-world use','jg.tbaName':'Judges to be announced','jg.tbaD':'More names coming soon…','jg.player':'Player judges','jg.playerD':'Real hands-on play to pick the most loved and most fun projects','jg.playerN':'seasoned AI practitioners','jg.playerNote':'form the player jury and help choose the awards from a public point of view.',
+  'dv.title':'What to submit','dv.desc':'Every project submits the materials below: all required items, plus bonus items where you can.','dv.must':'Required','dv.bonus':'Bonus','dv.mustD':'All three are needed','dv.bonusD':'Encouraged','dv1.t':'Project report (PDF or PPT)','dv1.d':'Document the journey from idea to result — <b>including process screenshots, key asset iterations or key result shots</b> — so judges quickly see what you built, how, and why it’s worth trying.','dv2.t':'Full demo (link or video)','dv2.d':'Submit a link where the project can be tried or run directly; or submit a demo video — edits, voice-over and captions are fine, but it must include real running footage','dv4.t':'Social media post link','dv4.d':'Publish a project introduction on a public social platform and submit the link; the post must stay public until results are announced.','dv5.t':'Source code','dv5.d':'A Git repository or a zipped codebase is encouraged.','cr.title':'Judging criteria','cr.desc':'Judges score each project across five dimensions. Final score = expert judges 70% + player judges 30%.','cr1.t':'Use of Manycore tech stack','cr1.d':'Manycore’s technology plays a core role in the project.','cr2.t':'Fun factor','cr2.d':'Gameplay and spatial interaction are creative and fun; the video clearly shows the highlights and has the potential to spark public discussion.','cr3.t':'Innovation','cr3.d':'The approach, interaction or concept is fresh and different from common existing products.','cr4.t':'Completeness','cr4.d':'The core experience is complete, the demo runs reliably, and the materials match the result.','cr5.t':'Reach','cr5.d':'The project video is posted with the official hashtag on Xiaohongshu (China) / X (international).','cr.total':'Score breakdown','sp.hint':'Tap to reveal the breakdown','sp.reset':'Collapse','sp.rule':'How it is scored','jg.title':'Judges','jg.pro':'Expert judges','jg.proD':'A professional lens to pick the strongest projects with real-world use','jg.tbaName':'Judges to be announced','jg.tbaD':'More names coming soon…','jg.player':'Player judges','jg.playerD':'Real hands-on play to pick the most loved and most fun projects','jg.playerN':'seasoned AI practitioners','jg.playerNote':'form the player jury and help choose the awards from a public point of view.',
   'prizes.title2':'total prize pool','pz.more':'For the full judging rules, <button type="button" class="link-btn" data-open-community>join the community</button> and see the Participant Handbook.','prizes.desc':'23 awards in total: a special award and first, second and third prizes, plus single awards for application, creativity and popularity.',
   'p0.r':'Special Award','p0.n':'Spatial Intelligence Ecosystem Special Award','p1.r':'First Prize','p2.r':'Second Prize','p3.r':'Third Prize',
   'aw1':'Application Award',
@@ -1693,17 +1687,17 @@ const EN = {
   'tl5.t':'Results announced','tl5.d':'Winners announced on the official event site and social channels','tl5.date':'Late Nov',
   'faq.title':'FAQ','faq.desc':'Can’t find your answer? Join the community and ask us directly.','faq.btn':'Join the community',
   'q1':'Who can join this hackathon?','a1':'The event is open worldwide. Developers, designers, creators, students and researchers interested in 3D creation, AI and spatial intelligence are all welcome. Eligibility is subject to the official rules.','q2':'How big can a team be?','a2':'Teams of 1–3 are supported, so you can also enter solo. Each account can be in only one team at a time; solo entrants also create a team.','q3':'How do I create or join a team?','a3':'After registering, go to “My entry”. You can create a team and share its team code with teammates, or enter a code from a team leader to join an existing team.','q4':'Can I change members after confirming my team?','a4':'You can edit the team, change members or disband it. Rosters are locked once the submission and team deadline passes. Team rewards go only to the members at the first confirmation; later members don’t receive them, and leaving or switching teams doesn’t earn the reward again.','q5':'Which tools are required?','a5':'Projects must use Aholo Lux3D, with it powering core 3D content or a key part of the creative workflow. Aholo API, LuxReal and other third-party creation and development tools are optional, as your project needs.','q6':'How do I earn creation credits?','a6':'You receive a one-time registration reward once your individual sign-up succeeds. After a team is formed and submits its topic, the team compute reward is split evenly among its members.','q7':'Who owns the intellectual property?','a7':'Participants retain the rights they legally hold in their original work, and must ensure that any code, models, images, music, data and other third-party content they use is properly licensed. Display and distribution licensing, and how winning projects may be used, are governed by the final event rules and the registration license terms.','q8':'Where can I find learning resources and technical help?','a8':'Join the official community for announcements, team matching, technical Q&A and event reminders. You can join before registering to learn about the event and find teammates.',
-  'final.title':'The next space<br>is yours to create.','final.desc':'Registration opens Oct 19, 2026, submissions close Nov 19 at 19:00, and results are announced in early December. Build your first spatial project with Aholo Lux3D.',
+  'final.title':'Play in 3D,<br>Create with Aholo','final.desc':'Registration opens Oct 19, 2026, submissions close Nov 19 at 19:00, and results are announced in early December. Build your first project with Aholo Lux3D.',
   'cta.my':'My entry','cta.community':'Join community','cta.communityFull':'Join the community','cta.submitSoon':'Submit project · Not yet open','cta.submit':'Submit project',
   'demo.head':'Products built with Aholo Lux3D','demo.note':'Examples · assets to be replaced','demo1.t':'Voxel world level generator','demo1.g':'Games','demo2.t':'Old street rebuilt in 3D','demo2.g':'City memory','demo3.t':'Walkable digital exhibition','demo3.g':'Culture & tourism','demo4.t':'Collectible figure print prototype','demo4.g':'3D printing','demo5.t':'Robot training scene','demo5.g':'Embodied AI','demo6.t':'Product film from 3D assets','demo6.g':'LuxReal video',
   'hero.tagline':'Play in 3D, Create with Aholo','faq.more':'Still have questions? Ask in the community.',
   'my.title':'My entry','my.back':'Back to event','my.dl':'Key dates · Oct 19 registration opens · Nov 19, 19:00 submission deadline',
-  'my.gateT':'Log in to see your entry','my.gateD':'Log in with your Aholo account to view your registration, credits and team.','my.reg':'Registration & credits','my.tools':'Open tools','my.toolsD':'Build your project with Lux3D, and add other products as you need.','my.team':'My team','my.works':'My project','my.worksT':'Submissions are not open yet','my.worksD':'Once open, you can edit and submit your team’s project here.','my.worksBtn':'Submit project',
+  'my.gateT':'Log in to see your entry','my.gateD':'Log in with your Aholo account to view your registration, credits and team.','my.reg':'Registration & credits','my.tools':'Open tools','my.toolsD':'Build your project with Aholo Lux3D, and add other products as you need.','my.team':'My team','my.works':'My project','my.worksT':'Submissions are not open yet','my.worksD':'Once open, you can edit and submit your team’s project here.','my.worksBtn':'Submit project',
   'nav.login':'Log in','nav.logout':'Log out','nav.my':'My entry','m.loginT':'Log in to Aholo','m.loginD':'Log in with your Aholo account to register and manage your team.','m.loginBtn':'Log in with Aholo',
   'm.regT':'Register','m.regD':'Every participant registers individually first, then creates or joins a team.','f.name':'Full name','f.email':'Contact email','f.role':'Role','f.roleNone':'Select','f.role1':'Developer','f.role2':'Designer','f.role3':'Creator','f.role4':'Student','f.role5':'Other','f.agree':'I have read and agree to the ','f.rules':'Event Rules','f.loc':'Current location','f.country':'Country / region','f.province':'Province / state','f.city':'City','f.social':'Social media ID','f.optional':'optional','f.xhs':'Xiaohongshu ID','f.x':'X handle (e.g. @aholo)','c.cn':'Chinese mainland','c.hk':'Hong Kong, China','c.mo':'Macao, China','c.tw':'Taiwan, China','c.us':'United States','c.ca':'Canada','c.gb':'United Kingdom','c.de':'Germany','c.fr':'France','c.jp':'Japan','c.kr':'South Korea','c.sg':'Singapore','c.my':'Malaysia','c.au':'Australia','c.other':'Other','m.regSubmit':'Submit registration',
   'm.invT':'Invite teammates','m.invD':'Share your team code. Once they’ve registered, they enter it under My entry · My team to request to join, and you approve it.','m.invCopyCode':'Copy code','m.invCopyText':'Copy invitation','m.editT':'Rename team','m.editD':'Your team name is shown to teammates and judges (2–20 characters).','m.editName':'Team name','m.editSave':'Save',
   'demo.reset':'Demo mode · Reset flow','m.comT':'Join the community','m.comD':'Scan the code or use the invite link to join the official group for learning resources, announcements, team matching and technical Q&A.','m.comQr':'QR code coming soon','m.comLink':'Invite link','m.comLinkSoon':'Coming soon','m.comR1':'Not registered yet? You can still join to learn about the event or find teammates.',
-  'foot.tag':'Spatial intelligence platform — reconstruct, generate, edit and understand space.','foot.event':'Event','foot.product':'Product','foot.platform':'Aholo Platform','foot.contact':'Contact','foot.rights':'All rights reserved'
+  'foot.event':'Event','foot.contact':'Contact','foot.rights':'All rights reserved'
 };
 const ZH = {};
 const i18nEls = document.querySelectorAll('[data-i18n]');
