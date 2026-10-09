@@ -250,7 +250,7 @@ html[lang="zh-CN"] .sec-title { letter-spacing: .02em; line-height: 1.22; }
 }
 .about-lead::before { content: ''; position: absolute; inset: 0; background: var(--grad-soft); pointer-events: none; }
 .about-lead > * { position: relative; }
-.about-lead p { font-size: clamp(20px, 2.1vw, 26px); line-height: 1.55; font-weight: 500; color: var(--text); }
+.about-lead p { font-size: clamp(17px, 1.3vw, 19px); line-height: 1.8; font-weight: 500; color: var(--text); }
 .about-lead p + p { margin-top: 18px; font-size: 16px; color: var(--text-soft); line-height: 1.8; }
 .about-lead p strong { font-weight: 700; }
 .about-lead p.punch { margin-top: 28px; padding-top: 24px; border-top: 1px solid var(--border); color: var(--text); font-weight: 600; }
@@ -1050,18 +1050,16 @@ html[lang="zh-CN"] .eco-head h2 { font-family: var(--font-title); font-weight: 4
   <div class="container">
     <div class="sec-head">
       <div class="reveal">
-        <div class="sec-index">01 — <span data-i18n="nav.about">赛题</span></div>
-        <h2 class="sec-title" data-i18n="about.title">把真实世界，<br>带进可计算的空间。</h2>
+        <div class="sec-index">01 — <span data-i18n="nav.about">赛事</span></div>
+        <h2 class="sec-title" data-i18n="about.title">关于比赛</h2>
       </div>
     </div>
 
     <div class="about-grid">
       <div class="about-lead reveal">
-        <p data-i18n="about.lead">别只让 AI 生成一张图。<br>让它变成立体的、能进入、能互动、真正派得上用场的作品。</p>
-        <p data-i18n="about.p1">这次不设赛道，也不押标准答案。我们只想看一件事：当 AI 开始理解并创造 3D 空间，你能拿它做出什么有趣的新东西？</p>
-        <p data-i18n="about.p2">请使用 <strong class="grad-text">Aholo Lux3D</strong> 围绕空间智能概念完成一个可体验、可演示的作品。</p>
-        <p data-i18n="about.p3">你可以做一款游戏，复活一段城市记忆，创造一个可探索的文旅空间，设计新的 3D 打印产品原型，也可以带来一种我们还没想过的空间交互方式。</p>
-        <p class="punch" data-i18n="about.p4">作品形态不限，创意不设边界。重要的是：3D 不是装饰，AI 不是贴纸，技术真正参与了作品的诞生，最终成果也真的能跑起来。</p>
+        <p data-i18n="about.p1">群核科技 Aholo 全球 3D AI 黑客松是一场面向全球开发者的 3D 创作赛事。赛事围绕群核 3D 生成模型 <strong class="grad-text">Aholo Lux3D</strong> 及 Aholo API 开放能力展开，鼓励全球开发者、3D 创作者及技术从业者在真实工作流中探索 3D 生成的新玩法，创作有创新精神和应用价值的 3D Demo 或应用。</p>
+        <p data-i18n="about.p2">参赛者将有机会获得 Aholo Lux3D 等模型与产品的使用权限，Aholo API 所开放的世界生成、云端渲染、重建等能力，以及算力、培育支持。</p>
+        <p data-i18n="about.p3">在本届黑客松的旅途中，我们鼓励大家创作“能用”的作品，更期待大家开启“敢玩”的探索：无论是游戏开发、影视创作、3D 打印、网页开发，还是与机器人、空间设计的跨界融合，一切围绕 3D 生成的创新尝试都值得被看见。</p>
       </div>
       <div class="demo-wall reveal d1" aria-label="Demo">
         <div class="demo-head"><span class="mono">DEMO</span><span data-i18n="demo.head">用 Lux3D 做出来的作品</span><em data-i18n="demo.note">示例 · 素材待替换</em></div>
@@ -1660,20 +1658,18 @@ html[lang="zh-CN"] .eco-head h2 { font-family: var(--font-title); font-weight: 4
 const EN = {
   'pk1.t':'Full access to Manycore 3D technology','pk1.d0':'Participants get access to Manycore 3D tools and compute. The core model Aholo Lux3D balances quality and speed, and can be combined with agents into workflows for game development, web building, 3D printing and more.','pk2.t':'Online & offline support','pk2.d0':'During the event, the organizers will run offline workshops with universities in Beijing, Shenzhen and Shanghai, with on-site coaching from university experts.','pk2.d1':'Online learning resources, livestreams and community Q&A help participants of every level finish their 3D AI project.','pk3.t':'Industry experts, scholars & ecosystem partners','pk3.d0':'Tech experts, university scholars, tech creators and partner companies form the expert panel, with AI practitioners invited as player judges.','pk3.d1':'Judging covers innovation, completeness, technical depth and fun, so great ideas get seen.','pk4.t':'Rewards for everyone to reach for','pk4.d0':'A ¥320,000 prize pool and a varied honours system give every participant a shot at the podium.',
   'tl.today':'Today','tl.run':'Build period','tl.rev':'Judging','tl.tbd':'TBA','ms1':'Registration opens','ms2':'Submission deadline','ms3':'Results','ms4':'Award ceremony','tl.events':'Events','tl.eventsD':'Workshops and livestreams are open to all; numbers match the timeline above.','tl.reserve':'Book livestream','tl.past':'Ended','tl.live':'Live now','tl.next':'Up next','ev1.type':'Offline workshop','ev1.t':'Shenzhen','ev2.type':'Livestream','ev2.t':'Kickoff livestream (name TBA)','ev3.type':'Offline workshop','ev3.t':'Beijing','ev4.type':'Offline workshop','ev4.t':'Shanghai','ev5.type':'Online workshop','ev5.t':'Online session',
-  'eco.title':'Ecosystem partners','eco.host':'Organizer','eco.co':'Co-organizers','eco.support':'Ecosystem supporters','eco.note':'Listed in no particular order','eco.manycore':'Manycore Tech','eco.guancha':'Guancha','eco.modelscope':'ModelScope','eco.xhs':'Xiaohongshu Tech','eco.gxr':'Silicon Star','nav.about':'Challenge','nav.resources':'Resources','nav.prizes':'Prizes & judging','nav.timeline':'Schedule','nav.faq':'FAQ',
+  'eco.title':'Ecosystem partners','eco.host':'Organizer','eco.co':'Co-organizers','eco.support':'Ecosystem supporters','eco.note':'Listed in no particular order','eco.manycore':'Manycore Tech','eco.guancha':'Guancha','eco.modelscope':'ModelScope','eco.xhs':'Xiaohongshu Tech','eco.gxr':'Silicon Star','nav.about':'About','nav.resources':'Resources','nav.prizes':'Prizes & judging','nav.timeline':'Schedule','nav.faq':'FAQ',
   'cta.register':'Register now','km.time':'Dates','km.timeV':'Oct 19 – Nov 19','km.pool':'Prize pool','km.format':'Format','km.formatV':'Online · open worldwide','km.team':'Teams','km.teamV':'Solo or teams of up to 3','cta.explore':'Discover Lux3D','cta.aholo':'Discover Aholo',
   'hero.eyebrow':'AHOLO HACKATHON',
   'hero.t1':'Aholo','hero.t2':' Global 3D AI Hackathon',
   'hero.sub':'Connecting the physical and digital worlds.<br>Build what you imagine in 3D, together with developers and creators.',
   'meta.date':'Date','meta.dateV':'Oct 19 – Nov 19, 2026','meta.loc':'Where','meta.locV':'Fully online · Open worldwide','meta.format':'Format','meta.formatV':'1 month · Teams of 1–3','meta.pool':'Prize pool','meta.poolV':'¥ 320,000',
   'cd.title':'Submissions close in','cd.deadline':'Nov 19, 2026, 19:00 (Beijing Time, UTC+8)','cd.d':'Days','cd.h':'Hrs','cd.m':'Min','cd.s':'Sec',
-  'about.title':'Bring the real world<br>into computable space.',
+  'about.title':'About the hackathon',
   'about.desc':'Hosted by Aholo, the Spatial Hackathon is open to anyone passionate about 3D, AI and spatial computing. Developers, designers and researchers alike — turn your ideas into interactive spatial experiences.',
-  'about.lead':'Don’t just have AI generate an image.<br>Turn it into something three-dimensional — a work you can step into, interact with, and actually put to use.',
-  'about.p1':'No tracks this time, and no single right answer. We only want to see one thing: as AI begins to understand and create 3D space, what fun new things can you build with it?',
-  'about.p2':'Use <strong class="grad-text">Aholo Lux3D</strong> to build an experienceable, demo-ready project around the idea of spatial intelligence.',
-  'about.p3':'Make a game, bring a city’s memory back to life, create an explorable cultural-tourism space, design a new 3D-printed product prototype — or bring a form of spatial interaction we haven’t imagined yet.',
-  'about.p4':'Any format, no creative limits. What matters: 3D isn’t decoration, AI isn’t a sticker — the technology genuinely shapes the work, and the final result actually runs.',
+  'about.p1':'The Manycore Aholo Global 3D AI Hackathon is a 3D creation challenge for developers worldwide. Built around Manycore’s 3D generation model <strong class="grad-text">Aholo Lux3D</strong> and the open capabilities of the Aholo API, it invites developers, 3D creators and technologists everywhere to explore new uses of 3D generation in real workflows, and to build innovative, genuinely useful 3D demos and applications.',
+  'about.p2':'Participants can get access to models and products such as Aholo Lux3D, to the world generation, cloud rendering and reconstruction capabilities opened up through the Aholo API, plus compute and mentoring support.',
+  'about.p3':'Along the way, we encourage projects that are “useful” — and look forward even more to explorations that are “bold”: game development, film and video, 3D printing, web development, or crossovers with robotics and spatial design. Every inventive use of 3D generation deserves to be seen.',
   'stat.unit':'month','stat.hours':'of focused building','stat.tracks':'No limits on format','stat.pool':'RMB in prizes','stat.hackers':'Expected hackers',
   'perk2.t':'API & workflow access','perk2.d':'Lux3D API, Skills and plugins that plug into tools like Blender',
   'perk3.t':'Online mentors','perk3.d':'Online office hours and 1:1 mentoring throughout',
