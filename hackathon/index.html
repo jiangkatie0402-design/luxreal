@@ -318,8 +318,6 @@ html[lang="zh-CN"] .sec-title { letter-spacing: .02em; line-height: 1.22; }
 .pz-special .prize-amt { font-size: clamp(52px, 6.4vw, 88px); margin: 0 0 6px; }
 .pz-special .prize-count { margin: 0; }
 .prizes { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; align-items: stretch; }
-.aw-tag { align-self: flex-start; font-size: 11.5px; font-weight: 600; padding: 2px 9px; border-radius: var(--radius-pill); color: var(--ice); border: 1px solid rgba(172,199,252,.35); background: rgba(69,87,255,.1); margin-top: 4px; }
-.award-rule p + p { margin-top: 10px; padding-top: 10px; border-top: 1px dashed var(--border); }
 .prize { position: relative; padding: 40px 36px; border-radius: var(--radius); border: 1px solid var(--border); background: var(--surface); display: flex; flex-direction: column; }
 .prize.grand { background: linear-gradient(var(--surface), var(--surface)) padding-box, var(--grad) border-box; border: 1px solid transparent; }
 .prize.grand::after { content: ''; position: absolute; inset: 0; border-radius: inherit; background: var(--grad-soft); pointer-events: none; }
@@ -338,9 +336,6 @@ html[lang="zh-CN"] .sec-title { letter-spacing: .02em; line-height: 1.22; }
 .award b i { font-style: normal; font-size: .7em; color: var(--text-muted); font-weight: 600; }
 .award p { font-size: 14px; color: var(--text-muted); margin-top: 4px; }
 .prize-total { margin-top: auto; padding-top: 18px; border-top: 1px solid var(--border-subtle); font-size: 14px; color: var(--text-soft); font-weight: 600; }
-.award-rule { margin-top: 20px; padding: 24px 28px; border: 1px dashed var(--border-strong); border-radius: var(--radius-sm); }
-.award-rule h4 { font-size: 15px; font-weight: 600; margin-bottom: 8px; }
-.award-rule p { font-size: 14px; color: var(--text-soft); line-height: 1.8; }
 .award b { display: block; font-size: 26px; font-weight: 600; letter-spacing: -.02em; font-variant-numeric: tabular-nums; }
 
 /* ---------- Timeline ---------- */
@@ -1145,16 +1140,11 @@ html[lang="zh-CN"] .eco-head h2 { font-family: var(--font-title); font-weight: 4
     </div>
 
     <div class="awards reveal">
-      <div class="award"><span class="award-name" data-i18n="aw1">应用方向奖</span><b>¥5,000 <i>× 5</i></b><span class="aw-tag" data-i18n="aw1.g">TOP 50 入围 · 专业评审</span><p data-i18n="aw1.d">面向游戏、文旅、影视创作、3D 打印、具身智能等具体场景，奖励真正把 Lux3D 用到实处的作品。</p></div>
-      <div class="award"><span class="award-name" data-i18n="aw2">有意思奖</span><b>¥5,000 <i>× 5</i></b><span class="aw-tag" data-i18n="aw2.g">TOP 50 入围 · 玩家评审</span><p data-i18n="aw2.d">不同内容、不同主题，for fun——奖励最有趣、最出人意料的作品。</p></div>
-      <div class="award"><span class="award-name" data-i18n="aw3">人气奖</span><b>¥5,000 <i>× 6</i></b><span class="aw-tag" data-i18n="aw3.g">全部有效作品 · 公开点赞</span><p data-i18n="aw3.d">国内 4 名 · 海外 2 名，按作品视频的公开点赞数评选。</p></div>
+      <div class="award"><span class="award-name" data-i18n="aw1">应用方向奖</span><b>¥5,000 <i>× 5</i></b><p data-i18n="aw1.d">面向游戏、文旅、影视创作、3D 打印、具身智能等具体场景，奖励真正把 Lux3D 用到实处的作品。应用方向奖从 TOP 50 入围作品中由专业评审评出</p></div>
+      <div class="award"><span class="award-name" data-i18n="aw2">有意思奖</span><b>¥5,000 <i>× 5</i></b><p data-i18n="aw2.d">不同内容、不同主题，for fun——奖励最有趣、最出人意料的作品。有意思奖从 TOP 50 入围作品中由玩家评审评出</p></div>
+      <div class="award"><span class="award-name" data-i18n="aw3">人气奖</span><b>¥5,000 <i>× 6</i></b><p data-i18n="aw3.d">国内4个，国外2个，参赛团队须在规定时间内，通过指定公开平台（国内：小红书；海外：X）发布作品视频，统一带赛事官方话题标签，并在作品提交系统中登记唯一参评链接。组委会将在规定截止时间记录该帖的公开点赞数，点赞数最高且通过真实性审核的有效作品获得人气奖。<br>人气奖面向所有有效参赛作品开放，只决定对应奖项，不折算为专业评审分，也不影响一、二、三等奖和其他专业奖项的评选。</p></div>
     </div>
 
-    <div class="award-rule reveal">
-      <h4 data-i18n="awr.t">人气奖评选规则</h4>
-      <p data-i18n="awr.d">参赛团队须在规定时间内，通过指定公开平台（国内：小红书；海外：X）发布作品视频，统一带赛事官方话题标签，并在作品提交系统中登记唯一参评链接。组委会将在规定截止时间记录该帖的公开点赞数，点赞数最高且通过真实性审核的有效作品获得人气奖。</p>
-      <p data-i18n="awr.d2">人气奖面向所有有效参赛作品开放，只决定对应奖项，不折算为专业评审分，也不影响一、二、三等奖和其他专业奖项的评选。</p>
-    </div>
 
     <!-- 提交内容 -->
     <div class="jr-block reveal" id="deliverables">
@@ -1540,9 +1530,9 @@ const EN = {
   'dv.title':'What to submit','dv.desc':'Every project submits the materials below: all required items, plus bonus items where you can.','dv.must':'Required','dv.bonus':'Bonus','dv.mustD':'All three are needed','dv.bonusD':'Encouraged','dv1.t':'Project report (PDF or PPT)','dv1.d':'Document the journey from idea to result — <b>including process screenshots, key asset iterations or key result shots</b> — so judges quickly see what you built, how, and why it’s worth trying.','dv2.t':'Full demo link','dv2.d':'A link that lets people try or run the complete core flow — <b>a web page, online app, downloadable program, installer or any other verifiable form.</b>','dv3.t':'Promo video','dv3.d':'A demo video — edits, voice-over and captions are fine, but it must include real running footage.','dv4.t':'Social media post link','dv4.d':'Publish a project introduction on a public social platform and submit the link; the post must stay public until results are announced.','dv5.t':'Source code','dv5.d':'A Git repository or a zipped codebase is encouraged.','cr.title':'Judging criteria','cr.desc':'Judges score each project across five dimensions totalling 100%.','cr1.t':'Use of Manycore tech stack','cr1.d':'Manycore’s technology plays a core role in the project.','cr2.t':'Fun factor','cr2.d':'Gameplay and spatial interaction are creative and fun; the video clearly shows the highlights and has the potential to spark public discussion.','cr3.t':'Innovation','cr3.d':'The approach, interaction or concept is fresh and different from common existing products.','cr4.t':'Completeness','cr4.d':'The core experience is complete, the demo runs reliably, and the materials match the result.','cr5.t':'Reach','cr5.d':'The project video is posted with the official hashtag on Xiaohongshu (China) / X (international).','cr.total':'Score breakdown','sp.hint':'Tap to reveal the breakdown','sp.reset':'Collapse','sp.rule':'How it is scored','jg.title':'Judges','jg.pro':'Expert judges','jg.player':'Player judges','jg.tba':'To be announced',
   'prizes.title2':'total prize pool','prizes.desc':'23 awards in total: a special award and first, second and third prizes, plus application, fun and people’s choice awards.',
   'p0.r':'Special Award','p0.n':'Award name TBA','p0.c':'1 winner','p1.r':'First Prize','p1.c':'1 winner','p2.r':'Second Prize','p2.c':'2 winners · per team','p2.t':'¥60,000 in total','p3.r':'Third Prize','p3.c':'3 winners · per team','p3.t':'¥30,000 in total',
-  'aw1':'Application Award','aw1.g':'From TOP 50 · expert judges','aw1.d':'For projects that put Lux3D to real use in games, culture & tourism, film, 3D printing, embodied AI and more.',
-  'aw2':'Most Fun Award','aw2.g':'From TOP 50 · player judges','aw2.d':'Any content, any theme, just for fun — for the most delightful and surprising projects.',
-  'aw3':'People’s Choice','aw3.g':'All valid entries · public likes','aw3.d':'4 in China · 2 international, decided by public likes on the project video.',
+  'aw1':'Application Award','aw1.d':'For projects that put Lux3D to real use in games, culture & tourism, film, 3D printing, embodied AI and more. Chosen from the TOP 50 by the expert judges.',
+  'aw2':'Most Fun Award','aw2.d':'Any content, any theme, just for fun — for the most delightful and surprising projects. Chosen from the TOP 50 by the player judges.',
+  'aw3':'People’s Choice','aw3.d':'4 in China, 2 international. Within the set period, teams publish their project video on the designated platform (China: Xiaohongshu; international: X) with the official hashtag and register that single entry link in the submission system. At the deadline the organizers record the post’s public likes; the valid, authenticity-verified projects with the most likes win.<br>People’s Choice is open to all valid entries and only decides its own award; it is not converted into expert scores and does not affect the first, second, third or other expert awards.',
   'awr.t':'People’s Choice rules','awr.d':'Within the set period, teams must publish their project video on the designated public platform (China: Xiaohongshu; international: X) with the official event hashtag, and register that single entry link in the submission system. At the deadline the organizers record the post’s public like count; the valid, authenticity-verified projects with the most likes win.','awr.d2':'People’s Choice is open to all valid entries and only decides its own award; it is not converted into expert scores and does not affect the first, second, third or other expert awards.',
   'tl.title':'From sign-up to awards,<br>on one line.','tl.desc':'All times are Beijing Time (UTC+8). Projects are submitted online; offline workshops and livestreams are open to all.',
   'tl1.t':'Registration opens','tl1.d':'Sign up solo or as a team and join the community',
