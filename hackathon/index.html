@@ -642,7 +642,7 @@ html[lang="zh-CN"] .my-sec-title, html[lang="zh-CN"] .my-title { font-family: va
 .work-head p { font-size: 13px; color: var(--text-muted); margin-top: 4px; }
 .work-form .grid2 { display: grid; grid-template-columns: 1fr 1fr; gap: 0 16px; }
 .field .hint { display: block; font-size: 12.5px; color: var(--text-muted); margin-top: 6px; }
-.field .opt { font-weight: 500; color: var(--text-muted); margin-left: 6px; }
+.field .opt { font-style: normal; font-weight: 500; color: var(--text-muted); margin-left: 6px; }
 textarea { width: 100%; min-height: 120px; padding: 12px 14px; border-radius: 12px; border: 1px solid var(--border-strong); background: var(--bg-2); color: var(--text); font: inherit; font-size: 15px; line-height: 1.6; resize: vertical; transition: border-color .2s, box-shadow .2s; }
 textarea:focus { outline: none; border-color: var(--ice); box-shadow: 0 0 0 3px rgba(172,199,252,.15); }
 .work-actions { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; margin-top: 20px; }
@@ -675,6 +675,12 @@ input:focus, select:focus { outline: none; border-color: var(--ice); box-shadow:
 .seg input:checked + span { border-color: var(--ice); background: rgba(69,87,255,.16); color: #fff; }
 .seg input:focus-visible + span { outline: 2px solid var(--ice); outline-offset: 2px; }
 .check { display: flex; gap: 10px; align-items: flex-start; font-size: 14px; color: var(--text-soft); cursor: pointer; margin: 4px 0 4px; }
+.check a { color: var(--ice); font-weight: 600; }
+.check a:hover { text-decoration: underline; text-underline-offset: 3px; }
+.loc-row { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+.loc-row select { grid-column: 1 / -1; }
+.grid2-m { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+.loc-row > *, .grid2-m > * { min-width: 0; }
 .check input { width: 18px; height: 18px; margin-top: 3px; accent-color: #4557FF; flex-shrink: 0; }
 #regSubmit { margin-top: 18px; }
 
@@ -1456,8 +1462,33 @@ html[lang="zh-CN"] .eco-head h2 { font-family: var(--font-title); font-weight: 4
     <form class="modal-pane" data-pane="register" id="regForm" novalidate>
       <h3 class="modal-title" data-i18n="m.regT">报名参赛</h3>
       <p class="modal-desc" data-i18n="m.regD">每位选手先完成个人报名，再创建或加入团队。</p>
-      <label class="field"><span data-i18n="f.name">昵称</span><input name="name" type="text" maxlength="20" autocomplete="nickname"><em class="field-error"></em></label>
+      <label class="field"><span data-i18n="f.name">姓名</span><input name="name" type="text" maxlength="30" autocomplete="name"><em class="field-error"></em></label>
       <label class="field"><span data-i18n="f.email">联系邮箱</span><input name="email" type="email" maxlength="80" autocomplete="email"><em class="field-error"></em></label>
+      <fieldset class="field">
+        <legend data-i18n="f.loc">现居住地</legend>
+        <div class="loc-row">
+          <select name="country" aria-label="国家 / 地区" autocomplete="country">
+            <option value="" data-i18n="f.country">国家 / 地区</option>
+            <option value="cn" data-i18n="c.cn">中国大陆</option>
+            <option value="hk" data-i18n="c.hk">中国香港</option>
+            <option value="mo" data-i18n="c.mo">中国澳门</option>
+            <option value="tw" data-i18n="c.tw">中国台湾</option>
+            <option value="us" data-i18n="c.us">美国</option>
+            <option value="ca" data-i18n="c.ca">加拿大</option>
+            <option value="gb" data-i18n="c.gb">英国</option>
+            <option value="de" data-i18n="c.de">德国</option>
+            <option value="fr" data-i18n="c.fr">法国</option>
+            <option value="jp" data-i18n="c.jp">日本</option>
+            <option value="kr" data-i18n="c.kr">韩国</option>
+            <option value="sg" data-i18n="c.sg">新加坡</option>
+            <option value="my" data-i18n="c.my">马来西亚</option>
+            <option value="au" data-i18n="c.au">澳大利亚</option>
+            <option value="other" data-i18n="c.other">其他</option>
+          </select>
+          <input name="province" type="text" maxlength="30" placeholder="省 / 州" data-i18n-ph="f.province" aria-label="省 / 州" autocomplete="address-level1">
+          <input name="city" type="text" maxlength="30" placeholder="城市" data-i18n-ph="f.city" aria-label="城市" autocomplete="address-level2">
+        </div><em class="field-error" data-for="loc"></em>
+      </fieldset>
       <label class="field"><span data-i18n="f.role">身份</span>
         <select name="role">
           <option value="" data-i18n="f.roleNone">请选择</option>
@@ -1468,13 +1499,13 @@ html[lang="zh-CN"] .eco-head h2 { font-family: var(--font-title); font-weight: 4
           <option value="other" data-i18n="f.role5">其他</option>
         </select><em class="field-error"></em></label>
       <fieldset class="field">
-        <legend data-i18n="f.region">参赛地区</legend>
-        <div class="seg">
-          <label><input type="radio" name="region" value="cn"><span data-i18n="f.cn">国内</span></label>
-          <label><input type="radio" name="region" value="intl"><span data-i18n="f.intl">海外</span></label>
-        </div><em class="field-error"></em>
+        <legend><span data-i18n="f.social">社媒账号 ID</span><em class="opt" data-i18n="f.optional">选填</em></legend>
+        <div class="grid2-m">
+          <input name="xhs" type="text" maxlength="40" placeholder="小红书 ID" data-i18n-ph="f.xhs" aria-label="小红书 ID">
+          <input name="x" type="text" maxlength="40" placeholder="X ID（如 @aholo）" data-i18n-ph="f.x" aria-label="X ID">
+        </div>
       </fieldset>
-      <label class="check"><input type="checkbox" name="agree"><span data-i18n="f.agree">我已阅读并同意赛事规则</span></label>
+      <label class="check"><input type="checkbox" name="agree"><span><span data-i18n="f.agree">我已阅读并同意</span><a href="#" id="rulesLink" target="_blank" rel="noopener" data-i18n="f.rules">《赛事规则》</a></span></label>
       <em class="field-error" data-for="agree"></em>
       <button type="submit" class="btn btn-primary btn-block" id="regSubmit" data-i18n="m.regSubmit">提交报名</button>
     </form>
@@ -1596,7 +1627,7 @@ const EN = {
   'my.title':'My entry','my.back':'Back to event','my.dl':'Key dates · Oct 19 registration opens · Nov 19, 19:00 submission deadline',
   'my.gateT':'Log in to see your entry','my.gateD':'Log in with your Aholo account to view your registration, credits and team.','my.reg':'Registration & credits','my.tools':'Creation tools','my.toolsD':'Build your project with Lux3D, and add other products as you need.','my.team':'My team','my.works':'My project','my.worksT':'Submissions are not open yet','my.worksD':'Once open, you can edit and submit your team’s project here.','my.worksBtn':'Submit project',
   'nav.login':'Log in','nav.logout':'Log out','nav.my':'My entry','m.loginT':'Log in to Aholo','m.loginD':'Log in with your Aholo account to register and manage your team.','m.loginBtn':'Log in with Aholo',
-  'm.regT':'Register','m.regD':'Every participant registers individually first, then creates or joins a team.','f.name':'Nickname','f.email':'Contact email','f.role':'Role','f.roleNone':'Select','f.role1':'Developer','f.role2':'Designer','f.role3':'Creator','f.role4':'Student','f.role5':'Other','f.region':'Region','f.cn':'China','f.intl':'International','f.agree':'I have read and agree to the event rules','m.regSubmit':'Submit registration',
+  'm.regT':'Register','m.regD':'Every participant registers individually first, then creates or joins a team.','f.name':'Full name','f.email':'Contact email','f.role':'Role','f.roleNone':'Select','f.role1':'Developer','f.role2':'Designer','f.role3':'Creator','f.role4':'Student','f.role5':'Other','f.agree':'I have read and agree to the ','f.rules':'Event Rules','f.loc':'Current location','f.country':'Country / region','f.province':'Province / state','f.city':'City','f.social':'Social media ID','f.optional':'optional','f.xhs':'Xiaohongshu ID','f.x':'X handle (e.g. @aholo)','c.cn':'Chinese mainland','c.hk':'Hong Kong, China','c.mo':'Macao, China','c.tw':'Taiwan, China','c.us':'United States','c.ca':'Canada','c.gb':'United Kingdom','c.de':'Germany','c.fr':'France','c.jp':'Japan','c.kr':'South Korea','c.sg':'Singapore','c.my':'Malaysia','c.au':'Australia','c.other':'Other','m.regSubmit':'Submit registration',
   'm.invT':'Invite teammates','m.invD':'Share your team code. Once they’ve registered, they can join by entering it under My entry · My team.','m.invCopyCode':'Copy code','m.invCopyText':'Copy invitation','m.editT':'Edit team','m.editD':'Change the team name. Members are managed on the team card.','m.editName':'Team name','m.editSave':'Save',
   'demo.reset':'Demo mode · Reset flow','m.comT':'Join the community','m.comD':'Scan the code or use the invite link to join the official group for announcements, team matching and Q&A.','m.comQr':'QR code coming soon','m.comLink':'Invite link','m.comLinkSoon':'Coming soon','m.comR1':'You can join before registering to learn about the event and find teammates.','m.comR2':'Post what you’re looking for and team up with others.',
   'foot.tag':'Spatial intelligence platform — reconstruct, generate, edit and understand space.','foot.event':'Event','foot.product':'Product','foot.platform':'Aholo Platform','foot.contact':'Contact','foot.rights':'All rights reserved'
@@ -1609,6 +1640,7 @@ function setLang(lang) {
   const dict = lang === 'en' ? EN : ZH;
   document.documentElement.lang = lang;
   i18nEls.forEach(el => { const v = dict[el.dataset.i18n]; if (v != null) el.innerHTML = v; });
+  document.querySelectorAll('[data-i18n-ph]').forEach(el => { const k = el.dataset.i18nPh; if (!(k in ZH)) ZH[k] = el.placeholder; const v = dict[k]; if (v != null) { el.placeholder = v; el.setAttribute('aria-label', v); } });
   document.querySelectorAll('.lang-toggle button').forEach(b => b.setAttribute('aria-pressed', String(b.dataset.lang === lang)));
   try { localStorage.setItem('aholo-hack-lang', lang); } catch (e) {}
   document.dispatchEvent(new Event('langchange'));
@@ -1743,7 +1775,7 @@ document.querySelectorAll('.res-main').forEach(card => card.addEventListener('po
     'rw.none': ['未领取', 'not received'], 'rw.onConfirm': ['团队首次确认时发放', 'Granted when the team is first confirmed'],
     'rw.split': ['按首次确认时的队员平均分配', 'Split among members at first confirmation'],
     'role.developer': ['开发者', 'Developer'], 'role.designer': ['设计师', 'Designer'], 'role.creator': ['创作者', 'Creator'], 'role.student': ['学生', 'Student'], 'role.other': ['其他', 'Other'],
-    'region.cn': ['国内', 'China'], 'region.intl': ['海外', 'International'],
+
     'team.emptyT': ['报名后可创建或加入团队', 'Register to create or join a team'],
     'team.emptyD': ['完成个人报名，与伙伴一起开始创作。单人参赛也可以创建团队。', 'Register individually, then build with teammates. Solo participants create a team too.'],
     'team.createT': ['创建团队', 'Create a team'], 'team.createD': ['成为队长，把团队编号分享给伙伴。', 'Become captain and share the team code.'],
@@ -1803,8 +1835,8 @@ document.querySelectorAll('.res-main').forEach(card => card.addEventListener('po
     'team.rewardNote': ['团队奖励仅在首次确认时发放给当时的队员，后续加入的成员不补发；退出或换队不会重复获得。', 'Team rewards are granted only at the first confirmation to the members at that time; later members don’t receive them, and leaving or switching teams doesn’t earn them again.'],
     'team.disbandQ': ['确定解散团队吗？', 'Disband this team?'], 'team.leaveQ': ['确定退出团队吗？', 'Leave this team?'], 'team.removeQ': ['确定移除该成员吗？', 'Remove this member?'],
     'team.demoCaptain': ['队长（示例）', 'Captain (demo)'], 'team.demoName': ['团队 ', 'Team '],
-    'err.name': ['请输入 2–20 个字符的昵称', 'Enter a nickname of 2–20 characters'], 'err.email': ['请输入有效的邮箱地址', 'Enter a valid email address'],
-    'err.role': ['请选择身份', 'Choose your role'], 'err.region': ['请选择参赛地区', 'Choose your region'], 'err.agree': ['请阅读并同意赛事规则', 'Please agree to the event rules'],
+    'err.name': ['请输入 2–30 个字符的姓名', 'Enter a name of 2–30 characters'], 'err.email': ['请输入有效的邮箱地址', 'Enter a valid email address'],
+    'err.role': ['请选择身份', 'Choose your role'], 'err.loc': ['请选择国家 / 地区并填写城市', 'Choose a country / region and enter your city'], 'rules.soon': ['赛事规则文件即将发布', 'The event rules document will be published soon'], 'err.agree': ['请阅读并同意赛事规则', 'Please agree to the event rules'],
     'err.teamName': ['请输入 2–20 个字符的团队名称', 'Enter a team name of 2–20 characters'], 'err.code': ['团队编号格式为 T + 6 位字母或数字', 'Team codes are T + 6 letters or digits'],
     'err.net': ['网络异常，请稍后重试', 'Something went wrong, please try again'],
     'busy': ['提交中…', 'Submitting…'], 'loggingIn': ['登录中…', 'Logging in…'],
@@ -1831,7 +1863,7 @@ document.querySelectorAll('.res-main').forEach(card => card.addEventListener('po
     // TODO: main-site logout
     async logout() { await wait(200); const s = load(); s.loggedIn = false; return save(s); },
     // TODO: POST registration; server must be idempotent (one registration per account)
-    async register(f) { await wait(700); const s = load(); if (!s.profile) s.profile = { name: f.name, email: f.email, role: f.role, region: f.region, id: 'AH26-' + rid(5, '0123456789'), teamReward: false }; return save(s); },
+    async register(f) { await wait(700); const s = load(); if (!s.profile) s.profile = { name: f.name, email: f.email, role: f.role, country: f.country, province: f.province, city: f.city, xhs: f.xhs, x: f.x, id: 'AH26-' + rid(5, '0123456789'), teamReward: false }; return save(s); },
     async createTeam(name) { await wait(400); const s = load(); s.team = { id: 'T' + rid(6, 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789'), name, captain: true, confirmed: false, rewarded: false, members: [{ name: s.profile.name, me: true, captain: true }] }; return save(s); },
     // Demo only: a real join looks the code up on the server
     async joinTeam(code) { await wait(400); const s = load(); s.team = { id: code, name: T('team.demoName') + code, captain: false, confirmed: false, rewarded: false, members: [{ name: T('team.demoCaptain'), captain: true }, { name: s.profile.name, me: true }] }; return save(s); },
@@ -1901,6 +1933,7 @@ document.querySelectorAll('.res-main').forEach(card => card.addEventListener('po
   /* ---------------- registration form ---------------- */
   const form = $('#regForm');
   function setErr(name, msg) {
+    if (name === 'loc') { form.querySelector('[data-for="loc"]').textContent = msg || ''; ['country', 'city'].forEach(k => form.elements[k].setAttribute('aria-invalid', msg && !form.elements[k].value.trim() ? 'true' : 'false')); return; }
     const input = form.elements[name];
     const holder = name === 'agree' ? form.querySelector('[data-for="agree"]') : (input.length ? input[0] : input).closest('.field').querySelector('.field-error');
     holder.textContent = msg || '';
@@ -1908,19 +1941,24 @@ document.querySelectorAll('.res-main').forEach(card => card.addEventListener('po
     nodes.forEach(n => n.setAttribute('aria-invalid', msg ? 'true' : 'false'));
   }
   function validate() {
-    const v = { name: form.elements.name.value.trim(), email: form.elements.email.value.trim(), role: form.elements.role.value, region: (form.querySelector('[name=region]:checked') || {}).value || '', agree: form.elements.agree.checked };
+    const g = k => form.elements[k].value.trim();
+    const v = { name: g('name'), email: g('email'), country: g('country'), province: g('province'), city: g('city'), role: g('role'), xhs: g('xhs'), x: g('x'), agree: form.elements.agree.checked };
     const errs = {
-      name: v.name.length < 2 || v.name.length > 20 ? T('err.name') : '',
+      name: v.name.length < 2 || v.name.length > 30 ? T('err.name') : '',
       email: /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(v.email) ? '' : T('err.email'),
-      role: v.role ? '' : T('err.role'), region: v.region ? '' : T('err.region'), agree: v.agree ? '' : T('err.agree'),
+      loc: v.country && v.city ? '' : T('err.loc'), role: v.role ? '' : T('err.role'), agree: v.agree ? '' : T('err.agree'),
     };
     Object.keys(errs).forEach(k => setErr(k, errs[k]));
     const first = Object.keys(errs).find(k => errs[k]);
-    if (first) { const el = form.elements[first]; (el.length && !el.tagName ? el[0] : el).focus(); return null; }
+    if (first) { const el = first === 'loc' ? form.elements[v.country ? 'city' : 'country'] : form.elements[first]; (el.length && !el.tagName ? el[0] : el).focus(); return null; }
     return v;
   }
-  form.addEventListener('input', e => { if (e.target.name && e.target.getAttribute('aria-invalid') === 'true') setErr(e.target.name, ''); });
-  form.addEventListener('change', e => { if (e.target.name === 'region' || e.target.name === 'agree') setErr(e.target.name, ''); });
+  const errKey = n => (n === 'country' || n === 'city' || n === 'province') ? 'loc' : n;
+  form.addEventListener('input', e => { if (e.target.name && e.target.getAttribute('aria-invalid') === 'true') setErr(errKey(e.target.name), ''); });
+  form.addEventListener('change', e => { const n = e.target.name; if (n === 'agree' || ((n === 'country' || n === 'role') && e.target.value)) setErr(errKey(n), ''); });
+  // 赛事规则: set RULES_URL to the published rules file (PDF / page)
+  const RULES_URL = '';
+  $('#rulesLink').addEventListener('click', e => { if (RULES_URL) { e.currentTarget.href = RULES_URL; return; } e.preventDefault(); toast(T('rules.soon')); });
   form.addEventListener('submit', async e => {
     e.preventDefault();
     if (busy) return;                       // no double submit
@@ -1982,7 +2020,7 @@ document.querySelectorAll('.res-main').forEach(card => card.addEventListener('po
     $('#myReg').innerHTML = p
       ? `<div class="reg-row"><span class="reg-avatar on">${esc(p.name.slice(0, 1).toUpperCase())}</span>
           <div class="reg-main"><span class="badge ok">${T('reg.done')}</span><h3>${esc(p.name)}</h3>
-          <p>${T('reg.id')} <span class="mono">${esc(p.id)}</span> · ${T('role.' + p.role)} · ${T('region.' + p.region)}</p></div>
+          <p>${T('reg.id')} <span class="mono">${esc(p.id)}</span> · ${T('role.' + p.role)}${p.city ? ' · ' + esc(p.city) : ''}</p></div>
           <div class="chips">${chips}</div></div>
          <p class="reg-note">${T('reg.note')}</p>`
       : `<div class="reg-row"><span class="reg-avatar"></span>
