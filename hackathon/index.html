@@ -299,7 +299,7 @@ html[lang="zh-CN"] .sec-title { letter-spacing: .02em; line-height: 1.22; }
 .res-main::before { content: ''; position: absolute; inset: 0; z-index: -1; background: var(--grad-soft); }
 .res-main::after { content: ''; position: absolute; right: -10%; top: -20%; width: 60%; height: 140%; z-index: -1; background: radial-gradient(closest-side, rgba(106,72,255,.28), transparent); }
 .res-badge { display: inline-block; padding: 5px 12px; border-radius: 6px; background: var(--primary); color: var(--primary-contrast); font-size: 12.5px; font-weight: 700; letter-spacing: .02em; }
-.res-name { font-size: clamp(44px, 5vw, 64px); font-weight: 700; letter-spacing: -.03em; line-height: 1; margin: 22px 0 18px; }
+.res-name { white-space: nowrap; font-size: clamp(40px, 4.4vw, 60px); font-weight: 700; letter-spacing: -.03em; line-height: 1; margin: 22px 0 18px; }
 .res-main p { color: var(--text-soft); font-size: 16px; line-height: 1.75; }
 .res-art { width: clamp(150px, 16vw, 220px); height: auto; flex-shrink: 0; filter: drop-shadow(0 20px 40px rgba(69,87,255,.25)); }
 .res-side { display: grid; gap: 16px; grid-template-rows: 1fr auto; }
@@ -310,6 +310,7 @@ html[lang="zh-CN"] .sec-title { letter-spacing: .02em; line-height: 1.22; }
 .api-icon svg { width: 20px; height: 20px; }
 .res-api h4 { display: flex; align-items: baseline; gap: 10px; font-size: 20px; font-weight: 700; }
 .res-api h4 em { font-style: normal; font-size: 12px; font-weight: 600; color: var(--text-muted); padding: 2px 8px; border: 1px solid var(--border-strong); border-radius: var(--radius-pill); }
+.api-desc { font-size: 14px; color: var(--text-muted); line-height: 1.7; margin: -4px 0 14px; }
 .api-caps { list-style: none; display: grid; gap: 10px; flex: 1; align-content: center; }
 .api-caps li { display: flex; align-items: center; gap: 16px; padding: 12px 14px; border-radius: 14px; border: 1px solid var(--border-subtle); background: var(--bg-2); transition: border-color .25s, transform .25s var(--ease); }
 .api-caps li:hover { border-color: var(--border-strong); transform: translateX(3px); }
@@ -1367,15 +1368,15 @@ html[lang="zh-CN"] .eco-head h2 { font-family: var(--font-title); font-weight: 4
         <div class="sec-index">04 — <span data-i18n="nav.resources">产品与资源</span></div>
         <h2 class="sec-title" data-i18n="res.title">产品与资源</h2>
       </div>
-      <p class="sec-desc reveal d1" data-i18n="res.desc">参赛作品必须使用 Lux3D；其他产品可按创作需要选用。</p>
+      <p class="sec-desc reveal d1" data-i18n="res.desc">参赛即领海量积分：报名即可获得第一笔积分，完成组队及提交选题后即可获得超额积分，助你完成项目。</p>
     </div>
 
     <div class="res-grid">
       <article class="res-main reveal">
         <div class="res-main-body">
           <span class="res-badge" data-i18n="res.must">参赛必须使用</span>
-          <h3 class="res-name">Lux3D</h3>
-          <p data-i18n="res.lux.d">以 Lux3D 为核心构建参赛作品，<br>将你的创意转化为 3D 内容。</p>
+          <h3 class="res-name">Aholo Lux3D</h3>
+          <p data-i18n="res.lux.d">Aholo Lux3D 是群核科技自主研发的 3D 生成模型。<br>上传图片或文字，即可快速生成可预览、可编辑的全套 3D 资产。</p>
         </div>
         <svg class="res-art" viewBox="0 0 220 220" aria-hidden="true">
           <defs>
@@ -1394,6 +1395,7 @@ html[lang="zh-CN"] .eco-head h2 { font-family: var(--font-title); font-weight: 4
       <div class="res-side">
         <article class="res-api reveal d1">
           <div class="api-head"><span class="api-icon"><svg viewBox="0 0 24 24" fill="none" stroke="url(#g1)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="m8 7-5 5 5 5M16 7l5 5-5 5M13.5 4l-3 16"/></svg></span><h4><span data-i18n="res.api.t">Aholo API</span><em data-i18n="res.opt">可选</em></h4></div>
+          <p class="api-desc" data-i18n="res.api.d">Aholo API 集成了 3D 物体生成、世界生成、云端渲染与重建等多套 API。</p>
           <ul class="api-caps">
             <li><svg class="res-thumb" viewBox="0 0 64 78" aria-hidden="true"><defs><linearGradient id="rth1" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#ACC7FC"/><stop offset="1" stop-color="#4557FF"/></linearGradient></defs><rect width="64" height="78" rx="6" fill="#18181b"/><path d="M0 0h40L22 78H0Z" fill="url(#rth1)" opacity=".85"/><path d="M40 0h24v78H22Z" fill="#6A48FF" opacity=".28"/></svg><div><strong data-i18n="res.r1.t">空间重建能力</strong><p data-i18n="res.r1.d">从真实世界构建 3D 场景</p></div></li>
             <li><svg class="res-thumb" viewBox="0 0 64 78" aria-hidden="true"><defs><radialGradient id="rth2" cx="30%" cy="35%" r="80%"><stop offset="0" stop-color="#F2F7D7"/><stop offset=".45" stop-color="#ACC7FC"/><stop offset="1" stop-color="#4557FF"/></radialGradient></defs><rect width="64" height="78" rx="6" fill="#18181b"/><circle cx="46" cy="44" r="34" fill="url(#rth2)" opacity=".9"/></svg><div><strong data-i18n="res.r2.t">空间生成能力</strong><p data-i18n="res.r2.d">使用 AI 探索更多空间内容</p></div></li>
@@ -1403,7 +1405,7 @@ html[lang="zh-CN"] .eco-head h2 { font-family: var(--font-title); font-weight: 4
           <svg class="res-thumb" viewBox="0 0 64 78" aria-hidden="true"><defs><linearGradient id="rth3" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#6A48FF"/><stop offset=".6" stop-color="#4557FF"/><stop offset="1" stop-color="#ACC7FC"/></linearGradient></defs><rect width="64" height="78" rx="6" fill="#18181b"/><rect x="8" y="20" width="48" height="38" rx="5" fill="url(#rth3)" opacity=".9"/><path d="M8 26h48M8 52h48" stroke="#18181b" stroke-width="1.5" stroke-dasharray="3 3"/><path d="M28 32v14l12-7Z" fill="#F2F7D7"/></svg>
           <div>
             <h4><span data-i18n="res.r3.t">LuxReal</span><em data-i18n="res.opt">可选</em></h4>
-            <p data-i18n="res.r3.d">使用 AI 生成视频</p>
+            <p data-i18n="res.r3.d">LuxReal 是群核科技基于 3D 技术打造的 AI 视频创作 Agent。在保证时空一致性的前提下，快速生成高度可控且富有创意的视频内容。</p>
           </div>
         </article>
       </div>
@@ -1493,8 +1495,8 @@ html[lang="zh-CN"] .eco-head h2 { font-family: var(--font-title); font-weight: 4
       <article class="res-main">
         <div class="res-main-body">
           <span class="res-badge" data-i18n="res.must">参赛必须使用</span>
-          <h3 class="res-name">Lux3D</h3>
-          <p data-i18n="res.lux.d">以 Lux3D 为核心构建参赛作品，<br>将你的创意转化为 3D 内容。</p>
+          <h3 class="res-name">Aholo Lux3D</h3>
+          <p data-i18n="res.lux.d">Aholo Lux3D 是群核科技自主研发的 3D 生成模型。<br>上传图片或文字，即可快速生成可预览、可编辑的全套 3D 资产。</p>
         </div>
         <svg class="res-art" viewBox="0 0 220 220" aria-hidden="true">
           <defs>
@@ -1513,6 +1515,7 @@ html[lang="zh-CN"] .eco-head h2 { font-family: var(--font-title); font-weight: 4
       <div class="res-side">
         <article class="res-api">
           <div class="api-head"><span class="api-icon"><svg viewBox="0 0 24 24" fill="none" stroke="url(#g1)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="m8 7-5 5 5 5M16 7l5 5-5 5M13.5 4l-3 16"/></svg></span><h4><span data-i18n="res.api.t">Aholo API</span><em data-i18n="res.opt">可选</em></h4></div>
+          <p class="api-desc" data-i18n="res.api.d">Aholo API 集成了 3D 物体生成、世界生成、云端渲染与重建等多套 API。</p>
           <ul class="api-caps">
             <li><svg class="res-thumb" viewBox="0 0 64 78" aria-hidden="true"><defs><linearGradient id="mrth1" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#ACC7FC"/><stop offset="1" stop-color="#4557FF"/></linearGradient></defs><rect width="64" height="78" rx="6" fill="#18181b"/><path d="M0 0h40L22 78H0Z" fill="url(#mrth1)" opacity=".85"/><path d="M40 0h24v78H22Z" fill="#6A48FF" opacity=".28"/></svg><div><strong data-i18n="res.r1.t">空间重建能力</strong><p data-i18n="res.r1.d">从真实世界构建 3D 场景</p></div></li>
             <li><svg class="res-thumb" viewBox="0 0 64 78" aria-hidden="true"><defs><radialGradient id="mrth2" cx="30%" cy="35%" r="80%"><stop offset="0" stop-color="#F2F7D7"/><stop offset=".45" stop-color="#ACC7FC"/><stop offset="1" stop-color="#4557FF"/></radialGradient></defs><rect width="64" height="78" rx="6" fill="#18181b"/><circle cx="46" cy="44" r="34" fill="url(#mrth2)" opacity=".9"/></svg><div><strong data-i18n="res.r2.t">空间生成能力</strong><p data-i18n="res.r2.d">使用 AI 探索更多空间内容</p></div></li>
@@ -1522,7 +1525,7 @@ html[lang="zh-CN"] .eco-head h2 { font-family: var(--font-title); font-weight: 4
           <svg class="res-thumb" viewBox="0 0 64 78" aria-hidden="true"><defs><linearGradient id="mrth3" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#6A48FF"/><stop offset=".6" stop-color="#4557FF"/><stop offset="1" stop-color="#ACC7FC"/></linearGradient></defs><rect width="64" height="78" rx="6" fill="#18181b"/><rect x="8" y="20" width="48" height="38" rx="5" fill="url(#mrth3)" opacity=".9"/><path d="M8 26h48M8 52h48" stroke="#18181b" stroke-width="1.5" stroke-dasharray="3 3"/><path d="M28 32v14l12-7Z" fill="#F2F7D7"/></svg>
           <div>
             <h4><span data-i18n="res.r3.t">LuxReal</span><em data-i18n="res.opt">可选</em></h4>
-            <p data-i18n="res.r3.d">使用 AI 生成视频</p>
+            <p data-i18n="res.r3.d">LuxReal 是群核科技基于 3D 技术打造的 AI 视频创作 Agent。在保证时空一致性的前提下，快速生成高度可控且富有创意的视频内容。</p>
           </div>
         </article>
       </div>
@@ -1691,9 +1694,9 @@ const EN = {
   
   
   
-  'res.title':'Products & resources','res.desc':'Every project must use Lux3D; other products are optional, as your work needs.',
-  'res.must':'Required','res.lux.d':'Build your project around Lux3D<br>and turn your ideas into 3D content.',
-  'res.opt':'Optional','res.api.t':'Aholo API','res.r1.t':'Spatial reconstruction','res.r1.d':'Build 3D scenes from the real world','res.r2.t':'Spatial generation','res.r2.d':'Explore more spatial content with AI','res.r3.t':'LuxReal','res.r3.d':'Generate videos with AI',
+  'res.title':'Products & resources','res.desc':'Join and get plenty of credits: your first batch arrives when you register, and a much larger one once your team is formed and your topic submitted — enough to finish your project.',
+  'res.must':'Required','res.lux.d':'Aholo Lux3D is a 3D generation model built in-house by Manycore.<br>Upload an image or text and quickly generate a full set of previewable, editable 3D assets.',
+  'res.opt':'Optional','res.api.t':'Aholo API','res.api.d':'Aholo API brings together APIs for 3D object generation, world generation, cloud rendering, reconstruction and more.','res.r1.t':'Spatial reconstruction','res.r1.d':'Build 3D scenes from the real world','res.r2.t':'Spatial generation','res.r2.d':'Explore more spatial content with AI','res.r3.t':'LuxReal','res.r3.d':'LuxReal is Manycore’s AI video-creation agent built on 3D technology. It keeps space and time consistent while quickly producing highly controllable, creative video.',
   'res.b.t':'Sign up to get creation credits and start your project','res.b.d':'Join the hackathon and explore new possibilities with your teammates.',
   'dv.title':'What to submit','dv.desc':'Every project submits the materials below: all required items, plus bonus items where you can.','dv.must':'Required','dv.bonus':'Bonus','dv.mustD':'All three are needed','dv.bonusD':'Encouraged','dv1.t':'Project report (PDF or PPT)','dv1.d':'Document the journey from idea to result — <b>including process screenshots, key asset iterations or key result shots</b> — so judges quickly see what you built, how, and why it’s worth trying.','dv2.t':'Full demo link / promo video (either one)','dv2.d':'Submit a link where the project can be tried or run directly; or submit a demo video — edits, voice-over and captions are fine, but it must include real running footage','dv4.t':'Social media post link','dv4.d':'Publish a project introduction on a public social platform and submit the link; the post must stay public until results are announced.','dv5.t':'Source code','dv5.d':'A Git repository or a zipped codebase is encouraged.','cr.title':'Judging criteria','cr.desc':'Judges score each project across five dimensions totalling 100%.','cr1.t':'Use of Manycore tech stack','cr1.d':'Manycore’s technology plays a core role in the project.','cr2.t':'Fun factor','cr2.d':'Gameplay and spatial interaction are creative and fun; the video clearly shows the highlights and has the potential to spark public discussion.','cr3.t':'Innovation','cr3.d':'The approach, interaction or concept is fresh and different from common existing products.','cr4.t':'Completeness','cr4.d':'The core experience is complete, the demo runs reliably, and the materials match the result.','cr5.t':'Reach','cr5.d':'The project video is posted with the official hashtag on Xiaohongshu (China) / X (international).','cr.total':'Score breakdown','sp.hint':'Tap to reveal the breakdown','sp.reset':'Collapse','sp.rule':'How it is scored','jg.title':'Judges','jg.pro':'Expert judges','jg.proD':'A professional lens to pick the strongest projects with real-world use','jg.tbaName':'Judges to be announced','jg.tbaD':'More names coming soon…','jg.player':'Player judges','jg.playerD':'Real hands-on play to pick the most loved and most fun projects','jg.playerN':'seasoned AI practitioners','jg.playerNote':'form the player jury and help choose the awards from a public point of view.',
   'prizes.title2':'total prize pool','prizes.desc':'23 awards in total: a special award and first, second and third prizes, plus application, fun and people’s choice awards.',
