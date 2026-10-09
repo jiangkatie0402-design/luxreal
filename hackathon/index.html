@@ -1777,15 +1777,18 @@ const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').match
   today.classList.toggle('edge-l', pct < 4); today.classList.toggle('edge-r', pct > SPAN - 4);
   document.querySelectorAll('.tl2-dot[data-at]').forEach(el => el.classList.toggle('done', t(el.dataset.at) <= now));
   // events: past / live / next
+  // only one card is highlighted: the event running today, otherwise the next upcoming one
+  const cards = [...document.querySelectorAll('.tl2-card')];
+  const anyLive = cards.some(c => now >= t(c.dataset.start) && now < t(c.dataset.end));
   let nextKey = null;
-  [...document.querySelectorAll('.tl2-card')].forEach(c => {
+  cards.forEach(c => {
     const a = t(c.dataset.start), b = t(c.dataset.end), st = c.querySelector('[data-state]');
-    const state = now >= b ? 'past' : now >= a ? 'live' : (!nextKey ? (nextKey = c.dataset.ev, 'next') : '');
+    const state = now >= b ? 'past' : now >= a ? 'live' : (!anyLive && !nextKey ? (nextKey = c.dataset.ev, 'next') : '');
     ['past', 'live', 'next'].forEach(x => c.classList.toggle(x, x === state));
     document.querySelector(`.tl2-ev[data-ev="${c.dataset.ev}"]`).className = 'tl2-ev' + (state ? ' ' + state : '');
     st.dataset.k = state; st.textContent = state ? ({ past: T_('tl.past'), live: T_('tl.live'), next: T_('tl.next') })[state] : '';
   });
-  function T_(k) { return (document.documentElement.lang === 'en' ? EN : ZH)[k] || ZH[k]; }
+  function T_(k) { const zh = { 'tl.past': '已结束', 'tl.live': '进行中', 'tl.next': '下一场' }; return document.documentElement.lang === 'en' ? EN[k] : (ZH[k] || zh[k]); }
   document.addEventListener('langchange', () => document.querySelectorAll('.tl2-card [data-state]').forEach(st => { if (st.dataset.k) st.textContent = T_('tl.' + st.dataset.k); }));
   const go = () => { today.style.left = pct + '%'; document.getElementById('tlFill').style.width = pct + '%'; };
   if (reduceMotion) go(); else new IntersectionObserver((es, o) => es.forEach(e => { if (e.isIntersecting) { go(); o.disconnect(); } }), { threshold: .3 }).observe(track);
