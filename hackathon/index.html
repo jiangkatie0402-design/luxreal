@@ -366,20 +366,22 @@ html[lang="zh-CN"] .sec-title { letter-spacing: .02em; line-height: 1.22; }
 .prize-amt .pz-x { font-style: normal; font-size: .42em; font-weight: 500; color: var(--text-soft); margin-left: 10px; letter-spacing: 0; }
 .prize-amt sup { font-size: .42em; vertical-align: top; position: relative; top: .35em; margin-right: 4px; color: var(--text-soft); font-weight: 500; }
 .prize-count { font-size: 14px; color: var(--text-muted); margin-bottom: 28px; }
-.prize .prize-amt { margin-bottom: 28px; }
+.prize .prize-amt { margin-bottom: 0; }
+.prize { padding: 32px 36px 36px; }
 .prize ul { list-style: none; margin-top: auto; border-top: 1px solid var(--border-subtle); padding-top: 20px; display: grid; gap: 10px; }
 .prize li { display: flex; gap: 10px; align-items: flex-start; font-size: 14px; color: var(--text-soft); }
 .prize li svg { width: 16px; height: 16px; flex-shrink: 0; margin-top: 4px; stroke: var(--ice); }
-.awards { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1px; margin-top: 20px; background: var(--border-subtle); border: 1px solid var(--border-subtle); border-radius: var(--radius); overflow: hidden; }
-.award { background: var(--bg-2); padding: 26px 24px; }
-.award { display: flex; flex-direction: column; gap: 6px; padding: 28px 28px 30px; }
-.award-name { font-size: 16px; font-weight: 600; color: var(--text); }
+.awards { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; margin-top: 20px; }
+/* same card as the prizes above */
+.award { display: flex; flex-direction: column; padding: 32px 36px; border-radius: var(--radius); border: 1px solid var(--border); background: var(--surface); }
+.award-name { font-size: 12px; font-weight: 600; letter-spacing: .14em; color: var(--text-muted); }
 .award b i { font-style: normal; font-size: .7em; color: var(--text-muted); font-weight: 600; }
 .award p { font-size: 14px; color: var(--text-muted); margin-top: 4px; }
 .pz-more { margin-top: 18px; font-size: 14.5px; color: var(--text-soft); }
 .pz-more .link-btn { padding: 0 2px; font-size: inherit; }
 .prize-total { margin-top: auto; padding-top: 18px; border-top: 1px solid var(--border-subtle); font-size: 14px; color: var(--text-soft); font-weight: 600; }
-.award b { display: block; font-size: 26px; font-weight: 600; letter-spacing: -.02em; font-variant-numeric: tabular-nums; }
+.award b { display: block; margin-top: 20px; font-size: clamp(28px, 2.6vw, 36px); font-weight: 600; letter-spacing: -.02em; line-height: 1; font-variant-numeric: tabular-nums; }
+.award b i { margin-left: 6px; }
 
 /* ---------- Timeline ---------- */
 /* 日程 — proportional rail with phases, live "today" cursor, numbered events */
@@ -853,7 +855,8 @@ body.modal-open { overflow: hidden; }
   .team-split { grid-template-columns: 1fr; }
   .my-stage { grid-template-columns: 1fr; }
   .res-grid { grid-template-columns: 1fr; }
-  .awards { grid-template-columns: 1fr; }
+  .awards { grid-template-columns: repeat(3, 1fr); gap: 12px; margin-top: 12px; }
+  .award { padding: 28px 22px; }
   .prizes { grid-template-columns: repeat(3, 1fr); gap: 12px; }
   .prize { padding: 28px 22px; }
   .tl2-cards { grid-template-columns: repeat(3, 1fr); }
@@ -895,7 +898,7 @@ body.modal-open { overflow: hidden; }
   .strip-inner { flex-direction: column; align-items: stretch; }
   .countdown { justify-content: space-between; }
   .cd-unit { min-width: 0; flex: 1; }
-  .prizes { grid-template-columns: 1fr; }
+  .prizes, .awards { grid-template-columns: 1fr; }
   .jg-grid { grid-template-columns: 1fr; }
   .dv-grid { grid-template-columns: 1fr; }
   .sp-stage { min-height: 480px; padding: 18px 14px; }
@@ -948,8 +951,6 @@ body.modal-open { overflow: hidden; }
   .team-btns .btn { flex: 1 1 30%; padding: 0 10px; }
   .modal-card { padding: 32px 22px 24px; }
   .eyebrow { font-size: 11.5px; letter-spacing: .06em; }
-  .award { padding: 22px 18px; }
-  .award b { font-size: 18px; white-space: nowrap; }
 }
 @media (max-height: 960px) { .scroll-hint { display: none; } }
 @media (max-width: 360px) { .brand-cobrand { height: 15px; } }
@@ -1255,12 +1256,10 @@ body.modal-open { overflow: hidden; }
       <div class="prize reveal d1">
         <span class="prize-rank" data-i18n="p2.r">二等奖</span>
         <div class="prize-amt"><sup>¥</sup>30,000<i class="pz-x">× 2</i></div>
-        <div class="prize-total" data-i18n="p2.t">合计 ¥60,000</div>
       </div>
       <div class="prize reveal d2">
         <span class="prize-rank" data-i18n="p3.r">三等奖</span>
         <div class="prize-amt"><sup>¥</sup>10,000<i class="pz-x">× 3</i></div>
-        <div class="prize-total" data-i18n="p3.t">合计 ¥30,000</div>
       </div>
     </div>
 
@@ -1679,7 +1678,7 @@ const EN = {
   'res.b.t':'Sign up to get creation credits and start your project','res.b.d':'Join the hackathon and explore new possibilities with your teammates.',
   'dv.title':'What to submit','dv.desc':'Every project submits the materials below: all required items, plus bonus items where you can.','dv.must':'Required','dv.bonus':'Bonus','dv.mustD':'All three are needed','dv.bonusD':'Encouraged','dv1.t':'Project report (PDF or PPT)','dv1.d':'Document the journey from idea to result — <b>including process screenshots, key asset iterations or key result shots</b> — so judges quickly see what you built, how, and why it’s worth trying.','dv2.t':'Full demo link / promo video (either one)','dv2.d':'Submit a link where the project can be tried or run directly; or submit a demo video — edits, voice-over and captions are fine, but it must include real running footage','dv4.t':'Social media post link','dv4.d':'Publish a project introduction on a public social platform and submit the link; the post must stay public until results are announced.','dv5.t':'Source code','dv5.d':'A Git repository or a zipped codebase is encouraged.','cr.title':'Judging criteria','cr.desc':'Judges score each project across five dimensions totalling 100%.','cr1.t':'Use of Manycore tech stack','cr1.d':'Manycore’s technology plays a core role in the project.','cr2.t':'Fun factor','cr2.d':'Gameplay and spatial interaction are creative and fun; the video clearly shows the highlights and has the potential to spark public discussion.','cr3.t':'Innovation','cr3.d':'The approach, interaction or concept is fresh and different from common existing products.','cr4.t':'Completeness','cr4.d':'The core experience is complete, the demo runs reliably, and the materials match the result.','cr5.t':'Reach','cr5.d':'The project video is posted with the official hashtag on Xiaohongshu (China) / X (international).','cr.total':'Score breakdown','sp.hint':'Tap to reveal the breakdown','sp.reset':'Collapse','sp.rule':'How it is scored','jg.title':'Judges','jg.pro':'Expert judges','jg.proD':'A professional lens to pick the strongest projects with real-world use','jg.tbaName':'Judges to be announced','jg.tbaD':'More names coming soon…','jg.player':'Player judges','jg.playerD':'Real hands-on play to pick the most loved and most fun projects','jg.playerN':'seasoned AI practitioners','jg.playerNote':'form the player jury and help choose the awards from a public point of view.',
   'prizes.title2':'total prize pool','pz.more':'For the full judging rules, <button type="button" class="link-btn" data-open-community>join the community</button> and see the Participant Handbook.','prizes.desc':'23 awards in total: a special award and first, second and third prizes, plus single awards for application, creativity and popularity.',
-  'p0.r':'Special Award','p0.n':'Spatial Intelligence Ecosystem Special Award','p1.r':'First Prize','p2.r':'Second Prize','p2.t':'¥60,000 in total','p3.r':'Third Prize','p3.t':'¥30,000 in total',
+  'p0.r':'Special Award','p0.n':'Spatial Intelligence Ecosystem Special Award','p1.r':'First Prize','p2.r':'Second Prize','p3.r':'Third Prize',
   'aw1':'Application Award',
   'aw2':'Creativity Award',
   'aw3':'Popularity Award',
