@@ -673,6 +673,32 @@ textarea { width: 100%; min-height: 120px; padding: 12px 14px; border-radius: 12
 textarea:focus { outline: none; border-color: var(--ice); box-shadow: 0 0 0 3px rgba(172,199,252,.15); }
 .work-actions { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; margin-top: 20px; }
 .work-actions .saved { font-size: 13px; color: var(--text-muted); margin-left: auto; }
+.seg.seg-sm span { height: 38px; line-height: 36px; font-size: 13.5px; }
+.wf-block > span:first-child { display: block; }
+.wf-block .seg { margin: 2px 0 10px; }
+.wf-pane .hint { display: block; margin-top: 8px; }
+.drop { position: relative; border: 1px dashed var(--border-strong); border-radius: var(--radius-sm); background: var(--bg-2); transition: border-color .2s, background .2s; }
+.drop.over { border-color: var(--ice); background: rgba(69,87,255,.08); }
+.drop-empty { display: flex; flex-direction: column; align-items: center; gap: 6px; padding: 22px 16px; cursor: pointer; text-align: center; font-size: 14px; color: var(--text-soft); outline: none; }
+.drop-empty:focus-visible { box-shadow: 0 0 0 2px var(--ice); border-radius: var(--radius-sm); }
+.drop-empty svg { width: 26px; height: 26px; color: var(--ice); }
+.drop-empty b { color: var(--ice); font-weight: 600; }
+.drop-empty small { font-size: 12.5px; color: var(--text-muted); }
+.drop-file { display: none; align-items: center; gap: 10px; padding: 14px 16px; font-size: 14px; }
+.drop-file svg { width: 22px; height: 22px; flex-shrink: 0; }
+.drop-file .nm { font-weight: 600; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.drop-file .sz { color: var(--text-muted); font-size: 13px; margin-right: auto; white-space: nowrap; }
+.drop-file label { cursor: pointer; }
+.drop.has-file { border-style: solid; }
+.drop.has-file .drop-empty { display: none; }
+.drop.has-file .drop-file { display: flex; }
+.work-status { display: flex; flex-direction: column; align-items: flex-start; gap: 10px; }
+.work-status .work-ver { font-size: 13px; color: var(--text-muted); }
+.work-status p { font-size: 14.5px; color: var(--text-soft); line-height: 1.7; max-width: 720px; }
+.work-btns { display: flex; gap: 10px; flex-wrap: wrap; margin-top: 4px; }
+.receipt-links[hidden] { display: none; }
+.receipt-links { padding-top: 16px; border-top: 1px solid var(--border-subtle); }
+.receipt-links .val b { font-weight: 600; color: var(--text); }
 .receipt-title { font-size: 22px; font-weight: 700; margin-bottom: 4px; }
 .receipt-tagline { color: var(--text-soft); margin-bottom: 14px; }
 .receipt-links { display: grid; gap: 8px; margin: 16px 0 4px; font-size: 14px; }
@@ -1843,19 +1869,26 @@ document.querySelectorAll('.res-main').forEach(card => card.addEventListener('po
     'w.closedT': ['作品提交已截止', 'Submissions are closed'], 'w.closedD': ['评审将以截止前最后一次成功提交的版本为准。', 'Judging uses your last successful submission before the deadline.'],
     'w.formT': ['提交你的作品', 'Submit your project'], 'w.owner': ['提交身份：', 'Submitting as: '], 'w.ownerTeam': ['团队「{t}」', 'team “{t}”'], 'w.ownerSolo': ['个人（尚未组队）', 'individual (no team yet)'],
     'w.rule': ['截止前可多次提交，评审以 11 月 19 日 19:00 前最后一次成功提交的版本为准。', 'You can resubmit until the deadline; judging uses the last successful submission before Nov 19, 19:00.'],
-    'w.title': ['作品名称', 'Project name'], 'w.tagline': ['一句话介绍', 'One-line pitch'], 'w.track': ['应用方向', 'Application area'], 'w.trackNone': ['请选择', 'Select'],
+    'w.track': ['应用方向', 'Application area'], 'w.trackNone': ['请选择', 'Select'],
     'w.t.game': ['游戏', 'Games'], 'w.t.culture': ['文旅', 'Culture & tourism'], 'w.t.film': ['影视创作', 'Film & video'], 'w.t.print': ['3D 打印', '3D printing'], 'w.t.embodied': ['具身智能', 'Embodied AI'], 'w.t.other': ['其他', 'Other'],
-    'w.desc': ['作品介绍', 'Description'], 'w.descPh': ['作品创意、Lux3D 在其中发挥的作用、实现方式与使用场景…', 'Your idea, how Lux3D is used, how it works and who it’s for…'],
     'w.demo': ['宣传视频链接', 'Promo video link'], 'w.demoHint': ['须包含真实运行画面，可剪辑、配音或加字幕。', 'Must include real running footage; edits, voice-over and captions are fine.'], 'w.link': ['完整 Demo 链接', 'Full demo link'],
-    'w.report': ['项目报告书链接（PDF 或 PPT）', 'Project report link (PDF or PPT)'], 'w.reportHint': ['上传到网盘或云文档后粘贴分享链接；需包含过程截图、关键资产迭代对比或关键效果截图。', 'Upload to a drive or cloud doc and paste the share link; include process shots, asset iterations or key results.'],
-    'w.repo': ['项目源代码', 'Source code'], 'w.repoHint': ['Git 仓库或代码压缩包链接。', 'Git repository or zipped code link.'], 'w.bonus': ['加分项', 'bonus'], 'w.either': ['二选一', 'either one'], 'w.e.either': ['完整 Demo 链接与宣传视频链接至少填写一项', 'Provide at least a demo link or a promo video link'], 'w.linkHint': ['作品需要真的能跑起来，请提供可访问的体验或下载地址。', 'Your project must actually run — share a link people can open or download.'],
-    'w.social': ['社交媒体发布链接', 'Social media post link'], 'w.optional': ['选填', 'optional'], 'w.socialHint': ['国内：小红书；海外：X。须带赛事官方话题标签，每件作品仅可登记一个。', 'China: Xiaohongshu; international: X. Must use the official hashtag; one link per project.'],
+    'w.report': ['项目报告书（PDF 或 PPT）', 'Project report (PDF or PPT)'], 'w.reportHint': ['需包含过程截图、关键资产迭代对比或关键效果截图。', 'Include process screenshots, key asset iterations or key result shots.'],
+    'w.repo': ['项目源代码', 'Source code'], 'w.repoHint': ['Git 仓库或网盘分享链接。', 'A Git repository or cloud-drive share link.'], 'w.bonus': ['加分项', 'bonus'], 'w.either': ['二选一', 'either one'], 'w.linkHint': ['作品需要真的能跑起来，请提供可访问的体验或下载地址。', 'Your project must actually run — share a link people can open or download.'],
+    'w.social': ['社交媒体发布链接', 'Social media post link'], 'w.socialHint': ['国内：小红书；海外：X。须带赛事官方话题标签，每件作品仅可登记一个。', 'China: Xiaohongshu; international: X. Must use the official hashtag; one link per project.'],
     'w.lux': ['我确认作品使用 Aholo Lux3D 完成，且可运行、可演示', 'I confirm the project is built with Aholo Lux3D and can run and be demoed'],
     'w.save': ['保存草稿', 'Save draft'], 'w.submit': ['提交作品', 'Submit project'], 'w.resubmit': ['提交新版本', 'Submit new version'], 'w.cancel': ['取消', 'Cancel'],
     'w.savedAt': ['草稿已保存 · {t}', 'Draft saved · {t}'], 'w.draftToast': ['草稿已保存', 'Draft saved'], 'w.submitToast': ['作品已提交', 'Project submitted'],
-    'w.done': ['已提交', 'Submitted'], 'w.version': ['第 {v} 版 · 提交于 {t}', 'Version {v} · submitted {t}'], 'w.edit': ['编辑并重新提交', 'Edit & resubmit'],
-    'w.e.title': ['请输入 2–40 个字符的作品名称', 'Enter a project name of 2–40 characters'], 'w.e.tagline': ['请输入 4–60 个字符的一句话介绍', 'Enter a pitch of 4–60 characters'],
-    'w.e.track': ['请选择应用方向', 'Choose an application area'], 'w.e.desc': ['请输入 10–1000 个字符的作品介绍', 'Enter a description of 10–1000 characters'],
+    'w.done': ['已提交', 'Submitted'], 'w.version': ['第 {v} 版 · 提交于 {t}', 'Version {v} · submitted {t}'], 'w.edit': ['修改提交', 'Edit submission'],
+    'w.e.track': ['请选择应用方向', 'Choose an application area'], 
+    'w.dvT': ['完整 Demo / 宣传视频', 'Full demo / promo video'], 'w.m.link': ['Demo 链接', 'Demo link'], 'w.m.demo': ['视频链接', 'Video link'], 'w.m.videoFile': ['上传视频', 'Upload video'], 'w.videoFileR': ['宣传视频文件', 'Promo video file'],
+    'w.m.repoLink': ['链接', 'Link'], 'w.m.repoFile': ['上传压缩包', 'Upload archive'],
+    'w.up.click': ['点击上传', 'Click to upload'], 'w.up.or': ['或拖拽文件到此处', ' or drag a file here'], 'w.up.replace': ['更换', 'Replace'], 'w.up.remove': ['移除', 'Remove'],
+    'w.up.videoFile': ['MP4 / MOV 或压缩包，不超过 {mb} MB', 'MP4 / MOV or an archive, up to {mb} MB'], 'w.up.reportFile': ['PDF / PPT / PPTX，不超过 {mb} MB', 'PDF / PPT / PPTX, up to {mb} MB'], 'w.up.repoFile': ['ZIP / RAR / 7Z，不超过 {mb} MB', 'ZIP / RAR / 7Z, up to {mb} MB'],
+    'w.e.type': ['文件格式不支持，请上传 {t}', 'Unsupported file type — upload {t}'], 'w.e.size': ['文件过大，请控制在 {mb} MB 以内', 'File too large — keep it under {mb} MB'],
+    'w.e.video': ['请上传视频文件', 'Upload your video file'], 'w.e.report': ['请上传项目报告书', 'Upload your project report'],
+    'w.reviewNote': ['作品已进入资格与完整性审核。请确保 Demo、视频和其他链接在结果公布前持续有效。', 'Your project is in eligibility and completeness review. Keep the demo, video and other links working until results are announced.'],
+    'w.closedBadge': ['提交已截止', 'Submissions closed'], 'w.lockedNote': ['作品已经锁定，不能再修改实质内容。如组委会要求补充行政材料，请按通知在指定时间内完成。', 'Your project is locked and its substance can no longer change. If the organizers ask for administrative documents, provide them by the date in their notice.'],
+    'w.view': ['查看提交内容', 'View submission'], 'w.hide': ['收起提交内容', 'Hide submission'],
     'w.e.url': ['请输入以 http:// 或 https:// 开头的有效链接', 'Enter a valid link starting with http:// or https://'], 'w.e.lux': ['提交前请确认作品使用 Aholo Lux3D 完成', 'Please confirm the project uses Aholo Lux3D'],
     'tl.rsvSoon': ['预约链接即将开放', 'Booking link coming soon'],
     'team.noReward': ['未获团队奖励', 'No team reward'], 'rw.done': ['已发放', 'granted'],
@@ -2051,7 +2084,8 @@ document.querySelectorAll('.res-main').forEach(card => card.addEventListener('po
     if (t.closest('[data-reserve]')) { e.preventDefault(); toast(T('tl.rsvSoon')); return; }
     if (t.closest('[data-submit-cta]')) { e.preventDefault(); goSubmit(); return; }
     const act = t.closest('[data-act]');
-    if (act && ['saveDraft', 'editWork', 'cancelEdit'].includes(act.dataset.act)) { workAction(act.dataset.act); return; }
+    if (act && act.dataset.act === 'clearFile') { setFile($('#workForm'), act.dataset.f, null); return; }
+    if (act && ['saveDraft', 'editWork', 'cancelEdit', 'viewWork'].includes(act.dataset.act)) { workAction(act.dataset.act); return; }
     if (act) teamAction(act);
   });
 
@@ -2279,38 +2313,39 @@ document.querySelectorAll('.res-main').forEach(card => card.addEventListener('po
     }
     const closed = Date.now() >= DEADLINE;
     if (sub && (!editingWork || closed)) {
-      const links = [sub.link ? ['w.link', sub.link] : null, sub.demo ? ['w.demo', sub.demo] : null, sub.report ? ['w.report', sub.report] : null, sub.social ? ['w.social', sub.social] : null, sub.repo ? ['w.repo', sub.repo] : null].filter(Boolean)
-        .map(([k, u]) => `<div><span>${T(k)}</span><a href="${safeUrl(u)}" target="_blank" rel="noopener noreferrer">${esc(u)}</a></div>`).join('');
-      el.innerHTML = `<div class="work-head"><div><h3><span class="badge ok">${T('w.done')}</span> <span style="font-size:13px;font-weight:500;color:var(--text-muted)">${T('w.version', { v: sub.version, t: fmtTime(sub.at) })}</span></h3></div>
-          ${closed ? '' : `<button type="button" class="btn btn-ghost btn-sm" data-act="editWork">${T('w.edit')}</button>`}</div>
-        <p class="receipt-title">${esc(sub.title)}</p><p class="receipt-tagline">${esc(sub.tagline)}</p>
-        <span class="badge">${sub.track === 'other' && sub.trackOther ? esc(sub.trackOther) : T('w.t.' + sub.track)}</span>
-        <p class="receipt-desc">${esc(sub.desc)}</p>
-        <div class="receipt-links">${links}</div>
-        <p class="reg-note">${T(closed ? 'w.closedD' : 'w.rule')}</p>`;
+      el.innerHTML = `<div class="work-status">
+          <span class="badge${closed ? '' : ' ok'}">${T(closed ? 'w.closedBadge' : 'w.done')}</span>
+          <span class="work-ver">${T('w.version', { v: sub.version, t: fmtTime(sub.at) })}</span>
+          <p>${T(closed ? 'w.lockedNote' : 'w.reviewNote')}</p>
+          <div class="work-btns"><button type="button" class="btn btn-primary btn-sm" data-act="viewWork" aria-expanded="${viewingWork}">${T(viewingWork ? 'w.hide' : 'w.view')}</button>
+            ${closed ? '' : `<button type="button" class="btn btn-ghost btn-sm" data-act="editWork">${T('w.edit')}</button>`}</div></div>
+        <div class="receipt-links"${viewingWork ? '' : ' hidden'}>${receiptRows(sub)}</div>
+        ${closed ? '' : `<p class="reg-note">${T('w.rule')}</p>`}`;
       return;
     }
     if (closed) { el.innerHTML = `<div class="empty">${icon}<h3>${T('w.closedT')}</h3><p>${T('w.closedD')}</p></div>`; return; }
-    const d = w.draft || (editingWork && sub) || (state.team && state.team.topic) || {};
+    const d = w.draft || (editingWork && sub) || {};
     const v = k => esc(d[k] || '');
+    picked = { videoFile: d.videoFile || null, reportFile: d.reportFile || null, repoFile: d.repoFile || null };
+    const dv = d.dv || 'link', rm = d.repoMode || 'link';
     const owner = state.team ? T('w.ownerTeam', { t: esc(state.team.name) }) : T('w.ownerSolo');
+    const tabs = (name, cur, opts) => `<div class="seg seg-sm" role="radiogroup">${opts.map(o => `<label><input type="radio" name="${name}" value="${o}"${cur === o ? ' checked' : ''}><span>${T('w.m.' + o)}</span></label>`).join('')}</div>`;
     el.innerHTML = `<form class="work-form" id="workForm" novalidate>
       <div class="work-head"><div><h3>${T('w.formT')}</h3><p>${T('w.owner')}${owner}</p></div></div>
-      <div class="grid2">
-        <label class="field"><span>${T('w.title')}</span><input type="text" name="title" maxlength="40" value="${v('title')}"><em class="field-error"></em></label>
-        <label class="field"><span>${T('w.track')}</span><select name="track"><option value="">${T('w.trackNone')}</option>${TRACKS.map(t => `<option value="${t}"${d.track === t ? ' selected' : ''}>${T('w.t.' + t)}</option>`).join('')}</select>
-          <input type="text" name="trackOther" maxlength="20" placeholder="${T('w.trackOtherPh')}" aria-label="${T('w.trackOtherPh')}" value="${v('trackOther')}"${d.track === 'other' ? '' : ' hidden'} style="margin-top:8px"><em class="field-error"></em></label>
-      </div>
-      <label class="field"><span>${T('w.tagline')}</span><input type="text" name="tagline" maxlength="60" value="${v('tagline')}"><em class="field-error"></em></label>
-      <label class="field"><span>${T('w.desc')}</span><textarea name="desc" maxlength="1000" placeholder="${T('w.descPh')}">${v('desc')}</textarea><em class="field-error"></em></label>
-      <div class="grid2">
-        <label class="field"><span>${T('w.link')}<em class="opt">${T('w.either')}</em></span><input type="url" name="link" placeholder="https://" value="${v('link')}"><em class="field-error"></em><small class="hint">${T('w.linkHint')}</small></label>
-        <label class="field"><span>${T('w.demo')}<em class="opt">${T('w.either')}</em></span><input type="url" name="demo" placeholder="https://" value="${v('demo')}"><em class="field-error"></em><small class="hint">${T('w.demoHint')}</small></label>
-      </div>
-      <label class="field"><span>${T('w.report')}</span><input type="url" name="report" placeholder="https://" value="${v('report')}"><em class="field-error"></em><small class="hint">${T('w.reportHint')}</small></label>
+      <div class="field wf-block" data-block="dv"><span>${T('w.dvT')}<em class="opt">${T('w.either')}</em></span>
+        ${tabs('dv', dv, ['link', 'demo', 'videoFile'])}
+        <div class="wf-pane" data-pane-of="dv" data-v="link"${dv === 'link' ? '' : ' hidden'}><input type="url" name="link" placeholder="https://" aria-label="${T('w.link')}" value="${v('link')}"><small class="hint">${T('w.linkHint')}</small></div>
+        <div class="wf-pane" data-pane-of="dv" data-v="demo"${dv === 'demo' ? '' : ' hidden'}><input type="url" name="demo" placeholder="https://" aria-label="${T('w.demo')}" value="${v('demo')}"><small class="hint">${T('w.demoHint')}</small></div>
+        <div class="wf-pane" data-pane-of="dv" data-v="videoFile"${dv === 'videoFile' ? '' : ' hidden'}>${drop('videoFile')}<small class="hint">${T('w.demoHint')}</small></div>
+        <em class="field-error" data-err="dv"></em></div>
+      <div class="field wf-block" data-block="report"><span>${T('w.report')}</span>${drop('reportFile')}<em class="field-error" data-err="report"></em><small class="hint">${T('w.reportHint')}</small></div>
       <div class="grid2">
         <label class="field"><span>${T('w.social')}<em class="opt">${T('w.bonus')}</em></span><input type="url" name="social" placeholder="https://" value="${v('social')}"><em class="field-error"></em><small class="hint">${T('w.socialHint')}</small></label>
-        <label class="field"><span>${T('w.repo')}<em class="opt">${T('w.bonus')}</em></span><input type="url" name="repo" placeholder="https://" value="${v('repo')}"><em class="field-error"></em><small class="hint">${T('w.repoHint')}</small></label>
+        <div class="field wf-block" data-block="repo"><span>${T('w.repo')}<em class="opt">${T('w.bonus')}</em></span>
+          <div class="seg seg-sm" role="radiogroup"><label><input type="radio" name="repoMode" value="link"${rm === 'link' ? ' checked' : ''}><span>${T('w.m.repoLink')}</span></label><label><input type="radio" name="repoMode" value="file"${rm === 'file' ? ' checked' : ''}><span>${T('w.m.repoFile')}</span></label></div>
+          <div class="wf-pane" data-pane-of="repoMode" data-v="link"${rm === 'link' ? '' : ' hidden'}><input type="url" name="repo" placeholder="https://" aria-label="${T('w.repo')}" value="${v('repo')}"><small class="hint">${T('w.repoHint')}</small></div>
+          <div class="wf-pane" data-pane-of="repoMode" data-v="file"${rm === 'file' ? '' : ' hidden'}>${drop('repoFile')}</div>
+          <em class="field-error" data-err="repo"></em></div>
       </div>
       <label class="check"><input type="checkbox" name="lux"${d.lux ? ' checked' : ''}><span>${T('w.lux')}</span></label><em class="field-error" data-for="lux"></em>
       <div class="work-actions">
@@ -2322,19 +2357,69 @@ document.querySelectorAll('.res-main').forEach(card => card.addEventListener('po
       <p class="reg-note">${T('w.rule')}</p>
     </form>`;
   }
-  const workData = f => ({ title: f.elements.title.value.trim(), track: f.elements.track.value, trackOther: f.elements.track.value === 'other' ? f.elements.trackOther.value.trim() : '', tagline: f.elements.tagline.value.trim(), desc: f.elements.desc.value.trim(), demo: f.elements.demo.value.trim(), link: f.elements.link.value.trim(), report: f.elements.report.value.trim(), social: f.elements.social.value.trim(), repo: f.elements.repo.value.trim(), lux: f.elements.lux.checked });
+  /* ---------- uploads: the demo keeps only file name + size; a real build uploads to storage and keeps the URL ---------- */
+  let picked = {}, viewingWork = false;
+  const FILES = {
+    videoFile: { ext: ['mp4', 'mov', 'zip', 'rar', '7z'], max: 500 },
+    reportFile: { ext: ['pdf', 'ppt', 'pptx'], max: 50 },
+    repoFile: { ext: ['zip', 'rar', '7z'], max: 200 },
+  };
+  const fmtSize = b => b >= 1048576 ? (b / 1048576).toFixed(1) + ' MB' : Math.max(1, Math.round(b / 1024)) + ' KB';
+  function drop(name) {
+    const f = picked[name], c = FILES[name];
+    return `<div class="drop${f ? ' has-file' : ''}" data-drop="${name}">
+      <input type="file" name="${name}" id="wf-${name}" accept="${c.ext.map(x => '.' + x).join(',')}" hidden>
+      <label for="wf-${name}" class="drop-empty"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 16V4M7 9l5-5 5 5"/><path d="M4 16v3a1 1 0 0 0 1 1h14a1 1 0 0 0 1-1v-3"/></svg>
+        <span><b>${T('w.up.click')}</b>${T('w.up.or')}</span><small>${T('w.up.' + name, { mb: c.max })}</small></label>
+      <div class="drop-file"><svg viewBox="0 0 24 24" fill="none" stroke="url(#g1)" stroke-width="1.5" stroke-linejoin="round"><path d="M6 3h8l4 4v14H6z"/><path d="M14 3v4h4"/></svg>
+        <span class="nm">${f ? esc(f.name) : ''}</span><span class="sz">${f ? fmtSize(f.size) : ''}</span>
+        <label for="wf-${name}" class="link-btn">${T('w.up.replace')}</label><button type="button" class="link-btn" data-act="clearFile" data-f="${name}">${T('w.up.remove')}</button></div></div>`;
+  }
+  function setFile(form, name, file) {
+    const c = FILES[name], box = form.querySelector(`[data-drop="${name}"]`), err = box.closest('.wf-block').querySelector('.field-error');
+    if (file) {
+      const ext = (file.name.split('.').pop() || '').toLowerCase();
+      if (!c.ext.includes(ext)) { err.textContent = T('w.e.type', { t: c.ext.join(' / ').toUpperCase() }); return; }
+      if (file.size > c.max * 1048576) { err.textContent = T('w.e.size', { mb: c.max }); return; }
+      err.textContent = '';
+    }
+    picked[name] = file ? { name: file.name, size: file.size } : null;
+    box.classList.toggle('has-file', !!file);
+    box.querySelector('.nm').textContent = file ? file.name : ''; box.querySelector('.sz').textContent = file ? fmtSize(file.size) : '';
+    box.querySelector('input').value = '';
+  }
+  function receiptRows(sub) {
+    const a = u => `<a href="${safeUrl(u)}" target="_blank" rel="noopener noreferrer">${esc(u)}</a>`, f = x => `<b>${esc(x.name)}</b> · ${fmtSize(x.size)}`;
+    const rows = [
+      sub.dv === 'videoFile' ? ['w.videoFileR', f(sub.videoFile)] : sub.dv === 'demo' ? ['w.demo', a(sub.demo)] : ['w.link', a(sub.link)],
+      ['w.report', f(sub.reportFile)],
+      sub.social ? ['w.social', a(sub.social)] : null,
+      sub.repoMode === 'file' && sub.repoFile ? ['w.repo', f(sub.repoFile)] : sub.repo ? ['w.repo', a(sub.repo)] : null,
+    ].filter(Boolean);
+    return rows.map(([k, h]) => `<div><span>${T(k)}</span><span class="val">${h}</span></div>`).join('');
+  }
+  const workData = f => {
+    const g = k => f.elements[k].value.trim(), dv = (f.querySelector('[name=dv]:checked') || {}).value || 'link', rm = (f.querySelector('[name=repoMode]:checked') || {}).value || 'link';
+    return { dv, link: dv === 'link' ? g('link') : '', demo: dv === 'demo' ? g('demo') : '', videoFile: dv === 'videoFile' ? picked.videoFile : null,
+      reportFile: picked.reportFile, social: g('social'), repoMode: rm, repo: rm === 'link' ? g('repo') : '', repoFile: rm === 'file' ? picked.repoFile : null, lux: f.elements.lux.checked };
+  };
   function validateWork(f, d) {
     const url = u => /^https?:\/\/[^\s/$.?#].[^\s]*$/i.test(u);
     const errs = {
-      title: d.title.length < 2 || d.title.length > 40 ? T('w.e.title') : '', track: !d.track ? T('w.e.track') : d.track === 'other' && !d.trackOther ? T('w.e.trackOther') : '',
-      tagline: d.tagline.length < 4 || d.tagline.length > 60 ? T('w.e.tagline') : '', desc: d.desc.length < 10 || d.desc.length > 1000 ? T('w.e.desc') : '',
-      demo: !d.demo ? (d.link ? '' : T('w.e.either')) : url(d.demo) ? '' : T('w.e.url'), link: !d.link ? (d.demo ? '' : T('w.e.either')) : url(d.link) ? '' : T('w.e.url'), report: url(d.report) ? '' : T('w.e.url'), social: !d.social || url(d.social) ? '' : T('w.e.url'), repo: !d.repo || url(d.repo) ? '' : T('w.e.url'), lux: d.lux ? '' : T('w.e.lux'),
+      dv: d.dv === 'videoFile' ? (d.videoFile ? '' : T('w.e.video')) : (url(d.dv === 'demo' ? d.demo : d.link) ? '' : T('w.e.url')),
+      report: d.reportFile ? '' : T('w.e.report'),
+      social: !d.social || url(d.social) ? '' : T('w.e.url'),
+      repo: !d.repo || url(d.repo) ? '' : T('w.e.url'),
+      lux: d.lux ? '' : T('w.e.lux'),
     };
+    const focusEl = { dv: () => d.dv === 'videoFile' ? f.querySelector('[data-drop=videoFile] .drop-empty') : f.elements[d.dv], report: () => f.querySelector('[data-drop=reportFile] .drop-empty'), social: () => f.elements.social, repo: () => f.elements.repo, lux: () => f.elements.lux };
     Object.keys(errs).forEach(k => {
-      const input = f.elements[k === 'track' && d.track === 'other' ? 'trackOther' : k], holder = k === 'lux' ? f.querySelector('[data-for="lux"]') : input.closest('.field').querySelector('.field-error');
-      holder.textContent = errs[k]; input.setAttribute('aria-invalid', errs[k] ? 'true' : 'false');
+      const holder = k === 'lux' ? f.querySelector('[data-for="lux"]') : k === 'social' ? f.elements.social.closest('.field').querySelector('.field-error') : f.querySelector(`[data-err="${k}"]`);
+      holder.textContent = errs[k];
+      const inp = k === 'dv' ? (d.dv === 'videoFile' ? null : f.elements[d.dv]) : k === 'report' ? null : f.elements[k === 'lux' ? 'lux' : k];
+      if (inp) inp.setAttribute('aria-invalid', errs[k] ? 'true' : 'false');
     });
-    const first = Object.keys(errs).find(k => errs[k]); if (first) { f.elements[first === 'track' && d.track === 'other' ? 'trackOther' : first].focus(); return false; }
+    const first = Object.keys(errs).find(k => errs[k]); if (first) { const el = focusEl[first](); if (el) { el.setAttribute('tabindex', el.tabIndex < 0 ? '-1' : el.getAttribute('tabindex') || ''); el.focus(); el.scrollIntoView({ block: 'center', behavior: 'smooth' }); } return false; }
     return true;
   }
   async function workRun(fn, msg) {
@@ -2348,14 +2433,28 @@ document.querySelectorAll('.res-main').forEach(card => card.addEventListener('po
     e.preventDefault();
     const f = e.target, d = workData(f);
     if (!validateWork(f, d)) return;
-    if (await workRun(() => api.submitWork(d), T('w.submitToast'))) editingWork = false;
+    if (await workRun(() => api.submitWork(d), T('w.submitToast'))) { editingWork = false; viewingWork = false; }
     renderWorks(); renderStage();
   });
-  document.addEventListener('change', e => { if (e.target.name === 'track' && e.target.closest('#workForm')) { const o = e.target.form.elements.trackOther; o.hidden = e.target.value !== 'other'; if (!o.hidden) o.focus(); } });
+  document.addEventListener('change', e => {
+    const f = e.target.closest && e.target.closest('#workForm'); if (!f) return;
+    const n = e.target.name;
+    if (n === 'dv' || n === 'repoMode') {
+      f.querySelectorAll(`[data-pane-of="${n}"]`).forEach(p => { p.hidden = p.dataset.v !== e.target.value; });
+      const blk = f.querySelector(`[data-block="${n === 'dv' ? 'dv' : 'repo'}"] .field-error`); if (blk) blk.textContent = '';
+    } else if (FILES[n] && e.target.files && e.target.files[0]) setFile(f, n, e.target.files[0]);
+  });
+  // drag & drop onto an upload box
+  ['dragover', 'dragleave', 'drop'].forEach(t => document.addEventListener(t, e => {
+    const box = e.target.closest && e.target.closest('#workForm .drop'); if (!box) return;
+    e.preventDefault(); box.classList.toggle('over', t === 'dragover');
+    if (t === 'drop' && e.dataTransfer.files[0]) setFile(box.closest('form'), box.dataset.drop, e.dataTransfer.files[0]);
+  }));
   document.addEventListener('input', e => { const f = e.target.closest && e.target.closest('#workForm'); if (f && e.target.getAttribute('aria-invalid') === 'true') { e.target.setAttribute('aria-invalid', 'false'); const h = e.target.name === 'lux' ? f.querySelector('[data-for="lux"]') : e.target.closest('.field').querySelector('.field-error'); if (h) h.textContent = ''; } });
   function workAction(a) {
     if (a === 'saveDraft') { const f = $('#workForm'); workRun(() => api.saveDraft(workData(f)), T('w.draftToast')).then(renderWorks); }
-    else if (a === 'editWork') { editingWork = true; renderWorks(); $('#workForm').elements.title.focus(); }
+    else if (a === 'editWork') { editingWork = true; renderWorks(); $('#workForm').scrollIntoView({ block: 'start', behavior: 'smooth' }); }
+    else if (a === 'viewWork') { viewingWork = !viewingWork; renderWorks(); }
     else if (a === 'cancelEdit') { editingWork = false; renderWorks(); }
   }
   function goSubmit() {
