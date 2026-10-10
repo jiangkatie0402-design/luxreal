@@ -660,7 +660,7 @@ html[lang="zh-CN"] .ms-now h3 { font-family: var(--font-title); font-weight: 400
 /* one continuous bar; thin dividers mark where each stage begins */
 .my-steps li::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 6px; background: rgba(255,255,255,.08); }
 .my-steps li:first-child::before { border-radius: 3px 0 0 3px; } .my-steps li:last-child::before { border-radius: 0 3px 3px 0; }
-.my-steps li + li::after { content: ''; position: absolute; z-index: 1; left: 0; top: -4px; width: 1px; height: 14px; background: rgba(255,255,255,.45); }
+.my-steps li + li::after { content: ''; position: absolute; z-index: 1; left: -1px; top: 0; width: 2px; height: 6px; background: var(--surface); }
 .my-steps li.done::before { background: #6A48FF; }
 .my-steps li.cur::before { background: linear-gradient(90deg, #6A48FF, #B5ACFF 50%, #6A48FF) 0 0 / 200% 100%; box-shadow: 0 0 14px rgba(123,92,255,.7); animation: msSweep 2.4s linear infinite; }
 @keyframes msSweep { to { background-position: -200% 0; } }
