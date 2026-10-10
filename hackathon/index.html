@@ -483,56 +483,39 @@ html[lang="zh-CN"] .rules-title { font-family: var(--font-title); font-weight: 4
 .dv-tag { align-self: flex-start; font-size: 12px; font-weight: 700; padding: 3px 10px; border-radius: var(--radius-pill); background: var(--primary); color: var(--primary-contrast); }
 .dv-bonus { border-style: dashed; background: transparent; }
 .dv-bonus .dv-tag { background: rgba(123,92,255,.16); color: var(--ice); border: 1px solid rgba(181,172,255,.35); }
-/* 评审规则 — 100% core splits into five tiles */
-.sp-stage { position: relative; min-height: 560px; padding: clamp(28px, 4vw, 48px); border: 1px solid var(--border); border-radius: var(--radius); overflow: hidden; isolation: isolate;
-  background: radial-gradient(55% 60% at 50% 50%, rgba(106,72,255,.20), transparent 70%), var(--surface); }
-.sp-stage::after { content: ''; position: absolute; inset: 0; z-index: -1; opacity: .22; background-image: radial-gradient(rgba(255,255,255,.22) 1px, transparent 1px); background-size: 22px 22px;
-  -webkit-mask-image: radial-gradient(ellipse 55% 55% at 50% 50%, #000, transparent); mask-image: radial-gradient(ellipse 55% 55% at 50% 50%, #000, transparent); }
-/* core */
-.sp-core { position: absolute; left: 50%; top: 50%; z-index: 3; width: clamp(240px, 30vw, 340px); aspect-ratio: 1; border-radius: 50%; transform: translate(-50%, -50%);
-  display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 8px; cursor: pointer;
-  background: radial-gradient(circle at 35% 30%, rgba(181,172,255,.22), rgba(123,92,255,.16) 45%, rgba(10,10,20,.9) 75%); border: 1px solid rgba(181,172,255,.35);
-  box-shadow: 0 0 80px -10px rgba(106,72,255,.65), inset 0 0 60px rgba(123,92,255,.25);
-  transition: transform .7s var(--ease), opacity .5s var(--ease), filter .6s; animation: spBreath 4s ease-in-out infinite; }
-.sp-core b { font-size: clamp(64px, 8vw, 96px); font-weight: 700; letter-spacing: -.05em; line-height: 1; background: var(--grad); -webkit-background-clip: text; background-clip: text; color: transparent; }
-.sp-core b small { font-size: .38em; }
-.sp-core .mono { font-size: 12px; font-weight: 600; letter-spacing: .28em; color: var(--ice); }
-.sp-core em { font-style: normal; font-size: 12.5px; color: var(--text-muted); margin-top: 6px; }
-.sp-ring { position: absolute; inset: -14px; border-radius: 50%; border: 1px dashed rgba(181,172,255,.25); animation: spSpin 24s linear infinite; pointer-events: none; }
-.sp-core:hover { box-shadow: 0 0 110px -6px rgba(106,72,255,.8), inset 0 0 60px rgba(123,92,255,.3); }
-@keyframes spBreath { 50% { transform: translate(-50%, -50%) scale(1.035); } }
-@keyframes spSpin { to { transform: rotate(360deg); } }
-.sp-stage.split .sp-core { animation: none; transform: translate(-50%, -50%) scale(1.6); opacity: 0; filter: blur(12px); pointer-events: none; }
-/* tiles */
-.sp-grid { position: relative; z-index: 2; display: grid; grid-template-columns: repeat(6, 1fr); gap: 14px; align-items: stretch; }
-.sp-t0, .sp-t1, .sp-t2 { grid-column: span 2; }
-.sp-t3, .sp-t4 { grid-column: span 3; }
-.sp-tile { position: relative; display: flex; flex-direction: column; align-items: flex-start; text-align: left; min-height: 200px; padding: 22px 24px; border-radius: 18px;
-  border: 1px solid var(--border); background: linear-gradient(160deg, color-mix(in srgb, var(--c) 10%, transparent), transparent 60%), var(--bg-2); cursor: pointer; overflow: hidden;
-  transform: translate(var(--dx, 0px), var(--dy, 0px)) scale(.25); opacity: 0;
-  transition: transform .8s cubic-bezier(.2,.9,.25,1.05) var(--d), opacity .5s var(--ease) var(--d), border-color .3s, background .3s, box-shadow .3s; }
-.sp-stage.split .sp-tile { transform: none; opacity: 1; }
-.sp-tile::before { content: ''; position: absolute; left: 24px; right: 24px; top: 0; height: 2px; background: var(--c); opacity: .7; border-radius: 0 0 2px 2px; }
-.sp-no { font-size: 12px; font-weight: 600; letter-spacing: .12em; color: var(--text-muted); }
-.sp-pct { margin: 18px 0 10px; font-size: clamp(48px, 5vw, 68px); font-weight: 700; line-height: .9; letter-spacing: -.05em; color: var(--text); transition: color .3s; font-variant-numeric: tabular-nums; }
-.sp-pct small { font-size: .4em; color: var(--text-muted); margin-left: 2px; }
-.sp-name { font-size: 18px; font-weight: 700; }
-.sp-more { display: grid; grid-template-rows: 0fr; opacity: 0; transition: grid-template-rows .4s var(--ease), opacity .3s, margin .4s var(--ease); }
-.sp-more-in { overflow: hidden; min-height: 0; }
-.sp-more { font-size: 14px; color: var(--text-soft); line-height: 1.75; }
-.sp-rule { display: block; font-size: 11.5px; font-weight: 600; letter-spacing: .14em; color: var(--c); margin-bottom: 4px; }
-.sp-stage.split .sp-tile:hover { border-color: var(--border-strong); box-shadow: 0 12px 40px -18px color-mix(in srgb, var(--c) 80%, transparent); }
-.sp-stage.split .sp-tile.on { transform: scale(1.035); z-index: 3; border-color: #7B5CFF; box-shadow: 0 0 0 1px #7B5CFF, 0 24px 60px -20px rgba(123,92,255,.7);
-  background: linear-gradient(160deg, color-mix(in srgb, var(--c) 26%, transparent), rgba(123,92,255,.08) 70%), var(--surface-2); transition-delay: 0s; }
-.sp-tile.on .sp-pct { color: #fff; }
-.sp-tile.on .sp-more { grid-template-rows: 1fr; opacity: 1; margin-top: 14px; }
-
-.sp-more { grid-template-columns: 1fr; }
-.sp-reset { position: absolute; right: 18px; top: 16px; z-index: 4; display: inline-flex; align-items: center; gap: 6px; height: 32px; padding: 0 14px; border-radius: var(--radius-pill);
-  border: 1px solid var(--border-strong); background: rgba(5,5,6,.6); font-size: 12.5px; font-weight: 600; color: var(--text-muted); opacity: 0; pointer-events: none; transition: opacity .3s .6s, color .2s, border-color .2s; }
-.sp-stage.split .sp-reset { opacity: 1; pointer-events: auto; }
-.sp-reset:hover { color: #fff; border-color: var(--ice); }
-.sp-stage.split .sp-grid { padding-top: 34px; }
+/* 评审规则 — a HUD scoring matrix in the KV language: dotted frame, corner handles, a 100-cell bar split into the five weights */
+.sc-panel { position: relative; padding: clamp(22px, 3vw, 40px); border: 2px dotted rgba(152,141,255,.6); background: radial-gradient(60% 80% at 50% 0%, rgba(106,72,255,.14), transparent 70%), #050409; }
+.sc-panel .fc { position: absolute; width: 10px; height: 10px; border: 2px solid #988DFF; background: #000; }
+.sc-panel .tl { left: -6px; top: -6px; } .sc-panel .tr { right: -6px; top: -6px; } .sc-panel .bl { left: -6px; bottom: -6px; } .sc-panel .br { right: -6px; bottom: -6px; }
+.sc-top { display: flex; justify-content: space-between; align-items: baseline; gap: 16px; font-size: 12px; letter-spacing: .16em; color: var(--ice); margin-bottom: 18px; }
+.sc-top .sc-total { color: var(--text-muted); } .sc-top .sc-total b { font-family: var(--font-title); font-weight: 400; font-size: 22px; letter-spacing: 0; color: #fff; margin: 0 2px 0 8px; }
+.sc-bar { display: flex; gap: 8px; }
+.sc-g { --on: var(--c); position: relative; display: flex; flex-direction: column; gap: 8px; min-width: 0; transition: opacity .3s; }
+.sc-g > .mono { font-size: 11.5px; letter-spacing: .12em; color: var(--text-muted); white-space: nowrap; transition: color .3s; }
+.sc-cells { display: grid; grid-auto-flow: column; grid-auto-columns: 1fr; gap: 2px; height: clamp(26px, 2.6vw, 36px); }
+.sc-cells i { background: #16122a; transition: background .12s steps(1) var(--d), box-shadow .12s steps(1) var(--d); }
+.sc-panel.run .sc-cells i { background: var(--c); box-shadow: 0 0 10px -2px color-mix(in srgb, var(--c) 80%, transparent); }
+.sc-panel.done .sc-cells i { transition: background .35s, box-shadow .35s; }
+.sc-cells i.scan { background: #fff !important; box-shadow: 0 0 12px rgba(181,172,255,.9) !important; transition: none !important; }
+.sc-scale { display: flex; justify-content: space-between; margin-top: 10px; font-size: 11px; letter-spacing: .1em; color: var(--text-muted); opacity: .7; }
+.sc-list { list-style: none; margin: clamp(22px, 2.6vw, 34px) 0 0; padding: 0; }
+.sc-row { display: grid; grid-template-columns: 56px minmax(150px, 230px) 1fr 132px; align-items: center; gap: 20px; padding: 18px 0; border-top: 1px dotted rgba(152,141,255,.35); transition: opacity .3s; }
+.sc-row:last-child { border-bottom: 1px dotted rgba(152,141,255,.35); }
+.sc-no { font-size: 12px; letter-spacing: .14em; color: var(--c); }
+.sc-row h4 { font-size: 18px; font-weight: 700; display: flex; align-items: center; gap: 10px; }
+.sc-row h4::before { content: ''; width: 8px; height: 8px; flex-shrink: 0; background: var(--c); box-shadow: 0 0 8px var(--c); }
+.sc-row p { font-size: 14px; color: var(--text-muted); line-height: 1.7; }
+.sc-pct { justify-self: end; font-family: var(--font-title); font-weight: 400; font-size: clamp(36px, 3.4vw, 48px); line-height: 1; color: #fff; font-variant-numeric: tabular-nums; }
+.sc-pct small { font-size: .42em; color: var(--ice); margin-left: 3px; }
+.sc-panel.hl .sc-g:not(.on), .sc-panel.hl .sc-row:not(.on) { opacity: .32; }
+.sc-panel.hl .sc-g.on > .mono { color: #fff; }
+.sc-foot { display: flex; align-items: stretch; gap: 8px; margin-top: clamp(20px, 2.4vw, 30px); font-size: 12px; letter-spacing: .12em; }
+.sc-foot > span { display: flex; align-items: center; justify-content: space-between; gap: 10px; padding: 10px 14px; border: 1px solid rgba(152,141,255,.4); white-space: nowrap; }
+.sc-foot .sc-f0 { flex: 0 0 auto; border-style: dotted; color: var(--ice); }
+.sc-foot .sc-f1 { flex: 70 1 0; background: linear-gradient(90deg, rgba(106,72,255,.35), rgba(106,72,255,.12)); color: #fff; }
+.sc-foot .sc-f2 { flex: 30 1 0; background: rgba(152,141,255,.08); color: var(--text-soft); }
+.sc-foot em { font-style: normal; }
+.sc-foot b { font-family: var(--font-title); font-weight: 400; font-size: 18px; letter-spacing: 0; }
 
 .jg-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
 .jg-card { display: flex; flex-direction: column; gap: 22px; padding: 28px; border: 1px solid var(--border); border-radius: var(--radius); background: var(--surface); }
@@ -884,9 +867,8 @@ body.modal-open { overflow: hidden; }
   .faq-wrap { gap: 32px; }
   .perks { grid-template-columns: 1fr 1fr; }
   .dv-grid { grid-template-columns: 1fr 1fr; }
-  .sp-grid { grid-template-columns: repeat(2, 1fr); }
-  .sp-t0 { grid-column: span 2; }
-  .sp-t1, .sp-t2, .sp-t3, .sp-t4 { grid-column: span 1; }
+  .sc-row { grid-template-columns: 48px 1fr auto; row-gap: 6px; }
+  .sc-row p { grid-column: 2 / -1; grid-row: 2; }
   .team-split { grid-template-columns: 1fr; }
   .my-stage { grid-template-columns: 1fr; }
   .res-grid { grid-template-columns: 1fr; }
@@ -935,15 +917,12 @@ body.modal-open { overflow: hidden; }
   .prizes, .awards { grid-template-columns: 1fr; }
   .jg-grid { grid-template-columns: 1fr; }
   .dv-grid { grid-template-columns: 1fr; }
-  .sp-stage { min-height: 480px; padding: 18px 14px; }
-  .sp-grid { gap: 10px; }
-  .sp-tile { min-height: 140px; padding: 16px; border-radius: 14px; }
-  .sp-tile::before { left: 16px; right: 16px; }
-  .sp-pct { font-size: 40px; margin: 12px 0 8px; }
-  .sp-name { font-size: 15px; }
-  .sp-more { font-size: 13px; }
-  .sp-stage.split .sp-tile.on { transform: none; }
-  .sp-reset { right: 12px; top: 12px; }
+  .sc-row { grid-template-columns: 34px 1fr auto; gap: 4px 12px; padding: 14px 0; }
+  .sc-row h4 { font-size: 15.5px; }
+  .sc-row p { font-size: 13px; }
+  .sc-bar { gap: 4px; } .sc-cells { gap: 1px; }
+  .sc-g > .mono { font-size: 10.5px; letter-spacing: .04em; } .sc-gp { display: none; }
+  .sc-foot { flex-wrap: wrap; } .sc-foot .sc-f0 { flex-basis: 100%; }
   .res-main { flex-direction: column; align-items: flex-start; }
   .res-media { align-self: center; width: min(280px, 100%); }
   .res-art { width: 150px; }
@@ -991,7 +970,6 @@ body.modal-open { overflow: hidden; }
 @media (max-width: 360px) { .brand-cobrand { height: 15px; } }
 @keyframes sheetUp { from { transform: translateY(24px); opacity: .6; } }
 @media (prefers-reduced-motion: reduce) {
-  .sp-core, .sp-ring { animation: none; }
   .demo-cols { overflow-y: auto; -webkit-mask-image: none; mask-image: none; }
   .demo-dup { display: none; }
   html { scroll-behavior: auto; }
@@ -1260,46 +1238,19 @@ body.modal-open { overflow: hidden; }
     <!-- 评审规则 -->
     <div class="jr-block reveal" id="criteria">
       <div class="jr-head"><h3 class="rules-title" data-i18n="cr.title">评审规则</h3><p class="rules-desc" data-i18n="cr.desc">评委从五个维度对作品打分，最终得分 = 专家评委 70% + 玩家评委 30%。</p></div>
-      <div class="sp-stage" id="spStage">
-        <button type="button" class="sp-core" id="spCore" aria-label="HOW WE SCORE">
-          <span class="sp-ring"></span>
-          <b>100<small>%</small></b>
-          <span class="mono">HOW WE SCORE</span>
-          <em data-i18n="sp.hint">点击展开评分构成</em>
-        </button>
-        <div class="sp-grid">
-          <button type="button" class="sp-tile sp-t0" data-i="0" style="--c:#6A48FF;--d:0ms" aria-expanded="false">
-            <span class="sp-no mono">01</span>
-            <b class="sp-pct">30<small>%</small></b>
-            <span class="sp-name" data-i18n="cr1.t">群核技术栈应用</span>
-            <span class="sp-more"><span class="sp-more-in"><span class="sp-rule mono" data-i18n="sp.rule">评分说明</span><span data-i18n="cr1.d">群核技术栈在项目中承担核心作用。</span></span></span>
-          </button>
-          <button type="button" class="sp-tile sp-t1" data-i="1" style="--c:#7B5CFF;--d:70ms" aria-expanded="false">
-            <span class="sp-no mono">02</span>
-            <b class="sp-pct">25<small>%</small></b>
-            <span class="sp-name" data-i18n="cr2.t">作品有趣程度</span>
-            <span class="sp-more"><span class="sp-more-in"><span class="sp-rule mono" data-i18n="sp.rule">评分说明</span><span data-i18n="cr2.d">作品玩法、空间交互富有创意趣味性，体验感吸引人；提交视频清晰呈现趣味亮点，具备对外展示、引发大众讨论的传播潜力。</span></span></span>
-          </button>
-          <button type="button" class="sp-tile sp-t2" data-i="2" style="--c:#7B5CFF;--d:140ms" aria-expanded="false">
-            <span class="sp-no mono">03</span>
-            <b class="sp-pct">20<small>%</small></b>
-            <span class="sp-name" data-i18n="cr3.t">创新性</span>
-            <span class="sp-more"><span class="sp-more-in"><span class="sp-rule mono" data-i18n="sp.rule">评分说明</span><span data-i18n="cr3.d">方案、交互、概念具备新意，区别于现有常见产品思路。</span></span></span>
-          </button>
-          <button type="button" class="sp-tile sp-t3" data-i="3" style="--c:#988DFF;--d:210ms" aria-expanded="false">
-            <span class="sp-no mono">04</span>
-            <b class="sp-pct">20<small>%</small></b>
-            <span class="sp-name" data-i18n="cr4.t">完成度</span>
-            <span class="sp-more"><span class="sp-more-in"><span class="sp-rule mono" data-i18n="sp.rule">评分说明</span><span data-i18n="cr4.d">核心体验完整，Demo 稳定可运行，材料与成果匹配。</span></span></span>
-          </button>
-          <button type="button" class="sp-tile sp-t4" data-i="4" style="--c:#CFC8FF;--d:280ms" aria-expanded="false">
-            <span class="sp-no mono">05</span>
-            <b class="sp-pct">5<small>%</small></b>
-            <span class="sp-name" data-i18n="cr5.t">传播</span>
-            <span class="sp-more"><span class="sp-more-in"><span class="sp-rule mono" data-i18n="sp.rule">评分说明</span><span data-i18n="cr5.d">作品视频带指定标签发布至小红书（国内）/ X（海外）。</span></span></span>
-          </button>
-        </div>
-        <button type="button" class="sp-reset" id="spReset"><span aria-hidden="true">↺</span> <span data-i18n="sp.reset">收起</span></button>
+      <div class="sc-panel" id="scPanel">
+        <i class="fc tl"></i><i class="fc tr"></i><i class="fc bl"></i><i class="fc br"></i>
+        <div class="sc-top mono"><span>//SCORING_MATRIX</span><span class="sc-total">TOTAL<b data-n="100">100</b>%</span></div>
+        <div class="sc-bar" id="scBar" aria-hidden="true"></div>
+        <div class="sc-scale mono" aria-hidden="true"><span>0</span><span>25</span><span>50</span><span>75</span><span>100</span></div>
+        <ol class="sc-list">
+          <li class="sc-row" data-i="0" style="--c:#6A48FF"><span class="sc-no mono">01</span><h4 data-i18n="cr1.t">群核技术栈应用</h4><p data-i18n="cr1.d">群核技术栈在项目中承担核心作用。</p><b class="sc-pct" data-n="30">30<small>%</small></b></li>
+          <li class="sc-row" data-i="1" style="--c:#7B5CFF"><span class="sc-no mono">02</span><h4 data-i18n="cr2.t">作品有趣程度</h4><p data-i18n="cr2.d">作品玩法、空间交互富有创意趣味性，体验感吸引人；提交视频清晰呈现趣味亮点，具备对外展示、引发大众讨论的传播潜力。</p><b class="sc-pct" data-n="25">25<small>%</small></b></li>
+          <li class="sc-row" data-i="2" style="--c:#8F7BFF"><span class="sc-no mono">03</span><h4 data-i18n="cr3.t">创新性</h4><p data-i18n="cr3.d">方案、交互、概念具备新意，区别于现有常见产品思路。</p><b class="sc-pct" data-n="20">20<small>%</small></b></li>
+          <li class="sc-row" data-i="3" style="--c:#A99DFF"><span class="sc-no mono">04</span><h4 data-i18n="cr4.t">完成度</h4><p data-i18n="cr4.d">核心体验完整，Demo 稳定可运行，材料与成果匹配。</p><b class="sc-pct" data-n="20">20<small>%</small></b></li>
+          <li class="sc-row" data-i="4" style="--c:#CFC8FF"><span class="sc-no mono">05</span><h4 data-i18n="cr5.t">传播</h4><p data-i18n="cr5.d">作品视频带指定标签发布至小红书（国内）/ X（海外）。</p><b class="sc-pct" data-n="5">5<small>%</small></b></li>
+        </ol>
+        <div class="sc-foot mono"><span class="sc-f0">FINAL SCORE =</span><span class="sc-f1"><em data-i18n="sc.pro">专家评委</em><b>70%</b></span><span class="sc-f2"><em data-i18n="sc.player">玩家评委</em><b>30%</b></span></div>
       </div>
     </div>
 
@@ -1648,7 +1599,7 @@ const EN = {
   'res.must':'Required','res.lux.d':'Aholo Lux3D is a 3D generation model built in-house by Manycore.<br>Upload an image or text and quickly generate a full set of previewable, editable 3D assets.',
   'res.opt':'Optional','res.api.t':'Aholo API','res.api.d':'Aholo API brings together APIs for 3D object generation, world generation, cloud rendering, reconstruction and more.','res.r3.t':'LuxReal','res.r3.d':'LuxReal is Manycore’s AI video-creation agent built on 3D technology. It keeps space and time consistent while quickly producing highly controllable, creative video.',
   'res.b.t':'Sign up to get creation credits and start your project','res.b.d':'Join the hackathon and explore new possibilities with your teammates.',
-  'dv.title':'What to submit','dv.desc':'Every project submits the materials below: all required items, plus bonus items where you can.','dv.must':'Required','dv.bonus':'Bonus','dv.mustD':'All three are needed','dv.bonusD':'Encouraged','dv1.t':'Project report (PDF or PPT)','dv1.d':'Document the journey from idea to result — <b>including process screenshots, key asset iterations or key result shots</b> — so judges quickly see what you built, how, and why it’s worth trying.','dv2.t':'Full demo (link or video)','dv2.d':'Submit a link where the project can be tried or run directly; or submit a demo video — edits, voice-over and captions are fine, but it must include real running footage','dv4.t':'Social media post link','dv4.d':'Publish a project introduction on a public social platform and submit the link; the post must stay public until results are announced.','dv5.t':'Source code','dv5.d':'A Git repository or a zipped codebase is encouraged.','cr.title':'Judging criteria','cr.desc':'Judges score each project across five dimensions. Final score = expert judges 70% + player judges 30%.','cr1.t':'Use of Manycore tech stack','cr1.d':'Manycore’s technology plays a core role in the project.','cr2.t':'Fun factor','cr2.d':'Gameplay and spatial interaction are creative and fun; the video clearly shows the highlights and has the potential to spark public discussion.','cr3.t':'Innovation','cr3.d':'The approach, interaction or concept is fresh and different from common existing products.','cr4.t':'Completeness','cr4.d':'The core experience is complete, the demo runs reliably, and the materials match the result.','cr5.t':'Reach','cr5.d':'The project video is posted with the official hashtag on Xiaohongshu (China) / X (international).','cr.total':'Score breakdown','sp.hint':'Tap to reveal the breakdown','sp.reset':'Collapse','sp.rule':'How it is scored','jg.title':'Judges','jg.pro':'Expert judges','jg.proD':'A professional lens to pick the strongest projects with real-world use','jg.tbaName':'Judges to be announced','jg.tbaD':'More names coming soon…','jg.player':'Player judges','jg.playerD':'Real hands-on play to pick the most loved and most fun projects','jg.playerN':'seasoned AI practitioners','jg.playerNote':'form the player jury and help choose the awards from a public point of view.',
+  'dv.title':'What to submit','dv.desc':'Every project submits the materials below: all required items, plus bonus items where you can.','dv.must':'Required','dv.bonus':'Bonus','dv.mustD':'All three are needed','dv.bonusD':'Encouraged','dv1.t':'Project report (PDF or PPT)','dv1.d':'Document the journey from idea to result — <b>including process screenshots, key asset iterations or key result shots</b> — so judges quickly see what you built, how, and why it’s worth trying.','dv2.t':'Full demo (link or video)','dv2.d':'Submit a link where the project can be tried or run directly; or submit a demo video — edits, voice-over and captions are fine, but it must include real running footage','dv4.t':'Social media post link','dv4.d':'Publish a project introduction on a public social platform and submit the link; the post must stay public until results are announced.','dv5.t':'Source code','dv5.d':'A Git repository or a zipped codebase is encouraged.','cr.title':'Judging criteria','cr.desc':'Judges score each project across five dimensions. Final score = expert judges 70% + player judges 30%.','cr1.t':'Use of Manycore tech stack','cr1.d':'Manycore’s technology plays a core role in the project.','cr2.t':'Fun factor','cr2.d':'Gameplay and spatial interaction are creative and fun; the video clearly shows the highlights and has the potential to spark public discussion.','cr3.t':'Innovation','cr3.d':'The approach, interaction or concept is fresh and different from common existing products.','cr4.t':'Completeness','cr4.d':'The core experience is complete, the demo runs reliably, and the materials match the result.','cr5.t':'Reach','cr5.d':'The project video is posted with the official hashtag on Xiaohongshu (China) / X (international).','cr.total':'Score breakdown','sc.pro':'Expert judges','sc.player':'Player judges','jg.title':'Judges','jg.pro':'Expert judges','jg.proD':'A professional lens to pick the strongest projects with real-world use','jg.tbaName':'Judges to be announced','jg.tbaD':'More names coming soon…','jg.player':'Player judges','jg.playerD':'Real hands-on play to pick the most loved and most fun projects','jg.playerN':'seasoned AI practitioners','jg.playerNote':'form the player jury and help choose the awards from a public point of view.',
   'prizes.title2':'total prize pool','pz.more':'For the full judging rules, <button type="button" class="link-btn" data-open-community>join the community</button> and see the Participant Handbook.','prizes.desc':'23 awards in total: a special award and first, second and third prizes, plus single awards for application, creativity and popularity.',
   'p0.r':'Special Award','p0.n':'Spatial Intelligence Ecosystem Special Award','p1.r':'First Prize','p2.r':'Second Prize','p3.r':'Third Prize',
   'aw1':'Application Award',
@@ -2573,33 +2524,27 @@ document.querySelectorAll('.res-main').forEach(card => card.addEventListener('po
   }
   function renderMy() { renderStage(); renderReg(); renderTeam(); renderWorks(); }
 
-  /* 评审规则: the 100% core splits into five tiles (click it, or scroll it into view) */
-  const spStage = document.getElementById('spStage');
-  if (spStage) {
-    const tiles = [...spStage.querySelectorAll('.sp-tile')];
-    // each tile starts stacked on the stage centre, then flies to its grid slot
-    const aim = () => {
-      if (spStage.classList.contains('split')) return;
-      const sr = spStage.getBoundingClientRect();
-      tiles.forEach(t => {
-        t.style.transition = 'none'; t.style.setProperty('--dx', '0px'); t.style.setProperty('--dy', '0px');
-        const r = t.getBoundingClientRect();
-        t.style.setProperty('--dx', (sr.left + sr.width / 2 - (r.left + r.width / 2)) + 'px');
-        t.style.setProperty('--dy', (sr.top + sr.height / 2 - (r.top + r.height / 2)) + 'px');
-        t.offsetWidth; t.style.transition = '';
-      });
-    };
-    const pick = i => tiles.forEach(t => { const on = t.dataset.i === String(i) && !t.classList.contains('on'); t.classList.toggle('on', on); t.setAttribute('aria-expanded', String(on)); });
-    const split = () => { if (spStage.classList.contains('split')) return; aim(); requestAnimationFrame(() => spStage.classList.add('split')); };
-    const merge = () => { tiles.forEach(t => { t.classList.remove('on'); t.setAttribute('aria-expanded', 'false'); }); spStage.classList.remove('split'); requestAnimationFrame(aim); };
-    document.getElementById('spCore').addEventListener('click', split);
-    document.getElementById('spReset').addEventListener('click', () => { merge(); autoDone = true; });
-    tiles.forEach(t => t.addEventListener('click', () => { if (spStage.classList.contains('split')) pick(t.dataset.i); }));
-    let autoDone = false;
-    new IntersectionObserver(es => es.forEach(e => { if (e.isIntersecting && !autoDone) { autoDone = true; setTimeout(split, 700); } }), { threshold: .6 }).observe(spStage);
-    window.addEventListener('resize', aim);
-    aim();
-    if (reduceMotion) { spStage.classList.add('split'); autoDone = true; }
+  /* 评审规则: the 100-cell bar lights up cell by cell, the weights count up through scrambled digits, then a scan line idles across it */
+  const scPanel = document.getElementById('scPanel');
+  if (scPanel) {
+    const rows = [...scPanel.querySelectorAll('.sc-row')], bar = document.getElementById('scBar'), cells = [];
+    rows.forEach((r, gi) => {
+      const n = +r.querySelector('.sc-pct').dataset.n, g = document.createElement('div');
+      g.className = 'sc-g'; g.dataset.i = gi; g.style.flex = n + ' 1 0'; g.style.setProperty('--c', r.style.getPropertyValue('--c'));
+      g.innerHTML = `<span class="mono">0${gi + 1}<span class="sc-gp"> · ${n}%</span></span><span class="sc-cells">${'<i></i>'.repeat(n)}</span>`;
+      bar.append(g); cells.push(...g.querySelectorAll('i'));
+    });
+    cells.forEach((c, i) => c.style.setProperty('--d', (reduceMotion ? 0 : i * 14) + 'ms'));
+    const hl = i => { scPanel.classList.toggle('hl', i != null); [...rows, ...bar.children].forEach(el => el.classList.toggle('on', el.dataset.i === String(i))); };
+    [...rows, ...bar.children].forEach(el => { el.addEventListener('mouseenter', () => hl(el.dataset.i)); el.addEventListener('mouseleave', () => hl(null)); });
+    const nums = [...scPanel.querySelectorAll('[data-n]')];
+    const count = () => nums.forEach(b => {
+      const n = +b.dataset.n, t = b.firstChild; let k = 0;
+      const id = setInterval(() => { k++; t.textContent = k < 14 ? String(Math.floor(Math.random() * (n < 10 ? 10 : 100))).padStart(String(n).length, '0') : n; if (k >= 14) clearInterval(id); }, 70);
+    });
+    let scan = 0;
+    const idle = () => { if (reduceMotion) return; setInterval(() => { if (!scPanel.matches(':hover')) { cells.forEach(c => c.classList.remove('scan')); cells[scan % cells.length].classList.add('scan'); scan += 1; } }, 45); };
+    new IntersectionObserver((es, o) => es.forEach(e => { if (!e.isIntersecting) return; o.disconnect(); scPanel.classList.add('run'); if (!reduceMotion) count(); setTimeout(() => { scPanel.classList.add('done'); idle(); }, cells.length * 14 + 600); }), { threshold: .35 }).observe(scPanel);
   }
 
   /* ⓘ tooltips: tap to toggle on touch screens, and keep the bubble inside the viewport */
