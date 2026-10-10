@@ -745,6 +745,16 @@ html[lang="zh-CN"] .my-sec-title, html[lang="zh-CN"] .my-title { font-family: va
 .team-meta { display: flex; align-items: center; flex-wrap: wrap; gap: 4px 6px; margin-top: 14px; font-size: 13px; color: var(--text-muted); }
 .team-actions { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; margin-top: 22px; }
 .team-actions p { font-size: 13px; color: var(--text-muted); flex: 1 1 260px; }
+.tm-group { margin-top: 18px; }
+.tm-group h5 { font-size: 12.5px; font-weight: 600; letter-spacing: .06em; color: var(--text-muted); margin-bottom: 2px; }
+.tm-group .members { margin: 0; }
+.tm-group .members li { border-bottom: 0; padding: 10px 0; }
+.tm-group .members li.is-req { gap: 12px; }
+.tm-group .members li.is-req .reg-avatar { background: transparent; border: 1px dashed var(--border-strong); color: var(--text-muted); }
+.tm-group .members li.is-req .who { color: var(--text-soft); }
+.tm-group .members li.is-req .who em.mono { font-family: var(--font-mono); font-size: 12px; }
+.tm-group .tm-empty { font-size: 13.5px; color: var(--text-muted); padding: 10px 0; }
+.tm-group .demo-link { margin-top: 4px; }
 .members .tag-muted { font-style: normal; font-size: 11.5px; font-weight: 600; color: var(--text-muted); padding: 1px 8px; border-radius: var(--radius-pill); background: rgba(255,255,255,.05); border: 1px solid var(--border); margin-left: 8px; }
 /* ⓘ info tooltip */
 .tip { position: relative; display: inline-grid; place-items: center; width: 18px; height: 18px; vertical-align: -4px; margin-left: 2px; color: var(--text-muted); cursor: help; border-radius: 50%; }
@@ -1869,6 +1879,8 @@ document.querySelectorAll('.res-main').forEach(card => card.addEventListener('po
     'jr.none': ['暂无新的入队申请。把团队编号分享给伙伴，对方申请后会出现在这里。', 'No requests yet. Share your team code; requests show up here.'],
     'jr.approve': ['同意', 'Approve'], 'jr.reject': ['拒绝', 'Decline'], 'jr.approved': ['已同意，成员已加入团队', 'Approved — they’ve joined the team'], 'jr.rejected': ['已拒绝该申请', 'Request declined'],
     'jr.demoReq': ['演示：模拟收到一条入队申请', 'Demo: receive a join request'],
+    'team.capT': ['队长', 'Captain'], 'team.memT': ['队员', 'Members'], 'jr.applying': ['申请加入', 'Wants to join'],
+    'team.noMem': ['暂无队员，分享团队编号邀请伙伴加入', 'No members yet — share your team code to invite teammates'],
     'mb.t': ['编辑团队成员', 'Edit members'], 'mb.d': ['当前 {n}/{max} 人。仅队长可调整成员，作品提交与组队截止后成员锁定。', '{n}/{max} members. Only the captain can change members; the roster locks at the submission and team deadline.'],
     'mb.hintLate': ['团队已确认，此后同意加入的成员不补发团队奖励。', 'The team is confirmed, so members approved from now on won’t receive the team reward.'],
     'mb.full': ['团队已满员，如需同意新申请请先移除成员。', 'The team is full. Remove a member before approving a request.'], 'mb.done': ['完成', 'Done'], 'mb.demoName': ['选手 ', 'Player '],
@@ -2245,9 +2257,19 @@ document.querySelectorAll('.res-main').forEach(card => card.addEventListener('po
       </div><p class="reg-note">${T('team.solo')} ${T('team.rewardNote')}</p>`;
       return;
     }
-    const members = tm.members.map((m, i) => `<li><span class="reg-avatar${m.me ? ' on' : ''}">${esc(m.name.slice(0, 1).toUpperCase())}</span>
-      <span class="who">${esc(m.name)}${m.captain ? `<em>${T('team.captain')}</em>` : ''}${m.me ? `<em>${T('team.you')}</em>` : ''}${tm.rewarded && !m.rewarded ? `<span class="tag-muted">${T('team.noReward')}</span>` : ''}</span>
-</li>`).join('');
+    // 队长 on top, then 队员; a captain sees join requests inline as grey rows with 拒绝 / 同意 (approved → a full-colour member)
+    const row = m => `<li><span class="reg-avatar on">${esc(m.name.slice(0, 1).toUpperCase())}</span>
+      <span class="who">${esc(m.name)}${m.me ? `<em>${T('team.you')}</em>` : ''}${tm.rewarded && !m.rewarded ? `<span class="tag-muted">${T('team.noReward')}</span>` : ''}</span></li>`;
+    const reqs = tm.captain ? (tm.requests || []) : [], full = tm.members.length >= TEAM_MAX;
+    const reqRows = reqs.map((r, i) => `<li class="is-req"><span class="reg-avatar">${esc(r.name.slice(0, 1).toUpperCase())}</span>
+      <span class="who">${esc(r.name)}<em>${T('jr.applying')}</em><em class="mono">${esc(r.pid)}</em></span>
+      <button type="button" class="link-btn" data-act="rejectReq" data-i="${i}">${T('jr.reject')}</button>
+      <button type="button" class="btn btn-primary btn-sm" data-act="approveReq" data-i="${i}"${full ? ' disabled' : ''}>${T('jr.approve')}</button></li>`).join('');
+    const cap = tm.members.filter(m => m.captain), mates = tm.members.filter(m => !m.captain);
+    const members = `<div class="tm-group"><h5>${T('team.capT')}</h5><ul class="members">${cap.map(row).join('')}</ul></div>
+      <div class="tm-group"><h5>${T('team.memT')}</h5>${mates.length || reqRows ? `<ul class="members">${mates.map(row).join('')}${reqRows}</ul>` : `<p class="tm-empty">${T('team.noMem')}</p>`}
+      ${reqs.length && full ? `<p class="mb-full">${T('mb.full')}</p>` : ''}${reqs.length && tm.rewarded ? `<p class="mb-full">${T('mb.hintLate')}</p>` : ''}
+      ${tm.captain && !full ? `<button type="button" class="link-btn demo-link" data-act="demoRequest">${T('jr.demoReq')}</button>` : ''}</div>`;
     // Unconfirmed: the rule sits next to the decision. Confirmed: status lives on the member-count row.
     const confirmRow = tm.confirmed ? '' : (tm.captain
       ? `<div class="team-actions"><button type="button" class="btn btn-primary" data-act="confirm">${T('team.confirm')}</button><p>${T('team.confirmHint', { n: tm.members.length })} ${tip(T('team.confirmTip'))}</p></div>`
@@ -2268,8 +2290,7 @@ document.querySelectorAll('.res-main').forEach(card => card.addEventListener('po
           ${tm.captain ? `<button type="button" class="btn btn-ghost btn-sm" data-act="edit">${T('team.edit')}</button>` : ''}
           <button type="button" class="btn btn-danger btn-sm" data-act="${tm.captain ? 'disband' : 'leave'}">${T(tm.captain ? 'team.disband' : 'team.leave')}</button>
         </div></div>
-      <ul class="members">${members}</ul>
-      ${tm.captain && tm.requests && tm.requests.length ? `<div class="team-req"><span>${T('jr.notice', { n: tm.requests.length })}</span><button type="button" class="btn btn-primary btn-sm" data-act="edit">${T('jr.handle')}</button></div>` : ''}
+      ${members}
       ${tm.confirmed ? `<div class="team-meta team-meta-2"><span>${T('team.okNote')}</span>${rewardLine ? `<span>${rewardLine}</span>` : ''}</div>` : `<div class="team-meta">${T('team.count', { n: tm.members.length })}</div>`}
       ${confirmRow}`;
   }
@@ -2284,15 +2305,8 @@ document.querySelectorAll('.res-main').forEach(card => card.addEventListener('po
       <ul class="members mb-list">${tm.members.map((m, i) => `<li><span class="reg-avatar${m.me ? ' on' : ''}">${esc(m.name.slice(0, 1).toUpperCase())}</span>
         <span class="who">${esc(m.name)}${m.captain ? `<em>${T('team.captain')}</em>` : ''}${m.me ? `<em>${T('team.you')}</em>` : ''}</span>
         ${!m.me ? `<button type="button" class="link-btn" data-act="remove" data-i="${i}">${T('team.remove')}</button>` : ''}</li>`).join('')}</ul>
-      <h4 class="mb-h">${T('jr.reqT')}${reqs.length ? ` <span class="badge">${reqs.length}</span>` : ''}</h4>
-      ${reqs.length ? `<ul class="members mb-list mb-reqs">${reqs.map((r, i) => `<li><span class="reg-avatar">${esc(r.name.slice(0, 1).toUpperCase())}</span>
-        <span class="who">${esc(r.name)}<em class="mono">${esc(r.pid)}</em></span>
-        <button type="button" class="link-btn" data-act="rejectReq" data-i="${i}">${T('jr.reject')}</button>
-        <button type="button" class="btn btn-primary btn-sm" data-act="approveReq" data-i="${i}"${full ? ' disabled' : ''}>${T('jr.approve')}</button></li>`).join('')}</ul>${full ? `<p class="mb-full">${T('mb.full')}</p>` : ''}`
-        : `<p class="mb-full">${T('jr.none')}</p>`}
       ${tm.rewarded ? `<p class="mb-full">${T('mb.hintLate')}</p>` : ''}
       <div class="mb-invite"><span>${T('team.code')}<span class="mono">${esc(tm.id)}</span></span><button type="button" class="btn btn-ghost btn-sm" data-act="copyInvite">${(isEN() ? EN : ZH)['m.invCopyText']}</button></div>
-      <button type="button" class="link-btn demo-link" data-act="demoRequest">${T('jr.demoReq')}</button>
       <button type="button" class="btn btn-ghost btn-block" data-close-modal>${T('mb.done')}</button>`;
   }
 
