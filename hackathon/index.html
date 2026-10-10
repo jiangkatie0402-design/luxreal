@@ -824,9 +824,9 @@ textarea:focus { outline: none; border-color: var(--ice); box-shadow: 0 0 0 3px 
 .wf-gh { display: flex; align-items: baseline; justify-content: space-between; gap: 12px; padding: 0 0 4px; }
 .wf-gh b { font-size: 12.5px; font-weight: 600; letter-spacing: .08em; color: var(--text-muted); }
 /* 必交项 reads as the primary block: white heading with a purple marker */
-.wf-group:not(.wf-bonus) .wf-gh b { display: inline-flex; align-items: center; gap: 10px; font-size: 17px; letter-spacing: .02em; color: #fff; }
-.wf-group:not(.wf-bonus) .wf-gh b::before { content: ''; width: 4px; height: 16px; border-radius: 2px; background: #7B5CFF; box-shadow: 0 0 10px rgba(123,92,255,.7); }
-.wf-group:not(.wf-bonus) .wf-gh { padding-bottom: 8px; }
+.wf-gh b, .wf-group:not(.wf-bonus) .wf-gh b { display: inline-flex; align-items: center; gap: 10px; font-size: 17px; letter-spacing: .02em; color: #fff; }
+.wf-gh b::before { content: ''; width: 4px; height: 16px; border-radius: 2px; background: #7B5CFF; box-shadow: 0 0 10px rgba(123,92,255,.7); }
+.wf-gh { padding-bottom: 8px; }
 .wf-gh span { font-size: 12.5px; color: var(--text-muted); }
 .wf-group:not(.wf-bonus) .wf-gh span { color: var(--ice); font-weight: 600; }
 .wf-group + .wf-group { padding-top: 26px; border-top: 1px solid var(--border-subtle); }
