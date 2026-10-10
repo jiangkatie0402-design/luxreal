@@ -480,6 +480,15 @@ html[lang="zh-CN"] .sec-title { letter-spacing: .02em; line-height: 1.22; }
 .tl2-ms strong { font-size: 15px; font-weight: 700; }
 .tl2-c { transform: translateX(-50%); align-items: center; } .tl2-r { transform: translateX(-100%); align-items: flex-end; }
 .tl2-today { position: absolute; top: 0; height: 90px;   /* arrow runs to the bar … */ left: 0; z-index: 3; pointer-events: none; transition: left 1.4s var(--ease); }
+/* the cursor can be dragged along the bar to preview other dates */
+.tl2-today .tl2-pill { pointer-events: auto; cursor: ew-resize; touch-action: none; }
+.tl2-pill::after { content: '⇆'; margin-left: 6px; font-size: 11px; opacity: .55; }
+.tl2-rail, .tl2-top { cursor: ew-resize; touch-action: pan-y; }
+.tl2-track.scrubbing, .tl2-track.scrubbing * { cursor: ew-resize !important; user-select: none; }
+.tl2-track.scrubbing .tl2-today, .tl2-track.scrubbing .tl2-fill { transition: none; }
+.tl2-today.preview .tl2-pill { background: #B5ACFF; }
+.tl2-today.preview .tl2-pill [data-i18n="tl.today"] { display: none; }
+.tl2-today.preview .tl2-pill b::before { content: ''; }
 .tl2-today::after { content: ''; position: absolute; left: 0; top: 26px; bottom: 6px; width: 2px; margin-left: -1px; background: #fff; box-shadow: 0 0 10px rgba(255,255,255,.6); }
 .tl2-today.on-ev { height: 50px; }   /* … unless today sits on an event number: then it stops right above it */
 .tl2-today::before { content: ''; position: absolute; left: -5px; bottom: 0; border: 5px solid transparent; border-top: 6px solid #fff; border-bottom: 0; }
@@ -1818,33 +1827,52 @@ const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').match
 (function () {
   const track = document.querySelector('.tl2-track'); if (!track) return;
   const q = new URLSearchParams(location.search).get('today');
-  const now = q ? new Date(q + 'T12:00:00+08:00').getTime() : Date.now();
+  const NOW = q ? new Date(q + 'T12:00:00+08:00').getTime() : Date.now();
   const t = d => new Date(d).getTime();
   const S = t(track.dataset.start), E = t(track.dataset.end), SPAN = +track.dataset.span;
-  const pct = Math.max(0, Math.min(SPAN, SPAN * (now - S) / (E - S)));
-  const today = document.getElementById('tlToday');
-  const d = new Date(now + (8 * 60 + new Date(now).getTimezoneOffset()) * 60000);   // show Beijing date
-  document.getElementById('tlTodayD').textContent = (d.getMonth() + 1) + '.' + d.getDate();
-  today.classList.toggle('edge-l', pct < 4); today.classList.toggle('edge-r', pct > SPAN - 4);
-  document.querySelectorAll('.tl2-dot[data-at]').forEach(el => el.classList.toggle('done', t(el.dataset.at) <= now));
-  // events: past / live / next
-  // only one card is highlighted: the event running today, otherwise the next upcoming one
+  const toPct = when => Math.max(0, Math.min(SPAN, SPAN * (when - S) / (E - S)));
+  const today = document.getElementById('tlToday'), fill = document.getElementById('tlFill'), rail = track.querySelector('.tl2-rail');
   const cards = [...document.querySelectorAll('.tl2-card')];
-  const anyLive = cards.some(c => now >= t(c.dataset.start) && now < t(c.dataset.end));
-  let nextKey = null;
-  cards.forEach(c => {
-    const a = t(c.dataset.start), b = t(c.dataset.end), st = c.querySelector('[data-state]');
-    const state = now >= b ? 'past' : now >= a ? 'live' : (!anyLive && !nextKey ? (nextKey = c.dataset.ev, 'next') : '');
-    ['past', 'live', 'next'].forEach(x => c.classList.toggle(x, x === state));
-    document.querySelector(`.tl2-ev[data-ev="${c.dataset.ev}"]`).className = 'tl2-ev' + (state ? ' ' + state : '');
-    st.dataset.k = state; st.textContent = state ? ({ past: T_('tl.past'), live: T_('tl.live'), next: T_('tl.next') })[state] : '';
-  });
   function T_(k) { const zh = { 'tl.past': '已结束', 'tl.live': '进行中', 'tl.next': '下一场' }; return document.documentElement.lang === 'en' ? EN[k] : (ZH[k] || zh[k]); }
+  let at = NOW;
+  // paint the timeline as of `when`: cursor, fill, milestone dots, and which event card is live / next
+  function paint(when) {
+    at = when; const pct = toPct(when);
+    const d = new Date(when + (8 * 60 + new Date(when).getTimezoneOffset()) * 60000);   // Beijing date
+    document.getElementById('tlTodayD').textContent = (d.getMonth() + 1) + '.' + d.getDate();
+    today.classList.toggle('preview', Math.abs(when - NOW) > 36e5);
+    today.classList.toggle('edge-l', pct < 4); today.classList.toggle('edge-r', pct > SPAN - 4);
+    document.querySelectorAll('.tl2-dot[data-at]').forEach(el => el.classList.toggle('done', t(el.dataset.at) <= when));
+    const anyLive = cards.some(c => when >= t(c.dataset.start) && when < t(c.dataset.end));
+    let nextKey = null;
+    cards.forEach(c => {
+      const a = t(c.dataset.start), b = t(c.dataset.end), st = c.querySelector('[data-state]');
+      const state = when >= b ? 'past' : when >= a ? 'live' : (!anyLive && !nextKey ? (nextKey = c.dataset.ev, 'next') : '');
+      ['past', 'live', 'next'].forEach(x => c.classList.toggle(x, x === state));
+      document.querySelector(`.tl2-ev[data-ev="${c.dataset.ev}"]`).className = 'tl2-ev' + (state ? ' ' + state : '');
+      st.dataset.k = state; st.textContent = state ? ({ past: T_('tl.past'), live: T_('tl.live'), next: T_('tl.next') })[state] : '';
+    });
+    const w = track.getBoundingClientRect().width;
+    today.classList.toggle('on-ev', [...document.querySelectorAll('.tl2-ev')].some(e => Math.abs(parseFloat(e.style.left) - pct) * w / 100 < 16));
+    today.style.left = pct + '%'; fill.style.width = pct + '%';
+  }
   document.addEventListener('langchange', () => document.querySelectorAll('.tl2-card [data-state]').forEach(st => { if (st.dataset.k) st.textContent = T_('tl.' + st.dataset.k); }));
-  const onEv = () => { const w = track.getBoundingClientRect().width; today.classList.toggle('on-ev', [...document.querySelectorAll('.tl2-ev')].some(e => Math.abs(parseFloat(e.style.left) - pct) * w / 100 < 16)); };
-  onEv(); addEventListener('resize', onEv);
-  const go = () => { today.style.left = pct + '%'; document.getElementById('tlFill').style.width = pct + '%'; };
-  if (reduceMotion) go(); else new IntersectionObserver((es, o) => es.forEach(e => { if (e.isIntersecting) { go(); o.disconnect(); } }), { threshold: .3 }).observe(track);
+  addEventListener('resize', () => paint(at));
+  // intro: the cursor sweeps in from the start the first time the timeline is seen
+  paint(NOW); if (!reduceMotion) { today.style.left = '0%'; fill.style.width = '0%'; }
+  let shown = reduceMotion;
+  new IntersectionObserver(es => es.forEach(e => {
+    if (e.isIntersecting && !shown) { shown = true; requestAnimationFrame(() => paint(NOW)); }
+    if (!e.isIntersecting && shown && at !== NOW) paint(NOW);     // scrolled away after scrubbing → back to the real "today"
+  }), { threshold: .3 }).observe(track);
+  // scrub: drag the cursor (or anywhere on the bar) to preview another date; the matching event card lights up
+  let drag = null;
+  const whenAt = x => { const r = track.getBoundingClientRect(); return S + Math.max(0, Math.min(SPAN, (x - r.left) / r.width * 100)) / SPAN * (E - S); };
+  const start = e => { if (e.button) return; drag = e.pointerId; track.setPointerCapture(e.pointerId); track.classList.add('scrubbing'); shown = true; paint(whenAt(e.clientX)); e.preventDefault(); };
+  [today, rail, track.querySelector('.tl2-top')].forEach(el => el.addEventListener('pointerdown', start));
+  track.addEventListener('pointermove', e => { if (drag === e.pointerId) paint(whenAt(e.clientX)); });
+  const stop = e => { if (drag !== e.pointerId) return; drag = null; track.classList.remove('scrubbing'); };
+  track.addEventListener('pointerup', stop); track.addEventListener('pointercancel', stop);
 })();
 
 /* ============================================================
