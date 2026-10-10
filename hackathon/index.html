@@ -601,7 +601,7 @@ html[lang="zh-CN"] :is(.hero h1, .sec-title, .final h2) { font-family: var(--fon
 .final .hero-cta { justify-content: center; margin-top: 0; }
 
 /* ---------- Footer ---------- */
-footer { padding: 72px 0 40px; margin-top: 0; border-top: 1px solid var(--border-subtle); }
+footer { padding: 72px 0 40px; margin-top: clamp(48px, 6vw, 96px); border-top: 1px solid var(--border-subtle); }
 .foot-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 40px; }
 .foot-grid h5 { font-family: var(--font-mono); font-size: 11.5px; letter-spacing: .16em; text-transform: uppercase; color: var(--text-muted); font-weight: 600; margin-bottom: 18px; }
 .foot-grid ul { list-style: none; display: grid; gap: 10px; }
