@@ -674,6 +674,25 @@ html[lang="zh-CN"] .my-sec-title, html[lang="zh-CN"] .my-title { font-family: va
 .my-card { padding: clamp(22px, 3vw, 32px); border: 1px solid var(--border); border-radius: var(--radius); background: var(--surface); }
 
 /* registration & credits */
+.rg-top { display: flex; align-items: center; gap: 18px; flex-wrap: wrap; }
+.rg-main { flex: 1 1 260px; min-width: 0; }
+.rg-name { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
+.rg-name h3 { font-size: 19px; font-weight: 700; }
+.rg-meta { font-size: 13.5px; color: var(--text-muted); margin-top: 4px; }
+.rg-meta .mono { color: var(--text-soft); font-weight: 600; }
+.rg-next { font-size: 14px; color: var(--text-soft); margin-top: 6px; } .rg-next b { color: #fff; font-weight: 600; }
+.rg-pts { display: grid; grid-template-columns: 1fr 1fr; margin-top: 22px; border: 1px solid var(--border-subtle); border-radius: var(--radius-sm); background: var(--bg-2); }
+.pt { display: flex; align-items: center; gap: 12px; padding: 14px 18px; min-width: 0; }
+.pt + .pt { border-left: 1px solid var(--border-subtle); }
+.pt-n { width: 26px; height: 26px; border-radius: 50%; flex-shrink: 0; display: grid; place-items: center; font-family: var(--font-mono); font-size: 11px; font-weight: 600;
+  color: var(--text-muted); border: 1px dashed var(--border-strong); }
+.pt.on .pt-n { color: #fff; border: 1px solid #7B5CFF; background: rgba(123,92,255,.2); }
+.pt.done .pt-n { color: #101012; border: 0; background: var(--grad); }
+.pt-k { flex: 1; min-width: 0; display: inline-flex; align-items: center; gap: 6px; font-size: 14.5px; font-weight: 600; }
+.pt-s { font-size: 13px; color: var(--text-muted); white-space: nowrap; }
+.pt-s.busy { color: var(--ice); } .pt-s.ok { color: #fff; font-weight: 600; }
+.rg-note { margin-top: 10px; font-size: 12.5px; color: var(--text-muted); }
+@media (max-width: 640px) { .rg-pts { grid-template-columns: 1fr; } .pt + .pt { border-left: 0; border-top: 1px solid var(--border-subtle); } .pt { padding: 12px 14px; } .rg-top .btn { width: 100%; } }
 .reg-row { display: flex; align-items: center; gap: 20px; flex-wrap: wrap; }
 .reg-avatar { width: 56px; height: 56px; border-radius: 50%; flex-shrink: 0; display: grid; place-items: center; font-size: 22px; font-weight: 700; background: var(--surface-2); border: 1px solid var(--border-strong); color: #fff; }
 .reg-avatar.on { background: var(--grad); color: #101012; border: 0; }
@@ -1906,6 +1925,11 @@ document.querySelectorAll('.res-main').forEach(card => card.addEventListener('po
     'jr.approve': ['同意', 'Approve'], 'jr.reject': ['拒绝', 'Decline'], 'jr.approved': ['已同意，成员已加入团队', 'Approved — they’ve joined the team'], 'jr.rejected': ['已拒绝该申请', 'Request declined'],
     'jr.demoReq': ['演示：模拟收到一条入队申请', 'Demo: receive a join request'],
     'loc.other': ['其他（手动填写）', 'Other (type it in)'],
+    'pt.reg': ['报名奖励', 'Registration credits'], 'pt.team': ['团队奖励', 'Team credits'], 'pt.afterReg': ['报名后发放', 'After you register'],
+    'pt.afterTopic': ['提交选题后发放', 'After your team submits a topic'], 'pt.pending': ['发放中', 'Processing'], 'pt.done': ['已到账 · {d}', 'Arrived · {d}'],
+    'pt.note': ['积分到账以 Aholo 账户中的积分记录为准', 'Credits are confirmed by the history in your Aholo account'],
+    'pt.teamTip': ['团队首次提交选题时发放，按当时的队员平均分配；之后加入的成员不补发，退出或换队不重复获得。', 'Granted once, when the team first submits its topic, split evenly among the members at that moment; later members don’t receive it, and leaving or switching teams doesn’t earn it again.'],
+    'reg.waitTopic': ['等待队长提交选题，提交后全队领取团队积分', 'Waiting for the captain to submit the topic — the whole team gets credits then'],
     'team.capT': ['队长', 'Captain'], 'team.memT': ['队员', 'Members'], 'jr.applying': ['申请加入', 'Wants to join'],
     'team.noMem': ['暂无队员，分享团队编号邀请伙伴加入', 'No members yet — share your team code to invite teammates'],
     'mb.add': ['邀请队员', 'Invite'], 'mb.seats': ['还可加入 {r} 人', '{r} seat(s) left'], 'team.member': ['队员', 'Member'],
@@ -1969,7 +1993,7 @@ document.querySelectorAll('.res-main').forEach(card => card.addEventListener('po
     'tp.needTeam': ['请先在下方创建或加入团队，并完成组队确认', 'Create or join a team below and confirm it first'], 'tp.captainOnly': ['选题由队长提交', 'The team captain submits the topic'],
     'tp.done': ['已提交选题：', 'Topic submitted: '], 'w.trackOtherPh': ['请填写应用方向', 'Describe the application area'], 'w.e.trackOther': ['请填写应用方向', 'Describe your application area'],
     'reg.waitTeam': ['待组队', 'Team pending'], 'reg.teamed': ['已组队', 'Team formed'], 'reg.topicT': ['提交选题并领取积分', 'Submit your topic & claim credits'],
-    'reg.topicD': ['完善团队信息并提交选题，领取第二轮足量创作积分', 'Complete your team info and submit a topic to receive the second, full round of creation credits'],
+    'reg.topicD': ['提交选题后，全队领取第二轮足量创作积分', 'Submit your topic and the whole team receives the second, full round of creation credits'],
     'rw.got': ['已领取', 'received'], 'rw.teamOnce': ['每个团队仅发放一次，按首次确认时的队员平均分配；后续加入成员不补发，退出或换队不重复获得', 'Granted once per team, split evenly among the members at first confirmation; later members don’t receive it, and leaving or switching teams doesn’t earn it again'],
     'team.confirm': ['确认组队', 'Confirm team'], 'team.confirmD': ['确认后即成为正式团队，之后仍可换人或解散。', 'Confirming makes the team official; you can still change members or disband later.'],
     'team.wait': ['等待队长确认组队。', 'Waiting for the captain to confirm the team.'],
@@ -2039,7 +2063,7 @@ document.querySelectorAll('.res-main').forEach(card => card.addEventListener('po
     // TODO: main-site logout
     async logout() { await wait(200); const s = load(); s.loggedIn = false; return save(s); },
     // TODO: POST registration; server must be idempotent (one registration per account)
-    async register(f) { await wait(700); const s = load(); if (!s.profile) s.profile = { name: f.name, email: f.email, role: f.role, country: f.country, province: f.province, city: f.city, xhs: f.xhs, x: f.x, id: 'AH26-' + rid(5, '0123456789'), teamReward: false }; return save(s); },
+    async register(f) { await wait(700); const s = load(); if (!s.profile) s.profile = { name: f.name, email: f.email, role: f.role, country: f.country, province: f.province, city: f.city, xhs: f.xhs, x: f.x, id: 'AH26-' + rid(5, '0123456789'), regAt: Date.now(), teamReward: false }; return save(s); },
     async createTeam(name) { await wait(400); const s = load(); s.team = { id: 'T' + rid(6, 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789'), shared: true, name, captain: true, confirmed: false, rewarded: false, members: [{ name: s.profile.name, pid: myPid(s), me: true, captain: true }] }; pub(s); return save(sync(s)); },
     // Demo only: a real join looks the code up on the server
     // Joining is a request: the captain approves it, the applicant doesn't confirm again
@@ -2052,8 +2076,11 @@ document.querySelectorAll('.res-main').forEach(card => card.addEventListener('po
     async approveReq(i) { await wait(400); const s = load(); const tm = s.team; if (tm && tm.captain && tm.requests && tm.requests[i] && tm.members.length < TEAM_MAX) { const r = tm.requests[i]; if (tm.shared) boardOp(tm.id, t => { t.requests = t.requests.filter(x => x.pid !== r.pid); t.members.push({ name: r.name, pid: r.pid, captain: false, rewarded: false }); }); else { tm.members.push(r); tm.requests.splice(i, 1); } } return save(sync(s)); },
     async rejectReq(i) { await wait(300); const s = load(); const tm = s.team; if (tm && tm.captain && tm.requests && tm.requests[i]) { const r = tm.requests[i]; if (tm.shared) boardOp(tm.id, t => { t.requests = t.requests.filter(x => x.pid !== r.pid); (t.rejected = t.rejected || []).push(r.pid); }); else tm.requests.splice(i, 1); } return save(sync(s)); },
     // First confirmation grants the team reward to the members at that moment. The real status (processing → granted + date) comes from the server.
-    async confirmTeam() { await wait(400); const s = load(); s.team.confirmed = true; if (!s.team.rewarded) { const now = Date.now(); s.team.rewarded = true; s.team.rewardCount = s.team.members.length; s.team.rewardSince = now; s.team.members.forEach(m => { m.rewarded = true; }); if (!s.profile.teamReward) { s.profile.teamReward = true; s.profile.teamRewardSince = now; } } pub(s); return save(s); },
-    async submitTopic(t) { await wait(400); const s = load(); if (s.team && s.team.captain && s.team.confirmed) { s.team.topic = t; pub(s); } return save(s); },
+    async confirmTeam() { await wait(400); const s = load(); s.team.confirmed = true; pub(s); return save(s); },
+    // The team reward is granted once, when the team first submits its topic, to the members at that moment.
+    async submitTopic(t) { await wait(400); const s = load(); const tm = s.team; if (tm && tm.captain && tm.confirmed) { tm.topic = t;
+      if (!tm.rewarded) { const now = Date.now(); tm.rewarded = true; tm.rewardCount = tm.members.length; tm.rewardSince = now; tm.members.forEach(m => { m.rewarded = true; }); if (!s.profile.teamReward) { s.profile.teamReward = true; s.profile.teamRewardSince = now; } }
+      pub(s); } return save(s); },
     async updateTeam(name) { await wait(300); const s = load(); if (s.team && s.team.captain) { s.team.name = name; pub(s); } return save(s); },
     async removeMember(i) { await wait(300); const s = load(); if (s.team && s.team.captain && !s.team.members[i].me) { s.team.members.splice(i, 1); pub(s); } return save(s); },
     // TODO: real endpoints; judging uses the last successful submission before the deadline
@@ -2222,41 +2249,47 @@ document.querySelectorAll('.res-main').forEach(card => card.addEventListener('po
   const fmtDate = t => { const d = new Date(t); return isEN() ? d.toLocaleDateString('en-US', { month: 'short', day: 'numeric' }) : `${d.getMonth() + 1} 月 ${d.getDate()} 日`; };
   const tip = text => `<span class="tip" tabindex="0" role="button" aria-label="${esc(text)}"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.3"><circle cx="8" cy="8" r="6.5"/><path d="M8 7.2v4M8 4.9v.1" stroke-linecap="round"/></svg><span class="tip-body" role="tooltip">${esc(text)}</span></span>`;
   let rewardTimer;
-  function scheduleRewardRefresh(since) {
+  function scheduleRewardRefresh(...sinces) {
     clearTimeout(rewardTimer);
-    const st = rewardStatus(since); if (!st.done) rewardTimer = setTimeout(() => { if (view === 'my') renderMy(); }, st.left + 50);
+    const left = sinces.filter(x => x != null).map(rewardStatus).filter(st => !st.done).map(st => st.left);
+    if (left.length) rewardTimer = setTimeout(() => { if (view === 'my') renderMy(); }, Math.min(...left) + 50);
   }
   function renderReg() {
     const p = registered() ? state.profile : null, tm = p ? state.team : null;
-    // Before the team is confirmed: the registration summary. After: the topic step takes over this card.
-    if (!tm || !tm.confirmed) {
-      const chips = p
-        ? `<div class="chip"><strong>${T('rw.reg')} · <b>${T('rw.pending')}</b></strong><span>${T('rw.acct')}</span></div>
-           <div class="chip"><strong>${T('rw.team')} · ${T('rw.none')}</strong><span>${T('rw.onConfirm')} ${tip(T('team.rewardTip'))}</span></div>`
-        : `<div class="chip"><strong>${T('rw.reg')} · ${T('rw.afterReg')}</strong><span>${T('rw.once')}</span></div>
-           <div class="chip"><strong>${T('rw.team')} · ${T('rw.none')}</strong><span>${T('rw.onConfirm')} ${tip(T('team.rewardTip'))}</span></div>`;
-      $('#myReg').innerHTML = p
-        ? `<div class="reg-row"><span class="reg-avatar on">${esc(p.name.slice(0, 1).toUpperCase())}</span>
-            <div class="reg-main"><span class="badge ok">${T('reg.done')}</span><h3>${esc(p.name)}</h3>
-            <p>${T('reg.id')} <span class="mono">${esc(p.id)}</span> · ${T('role.' + p.role)}${p.city ? ' · ' + esc(p.city) : ''}</p></div>
-            <div class="chips">${chips}</div></div>
-           <p class="reg-note">${T('reg.note')}</p>`
-        : `<div class="reg-row"><span class="reg-avatar"></span>
-            <div class="reg-main"><span class="badge">${T('reg.none')}</span><h3>${T('reg.startT')}</h3><p>${T('reg.startD')}</p></div>
-            <div class="chips">${chips}</div>
-            <a href="#register" class="btn btn-primary" data-start-reg>${(isEN() ? EN : ZH)['cta.register']}</a></div>`;
+    // One card for every state: who you are + the next action, then the two credit grants and where each one stands.
+    const me = tm && tm.members.find(m => m.me), open = Date.now() < DEADLINE;
+    const regSince = p ? (p.regAt || 0) : null;
+    const teamSince = p && (p.teamReward || (tm && tm.rewarded && me && me.rewarded)) ? (p.teamRewardSince || (tm && tm.rewardSince) || 0) : null;
+    const status = (since, waiting) => {
+      if (since == null) return `<span class="pt-s">${waiting}</span>`;
+      const st = rewardStatus(since);
+      return st.done ? `<span class="pt-s ok">${T('pt.done', { d: fmtDate(st.at) })}</span>` : `<span class="pt-s busy">${T('pt.pending')}</span>`;
+    };
+    const cell = (cls, n, label, stHtml, extra) => `<div class="pt ${cls}"><span class="pt-n">${n}</span><span class="pt-k">${label}${extra || ''}</span>${stHtml}</div>`;
+    const regDone = regSince != null && rewardStatus(regSince).done, teamDone = teamSince != null && rewardStatus(teamSince).done;
+    const pts = `<div class="rg-pts">
+        ${cell(regDone ? 'done' : regSince != null ? 'on' : '', '01', T('pt.reg'), status(regSince, T('pt.afterReg')))}
+        ${cell(teamDone ? 'done' : teamSince != null ? 'on' : '', '02', T('pt.team'), status(teamSince, T('pt.afterTopic')), ' ' + tip(T('pt.teamTip')))}
+      </div><p class="rg-note">${T('pt.note')}</p>`;
+    scheduleRewardRefresh(regSince, teamSince);
+    if (!p) {
+      $('#myReg').innerHTML = `<div class="rg-top"><span class="reg-avatar"></span>
+          <div class="rg-main"><div class="rg-name"><h3>${T('reg.startT')}</h3><span class="badge">${T('reg.none')}</span></div><p class="rg-meta">${T('reg.startD')}</p></div>
+          <a href="#register" class="btn btn-primary" data-start-reg>${(isEN() ? EN : ZH)['cta.register']}</a></div>${pts}`;
       return;
     }
-    const teamed = true, topic = tm.topic, open = Date.now() < DEADLINE;
-    const btn = open && !(topic && !tm.captain) ? `<button type="button" class="btn ${topic ? 'btn-ghost' : 'btn-primary'}" data-act="topic">${T(topic ? 'tp.edit' : 'tp.btn')}</button>` : '';
-    $('#myReg').innerHTML = `<div class="reg-row"><span class="reg-avatar on">${esc(p.name.slice(0, 1).toUpperCase())}</span>
-        <div class="reg-main"><span class="badge${teamed ? ' ok' : ''}">${T(teamed ? 'reg.teamed' : 'reg.waitTeam')}</span><h3>${T('reg.topicT')}</h3>
-          <ul class="reg-list"><li>${T('reg.id')} <span class="mono">${esc(p.id)}</span></li>
-            <li>${topic ? T('tp.done') + '<b>' + esc(topic.title) + '</b>' : T('reg.topicD')}</li></ul></div>
-        ${btn}</div>
-      <div class="reg-tips"><div><strong>${T('rw.reg')} · <b>${T('rw.got')}</b></strong><span>${T('rw.once')}</span></div>
-        <div><strong>${T('rw.team')} · ${p.teamReward ? '<b>' + T('rw.got') + '</b>' : T('rw.none')}</strong><span>${T('rw.teamOnce')}</span></div></div>`;
+    const topic = tm && tm.topic, confirmed = tm && tm.confirmed;
+    const needTopic = confirmed && !topic;
+    const badge = confirmed ? `<span class="badge ok">${T('reg.teamed')}</span>` : `<span class="badge ok">${T('reg.done')}</span>`;
+    const meta = [`${T('reg.id')} <span class="mono">${esc(p.id)}</span>`, T('role.' + p.role), p.city ? esc(p.city) : ''].filter(Boolean).join(' · ');
+    const next = needTopic ? (tm.captain ? T('reg.topicD') : T('reg.waitTopic')) : topic ? T('tp.done') + '<b>' + esc(topic.title) + '</b>' : '';
+    const btn = confirmed && open && tm.captain ? `<button type="button" class="btn ${topic ? 'btn-ghost' : 'btn-primary'}" data-act="topic">${T(topic ? 'tp.edit' : 'tp.btn')}</button>` : '';
+    $('#myReg').innerHTML = `<div class="rg-top"><span class="reg-avatar on">${esc(p.name.slice(0, 1).toUpperCase())}</span>
+        <div class="rg-main"><div class="rg-name"><h3>${needTopic ? T('reg.topicT') : esc(p.name)}</h3>${badge}</div>
+          <p class="rg-meta">${needTopic ? esc(p.name) + ' · ' : ''}${meta}</p>${next ? `<p class="rg-next">${next}</p>` : ''}</div>
+        ${btn}</div>${pts}`;
   }
+
 
   /* ---------- 选题: captain submits after the team is confirmed; pre-fills the works form ---------- */
   const topicForm = $('#topicForm');
@@ -2334,8 +2367,6 @@ document.querySelectorAll('.res-main').forEach(card => card.addEventListener('po
     const confirmRow = tm.confirmed ? '' : (tm.captain
       ? `<div class="team-actions"><button type="button" class="btn btn-primary" data-act="confirm">${T('team.confirm')}</button><p>${T('team.confirmTip')}</p></div>`
       : `<div class="team-actions"><p>${T('team.waitHint')}</p></div>`);
-    // team-reward status lives in 报名与积分; keep refreshing so that card picks up the grant date
-    if (tm.rewarded) scheduleRewardRefresh(tm.rewardSince || 0);
     el.innerHTML = `<div class="team-head">
         <div><h3>${esc(tm.name)}${tm.captain ? ` <button type="button" class="icon-btn" data-act="rename" aria-label="${T('team.rename')}" title="${T('team.rename')}"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><path d="M10.5 2.5l3 3L6 13H3v-3l7.5-7.5Z"/><path d="M9 4l3 3"/></svg></button>` : ''} <span class="badge${tm.confirmed ? ' ok' : ''}">${T(tm.confirmed ? 'team.ok' : 'team.pending')}</span></h3>
           <span class="team-code">${T('team.code')}<span class="mono">${esc(tm.id)}</span></span></div>
