@@ -863,6 +863,14 @@ textarea:focus { outline: none; border-color: var(--ice); box-shadow: 0 0 0 3px 
 .wf-gh b, .wf-group:not(.wf-bonus) .wf-gh b { display: inline-flex; align-items: center; gap: 10px; font-size: 17px; letter-spacing: .02em; color: #fff; }
 .wf-gh b::before { content: ''; width: 4px; height: 16px; border-radius: 2px; background: #7B5CFF; box-shadow: 0 0 10px rgba(123,92,255,.7); }
 .wf-gh { padding-bottom: 8px; }
+/* 加分项 starts folded; the header opens it (it stays open when there's already something filled in) */
+.wf-toggle { width: 100%; background: none; border: 0; color: inherit; font: inherit; text-align: left; cursor: pointer; }
+.wf-toggle span { display: inline-flex; align-items: center; gap: 10px; }
+.wf-chev { width: 8px; height: 8px; border-right: 1.5px solid var(--ice); border-bottom: 1.5px solid var(--ice); transform: rotate(45deg) translateY(-3px); transition: transform .25s; }
+.wf-bonus:not(.closed) .wf-chev { transform: rotate(-135deg) translate(-2px, -1px); }
+.wf-toggle:hover span { color: var(--text-soft); }
+.wf-bonus.closed .wf-item { display: none; }
+.wf-bonus.closed { margin-bottom: 18px; }
 .wf-gh span { font-size: 12.5px; color: var(--text-muted); }
 .wf-group:not(.wf-bonus) .wf-gh span { color: var(--ice); font-weight: 600; }
 .wf-group + .wf-group { padding-top: 26px; border-top: 1px solid var(--border-subtle); }
@@ -2328,7 +2336,7 @@ document.querySelectorAll('.res-main').forEach(card => card.addEventListener('po
     if (t.closest('[data-submit-cta]')) { e.preventDefault(); goSubmit(); return; }
     const act = t.closest('[data-act]');
     if (act && act.dataset.act === 'clearFile') { setFile($('#workForm'), act.dataset.f, null); return; }
-    if (act && ['saveDraft', 'editWork', 'cancelEdit', 'viewWork', 'demoTeamWork'].includes(act.dataset.act)) { workAction(act.dataset.act); return; }
+    if (act && ['saveDraft', 'editWork', 'cancelEdit', 'viewWork', 'demoTeamWork', 'toggleBonus'].includes(act.dataset.act)) { workAction(act.dataset.act); return; }
     if (act) teamAction(act);
   });
 
@@ -2608,8 +2616,8 @@ document.querySelectorAll('.res-main').forEach(card => card.addEventListener('po
           <div class="wf-ctrl">${drop('reportFile')}<em class="field-error" data-err="report"></em></div>
         </div>
       </section>
-      <section class="wf-group wf-bonus">
-        <header class="wf-gh"><b>${T('w.bonusT')}</b><span>${T('w.bonusD')}</span></header>
+      <section class="wf-group wf-bonus${d.social || d.repo || d.repoFile ? '' : ' closed'}">
+        <button type="button" class="wf-gh wf-toggle" data-act="toggleBonus" aria-expanded="${d.social || d.repo || d.repoFile ? 'true' : 'false'}"><b>${T('w.bonusT')}</b><span>${T('w.bonusD')}<i class="wf-chev" aria-hidden="true"></i></span></button>
         <div class="field wf-item">
           <div class="wf-label"><i class="wf-num">+</i><div><strong>${T('w.social')}</strong><p>${T('w.socialHint')}</p></div></div>
           <div class="wf-ctrl"><input type="url" name="social" placeholder="https://" aria-label="${T('w.social')}" value="${v('social')}"><em class="field-error"></em></div>
@@ -2743,6 +2751,7 @@ document.querySelectorAll('.res-main').forEach(card => card.addEventListener('po
     else if (a === 'editWork') { editingWork = true; renderWorks(); $('#workForm').scrollIntoView({ block: 'start', behavior: 'smooth' }); }
     else if (a === 'viewWork') { viewingWork = !viewingWork; renderWorks(); }
     else if (a === 'cancelEdit') { editingWork = false; renderWorks(); }
+    else if (a === 'toggleBonus') { const g = $('#workForm .wf-bonus'), open = g.classList.toggle('closed') === false; g.querySelector('.wf-toggle').setAttribute('aria-expanded', String(open)); }
     else if (a === 'demoTeamWork') workRun(() => api.demoTeamWork(), T('w.done')).then(() => renderMy());
   }
   function goSubmit() {
