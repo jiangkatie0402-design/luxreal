@@ -722,8 +722,10 @@ html[lang="zh-CN"] .my-sec-title, html[lang="zh-CN"] .my-title { font-family: va
 .empty p { font-size: 14px; color: var(--text-muted); margin-bottom: 22px; max-width: 460px; }
 
 /* team */
-.team-split { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
-.team-box { padding: 24px; border: 1px solid var(--border); border-radius: var(--radius-sm); background: var(--bg-2); display: flex; flex-direction: column; gap: 12px; }
+.team-split { display: grid; grid-template-columns: 1fr 1fr; gap: 0; }
+.team-split > .team-box + .team-box { border-left: 1px solid var(--border-subtle); }
+.team-box { padding: 4px 32px 4px 0; display: flex; flex-direction: column; gap: 12px; }
+.team-box + .team-box { padding: 4px 0 4px 32px; }
 .team-box h3 { font-size: 17px; font-weight: 700; }
 .team-box p { font-size: 13.5px; color: var(--text-muted); margin-top: -6px; }
 .team-box .row { display: flex; gap: 10px; }
@@ -950,7 +952,9 @@ body.modal-open { overflow: hidden; }
   .faq-wrap { gap: 32px; }
   .perks { grid-template-columns: 1fr 1fr; }
   .dv-grid { grid-template-columns: 1fr 1fr; }
-  .team-split { grid-template-columns: 1fr; }
+  .team-split { grid-template-columns: 1fr; gap: 24px; }
+  .team-box, .team-box + .team-box { padding: 0; }
+  .team-split > .team-box + .team-box { border-left: 0; padding-top: 24px; border-top: 1px solid var(--border-subtle); }
   .res-grid { grid-template-columns: 1fr; }
   .awards { grid-template-columns: repeat(3, 1fr); gap: 12px; margin-top: 12px; }
   .award { padding: 28px 22px; }
@@ -1031,7 +1035,7 @@ body.modal-open { overflow: hidden; }
   .my-head { flex-direction: column; align-items: flex-start; }
   .chip { flex: 1 1 100%; }
   .reg-row > .btn { width: 100%; }
-  .team-box .row { flex-direction: column; }
+  .team-box .row { flex-direction: column; } .team-box .row input { flex: none; }
   .work-form .grid2 { grid-template-columns: 1fr; }
   .receipt-links div { grid-template-columns: 1fr; gap: 2px; }
   .work-actions .btn { flex: 1 1 100%; }
@@ -2351,7 +2355,7 @@ document.querySelectorAll('.res-main').forEach(card => card.addEventListener('po
           <div class="row"><input type="text" name="teamName" maxlength="20" placeholder="${T('team.namePh')}" aria-label="${T('team.namePh')}"><button class="btn btn-primary btn-sm" type="submit">${T('team.createBtn')}</button></div><em class="field-error"></em></form>
         <form class="team-box" data-form="join" novalidate><h3>${T('team.joinT')}</h3><p>${T('team.joinD')}</p>
           <div class="row"><input type="text" name="code" maxlength="7" placeholder="${T('team.codePh')}" aria-label="${T('team.codePh')}" style="text-transform:uppercase"><button class="btn btn-ghost btn-sm" type="submit">${T('team.joinBtn')}</button></div><em class="field-error"></em></form>
-      </div><p class="reg-note">${T('team.solo')} ${T('team.rewardNote')}</p>`;
+      </div><p class="reg-note">${T('team.solo')}</p>`;
       return;
     }
     // 队长 on top, then 队员; a captain sees join requests inline as grey rows with 拒绝 / 同意 (approved → a full-colour member)
