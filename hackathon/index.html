@@ -1939,7 +1939,9 @@ const JUDGES = [];
     const g = Math.min(88, Math.max(56, innerWidth * .045));
     const up = Math.max(0, (c.top + pt) - (tr.top + tr.height / 2 - rh * 285 / 695)), down = Math.max(0, (bl.top + bl.height / 2 + lh * (263 - 126) / 263) - (c.bottom - pb));
     // same padding above and below, sized for whichever side module overhangs more → the copy sits dead centre
-    const pad = Math.round(g + Math.max(up, down)) + 'px', nt = pad, nb = pad;
+    // optical centring: the slogan + date line sit on the section's (and globe's) centre line; the buttons hang below it
+    const pEl = C.querySelector('p'), cta = C.querySelector('.hero-cta'), shift = pEl && cta ? Math.round((cta.getBoundingClientRect().bottom - pEl.getBoundingClientRect().bottom) / 2) : 0;
+    const base = Math.round(g + Math.max(up, down)), nt = base + shift + 'px', nb = Math.max(g, base - shift) + 'px';
     if (C.style.paddingTop !== nt || C.style.paddingBottom !== nb) { C.style.paddingTop = nt; C.style.paddingBottom = nb; requestAnimationFrame(place); }
   };
   addEventListener('resize', place); addEventListener('load', place); new ResizeObserver(place).observe(wrap);
@@ -3041,7 +3043,7 @@ document.querySelectorAll('.res-main').forEach(card => card.addEventListener('po
     rot += Math.min(.05, (now - (last || now)) / 1000) * .28; last = now;
     ctx.setTransform(dpr, 0, 0, dpr, 0, 0); ctx.clearRect(0, 0, W, H); ctx.lineWidth = 1;
     // centre the sphere on the copy block (slogan → buttons), not the section box
-    const wr = wrap.getBoundingClientRect(), s1 = wrap.querySelector('.final-slogan'), s2 = wrap.querySelector('.final .hero-cta');
+    const wr = wrap.getBoundingClientRect(), s1 = wrap.querySelector('.final-slogan'), s2 = wrap.querySelector('.final p');
     const mid = s1 && s2 ? ((s1.getBoundingClientRect().top + s2.getBoundingClientRect().bottom) / 2 - wr.top) : H / 2;
     const cy = mid, cx = W / 2, R = Math.min(Math.min(cy, H - cy) * .97, W * .42);
     const halo = ctx.createRadialGradient(cx, cy, R * .2, cx, cy, R * 1.15); halo.addColorStop(0, 'rgba(106,72,255,.10)'); halo.addColorStop(1, 'rgba(106,72,255,0)'); ctx.fillStyle = halo; ctx.fillRect(0, 0, W, H);
