@@ -1938,6 +1938,7 @@ document.querySelectorAll('.res-main').forEach(card => card.addEventListener('po
     'jr.approve': ['同意', 'Approve'], 'jr.reject': ['拒绝', 'Decline'], 'jr.approved': ['已同意，成员已加入团队', 'Approved — they’ve joined the team'], 'jr.rejected': ['已拒绝该申请', 'Request declined'],
     'jr.demoReq': ['演示：模拟收到一条入队申请', 'Demo: receive a join request'],
     'loc.other': ['其他（手动填写）', 'Other (type it in)'],
+    'pt.afterCapTopic': ['待队长提交选题后发放', 'After your captain submits the topic'], 'tp.demo': ['演示：模拟队长提交选题', 'Demo: captain submits the topic'],
     'w.noTeamT': ['创建或加入团队后提交作品', 'Create or join a team to submit'], 'w.noTeamD': ['作品由队长代表团队提交；单人参赛也需要先创建团队。', 'The captain submits on behalf of the team — solo entrants create a team too.'],
     'w.waitT': ['等待队长提交作品', 'Waiting for your captain to submit'], 'w.waitD': ['团队作品由队长统一上传提交，提交后这里会显示作品与版本。', 'Your captain uploads the team’s project; once submitted it shows up here with its version.'],
     'w.memberNote': ['作品由队长提交，如需修改请联系队长。', 'Your captain submits the project — ask them if anything needs changing.'], 'w.demoTeam': ['演示：模拟队长提交作品', 'Demo: captain submits the project'],
@@ -2070,6 +2071,12 @@ document.querySelectorAll('.res-main').forEach(card => card.addEventListener('po
     return s;
   };
   const boardOp = (code, fn) => { const b = getBoard(); if (b.teams[code]) { fn(b.teams[code]); setBoard(b); } };
+  // demo stand-in for what the captain's own tab would write when submitting the topic
+  const captainTopic = tm => {
+    const apply = t => { if (!t.topic) t.topic = { title: isEN() ? 'Breathing City' : '会呼吸的城市', track: 'other', trackOther: isEN() ? 'Urban renewal' : '城市更新', desc: '' };
+      t.confirmed = true; if (!t.rewarded) { t.rewarded = true; t.rewardCount = t.members.length; t.rewardSince = Date.now(); t.members.forEach(m => { m.rewarded = true; }); } };
+    if (tm.shared) boardOp(tm.id, apply); else apply(tm);
+  };
   const wait = ms => new Promise(r => setTimeout(r, ms));
   const rid = (n, set) => Array.from({ length: n }, () => set[Math.floor(Math.random() * set.length)]).join('');
   const api = {
@@ -2103,7 +2110,9 @@ document.querySelectorAll('.res-main').forEach(card => card.addEventListener('po
     async saveDraft(d) { await wait(300); const s = load(); s.work = s.work || {}; s.work.draft = d; s.work.draftAt = Date.now(); return save(s); },
     async submitWork(d) { await wait(600); const s = load(); s.work = s.work || {}; const v = ((s.work.submitted && s.work.submitted.version) || 0) + 1; s.work.submitted = Object.assign({}, d, { version: v, at: Date.now() }); s.work.draft = null; s.work.draftAt = null; if (s.team && s.team.captain) { s.team.work = s.work.submitted; pub(s); } return save(s); },
     // demo: the captain (in another tab / account) submits the team's work
-    async demoTeamWork() { await wait(400); const s = load(); const tm = s.team; if (!tm || tm.captain) return s; const w = { dv: 'link', link: 'https://aholo.example/demo/' + tm.id.toLowerCase(), reportFile: { name: (isEN() ? 'Project report' : '项目报告书') + '.pdf', size: 4718592 }, version: ((tm.work && tm.work.version) || 0) + 1, at: Date.now() }; if (tm.shared) boardOp(tm.id, t => { t.work = w; }); else tm.work = w; return save(sync(s)); },
+    // demo: the captain (in another tab / account) submits the topic — the team is formed and every member gets the team credits
+    async demoTeamTopic() { await wait(400); const s = load(); const tm = s.team; if (!tm || tm.captain) return s; captainTopic(tm); return save(sync(s)); },
+    async demoTeamWork() { await wait(400); const s = load(); const tm = s.team; if (!tm || tm.captain) return s; captainTopic(tm); const w = { dv: 'link', link: 'https://aholo.example/demo/' + tm.id.toLowerCase(), reportFile: { name: (isEN() ? 'Project report' : '项目报告书') + '.pdf', size: 4718592 }, version: ((tm.work && tm.work.version) || 0) + 1, at: Date.now() }; if (tm.shared) boardOp(tm.id, t => { t.work = w; }); else tm.work = w; return save(sync(s)); },
     async leaveTeam() { await wait(300); const s = load(); const tm = s.team; if (tm && tm.shared) { const b = getBoard(); if (tm.captain) delete b.teams[tm.id]; else if (b.teams[tm.id]) b.teams[tm.id].members = b.teams[tm.id].members.filter(m => m.pid !== myPid(s)); setBoard(b); } s.team = null; return save(s); },
   };
 
@@ -2287,7 +2296,7 @@ document.querySelectorAll('.res-main').forEach(card => card.addEventListener('po
     const regDone = regSince != null && rewardStatus(regSince).done, teamDone = teamSince != null && rewardStatus(teamSince).done;
     const pts = `<div class="rg-pts">
         ${cell(regDone ? 'done' : regSince != null ? 'on' : '', '01', T('pt.reg'), T('rw.once'), status(regSince, T('pt.afterReg')))}
-        ${cell(teamDone ? 'done' : teamSince != null ? 'on' : '', '02', T('pt.team'), T('pt.teamTip'), status(teamSince, T('pt.afterTopic')))}
+        ${cell(teamDone ? 'done' : teamSince != null ? 'on' : '', '02', T('pt.team'), T('pt.teamTip'), status(teamSince, T(tm && !tm.captain ? 'pt.afterCapTopic' : 'pt.afterTopic')))}
       </div><p class="rg-note">${T('pt.note')}</p>`;
     scheduleRewardRefresh(regSince, teamSince);
     if (!p) {
@@ -2302,8 +2311,8 @@ document.querySelectorAll('.res-main').forEach(card => card.addEventListener('po
     const next = needTopic ? (tm.captain ? T('reg.topicD') : T('reg.waitTopic')) : topic ? T('tp.done') + '<b>' + esc(topic.title) + '</b>' : '';
     const btn = confirmed && open && tm.captain ? `<button type="button" class="btn ${topic ? 'btn-ghost' : 'btn-primary'}" data-act="topic">${T(topic ? 'tp.edit' : 'tp.btn')}</button>` : '';
     $('#myReg').innerHTML = `<div class="rg-top"><span class="reg-avatar on">${esc(p.name.slice(0, 1).toUpperCase())}</span>
-        <div class="rg-main"><div class="rg-name"><h3>${needTopic ? T('reg.topicT') : esc(p.name)}</h3>${badge}</div>
-          ${next ? `<p class="rg-next">${next}</p>` : ''}</div>
+        <div class="rg-main"><div class="rg-name"><h3>${needTopic && tm.captain ? T('reg.topicT') : esc(p.name)}</h3>${badge}</div>
+          ${next ? `<p class="rg-next">${next}</p>` : ''}${tm && !tm.captain && !topic && open ? `<button type="button" class="link-btn demo-link" data-act="demoTeamTopic">${T('tp.demo')}</button>` : ''}</div>
         ${btn}</div>${pts}`;
   }
 
@@ -2448,6 +2457,7 @@ document.querySelectorAll('.res-main').forEach(card => card.addEventListener('po
     else if (a === 'demoRequest') run(() => api.demoRequest());
     else if (a === 'cancelJoin') run(() => api.cancelJoin(), T('jr.cancelled'));
     else if (a === 'demoApprove') run(() => api.demoApprove(), T('toast.join'));
+    else if (a === 'demoTeamTopic') run(() => api.demoTeamTopic(), T('tp.saved'));
     else if (a === 'askRemove') { pendingRemove = +btn.dataset.i; renderMembers(); }
     else if (a === 'cancelRemove') { pendingRemove = null; renderMembers(); }
     else if (a === 'remove') { pendingRemove = null; run(() => api.removeMember(+btn.dataset.i), T('team.removed')); }
