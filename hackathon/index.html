@@ -1923,6 +1923,8 @@ document.querySelectorAll('.res-main').forEach(card => card.addEventListener('po
     'jr.approve': ['同意', 'Approve'], 'jr.reject': ['拒绝', 'Decline'], 'jr.approved': ['已同意，成员已加入团队', 'Approved — they’ve joined the team'], 'jr.rejected': ['已拒绝该申请', 'Request declined'],
     'jr.demoReq': ['演示：模拟收到一条入队申请', 'Demo: receive a join request'],
     'loc.other': ['其他（手动填写）', 'Other (type it in)'],
+    'w.waitT': ['等待队长提交作品', 'Waiting for your captain to submit'], 'w.waitD': ['团队作品由队长统一上传提交，提交后这里会显示作品与版本。', 'Your captain uploads the team’s project; once submitted it shows up here with its version.'],
+    'w.memberNote': ['作品由队长提交，如需修改请联系队长。', 'Your captain submits the project — ask them if anything needs changing.'], 'w.demoTeam': ['演示：模拟队长提交作品', 'Demo: captain submits the project'],
     'pt.reg': ['报名奖励', 'Registration credits'], 'pt.team': ['团队奖励', 'Team credits'], 'pt.afterReg': ['报名后发放', 'After you register'],
     'pt.afterTopic': ['提交选题后发放', 'After your team submits a topic'], 'pt.pending': ['发放中', 'Processing'], 'pt.done': ['已到账 · {d}', 'Arrived · {d}'],
     'pt.note': ['积分到账以 Aholo 账户中的积分记录为准', 'Credits are confirmed by the history in your Aholo account'],
@@ -2030,7 +2032,7 @@ document.querySelectorAll('.res-main').forEach(card => card.addEventListener('po
   const pub = s => {
     const tm = s.team; if (!tm || !tm.shared) return;
     const b = getBoard(), cur = b.teams[tm.id] || { requests: [], rejected: [] };
-    b.teams[tm.id] = Object.assign(cur, { name: tm.name, confirmed: tm.confirmed, rewarded: tm.rewarded, rewardCount: tm.rewardCount, rewardSince: tm.rewardSince, topic: tm.topic || null,
+    b.teams[tm.id] = Object.assign(cur, { name: tm.name, confirmed: tm.confirmed, rewarded: tm.rewarded, rewardCount: tm.rewardCount, rewardSince: tm.rewardSince, topic: tm.topic || null, work: tm.work || null,
       members: tm.members.map(m => ({ name: m.name, pid: m.pid, captain: !!m.captain, rewarded: !!m.rewarded })) });
     setBoard(b);
   };
@@ -2040,7 +2042,7 @@ document.querySelectorAll('.res-main').forEach(card => card.addEventListener('po
     if (s.team && s.team.shared) {
       const bt = b.teams[s.team.id];
       if (!bt || !bt.members.some(m => m.pid === pid)) { s.team = null; s.lostTeam = true; }
-      else s.team = { id: s.team.id, shared: true, name: bt.name, confirmed: bt.confirmed, rewarded: bt.rewarded, rewardCount: bt.rewardCount, rewardSince: bt.rewardSince, topic: bt.topic || null,
+      else s.team = { id: s.team.id, shared: true, name: bt.name, confirmed: bt.confirmed, rewarded: bt.rewarded, rewardCount: bt.rewardCount, rewardSince: bt.rewardSince, topic: bt.topic || null, work: bt.work || null,
         captain: bt.members.some(m => m.pid === pid && m.captain), requests: bt.requests || [],
         members: bt.members.map(m => Object.assign({}, m, { me: m.pid === pid })) };
     }
@@ -2083,7 +2085,9 @@ document.querySelectorAll('.res-main').forEach(card => card.addEventListener('po
     async removeMember(i) { await wait(300); const s = load(); if (s.team && s.team.captain && !s.team.members[i].me) { s.team.members.splice(i, 1); pub(s); } return save(s); },
     // TODO: real endpoints; judging uses the last successful submission before the deadline
     async saveDraft(d) { await wait(300); const s = load(); s.work = s.work || {}; s.work.draft = d; s.work.draftAt = Date.now(); return save(s); },
-    async submitWork(d) { await wait(600); const s = load(); s.work = s.work || {}; const v = ((s.work.submitted && s.work.submitted.version) || 0) + 1; s.work.submitted = Object.assign({}, d, { version: v, at: Date.now() }); s.work.draft = null; s.work.draftAt = null; return save(s); },
+    async submitWork(d) { await wait(600); const s = load(); s.work = s.work || {}; const v = ((s.work.submitted && s.work.submitted.version) || 0) + 1; s.work.submitted = Object.assign({}, d, { version: v, at: Date.now() }); s.work.draft = null; s.work.draftAt = null; if (s.team && s.team.captain) { s.team.work = s.work.submitted; pub(s); } return save(s); },
+    // demo: the captain (in another tab / account) submits the team's work
+    async demoTeamWork() { await wait(400); const s = load(); const tm = s.team; if (!tm || tm.captain) return s; const w = { dv: 'link', link: 'https://aholo.example/demo/' + tm.id.toLowerCase(), reportFile: { name: (isEN() ? 'Project report' : '项目报告书') + '.pdf', size: 4718592 }, version: ((tm.work && tm.work.version) || 0) + 1, at: Date.now() }; if (tm.shared) boardOp(tm.id, t => { t.work = w; }); else tm.work = w; return save(sync(s)); },
     async leaveTeam() { await wait(300); const s = load(); const tm = s.team; if (tm && tm.shared) { const b = getBoard(); if (tm.captain) delete b.teams[tm.id]; else if (b.teams[tm.id]) b.teams[tm.id].members = b.teams[tm.id].members.filter(m => m.pid !== myPid(s)); setBoard(b); } s.team = null; return save(s); },
   };
 
@@ -2237,7 +2241,7 @@ document.querySelectorAll('.res-main').forEach(card => card.addEventListener('po
     if (t.closest('[data-submit-cta]')) { e.preventDefault(); goSubmit(); return; }
     const act = t.closest('[data-act]');
     if (act && act.dataset.act === 'clearFile') { setFile($('#workForm'), act.dataset.f, null); return; }
-    if (act && ['saveDraft', 'editWork', 'cancelEdit', 'viewWork'].includes(act.dataset.act)) { workAction(act.dataset.act); return; }
+    if (act && ['saveDraft', 'editWork', 'cancelEdit', 'viewWork', 'demoTeamWork'].includes(act.dataset.act)) { workAction(act.dataset.act); return; }
     if (act) teamAction(act);
   });
 
@@ -2463,23 +2467,30 @@ document.querySelectorAll('.res-main').forEach(card => card.addEventListener('po
   const TRACKS = ['game', 'culture', 'film', 'print', 'embodied', 'other'];
   const fmtTime = t => { const d = new Date(t), hm = String(d.getHours()).padStart(2, '0') + ':' + String(d.getMinutes()).padStart(2, '0'); return fmtDate(t) + ' ' + hm; };
   const safeUrl = u => /^https?:\/\//i.test(u || '') ? esc(u) : '#';
+  // a team's work is submitted by its captain and shared with the members; without a team it's your own
+  const teamWork = () => state.team ? state.team.work || null : (state.work && state.work.submitted) || null;
   function renderWorks() {
-    const el = $('#myWorks'), w = state.work || {}, sub = w.submitted;
+    const el = $('#myWorks'), w = state.work || {}, member = state.team && !state.team.captain, sub = member ? teamWork() : w.submitted;
     const icon = '';
     if (!registered()) {
       el.innerHTML = `<div class="empty">${icon}<h3>${T('w.lockedT')}</h3><p>${T('w.lockedD')}</p><a href="#register" class="btn btn-primary" data-start-reg>${(isEN() ? EN : ZH)['cta.register']}</a></div>`;
       return;
     }
     const closed = Date.now() >= DEADLINE;
-    if (sub && (!editingWork || closed)) {
+    if (member && !sub) {
+      el.innerHTML = `<div class="empty"><h3>${T(closed ? 'w.closedT' : 'w.waitT')}</h3><p>${T(closed ? 'w.closedD' : 'w.waitD')}</p>
+        ${closed ? '' : `<button type="button" class="link-btn demo-link" data-act="demoTeamWork">${T('w.demoTeam')}</button>`}</div>`;
+      return;
+    }
+    if (sub && (!editingWork || closed || member)) {
       el.innerHTML = `<div class="work-status">
           <span class="badge${closed ? '' : ' ok'}">${T(closed ? 'w.closedBadge' : 'w.done')}</span>
           <span class="work-ver">${T('w.version', { v: sub.version, t: fmtTime(sub.at) })}</span>
           <p>${T(closed ? 'w.lockedNote' : 'w.reviewNote')}</p>
           <div class="work-btns"><button type="button" class="btn btn-primary btn-sm" data-act="viewWork" aria-expanded="${viewingWork}">${T(viewingWork ? 'w.hide' : 'w.view')}</button>
-            ${closed ? '' : `<button type="button" class="btn btn-ghost btn-sm" data-act="editWork">${T('w.edit')}</button>`}</div></div>
+            ${closed || member ? '' : `<button type="button" class="btn btn-ghost btn-sm" data-act="editWork">${T('w.edit')}</button>`}</div></div>
         <div class="receipt-links"${viewingWork ? '' : ' hidden'}>${receiptRows(sub)}</div>
-        ${closed ? '' : `<p class="reg-note">${T('w.rule')}</p>`}`;
+        ${closed ? '' : `<p class="reg-note">${T(member ? 'w.memberNote' : 'w.rule')}</p>`}`;
       return;
     }
     if (closed) { el.innerHTML = `<div class="empty">${icon}<h3>${T('w.closedT')}</h3><p>${T('w.closedD')}</p></div>`; return; }
@@ -2640,6 +2651,7 @@ document.querySelectorAll('.res-main').forEach(card => card.addEventListener('po
     else if (a === 'editWork') { editingWork = true; renderWorks(); $('#workForm').scrollIntoView({ block: 'start', behavior: 'smooth' }); }
     else if (a === 'viewWork') { viewingWork = !viewingWork; renderWorks(); }
     else if (a === 'cancelEdit') { editingWork = false; renderWorks(); }
+    else if (a === 'demoTeamWork') workRun(() => api.demoTeamWork(), T('w.done')).then(() => renderMy());
   }
   function goSubmit() {
     if (!registered()) { startRegister(); return; }
@@ -2656,7 +2668,7 @@ document.querySelectorAll('.res-main').forEach(card => card.addEventListener('po
     if (!registered()) return 'reg';
     if (!tm || !tm.confirmed) return 'team';
     if (!tm.topic) return 'topic';
-    if (!(state.work && state.work.submitted)) return 'work';
+    if (!teamWork()) return 'work';
     return 'review';
   }
   function renderStage() {
