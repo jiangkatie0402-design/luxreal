@@ -258,13 +258,16 @@ html[lang="zh-CN"] .hero h1 { font-size: clamp(32px, 6.2vw, 84px); letter-spacin
 @media (max-width: 640px) { .partners { flex-wrap: wrap; } .pt-marquee { flex-basis: 100%; } }
 /* partner strip: logos drift left in an endless loop (two identical sets, the track slides by one set) */
 .pt-marquee { position: relative; flex: 1 1 auto; min-width: 0; overflow: hidden; }
-.pt-marquee::before, .pt-marquee::after { content: ''; position: absolute; top: 0; bottom: 0; z-index: 1; width: 64px; pointer-events: none; }
+.pt-marquee::before, .pt-marquee::after { content: ''; position: absolute; top: 0; bottom: 0; z-index: 1; width: 48px; pointer-events: none; }
+.pt-marquee::before { width: 20px; }
 .pt-marquee::before { left: 0; background: linear-gradient(90deg, var(--bg-2), transparent); }
 .pt-marquee::after { right: 0; background: linear-gradient(270deg, var(--bg-2), transparent); }
-.pt-track { display: flex; width: max-content; animation: ptDrift 48s linear infinite; will-change: transform; }
-.pt-marquee:hover .pt-track { animation-play-state: paused; }
-.pt-set { display: flex; align-items: center; gap: clamp(36px, 4vw, 64px); padding-right: clamp(36px, 4vw, 64px); }
-.pt-role { font-size: 13px; color: var(--text-muted); white-space: nowrap; margin-right: calc(clamp(36px, 4vw, 64px) * -1 + 14px); }
+.pt-track { display: flex; width: max-content; animation: ptDrift 48s linear infinite paused; will-change: transform; }
+/* starts from the first logo once the strip is on screen; hover pauses it */
+.pt-marquee.run .pt-track { animation-play-state: running; }
+.pt-marquee.run:hover .pt-track { animation-play-state: paused; }
+.pt-set { display: flex; align-items: center; gap: clamp(36px, 4vw, 64px); padding-left: 24px; padding-right: calc(clamp(36px, 4vw, 64px) - 24px); }
+.pt-role { font-size: 15px; color: var(--text-muted); white-space: nowrap; margin-right: calc(clamp(36px, 4vw, 64px) * -1 + 14px); }
 .pt-logo { display: flex; align-items: center; height: 30px; white-space: nowrap; }
 .pt-logo img { height: 100%; width: auto; }
 .pt-word { font-size: 18px; font-weight: 700; color: var(--text); letter-spacing: .01em; }
@@ -2738,6 +2741,11 @@ document.querySelectorAll('.res-main').forEach(card => card.addEventListener('po
   };
   let shown = false;
   new IntersectionObserver(([e]) => { if (e.isIntersecting && !shown) { shown = true; roll(); } else if (!e.isIntersecting && e.intersectionRatio === 0) shown = false; }, { threshold: .6 }).observe(el);
+})();
+/* partner strip: start drifting (from the first logo) only once it is on screen */
+(function () {
+  const m = document.querySelector('.pt-marquee'); if (!m) return;
+  new IntersectionObserver(([e], o) => { if (e.isIntersecting) { m.classList.add('run'); o.disconnect(); } }, { threshold: .5 }).observe(m);
 })();
 </script>
 </body>
