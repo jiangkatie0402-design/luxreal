@@ -3040,9 +3040,10 @@ document.querySelectorAll('.res-main').forEach(card => card.addEventListener('po
     if (!on) return;
     rot += Math.min(.05, (now - (last || now)) / 1000) * .06; last = now;
     ctx.setTransform(dpr, 0, 0, dpr, 0, 0); ctx.clearRect(0, 0, W, H); ctx.lineWidth = 1;
-    const R = Math.max(W * .56, H * .95), cx = W / 2, cy = H * .5 + R * .38;
+    const R = Math.min(H * .47, W * .42), cx = W / 2, cy = H / 2;   // the whole sphere, centred behind the copy
+    const halo = ctx.createRadialGradient(cx, cy, R * .2, cx, cy, R * 1.15); halo.addColorStop(0, 'rgba(106,72,255,.10)'); halo.addColorStop(1, 'rgba(106,72,255,0)'); ctx.fillStyle = halo; ctx.fillRect(0, 0, W, H);
     // rim
-    ctx.strokeStyle = 'rgba(181,172,255,.35)'; ctx.beginPath(); ctx.arc(cx, cy, R, 0, Math.PI * 2); ctx.stroke();
+    ctx.strokeStyle = 'rgba(181,172,255,.5)'; ctx.beginPath(); ctx.arc(cx, cy, R, 0, Math.PI * 2); ctx.stroke();
     for (let m = 0; m < MER; m++) { const lon = m * 360 / MER, pts = []; for (let k = -90; k <= 90; k += 4) pts.push([k, lon]); line(pts, R, cx, cy, 1); }
     PAR.forEach(lat => { const pts = []; for (let k = 0; k <= 360; k += 4) pts.push([lat, k]); line(pts, R, cx, cy, lat === 0 ? 1.8 : 1); });
     PTS.forEach(([la, lo], i) => {
