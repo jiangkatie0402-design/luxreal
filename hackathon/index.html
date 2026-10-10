@@ -3038,9 +3038,12 @@ document.querySelectorAll('.res-main').forEach(card => card.addEventListener('po
   };
   function draw(now) {
     if (!on) return;
-    rot += Math.min(.05, (now - (last || now)) / 1000) * .06; last = now;
+    rot += Math.min(.05, (now - (last || now)) / 1000) * .28; last = now;
     ctx.setTransform(dpr, 0, 0, dpr, 0, 0); ctx.clearRect(0, 0, W, H); ctx.lineWidth = 1;
-    const R = Math.min(H * .47, W * .42), cx = W / 2, cy = H / 2;   // the whole sphere, centred behind the copy
+    // centre the sphere on the copy block (slogan → buttons), not the section box
+    const wr = wrap.getBoundingClientRect(), s1 = wrap.querySelector('.final-slogan'), s2 = wrap.querySelector('.final .hero-cta');
+    const mid = s1 && s2 ? ((s1.getBoundingClientRect().top + s2.getBoundingClientRect().bottom) / 2 - wr.top) : H / 2;
+    const cy = mid, cx = W / 2, R = Math.min(Math.min(cy, H - cy) * .97, W * .42);
     const halo = ctx.createRadialGradient(cx, cy, R * .2, cx, cy, R * 1.15); halo.addColorStop(0, 'rgba(106,72,255,.10)'); halo.addColorStop(1, 'rgba(106,72,255,0)'); ctx.fillStyle = halo; ctx.fillRect(0, 0, W, H);
     // rim
     ctx.strokeStyle = 'rgba(181,172,255,.5)'; ctx.beginPath(); ctx.arc(cx, cy, R, 0, Math.PI * 2); ctx.stroke();
