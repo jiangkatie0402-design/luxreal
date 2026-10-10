@@ -650,15 +650,10 @@ footer { padding: 72px 0 40px; margin-top: clamp(48px, 6vw, 96px); border-top: 1
 .my-stage { position: relative; padding: 26px 28px 24px; border: 1px solid var(--border); border-radius: var(--radius); overflow: hidden;
   background: radial-gradient(70% 140% at 0% 0%, rgba(106,72,255,.16), transparent 60%), var(--surface); }
 .ms-head { display: flex; align-items: flex-end; justify-content: space-between; gap: 20px 32px; flex-wrap: wrap; margin-bottom: 26px; }
-.ms-now .k { display: block; font-family: var(--font-mono); font-size: 12px; font-weight: 600; letter-spacing: .12em; color: var(--ice); margin-bottom: 10px; }
 .ms-now h3 { font-size: clamp(24px, 2.2vw, 30px); font-weight: 700; line-height: 1.2; margin-bottom: 6px; }
 html[lang="zh-CN"] .ms-now h3 { font-family: var(--font-title); font-weight: 400; letter-spacing: .02em; }
 .ms-now p { font-size: 14px; color: var(--text-muted); }
 .ms-side { display: flex; align-items: center; gap: 24px; flex-wrap: wrap; }
-.ms-dates { display: flex; gap: 22px; margin: 0; }
-.ms-dates div { display: flex; flex-direction: column; gap: 2px; padding-left: 12px; border-left: 2px solid rgba(152,141,255,.5); }
-.ms-dates dt { font-size: 12px; color: var(--text-muted); }
-.ms-dates dd { margin: 0; font-size: 15px; font-weight: 600; color: var(--text); }
 /* six segments: a bar each (done = solid, current = glowing sweep, upcoming = dim) with an index and label */
 .my-steps { display: grid; grid-template-columns: repeat(6, 1fr); gap: 8px; list-style: none; margin: 0; padding: 0; }
 .my-steps li { position: relative; padding-top: 16px; font-size: 13.5px; color: var(--text-muted); }
@@ -1018,7 +1013,7 @@ body.modal-open { overflow: hidden; }
 }
 @media (max-width: 640px) {
   .my-stage { padding: 20px 16px; }
-  .ms-head { margin-bottom: 20px; } .ms-side { width: 100%; justify-content: space-between; }
+  .ms-head { margin-bottom: 20px; }
   .my-steps { gap: 4px; } .my-steps li b { font-size: 10px; letter-spacing: .04em; }
   .my-steps li { font-size: 10.5px; padding-top: 12px; line-height: 1.45; letter-spacing: 0; }
   .my-steps .sep { display: block; height: 0; overflow: hidden; }
@@ -1440,10 +1435,6 @@ body.modal-open { overflow: hidden; }
       <div class="ms-head">
         <div class="ms-now" id="msNow" aria-live="polite"></div>
         <div class="ms-side">
-          <dl class="ms-dates">
-            <div><dt data-i18n="my.d1">报名开启</dt><dd class="mono">10.19</dd></div>
-            <div><dt data-i18n="my.d2">作品提交截止</dt><dd class="mono">11.19 19:00</dd></div>
-          </dl>
           <button type="button" class="btn btn-ghost btn-sm" data-open-community data-i18n="cta.communityFull">进入赛事社群</button>
         </div>
       </div>
@@ -2579,7 +2570,7 @@ document.querySelectorAll('.res-main').forEach(card => card.addEventListener('po
   function renderStage() {
     const i = STAGES.indexOf(stageNow());
     const k = STAGES[i];
-    $('#msNow').innerHTML = `<span class="k">${T('st.curK')} · ${String(i + 1).padStart(2, '0')} / ${String(STAGES.length).padStart(2, '0')}</span><h3>${T('st.' + k)}</h3><p>${T('st.' + k + 'D')}</p>`;
+    $('#msNow').innerHTML = `<h3>${T('st.' + k)}</h3><p>${T('st.' + k + 'D')}</p>`;
     $('#mySteps').innerHTML = STAGES.map((k, j) => `<li class="${j < i ? 'done' : j === i ? 'cur' : ''}"${j === i ? ' aria-current="step"' : ''}><b>${j < i ? '✓ ' : ''}${String(j + 1).padStart(2, '0')}</b>${T('st.' + k).replace(' · ', '<span class="sep"> · </span>')}</li>`).join('');
   }
   function renderMy() { renderStage(); renderReg(); renderTeam(); renderWorks(); }
