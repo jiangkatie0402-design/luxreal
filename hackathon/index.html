@@ -1930,6 +1930,7 @@ document.querySelectorAll('.res-main').forEach(card => card.addEventListener('po
     'jr.approve': ['同意', 'Approve'], 'jr.reject': ['拒绝', 'Decline'], 'jr.approved': ['已同意，成员已加入团队', 'Approved — they’ve joined the team'], 'jr.rejected': ['已拒绝该申请', 'Request declined'],
     'jr.demoReq': ['演示：模拟收到一条入队申请', 'Demo: receive a join request'],
     'loc.other': ['其他（手动填写）', 'Other (type it in)'],
+    'w.noTeamT': ['创建或加入团队后提交作品', 'Create or join a team to submit'], 'w.noTeamD': ['作品由队长代表团队提交；单人参赛也需要先创建团队。', 'The captain submits on behalf of the team — solo entrants create a team too.'],
     'w.waitT': ['等待队长提交作品', 'Waiting for your captain to submit'], 'w.waitD': ['团队作品由队长统一上传提交，提交后这里会显示作品与版本。', 'Your captain uploads the team’s project; once submitted it shows up here with its version.'],
     'w.memberNote': ['作品由队长提交，如需修改请联系队长。', 'Your captain submits the project — ask them if anything needs changing.'], 'w.demoTeam': ['演示：模拟队长提交作品', 'Demo: captain submits the project'],
     'pt.reg': ['报名奖励', 'Registration credits'], 'pt.team': ['团队奖励', 'Team credits'], 'pt.afterReg': ['报名后发放', 'After you register'],
@@ -2484,6 +2485,11 @@ document.querySelectorAll('.res-main').forEach(card => card.addEventListener('po
       return;
     }
     const closed = Date.now() >= DEADLINE;
+    // only a team's captain submits; without a team there's nothing to submit yet (solo entrants create a team too)
+    if (!state.team && !w.submitted) {
+      el.innerHTML = `<div class="empty"><h3>${T(closed ? 'w.closedT' : 'w.noTeamT')}</h3><p>${T(closed ? 'w.closedD' : 'w.noTeamD')}</p></div>`;
+      return;
+    }
     if (member && !sub) {
       el.innerHTML = `<div class="empty"><h3>${T(closed ? 'w.closedT' : 'w.waitT')}</h3><p>${T(closed ? 'w.closedD' : 'w.waitD')}</p>
         ${closed ? '' : `<button type="button" class="link-btn demo-link" data-act="demoTeamWork">${T('w.demoTeam')}</button>`}</div>`;
@@ -2505,10 +2511,9 @@ document.querySelectorAll('.res-main').forEach(card => card.addEventListener('po
     const v = k => esc(d[k] || '');
     picked = { videoFile: d.videoFile || null, reportFile: d.reportFile || null, repoFile: d.repoFile || null };
     const dv = d.dv === 'videoFile' ? 'videoFile' : 'link', rm = d.repoMode || 'link';
-    const owner = state.team ? T('w.ownerTeam', { t: esc(state.team.name) }) : T('w.ownerSolo');
     const tabs = (name, cur, opts) => `<div class="seg seg-sm" role="radiogroup">${opts.map(o => `<label><input type="radio" name="${name}" value="${o}"${cur === o ? ' checked' : ''}><span>${T('w.m.' + o)}</span></label>`).join('')}</div>`;
     el.innerHTML = `<form class="work-form" id="workForm" novalidate>
-      <div class="work-head"><div><h3>${T('w.formT')}</h3><p>${T('w.owner')}${owner}</p></div></div>
+      <div class="work-head"><div><h3>${T('w.formT')}</h3></div></div>
       <section class="wf-group">
         <header class="wf-gh"><b>${T('w.must')}</b><span id="wfCount"></span></header>
         <div class="field wf-block wf-item" data-block="dv">
