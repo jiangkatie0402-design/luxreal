@@ -2311,7 +2311,8 @@ document.querySelectorAll('.res-main').forEach(card => card.addEventListener('po
     const cap = tm.members.filter(m => m.captain), mates = tm.members.filter(m => !m.captain);
     const members = `<div class="tm-group"><h5>${T('team.capT')}</h5><ul class="members">${cap.map(row).join('')}</ul></div>
       <div class="tm-group"><h5>${T('team.memT')}</h5>${mates.length || reqRows ? `<ul class="members">${mates.map(row).join('')}${reqRows}</ul>` : `<p class="tm-empty">${T('team.noMem')}</p>`}
-      ${reqs.length && full ? `<p class="mb-full">${T('mb.full')}</p>` : ''}</div>`;
+      ${reqs.length && full ? `<p class="mb-full">${T('mb.full')}</p>` : ''}
+      ${tm.captain && !full ? `<button type="button" class="link-btn demo-link" data-act="demoRequest">${T('jr.demoReq')}</button>` : ''}</div>`;
     // Unconfirmed: the rule sits next to the decision. Confirmed: status lives on the member-count row.
     const confirmRow = tm.confirmed ? '' : (tm.captain
       ? `<div class="team-actions"><button type="button" class="btn btn-primary" data-act="confirm">${T('team.confirm')}</button><p>${T('team.confirmTip')}</p></div>`
