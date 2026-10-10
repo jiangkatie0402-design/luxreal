@@ -295,15 +295,18 @@ html[lang="zh-CN"] .sec-title { letter-spacing: .02em; line-height: 1.22; }
 .demo-head { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; padding: 18px 22px; border-bottom: 1px solid var(--border-subtle); font-size: 14px; font-weight: 600; position: relative; z-index: 2; background: var(--surface); }
 .demo-head .mono { font-size: 11.5px; letter-spacing: .14em; color: var(--ice); padding: 2px 8px; border: 1px solid rgba(181,172,255,.35); border-radius: 6px; }
 .demo-head em { font-style: normal; font-weight: 500; font-size: 12px; color: var(--text-muted); margin-left: auto; }
-.demo-cols { position: relative; flex: 1 1 0; min-height: 0; contain: size; display: grid; grid-template-columns: 1fr 1fr; gap: 12px; padding: 0 12px; overflow: hidden;
-  -webkit-mask-image: linear-gradient(transparent, #000 12%, #000 88%, transparent); mask-image: linear-gradient(transparent, #000 12%, #000 88%, transparent); }
+.demo-cols { position: relative; flex: 1 1 0; min-height: 0; contain: size; display: grid; grid-template-columns: 1fr 1fr; gap: 12px; padding: 0 12px; overflow: hidden; }
+/* edge fades as overlays (a mask over moving video would repaint the whole wall every frame) */
+.demo-cols::before, .demo-cols::after { content: ''; position: absolute; left: 0; right: 0; z-index: 2; height: 12%; pointer-events: none; }
+.demo-cols::before { top: 0; background: linear-gradient(var(--surface), transparent); }
+.demo-cols::after { bottom: 0; background: linear-gradient(transparent, var(--surface)); }
 .demo-col { position: relative; overflow: hidden; }
-.demo-track { display: flex; flex-direction: column; gap: 12px; animation: demoUp 36s linear infinite; }
-.demo-col.down .demo-track { animation-name: demoDown; animation-duration: 42s; }
+.demo-track { display: flex; flex-direction: column; gap: 12px; animation: demoUp 64s linear infinite; will-change: transform; backface-visibility: hidden; }
+.demo-col.down .demo-track { animation-name: demoDown; animation-duration: 74s; }
 .demo-dup { display: contents; }
 .demo-wall:hover .demo-track { animation-play-state: paused; }
-@keyframes demoUp { from { transform: translateY(0); } to { transform: translateY(calc(-50% - 6px)); } }
-@keyframes demoDown { from { transform: translateY(calc(-50% - 6px)); } to { transform: translateY(0); } }
+@keyframes demoUp { from { transform: translate3d(0, 0, 0); } to { transform: translate3d(0, calc(-50% - 6px), 0); } }
+@keyframes demoDown { from { transform: translate3d(0, calc(-50% - 6px), 0); } to { transform: translate3d(0, 0, 0); } }
 .demo-tile { margin: 0; border-radius: var(--radius-sm); overflow: hidden; border: 1px solid var(--border); background: var(--bg-2); transition: border-color .25s; }
 .demo-tile:hover { border-color: var(--border-strong); }
 .demo-art { display: block; width: 100%; height: auto; aspect-ratio: 16 / 10; }
@@ -960,7 +963,8 @@ body.modal-open { overflow: hidden; }
 @media (max-width: 360px) { .brand-cobrand { height: 15px; } }
 @keyframes sheetUp { from { transform: translateY(24px); opacity: .6; } }
 @media (prefers-reduced-motion: reduce) {
-  .demo-cols { overflow-y: auto; -webkit-mask-image: none; mask-image: none; }
+  .demo-cols { overflow-y: auto; }
+  .demo-cols::before, .demo-cols::after { display: none; }
   .demo-dup { display: none; }
   html { scroll-behavior: auto; }
   *, *::before, *::after { animation: none !important; transition: none !important; }
@@ -2634,9 +2638,14 @@ document.querySelectorAll('.res-main').forEach(card => card.addEventListener('po
   const [ext, type] = vids[0].canPlayType('video/mp4; codecs="avc1.4d401e"') ? ['', 'video/mp4'] : ['Webm', 'video/webm'];
   const urls = {}, url = id => urls[id] || (urls[id] = (() => { const raw = atob(document.getElementById(id + ext).textContent.trim()), bytes = new Uint8Array(raw.length);
     for (let i = 0; i < raw.length; i++) bytes[i] = raw.charCodeAt(i); return URL.createObjectURL(new Blob([bytes], { type })); })());
+  // decode every clip once, before the wall scrolls into view, so tiles never stall while they glide in
+  const wall = vids[0].closest('.demo-wall'); let ready = false;
+  const prime = () => { if (ready) return; ready = true; vids.forEach(v => { v.src = url(v.dataset.src); v.preload = 'auto'; }); };
+  new IntersectionObserver(([e], o) => { if (e.isIntersecting) { o.disconnect(); (window.requestIdleCallback || setTimeout)(prime); } }, { rootMargin: '600px 0px' }).observe(wall);
+  // tiles start playing a little before they enter the wall and pause once well clear of it
   const io = new IntersectionObserver(es => es.forEach(({ target: v, isIntersecting: on }) => {
-    if (on) { if (!v.src) v.src = url(v.dataset.src); if (!reduceMotion) v.play().catch(() => {}); } else v.pause();
-  }));
+    if (on) { prime(); if (!reduceMotion) v.play().catch(() => {}); } else v.pause();
+  }), { rootMargin: '160px 0px' });
   vids.forEach(v => io.observe(v));
 })();
 /* closing slogan: per-letter decode loop — mono glyphs flicker in, lock to the real letterforms, hold, glitch out, repeat */
