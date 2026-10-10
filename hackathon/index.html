@@ -647,19 +647,28 @@ footer { padding: 72px 0 40px; margin-top: clamp(48px, 6vw, 96px); border-top: 1
 .my-title { font-size: clamp(34px, 4.4vw, 52px); font-weight: 700; letter-spacing: -.02em; line-height: 1.1; }
 .my-back { display: inline-block; padding: 10px 0; font-size: 14px; font-weight: 600; color: var(--text-soft); transition: color .2s; white-space: nowrap; }
 .my-back:hover { color: #fff; }
-.my-stage { display: grid; grid-template-columns: 1fr auto; gap: 18px 24px; padding: 24px 28px; border: 1px solid var(--border); border-radius: var(--radius); background: linear-gradient(90deg, rgba(106,72,255,.14), rgba(123,92,255,.04) 60%, transparent), var(--surface); }
-.my-steps { grid-column: 1 / -1; display: grid; grid-template-columns: repeat(6, 1fr); list-style: none; margin: 0; padding: 0; }
-.my-steps li { position: relative; padding-top: 30px; text-align: center; font-size: 13.5px; color: var(--text-muted); }
-.my-steps li::before { content: ''; position: absolute; top: 10px; left: -50%; right: 50%; height: 2px; margin-top: -0.5px; background: var(--border-subtle); }
-.my-steps li:first-child::before { display: none; }
-.my-steps li.done::before, .my-steps li.cur::before { background: linear-gradient(90deg, var(--violet), var(--blue)); }
-.my-steps li i { position: absolute; top: 4px; left: 50%; transform: translateX(-50%); width: 13px; height: 13px; border-radius: 50%; border: 1px solid var(--border-strong); background: var(--surface); z-index: 1; box-sizing: border-box; }
-.my-steps li.done i { background: var(--blue); border-color: var(--blue); }
-.my-steps li.cur i { width: 17px; height: 17px; top: 2px; background: #fff; border: 3px solid var(--violet); box-shadow: 0 0 0 5px rgba(106,72,255,.25), 0 0 18px rgba(106,72,255,.7); }
-.my-steps li.done { color: var(--text-soft); }
-.my-steps li.cur { color: #fff; font-weight: 700; }
-.my-stage-foot { grid-column: 1 / -1; display: flex; align-items: center; justify-content: space-between; gap: 16px; flex-wrap: wrap; padding-top: 16px; border-top: 1px solid var(--border-subtle); }
-.my-stage-foot .mono { font-size: 12.5px; font-weight: 600; color: var(--ice); letter-spacing: .04em; }
+.my-stage { position: relative; padding: 26px 28px 24px; border: 1px solid var(--border); border-radius: var(--radius); overflow: hidden;
+  background: radial-gradient(70% 140% at 0% 0%, rgba(106,72,255,.16), transparent 60%), var(--surface); }
+.ms-head { display: flex; align-items: flex-end; justify-content: space-between; gap: 20px 32px; flex-wrap: wrap; margin-bottom: 26px; }
+.ms-now .k { display: block; font-family: var(--font-mono); font-size: 12px; font-weight: 600; letter-spacing: .12em; color: var(--ice); margin-bottom: 10px; }
+.ms-now h3 { font-size: clamp(24px, 2.2vw, 30px); font-weight: 700; line-height: 1.2; margin-bottom: 6px; }
+html[lang="zh-CN"] .ms-now h3 { font-family: var(--font-title); font-weight: 400; letter-spacing: .02em; }
+.ms-now p { font-size: 14px; color: var(--text-muted); }
+.ms-side { display: flex; align-items: center; gap: 24px; flex-wrap: wrap; }
+.ms-dates { display: flex; gap: 22px; margin: 0; }
+.ms-dates div { display: flex; flex-direction: column; gap: 2px; padding-left: 12px; border-left: 2px solid rgba(152,141,255,.5); }
+.ms-dates dt { font-size: 12px; color: var(--text-muted); }
+.ms-dates dd { margin: 0; font-size: 15px; font-weight: 600; color: var(--text); }
+/* six segments: a bar each (done = solid, current = glowing sweep, upcoming = dim) with an index and label */
+.my-steps { display: grid; grid-template-columns: repeat(6, 1fr); gap: 8px; list-style: none; margin: 0; padding: 0; }
+.my-steps li { position: relative; padding-top: 16px; font-size: 13.5px; color: var(--text-muted); }
+.my-steps li::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 4px; border-radius: 2px; background: rgba(255,255,255,.08); }
+.my-steps li.done::before { background: #6A48FF; }
+.my-steps li.cur::before { background: linear-gradient(90deg, #6A48FF, #B5ACFF 50%, #6A48FF) 0 0 / 200% 100%; box-shadow: 0 0 14px rgba(123,92,255,.7); animation: msSweep 2.4s linear infinite; }
+@keyframes msSweep { to { background-position: -200% 0; } }
+.my-steps li b { display: block; font-family: var(--font-mono); font-size: 11.5px; font-weight: 600; letter-spacing: .1em; margin-bottom: 4px; color: var(--text-muted); opacity: .7; }
+.my-steps li.done { color: var(--text-soft); } .my-steps li.done b { color: #988DFF; opacity: 1; }
+.my-steps li.cur { color: #fff; font-weight: 700; } .my-steps li.cur b { color: #B5ACFF; opacity: 1; }
 .my-sec { margin-top: 56px; }
 .my-sec-title { font-size: clamp(22px, 2.2vw, 28px); font-weight: 700; margin-bottom: 18px; }
 html[lang="zh-CN"] .my-sec-title, html[lang="zh-CN"] .my-title { font-family: var(--font-title); font-weight: 400; letter-spacing: .02em; }
@@ -906,7 +915,6 @@ body.modal-open { overflow: hidden; }
   .perks { grid-template-columns: 1fr 1fr; }
   .dv-grid { grid-template-columns: 1fr 1fr; }
   .team-split { grid-template-columns: 1fr; }
-  .my-stage { grid-template-columns: 1fr; }
   .res-grid { grid-template-columns: 1fr; }
   .awards { grid-template-columns: repeat(3, 1fr); gap: 12px; margin-top: 12px; }
   .award { padding: 28px 22px; }
@@ -1009,9 +1017,10 @@ body.modal-open { overflow: hidden; }
   .reveal { opacity: 1; transform: none; }
 }
 @media (max-width: 640px) {
-  .my-stage { padding: 22px 14px; }
-  .my-stage-foot { padding-left: 6px; padding-right: 6px; }
-  .my-steps li { font-size: 10.5px; padding: 28px 0 0; line-height: 1.45; letter-spacing: 0; }
+  .my-stage { padding: 20px 16px; }
+  .ms-head { margin-bottom: 20px; } .ms-side { width: 100%; justify-content: space-between; }
+  .my-steps { gap: 4px; } .my-steps li b { font-size: 10px; letter-spacing: .04em; }
+  .my-steps li { font-size: 10.5px; padding-top: 12px; line-height: 1.45; letter-spacing: 0; }
   .my-steps .sep { display: block; height: 0; overflow: hidden; }
 }
 </style>
@@ -1428,11 +1437,17 @@ body.modal-open { overflow: hidden; }
     </div>
 
     <div class="my-stage">
-      <ol class="my-steps" id="mySteps" aria-label="参赛阶段"></ol>
-      <div class="my-stage-foot">
-        <span class="mono" data-i18n="my.dl">关键时间 · 10.19 报名开启 · 11.19 19:00 作品提交截止</span>
-        <button type="button" class="btn btn-ghost btn-sm" data-open-community data-i18n="cta.communityFull">进入赛事社群</button>
+      <div class="ms-head">
+        <div class="ms-now" id="msNow" aria-live="polite"></div>
+        <div class="ms-side">
+          <dl class="ms-dates">
+            <div><dt data-i18n="my.d1">报名开启</dt><dd class="mono">10.19</dd></div>
+            <div><dt data-i18n="my.d2">作品提交截止</dt><dd class="mono">11.19 19:00</dd></div>
+          </dl>
+          <button type="button" class="btn btn-ghost btn-sm" data-open-community data-i18n="cta.communityFull">进入赛事社群</button>
+        </div>
       </div>
+      <ol class="my-steps" id="mySteps" aria-label="参赛阶段"></ol>
     </div>
 
     <div id="myBody">
@@ -1667,7 +1682,7 @@ const EN = {
   'cta.my':'My entry','cta.community':'Join community','cta.communityFull':'Join the community','cta.submitSoon':'Submit project · Not yet open','cta.submit':'Submit project',
   'demo.head':'Products built with Aholo Lux3D','demo1.t':'Little sprite adventure game','demo2.t':'Snowy house scene rebuilt','demo3.t':'Flying adventure game','demo4.t':'Cloud-and-water Zen ruins website','demo6.t':'Ancient village adventure game',
   'hero.tagline':'Play in 3D, Create with Aholo','faq.more':'Still have questions? Ask in the community.',
-  'my.title':'My entry','my.back':'Back to event','my.dl':'Key dates · Oct 19 registration opens · Nov 19, 19:00 submission deadline',
+  'my.title':'My entry','my.back':'Back to event','my.d1':'Registration opens','my.d2':'Submissions close',
   'my.gateT':'Log in to see your entry','my.gateD':'Log in with your Aholo account to view your registration, credits and team.','my.reg':'Registration & credits','my.tools':'Open tools','my.toolsD':'Build your project with Aholo Lux3D, and add other products as you need.','my.team':'My team','my.works':'My project','my.worksT':'Submissions are not open yet','my.worksD':'Once open, you can edit and submit your team’s project here.','my.worksBtn':'Submit project',
   'nav.login':'Log in','nav.logout':'Log out','nav.my':'My entry','m.loginT':'Log in to Aholo','m.loginD':'Log in with your Aholo account to register and manage your team.','m.loginBtn':'Log in with Aholo',
   'm.regT':'Register','m.regD':'Every participant registers individually first, then creates or joins a team.','f.name':'Full name','f.email':'Contact email','f.role':'Role','f.roleNone':'Select','f.role1':'Developer','f.role2':'Designer','f.role3':'Creator','f.role4':'Student','f.role5':'Other','f.agree':'I have read and agree to the ','f.rules':'Event Rules','f.loc':'Current location','f.country':'Country / region','f.province':'Province / state','f.city':'City','f.social':'Social media ID','f.optional':'optional','f.xhs':'Xiaohongshu ID','f.x':'X handle (e.g. @aholo)','c.cn':'China','c.us':'United States','c.ca':'Canada','c.gb':'United Kingdom','c.de':'Germany','c.fr':'France','c.jp':'Japan','c.kr':'South Korea','c.sg':'Singapore','c.my':'Malaysia','c.au':'Australia','c.other':'Other','m.regSubmit':'Submit registration',
@@ -1926,7 +1941,7 @@ document.querySelectorAll('.res-main').forEach(card => card.addEventListener('po
     'w.e.url': ['请输入以 http:// 或 https:// 开头的有效链接', 'Enter a valid link starting with http:// or https://'], 'w.e.lux': ['提交前请确认作品使用 Aholo Lux3D 完成', 'Please confirm the project uses Aholo Lux3D'],
     'tl.rsvSoon': ['预约链接即将开放', 'Booking link coming soon'],
     'team.noReward': ['未获团队奖励', 'No team reward'], 'rw.done': ['已发放', 'granted'],
-    'st.cur': ['当前阶段：', 'Current stage: '], 'st.next': ['下一阶段：', 'Next: '],
+    'st.cur': ['当前阶段：', 'Current stage: '], 'st.curK': ['当前阶段', 'CURRENT STAGE'], 'st.next': ['下一阶段：', 'Next: '],
     'st.reg': ['个人报名', 'Registration'], 'st.regD': ['加入赛事，开启你的创作之旅', 'Join the event and start your creative journey'],
     'st.team': ['组队', 'Team up'], 'st.teamD': ['寻找伙伴，创建或加入你的团队', 'Find partners — create or join a team'],
     'st.topic': ['选题确认', 'Topic'], 'st.topicD': ['完善团队信息，提交你们的创作选题', 'Complete your team info and submit your topic'],
@@ -2563,7 +2578,9 @@ document.querySelectorAll('.res-main').forEach(card => card.addEventListener('po
   }
   function renderStage() {
     const i = STAGES.indexOf(stageNow());
-    $('#mySteps').innerHTML = STAGES.map((k, j) => `<li class="${j < i ? 'done' : j === i ? 'cur' : ''}"${j === i ? ' aria-current="step"' : ''}><i></i>${T('st.' + k).replace(' · ', '<span class="sep"> · </span>')}</li>`).join('');
+    const k = STAGES[i];
+    $('#msNow').innerHTML = `<span class="k">${T('st.curK')} · ${String(i + 1).padStart(2, '0')} / ${String(STAGES.length).padStart(2, '0')}</span><h3>${T('st.' + k)}</h3><p>${T('st.' + k + 'D')}</p>`;
+    $('#mySteps').innerHTML = STAGES.map((k, j) => `<li class="${j < i ? 'done' : j === i ? 'cur' : ''}"${j === i ? ' aria-current="step"' : ''}><b>${j < i ? '✓ ' : ''}${String(j + 1).padStart(2, '0')}</b>${T('st.' + k).replace(' · ', '<span class="sep"> · </span>')}</li>`).join('');
   }
   function renderMy() { renderStage(); renderReg(); renderTeam(); renderWorks(); }
 
