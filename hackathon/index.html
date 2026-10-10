@@ -1893,7 +1893,7 @@ document.querySelectorAll('.res-main').forEach(card => card.addEventListener('po
     'team.count': ['成员 {n}/{max}', 'Members {n}/{max}'], 'team.share': ['分享团队编号，邀请伙伴加入', 'Share the code to invite teammates'],
     'team.confirmHint': ['团队奖励仅在首次确认时发放给当时的队员，后续加入成员不补发；退出或换队不重复获得', 'The team reward goes only to the members at the first confirmation; later members don’t receive it, and leaving or switching teams doesn’t earn it again'],
     'team.confirmTip': ['确认后仍可换人或解散。', 'You can still change members or disband after confirming.'],
-    'team.waitHint': ['等待队长确认组队。确认时在队的成员将获得团队奖励', 'Waiting for the captain to confirm. Members on the team at that moment receive the team reward'],
+    'team.waitHint': ['等待队长确认组队', 'Waiting for the captain to confirm the team'],
     'team.rewardDone': ['团队奖励已于 {d}发放给 {n} 名成员', 'Team reward granted to {n} member(s) on {d}'],
     'team.rewardPending': ['团队奖励发放中，将发放给 {n} 名成员', 'Team reward processing for {n} member(s)'],
     'team.rewardTip': ['团队奖励仅在首次确认时发放给当时的队员；后续加入的成员不补发，退出或换队不会重复获得。', 'Team rewards are granted only at the first confirmation to the members at that time; later members don’t receive them, and leaving or switching teams doesn’t earn them again.'],
@@ -1941,7 +1941,7 @@ document.querySelectorAll('.res-main').forEach(card => card.addEventListener('po
     'tp.done': ['已提交选题：', 'Topic submitted: '], 'w.trackOtherPh': ['请填写应用方向', 'Describe the application area'], 'w.e.trackOther': ['请填写应用方向', 'Describe your application area'],
     'reg.waitTeam': ['待组队', 'Team pending'], 'reg.teamed': ['已组队', 'Team formed'], 'reg.topicT': ['提交选题并领取积分', 'Submit your topic & claim credits'],
     'reg.topicD': ['完善团队信息并提交选题，领取第二轮足量创作积分', 'Complete your team info and submit a topic to receive the second, full round of creation credits'],
-    'rw.got': ['已领取', 'received'], 'rw.teamOnce': ['每个团队仅发放一次，按首次确认时的队员平均分配', 'Granted once per team, split evenly among the members at first confirmation'],
+    'rw.got': ['已领取', 'received'], 'rw.teamOnce': ['每个团队仅发放一次，按首次确认时的队员平均分配；后续加入成员不补发，退出或换队不重复获得', 'Granted once per team, split evenly among the members at first confirmation; later members don’t receive it, and leaving or switching teams doesn’t earn it again'],
     'team.confirm': ['确认组队', 'Confirm team'], 'team.confirmD': ['确认后即成为正式团队，之后仍可换人或解散。', 'Confirming makes the team official; you can still change members or disband later.'],
     'team.wait': ['等待队长确认组队。', 'Waiting for the captain to confirm the team.'],
     'team.okD': ['团队已确认，仍可调整成员或解散。', 'Team confirmed. You can still change members or disband.'],
@@ -2172,9 +2172,9 @@ document.querySelectorAll('.res-main').forEach(card => card.addEventListener('po
     if (!tm || !tm.confirmed) {
       const chips = p
         ? `<div class="chip"><strong>${T('rw.reg')} · <b>${T('rw.pending')}</b></strong><span>${T('rw.acct')}</span></div>
-           <div class="chip"><strong>${T('rw.team')} · ${T('rw.none')}</strong><span>${T('rw.onConfirm')}</span></div>`
+           <div class="chip"><strong>${T('rw.team')} · ${T('rw.none')}</strong><span>${T('rw.onConfirm')} ${tip(T('team.rewardTip'))}</span></div>`
         : `<div class="chip"><strong>${T('rw.reg')} · ${T('rw.afterReg')}</strong><span>${T('rw.once')}</span></div>
-           <div class="chip"><strong>${T('rw.team')} · ${T('rw.none')}</strong><span>${T('rw.onConfirm')}</span></div>`;
+           <div class="chip"><strong>${T('rw.team')} · ${T('rw.none')}</strong><span>${T('rw.onConfirm')} ${tip(T('team.rewardTip'))}</span></div>`;
       $('#myReg').innerHTML = p
         ? `<div class="reg-row"><span class="reg-avatar on">${esc(p.name.slice(0, 1).toUpperCase())}</span>
             <div class="reg-main"><span class="badge ok">${T('reg.done')}</span><h3>${esc(p.name)}</h3>
@@ -2237,7 +2237,7 @@ document.querySelectorAll('.res-main').forEach(card => card.addEventListener('po
   function renderTeam() {
     const el = $('#myTeam'), p = registered() ? state.profile : null, tm = p ? state.team : null;
     if (!p) {
-      el.innerHTML = `<div class="empty"><span class="empty-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><path fill="#B5ACFF" d="M12 1 23 12 12 23 1 12Z"/><path fill="#7B5CFF" d="M12 1 23 12H1Z"/><path fill="#3E2C99" d="M12 7 17 12 12 17 7 12Z"/></svg></span>
+      el.innerHTML = `<div class="empty">
         <h3>${T('team.emptyT')}</h3><p>${T('team.emptyD')}</p><a href="#register" class="btn btn-primary" data-start-reg>${(isEN() ? EN : ZH)['cta.register']}</a></div>`;
       return;
     }
@@ -2259,7 +2259,7 @@ document.querySelectorAll('.res-main').forEach(card => card.addEventListener('po
     }
     // 队长 on top, then 队员; a captain sees join requests inline as grey rows with 拒绝 / 同意 (approved → a full-colour member)
     const row = m => `<li><span class="reg-avatar on">${esc(m.name.slice(0, 1).toUpperCase())}</span>
-      <span class="who">${esc(m.name)}${m.me ? `<em>${T('team.you')}</em>` : ''}${tm.rewarded && !m.rewarded ? `<span class="tag-muted">${T('team.noReward')}</span>` : ''}</span></li>`;
+      <span class="who">${esc(m.name)}${m.me ? `<em>${T('team.you')}</em>` : ''}</span></li>`;
     const reqs = tm.captain ? (tm.requests || []) : [], full = tm.members.length >= TEAM_MAX;
     const reqRows = reqs.map((r, i) => `<li class="is-req"><span class="reg-avatar">${esc(r.name.slice(0, 1).toUpperCase())}</span>
       <span class="who">${esc(r.name)}<em>${T('jr.applying')}</em><em class="mono">${esc(r.pid)}</em></span>
@@ -2268,20 +2268,13 @@ document.querySelectorAll('.res-main').forEach(card => card.addEventListener('po
     const cap = tm.members.filter(m => m.captain), mates = tm.members.filter(m => !m.captain);
     const members = `<div class="tm-group"><h5>${T('team.capT')}</h5><ul class="members">${cap.map(row).join('')}</ul></div>
       <div class="tm-group"><h5>${T('team.memT')}</h5>${mates.length || reqRows ? `<ul class="members">${mates.map(row).join('')}${reqRows}</ul>` : `<p class="tm-empty">${T('team.noMem')}</p>`}
-      ${reqs.length && full ? `<p class="mb-full">${T('mb.full')}</p>` : ''}${reqs.length && tm.rewarded ? `<p class="mb-full">${T('mb.hintLate')}</p>` : ''}
-      ${tm.captain && !full ? `<button type="button" class="link-btn demo-link" data-act="demoRequest">${T('jr.demoReq')}</button>` : ''}</div>`;
+      ${reqs.length && full ? `<p class="mb-full">${T('mb.full')}</p>` : ''}</div>`;
     // Unconfirmed: the rule sits next to the decision. Confirmed: status lives on the member-count row.
     const confirmRow = tm.confirmed ? '' : (tm.captain
-      ? `<div class="team-actions"><button type="button" class="btn btn-primary" data-act="confirm">${T('team.confirm')}</button><p>${T('team.confirmHint', { n: tm.members.length })} ${tip(T('team.confirmTip'))}</p></div>`
-      : `<div class="team-actions"><p>${T('team.waitHint')} ${tip(T('team.rewardTip'))}</p></div>`);
-    let rewardLine = '';
-    if (tm.rewarded) {
-      const st = rewardStatus(tm.rewardSince || 0), n = tm.rewardCount || tm.members.length;
-      rewardLine = st.done
-        ? `${T('team.rewardDone', { d: fmtDate(st.at), n })} ${tip(T('team.rewardTip'))}`
-        : `${T('team.rewardPending', { n })} ${tip(T('team.rewardTip') + ' ' + T('team.pendingTip'))}`;
-      scheduleRewardRefresh(tm.rewardSince || 0);
-    }
+      ? `<div class="team-actions"><button type="button" class="btn btn-primary" data-act="confirm">${T('team.confirm')}</button><p>${T('team.confirmTip')}</p></div>`
+      : `<div class="team-actions"><p>${T('team.waitHint')}</p></div>`);
+    // team-reward status lives in 报名与积分; keep refreshing so that card picks up the grant date
+    if (tm.rewarded) scheduleRewardRefresh(tm.rewardSince || 0);
     el.innerHTML = `<div class="team-head">
         <div><h3>${esc(tm.name)}${tm.captain ? ` <button type="button" class="icon-btn" data-act="rename" aria-label="${T('team.rename')}" title="${T('team.rename')}"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><path d="M10.5 2.5l3 3L6 13H3v-3l7.5-7.5Z"/><path d="M9 4l3 3"/></svg></button>` : ''} <span class="badge${tm.confirmed ? ' ok' : ''}">${T(tm.confirmed ? 'team.ok' : 'team.pending')}</span></h3>
           <span class="team-code">${T('team.code')}<span class="mono">${esc(tm.id)}</span></span></div>
@@ -2291,7 +2284,7 @@ document.querySelectorAll('.res-main').forEach(card => card.addEventListener('po
           <button type="button" class="btn btn-danger btn-sm" data-act="${tm.captain ? 'disband' : 'leave'}">${T(tm.captain ? 'team.disband' : 'team.leave')}</button>
         </div></div>
       ${members}
-      ${tm.confirmed ? `<div class="team-meta team-meta-2"><span>${T('team.okNote')}</span>${rewardLine ? `<span>${rewardLine}</span>` : ''}</div>` : `<div class="team-meta">${T('team.count', { n: tm.members.length })}</div>`}
+      ${tm.confirmed ? `<div class="team-meta team-meta-2"><span>${T('team.okNote')}</span></div>` : `<div class="team-meta">${T('team.count', { n: tm.members.length })}</div>`}
       ${confirmRow}`;
   }
 
@@ -2305,7 +2298,6 @@ document.querySelectorAll('.res-main').forEach(card => card.addEventListener('po
       <ul class="members mb-list">${tm.members.map((m, i) => `<li><span class="reg-avatar${m.me ? ' on' : ''}">${esc(m.name.slice(0, 1).toUpperCase())}</span>
         <span class="who">${esc(m.name)}${m.captain ? `<em>${T('team.captain')}</em>` : ''}${m.me ? `<em>${T('team.you')}</em>` : ''}</span>
         ${!m.me ? `<button type="button" class="link-btn" data-act="remove" data-i="${i}">${T('team.remove')}</button>` : ''}</li>`).join('')}</ul>
-      ${tm.rewarded ? `<p class="mb-full">${T('mb.hintLate')}</p>` : ''}
       <div class="mb-invite"><span>${T('team.code')}<span class="mono">${esc(tm.id)}</span></span><button type="button" class="btn btn-ghost btn-sm" data-act="copyInvite">${(isEN() ? EN : ZH)['m.invCopyText']}</button></div>
       <button type="button" class="btn btn-ghost btn-block" data-close-modal>${T('mb.done')}</button>`;
   }
@@ -2375,7 +2367,7 @@ document.querySelectorAll('.res-main').forEach(card => card.addEventListener('po
   const safeUrl = u => /^https?:\/\//i.test(u || '') ? esc(u) : '#';
   function renderWorks() {
     const el = $('#myWorks'), w = state.work || {}, sub = w.submitted;
-    const icon = '<span class="empty-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><path fill="#B5ACFF" d="M4 1H15L20 6V23H4Z"/><path fill="#3E2C99" d="M15 1V6H20Z"/><path fill="#3E2C99" d="M7 10H17V12H7Z M7 14H17V16H7Z M7 18H13V20H7Z"/></svg></span>';
+    const icon = '';
     if (!registered()) {
       el.innerHTML = `<div class="empty">${icon}<h3>${T('w.lockedT')}</h3><p>${T('w.lockedD')}</p><a href="#register" class="btn btn-primary" data-start-reg>${(isEN() ? EN : ZH)['cta.register']}</a></div>`;
       return;
