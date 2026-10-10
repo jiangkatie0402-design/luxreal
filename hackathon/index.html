@@ -373,7 +373,8 @@ html[lang="zh-CN"] .sec-title { letter-spacing: .02em; line-height: 1.22; }
   border: 1px dotted rgba(152,141,255,.7); box-shadow: none;
   background: linear-gradient(#988DFF,#988DFF) 0 0 / 5px 5px no-repeat, linear-gradient(#988DFF,#988DFF) 100% 0 / 5px 5px no-repeat,
     linear-gradient(#988DFF,#988DFF) 0 100% / 5px 5px no-repeat, linear-gradient(#988DFF,#988DFF) 100% 100% / 5px 5px no-repeat, #050409; }
-.ico svg, .api-icon svg, .jg-icon svg, .pz-icon svg, .empty-icon svg, .modal-icon svg { width: 26px; height: 26px; filter: drop-shadow(0 0 6px rgba(123,92,255,.55)); }
+.ico svg, .api-icon svg, .jg-icon svg, .pz-icon svg, .empty-icon svg, .modal-icon svg { width: 28px; height: 28px; overflow: visible; filter: drop-shadow(0 0 7px rgba(123,92,255,.5)); }
+.ico svg > *, .api-icon svg > *, .jg-icon svg > *, .pz-icon svg > *, .empty-icon svg > *, .modal-icon svg > * { filter: url(#steel3d); }
 .api-icon .ico-img { width: 30px; height: 30px; object-fit: contain; display: block; }
 .drop-file svg { filter: drop-shadow(0 0 4px rgba(123,92,255,.5)); }
 .empty-icon { margin-bottom: 18px; }
@@ -1120,9 +1121,23 @@ body.modal-open { overflow: hidden; }
 <body>
 <svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false"><defs>
   <!-- icon materials: chrome highlight / purple-lit steel / dark gunmetal (matches the KV renders) -->
-  <linearGradient id="mtA" x1="0" y1="0" x2=".35" y2="1"><stop offset="0" stop-color="#ffffff"/><stop offset=".32" stop-color="#d8d5e8"/><stop offset=".5" stop-color="#8d88a3"/><stop offset=".62" stop-color="#ecebf5"/><stop offset="1" stop-color="#5f5a78"/></linearGradient>
+  <linearGradient id="mtA" x1="0" y1="0" x2=".5" y2="1"><stop offset="0" stop-color="#f2f1f7"/><stop offset=".28" stop-color="#b9b6c9"/><stop offset=".46" stop-color="#5e5a70"/><stop offset=".58" stop-color="#d9d7e4"/><stop offset=".8" stop-color="#8a869c"/><stop offset="1" stop-color="#3b384a"/></linearGradient>
   <linearGradient id="mtB" x1="0" y1="0" x2=".4" y2="1"><stop offset="0" stop-color="#d9d0ff"/><stop offset=".38" stop-color="#7b5cff"/><stop offset=".56" stop-color="#2a1f63"/><stop offset=".78" stop-color="#9a86ff"/><stop offset="1" stop-color="#3b2b8f"/></linearGradient>
-  <linearGradient id="mtC" x1="0" y1="0" x2=".3" y2="1"><stop offset="0" stop-color="#5a5570"/><stop offset=".55" stop-color="#22202c"/><stop offset="1" stop-color="#0e0d14"/></linearGradient>
+  <!-- machined-metal relief: bevel lighting + specular glint + a dark extruded edge so flat glyphs read as solid steel -->
+  <filter id="steel3d" x="-25%" y="-25%" width="160%" height="170%" color-interpolation-filters="sRGB">
+    <feGaussianBlur in="SourceAlpha" stdDeviation=".55" result="bump"/>
+    <feDiffuseLighting in="bump" surfaceScale="2.6" diffuseConstant="1.15" lighting-color="#ffffff" result="diff"><feDistantLight azimuth="225" elevation="42"/></feDiffuseLighting>
+    <feComposite in="SourceGraphic" in2="diff" operator="arithmetic" k1="1.25" result="lit"/>
+    <feSpecularLighting in="bump" surfaceScale="2.6" specularConstant="1.25" specularExponent="26" lighting-color="#ffffff" result="spec"><feDistantLight azimuth="225" elevation="48"/></feSpecularLighting>
+    <feComposite in="spec" in2="SourceAlpha" operator="in" result="glint"/>
+    <feComposite in="lit" in2="glint" operator="arithmetic" k2="1" k3=".9" result="shine"/>
+    <feComposite in="shine" in2="SourceAlpha" operator="in" result="face"/>
+    <feOffset in="SourceAlpha" dx=".9" dy="1.6" result="o1"/><feOffset in="SourceAlpha" dx=".45" dy=".8" result="o2"/>
+    <feMerge result="ext"><feMergeNode in="o1"/><feMergeNode in="o2"/></feMerge>
+    <feFlood flood-color="#0a0812"/><feComposite in2="ext" operator="in" result="side"/>
+    <feMerge><feMergeNode in="side"/><feMergeNode in="face"/></feMerge>
+  </filter>
+  <linearGradient id="mtC" x1="0" y1="0" x2=".3" y2="1"><stop offset="0" stop-color="#6b667f"/><stop offset=".5" stop-color="#2a2735"/><stop offset="1" stop-color="#111018"/></linearGradient>
 </defs></svg>
 
 
