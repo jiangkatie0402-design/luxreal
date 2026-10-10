@@ -682,15 +682,13 @@ html[lang="zh-CN"] .my-sec-title, html[lang="zh-CN"] .my-title { font-family: va
 .rg-meta .mono { color: var(--text-soft); font-weight: 600; }
 .rg-next { font-size: 14px; color: var(--text-soft); margin-top: 6px; } .rg-next b { color: #fff; font-weight: 600; }
 .rg-pts { display: grid; grid-template-columns: 1fr 1fr; margin-top: 22px; border: 1px solid var(--border-subtle); border-radius: var(--radius-sm); background: var(--bg-2); }
-.pt { display: flex; align-items: center; gap: 12px; padding: 14px 18px; min-width: 0; }
+.pt { display: flex; align-items: flex-start; gap: 12px; padding: 16px 18px; min-width: 0; }
+.pt .pt-s { margin-top: 2px; }
 .pt + .pt { border-left: 1px solid var(--border-subtle); }
-.pt-n { width: 26px; height: 26px; border-radius: 50%; flex-shrink: 0; display: grid; place-items: center; font-family: var(--font-mono); font-size: 11px; font-weight: 600;
-  color: var(--text-muted); border: 1px dashed var(--border-strong); }
-.pt.on .pt-n { color: #fff; border: 1px solid #7B5CFF; background: rgba(123,92,255,.2); }
-.pt.done .pt-n { color: #101012; border: 0; background: var(--grad); }
-.pt-k { flex: 1; min-width: 0; display: inline-flex; align-items: center; gap: 6px; font-size: 14.5px; font-weight: 600; }
+.pt-k { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 3px; font-size: 14.5px; font-weight: 600; }
+.pt-k small { font-size: 12.5px; font-weight: 400; color: var(--text-muted); line-height: 1.6; }
 .pt-s { font-size: 13px; color: var(--text-muted); white-space: nowrap; }
-.pt-s.busy { color: var(--ice); } .pt-s.ok { color: #fff; font-weight: 600; }
+.pt-s.busy { color: var(--ice); } .pt-s.ok { color: #B5ACFF; font-weight: 600; }
 .rg-note { margin-top: 10px; font-size: 12.5px; color: var(--text-muted); }
 @media (max-width: 640px) { .rg-pts { grid-template-columns: 1fr; } .pt + .pt { border-left: 0; border-top: 1px solid var(--border-subtle); } .pt { padding: 12px 14px; } .rg-top .btn { width: 100%; } }
 .reg-row { display: flex; align-items: center; gap: 20px; flex-wrap: wrap; }
@@ -1928,7 +1926,7 @@ document.querySelectorAll('.res-main').forEach(card => card.addEventListener('po
     'pt.reg': ['报名奖励', 'Registration credits'], 'pt.team': ['团队奖励', 'Team credits'], 'pt.afterReg': ['报名后发放', 'After you register'],
     'pt.afterTopic': ['提交选题后发放', 'After your team submits a topic'], 'pt.pending': ['发放中', 'Processing'], 'pt.done': ['已到账 · {d}', 'Arrived · {d}'],
     'pt.note': ['积分到账以 Aholo 账户中的积分记录为准', 'Credits are confirmed by the history in your Aholo account'],
-    'pt.teamTip': ['团队首次提交选题时发放，按当时的队员平均分配；之后加入的成员不补发，退出或换队不重复获得。', 'Granted once, when the team first submits its topic, split evenly among the members at that moment; later members don’t receive it, and leaving or switching teams doesn’t earn it again.'],
+    'pt.teamTip': ['每个团队仅发放一次，按提交选题时的队员平均分配；后续加入成员不补发，退出或换队不重复获得', 'Once per team, split evenly among the members when the topic is submitted; later members don’t receive it, and leaving or switching teams doesn’t earn it again'],
     'reg.waitTopic': ['等待队长提交选题，提交后全队领取团队积分', 'Waiting for the captain to submit the topic — the whole team gets credits then'],
     'team.capT': ['队长', 'Captain'], 'team.memT': ['队员', 'Members'], 'jr.applying': ['申请加入', 'Wants to join'],
     'team.noMem': ['暂无队员，分享团队编号邀请伙伴加入', 'No members yet — share your team code to invite teammates'],
@@ -2265,11 +2263,11 @@ document.querySelectorAll('.res-main').forEach(card => card.addEventListener('po
       const st = rewardStatus(since);
       return st.done ? `<span class="pt-s ok">${T('pt.done', { d: fmtDate(st.at) })}</span>` : `<span class="pt-s busy">${T('pt.pending')}</span>`;
     };
-    const cell = (cls, n, label, stHtml, extra) => `<div class="pt ${cls}"><span class="pt-n">${n}</span><span class="pt-k">${label}${extra || ''}</span>${stHtml}</div>`;
+    const cell = (cls, n, label, desc, stHtml) => `<div class="pt ${cls}"><span class="pt-k">${label}<small>${desc}</small></span>${stHtml}</div>`;
     const regDone = regSince != null && rewardStatus(regSince).done, teamDone = teamSince != null && rewardStatus(teamSince).done;
     const pts = `<div class="rg-pts">
-        ${cell(regDone ? 'done' : regSince != null ? 'on' : '', '01', T('pt.reg'), status(regSince, T('pt.afterReg')))}
-        ${cell(teamDone ? 'done' : teamSince != null ? 'on' : '', '02', T('pt.team'), status(teamSince, T('pt.afterTopic')), ' ' + tip(T('pt.teamTip')))}
+        ${cell(regDone ? 'done' : regSince != null ? 'on' : '', '01', T('pt.reg'), T('rw.once'), status(regSince, T('pt.afterReg')))}
+        ${cell(teamDone ? 'done' : teamSince != null ? 'on' : '', '02', T('pt.team'), T('pt.teamTip'), status(teamSince, T('pt.afterTopic')))}
       </div><p class="rg-note">${T('pt.note')}</p>`;
     scheduleRewardRefresh(regSince, teamSince);
     if (!p) {
@@ -2281,12 +2279,11 @@ document.querySelectorAll('.res-main').forEach(card => card.addEventListener('po
     const topic = tm && tm.topic, confirmed = tm && tm.confirmed;
     const needTopic = confirmed && !topic;
     const badge = confirmed ? `<span class="badge ok">${T('reg.teamed')}</span>` : `<span class="badge ok">${T('reg.done')}</span>`;
-    const meta = [`${T('reg.id')} <span class="mono">${esc(p.id)}</span>`, T('role.' + p.role), p.city ? esc(p.city) : ''].filter(Boolean).join(' · ');
     const next = needTopic ? (tm.captain ? T('reg.topicD') : T('reg.waitTopic')) : topic ? T('tp.done') + '<b>' + esc(topic.title) + '</b>' : '';
     const btn = confirmed && open && tm.captain ? `<button type="button" class="btn ${topic ? 'btn-ghost' : 'btn-primary'}" data-act="topic">${T(topic ? 'tp.edit' : 'tp.btn')}</button>` : '';
     $('#myReg').innerHTML = `<div class="rg-top"><span class="reg-avatar on">${esc(p.name.slice(0, 1).toUpperCase())}</span>
         <div class="rg-main"><div class="rg-name"><h3>${needTopic ? T('reg.topicT') : esc(p.name)}</h3>${badge}</div>
-          <p class="rg-meta">${needTopic ? esc(p.name) + ' · ' : ''}${meta}</p>${next ? `<p class="rg-next">${next}</p>` : ''}</div>
+          ${next ? `<p class="rg-next">${next}</p>` : ''}</div>
         ${btn}</div>${pts}`;
   }
 
