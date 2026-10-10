@@ -362,7 +362,7 @@ html[lang="zh-CN"] .sec-title { letter-spacing: .02em; line-height: 1.22; }
 .lb-box { position: relative; width: min(1100px, 100%); }
 .lb-box video { display: block; width: 100%; max-height: calc(100vh - 140px); border-radius: var(--radius-sm); background: #000; border: 1px solid var(--border-strong); }
 .lb-cap { margin-top: 12px; font-size: 15px; font-weight: 600; }
-.lb-x { position: absolute; right: 0; top: -46px; width: 36px; height: 36px; border-radius: 50%; border: 1px solid var(--border-strong); background: rgba(5,5,6,.7); color: #fff; font-size: 20px; line-height: 1; cursor: pointer; }
+.lb-x { position: absolute; z-index: 2; right: 12px; top: 12px; width: 36px; height: 36px; border-radius: 50%; border: 1px solid var(--border-strong); background: rgba(5,5,6,.7); color: #fff; font-size: 20px; line-height: 1; cursor: pointer; }
 .lb-x:hover { border-color: var(--ice); }
 .demo-art { display: block; width: 100%; height: auto; aspect-ratio: 16 / 10; }
 .demo-vid { object-fit: cover; background: #000; }
@@ -1110,6 +1110,13 @@ body.modal-open { overflow: hidden; }
 </style>
 </head>
 <body>
+<svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false"><defs>
+  <!-- icon materials: chrome highlight / purple-lit steel / dark gunmetal (matches the KV renders) -->
+  <linearGradient id="mtA" x1="0" y1="0" x2=".35" y2="1"><stop offset="0" stop-color="#ffffff"/><stop offset=".32" stop-color="#d8d5e8"/><stop offset=".5" stop-color="#8d88a3"/><stop offset=".62" stop-color="#ecebf5"/><stop offset="1" stop-color="#5f5a78"/></linearGradient>
+  <linearGradient id="mtB" x1="0" y1="0" x2=".4" y2="1"><stop offset="0" stop-color="#d9d0ff"/><stop offset=".38" stop-color="#7b5cff"/><stop offset=".56" stop-color="#2a1f63"/><stop offset=".78" stop-color="#9a86ff"/><stop offset="1" stop-color="#3b2b8f"/></linearGradient>
+  <linearGradient id="mtC" x1="0" y1="0" x2=".3" y2="1"><stop offset="0" stop-color="#5a5570"/><stop offset=".55" stop-color="#22202c"/><stop offset="1" stop-color="#0e0d14"/></linearGradient>
+</defs></svg>
+
 
 <!-- ======================= NAV ======================= -->
 <header class="nav" id="nav">
@@ -1241,10 +1248,10 @@ body.modal-open { overflow: hidden; }
 
 
     <div class="perks">
-      <div class="perk reveal"><span class="ico"><svg viewBox="0 0 24 24" aria-hidden="true"><path fill="#B5ACFF" d="M12 1.5 21.5 7 12 12.5 2.5 7Z"/><path fill="#7B5CFF" d="M2 8.6 11 13.8V23L2 17.8Z"/><path fill="#3E2C99" d="M13 13.8 22 8.6V17.8L13 23Z"/></svg></span><h4 data-i18n="pk1.t">群核核心3D技术支持</h4><p data-i18n="pk1.d0">参赛选手将获得群核核心3D工具使用权限及算力支持。</p></div>
-      <div class="perk reveal d1"><span class="ico"><svg viewBox="0 0 24 24" aria-hidden="true"><path fill="#B5ACFF" d="M12 3 1 8.6 12 14.2 20.5 9.9V16H22.5V8.6Z"/><path fill="#7B5CFF" d="M5 11.6V16.6L12 20.6 19 16.6V11.6L12 15.2Z"/></svg></span><h4 data-i18n="pk2.t">多方面培育服务</h4><p data-i18n="pk2.d0">我们将在北京、深圳、上海联合高校举办线下 Workshop，并邀请高校专家现场辅导。</p><p data-i18n="pk2.d1">同时提供线上学习资源、专题直播和社群答疑。</p></div>
-      <div class="perk reveal d2"><span class="ico"><svg viewBox="0 0 24 24" aria-hidden="true"><path fill="#3E2C99" d="M15 3H19L20.5 4.5V9L19 10.5H15L13.5 9V4.5Z"/><path fill="#3E2C99" d="M13 12.5H21L23 15.5V21H13Z"/><path fill="#B5ACFF" d="M6.5 2H11.5L13 3.5V9L11.5 10.5H6.5L5 9V3.5Z"/><path fill="#7B5CFF" d="M3.5 12.5H14.5L17 16V22H1V16Z"/></svg></span><h4 data-i18n="pk3.t">集结行业前沿专家学者、生态伙伴</h4><p data-i18n="pk3.d0">技术专家、高校学者、科技达人及生态企业代表将组成专业评审团，并邀请AI从业者参与玩家评审，让优秀创意被看见。</p></div>
-      <div class="perk reveal d3"><span class="ico"><svg viewBox="0 0 24 24" aria-hidden="true"><path fill="#B5ACFF" d="M12 1 15 8.3 23 9 17 14.3 18.8 22.2 12 18 5.2 22.2 7 14.3 1 9 9 8.3Z"/><path fill="#3E2C99" d="M12 8 14.6 12 12 16 9.4 12Z"/></svg></span><h4 data-i18n="pk4.t">多重激励，人人都有机会摘星</h4><p data-i18n="pk4.d0">32万人民币总奖金池虚位以待，多样化的荣誉激励体系，让每个参赛者都有机会站上领奖台。</p></div>
+      <div class="perk reveal"><span class="ico"><svg viewBox="0 0 24 24" aria-hidden="true"><path fill="url(#mtA)" d="M12 1.5 21.5 7 12 12.5 2.5 7Z"/><path fill="url(#mtB)" d="M2 8.6 11 13.8V23L2 17.8Z"/><path fill="url(#mtC)" d="M13 13.8 22 8.6V17.8L13 23Z"/></svg></span><h4 data-i18n="pk1.t">群核核心3D技术支持</h4><p data-i18n="pk1.d0">参赛选手将获得群核核心3D工具使用权限及算力支持。</p></div>
+      <div class="perk reveal d1"><span class="ico"><svg viewBox="0 0 24 24" aria-hidden="true"><path fill="url(#mtA)" d="M12 3 1 8.6 12 14.2 20.5 9.9V16H22.5V8.6Z"/><path fill="url(#mtB)" d="M5 11.6V16.6L12 20.6 19 16.6V11.6L12 15.2Z"/></svg></span><h4 data-i18n="pk2.t">多方面培育服务</h4><p data-i18n="pk2.d0">我们将在北京、深圳、上海联合高校举办线下 Workshop，并邀请高校专家现场辅导。</p><p data-i18n="pk2.d1">同时提供线上学习资源、专题直播和社群答疑。</p></div>
+      <div class="perk reveal d2"><span class="ico"><svg viewBox="0 0 24 24" aria-hidden="true"><path fill="url(#mtC)" d="M15 3H19L20.5 4.5V9L19 10.5H15L13.5 9V4.5Z"/><path fill="url(#mtC)" d="M13 12.5H21L23 15.5V21H13Z"/><path fill="url(#mtA)" d="M6.5 2H11.5L13 3.5V9L11.5 10.5H6.5L5 9V3.5Z"/><path fill="url(#mtB)" d="M3.5 12.5H14.5L17 16V22H1V16Z"/></svg></span><h4 data-i18n="pk3.t">集结行业前沿专家学者、生态伙伴</h4><p data-i18n="pk3.d0">技术专家、高校学者、科技达人及生态企业代表将组成专业评审团，并邀请AI从业者参与玩家评审，让优秀创意被看见。</p></div>
+      <div class="perk reveal d3"><span class="ico"><svg viewBox="0 0 24 24" aria-hidden="true"><path fill="url(#mtA)" d="M12 1 15 8.3 23 9 17 14.3 18.8 22.2 12 18 5.2 22.2 7 14.3 1 9 9 8.3Z"/><path fill="url(#mtC)" d="M12 8 14.6 12 12 16 9.4 12Z"/></svg></span><h4 data-i18n="pk4.t">多重激励，人人都有机会摘星</h4><p data-i18n="pk4.d0">32万人民币总奖金池虚位以待，多样化的荣誉激励体系，让每个参赛者都有机会站上领奖台。</p></div>
     </div>
   </div>
 </section>
@@ -1331,7 +1338,7 @@ body.modal-open { overflow: hidden; }
 
     <div class="pz-special reveal">
       <div class="pz-sp-main">
-        <span class="pz-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><path fill="#B5ACFF" d="M5.5 2H18.5V9C18.5 12.6 15.6 15.5 12 15.5S5.5 12.6 5.5 9Z"/><path fill="#7B5CFF" d="M1 3.5H4.5V7.5C4.5 8.6 5 9.6 5.9 10.2L4.9 12C2.5 11 1 8.9 1 6.5Z M23 3.5H19.5V7.5C19.5 8.6 19 9.6 18.1 10.2L19.1 12C21.5 11 23 8.9 23 6.5Z"/><path fill="#7B5CFF" d="M10.5 15.5H13.5V18.5H17L18 22H6L7 18.5H10.5Z"/><path fill="#3E2C99" d="M12 5 13.4 7.8 16.4 8.2 14.2 10.2 14.8 13.2 12 11.7 9.2 13.2 9.8 10.2 7.6 8.2 10.6 7.8Z"/></svg></span>
+        <span class="pz-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><path fill="url(#mtA)" d="M5.5 2H18.5V9C18.5 12.6 15.6 15.5 12 15.5S5.5 12.6 5.5 9Z"/><path fill="url(#mtB)" d="M1 3.5H4.5V7.5C4.5 8.6 5 9.6 5.9 10.2L4.9 12C2.5 11 1 8.9 1 6.5Z M23 3.5H19.5V7.5C19.5 8.6 19 9.6 18.1 10.2L19.1 12C21.5 11 23 8.9 23 6.5Z"/><path fill="url(#mtB)" d="M10.5 15.5H13.5V18.5H17L18 22H6L7 18.5H10.5Z"/><path fill="url(#mtC)" d="M12 5 13.4 7.8 16.4 8.2 14.2 10.2 14.8 13.2 12 11.7 9.2 13.2 9.8 10.2 7.6 8.2 10.6 7.8Z"/></svg></span>
         <div><span class="prize-rank" data-i18n="p0.r">特别奖</span><p class="pz-sp-note" data-i18n="p0.n">空间智能生态特别奖</p></div>
       </div>
       <div class="pz-sp-amt"><div class="prize-amt grad-text"><sup>¥</sup>100,000</div></div>
@@ -1398,14 +1405,14 @@ body.modal-open { overflow: hidden; }
       <div class="jr-head"><h3 class="rules-title" data-i18n="jg.title">评委</h3></div>
       <div class="jg-grid">
         <article class="jg-card jg-pro" id="jgPro">
-          <header class="jg-head"><span class="jg-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><path fill="#B5ACFF" d="M12 1 21 4.5V11C21 16.6 17.4 21.2 12 23 6.6 21.2 3 16.6 3 11V4.5Z"/><path fill="#7B5CFF" d="M12 1V23C6.6 21.2 3 16.6 3 11V4.5Z"/><path fill="#3E2C99" d="M10.4 16.2 6.4 12.2 8.2 10.4 10.4 12.6 15.8 7.2 17.6 9Z"/></svg></span><div><h4 data-i18n="jg.pro">专业评委</h4><p data-i18n="jg.proD">用专业视角选出最具实力与应用场景的作品</p></div></header>
+          <header class="jg-head"><span class="jg-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><path fill="url(#mtA)" d="M12 1 21 4.5V11C21 16.6 17.4 21.2 12 23 6.6 21.2 3 16.6 3 11V4.5Z"/><path fill="url(#mtB)" d="M12 1V23C6.6 21.2 3 16.6 3 11V4.5Z"/><path fill="url(#mtC)" d="M10.4 16.2 6.4 12.2 8.2 10.4 10.4 12.6 15.8 7.2 17.6 9Z"/></svg></span><div><h4 data-i18n="jg.pro">专业评委</h4><p data-i18n="jg.proD">用专业视角选出最具实力与应用场景的作品</p></div></header>
           <!-- Filled from JUDGES in the script below; while it is empty, one placeholder profile is shown. -->
           <div class="jg-list" id="jgList">
             <div class="jg-person is-tba"><span class="jg-ava"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"><circle cx="12" cy="9" r="3.6"/><path d="M5 20c1.2-3.6 3.8-5.4 7-5.4s5.8 1.8 7 5.4"/></svg></span><div class="jg-info"><h5 data-i18n="jg.tbaName">评委阵容陆续公布</h5><p class="jg-role" data-i18n="jg.tbaD">敬请期待…</p><span class="jg-sk"></span><span class="jg-sk s2"></span></div></div>
           </div>
         </article>
         <article class="jg-card jg-player">
-          <header class="jg-head"><span class="jg-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><path fill="#B5ACFF" d="M5 6H19L22 9 23.5 16.5 21 19.5 16.5 16H7.5L3 19.5 .5 16.5 2 9Z"/><path fill="#3E2C99" d="M6.5 9.5H8.5V11.5H10.5V13.5H8.5V15.5H6.5V13.5H4.5V11.5H6.5Z"/><path fill="#3E2C99" d="M15 9.5H17.5V12H15Z M17.5 12.5H20V15H17.5Z"/></svg></span><div><h4 data-i18n="jg.player">玩家评委</h4><p data-i18n="jg.playerD">用真实互动选出最心仪与最有意思的作品</p></div></header>
+          <header class="jg-head"><span class="jg-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><path fill="url(#mtA)" d="M5 6H19L22 9 23.5 16.5 21 19.5 16.5 16H7.5L3 19.5 .5 16.5 2 9Z"/><path fill="url(#mtC)" d="M6.5 9.5H8.5V11.5H10.5V13.5H8.5V15.5H6.5V13.5H4.5V11.5H6.5Z"/><path fill="url(#mtC)" d="M15 9.5H17.5V12H15Z M17.5 12.5H20V15H17.5Z"/></svg></span><div><h4 data-i18n="jg.player">玩家评委</h4><p data-i18n="jg.playerD">用真实互动选出最心仪与最有意思的作品</p></div></header>
           <div class="jg-stat"><b>50</b><span data-i18n="jg.playerN">名资深 AI 从业者</span></div>
           <p class="jg-note" data-i18n="jg.playerNote">组成玩家评委团，从大众角度参与奖项评选。</p>
         </article>
@@ -1593,7 +1600,7 @@ body.modal-open { overflow: hidden; }
     <button type="button" class="modal-close" data-close-modal aria-label="Close"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><path d="M6 6l12 12M18 6 6 18"/></svg></button>
 
     <div class="modal-pane" data-pane="login">
-      <span class="modal-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><path fill="#B5ACFF" d="M9 1H15L17 3V9L15 11H9L7 9V3Z"/><path fill="#7B5CFF" d="M5 13H19L22 17V23H2V17Z"/></svg></span>
+      <span class="modal-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><path fill="url(#mtA)" d="M9 1H15L17 3V9L15 11H9L7 9V3Z"/><path fill="url(#mtB)" d="M5 13H19L22 17V23H2V17Z"/></svg></span>
       <h3 class="modal-title" data-i18n="m.loginT">登录 Aholo 账号</h3>
       <p class="modal-desc" data-i18n="m.loginD">登录 Aholo 账号，报名参赛并管理你的团队。</p>
       <button type="button" class="btn btn-primary btn-block" id="loginBtn" data-i18n="m.loginBtn">登录 Aholo 账号</button>
@@ -2151,7 +2158,7 @@ document.querySelectorAll('.res-main').forEach(card => card.addEventListener('po
     async demoApprove() { await wait(400); const s = load(); const code = s.joinReq && s.joinReq.code; if (!code) return s; s.joinReq = null; s.team = { id: code, name: T('team.demoName') + code, captain: false, confirmed: true, rewarded: false, members: [{ name: T('team.demoCaptain'), captain: true }, { name: s.profile.name, me: true, pid: s.profile.id }] }; return save(s); },
     // Demo only: a real request arrives from another participant
     async demoRequest() { await wait(300); const s = load(); if (s.team && s.team.captain) { const pid = 'AH26-' + rid(5, '0123456789'), r = { name: T('mb.demoName') + pid.slice(-3), pid }; if (s.team.shared) boardOp(s.team.id, t => { (t.requests = t.requests || []).push(r); }); else (s.team.requests = s.team.requests || []).push(r); } return save(sync(s)); },
-    async approveReq(i) { await wait(400); const s = load(); const tm = s.team; if (tm && tm.captain && tm.requests && tm.requests[i] && tm.members.length < TEAM_MAX) { const r = tm.requests[i]; if (tm.shared) boardOp(tm.id, t => { t.requests = t.requests.filter(x => x.pid !== r.pid); t.members.push({ name: r.name, pid: r.pid, captain: false, rewarded: false }); t.confirmed = true; }); else { tm.members.push(r); tm.requests.splice(i, 1); tm.confirmed = true; } } return save(sync(s)); },   // approving a teammate forms the team — no separate confirmation
+    async approveReq(i) { await wait(400); const s = load(); const tm = s.team; if (tm && tm.captain && tm.requests && tm.requests[i] && tm.members.length < TEAM_MAX) { const r = tm.requests[i]; if (tm.shared) boardOp(tm.id, t => { t.requests = t.requests.filter(x => x.pid !== r.pid); t.members.push({ name: r.name, pid: r.pid, captain: false, rewarded: false }); }); else { tm.members.push(r); tm.requests.splice(i, 1); } } return save(sync(s)); },
     async rejectReq(i) { await wait(300); const s = load(); const tm = s.team; if (tm && tm.captain && tm.requests && tm.requests[i]) { const r = tm.requests[i]; if (tm.shared) boardOp(tm.id, t => { t.requests = t.requests.filter(x => x.pid !== r.pid); (t.rejected = t.rejected || []).push(r.pid); }); else tm.requests.splice(i, 1); } return save(sync(s)); },
     // First confirmation grants the team reward to the members at that moment. The real status (processing → granted + date) comes from the server.
     async confirmTeam() { await wait(400); const s = load(); s.team.confirmed = true; pub(s); return save(s); },
@@ -2648,7 +2655,7 @@ document.querySelectorAll('.res-main').forEach(card => card.addEventListener('po
       <input type="file" name="${name}" id="wf-${name}" accept="${c.ext.map(x => '.' + x).join(',')}" hidden>
       <label for="wf-${name}" class="drop-empty"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 16V4M7 9l5-5 5 5"/><path d="M4 16v3a1 1 0 0 0 1 1h14a1 1 0 0 0 1-1v-3"/></svg>
         <span><b>${T('w.up.click')}</b>${T('w.up.or')}</span><small>${T('w.up.' + name, { mb: c.max })}</small></label>
-      <div class="drop-file"><svg viewBox="0 0 24 24" aria-hidden="true"><path fill="#B5ACFF" d="M4 1H15L20 6V23H4Z"/><path fill="#3E2C99" d="M15 1V6H20Z"/><path fill="#3E2C99" d="M7 10H17V12H7Z M7 14H17V16H7Z M7 18H13V20H7Z"/></svg>
+      <div class="drop-file"><svg viewBox="0 0 24 24" aria-hidden="true"><path fill="url(#mtA)" d="M4 1H15L20 6V23H4Z"/><path fill="url(#mtC)" d="M15 1V6H20Z"/><path fill="url(#mtC)" d="M7 10H17V12H7Z M7 14H17V16H7Z M7 18H13V20H7Z"/></svg>
         <span class="nm">${f ? esc(f.name) : ''}</span><span class="sz">${f ? fmtSize(f.size) : ''}</span>
         <label for="wf-${name}" class="link-btn">${T('w.up.replace')}</label><button type="button" class="link-btn" data-act="clearFile" data-f="${name}">${T('w.up.remove')}</button></div></div>`;
   }
