@@ -732,6 +732,21 @@ html[lang="zh-CN"] .my-sec-title, html[lang="zh-CN"] .my-title { font-family: va
 .icon-btn svg { width: 15px; height: 15px; }
 .team-meta.team-meta-2 { flex-direction: column; align-items: flex-start; gap: 6px; }
 .team-meta-2 > span { display: inline-flex; align-items: center; gap: 6px; flex-wrap: wrap; }
+.mb-grid { display: flex; flex-wrap: wrap; gap: 18px 14px; margin: 6px 0 22px; }
+.mb-person { position: relative; display: flex; flex-direction: column; align-items: center; gap: 6px; width: 92px; padding: 0; text-align: center; background: none; border: 0; color: inherit; font: inherit; }
+.mb-person .reg-avatar { width: 64px; height: 64px; font-size: 24px; margin-bottom: 4px; }
+.mb-person .nm { max-width: 100%; font-size: 13.5px; font-weight: 600; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.mb-person em { font-style: normal; font-size: 12px; color: var(--text-muted); }
+.mb-x { position: absolute; top: -4px; right: 10px; width: 24px; height: 24px; border-radius: 50%; display: grid; place-items: center; padding: 0; font-size: 15px; line-height: 1;
+  color: #fff; background: #2a2533; border: 1px solid var(--border-strong); cursor: pointer; transition: background .2s, border-color .2s; }
+.mb-x:hover, .mb-x:focus-visible { background: #e5484d; border-color: #e5484d; }
+.mb-add { cursor: pointer; }
+.mb-add .reg-avatar { background: transparent; border: 1.5px dashed rgba(152,141,255,.6); color: var(--ice); font-size: 30px; font-weight: 400; transition: border-color .2s, background .2s; }
+.mb-add:hover .reg-avatar { border-color: var(--ice); background: rgba(123,92,255,.12); }
+.mb-confirm { margin: -6px 0 18px; padding: 16px; border-radius: var(--radius-sm); border: 1px solid rgba(229,72,77,.45); background: rgba(229,72,77,.07); }
+.mb-confirm strong { display: block; font-size: 15px; margin-bottom: 4px; }
+.mb-confirm p { font-size: 13.5px; color: var(--text-soft); margin-bottom: 12px; }
+.mb-confirm .row { display: flex; justify-content: flex-end; gap: 10px; }
 .mb-list { margin: 4px 0 18px; }
 .mb-h { font-size: 15px; font-weight: 700; margin: 6px 0 4px; display: flex; align-items: center; gap: 8px; }
 .mb-reqs .who em.mono { font-family: var(--font-mono); font-size: 12px; }
@@ -1893,7 +1908,9 @@ document.querySelectorAll('.res-main').forEach(card => card.addEventListener('po
     'loc.other': ['其他（手动填写）', 'Other (type it in)'],
     'team.capT': ['队长', 'Captain'], 'team.memT': ['队员', 'Members'], 'jr.applying': ['申请加入', 'Wants to join'],
     'team.noMem': ['暂无队员，分享团队编号邀请伙伴加入', 'No members yet — share your team code to invite teammates'],
-    'mb.t': ['编辑团队成员', 'Edit members'], 'mb.d': ['当前 {n}/{max} 人。仅队长可调整成员，作品提交与组队截止后成员锁定。', '{n}/{max} members. Only the captain can change members; the roster locks at the submission and team deadline.'],
+    'mb.add': ['邀请队员', 'Invite'], 'mb.seats': ['还可加入 {r} 人', '{r} seat(s) left'], 'team.member': ['队员', 'Member'],
+    'mb.rmT': ['移除队员', 'Remove member'], 'mb.rmQ': ['确定将 {name} 移出团队吗？移出后对方需重新申请才能加入。', 'Remove {name} from the team? They’ll need to request again to rejoin.'], 'mb.rmOk': ['确认移除', 'Remove'], 'mb.cancel': ['取消', 'Cancel'],
+    'mb.t': ['编辑团队成员', 'Edit members'], 'mb.d': ['当前 {n}/{max} 人。点队员头像右上角的 × 可移除；作品提交与组队截止后成员锁定。', '{n}/{max} members. Tap × on a teammate to remove them; the roster locks at the submission and team deadline.'],
     'mb.hintLate': ['团队已确认，此后同意加入的成员不补发团队奖励。', 'The team is confirmed, so members approved from now on won’t receive the team reward.'],
     'mb.full': ['团队已满员，如需同意新申请请先移除成员。', 'The team is full. Remove a member before approving a request.'], 'mb.done': ['完成', 'Done'], 'mb.demoName': ['选手 ', 'Player '],
     'team.invite': ['邀请队员', 'Invite'], 'team.edit': ['编辑团队', 'Edit team'], 'team.saved': ['团队信息已更新', 'Team updated'],
@@ -2334,16 +2351,23 @@ document.querySelectorAll('.res-main').forEach(card => card.addEventListener('po
 
   /* ---------- 编辑团队: captain adds members by participant ID or removes them ---------- */
   const membersPane = $('#membersPane');
+  let pendingRemove = null;   // index awaiting the in-modal 确认移除
   function renderMembers() {
     const tm = state.team; if (!tm) { closeModal(); return; }
-    const full = tm.members.length >= TEAM_MAX, reqs = tm.requests || [];
     if (!tm.captain) { closeModal(); return; }
+    if (pendingRemove != null && !tm.members[pendingRemove]) pendingRemove = null;
+    const ini = n => esc(n.slice(0, 1).toUpperCase());
+    const people = tm.members.map((m, i) => `<div class="mb-person"><span class="reg-avatar on">${ini(m.name)}</span>
+        ${!m.captain ? `<button type="button" class="mb-x" data-act="askRemove" data-i="${i}" aria-label="${T('team.remove')} ${esc(m.name)}">×</button>` : ''}
+        <span class="nm">${esc(m.name)}</span><em>${m.captain ? T('team.captain') : T('team.member')}${m.me ? ' · ' + T('team.you') : ''}</em></div>`).join('');
+    const add = tm.members.length < TEAM_MAX ? `<button type="button" class="mb-person mb-add" data-act="invite"><span class="reg-avatar">+</span><span class="nm">${T('mb.add')}</span><em>${T('mb.seats', { r: TEAM_MAX - tm.members.length })}</em></button>` : '';
+    const who = pendingRemove != null ? tm.members[pendingRemove] : null;
     membersPane.innerHTML = `<h3 class="modal-title">${T('mb.t')}</h3><p class="modal-desc">${T('mb.d', { n: tm.members.length })}</p>
-      <ul class="members mb-list">${tm.members.map((m, i) => `<li><span class="reg-avatar${m.me ? ' on' : ''}">${esc(m.name.slice(0, 1).toUpperCase())}</span>
-        <span class="who">${esc(m.name)}${m.captain ? `<em>${T('team.captain')}</em>` : ''}${m.me ? `<em>${T('team.you')}</em>` : ''}</span>
-        ${!m.me ? `<button type="button" class="link-btn" data-act="remove" data-i="${i}">${T('team.remove')}</button>` : ''}</li>`).join('')}</ul>
-      <div class="mb-invite"><span>${T('team.code')}<span class="mono">${esc(tm.id)}</span></span><button type="button" class="btn btn-ghost btn-sm" data-act="copyInvite">${(isEN() ? EN : ZH)['m.invCopyText']}</button></div>
+      <div class="mb-grid">${people}${add}</div>
+      ${who ? `<div class="mb-confirm" role="alertdialog" aria-label="${T('mb.rmT')}"><strong>${T('mb.rmT')}</strong><p>${T('mb.rmQ', { name: esc(who.name) })}</p>
+        <div class="row"><button type="button" class="btn btn-ghost btn-sm" data-act="cancelRemove">${T('mb.cancel')}</button><button type="button" class="btn btn-danger btn-sm" data-act="remove" data-i="${pendingRemove}">${T('mb.rmOk')}</button></div></div>` : ''}
       <button type="button" class="btn btn-ghost btn-block" data-close-modal>${T('mb.done')}</button>`;
+    if (who) membersPane.querySelector('[data-act=cancelRemove]').focus();
   }
 
   async function run(fn, okMsg) {
@@ -2365,7 +2389,7 @@ document.querySelectorAll('.res-main').forEach(card => card.addEventListener('po
       $('#invCode').textContent = state.team.id;
       $('#invSeats').textContent = n >= TEAM_MAX ? T('team.fullSeats') : T('team.seats', { n, r: TEAM_MAX - n });
       openModal('invite');
-    } else if (a === 'edit') { renderMembers(); openModal('members'); }
+    } else if (a === 'edit') { pendingRemove = null; renderMembers(); openModal('members'); }
     else if (a === 'rename') {
       const f = modal.querySelector('[data-form=editTeam]');
       f.elements.teamName.value = state.team.name; f.querySelector('.field-error').textContent = ''; f.elements.teamName.removeAttribute('aria-invalid');
@@ -2376,7 +2400,9 @@ document.querySelectorAll('.res-main').forEach(card => card.addEventListener('po
     else if (a === 'demoRequest') run(() => api.demoRequest());
     else if (a === 'cancelJoin') run(() => api.cancelJoin(), T('jr.cancelled'));
     else if (a === 'demoApprove') run(() => api.demoApprove(), T('toast.join'));
-    else if (a === 'remove') { if (confirm(T('team.removeQ'))) run(() => api.removeMember(+btn.dataset.i), T('team.removed')); }
+    else if (a === 'askRemove') { pendingRemove = +btn.dataset.i; renderMembers(); }
+    else if (a === 'cancelRemove') { pendingRemove = null; renderMembers(); }
+    else if (a === 'remove') { pendingRemove = null; run(() => api.removeMember(+btn.dataset.i), T('team.removed')); }
     else if (a === 'topic') openTopic();
     else if (a === 'disband') { if (confirm(T('team.disbandQ'))) run(() => api.leaveTeam()); }
     else if (a === 'leave') { if (confirm(T('team.leaveQ'))) run(() => api.leaveTeam()); }
