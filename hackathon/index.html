@@ -747,10 +747,10 @@ html[lang="zh-CN"] .ms-now h3 { font-family: var(--font-title); font-weight: 400
 .my-steps li.cur { color: #fff; font-weight: 700; } .my-steps li.cur b { color: #B5ACFF; opacity: 1; }
 .my-sec { margin-top: 56px; }
 /* stage tabs */
-.my-steps li { cursor: pointer; border-radius: 0 0 10px 10px; padding-bottom: 10px; transition: background .25s, color .3s; }
-.my-steps li:not(.locked):hover { background: rgba(123,92,255,.07); }
-.my-steps li.sel { background: linear-gradient(180deg, rgba(123,92,255,.16), rgba(123,92,255,0)); color: #fff; }
-.my-steps li.sel { box-shadow: inset 0 -2px 0 #B5ACFF; }
+.my-steps li { cursor: pointer; padding-bottom: 6px; transition: color .3s; }
+.my-steps li:not(.locked):hover { color: #fff; }
+.my-steps li.sel { color: #fff; font-weight: 700; }
+.my-steps li.sel b { color: #B5ACFF; opacity: 1; }
 .my-steps li.locked { cursor: not-allowed; }
 .my-steps li.locked b::after { content: ' 🔒︎'; font-size: 10px; opacity: .6; filter: grayscale(1); }
 #myBody .my-sec[hidden] { display: none; }
@@ -881,6 +881,12 @@ html[lang="zh-CN"] .my-sec-title, html[lang="zh-CN"] .my-title { font-family: va
 .tm-group .members { margin: 0; }
 .tm-group .members li { border-bottom: 0; padding: 10px 0; }
 .tm-group .members li.is-req { gap: 12px; }
+/* captain: clicking a member opens the same editor as 编辑团队 */
+.tm-group .members li.tm-edit { cursor: pointer; margin: 0 -10px; padding-left: 10px; padding-right: 10px; border-radius: var(--radius-sm); transition: background .2s; }
+.tm-group .members li.tm-edit:hover, .tm-group .members li.tm-edit:focus-visible { background: rgba(123,92,255,.1); outline: none; }
+.tm-group .members li.tm-edit::after { content: '编辑'; margin-left: auto; font-size: 12.5px; color: var(--ice); opacity: 0; transition: opacity .2s; }
+html[lang="en"] .tm-group .members li.tm-edit::after { content: 'Edit'; }
+.tm-group .members li.tm-edit:hover::after, .tm-group .members li.tm-edit:focus-visible::after { opacity: 1; }
 .tm-group .members li.is-req .reg-avatar { background: transparent; border: 1px dashed var(--border-strong); color: var(--text-muted); }
 .tm-group .members li.is-req .who { color: var(--text-soft); }
 .tm-group .members li.is-req .who em.mono { font-family: var(--font-mono); font-size: 12px; }
@@ -2545,7 +2551,7 @@ document.querySelectorAll('.res-main').forEach(card => card.addEventListener('po
       return;
     }
     // 队长 on top, then 队员; a captain sees join requests inline as grey rows with 拒绝 / 同意 (approved → a full-colour member)
-    const row = m => `<li><span class="reg-avatar on">${esc(m.name.slice(0, 1).toUpperCase())}</span>
+    const row = m => `<li${tm.captain ? ` class="tm-edit" data-act="edit" role="button" tabindex="0" title="${T('team.edit')}"` : ''}><span class="reg-avatar on">${esc(m.name.slice(0, 1).toUpperCase())}</span>
       <span class="who">${esc(m.name)}${m.me ? `<em>${T('team.you')}</em>` : ''}</span></li>`;
     const reqs = tm.captain ? (tm.requests || []) : [], full = tm.members.length >= TEAM_MAX;
     const reqRows = reqs.map((r, i) => `<li class="is-req"><span class="reg-avatar">${esc(r.name.slice(0, 1).toUpperCase())}</span>
@@ -2927,6 +2933,7 @@ document.querySelectorAll('.res-main').forEach(card => card.addEventListener('po
     myTab = k; applyTab();
   }
   $('#mySteps').addEventListener('click', e => { const li = e.target.closest('li'); if (li) goTab(STAGES[[...li.parentNode.children].indexOf(li)]); });
+  $('#myTeam').addEventListener('keydown', e => { const li = e.target.closest('li.tm-edit'); if (li && (e.key === 'Enter' || e.key === ' ')) { e.preventDefault(); li.click(); } });
   $('#mySteps').addEventListener('keydown', e => { if ((e.key === 'Enter' || e.key === ' ') && e.target.closest('li')) { e.preventDefault(); e.target.click(); } });
   document.addEventListener('click', e => { const g = e.target.closest('[data-goto]'); if (g) { e.preventDefault(); goTab(g.dataset.goto); $('#mySteps').scrollIntoView({ block: 'nearest', behavior: 'smooth' }); } });
 
