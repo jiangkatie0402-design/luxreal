@@ -2154,7 +2154,7 @@ document.querySelectorAll('.res-main').forEach(card => card.addEventListener('po
   const boardOp = (code, fn) => { const b = getBoard(); if (b.teams[code]) { fn(b.teams[code]); setBoard(b); } };
   // demo stand-in for what the captain's own tab would write when submitting the topic
   const captainTopic = tm => {
-    const apply = t => { if (!t.topic) t.topic = { title: isEN() ? 'Breathing City' : '会呼吸的城市', track: 'other', trackOther: isEN() ? 'Urban renewal' : '城市更新', desc: '' };
+    const apply = t => { if (!t.topic) t.topic = { title: isEN() ? 'Breathing City' : '会呼吸的城市', desc: '' };
       t.confirmed = true; if (!t.rewarded) { t.rewarded = true; t.rewardCount = t.members.length; t.rewardSince = Date.now(); t.members.forEach(m => { m.rewarded = true; }); } };
     if (tm.shared) boardOp(tm.id, apply); else apply(tm);
   };
@@ -2407,29 +2407,22 @@ document.querySelectorAll('.res-main').forEach(card => card.addEventListener('po
     const d = tm.topic || {}, v = k => esc(d[k] || '');
     topicForm.innerHTML = `<h3 class="modal-title">${T(tm.topic ? 'tp.edit' : 'tp.btn')}</h3><p class="modal-desc">${T('tp.modalD')}</p>
       <label class="field"><span>${T('tp.title')}</span><input type="text" name="title" maxlength="40" value="${v('title')}"><em class="field-error"></em></label>
-      <label class="field"><span>${T('w.track')}</span><select name="track"><option value="">${T('w.trackNone')}</option>${TRACKS.map(t => `<option value="${t}"${d.track === t ? ' selected' : ''}>${T('w.t.' + t)}</option>`).join('')}</select>
-        <input type="text" name="trackOther" maxlength="20" placeholder="${T('w.trackOtherPh')}" aria-label="${T('w.trackOtherPh')}" value="${v('trackOther')}"${d.track === 'other' ? '' : ' hidden'} style="margin-top:8px"><em class="field-error"></em></label>
       <label class="field"><span>${T('tp.desc')}</span><textarea name="desc" maxlength="500" placeholder="${T('tp.descPh')}">${v('desc')}</textarea><em class="field-error"></em></label>
       <button type="submit" class="btn btn-primary btn-block">${T('tp.save')}</button>`;
     openModal('topic');
   }
-  topicForm.addEventListener('change', e => {
-    if (e.target.name !== 'track') return;
-    const o = topicForm.elements.trackOther; o.hidden = e.target.value !== 'other'; if (!o.hidden) o.focus();
-  });
   topicForm.addEventListener('input', e => { const f = e.target.closest('.field'); if (f && e.target.getAttribute('aria-invalid') === 'true') { f.querySelector('.field-error').textContent = ''; e.target.setAttribute('aria-invalid', 'false'); } });
   topicForm.addEventListener('submit', e => {
     e.preventDefault(); if (busy) return;
     const g = k => topicForm.elements[k].value.trim();
-    const d = { title: g('title'), track: g('track'), trackOther: g('track') === 'other' ? g('trackOther') : '', desc: g('desc') };
+    const d = { title: g('title'), desc: g('desc') };
     const errs = {
       title: d.title.length < 2 || d.title.length > 40 ? T('tp.e.title') : '',
-      track: !d.track ? T('w.e.track') : d.track === 'other' && !d.trackOther ? T('w.e.trackOther') : '',
       desc: d.desc.length < 10 || d.desc.length > 500 ? T('tp.e.desc') : '',
     };
-    Object.keys(errs).forEach(k => { const el = topicForm.elements[k === 'track' && d.track === 'other' ? 'trackOther' : k]; el.closest('.field').querySelector('.field-error').textContent = errs[k]; el.setAttribute('aria-invalid', errs[k] ? 'true' : 'false'); });
+    Object.keys(errs).forEach(k => { const el = topicForm.elements[k]; el.closest('.field').querySelector('.field-error').textContent = errs[k]; el.setAttribute('aria-invalid', errs[k] ? 'true' : 'false'); });
     const first = Object.keys(errs).find(k => errs[k]);
-    if (first) { topicForm.elements[first === 'track' && d.track === 'other' ? 'trackOther' : first].focus(); return; }
+    if (first) { topicForm.elements[first].focus(); return; }
     busy = true;
     api.submitTopic(d).then(st => { state = st; busy = false; closeModal(); toast(T('tp.saved')); renderMy(); }, () => { busy = false; toast(T('err.net')); });
   });
