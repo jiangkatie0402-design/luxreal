@@ -101,6 +101,23 @@ button { font: inherit; color: inherit; background: none; border: 0; cursor: poi
 .btn:hover svg { transform: translateX(3px); }
 .btn-primary { background: var(--primary); color: var(--primary-contrast); box-shadow: 0 0 0 0 rgba(181,172,255,0); }
 .btn-primary:hover { background: #fff; box-shadow: 0 8px 40px -8px rgba(106,72,255,.55); }
+/* nav account: 登录 matches the KV primary CTA; once logged in it becomes an avatar with a small menu */
+#navAuth { color: #fff; font-weight: 700; background: #6A48FF; box-shadow: 0 0 0 1px rgba(181,172,255,.55), 0 6px 22px -6px rgba(123,92,255,.85); }
+#navAuth:hover { background: #7B5CFF; box-shadow: 0 0 0 1px rgba(181,172,255,.8), 0 8px 28px -6px rgba(123,92,255,1); }
+#navAuth[hidden], .nav-user[hidden] { display: none !important; }
+.nav-user { position: relative; }
+.nav-ava { width: 38px; height: 38px; border-radius: 50%; display: grid; place-items: center; padding: 0; cursor: pointer; font-weight: 700; font-size: 16px; color: #fff;
+  background: radial-gradient(circle at 35% 30%, #9a86ff, #6A48FF 60%, #3E2C99); border: 2px solid rgba(181,172,255,.55); box-shadow: 0 0 14px -2px rgba(123,92,255,.8); transition: box-shadow .2s, border-color .2s; }
+.nav-ava:hover, .nav-ava[aria-expanded="true"] { border-color: #fff; box-shadow: 0 0 18px rgba(123,92,255,1); }
+.nav-ava.anon::before { content: ''; width: 16px; height: 16px; background: #fff; -webkit-mask: radial-gradient(circle at 50% 30%, #000 28%, transparent 30%), radial-gradient(ellipse 60% 45% at 50% 100%, #000 98%, transparent 100%); mask: radial-gradient(circle at 50% 30%, #000 28%, transparent 30%), radial-gradient(ellipse 60% 45% at 50% 100%, #000 98%, transparent 100%); }
+.nav-menu { position: absolute; right: 0; top: calc(100% + 10px); z-index: 60; min-width: 200px; padding: 6px; border-radius: var(--radius-sm); border: 1px solid var(--border-strong); background: #0d0c13; box-shadow: 0 18px 40px -10px rgba(0,0,0,.8); }
+.nav-menu[hidden] { display: none; }
+.nm-who { display: flex; flex-direction: column; gap: 2px; padding: 10px 12px 12px; margin-bottom: 4px; border-bottom: 1px solid var(--border-subtle); }
+.nm-who b { font-size: 14.5px; } .nm-who .mono { font-size: 12px; color: var(--text-muted); }
+.nm-item { display: block; width: 100%; text-align: left; padding: 9px 12px; border-radius: 8px; border: 0; background: none; color: var(--text-soft); font: inherit; font-size: 14px; cursor: pointer; }
+.nm-item:hover { background: rgba(123,92,255,.14); color: #fff; }
+.nm-item[hidden] { display: none; }
+.nm-out { color: #fca5a5; } .nm-out:hover { background: rgba(248,113,113,.12); color: #fecaca; }
 .btn-ghost { border: 1px solid var(--border-strong); color: var(--text); background: rgba(255,255,255,.02); }
 .btn-ghost:hover { border-color: #71717a; background: rgba(255,255,255,.05); }
 .btn-sm { height: 38px; padding: 0 18px; font-size: 14px; }
@@ -506,7 +523,14 @@ html[lang="zh-CN"] .sec-title { letter-spacing: .02em; line-height: 1.22; }
 .tl2-ctop { flex-wrap: nowrap; row-gap: 6px; }
 @media (max-width: 1199px) { .tl2-ctop { flex-wrap: wrap; } }
 .tl2-ctop .mono, .tl2-ctop .tl2-type { white-space: nowrap; }
-.tl2-ctop .tl2-type { font-size: 10.5px; font-weight: 600; padding: 1px 5px; letter-spacing: -.01em; }
+.tl2-ctop .tl2-type { margin-left: auto; font-size: 11px; font-weight: 600; padding: 0; border: 0; letter-spacing: 0; color: var(--text-muted); display: inline-flex; align-items: center; gap: 5px; }
+.tl2-ctop .tl2-type::before { content: ''; width: 5px; height: 5px; border-radius: 50%; background: currentColor; opacity: .8; }
+.tl2-ctop .tl2-live { color: #fda4af; } .tl2-ctop .tl2-on { color: var(--ice); }
+/* calmer cards: more air between the meta row, the title and the action */
+.tl2-cards .tl2-card { gap: 14px; padding: 20px 18px; }
+.tl2-cards .tl2-card .tl2-ctop { padding-bottom: 12px; border-bottom: 1px solid var(--border-subtle); }
+.tl2-cards .tl2-card h4 { font-size: 15.5px; }
+.tl2-cards .tl2-card .tl2-rsv { margin-top: auto; }
 .tl2-ctop { gap: 6px; } .tl2-ctop .mono { letter-spacing: -.02em; }
 .tl2-state[hidden] { display: none !important; }
 .tl2-cards { display: grid; grid-template-columns: repeat(5, 1fr); gap: 12px; }
@@ -1163,6 +1187,15 @@ body.modal-open { overflow: hidden; }
         <button type="button" data-lang="en" aria-pressed="false">EN</button>
       </div>
       <button type="button" class="btn btn-primary btn-sm" id="navAuth" data-i18n="nav.login">登录</button>
+      <div class="nav-user" id="navUser" hidden>
+        <button type="button" class="nav-ava" id="navAva" aria-haspopup="menu" aria-expanded="false"></button>
+        <div class="nav-menu" id="navMenu" role="menu" hidden>
+          <div class="nm-who"><b id="nmName"></b><span class="mono" id="nmId"></span></div>
+          <a href="#/my" role="menuitem" class="nm-item" data-i18n="nav.my">我的参赛</a>
+          <button type="button" role="menuitem" class="nm-item" id="nmReg" data-i18n="cta.register">立即报名</button>
+          <button type="button" role="menuitem" class="nm-item nm-out" id="nmOut" data-i18n="nav.logout">退出登录</button>
+        </div>
+      </div>
       <button type="button" class="menu-btn" id="menuBtn" aria-label="Menu" aria-expanded="false" aria-controls="navLinks"><span></span></button>
     </div>
   </div>
@@ -2251,10 +2284,17 @@ document.querySelectorAll('.res-main').forEach(card => card.addEventListener('po
     refreshAll();
     if (afterLogin === 'register' && !state.profile) openModal('register'); else closeModal();
   }));
-  $('#navAuth').addEventListener('click', async () => {
-    if (busy) return;
-    if (!state.loggedIn) { afterLogin = 'close'; openModal('login'); return; }
-    busy = true;
+  // 登录 behaves like 立即报名: log in, then straight into the registration form
+  $('#navAuth').addEventListener('click', () => { if (!busy) startRegister(); });
+  const navMenu = $('#navMenu'), navAva = $('#navAva');
+  function closeNavMenu() { navMenu.hidden = true; navAva.setAttribute('aria-expanded', 'false'); }
+  navAva.addEventListener('click', e => { e.stopPropagation(); const open = navMenu.hidden; navMenu.hidden = !open; navAva.setAttribute('aria-expanded', String(open)); });
+  document.addEventListener('click', e => { if (!navMenu.hidden && !e.target.closest('#navUser')) closeNavMenu(); });
+  document.addEventListener('keydown', e => { if (e.key === 'Escape') closeNavMenu(); });
+  navMenu.addEventListener('click', e => { if (e.target.closest('.nm-item')) setTimeout(closeNavMenu); });
+  $('#nmReg').addEventListener('click', () => startRegister());
+  $('#nmOut').addEventListener('click', async () => {
+    if (busy) return; busy = true;
     try { state = await api.logout(); toast(T('toast.logout')); } catch (e) { toast(T('err.net')); }
     finally { busy = false; refreshAll(); }
   });
@@ -2341,9 +2381,16 @@ document.querySelectorAll('.res-main').forEach(card => card.addEventListener('po
       el.setAttribute('href', registered() ? '#/my' : '#register');
     });
     // nav: 登录 ⇄ 退出登录 (我的参赛 is always in the nav)
-    const auth = $('#navAuth'), ak = state.loggedIn ? 'nav.logout' : 'nav.login';
-    auth.dataset.i18n = ak; auth.innerHTML = (isEN() ? EN : ZH)[ak];
-    auth.classList.toggle('btn-primary', !state.loggedIn); auth.classList.toggle('btn-ghost', state.loggedIn);
+    // nav: 登录 (logged out) ⇄ avatar with a small menu (logged in)
+    const auth = $('#navAuth'), user = $('#navUser'), p = state.profile;
+    auth.dataset.i18n = 'nav.login'; auth.innerHTML = (isEN() ? EN : ZH)['nav.login'];
+    auth.hidden = !!state.loggedIn; user.hidden = !state.loggedIn;
+    const ava = $('#navAva'), nm = p && p.name ? p.name.trim() : '';
+    ava.textContent = nm ? nm.slice(0, 1).toUpperCase() : ''; ava.classList.toggle('anon', !nm);
+    ava.setAttribute('aria-label', nm || (isEN() ? 'Account' : '账户'));
+    $('#nmName').textContent = nm || (isEN() ? 'Aholo user' : 'Aholo 用户'); $('#nmId').textContent = p ? p.id : (isEN() ? 'Not registered' : '尚未报名');
+    $('#nmReg').hidden = registered();
+    if (!state.loggedIn) closeNavMenu();
   }
 
 
