@@ -767,6 +767,25 @@ html[lang="zh-CN"] .ms-now h3 { font-family: var(--font-title); font-weight: 400
 .ws-list div { display: grid; grid-template-columns: minmax(140px, 240px) 1fr; gap: 24px; padding: 18px 0; border-bottom: 1px solid var(--border-subtle); font-size: 14.5px; }
 .ws-list dt { color: var(--text-muted); } .ws-list dd { margin: 0; min-width: 0; word-break: break-all; }
 .ws-list a { color: var(--ice); } .ws-list a:hover { color: #fff; } .ws-list b { font-weight: 600; }
+.ws-tags { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; }
+.ws-cd { display: inline-flex; align-items: center; gap: 8px; font-size: 13px; font-weight: 600; color: #FFB86B; font-variant-numeric: tabular-nums; }
+.ws-cd::before { content: ''; width: 7px; height: 7px; border-radius: 50%; background: #FFB86B; box-shadow: 0 0 10px 2px rgba(255,170,80,.55); animation: wsPulse 1.6s ease-in-out infinite; }
+@keyframes wsPulse { 50% { opacity: .35; } }
+.ws-main .badge:not(.ok) { color: var(--ice); border-color: rgba(152,141,255,.5); background: rgba(123,92,255,.12); }
+.rv-steps { list-style: none; margin: 28px 0 0; padding: 0; display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; }
+.rv-steps li { position: relative; display: flex; align-items: flex-start; gap: 12px; padding: 18px 18px 18px 16px; border-radius: var(--radius-sm); border: 1px solid var(--border-subtle); background: rgba(255,255,255,.02); }
+.rv-steps li > i { flex-shrink: 0; width: 10px; height: 10px; margin-top: 5px; border-radius: 50%; border: 1.5px solid var(--border-strong); }
+.rv-steps li.done > i { border-color: #7B5CFF; background: #7B5CFF; }
+.rv-steps li.cur { border-color: rgba(123,92,255,.55); background: rgba(123,92,255,.08); }
+.rv-steps li.cur > i { border-color: #B5ACFF; background: #B5ACFF; box-shadow: 0 0 10px 2px rgba(123,92,255,.8); }
+.rv-steps li > div { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 4px; }
+.rv-steps strong { font-size: 14.5px; font-weight: 700; }
+.rv-steps span { font-size: 12.5px; color: var(--text-muted); }
+.rv-steps em { font-style: normal; font-size: 12px; font-weight: 600; color: var(--text-muted); white-space: nowrap; }
+.rv-steps li.done em { color: var(--ice); } .rv-steps li.cur em { color: #fff; }
+.rv-steps li:not(.done):not(.cur) strong { color: var(--text-soft); }
+.ws-demo { display: flex; gap: 18px; flex-wrap: wrap; margin-top: 20px; }
+@media (max-width: 760px) { .rv-steps { grid-template-columns: 1fr; } }
 #myWorks .reg-note { margin-top: 20px; padding-top: 0; border-top: 0; }
 @media (max-width: 640px) { .ws-list div { grid-template-columns: 1fr; gap: 4px; } }
 /* stage tabs */
@@ -1604,9 +1623,9 @@ body.modal-open { overflow: hidden; }
       <details><summary><span data-i18n="q1">谁可以参加本次黑客松？</span><span class="pm"></span></summary><p data-i18n="a1">赛事面向全球开放，欢迎对 3D 创作、AI 与空间智能感兴趣的开发者、设计师、创作者、学生和研究者参赛。具体资格以正式赛事规则为准。</p></details>
       <details><summary><span data-i18n="q2">团队可以有多少人？</span><span class="pm"></span></summary><p data-i18n="a2">支持 1–3 人组队，也可以选择单人参赛。每个账号同一时间只能加入一支团队，个人参赛也需要创建团队。</p></details>
       <details><summary><span data-i18n="q3">如何创建或加入团队？</span><span class="pm"></span></summary><p data-i18n="a3">报名成功后，进入“我的参赛”。你可以创建团队并把团队编号分享给伙伴，也可以输入队长提供的团队编号加入现有团队。</p></details>
-      <details><summary><span data-i18n="q4">确认组队后还能调整成员吗？</span><span class="pm"></span></summary><p data-i18n="a4">支持修改团队、调整成员或解散团队。作品提交与组队截止后，团队成员将被锁定。团队奖励只在首次确认时发放给当时的成员，后续加入的成员不补发；退出或换队不会重复获得奖励。</p></details>
+      <details><summary><span data-i18n="q4">确认组队后还能调整成员吗？</span><span class="pm"></span></summary><p data-i18n="a4">支持修改团队、调整成员或解散团队。作品提交与组队截止后，团队成员将被锁定。团队积分只在首次确认时发放给当时的成员，后续加入的成员不补发；退出或换队不会重复获得奖励。</p></details>
       <details><summary><span data-i18n="q5">参赛必须使用什么工具？</span><span class="pm"></span></summary><p data-i18n="a5">参赛作品必须使用 Aholo Lux3D，并让它参与核心 3D 内容或关键创作流程。Aholo API、LuxReal 及其他第三方创作和开发工具可按作品需要选用。</p></details>
-      <details><summary><span data-i18n="q6">如何获得创作积分？</span><span class="pm"></span></summary><p data-i18n="a6">个人报名成功后发放一次报名奖励。团队组队成功并提交选题后，团队算力奖励平均分配给团队队员。</p></details>
+      <details><summary><span data-i18n="q6">如何获得创作积分？</span><span class="pm"></span></summary><p data-i18n="a6">个人报名成功后发放一次报名积分。团队组队成功并提交选题后，团队积分平均分配给团队队员。</p></details>
       <details><summary><span data-i18n="q7">作品知识产权归谁？</span><span class="pm"></span></summary><p data-i18n="a7">参赛者应保留其原创作品依法享有的权利，并确保所使用的代码、模型、图片、音乐、数据及其他第三方内容具有合法授权。作品展示、传播授权及获奖作品使用范围以最终赛事规则和报名授权条款为准。</p></details>
       <details><summary><span data-i18n="q8">在哪里获得学习资源和技术帮助？</span><span class="pm"></span></summary><p data-i18n="a8">加入官方赛事社群，可获得赛事通知、组队信息、技术答疑和活动提醒。未报名也可以先加入社群了解赛事、寻找队友。</p></details>
       <div class="faq-more">
@@ -1823,7 +1842,7 @@ body.modal-open { overflow: hidden; }
       </div>
       <div>
         <h5 data-i18n="foot.tools">工具</h5>
-        <ul><li><a href="https://www.aholo3d.cn/" target="_blank" rel="noopener">Aholo Lux3D</a></li><li><a href="https://www.aholo3d.cn/" target="_blank" rel="noopener">Aholo</a></li><li><a href="https://www.aholo3d.cn/" target="_blank" rel="noopener">Aholo API</a></li><li><a href="https://www.aholo3d.cn/" target="_blank" rel="noopener">LuxReal</a></li></ul>
+        <ul><li><a href="https://lux3d.aholo3d.cn/lux3d/home" target="_blank" rel="noopener">Aholo Lux3D</a></li><li><a href="https://www.aholo3d.cn/" target="_blank" rel="noopener">Aholo</a></li><li><a href="https://labs.aholo3d.cn/" target="_blank" rel="noopener">Aholo API</a></li><li><a href="https://www.luxreal.com/create-video?createType=8" target="_blank" rel="noopener">LuxReal</a></li></ul>
       </div>
       <div>
         <h5 data-i18n="foot.contact">联系</h5>
@@ -1934,10 +1953,15 @@ window.addEventListener('resize', () => { if (innerWidth > 1080 && nav.classList
 const KICKOFF = new Date('2026-10-14T00:00:00+08:00').getTime();
 const DEADLINE = new Date('2026-11-19T19:00:00+08:00').getTime(); // submission deadline
 const TARGET = DEADLINE;
+// DEMO ONLY: the page clock can be shifted (session-scoped) to preview the last days before the deadline and the judging stage
+const DEMO_CLOCK_KEY = 'aholo-demo-clock';
+let demoShift = 0; try { demoShift = +sessionStorage.getItem(DEMO_CLOCK_KEY) || 0; } catch (e) {}
+const clock = () => Date.now() + demoShift;
+function setDemoClock(at) { demoShift = at ? at - Date.now() : 0; try { demoShift ? sessionStorage.setItem(DEMO_CLOCK_KEY, String(demoShift)) : sessionStorage.removeItem(DEMO_CLOCK_KEY); } catch (e) {} tick(); }
 const cdEls = { d: document.querySelector('[data-cd=d]'), h: document.querySelector('[data-cd=h]'), m: document.querySelector('[data-cd=m]'), s: document.querySelector('[data-cd=s]') };
 const pad = n => String(n).padStart(2, '0');
 function tick() {
-  const diff = Math.max(0, TARGET - Date.now());
+  const diff = Math.max(0, TARGET - clock());
   const s = Math.floor(diff / 1000);
   cdEls.d.textContent = pad(Math.floor(s / 86400));
   cdEls.h.textContent = pad(Math.floor(s % 86400 / 3600));
@@ -2104,8 +2128,8 @@ document.querySelectorAll('.res-main').forEach(card => card.addEventListener('po
     'reg.startD': ['完成报名，领取创作积分并开始组队', 'Register to receive creation credits and start forming a team'],
     'reg.done': ['已报名', 'Registered'], 'reg.id': ['参赛编号', 'Participant ID'],
     'reg.note': ['报名成功 ≠ 积分到账，请以 Aholo 账户中的积分记录为准。', 'Registration does not mean credits have arrived — check the credit history in your Aholo account.'],
-    'rw.reg': ['报名奖励', 'Registration reward'], 'rw.team': ['团队奖励', 'Team reward'],
-    'rw.afterReg': ['报名后领取', 'after registering'], 'rw.once': ['每位选手仅发放一次', 'Granted once per participant'],
+    'rw.reg': ['报名积分', 'Registration reward'], 'rw.team': ['团队积分', 'Team reward'],
+    'rw.afterReg': ['报名后领取', 'after registering'], 'rw.once': ['每位选手报名后即可获得的积分奖励，每位选手仅发放一次', 'Credits every participant receives on registering, granted once per participant'],
     'rw.pending': ['发放中', 'processing'], 'rw.acct': ['到账以 Aholo 账户积分记录为准', 'See your Aholo account for arrival'],
     'rw.none': ['未领取', 'not received'], 'rw.onConfirm': ['团队首次确认时发放', 'Granted when the team is first confirmed'],
     'rw.split': ['按首次确认时的队员平均分配', 'Split among members at first confirmation'],
@@ -2142,7 +2166,7 @@ document.querySelectorAll('.res-main').forEach(card => card.addEventListener('po
     'w.noTeamT': ['创建或加入团队后提交作品', 'Create or join a team to submit'], 'w.noTeamD': ['作品由队长代表团队提交；单人参赛也需要先创建团队。', 'The captain submits on behalf of the team — solo entrants create a team too.'],
     'w.waitT': ['等待队长提交作品', 'Waiting for your captain to submit'], 'w.waitD': ['团队作品由队长统一上传提交，提交后这里会显示作品与版本。', 'Your captain uploads the team’s project; once submitted it shows up here with its version.'],
     'w.memberNote': ['作品由队长提交，如需修改请联系队长。', 'Your captain submits the project — ask them if anything needs changing.'], 'w.demoTeam': ['演示：模拟队长提交作品', 'Demo: captain submits the project'],
-    'pt.reg': ['报名奖励', 'Registration credits'], 'pt.team': ['团队奖励', 'Team credits'], 'pt.afterReg': ['报名后发放', 'After you register'],
+    'pt.reg': ['报名积分', 'Registration credits'], 'pt.team': ['团队积分', 'Team credits'], 'pt.afterReg': ['报名后发放', 'After you register'],
     'pt.afterTopic': ['提交选题后发放', 'After your team submits a topic'], 'pt.pending': ['发放中', 'Processing'], 'pt.done': ['已到账 · {d}', 'Arrived · {d}'],
     'pt.note': ['积分到账以 Aholo 账户中的积分记录为准', 'Credits are confirmed by the history in your Aholo account'],
     'pt.teamTip': ['每个团队仅发放一次，按提交选题时的队员平均分配；后续加入成员不补发，退出或换队不重复获得', 'Once per team, split evenly among the members when the topic is submitted; later members don’t receive it, and leaving or switching teams doesn’t earn it again'],
@@ -2152,7 +2176,7 @@ document.querySelectorAll('.res-main').forEach(card => card.addEventListener('po
     'mb.add': ['邀请队员', 'Invite'], 'mb.seats': ['还可加入 {r} 人', '{r} seat(s) left'], 'team.member': ['队员', 'Member'],
     'mb.rmT': ['移除队员', 'Remove member'], 'mb.rmQ': ['确定将 {name} 移出团队吗？移出后对方需重新申请才能加入。', 'Remove {name} from the team? They’ll need to request again to rejoin.'], 'mb.rmOk': ['确认移除', 'Remove'], 'mb.cancel': ['取消', 'Cancel'],
     'mb.t': ['编辑团队成员', 'Edit members'], 'mb.d': ['当前 {n}/{max} 人。点队员头像右上角的 × 可移除；作品提交与组队截止后成员锁定。', '{n}/{max} members. Tap × on a teammate to remove them; the roster locks at the submission and team deadline.'],
-    'mb.hintLate': ['团队已确认，此后同意加入的成员不补发团队奖励。', 'The team is confirmed, so members approved from now on won’t receive the team reward.'],
+    'mb.hintLate': ['团队已确认，此后同意加入的成员不补发团队积分。', 'The team is confirmed, so members approved from now on won’t receive the team reward.'],
     'mb.full': ['团队已满员，如需同意新申请请先移除成员。', 'The team is full. Remove a member before approving a request.'], 'mb.done': ['完成', 'Done'], 'mb.demoName': ['选手 ', 'Player '],
     'team.invite': ['邀请队员', 'Invite'], 'team.edit': ['编辑团队', 'Edit team'], 'team.saved': ['团队信息已更新', 'Team updated'],
     'team.seats': ['当前 {n}/{max} 人，还可邀请 {r} 人', '{n}/{max} members — {r} more can join'], 'team.fullSeats': ['团队已满 {max} 人', 'Team is full ({max}/{max})'],
@@ -2161,12 +2185,12 @@ document.querySelectorAll('.res-main').forEach(card => card.addEventListener('po
     'team.code': ['团队编号：', 'Team code: '], 'team.copy': ['复制', 'Copy'], 'team.copied': ['团队编号已复制', 'Team code copied'],
     'team.captain': ['队长', 'Captain'], 'team.you': ['你', 'you'], 'team.remove': ['移除', 'Remove'],
     'team.count': ['成员 {n}/{max}', 'Members {n}/{max}'], 'team.share': ['分享团队编号，邀请伙伴加入', 'Share the code to invite teammates'],
-    'team.confirmHint': ['团队奖励仅在首次确认时发放给当时的队员，后续加入成员不补发；退出或换队不重复获得', 'The team reward goes only to the members at the first confirmation; later members don’t receive it, and leaving or switching teams doesn’t earn it again'],
+    'team.confirmHint': ['团队积分仅在首次确认时发放给当时的队员，后续加入成员不补发；退出或换队不重复获得', 'The team reward goes only to the members at the first confirmation; later members don’t receive it, and leaving or switching teams doesn’t earn it again'],
     'team.confirmTip': ['确认后仍可换人或解散。', 'You can still change members or disband after confirming.'],
     'team.waitHint': ['等待队长确认组队', 'Waiting for the captain to confirm the team'],
-    'team.rewardDone': ['团队奖励已于 {d}发放给 {n} 名成员', 'Team reward granted to {n} member(s) on {d}'],
-    'team.rewardPending': ['团队奖励发放中，将发放给 {n} 名成员', 'Team reward processing for {n} member(s)'],
-    'team.rewardTip': ['团队奖励仅在首次确认时发放给当时的队员；后续加入的成员不补发，退出或换队不会重复获得。', 'Team rewards are granted only at the first confirmation to the members at that time; later members don’t receive them, and leaving or switching teams doesn’t earn them again.'],
+    'team.rewardDone': ['团队积分已于 {d}发放给 {n} 名成员', 'Team reward granted to {n} member(s) on {d}'],
+    'team.rewardPending': ['团队积分发放中，将发放给 {n} 名成员', 'Team reward processing for {n} member(s)'],
+    'team.rewardTip': ['团队积分仅在首次确认时发放给当时的队员；后续加入的成员不补发，退出或换队不会重复获得。', 'Team rewards are granted only at the first confirmation to the members at that time; later members don’t receive them, and leaving or switching teams doesn’t earn them again.'],
     'team.pendingTip': ['到账后这里会显示发放日期。', 'The grant date will appear here once it arrives.'],
     'w.lockedT': ['报名后即可提交作品', 'Register to submit your project'], 'w.lockedD': ['完成个人报名后，就能在这里编辑并提交你的作品。', 'Once registered, you can edit and submit your project here.'],
     'w.closedT': ['作品提交已截止', 'Submissions are closed'], 'w.closedD': ['评审将以截止前最后一次成功提交的版本为准。', 'Judging uses your last successful submission before the deadline.'],
@@ -2191,14 +2215,20 @@ document.querySelectorAll('.res-main').forEach(card => card.addEventListener('po
     'w.e.type': ['文件格式不支持，请上传 {t}', 'Unsupported file type — upload {t}'], 'w.e.size': ['文件过大，请控制在 {mb} MB 以内', 'File too large — keep it under {mb} MB'],
     'w.e.video': ['请上传视频文件', 'Upload your video file'], 'w.e.report': ['请上传项目报告书', 'Upload your project report'],
     'w.reviewNote': ['作品已进入资格与完整性审核。请确保 Demo、视频和其他链接在结果公布前持续有效。', 'Your project is in eligibility and completeness review. Keep the demo, video and other links working until results are announced.'],
+    'w.cd': ['距截止 {d} 天 {t}', '{d}d {t} to deadline'], 'w.reviewBadge': ['评审中', 'In judging'], 'w.finalVer': ['最终版本 · 第 {v} 版 · 提交于 {t}', 'Final version · v{v} · submitted {t}'],
+    'w.rv1': ['提交截止 · 作品锁定', 'Submissions closed · project locked'], 'w.rv1d': ['11 月 19 日 19:00', 'Nov 19, 19:00'],
+    'w.rv2': ['专业评委与玩家评委评审', 'Expert and player judging'], 'w.rv2d': ['11 月 20 日 – 11 月 30 日', 'Nov 20 – Nov 30'],
+    'w.rv3': ['结果公布 · 作品展示', 'Results · showcase'], 'w.rv3d': ['12 月初', 'Early December'],
+    'w.rvDone': ['已完成', 'Done'], 'w.rvCur': ['进行中', 'In progress'], 'w.rvNext': ['未开始', 'Upcoming'],
+    'w.demoSoon': ['演示：临近截止（剩 2 天）', 'Demo: 2 days to deadline'], 'w.demoClosed': ['演示：已截止，进入作品评审', 'Demo: deadline passed, judging'], 'w.demoNow': ['演示：回到当前时间', 'Demo: back to now'],
     'w.closedBadge': ['提交已截止', 'Submissions closed'], 'w.lockedNote': ['作品已经锁定，不能再修改实质内容。如组委会要求补充行政材料，请按通知在指定时间内完成。', 'Your project is locked and its substance can no longer change. If the organizers ask for administrative documents, provide them by the date in their notice.'],
     'w.view': ['查看提交内容', 'View submission'], 'w.hide': ['收起提交内容', 'Hide submission'],
     'w.e.url': ['请输入以 http:// 或 https:// 开头的有效链接', 'Enter a valid link starting with http:// or https://'], 'w.e.lux': ['提交前请确认作品使用 Aholo Lux3D 完成', 'Please confirm the project uses Aholo Lux3D'],
     'tl.rsvSoon': ['预约链接即将开放', 'Booking link coming soon'],
-    'team.noReward': ['未获团队奖励', 'No team reward'], 'rw.done': ['已发放', 'granted'],
+    'team.noReward': ['未获团队积分', 'No team reward'], 'rw.done': ['已发放', 'granted'],
     'st.cur': ['当前阶段：', 'Current stage: '], 'st.curK': ['当前阶段', 'CURRENT STAGE'], 'st.next': ['下一阶段：', 'Next: '],
-    'st.reg': ['个人报名', 'Registration'], 'st.regD': ['加入赛事，开启你的创作之旅', 'Join the event and start your creative journey'],
-    'st.team': ['组队', 'Team up'], 'st.teamD': ['寻找伙伴，创建或加入你的团队', 'Find partners — create or join a team'],
+    'st.reg': ['报名与积分', 'Registration & credits'], 'st.regD': ['加入赛事，开启你的创作之旅', 'Join the event and start your creative journey'],
+    'st.team': ['组建团队', 'Build your team'], 'st.teamD': ['寻找伙伴，创建或加入你的团队', 'Find partners — create or join a team'],
     'st.topic': ['提交选题', 'Submit topic'], 'st.topicD': ['完善团队信息，提交你们的创作选题', 'Complete your team info and submit your topic'],
     'st.work': ['作品提交', 'Submission'], 'st.workD': ['完成创作，让想法成为真实作品', 'Finish your build and turn the idea into a real project'],
     'st.review': ['作品评审', 'Judging'], 'st.reviewD': ['专业评委与玩家评委共同评审参赛作品', 'Expert and player judges review the projects'],
@@ -2216,7 +2246,7 @@ document.querySelectorAll('.res-main').forEach(card => card.addEventListener('po
     'team.wait': ['等待队长确认组队。', 'Waiting for the captain to confirm the team.'],
     'team.okD': ['团队已确认，仍可调整成员或解散。', 'Team confirmed. You can still change members or disband.'],
     'team.disband': ['解散团队', 'Disband team'], 'team.leave': ['退出团队', 'Leave team'],
-    'team.rewardNote': ['团队奖励仅在首次确认时发放给当时的队员，后续加入的成员不补发；退出或换队不会重复获得。', 'Team rewards are granted only at the first confirmation to the members at that time; later members don’t receive them, and leaving or switching teams doesn’t earn them again.'],
+    'team.rewardNote': ['团队积分仅在首次确认时发放给当时的队员，后续加入的成员不补发；退出或换队不会重复获得。', 'Team rewards are granted only at the first confirmation to the members at that time; later members don’t receive them, and leaving or switching teams doesn’t earn them again.'],
     'team.disbandQ': ['确定解散团队吗？', 'Disband this team?'], 'team.leaveQ': ['确定退出团队吗？', 'Leave this team?'], 'team.removeQ': ['确定移除该成员吗？', 'Remove this member?'],
     'team.demoCaptain': ['队长（示例）', 'Captain (demo)'], 'team.demoName': ['团队 ', 'Team '],
     'err.name': ['请输入 2–30 个字符的姓名', 'Enter a name of 2–30 characters'], 'err.email': ['请输入有效的邮箱地址', 'Enter a valid email address'],
@@ -2480,7 +2510,7 @@ document.querySelectorAll('.res-main').forEach(card => card.addEventListener('po
     if (t.closest('[data-submit-cta]')) { e.preventDefault(); goSubmit(); return; }
     const act = t.closest('[data-act]');
     if (act && act.dataset.act === 'clearFile') { setFile($('#workForm'), act.dataset.f, null); return; }
-    if (act && ['saveDraft', 'editWork', 'cancelEdit', 'viewWork', 'demoTeamWork'].includes(act.dataset.act)) { workAction(act.dataset.act); return; }
+    if (act && ['saveDraft', 'editWork', 'cancelEdit', 'viewWork', 'demoTeamWork', 'demoSoon', 'demoClosed', 'demoNow'].includes(act.dataset.act)) { workAction(act.dataset.act); return; }
     if (act) teamAction(act);
   });
 
@@ -2498,7 +2528,7 @@ document.querySelectorAll('.res-main').forEach(card => card.addEventListener('po
   function renderReg() {
     const p = registered() ? state.profile : null, tm = p ? state.team : null;
     // One card for every state: who you are + the next action, then the two credit grants and where each one stands.
-    const me = tm && tm.members.find(m => m.me), open = Date.now() < DEADLINE;
+    const me = tm && tm.members.find(m => m.me), open = clock() < DEADLINE;
     const regSince = p ? (p.regAt || 0) : null;
     const teamSince = p && (p.teamReward || (tm && tm.rewarded && me && me.rewarded)) ? (p.teamRewardSince || (tm && tm.rewardSince) || 0) : null;
     const status = (since, waiting) => {
@@ -2530,7 +2560,7 @@ document.querySelectorAll('.res-main').forEach(card => card.addEventListener('po
 
   /* ---------- 提交选题 (own step): captain submits, teammates wait ---------- */
   function renderTopic() {
-    const el = $('#myTopic'), tm = state.team, open = Date.now() < DEADLINE;
+    const el = $('#myTopic'), tm = state.team, open = clock() < DEADLINE;
     if (!tm || !tm.confirmed) { el.innerHTML = `<div class="empty"><h3>${T('w.gateTeamT')}</h3><p>${T('w.gateTeamD')}</p></div>`; return; }
     const topic = tm.topic;
     if (tm.captain && open && (!topic || editingTopic)) {
@@ -2737,7 +2767,7 @@ document.querySelectorAll('.res-main').forEach(card => card.addEventListener('po
       el.innerHTML = `<div class="empty">${icon}<h3>${T('w.lockedT')}</h3><p>${T('w.lockedD')}</p><a href="#register" class="btn btn-primary" data-start-reg>${(isEN() ? EN : ZH)['cta.register']}</a></div>`;
       return;
     }
-    const closed = Date.now() >= DEADLINE;
+    const closed = clock() >= DEADLINE;
     // only a team's captain submits; without a team there's nothing to submit yet (solo entrants create a team too)
     if (!state.team && !w.submitted) {
       el.innerHTML = `<div class="empty"><h3>${T(closed ? 'w.closedT' : 'w.noTeamT')}</h3><p>${T(closed ? 'w.closedD' : 'w.noTeamD')}</p></div>`;
@@ -2756,15 +2786,31 @@ document.querySelectorAll('.res-main').forEach(card => card.addEventListener('po
       return;
     }
     if (sub && (!editingWork || closed || member)) {
-      const topic = state.team && state.team.topic;
+      const topic = state.team && state.team.topic, rows = receiptRows(sub).replace(/<div><span>/g, '<div><dt>').replace(/<\/span><span class="val">/g, '</dt><dd>').replace(/<\/span><\/div>/g, '</dd></div>');
+      // DEMO ONLY: jump the clock to preview the countdown / the judging view, or come back to now
+      const dl = k => `<button type="button" class="link-btn demo-link" data-act="${k}">${T('w.' + k)}</button>`, soonNow = !closed && DEADLINE - clock() <= 3 * 864e5;
+      const demo = `<p class="ws-demo">${soonNow ? '' : dl('demoSoon')}${closed ? '' : dl('demoClosed')}${demoShift ? dl('demoNow') : ''}</p>`;
+      if (closed) {
+        const now = clock(), REV_END = new Date('2026-12-01T00:00:00+08:00').getTime();
+        const steps = [['w.rv1', 'w.rv1d', true, false], ['w.rv2', 'w.rv2d', now >= REV_END, now < REV_END], ['w.rv3', 'w.rv3d', now >= RESULTS_AT, now >= REV_END && now < RESULTS_AT]];
+        el.innerHTML = `<div class="ws-head"><div class="ws-main">
+            <span class="badge">${T('w.reviewBadge')}</span>
+            <h3>${topic ? esc(topic.title) : T('w.done')}</h3>
+            <span class="work-ver">${T('w.finalVer', { v: sub.version, t: fmtTime(sub.at) })}</span></div></div>
+          <p class="ws-note">${T('w.lockedNote')}</p>
+          <ol class="rv-steps">${steps.map(([t, d, done, cur]) => `<li class="${done ? 'done' : cur ? 'cur' : ''}"><i></i><div><strong>${T(t)}</strong><span>${T(d)}</span></div><em>${T(done ? 'w.rvDone' : cur ? 'w.rvCur' : 'w.rvNext')}</em></li>`).join('')}</ol>
+          <dl class="ws-list">${rows}</dl>${demo}`;
+        return;
+      }
+      const left = DEADLINE - clock(), soon = left <= 3 * 864e5;
       el.innerHTML = `<div class="ws-head"><div class="ws-main">
-          <span class="badge${closed ? '' : ' ok'}">${T(closed ? 'w.closedBadge' : 'w.done')}</span>
+          <div class="ws-tags"><span class="badge ok">${T('w.done')}</span>${soon ? `<span class="ws-cd" data-ws-cd>${cdText(left)}</span>` : ''}</div>
           <h3>${topic ? esc(topic.title) : T('w.done')}</h3>
           <span class="work-ver">${T('w.version', { v: sub.version, t: fmtTime(sub.at) })}</span></div>
-          ${closed || member ? '' : `<button type="button" class="btn btn-ghost" data-act="editWork">${T('w.edit')}</button>`}</div>
-        <p class="ws-note">${T(closed ? 'w.lockedNote' : 'w.reviewNote')}</p>
-        <dl class="ws-list">${receiptRows(sub).replace(/<div><span>/g, '<div><dt>').replace(/<\/span><span class="val">/g, '</dt><dd>').replace(/<\/span><\/div>/g, '</dd></div>')}</dl>
-        ${closed ? '' : `<p class="reg-note">${T(member ? 'w.memberNote' : 'w.rule')}</p>`}`;
+          ${member ? '' : `<button type="button" class="btn btn-ghost" data-act="editWork">${T('w.edit')}</button>`}</div>
+        <p class="ws-note">${T('w.reviewNote')}</p>
+        <dl class="ws-list">${rows}</dl>
+        <p class="reg-note">${T(member ? 'w.memberNote' : 'w.rule')}</p>${demo}`;
       return;
     }
     if (closed) { el.innerHTML = `<div class="empty">${icon}<h3>${T('w.closedT')}</h3><p>${T('w.closedD')}</p></div>`; return; }
@@ -2924,6 +2970,9 @@ document.querySelectorAll('.res-main').forEach(card => card.addEventListener('po
     else if (a === 'editWork') { editingWork = true; renderWorks(); $('#workForm').scrollIntoView({ block: 'start', behavior: 'smooth' }); }
     else if (a === 'viewWork') { viewingWork = !viewingWork; renderWorks(); }
     else if (a === 'cancelEdit') { editingWork = false; renderWorks(); }
+    else if (a === 'demoSoon') { setDemoClock(DEADLINE - (2 * 864e5 + 4 * 36e5 + 12 * 6e4)); editingWork = false; renderMy(); }
+    else if (a === 'demoClosed') { setDemoClock(new Date('2026-11-23T10:00:00+08:00').getTime()); editingWork = false; renderMy(); }
+    else if (a === 'demoNow') { setDemoClock(0); renderMy(); }
     else if (a === 'demoTeamWork') workRun(() => api.demoTeamWork(), T('w.done')).then(() => renderMy());
   }
   function goSubmit() {
@@ -2934,8 +2983,19 @@ document.querySelectorAll('.res-main').forEach(card => card.addEventListener('po
   /* ---------- 阶段状态条: follows the participant's own progress; judging and results follow the calendar ---------- */
   const STAGES = ['reg', 'team', 'topic', 'work', 'review', 'show'];
   const RESULTS_AT = new Date('2026-12-03T00:00:00+08:00').getTime();
+  // 截止倒计时 (last 3 days): 距截止 2 天 04:12:33
+  function cdText(ms) {
+    const t = Math.max(0, Math.floor(ms / 1000)), d = Math.floor(t / 86400), hms = [Math.floor(t % 86400 / 3600), Math.floor(t % 3600 / 60), t % 60].map(pad).join(':');
+    return T('w.cd', { d, t: hms });
+  }
+  setInterval(() => {
+    const el = document.querySelector('[data-ws-cd]'); if (!el) return;
+    const left = DEADLINE - clock();
+    if (left <= 0) { if (view === 'my') renderMy(); return; }
+    el.textContent = cdText(left);
+  }, 1000);
   function stageNow() {
-    const now = Date.now(), tm = state.team;
+    const now = clock(), tm = state.team;
     if (now >= RESULTS_AT) return 'show';
     if (now >= DEADLINE) return 'review';
     if (!registered()) return 'reg';
@@ -2955,7 +3015,7 @@ document.querySelectorAll('.res-main').forEach(card => card.addEventListener('po
       team: !tm ? .2 : tm.members.length > 1 ? .7 : .45,
       topic: .35,
       work: (() => { const d = w.draft; if (!d) return .2; const n = (d.link || d.videoFile ? 1 : 0) + (d.reportFile ? 1 : 0); return .3 + .25 * n; })(),
-      review: Math.max(.15, Math.min(.95, (Date.now() - new Date('2026-11-20T00:00:00+08:00').getTime()) / (10 * 864e5))),
+      review: Math.max(.15, Math.min(.95, (clock() - new Date('2026-11-20T00:00:00+08:00').getTime()) / (10 * 864e5))),
       show: 1,
     }[k];
     const ol = $('#mySteps');
@@ -3091,6 +3151,7 @@ document.querySelectorAll('.res-main').forEach(card => card.addEventListener('po
   $('#demoReset').addEventListener('click', () => {
     if (busy) return;
     try { sessionStorage.removeItem(KEY); } catch (e) {}
+    setDemoClock(0);
     mem = { loggedIn: false, profile: null, team: null }; state = load();
     clearTimeout(rewardTimer); editingWork = false; if (!modal.hidden) closeModal(); form.reset();
     refreshAll(); show('intro'); window.scrollTo(0, 0); toast(T('toast.reset'));
