@@ -959,17 +959,8 @@ textarea:focus { outline: none; border-color: var(--ice); box-shadow: 0 0 0 3px 
 .wf-gh b::before { content: ''; width: 4px; height: 16px; border-radius: 2px; background: #7B5CFF; box-shadow: 0 0 10px rgba(123,92,255,.7); }
 .wf-gh { padding-bottom: 8px; }
 /* 加分项 starts folded; the header opens it (it stays open when there's already something filled in) */
-.wf-toggle { width: 100%; display: flex; align-items: center; justify-content: flex-start; gap: 14px; background: none; border: 0; color: inherit; font: inherit; text-align: left; cursor: pointer; }
-.wf-toggle .wf-note { margin-left: auto; }
-.wf-more { display: inline-flex; align-items: center; gap: 8px; height: 30px; padding: 0 14px; border-radius: var(--radius-pill); border: 1px solid rgba(152,141,255,.45); background: rgba(123,92,255,.1); font-size: 13px; font-weight: 600; color: var(--ice); }
-.wf-more em { font-style: normal; } .wf-bonus.closed .wf-more .c, .wf-bonus:not(.closed) .wf-more .o { display: none; }
-.wf-toggle:hover .wf-more { border-color: var(--ice); background: rgba(123,92,255,.2); }
 /* the confirm + submit block is its own band, clearly apart from the 加分项 toggle */
 .work-form > .check { margin-top: 26px; padding-top: 52px; border-top: 1px solid var(--border-subtle); }
-.wf-chev { width: 8px; height: 8px; border-right: 1.5px solid var(--ice); border-bottom: 1.5px solid var(--ice); transform: rotate(45deg) translateY(-3px); transition: transform .25s; }
-.wf-bonus:not(.closed) .wf-chev { transform: rotate(-135deg) translate(-2px, -1px); }
-.wf-bonus.closed .wf-item { display: none; }
-.wf-bonus.closed { margin-bottom: 26px; }
 .wf-gh span { font-size: 12.5px; color: var(--text-muted); }
 .wf-group:not(.wf-bonus) .wf-gh span { color: var(--ice); font-weight: 600; }
 .wf-group + .wf-group { padding-top: 26px; border-top: 1px solid var(--border-subtle); }
@@ -1003,8 +994,6 @@ textarea:focus { outline: none; border-color: var(--ice); box-shadow: 0 0 0 3px 
 .work-form .wf-ctrl { gap: 12px !important; }
 .work-form .wf-label > div { row-gap: 6px; }
 .work-form .wf-group + .wf-group { margin-top: 32px; padding-top: 32px; border-top: 1px solid var(--border-subtle); }
-.work-form .wf-bonus.closed { margin-bottom: 0; }
-.work-form .wf-bonus.closed .wf-gh { margin-bottom: 0; }
 .work-form > .check { margin: 32px 0 0; padding-top: 32px; border-top: 1px solid var(--border-subtle); }
 .work-form .work-actions { margin-top: 24px; }
 #myWorks .work-form > .reg-note { margin-top: 16px; }
@@ -2142,7 +2131,6 @@ document.querySelectorAll('.res-main').forEach(card => card.addEventListener('po
     'pt.afterCapTopic': ['待队长提交选题后发放', 'After your captain submits the topic'], 'tp.demo': ['演示：模拟队长提交选题', 'Demo: captain submits the topic'],
     'w.gateTeamT': ['确认组队后提交选题', 'Confirm your team, then submit a topic'], 'w.gateTeamD': ['流程：确认组队 → 提交选题 → 提交作品。先在「我的团队」中确认组队。', 'Flow: confirm the team → submit a topic → submit the project. Start by confirming your team under My team.'],
     'w.gateTopicT': ['提交选题后即可提交作品', 'Submit your topic to unlock the project form'], 'w.gateTopicD': ['选题提交后，这里会开放作品提交表单。', 'Once the topic is in, the submission form opens here.'],
-    'w.expand': ['展开填写', 'Add'], 'w.collapse': ['收起', 'Hide'],
     'my.topic': ['提交选题', 'Submit topic'], 'reg.nextTeam': ['下一步：创建或加入团队', 'Next: create or join a team'], 'reg.goTeam': ['去组队', 'Form a team'],
     'tp.submitted': ['已提交选题', 'Topic submitted'], 'tp.toWork': ['去提交作品', 'Go to submission'], 'tp.waitT': ['等待队长提交选题', 'Waiting for your captain'],
     'st.locked': ['完成上一步后解锁', 'Finish the previous step to unlock'],
@@ -2492,7 +2480,7 @@ document.querySelectorAll('.res-main').forEach(card => card.addEventListener('po
     if (t.closest('[data-submit-cta]')) { e.preventDefault(); goSubmit(); return; }
     const act = t.closest('[data-act]');
     if (act && act.dataset.act === 'clearFile') { setFile($('#workForm'), act.dataset.f, null); return; }
-    if (act && ['saveDraft', 'editWork', 'cancelEdit', 'viewWork', 'demoTeamWork', 'toggleBonus'].includes(act.dataset.act)) { workAction(act.dataset.act); return; }
+    if (act && ['saveDraft', 'editWork', 'cancelEdit', 'viewWork', 'demoTeamWork'].includes(act.dataset.act)) { workAction(act.dataset.act); return; }
     if (act) teamAction(act);
   });
 
@@ -2801,8 +2789,8 @@ document.querySelectorAll('.res-main').forEach(card => card.addEventListener('po
           <div class="wf-ctrl">${drop('reportFile')}<em class="field-error" data-err="report"></em></div>
         </div>
       </section>
-      <section class="wf-group wf-bonus${d.social || d.repo || d.repoFile ? '' : ' closed'}">
-        <button type="button" class="wf-gh wf-toggle" data-act="toggleBonus" aria-expanded="${d.social || d.repo || d.repoFile ? 'true' : 'false'}"><b>${T('w.bonusT')}</b><span class="wf-more"><em class="o">${T('w.expand')}</em><em class="c">${T('w.collapse')}</em><i class="wf-chev" aria-hidden="true"></i></span><span class="wf-note">${T('w.bonusD')}</span></button>
+      <section class="wf-group wf-bonus">
+        <header class="wf-gh"><b>${T('w.bonusT')}</b><span class="wf-note">${T('w.bonusD')}</span></header>
         <div class="field wf-item">
           <div class="wf-label"><i class="wf-num">+</i><div><strong>${T('w.social')}</strong><p>${T('w.socialHint')}</p></div></div>
           <div class="wf-ctrl"><input type="url" name="social" placeholder="https://" aria-label="${T('w.social')}" value="${v('social')}"><em class="field-error"></em></div>
@@ -2936,7 +2924,6 @@ document.querySelectorAll('.res-main').forEach(card => card.addEventListener('po
     else if (a === 'editWork') { editingWork = true; renderWorks(); $('#workForm').scrollIntoView({ block: 'start', behavior: 'smooth' }); }
     else if (a === 'viewWork') { viewingWork = !viewingWork; renderWorks(); }
     else if (a === 'cancelEdit') { editingWork = false; renderWorks(); }
-    else if (a === 'toggleBonus') { const g = $('#workForm .wf-bonus'), open = g.classList.toggle('closed') === false; g.querySelector('.wf-toggle').setAttribute('aria-expanded', String(open)); }
     else if (a === 'demoTeamWork') workRun(() => api.demoTeamWork(), T('w.done')).then(() => renderMy());
   }
   function goSubmit() {
