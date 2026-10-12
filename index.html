@@ -73,33 +73,37 @@
           <h2 class="section-title">LuxReal，你的故事，由你导演</h2>
           <p class="section-desc">互动影游 × AI 短剧，一键成片</p>
         </div>
-        <div class="showcase-media">
-          <div class="showcase-slide active" data-slide="0">
-            <video autoplay muted loop playsinline preload="metadata">
+        <div class="showcase-stage" id="showcase-stage">
+          <div class="showcase-media" id="showcase-media">
+            <video class="showcase-video active" data-video="0" autoplay muted loop playsinline preload="metadata">
               <source src="assets/showcase-video.webm" type="video/webm">
               <source src="assets/showcase-video.mp4" type="video/mp4">
             </video>
-            <div class="showcase-overlay-gradient"></div>
-            <div class="showcase-overlay-text">
-              <h3 class="showcase-title">巴黎情缘</h3>
-              <p class="showcase-subtitle">LuxReal 精选短片</p>
-            </div>
-          </div>
-          <div class="showcase-slide" data-slide="1">
-            <video autoplay muted loop playsinline preload="metadata">
+            <video class="showcase-video" data-video="1" muted loop playsinline preload="metadata">
               <source src="assets/showcase-video-2.webm" type="video/webm">
               <source src="assets/showcase-video-2.mp4" type="video/mp4">
             </video>
             <div class="showcase-overlay-gradient"></div>
-            <div class="showcase-overlay-text">
-              <h3 class="showcase-title">锚点</h3>
-              <p class="showcase-subtitle">LuxReal 精选互动影游</p>
+            <div class="showcase-frame" aria-hidden="true">
+              <span class="showcase-frame-corner tl"></span>
+              <span class="showcase-frame-corner tr"></span>
+              <span class="showcase-frame-corner bl"></span>
+              <span class="showcase-frame-corner br"></span>
+              <span class="showcase-frame-tag"><i class="showcase-rec-dot"></i>REC</span>
             </div>
           </div>
-          <div class="showcase-dots">
-            <button class="showcase-dot active" type="button" data-slide-to="0" aria-label="第 1 项"></button>
-            <button class="showcase-dot" type="button" data-slide-to="1" aria-label="第 2 项"></button>
+          <div class="showcase-copy showcase-copy-right active" id="showcase-copy-1">
+            <p class="showcase-copy-eyebrow">LuxReal 用户创作短剧</p>
+            <h3 class="showcase-copy-title">《天海》</h3>
           </div>
+          <div class="showcase-copy showcase-copy-left" id="showcase-copy-2">
+            <p class="showcase-copy-eyebrow">LuxReal 精选互动影游</p>
+            <h3 class="showcase-copy-title">《锚点》</h3>
+          </div>
+        </div>
+        <div class="showcase-dots">
+          <button class="showcase-dot active" type="button" data-slide-to="0" aria-label="第 1 项"></button>
+          <button class="showcase-dot" type="button" data-slide-to="1" aria-label="第 2 项"></button>
         </div>
       </div>
     </div>

@@ -171,68 +171,77 @@ if (privacyLinks.length) {
   sections.forEach(s => s && spy.observe(s));
 }
 
-// ---------- showcase scroll-linked slider ----------
+// ---------- showcase scroll-linked stage (left-video -> right-video-bigger -> full-bleed) ----------
 const showcaseScroll = document.getElementById('showcase-scroll');
 const showcaseDots = document.querySelectorAll('.showcase-dot');
-const showcaseSlides = document.querySelectorAll('.showcase-slide');
-if (showcaseScroll && showcaseDots.length && showcaseSlides.length) {
-  const slideCount = showcaseSlides.length;
-  showcaseScroll.style.setProperty('--slides', slideCount);
+const showcaseMedia = document.getElementById('showcase-media');
+const showcaseVideos = document.querySelectorAll('.showcase-video');
+const showcaseCopy1 = document.getElementById('showcase-copy-1');
+const showcaseCopy2 = document.getElementById('showcase-copy-2');
+if (showcaseScroll && showcaseMedia && showcaseVideos.length === 2 && showcaseCopy1 && showcaseCopy2) {
+  showcaseScroll.style.setProperty('--slides', 2);
   const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
+  const lerp = (a, b, t) => a + (b - a) * t;
+  const clamp01 = v => Math.min(1, Math.max(0, v));
   const easeInOutCubic = t => (t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2);
+
+  // keyframes as % of the stage width: [left, width]
+  const KF0 = [0, 54];   // stage 1: video left, smaller
+  const KF1 = [28, 72];  // stage 2: video right, bigger
+  const KF2 = [0, 100];  // stage 3: video fills the stage
+
+  function applyStage(mediaLeft, mediaWidth, video1Opacity, copy1Opacity, copy2Opacity, activeDotIndex) {
+    showcaseMedia.style.left = mediaLeft + '%';
+    showcaseMedia.style.width = mediaWidth + '%';
+    showcaseVideos[0].style.opacity = video1Opacity;
+    showcaseVideos[1].style.opacity = 1 - video1Opacity;
+    showcaseVideos[0].classList.toggle('active', video1Opacity >= 0.5);
+    showcaseVideos[1].classList.toggle('active', video1Opacity < 0.5);
+    if (video1Opacity > 0) showcaseVideos[0].play().catch(() => {}); else showcaseVideos[0].pause();
+    if (video1Opacity < 1) showcaseVideos[1].play().catch(() => {}); else showcaseVideos[1].pause();
+    showcaseCopy1.style.opacity = copy1Opacity;
+    showcaseCopy2.style.opacity = copy2Opacity;
+    showcaseCopy1.classList.toggle('active', copy1Opacity > 0.05);
+    showcaseCopy2.classList.toggle('active', copy2Opacity > 0.05);
+    showcaseDots.forEach((dot, i) => dot.classList.toggle('active', i === activeDotIndex));
+  }
 
   let showcaseTicking = false;
   function updateShowcase() {
     showcaseTicking = false;
     const rect = showcaseScroll.getBoundingClientRect();
     const scrollable = showcaseScroll.offsetHeight - window.innerHeight;
-    const progress = scrollable > 0 ? Math.min(1, Math.max(0, -rect.top / scrollable)) : 0;
+    const t = scrollable > 0 ? clamp01(-rect.top / scrollable) : 0;
 
     if (reduceMotion) {
-      // No scrubbed crossfade: jump straight to whichever slide owns this
-      // segment of the scroll range (segment k = [k/N, (k+1)/N)).
-      const activeIndex = Math.min(slideCount - 1, Math.floor(progress * slideCount));
-      showcaseSlides.forEach((slide, i) => {
-        const opacity = i === activeIndex ? 1 : 0;
-        slide.style.opacity = opacity;
-        slide.style.transform = 'none';
-        slide.classList.toggle('active', i === activeIndex);
-        const video = slide.querySelector('video');
-        if (video) { if (opacity > 0) video.play().catch(() => {}); else video.pause(); }
-      });
-      showcaseDots.forEach((dot, i) => dot.classList.toggle('active', i === activeIndex));
+      // snap straight to whichever of the 3 stages owns this segment
+      const stage = Math.min(2, Math.floor(t * 3));
+      const [left, width] = stage === 0 ? KF0 : stage === 1 ? KF1 : KF2;
+      applyStage(left, width, stage === 0 ? 1 : 0, stage === 0 ? 1 : 0, stage === 1 ? 1 : 0, stage === 0 ? 0 : 1);
       return;
     }
 
-    const scaled = progress * slideCount;
-    const currentIndex = Math.min(slideCount - 1, Math.floor(scaled));
-    const nextIndex = Math.min(slideCount - 1, currentIndex + 1);
-    const localT = Math.min(1, Math.max(0, scaled - currentIndex));
-    const eased = easeInOutCubic(localT);
+    let left, width;
+    if (t <= 0.5) {
+      const e = easeInOutCubic(t / 0.5);
+      left = lerp(KF0[0], KF1[0], e);
+      width = lerp(KF0[1], KF1[1], e);
+    } else {
+      const e = easeInOutCubic((t - 0.5) / 0.5);
+      left = lerp(KF1[0], KF2[0], e);
+      width = lerp(KF1[1], KF2[1], e);
+    }
 
-    showcaseSlides.forEach((slide, i) => {
-      let opacity = 0;
-      let scale = 0.94;
-      if (currentIndex === nextIndex) {
-        opacity = i === currentIndex ? 1 : 0;
-        scale = i === currentIndex ? 1 : 0.94;
-      } else if (i === currentIndex) {
-        opacity = 1 - eased;
-        scale = 1 - 0.06 * eased;
-      } else if (i === nextIndex) {
-        opacity = eased;
-        scale = 0.94 + 0.06 * eased;
-      }
-      slide.style.opacity = opacity;
-      slide.style.transform = `scale(${scale})`;
-      slide.classList.toggle('active', opacity > 0.5 || currentIndex === nextIndex && i === currentIndex);
-      const video = slide.querySelector('video');
-      if (video) { if (opacity > 0) video.play().catch(() => {}); else video.pause(); }
-    });
+    const video1Opacity = 1 - clamp01((t - 0.45) / 0.1);
+    const copy1Opacity = 1 - clamp01((t - 0.3) / 0.2);
+    let copy2Opacity;
+    if (t < 0.5) copy2Opacity = 0;
+    else if (t < 0.68) copy2Opacity = clamp01((t - 0.5) / 0.18);
+    else if (t < 0.8) copy2Opacity = 1;
+    else copy2Opacity = 1 - clamp01((t - 0.8) / 0.2);
 
-    const activeDotIndex = eased < 0.5 ? currentIndex : nextIndex;
-    showcaseDots.forEach((dot, i) => dot.classList.toggle('active', i === activeDotIndex));
+    applyStage(left, width, video1Opacity, copy1Opacity, copy2Opacity, t < 0.5 ? 0 : 1);
   }
 
   function onShowcaseScroll() {
@@ -251,7 +260,7 @@ if (showcaseScroll && showcaseDots.length && showcaseSlides.length) {
       const scrollable = showcaseScroll.offsetHeight - window.innerHeight;
       if (scrollable <= 0) return;
       const rect = showcaseScroll.getBoundingClientRect();
-      const targetProgress = (idx + 0.001) / slideCount;
+      const targetProgress = idx === 0 ? 0.001 : 0.5;
       const targetY = window.scrollY + rect.top + targetProgress * scrollable;
       window.scrollTo({ top: targetY, behavior: reduceMotion ? 'auto' : 'smooth' });
     });
