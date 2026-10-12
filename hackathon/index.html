@@ -700,8 +700,15 @@ html[lang="zh-CN"] .ms-now h3 { font-family: var(--font-title); font-weight: 400
 .my-steps li::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 6px; background: rgba(255,255,255,.08); }
 .my-steps li:first-child::before { border-radius: 3px 0 0 3px; } .my-steps li:last-child::before { border-radius: 0 3px 3px 0; }
 .my-steps li + li::after { content: ''; position: absolute; z-index: 1; left: -1px; top: 0; width: 2px; height: 6px; background: var(--surface); }
-.my-steps li.done::before { background: #6A48FF; }
-.my-steps li.cur::before { background: linear-gradient(90deg, #6A48FF, #B5ACFF 50%, #6A48FF) 0 0 / 200% 100%; box-shadow: 0 0 14px rgba(123,92,255,.7); animation: msSweep 2.4s linear infinite; }
+/* fill: each stage holds its own fill bar; the current one is only partly filled (how far along this step is) and glows at its tip.
+   Width changes animate, and stages fill one after another when you advance. */
+.my-steps .ms-fill { position: absolute; z-index: 0; top: 0; left: 0; height: 6px; width: calc(var(--p, 0) * 100%); background: #6A48FF;
+  transition: width .9s cubic-bezier(.22,.8,.24,1) var(--dl, 0s), box-shadow .4s; }
+.my-steps li:first-child .ms-fill { border-radius: 3px 0 0 3px; } .my-steps li:last-child .ms-fill { border-radius: 0 3px 3px 0; }
+.my-steps li.cur .ms-fill { background: linear-gradient(90deg, #6A48FF, #B5ACFF 50%, #6A48FF) 0 0 / 200% 100%; box-shadow: 0 0 14px rgba(123,92,255,.7); animation: msSweep 2.4s linear infinite; }
+.my-steps li.cur .ms-fill::after { content: ''; position: absolute; right: -3px; top: -3px; width: 12px; height: 12px; border-radius: 50%; background: #fff; box-shadow: 0 0 10px 2px rgba(181,172,255,.9); animation: msPulse 1.6s ease-in-out infinite; }
+@keyframes msPulse { 50% { transform: scale(.7); opacity: .7; } }
+.my-steps li b, .my-steps li { transition: color .5s; }
 @keyframes msSweep { to { background-position: -200% 0; } }
 .my-steps li b { display: block; font-family: var(--font-mono); font-size: 11.5px; font-weight: 600; letter-spacing: .1em; margin-bottom: 4px; color: var(--text-muted); opacity: .7; }
 .my-steps li.done { color: var(--text-soft); } .my-steps li.done b { color: #988DFF; opacity: 1; }
@@ -873,11 +880,11 @@ textarea:focus { outline: none; border-color: var(--ice); box-shadow: 0 0 0 3px 
 .wf-more em { font-style: normal; } .wf-bonus.closed .wf-more .c, .wf-bonus:not(.closed) .wf-more .o { display: none; }
 .wf-toggle:hover .wf-more { border-color: var(--ice); background: rgba(123,92,255,.2); }
 /* the confirm + submit block is its own band, clearly apart from the 加分项 toggle */
-.work-form > .check { margin-top: 8px; padding-top: 26px; border-top: 1px solid var(--border-subtle); }
+.work-form > .check { margin-top: 22px; padding-top: 34px; border-top: 1px solid var(--border-subtle); }
 .wf-chev { width: 8px; height: 8px; border-right: 1.5px solid var(--ice); border-bottom: 1.5px solid var(--ice); transform: rotate(45deg) translateY(-3px); transition: transform .25s; }
 .wf-bonus:not(.closed) .wf-chev { transform: rotate(-135deg) translate(-2px, -1px); }
 .wf-bonus.closed .wf-item { display: none; }
-.wf-bonus.closed { margin-bottom: 18px; }
+.wf-bonus.closed { margin-bottom: 26px; }
 .wf-gh span { font-size: 12.5px; color: var(--text-muted); }
 .wf-group:not(.wf-bonus) .wf-gh span { color: var(--ice); font-weight: 600; }
 .wf-group + .wf-group { padding-top: 26px; border-top: 1px solid var(--border-subtle); }
@@ -2787,7 +2794,33 @@ document.querySelectorAll('.res-main').forEach(card => card.addEventListener('po
     const i = STAGES.indexOf(stageNow());
     const k = STAGES[i];
     $('#msNow').innerHTML = `<h3>${T('st.' + k)}</h3><p>${T('st.' + k + 'D')}</p>`;
-    $('#mySteps').innerHTML = STAGES.map((k, j) => `<li class="${j < i ? 'done' : j === i ? 'cur' : ''}"${j === i ? ' aria-current="step"' : ''}><b>${j < i ? '✓ ' : ''}${String(j + 1).padStart(2, '0')}</b>${T('st.' + k).replace(' · ', '<span class="sep"> · </span>')}</li>`).join('');
+    // how far along the current step is (so the bar never looks "finished" before it is)
+    const tm = state.team, w = state.work || {};
+    const part = {
+      reg: .2,
+      team: !tm ? .2 : tm.members.length > 1 ? .7 : .45,
+      topic: .35,
+      work: (() => { const d = w.draft; if (!d) return .2; const n = (d.link || d.videoFile ? 1 : 0) + (d.reportFile ? 1 : 0); return .3 + .25 * n; })(),
+      review: Math.max(.15, Math.min(.95, (Date.now() - new Date('2026-11-20T00:00:00+08:00').getTime()) / (10 * 864e5))),
+      show: 1,
+    }[k];
+    const ol = $('#mySteps');
+    if (ol.children.length !== STAGES.length || ol.dataset.lang !== (isEN() ? 'en' : 'zh')) {
+      ol.dataset.lang = isEN() ? 'en' : 'zh';
+      ol.innerHTML = STAGES.map(k2 => `<li><i class="ms-fill"></i><b></b>${T('st.' + k2).replace(' · ', '<span class="sep"> · </span>')}</li>`).join('');
+    }
+    const prev = +(ol.dataset.i || -1);
+    [...ol.children].forEach((li, j) => {
+      li.className = j < i ? 'done' : j === i ? 'cur' : '';
+      j === i ? li.setAttribute('aria-current', 'step') : li.removeAttribute('aria-current');
+      li.querySelector('b').textContent = (j < i ? '✓ ' : '') + String(j + 1).padStart(2, '0');
+      const p = j < i ? 1 : j === i ? part : 0, f = li.querySelector('.ms-fill');
+      // when advancing, earlier segments finish first, then the next one starts
+      f.style.setProperty('--dl', i > prev && prev >= 0 ? Math.max(0, j - prev) * .35 + 's' : '0s');
+      f.style.setProperty('--p', p);
+    });
+    if (prev < 0) [...ol.children].forEach(li => { const f = li.querySelector('.ms-fill'); const v = f.style.getPropertyValue('--p'); f.style.setProperty('--p', 0); f.style.setProperty('--dl', '0s'); requestAnimationFrame(() => requestAnimationFrame(() => f.style.setProperty('--p', v))); });
+    ol.dataset.i = i;
   }
   function renderMy() { renderStage(); renderReg(); renderTeam(); renderWorks(); }
 
