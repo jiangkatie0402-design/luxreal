@@ -1199,7 +1199,7 @@ body.modal-open { overflow: hidden; }
         <button type="button" data-lang="zh-CN" aria-pressed="true">中</button>
         <button type="button" data-lang="en" aria-pressed="false">EN</button>
       </div>
-      <button type="button" class="btn btn-primary btn-sm" id="navAuth" data-i18n="nav.signup">我的报名</button>
+      <button type="button" class="btn btn-primary btn-sm" id="navAuth" data-i18n="cta.register">立即报名</button>
       <div class="nav-user" id="navUser" hidden>
         <button type="button" class="nav-ava" id="navAva" aria-haspopup="menu" aria-expanded="false"></button>
         <div class="nav-menu" id="navMenu" role="menu" hidden>
@@ -2407,7 +2407,7 @@ document.querySelectorAll('.res-main').forEach(card => card.addEventListener('po
     // nav: 登录 ⇄ 退出登录 (我的参赛 is always in the nav)
     // nav: 登录 (logged out) ⇄ avatar with a small menu (logged in)
     const auth = $('#navAuth'), user = $('#navUser'), p = state.profile;
-    auth.dataset.i18n = 'nav.signup'; auth.innerHTML = (isEN() ? EN : ZH)['nav.signup'];
+    auth.dataset.i18n = 'cta.register'; auth.innerHTML = (isEN() ? EN : ZH)['cta.register'];
     auth.hidden = !!state.loggedIn; user.hidden = !state.loggedIn;
     const ava = $('#navAva'), nm = p && p.name ? p.name.trim() : '';
     ava.textContent = nm ? nm.slice(0, 1).toUpperCase() : ''; ava.classList.toggle('anon', !nm);
