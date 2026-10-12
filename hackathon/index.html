@@ -746,6 +746,28 @@ html[lang="zh-CN"] .ms-now h3 { font-family: var(--font-title); font-weight: 400
 .my-steps li.done { color: var(--text-soft); } .my-steps li.done b { color: #988DFF; opacity: 1; }
 .my-steps li.cur { color: #fff; font-weight: 700; } .my-steps li.cur b { color: #B5ACFF; opacity: 1; }
 .my-sec { margin-top: 56px; }
+/* 我的参赛 step panels: one card per step, so give each one room */
+#myBody .my-card { padding: clamp(28px, 4vw, 48px); }
+#myBody .empty { padding: clamp(32px, 5vw, 64px) 0; }
+#myBody .empty h3 { font-size: 22px; margin-bottom: 10px; }
+#myBody .empty p { font-size: 15px; line-height: 1.75; margin-bottom: 28px; max-width: 520px; }
+.tp-done { gap: 14px !important; }
+.tp-done h3 { font-size: clamp(24px, 2.4vw, 30px) !important; margin-top: 6px; }
+html[lang="zh-CN"] .tp-done h3, html[lang="zh-CN"] .ws-main h3 { font-family: var(--font-title); font-weight: 400; letter-spacing: .02em; }
+.tp-done p { font-size: 15px; }
+.tp-done .row { margin-top: 18px !important; gap: 14px !important; align-items: center; flex-wrap: wrap; }
+.tp-next { font-size: 14px; color: var(--ice); margin-right: 6px; }
+.ws-head { display: flex; align-items: flex-start; justify-content: space-between; gap: 20px; flex-wrap: wrap; }
+.ws-main { display: flex; flex-direction: column; align-items: flex-start; gap: 12px; }
+.ws-main h3 { font-size: clamp(24px, 2.4vw, 30px); font-weight: 700; margin-top: 4px; }
+.ws-main .work-ver { font-size: 13.5px; color: var(--text-muted); }
+.ws-note { margin: 22px 0 0; font-size: 15px; line-height: 1.75; color: var(--text-soft); max-width: 760px; }
+.ws-list { margin: 28px 0 0; border-top: 1px solid var(--border-subtle); }
+.ws-list div { display: grid; grid-template-columns: minmax(140px, 240px) 1fr; gap: 24px; padding: 18px 0; border-bottom: 1px solid var(--border-subtle); font-size: 14.5px; }
+.ws-list dt { color: var(--text-muted); } .ws-list dd { margin: 0; min-width: 0; word-break: break-all; }
+.ws-list a { color: var(--ice); } .ws-list a:hover { color: #fff; } .ws-list b { font-weight: 600; }
+#myWorks .reg-note { margin-top: 20px; padding-top: 0; border-top: 0; }
+@media (max-width: 640px) { .ws-list div { grid-template-columns: 1fr; gap: 4px; } }
 /* stage tabs */
 .my-steps li { cursor: pointer; padding-bottom: 6px; transition: color .3s; }
 .my-steps li:not(.locked):hover { color: #fff; }
@@ -2110,6 +2132,7 @@ document.querySelectorAll('.res-main').forEach(card => card.addEventListener('po
     'team.cf2': ['确认后仍可调整队员或解散团队', 'You can still change members or disband after confirming'], 'team.cf3': ['之后新加入的队员不补发团队积分；退出或换队不会重复获得', 'People who join later don’t receive team credits; leaving or switching teams doesn’t earn them again'],
     'team.cfOk': ['确认组队', 'Confirm team'],
     'tp.titlePh': ['给你们的作品起个名字', 'Name your project'], 'tp.saveEdit': ['保存修改', 'Save changes'],
+    'tp.waitWork': ['下一步：等待队长提交作品', 'Next: your captain submits the project'], 'tp.viewWork': ['查看作品进度', 'View submission status'],
     'w.noTeamT': ['创建或加入团队后提交作品', 'Create or join a team to submit'], 'w.noTeamD': ['作品由队长代表团队提交；单人参赛也需要先创建团队。', 'The captain submits on behalf of the team — solo entrants create a team too.'],
     'w.waitT': ['等待队长提交作品', 'Waiting for your captain to submit'], 'w.waitD': ['团队作品由队长统一上传提交，提交后这里会显示作品与版本。', 'Your captain uploads the team’s project; once submitted it shows up here with its version.'],
     'w.memberNote': ['作品由队长提交，如需修改请联系队长。', 'Your captain submits the project — ask them if anything needs changing.'], 'w.demoTeam': ['演示：模拟队长提交作品', 'Demo: captain submits the project'],
@@ -2509,7 +2532,8 @@ document.querySelectorAll('.res-main').forEach(card => card.addEventListener('po
     }
     if (topic) {
       el.innerHTML = `<div class="tp-done"><span class="badge ok">${T('tp.submitted')}</span><h3>${esc(topic.title)}</h3>${topic.desc ? `<p>${esc(topic.desc)}</p>` : ''}
-        <div class="row">${tm.captain && open ? `<button type="button" class="btn btn-ghost btn-sm" data-act="topic">${T('tp.edit')}</button>` : ''}<button type="button" class="btn btn-primary btn-sm" data-goto="work">${T('tp.toWork')}</button></div></div>`;
+        <div class="row">${tm.captain ? `<button type="button" class="btn btn-primary" data-goto="work">${T('tp.toWork')}</button>${open ? `<button type="button" class="btn btn-ghost" data-act="topic">${T('tp.edit')}</button>` : ''}`
+          : `<span class="tp-next">${T('tp.waitWork')}</span><button type="button" class="btn btn-ghost" data-goto="work">${T('tp.viewWork')}</button>`}</div></div>`;
       return;
     }
     el.innerHTML = tm.captain
@@ -2726,13 +2750,14 @@ document.querySelectorAll('.res-main').forEach(card => card.addEventListener('po
       return;
     }
     if (sub && (!editingWork || closed || member)) {
-      el.innerHTML = `<div class="work-status">
+      const topic = state.team && state.team.topic;
+      el.innerHTML = `<div class="ws-head"><div class="ws-main">
           <span class="badge${closed ? '' : ' ok'}">${T(closed ? 'w.closedBadge' : 'w.done')}</span>
-          <span class="work-ver">${T('w.version', { v: sub.version, t: fmtTime(sub.at) })}</span>
-          <p>${T(closed ? 'w.lockedNote' : 'w.reviewNote')}</p>
-          <div class="work-btns"><button type="button" class="btn btn-primary btn-sm" data-act="viewWork" aria-expanded="${viewingWork}">${T(viewingWork ? 'w.hide' : 'w.view')}</button>
-            ${closed || member ? '' : `<button type="button" class="btn btn-ghost btn-sm" data-act="editWork">${T('w.edit')}</button>`}</div></div>
-        <div class="receipt-links"${viewingWork ? '' : ' hidden'}>${receiptRows(sub)}</div>
+          <h3>${topic ? esc(topic.title) : T('w.done')}</h3>
+          <span class="work-ver">${T('w.version', { v: sub.version, t: fmtTime(sub.at) })}</span></div>
+          ${closed || member ? '' : `<button type="button" class="btn btn-ghost" data-act="editWork">${T('w.edit')}</button>`}</div>
+        <p class="ws-note">${T(closed ? 'w.lockedNote' : 'w.reviewNote')}</p>
+        <dl class="ws-list">${receiptRows(sub).replace(/<div><span>/g, '<div><dt>').replace(/<\/span><span class="val">/g, '</dt><dd>').replace(/<\/span><\/div>/g, '</dd></div>')}</dl>
         ${closed ? '' : `<p class="reg-note">${T(member ? 'w.memberNote' : 'w.rule')}</p>`}`;
       return;
     }
