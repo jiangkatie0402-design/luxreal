@@ -520,19 +520,21 @@ html[lang="zh-CN"] .sec-title { letter-spacing: .02em; line-height: 1.22; }
 .tl2-ehead { display: flex; align-items: baseline; gap: 16px; flex-wrap: wrap; margin-bottom: 18px; }
 .tl2-ehead .rules-title { font-size: 22px; margin: 0; }
 .tl2-ehead .rules-desc { font-size: 14px; color: var(--text-muted); }
-.tl2-ctop { flex-wrap: nowrap; row-gap: 6px; }
-@media (max-width: 1199px) { .tl2-ctop { flex-wrap: wrap; } }
-.tl2-ctop .mono, .tl2-ctop .tl2-type { white-space: nowrap; }
-.tl2-ctop .tl2-type { margin-left: auto; font-size: 11px; font-weight: 600; padding: 0; border: 0; letter-spacing: 0; color: var(--text-muted); display: inline-flex; align-items: center; gap: 5px; }
-.tl2-ctop .tl2-type::before { content: ''; width: 5px; height: 5px; border-radius: 50%; background: currentColor; opacity: .8; }
-.tl2-ctop .tl2-live { color: #fda4af; } .tl2-ctop .tl2-on { color: var(--ice); }
-/* calmer cards: more air between the meta row, the title and the action */
-.tl2-cards .tl2-card { gap: 14px; padding: 20px 18px; }
-.tl2-cards .tl2-card .tl2-ctop { padding-bottom: 12px; border-bottom: 1px solid var(--border-subtle); }
-.tl2-cards .tl2-card h4 { font-size: 15.5px; }
-.tl2-cards .tl2-card .tl2-rsv { margin-top: auto; }
+/* event card, top → bottom: number + status · big date · title · type + action (pinned to the bottom) */
+.tl2-cards .tl2-card { gap: 10px; padding: 18px 18px 16px; }
+.tl2-cards .tl2-ctop { gap: 10px; }
+.tl2-cards .tl2-date { font-size: 13.5px; font-weight: 600; color: var(--ice); letter-spacing: 0; white-space: nowrap; }
+.tl2-cards .tl2-card h4 { font-size: 17px; line-height: 1.4; margin-top: 4px; }
+.tl2-cfoot { margin-top: auto; padding-top: 12px; width: 100%; display: flex; align-items: center; justify-content: space-between; gap: 10px; min-height: 48px; border-top: 1px solid var(--border-subtle); }
+.tl2-cfoot .tl2-type { display: inline-flex; align-items: center; gap: 6px; padding: 0; border: 0; font-size: 12px; font-weight: 600; color: var(--text-muted); white-space: nowrap; }
+.tl2-cfoot .tl2-type::before { content: ''; width: 6px; height: 6px; border-radius: 50%; background: currentColor; }
+.tl2-cfoot .tl2-live { color: #fda4af; } .tl2-cfoot .tl2-on { color: var(--ice); }
+.tl2-cfoot .tl2-rsv { margin: 0; }
+/* status: 进行中 glows, 下一场 is a solid pill, 已结束 is quiet and the card dims */
+.tl2-card.live .tl2-state { background: #7B5CFF; color: #fff; box-shadow: 0 0 12px rgba(123,92,255,.8); }
+.tl2-card.live .tl2-state::before { content: ''; display: inline-block; width: 6px; height: 6px; margin-right: 5px; border-radius: 50%; background: #fff; vertical-align: 1px; animation: msPulse 1.4s ease-in-out infinite; }
+.tl2-card.past { opacity: .55; }
 .tl2-ctop { gap: 6px; } .tl2-ctop .mono { letter-spacing: -.02em; }
-.tl2-state[hidden] { display: none !important; }
 .tl2-cards { display: grid; grid-template-columns: repeat(5, 1fr); gap: 12px; }
 .tl2-card { position: relative; display: flex; flex-direction: column; align-items: flex-start; gap: 10px; padding: 18px 15px; border: 1px solid var(--border); border-radius: var(--radius-sm); background: var(--surface); transition: border-color .25s, opacity .25s; }
 .tl2-card:hover { border-color: var(--border-strong); }
@@ -1347,29 +1349,32 @@ body.modal-open { overflow: hidden; }
         <div class="tl2-ehead"><h3 class="rules-title" data-i18n="tl.events">赛事活动</h3><p class="rules-desc" data-i18n="tl.eventsD">Workshop 与直播自由参加，编号对应上方时间轴。</p></div>
         <div class="tl2-cards">
         <article class="tl2-card" data-ev="ev1" data-start="2026-10-24T00:00:00+08:00" data-end="2026-10-26T00:00:00+08:00">
-          <div class="tl2-ctop"><span class="tl2-num">1</span><span class="mono">10.24–10.25</span><span class="tl2-type tl2-off" data-i18n="ev1.type">线下 Workshop</span><span class="tl2-state" data-state hidden></span></div>
+          <div class="tl2-ctop"><span class="tl2-num">1</span><span class="tl2-date mono">10.24–10.25</span><span class="tl2-state" data-state></span></div>
           <h4 data-i18n="ev1.t">深圳站</h4>
+          <div class="tl2-cfoot"><span class="tl2-type tl2-off" data-i18n="ev1.type">线下 Workshop</span></div>
           
         </article>
         <article class="tl2-card" data-ev="ev2" data-start="2026-10-29T00:00:00+08:00" data-end="2026-10-30T00:00:00+08:00">
-          <div class="tl2-ctop"><span class="tl2-num">2</span><span class="mono">10.29</span><span class="tl2-type tl2-live" data-i18n="ev2.type">直播</span><span class="tl2-state" data-state hidden></span></div>
+          <div class="tl2-ctop"><span class="tl2-num">2</span><span class="tl2-date mono">10.29</span><span class="tl2-state" data-state></span></div>
           <h4 data-i18n="ev2.t">3D AI 共创之夜暨群核3D黑客松赛事说明会</h4>
-          <button type="button" class="btn btn-ghost btn-sm tl2-rsv" data-reserve data-i18n="tl.reserve">预约直播</button>
+          <div class="tl2-cfoot"><span class="tl2-type tl2-live" data-i18n="ev2.type">直播</span><button type="button" class="btn btn-ghost btn-sm tl2-rsv" data-reserve data-i18n="tl.reserve">预约直播</button></div>
         </article>
         <article class="tl2-card" data-ev="ev3" data-start="2026-10-31T00:00:00+08:00" data-end="2026-11-02T00:00:00+08:00">
-          <div class="tl2-ctop"><span class="tl2-num">3</span><span class="mono">10.31–11.1</span><span class="tl2-type tl2-off" data-i18n="ev3.type">线下 Workshop</span><span class="tl2-state" data-state hidden></span></div>
+          <div class="tl2-ctop"><span class="tl2-num">3</span><span class="tl2-date mono">10.31–11.1</span><span class="tl2-state" data-state></span></div>
           <h4 data-i18n="ev3.t">北京站</h4>
+          <div class="tl2-cfoot"><span class="tl2-type tl2-off" data-i18n="ev3.type">线下 Workshop</span></div>
           
         </article>
         <article class="tl2-card" data-ev="ev4" data-start="2026-11-07T00:00:00+08:00" data-end="2026-11-09T00:00:00+08:00">
-          <div class="tl2-ctop"><span class="tl2-num">4</span><span class="mono">11.7–11.8</span><span class="tl2-type tl2-off" data-i18n="ev4.type">线下 Workshop</span><span class="tl2-state" data-state hidden></span></div>
+          <div class="tl2-ctop"><span class="tl2-num">4</span><span class="tl2-date mono">11.7–11.8</span><span class="tl2-state" data-state></span></div>
           <h4 data-i18n="ev4.t">上海站</h4>
+          <div class="tl2-cfoot"><span class="tl2-type tl2-off" data-i18n="ev4.type">线下 Workshop</span></div>
           
         </article>
         <article class="tl2-card" data-ev="ev5" data-start="2026-11-12T00:00:00+08:00" data-end="2026-11-13T00:00:00+08:00">
-          <div class="tl2-ctop"><span class="tl2-num">5</span><span class="mono">11.12</span><span class="tl2-type tl2-on" data-i18n="ev5.type">线上 Workshop</span><span class="tl2-state" data-state hidden></span></div>
+          <div class="tl2-ctop"><span class="tl2-num">5</span><span class="tl2-date mono">11.12</span><span class="tl2-state" data-state></span></div>
           <h4 data-i18n="ev5.t">线上专场</h4>
-          <button type="button" class="btn btn-ghost btn-sm tl2-rsv" data-reserve data-i18n="tl.reserve">预约直播</button>
+          <div class="tl2-cfoot"><span class="tl2-type tl2-on" data-i18n="ev5.type">线上 Workshop</span><button type="button" class="btn btn-ghost btn-sm tl2-rsv" data-reserve data-i18n="tl.reserve">预约直播</button></div>
         </article>
         </div>
       </div>
