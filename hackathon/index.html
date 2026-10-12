@@ -867,11 +867,15 @@ textarea:focus { outline: none; border-color: var(--ice); box-shadow: 0 0 0 3px 
 .wf-gh b::before { content: ''; width: 4px; height: 16px; border-radius: 2px; background: #7B5CFF; box-shadow: 0 0 10px rgba(123,92,255,.7); }
 .wf-gh { padding-bottom: 8px; }
 /* 加分项 starts folded; the header opens it (it stays open when there's already something filled in) */
-.wf-toggle { width: 100%; background: none; border: 0; color: inherit; font: inherit; text-align: left; cursor: pointer; }
-.wf-toggle span { display: inline-flex; align-items: center; gap: 10px; }
+.wf-toggle { width: 100%; display: flex; align-items: center; justify-content: flex-start; gap: 14px; background: none; border: 0; color: inherit; font: inherit; text-align: left; cursor: pointer; }
+.wf-toggle .wf-note { margin-left: auto; }
+.wf-more { display: inline-flex; align-items: center; gap: 8px; height: 30px; padding: 0 14px; border-radius: var(--radius-pill); border: 1px solid rgba(152,141,255,.45); background: rgba(123,92,255,.1); font-size: 13px; font-weight: 600; color: var(--ice); }
+.wf-more em { font-style: normal; } .wf-bonus.closed .wf-more .c, .wf-bonus:not(.closed) .wf-more .o { display: none; }
+.wf-toggle:hover .wf-more { border-color: var(--ice); background: rgba(123,92,255,.2); }
+/* the confirm + submit block is its own band, clearly apart from the 加分项 toggle */
+.work-form > .check { margin-top: 8px; padding-top: 26px; border-top: 1px solid var(--border-subtle); }
 .wf-chev { width: 8px; height: 8px; border-right: 1.5px solid var(--ice); border-bottom: 1.5px solid var(--ice); transform: rotate(45deg) translateY(-3px); transition: transform .25s; }
 .wf-bonus:not(.closed) .wf-chev { transform: rotate(-135deg) translate(-2px, -1px); }
-.wf-toggle:hover span { color: var(--text-soft); }
 .wf-bonus.closed .wf-item { display: none; }
 .wf-bonus.closed { margin-bottom: 18px; }
 .wf-gh span { font-size: 12.5px; color: var(--text-muted); }
@@ -2013,6 +2017,9 @@ document.querySelectorAll('.res-main').forEach(card => card.addEventListener('po
     'jr.demoReq': ['演示：模拟收到一条入队申请', 'Demo: receive a join request'],
     'loc.other': ['其他（手动填写）', 'Other (type it in)'],
     'pt.afterCapTopic': ['待队长提交选题后发放', 'After your captain submits the topic'], 'tp.demo': ['演示：模拟队长提交选题', 'Demo: captain submits the topic'],
+    'w.gateTeamT': ['确认组队后提交选题', 'Confirm your team, then submit a topic'], 'w.gateTeamD': ['流程：确认组队 → 提交选题 → 提交作品。先在「我的团队」中确认组队。', 'Flow: confirm the team → submit a topic → submit the project. Start by confirming your team under My team.'],
+    'w.gateTopicT': ['提交选题后即可提交作品', 'Submit your topic to unlock the project form'], 'w.gateTopicD': ['选题提交后，这里会开放作品提交表单。', 'Once the topic is in, the submission form opens here.'],
+    'w.expand': ['展开填写', 'Add'], 'w.collapse': ['收起', 'Hide'],
     'w.noTeamT': ['创建或加入团队后提交作品', 'Create or join a team to submit'], 'w.noTeamD': ['作品由队长代表团队提交；单人参赛也需要先创建团队。', 'The captain submits on behalf of the team — solo entrants create a team too.'],
     'w.waitT': ['等待队长提交作品', 'Waiting for your captain to submit'], 'w.waitD': ['团队作品由队长统一上传提交，提交后这里会显示作品与版本。', 'Your captain uploads the team’s project; once submitted it shows up here with its version.'],
     'w.memberNote': ['作品由队长提交，如需修改请联系队长。', 'Your captain submits the project — ask them if anything needs changing.'], 'w.demoTeam': ['演示：模拟队长提交作品', 'Demo: captain submits the project'],
@@ -2582,6 +2589,13 @@ document.querySelectorAll('.res-main').forEach(card => card.addEventListener('po
       el.innerHTML = `<div class="empty"><h3>${T(closed ? 'w.closedT' : 'w.noTeamT')}</h3><p>${T(closed ? 'w.closedD' : 'w.noTeamD')}</p></div>`;
       return;
     }
+    // captain flow: confirm the team → submit the topic → then the work form opens
+    if (state.team && state.team.captain && !w.submitted && !(state.team.confirmed && state.team.topic)) {
+      const needConfirm = !state.team.confirmed;
+      el.innerHTML = `<div class="empty"><h3>${T(closed ? 'w.closedT' : needConfirm ? 'w.gateTeamT' : 'w.gateTopicT')}</h3><p>${T(closed ? 'w.closedD' : needConfirm ? 'w.gateTeamD' : 'w.gateTopicD')}</p>
+        ${!closed && !needConfirm ? `<button type="button" class="btn btn-primary" data-act="topic">${T('tp.btn')}</button>` : ''}</div>`;
+      return;
+    }
     if (member && !sub) {
       el.innerHTML = `<div class="empty"><h3>${T(closed ? 'w.closedT' : 'w.waitT')}</h3><p>${T(closed ? 'w.closedD' : 'w.waitD')}</p>
         ${closed ? '' : `<button type="button" class="link-btn demo-link" data-act="demoTeamWork">${T('w.demoTeam')}</button>`}</div>`;
@@ -2621,7 +2635,7 @@ document.querySelectorAll('.res-main').forEach(card => card.addEventListener('po
         </div>
       </section>
       <section class="wf-group wf-bonus${d.social || d.repo || d.repoFile ? '' : ' closed'}">
-        <button type="button" class="wf-gh wf-toggle" data-act="toggleBonus" aria-expanded="${d.social || d.repo || d.repoFile ? 'true' : 'false'}"><b>${T('w.bonusT')}</b><span>${T('w.bonusD')}<i class="wf-chev" aria-hidden="true"></i></span></button>
+        <button type="button" class="wf-gh wf-toggle" data-act="toggleBonus" aria-expanded="${d.social || d.repo || d.repoFile ? 'true' : 'false'}"><b>${T('w.bonusT')}</b><span class="wf-more"><em class="o">${T('w.expand')}</em><em class="c">${T('w.collapse')}</em><i class="wf-chev" aria-hidden="true"></i></span><span class="wf-note">${T('w.bonusD')}</span></button>
         <div class="field wf-item">
           <div class="wf-label"><i class="wf-num">+</i><div><strong>${T('w.social')}</strong><p>${T('w.socialHint')}</p></div></div>
           <div class="wf-ctrl"><input type="url" name="social" placeholder="https://" aria-label="${T('w.social')}" value="${v('social')}"><em class="field-error"></em></div>
