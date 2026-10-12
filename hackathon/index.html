@@ -755,6 +755,14 @@ html[lang="zh-CN"] .ms-now h3 { font-family: var(--font-title); font-weight: 400
 .my-steps li.locked b::after { content: ' 🔒︎'; font-size: 10px; opacity: .6; filter: grayscale(1); }
 #myBody .my-sec[hidden] { display: none; }
 #myBody .my-sec:first-child, #myBody .my-sec[hidden] + .my-sec:not([hidden]) { margin-top: 40px; }
+.tp-form { display: flex; flex-direction: column; gap: 4px; max-width: 760px; }
+.tp-lead { color: var(--text-soft); font-size: 14px; margin-bottom: 14px; }
+.tp-form textarea { min-height: 140px; }
+.tp-actions { display: flex; align-items: center; gap: 16px; flex-wrap: wrap; margin-top: 10px; }
+.tp-hint { font-size: 13px; color: var(--ice); }
+.tm-confirm { margin-top: 18px; }
+.tm-confirm ul { margin: 6px 0 14px; padding-left: 18px; display: grid; gap: 4px; font-size: 13.5px; color: var(--text-soft); }
+.tm-confirm { border-color: rgba(123,92,255,.5); background: rgba(123,92,255,.08); }
 .tp-done { display: flex; flex-direction: column; align-items: flex-start; gap: 10px; }
 .tp-done h3 { font-size: 22px; font-weight: 700; } .tp-done p { color: var(--text-soft); line-height: 1.75; max-width: 760px; }
 .tp-done .row { display: flex; gap: 10px; margin-top: 6px; }
@@ -939,7 +947,10 @@ textarea:focus { outline: none; border-color: var(--ice); box-shadow: 0 0 0 3px 
 .wf-gh span { font-size: 12.5px; color: var(--text-muted); }
 .wf-group:not(.wf-bonus) .wf-gh span { color: var(--ice); font-weight: 600; }
 .wf-group + .wf-group { padding-top: 26px; border-top: 1px solid var(--border-subtle); }
-.field.wf-item { display: flex; flex-direction: column; gap: 16px; margin: 0; padding: 16px 0; }
+.field.wf-item { display: flex; flex-direction: column; gap: 18px; margin: 0; padding: 22px 0; }
+.wf-item + .wf-item { margin-top: 6px; }
+.wf-ctrl { gap: 14px !important; }
+.wf-gh { margin-bottom: 4px; }
 /* title, 二选一 and the explanation sit on one line */
 .wf-label > div { display: flex; align-items: baseline; flex-wrap: wrap; column-gap: 12px; row-gap: 2px; }
 .wf-label > div strong { margin-bottom: 0; }
@@ -973,10 +984,12 @@ textarea:focus { outline: none; border-color: var(--ice); box-shadow: 0 0 0 3px 
 .drop.has-file { border-style: solid; }
 .drop.has-file .drop-empty { display: none; }
 .drop.has-file .drop-file { display: flex; }
-.work-status { display: flex; flex-direction: column; align-items: flex-start; gap: 10px; }
+.work-status { display: flex; flex-direction: column; align-items: flex-start; gap: 16px; padding: 8px 0 6px; }
+.work-status .badge { font-size: 13px; padding: 4px 12px; }
+.work-status + .receipt-links { margin-top: 22px; }
 .work-status .work-ver { font-size: 13px; color: var(--text-muted); }
 .work-status p { font-size: 14.5px; color: var(--text-soft); line-height: 1.7; max-width: 720px; }
-.work-btns { display: flex; gap: 10px; flex-wrap: wrap; margin-top: 4px; }
+.work-btns { display: flex; gap: 12px; flex-wrap: wrap; margin-top: 10px; }
 .receipt-links[hidden] { display: none; }
 .receipt-links { padding-top: 16px; border-top: 1px solid var(--border-subtle); }
 .receipt-links .val b { font-weight: 600; color: var(--text); }
@@ -1751,7 +1764,7 @@ body.modal-open { overflow: hidden; }
       <button type="submit" class="btn btn-primary btn-block" data-i18n="m.editSave">保存</button>
     </form>
 
-    <form class="modal-pane" data-pane="topic" id="topicForm" novalidate></form>
+    <form class="tp-form" id="topicForm" novalidate hidden></form>
 
     <div class="modal-pane" data-pane="members" id="membersPane"></div>
 
@@ -2078,7 +2091,7 @@ document.querySelectorAll('.res-main').forEach(card => card.addEventListener('po
     'team.solo': ['单人参赛也需要创建团队。', 'Solo participants also need to create a team.'],
     'team.pending': ['组队中', 'Forming'], 'team.ok': ['已确认', 'Confirmed'],
     'team.rename': ['修改团队名称', 'Rename team'], 'team.removed': ['已移除该成员', 'Member removed'],
-    'team.okNote': ['团队已经确认，仍可调整成员或解散；作品提交与组队截止后成员锁定', 'Team confirmed. You can still change members or disband; members lock at the submission and team deadline'],
+    'team.okNote': ['团队已确认。团队积分将在提交选题时平均分配给当时的全部队员；之后仍可调整队员，但新加入的队员不补发积分。作品提交与组队截止后成员锁定。', 'Team confirmed. Team credits are split evenly among everyone on the team when the topic is submitted; you can still change members, but people who join later don’t receive them. Members lock at the submission and team deadline.'],
     'jr.badge': ['待队长确认', 'Pending'], 'jr.t': ['已申请加入团队 ', 'Request sent to team '], 'jr.d': ['队长确认后你将自动加入团队，无需再次操作。', 'Once the captain approves, you join the team automatically — nothing else to do.'],
     'jr.cancel': ['撤回申请', 'Withdraw'], 'jr.cancelled': ['已撤回入队申请', 'Request withdrawn'], 'jr.demo': ['演示：模拟队长同意', 'Demo: captain approves'],
     'jr.notice': ['有 {n} 条入队申请待确认', '{n} join request(s) waiting'], 'jr.handle': ['去处理', 'Review'], 'jr.reqT': ['入队申请', 'Join requests'],
@@ -2093,6 +2106,10 @@ document.querySelectorAll('.res-main').forEach(card => card.addEventListener('po
     'my.topic': ['提交选题', 'Submit topic'], 'reg.nextTeam': ['下一步：创建或加入团队', 'Next: create or join a team'], 'reg.goTeam': ['去组队', 'Form a team'],
     'tp.submitted': ['已提交选题', 'Topic submitted'], 'tp.toWork': ['去提交作品', 'Go to submission'], 'tp.waitT': ['等待队长提交选题', 'Waiting for your captain'],
     'st.locked': ['完成上一步后解锁', 'Finish the previous step to unlock'],
+    'team.cfT': ['确认组队前请了解', 'Before you confirm'], 'team.cf1': ['团队积分将在提交选题时，平均分配给当时的全部 {n} 名队员', 'Team credits are split evenly among all {n} member(s) on the team when the topic is submitted'],
+    'team.cf2': ['确认后仍可调整队员或解散团队', 'You can still change members or disband after confirming'], 'team.cf3': ['之后新加入的队员不补发团队积分；退出或换队不会重复获得', 'People who join later don’t receive team credits; leaving or switching teams doesn’t earn them again'],
+    'team.cfOk': ['确认组队', 'Confirm team'],
+    'tp.titlePh': ['给你们的作品起个名字', 'Name your project'], 'tp.saveEdit': ['保存修改', 'Save changes'],
     'w.noTeamT': ['创建或加入团队后提交作品', 'Create or join a team to submit'], 'w.noTeamD': ['作品由队长代表团队提交；单人参赛也需要先创建团队。', 'The captain submits on behalf of the team — solo entrants create a team too.'],
     'w.waitT': ['等待队长提交作品', 'Waiting for your captain to submit'], 'w.waitD': ['团队作品由队长统一上传提交，提交后这里会显示作品与版本。', 'Your captain uploads the team’s project; once submitted it shows up here with its version.'],
     'w.memberNote': ['作品由队长提交，如需修改请联系队长。', 'Your captain submits the project — ask them if anything needs changing.'], 'w.demoTeam': ['演示：模拟队长提交作品', 'Demo: captain submits the project'],
@@ -2487,29 +2504,36 @@ document.querySelectorAll('.res-main').forEach(card => card.addEventListener('po
     const el = $('#myTopic'), tm = state.team, open = Date.now() < DEADLINE;
     if (!tm || !tm.confirmed) { el.innerHTML = `<div class="empty"><h3>${T('w.gateTeamT')}</h3><p>${T('w.gateTeamD')}</p></div>`; return; }
     const topic = tm.topic;
+    if (tm.captain && open && (!topic || editingTopic)) {
+      el.innerHTML = ''; fillTopicForm(); el.append(topicForm); topicForm.hidden = false; return;
+    }
     if (topic) {
       el.innerHTML = `<div class="tp-done"><span class="badge ok">${T('tp.submitted')}</span><h3>${esc(topic.title)}</h3>${topic.desc ? `<p>${esc(topic.desc)}</p>` : ''}
         <div class="row">${tm.captain && open ? `<button type="button" class="btn btn-ghost btn-sm" data-act="topic">${T('tp.edit')}</button>` : ''}<button type="button" class="btn btn-primary btn-sm" data-goto="work">${T('tp.toWork')}</button></div></div>`;
       return;
     }
     el.innerHTML = tm.captain
-      ? `<div class="empty"><h3>${T('reg.topicT')}</h3><p>${T('reg.topicD')}</p>${open ? `<button type="button" class="btn btn-primary" data-act="topic">${T('tp.btn')}</button>` : ''}</div>`
+      ? `<div class="empty"><h3>${T('w.closedT')}</h3><p>${T('w.closedD')}</p></div>`
       : `<div class="empty"><h3>${T('tp.waitT')}</h3><p>${T('reg.waitTopic')}</p>${open ? `<button type="button" class="link-btn demo-link" data-act="demoTeamTopic">${T('tp.demo')}</button>` : ''}</div>`;
   }
 
 
   /* ---------- 选题: captain submits after the team is confirmed; pre-fills the works form ---------- */
   const topicForm = $('#topicForm');
+  let editingTopic = false;
+  function fillTopicForm() {
+    const tm = state.team, d = tm.topic || {}, v = k => esc(d[k] || '');
+    topicForm.innerHTML = `<p class="tp-lead">${T('tp.modalD')}</p>
+      <label class="field"><span>${T('tp.title')}</span><input type="text" name="title" maxlength="40" value="${v('title')}" placeholder="${T('tp.titlePh')}"><em class="field-error"></em></label>
+      <label class="field"><span>${T('tp.desc')}</span><textarea name="desc" maxlength="500" placeholder="${T('tp.descPh')}">${v('desc')}</textarea><em class="field-error"></em></label>
+      <div class="tp-actions"><button type="submit" class="btn btn-primary">${T(tm.topic ? 'tp.saveEdit' : 'tp.save')}</button>${tm.topic ? `<button type="button" class="link-btn" data-act="cancelTopic">${T('w.cancel')}</button>` : ''}<span class="tp-hint">${T('reg.topicD')}</span></div>`;
+  }
   function openTopic() {
     const tm = state.team;
-    if (!tm || !tm.confirmed) { toast(T('tp.needTeam')); document.getElementById('myTeam').scrollIntoView({ behavior: 'smooth', block: 'center' }); return; }
+    if (!tm || !tm.confirmed) { toast(T('tp.needTeam')); goTab('team'); return; }
     if (!tm.captain) { toast(T('tp.captainOnly')); return; }
-    const d = tm.topic || {}, v = k => esc(d[k] || '');
-    topicForm.innerHTML = `<h3 class="modal-title">${T(tm.topic ? 'tp.edit' : 'tp.btn')}</h3><p class="modal-desc">${T('tp.modalD')}</p>
-      <label class="field"><span>${T('tp.title')}</span><input type="text" name="title" maxlength="40" value="${v('title')}"><em class="field-error"></em></label>
-      <label class="field"><span>${T('tp.desc')}</span><textarea name="desc" maxlength="500" placeholder="${T('tp.descPh')}">${v('desc')}</textarea><em class="field-error"></em></label>
-      <button type="submit" class="btn btn-primary btn-block">${T('tp.save')}</button>`;
-    openModal('topic');
+    editingTopic = true; goTab('topic'); renderTopic();
+    const f = topicForm.elements.title; if (f) f.focus();
   }
   topicForm.addEventListener('input', e => { const f = e.target.closest('.field'); if (f && e.target.getAttribute('aria-invalid') === 'true') { f.querySelector('.field-error').textContent = ''; e.target.setAttribute('aria-invalid', 'false'); } });
   topicForm.addEventListener('submit', e => {
@@ -2524,9 +2548,10 @@ document.querySelectorAll('.res-main').forEach(card => card.addEventListener('po
     const first = Object.keys(errs).find(k => errs[k]);
     if (first) { topicForm.elements[first].focus(); return; }
     busy = true;
-    api.submitTopic(d).then(st => { state = st; busy = false; closeModal(); toast(T('tp.saved')); renderMy(); }, () => { busy = false; toast(T('err.net')); });
+    api.submitTopic(d).then(st => { state = st; busy = false; editingTopic = false; toast(T('tp.saved')); renderMy(); }, () => { busy = false; toast(T('err.net')); });
   });
 
+  let askConfirm = false;   // 确认组队 asks once, with the credit rule spelled out
   function renderTeam() {
     const el = $('#myTeam'), p = registered() ? state.profile : null, tm = p ? state.team : null;
     if (!p) {
@@ -2565,7 +2590,10 @@ document.querySelectorAll('.res-main').forEach(card => card.addEventListener('po
       ${tm.captain && !full ? `<button type="button" class="link-btn demo-link" data-act="demoRequest">${T('jr.demoReq')}</button>` : ''}</div>`;
     // Unconfirmed: the rule sits next to the decision. Confirmed: status lives on the member-count row.
     const confirmRow = tm.confirmed ? '' : (tm.captain
-      ? `<div class="team-actions"><button type="button" class="btn btn-primary" data-act="confirm">${T('team.confirm')}</button><p>${T('team.confirmTip')}</p></div>`
+      ? (askConfirm
+        ? `<div class="mb-confirm tm-confirm" role="alertdialog" aria-label="${T('team.confirm')}"><strong>${T('team.cfT')}</strong><ul><li>${T('team.cf1', { n: tm.members.length })}</li><li>${T('team.cf2')}</li><li>${T('team.cf3')}</li></ul>
+            <div class="row"><button type="button" class="btn btn-ghost btn-sm" data-act="cancelConfirm">${T('mb.cancel')}</button><button type="button" class="btn btn-primary btn-sm" data-act="confirmYes">${T('team.cfOk')}</button></div></div>`
+        : `<div class="team-actions"><button type="button" class="btn btn-primary" data-act="confirm">${T('team.confirm')}</button><p>${T('team.confirmTip')}</p></div>`)
       : `<div class="team-actions"><p>${T('team.waitHint')}</p></div>`);
     el.innerHTML = `<div class="team-head">
         <div><h3>${esc(tm.name)}${tm.captain ? ` <button type="button" class="icon-btn" data-act="rename" aria-label="${T('team.rename')}" title="${T('team.rename')}"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><path d="M10.5 2.5l3 3L6 13H3v-3l7.5-7.5Z"/><path d="M9 4l3 3"/></svg></button>` : ''} <span class="badge${tm.confirmed ? ' ok' : ''}">${T(tm.confirmed ? 'team.ok' : 'team.pending')}</span></h3>
@@ -2625,7 +2653,10 @@ document.querySelectorAll('.res-main').forEach(card => card.addEventListener('po
       const f = modal.querySelector('[data-form=editTeam]');
       f.elements.teamName.value = state.team.name; f.querySelector('.field-error').textContent = ''; f.elements.teamName.removeAttribute('aria-invalid');
       openModal('editTeam');
-    } else if (a === 'confirm') run(() => api.confirmTeam(), T('toast.confirm'));
+    } else if (a === 'confirm') { askConfirm = true; renderTeam(); }
+    else if (a === 'cancelTopic') { editingTopic = false; renderTopic(); }
+    else if (a === 'cancelConfirm') { askConfirm = false; renderTeam(); }
+    else if (a === 'confirmYes') { askConfirm = false; run(() => api.confirmTeam(), T('toast.confirm')); }
     else if (a === 'approveReq') run(() => api.approveReq(+btn.dataset.i), T('jr.approved'));
     else if (a === 'rejectReq') run(() => api.rejectReq(+btn.dataset.i), T('jr.rejected'));
     else if (a === 'demoRequest') run(() => api.demoRequest());
