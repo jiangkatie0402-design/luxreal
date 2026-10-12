@@ -176,7 +176,11 @@ button { font-family: inherit; }
   position: absolute; inset: 0; z-index: 1;
   background: linear-gradient(180deg, rgba(8,9,11,.6) 0%, rgba(8,9,11,.1) 32%, rgba(8,9,11,.15) 62%, rgba(8,9,11,.8) 100%);
 }
-.hero-cinematic-content { position: relative; z-index: 2; max-width: 900px; }
+.hero-cinematic-content {
+  position: relative; z-index: 2; max-width: 900px;
+  opacity: 0; transition: opacity 1.2s ease;
+}
+.hero-cinematic-content.revealed { opacity: 1; }
 .hero-cinematic-title {
   position: relative;
   font-family: "PingFang SC", "Microsoft YaHei", sans-serif; font-weight: 600; font-style: normal; color: #fff;

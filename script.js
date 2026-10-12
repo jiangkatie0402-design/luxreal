@@ -122,6 +122,25 @@ if (heroBgVideos.length > 1) {
   activeHeroVideo.addEventListener('canplay', () => {
     if (activeHeroVideo.paused) activeHeroVideo.play().catch(() => {});
   }, { once: true });
+
+  // reveal the title/subtitle/button once the first video reaches 2s;
+  // fall back to a flat timeout if playback stalls so content isn't stuck hidden
+  const heroContent = document.querySelector('.hero-cinematic-content');
+  if (heroContent) {
+    let heroContentRevealed = false;
+    function revealHeroContent() {
+      if (heroContentRevealed) return;
+      heroContentRevealed = true;
+      heroContent.classList.add('revealed');
+    }
+    activeHeroVideo.addEventListener('timeupdate', function onHeroTimeUpdate() {
+      if (activeHeroVideo.currentTime >= 2) {
+        revealHeroContent();
+        activeHeroVideo.removeEventListener('timeupdate', onHeroTimeUpdate);
+      }
+    });
+    setTimeout(revealHeroContent, 4000);
+  }
 }
 
 // ---------- hero waveform bars ----------
