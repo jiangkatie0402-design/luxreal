@@ -115,6 +115,8 @@ if (heroBgVideos.length > 1) {
       playHeroBgVideo((i + 1) % heroBgVideos.length);
     });
   });
+}
+if (heroBgVideos.length > 0) {
   // explicit play() as a fallback: the autoplay attribute can silently fail
   // to fire when several <video> elements compete for bandwidth on load
   const activeHeroVideo = heroBgVideos[0];
