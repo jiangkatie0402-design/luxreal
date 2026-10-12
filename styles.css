@@ -164,14 +164,12 @@ button { font-family: inherit; }
     radial-gradient(circle at 25% 30%, rgba(26,122,248,0.4), transparent 50%),
     radial-gradient(circle at 78% 70%, rgba(0,73,245,0.5), transparent 55%),
     conic-gradient(from 200deg at 50% 50%, #0a0d1c, #141a3d, #0a0e26, #0a0d1c);
-  animation: meshmove 18s linear infinite;
 }
 .hero-cinematic-bg video, .hero-cinematic-bg img {
   position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover;
 }
 .hero-bg-video { opacity: 0; z-index: 0; }
 .hero-bg-video.active { opacity: 1; z-index: 1; }
-@keyframes meshmove { 0%{filter:hue-rotate(0deg);} 100%{filter:hue-rotate(20deg);} }
 .hero-cinematic-overlay {
   position: absolute; inset: 0; z-index: 1;
   background: linear-gradient(180deg, rgba(8,9,11,.6) 0%, rgba(8,9,11,.1) 32%, rgba(8,9,11,.15) 62%, rgba(8,9,11,.8) 100%);
