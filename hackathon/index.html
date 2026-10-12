@@ -994,18 +994,18 @@ textarea:focus { outline: none; border-color: var(--ice); box-shadow: 0 0 0 3px 
 .seg.seg-sm label { flex: none; }
 .seg.seg-sm span { height: auto; line-height: 1.4; padding: 0 0 4px; border: 0; border-bottom: 2px solid transparent; border-radius: 0; background: transparent; font-size: 13px; font-weight: 600; color: var(--text-muted); }
 .seg.seg-sm input:checked + span { background: transparent; color: #fff; border-bottom-color: var(--ice); box-shadow: none; }
-/* work form spacing — one scale: 8 inside a control · 16 label→control · 24 header→content · 32 item→item · 40 section→section */
-.work-form .work-head { padding-bottom: 24px; margin-bottom: 40px; }
+/* work form spacing — one rhythm: 12 tabs→control · 16 label→control · 24 header→content · 40 item→item · 32 either side of every divider */
+.work-form .work-head { padding-bottom: 24px; margin-bottom: 32px; }
 .work-form .wf-group { margin: 0; padding: 0; }
 .work-form .wf-gh { margin: 0 0 24px; padding: 0; min-height: 30px; align-items: center; }
 .work-form .field.wf-item { gap: 16px; padding: 0; margin: 0; }
-.work-form .wf-item + .wf-item { margin-top: 32px; }
+.work-form .wf-item + .wf-item { margin-top: 40px; }
 .work-form .wf-ctrl { gap: 12px !important; }
 .work-form .wf-label > div { row-gap: 6px; }
-.work-form .wf-group + .wf-group { margin-top: 40px; padding-top: 40px; border-top: 1px solid var(--border-subtle); }
+.work-form .wf-group + .wf-group { margin-top: 32px; padding-top: 32px; border-top: 1px solid var(--border-subtle); }
 .work-form .wf-bonus.closed { margin-bottom: 0; }
 .work-form .wf-bonus.closed .wf-gh { margin-bottom: 0; }
-.work-form > .check { margin: 40px 0 0; padding-top: 40px; border-top: 1px solid var(--border-subtle); }
+.work-form > .check { margin: 32px 0 0; padding-top: 32px; border-top: 1px solid var(--border-subtle); }
 .work-form .work-actions { margin-top: 24px; }
 #myWorks .work-form > .reg-note { margin-top: 16px; }
 @media (max-width: 760px) { .field.wf-item { grid-template-columns: 1fr; } .wf-group { padding: 4px 16px; } }
