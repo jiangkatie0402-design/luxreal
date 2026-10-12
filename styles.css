@@ -185,11 +185,7 @@ button { font-family: inherit; }
   position: relative;
   font-family: "PingFang SC", "Microsoft YaHei", sans-serif; font-weight: 600; font-style: normal; color: #fff;
   font-size: clamp(36px, 4vw, 64px); white-space: nowrap; letter-spacing: 0.02em; line-height: 1.1; margin-bottom: 16px;
-}
-.hero-cinematic-title::before {
-  content: '';
-  position: absolute; inset: -20% -10%; z-index: -1; pointer-events: none;
-  background: radial-gradient(ellipse 50% 40% at 50% 50%, rgba(0,0,0,.45), transparent 70%);
+  text-shadow: 0 2px 16px rgba(0,0,0,.5), 0 1px 4px rgba(0,0,0,.4);
 }
 .hero-serif {
   font-family: "Playfair Display", Georgia, "Times New Roman", serif;
