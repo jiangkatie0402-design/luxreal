@@ -406,8 +406,8 @@ html[lang="zh-CN"] .sec-title { letter-spacing: .02em; line-height: 1.22; }
 .res-grid { display: grid; grid-template-columns: 1.55fr 1fr; gap: 20px; }
 .res-main { position: relative; display: flex; align-items: center; justify-content: space-between; gap: 24px; padding: clamp(32px, 4vw, 52px); border: 1px solid var(--border); border-radius: var(--radius); background: #030407; overflow: hidden; isolation: isolate; }   /* matches the logo video's own near-black, no purple glow */
 /* a label, not a button: mono caps with a glowing dot */
-.res-badge { display: inline-flex; align-items: center; gap: 10px; padding: 0; background: none; color: var(--ice); font-family: var(--font-mono); font-size: 12.5px; font-weight: 600; letter-spacing: .14em; }
-.res-badge::before { content: ''; width: 7px; height: 7px; border-radius: 50%; background: #B5ACFF; box-shadow: 0 0 10px 2px rgba(123,92,255,.8); }
+.res-badge { display: inline-flex; align-items: center; gap: 12px; padding: 0; background: none; color: #CFC7FF; font-size: 16px; font-weight: 700; letter-spacing: .16em; text-shadow: 0 0 18px rgba(123,92,255,.55); }
+.res-badge::before { content: ''; width: 9px; height: 9px; border-radius: 50%; background: #B5ACFF; box-shadow: 0 0 12px 3px rgba(123,92,255,.85); }
 .res-name { white-space: nowrap; font-size: clamp(34px, 3.5vw, 60px); font-weight: 700; letter-spacing: -.03em; line-height: 1; margin: 22px 0 18px; }
 .res-main p { color: var(--text-soft); font-size: 16px; line-height: 1.75; }
 /* Lux3D card: product video (remote); the shapes stay underneath as the fallback until it plays */
@@ -753,7 +753,8 @@ html[lang="zh-CN"] .ms-now h3 { font-family: var(--font-title); font-weight: 400
 #myBody .empty p { font-size: 15px; line-height: 1.75; margin-bottom: 28px; max-width: 520px; }
 .tp-done { gap: 14px !important; }
 .tp-done h3 { font-size: clamp(24px, 2.4vw, 30px) !important; margin-top: 6px; }
-html[lang="zh-CN"] .tp-done h3, html[lang="zh-CN"] .ws-main h3 { font-family: var(--font-title); font-weight: 400; letter-spacing: .02em; }
+/* user-entered titles use the body font: the embedded title font is a page-copy subset and would fall back per-glyph */
+.tp-done h3, .ws-main h3 { font-family: var(--font-sans); font-weight: 700; letter-spacing: .01em; }
 .tp-done p { font-size: 15px; }
 .tp-done .row { margin-top: 18px !important; gap: 14px !important; align-items: center; flex-wrap: wrap; }
 .tp-next { font-size: 14px; color: var(--ice); margin-right: 6px; }
@@ -777,14 +778,17 @@ html[lang="zh-CN"] .tp-done h3, html[lang="zh-CN"] .ws-main h3 { font-family: va
 .my-steps li.locked b::after { content: ' 🔒︎'; font-size: 10px; opacity: .6; filter: grayscale(1); }
 #myBody .my-sec[hidden] { display: none; }
 #myBody .my-sec:first-child, #myBody .my-sec[hidden] + .my-sec:not([hidden]) { margin-top: 40px; }
-.tp-form { display: flex; flex-direction: column; gap: 4px; max-width: 760px; }
+.tp-form { display: flex; flex-direction: column; gap: 10px; max-width: 1040px; }
+.tp-form .field input { height: 54px; font-size: 15.5px; padding: 0 18px; }
+.tp-form .field textarea { font-size: 15.5px; padding: 16px 18px; line-height: 1.7; }
 .tp-lead { color: var(--text-soft); font-size: 14px; margin-bottom: 14px; }
-.tp-form textarea { min-height: 140px; }
+.tp-form textarea { min-height: 220px; }
 .tp-actions { display: flex; align-items: center; gap: 16px; flex-wrap: wrap; margin-top: 10px; }
 .tp-hint { font-size: 13px; color: var(--ice); }
-.tm-confirm { margin-top: 18px; }
-.tm-confirm ul { margin: 6px 0 14px; padding-left: 18px; display: grid; gap: 4px; font-size: 13.5px; color: var(--text-soft); }
-.tm-confirm { border-color: rgba(123,92,255,.5); background: rgba(123,92,255,.08); }
+.tm-confirm { margin: 20px 0 0; padding: 18px 20px; border-radius: var(--radius-sm); border: 1px solid rgba(123,92,255,.55); background: rgba(123,92,255,.08); }
+.tm-confirm strong { display: block; font-size: 15px; margin-bottom: 6px; }
+.tm-confirm ul { margin: 6px 0 16px; padding-left: 18px; display: grid; gap: 6px; font-size: 13.5px; color: var(--text-soft); }
+.tm-confirm .row { display: flex; justify-content: flex-start; gap: 12px; }
 .tp-done { display: flex; flex-direction: column; align-items: flex-start; gap: 10px; }
 .tp-done h3 { font-size: 22px; font-weight: 700; } .tp-done p { color: var(--text-soft); line-height: 1.75; max-width: 760px; }
 .tp-done .row { display: flex; gap: 10px; margin-top: 6px; }
@@ -2131,7 +2135,7 @@ document.querySelectorAll('.res-main').forEach(card => card.addEventListener('po
     'team.cfT': ['确认组队前请了解', 'Before you confirm'], 'team.cf1': ['团队积分将在提交选题时，平均分配给当时的全部 {n} 名队员', 'Team credits are split evenly among all {n} member(s) on the team when the topic is submitted'],
     'team.cf2': ['确认后仍可调整队员或解散团队', 'You can still change members or disband after confirming'], 'team.cf3': ['之后新加入的队员不补发团队积分；退出或换队不会重复获得', 'People who join later don’t receive team credits; leaving or switching teams doesn’t earn them again'],
     'team.cfOk': ['确认组队', 'Confirm team'],
-    'tp.titlePh': ['给你们的作品起个名字', 'Name your project'], 'tp.saveEdit': ['保存修改', 'Save changes'],
+    'tp.saveEdit': ['保存修改', 'Save changes'],
     'tp.waitWork': ['下一步：等待队长提交作品', 'Next: your captain submits the project'], 'tp.viewWork': ['查看作品进度', 'View submission status'],
     'w.noTeamT': ['创建或加入团队后提交作品', 'Create or join a team to submit'], 'w.noTeamD': ['作品由队长代表团队提交；单人参赛也需要先创建团队。', 'The captain submits on behalf of the team — solo entrants create a team too.'],
     'w.waitT': ['等待队长提交作品', 'Waiting for your captain to submit'], 'w.waitD': ['团队作品由队长统一上传提交，提交后这里会显示作品与版本。', 'Your captain uploads the team’s project; once submitted it shows up here with its version.'],
@@ -2548,7 +2552,7 @@ document.querySelectorAll('.res-main').forEach(card => card.addEventListener('po
   function fillTopicForm() {
     const tm = state.team, d = tm.topic || {}, v = k => esc(d[k] || '');
     topicForm.innerHTML = `<p class="tp-lead">${T('tp.modalD')}</p>
-      <label class="field"><span>${T('tp.title')}</span><input type="text" name="title" maxlength="40" value="${v('title')}" placeholder="${T('tp.titlePh')}"><em class="field-error"></em></label>
+      <label class="field"><span>${T('tp.title')}</span><input type="text" name="title" maxlength="40" value="${v('title')}"><em class="field-error"></em></label>
       <label class="field"><span>${T('tp.desc')}</span><textarea name="desc" maxlength="500" placeholder="${T('tp.descPh')}">${v('desc')}</textarea><em class="field-error"></em></label>
       <div class="tp-actions"><button type="submit" class="btn btn-primary">${T(tm.topic ? 'tp.saveEdit' : 'tp.save')}</button>${tm.topic ? `<button type="button" class="link-btn" data-act="cancelTopic">${T('w.cancel')}</button>` : ''}<span class="tp-hint">${T('reg.topicD')}</span></div>`;
   }
@@ -2615,8 +2619,8 @@ document.querySelectorAll('.res-main').forEach(card => card.addEventListener('po
     // Unconfirmed: the rule sits next to the decision. Confirmed: status lives on the member-count row.
     const confirmRow = tm.confirmed ? '' : (tm.captain
       ? (askConfirm
-        ? `<div class="mb-confirm tm-confirm" role="alertdialog" aria-label="${T('team.confirm')}"><strong>${T('team.cfT')}</strong><ul><li>${T('team.cf1', { n: tm.members.length })}</li><li>${T('team.cf2')}</li><li>${T('team.cf3')}</li></ul>
-            <div class="row"><button type="button" class="btn btn-ghost btn-sm" data-act="cancelConfirm">${T('mb.cancel')}</button><button type="button" class="btn btn-primary btn-sm" data-act="confirmYes">${T('team.cfOk')}</button></div></div>`
+        ? `<div class="tm-confirm" role="alertdialog" aria-label="${T('team.confirm')}"><strong>${T('team.cfT')}</strong><ul><li>${T('team.cf1', { n: tm.members.length })}</li><li>${T('team.cf2')}</li><li>${T('team.cf3')}</li></ul>
+            <div class="row"><button type="button" class="btn btn-primary btn-sm" data-act="confirmYes">${T('team.cfOk')}</button><button type="button" class="btn btn-ghost btn-sm" data-act="cancelConfirm">${T('mb.cancel')}</button></div></div>`
         : `<div class="team-actions"><button type="button" class="btn btn-primary" data-act="confirm">${T('team.confirm')}</button><p>${T('team.confirmTip')}</p></div>`)
       : `<div class="team-actions"><p>${T('team.waitHint')}</p></div>`);
     el.innerHTML = `<div class="team-head">
