@@ -171,45 +171,72 @@ if (privacyLinks.length) {
   sections.forEach(s => s && spy.observe(s));
 }
 
-// ---------- showcase video switch cards ----------
-const showcaseMedia = document.getElementById('showcase-media');
+// ---------- showcase cards: a cat hops onto the clicked card and pulls it out ----------
+const showcaseSwitch = document.querySelector('.showcase-switch');
 const showcaseVideos = document.querySelectorAll('.showcase-video');
-const showcaseSwitchCards = document.querySelectorAll('.showcase-switch-card');
-if (showcaseMedia && showcaseVideos.length === 2 && showcaseSwitchCards.length) {
-  const cardFor = i => [...showcaseSwitchCards].find(c => parseInt(c.dataset.videoTo, 10) === i);
-  let showcaseIndex = 0;
-  let switchTimer, pauseTimer;
+const showcaseCards = document.querySelectorAll('.showcase-card');
+const showcaseCat = document.querySelector('.showcase-cat');
+if (showcaseSwitch && showcaseVideos.length === 2 && showcaseCards.length === 2 && showcaseCat) {
+  const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const tuck = () => parseFloat(getComputedStyle(showcaseSwitch).getPropertyValue('--tuck')) || 0;
+  let activeCard = document.querySelector('.showcase-card.active') || showcaseCards[0];
+  let busy = false;
   showcaseVideos[0].play().catch(() => {});
 
-  showcaseVideos.forEach((video, i) => {
-    video.addEventListener('timeupdate', () => {
-      const card = cardFor(i);
-      if (card && video.duration) card.style.setProperty('--progress', video.currentTime / video.duration);
-    });
-  });
+  function placeCat(card, tucked) {
+    showcaseCat.style.setProperty('--cat-x', (card.offsetLeft + card.offsetWidth / 2) + 'px');
+    showcaseCat.style.setProperty('--cat-y', (card.offsetTop + (tucked ? tuck() : 0)) + 'px');
+  }
+  function replay(el, cls) {
+    el.classList.remove(cls);
+    void el.offsetWidth;
+    el.classList.add(cls);
+  }
+  ['hopping', 'tugging'].forEach(cls => showcaseCat.addEventListener('animationend', () => showcaseCat.classList.remove(cls)));
 
-  showcaseSwitchCards.forEach(card => {
+  placeCat(activeCard, false);
+  window.addEventListener('resize', () => placeCat(activeCard, false));
+
+  showcaseCards.forEach(card => {
+    card.addEventListener('mouseenter', () => {
+      if (card === activeCard) return;
+      showcaseCat.dataset.look = card.offsetLeft > activeCard.offsetLeft ? 'right' : 'left';
+    });
+    card.addEventListener('mouseleave', () => { delete showcaseCat.dataset.look; });
+
     card.addEventListener('click', () => {
+      if (card === activeCard || busy) return;
+      busy = true;
+      const prevCard = activeCard;
       const idx = parseInt(card.dataset.videoTo, 10);
-      if (idx === showcaseIndex) return;
-      const prev = showcaseIndex;
-      showcaseIndex = idx;
-      // tab stretches first; the video swaps once the stretch is underway
-      showcaseSwitchCards.forEach(c => {
-        const on = c === card;
-        c.classList.toggle('active', on);
-        c.setAttribute('aria-selected', on ? 'true' : 'false');
-      });
-      card.style.setProperty('--progress', 0);
-      clearTimeout(switchTimer);
-      clearTimeout(pauseTimer);
-      switchTimer = setTimeout(() => {
+      activeCard = card;
+      delete showcaseCat.dataset.look;
+
+      // 1) the cat lets go of the old card (it slides back in) and hops onto the new one
+      prevCard.classList.remove('active', 'pulled');
+      prevCard.setAttribute('aria-selected', 'false');
+      if (!reduceMotion) replay(showcaseCat, 'hopping');
+      placeCat(card, true);
+
+      // 2) it lands, grabs the edge and pulls the card out, riding up with it
+      setTimeout(() => {
+        card.classList.add('active');
+        card.setAttribute('aria-selected', 'true');
+        if (!reduceMotion) { replay(showcaseCat, 'tugging'); replay(card, 'pulled'); }
+        placeCat(card, false);
+      }, reduceMotion ? 0 : 500);
+
+      // 3) once the card is out, the video changes
+      setTimeout(() => {
         const next = showcaseVideos[idx];
         next.currentTime = 0;
         next.play().catch(() => {});
         showcaseVideos.forEach((video, i) => video.classList.toggle('active', i === idx));
-        pauseTimer = setTimeout(() => { if (showcaseIndex !== prev) showcaseVideos[prev].pause(); }, 700);
-      }, 380);
+        setTimeout(() => {
+          showcaseVideos.forEach((video, i) => { if (i !== idx) video.pause(); });
+          busy = false;
+        }, reduceMotion ? 0 : 700);
+      }, reduceMotion ? 0 : 850);
     });
   });
 }
