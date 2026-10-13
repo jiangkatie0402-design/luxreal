@@ -73,8 +73,16 @@
     </div>
     <div class="showcase-media-wrap reveal">
       <div class="showcase-switch" role="tablist">
-        <button class="showcase-switch-card active" type="button" role="tab" data-video-to="0"><span class="showcase-switch-dot"></span>AI 短剧</button>
-        <button class="showcase-switch-card" type="button" role="tab" data-video-to="1"><span class="showcase-switch-dot"></span>互动影游</button>
+        <button class="showcase-switch-card active" type="button" role="tab" aria-selected="true" data-video-to="0">
+          <span class="showcase-switch-index">01</span>
+          <span class="showcase-switch-label">AI 短剧<small>AI Drama</small></span>
+          <span class="showcase-switch-progress"></span>
+        </button>
+        <button class="showcase-switch-card" type="button" role="tab" aria-selected="false" data-video-to="1">
+          <span class="showcase-switch-index">02</span>
+          <span class="showcase-switch-label">互动影游<small>Interactive Film</small></span>
+          <span class="showcase-switch-progress"></span>
+        </button>
       </div>
       <div class="showcase-media" id="showcase-media">
         <video class="showcase-video active" data-video="0" autoplay muted loop playsinline preload="metadata">

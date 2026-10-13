@@ -176,15 +176,40 @@ const showcaseMedia = document.getElementById('showcase-media');
 const showcaseVideos = document.querySelectorAll('.showcase-video');
 const showcaseSwitchCards = document.querySelectorAll('.showcase-switch-card');
 if (showcaseMedia && showcaseVideos.length === 2 && showcaseSwitchCards.length) {
+  const cardFor = i => [...showcaseSwitchCards].find(c => parseInt(c.dataset.videoTo, 10) === i);
+  let showcaseIndex = 0;
+  let switchTimer, pauseTimer;
   showcaseVideos[0].play().catch(() => {});
+
+  showcaseVideos.forEach((video, i) => {
+    video.addEventListener('timeupdate', () => {
+      const card = cardFor(i);
+      if (card && video.duration) card.style.setProperty('--progress', video.currentTime / video.duration);
+    });
+  });
+
   showcaseSwitchCards.forEach(card => {
     card.addEventListener('click', () => {
       const idx = parseInt(card.dataset.videoTo, 10);
-      showcaseVideos.forEach((video, i) => {
-        video.classList.toggle('active', i === idx);
-        if (i === idx) video.play().catch(() => {}); else video.pause();
+      if (idx === showcaseIndex) return;
+      const prev = showcaseIndex;
+      showcaseIndex = idx;
+      // tab stretches first; the video swaps once the stretch is underway
+      showcaseSwitchCards.forEach(c => {
+        const on = c === card;
+        c.classList.toggle('active', on);
+        c.setAttribute('aria-selected', on ? 'true' : 'false');
       });
-      showcaseSwitchCards.forEach(c => c.classList.toggle('active', parseInt(c.dataset.videoTo, 10) === idx));
+      card.style.setProperty('--progress', 0);
+      clearTimeout(switchTimer);
+      clearTimeout(pauseTimer);
+      switchTimer = setTimeout(() => {
+        const next = showcaseVideos[idx];
+        next.currentTime = 0;
+        next.play().catch(() => {});
+        showcaseVideos.forEach((video, i) => video.classList.toggle('active', i === idx));
+        pauseTimer = setTimeout(() => { if (showcaseIndex !== prev) showcaseVideos[prev].pause(); }, 700);
+      }, 380);
     });
   });
 }
