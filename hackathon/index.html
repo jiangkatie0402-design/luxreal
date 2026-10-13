@@ -1004,14 +1004,12 @@ textarea:focus { outline: none; border-color: var(--ice); box-shadow: 0 0 0 3px 
 .wf-item.done .wf-num::after { content: '✓'; font-size: 12px; color: #fff; }
 .wf-ctrl { min-width: 0; display: flex; flex-direction: column; gap: 10px; }
 .wf-ctrl .field-error { margin-top: 0; }
-.seg.seg-sm { display: inline-flex; align-self: flex-start; gap: 4px; padding: 4px; border: 1px solid var(--border-strong); border-radius: var(--radius-pill); background: var(--bg-2); }
+.seg.seg-sm { display: inline-flex; align-self: flex-start; gap: 0; padding: 3px; border: 1px solid var(--border-strong); border-radius: 10px; background: var(--bg-2); }
 .seg.seg-sm label { flex: none; }
-/* either/or switch: radio dot + pill, so it reads as "choose one", not two fields to fill */
-.seg.seg-sm span { display: inline-flex; align-items: center; gap: 8px; height: 32px; line-height: 1; padding: 0 14px 0 12px; border: 0; border-radius: var(--radius-pill); background: transparent; font-size: 13px; font-weight: 600; color: var(--text-muted); transition: background .2s, color .2s; }
-.seg.seg-sm span::before { content: ''; width: 12px; height: 12px; border-radius: 50%; border: 1.5px solid var(--border-strong); box-sizing: border-box; transition: border-color .2s, box-shadow .2s; }
+/* either/or switch: one segmented control, the chosen side filled — reads as "pick one", not two fields */
+.seg.seg-sm span { display: block; height: 30px; line-height: 30px; padding: 0 16px; border: 0; border-radius: 7px; background: transparent; font-size: 13px; font-weight: 600; color: var(--text-muted); transition: background .2s, color .2s; }
 .seg.seg-sm span:hover { color: var(--text); }
-.seg.seg-sm input:checked + span { background: rgba(123,92,255,.2); color: #fff; box-shadow: none; }
-.seg.seg-sm input:checked + span::before { border: 3.5px solid #B5ACFF; box-shadow: 0 0 8px rgba(123,92,255,.8); }
+.seg.seg-sm input:checked + span { background: #7B5CFF; color: #fff; box-shadow: 0 4px 14px -6px rgba(123,92,255,.9); }
 .wf-mode { display: flex; align-items: center; gap: 12px 16px; flex-wrap: wrap; }
 .wf-or { font-size: 12.5px; color: var(--text-muted); }
 /* work form spacing — one rhythm: 12 tabs→control · 16 label→control · 24 header→content · 40 item→item · 32 either side of every divider */
