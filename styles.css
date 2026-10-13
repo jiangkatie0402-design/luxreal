@@ -237,7 +237,7 @@ button { font-family: inherit; }
 /* ---------- showcase (scenarios) ---------- */
 .showcase-head { max-width: 680px; margin: 0 auto 48px; text-align: center; }
 .showcase-head .section-desc { margin-left: auto; margin-right: auto; }
-.showcase-media-wrap { position: relative; max-width: 1100px; margin: 0 auto; padding-right: 110px; }
+.showcase-media-wrap { position: relative; max-width: 1100px; margin: 0 auto; }
 .showcase-media {
   position: relative; aspect-ratio: 16 / 9;
   border-radius: var(--radius-lg); border: 1px solid var(--border-2); background: var(--surface);
@@ -253,29 +253,21 @@ button { font-family: inherit; }
   background: linear-gradient(0deg, rgba(8,9,11,.6) 0%, rgba(8,9,11,.1) 32%, transparent 55%);
 }
 .showcase-switch {
-  position: absolute; top: 10%; bottom: 10%; right: 0; width: 220px; z-index: 3;
-  display: flex; flex-direction: column; gap: 3px;
+  position: absolute; top: 24px; left: 24px; right: 24px; z-index: 3;
+  display: flex; gap: 12px;
 }
 .showcase-switch-card {
-  flex: 1 1 50%; display: flex; align-items: center; justify-content: flex-end;
-  clip-path: polygon(22% 0%, 100% 0%, 100% 100%, 0% 100%);
-  padding: 0 24px 0 40px;
-  border: 1px solid var(--border-2); background: var(--surface);
-  color: var(--text-dim); font-size: 17px; font-weight: 700; font-family: inherit; letter-spacing: .01em;
-  text-align: right; cursor: pointer; transition: all .25s var(--ease);
+  flex: 1 1 0; padding: 18px 24px; border-radius: 16px;
+  border: 1px solid rgba(255,255,255,.22); background: rgba(10,10,12,.5); backdrop-filter: blur(10px);
+  color: rgba(255,255,255,.8); font-size: 17px; font-weight: 700; font-family: inherit; letter-spacing: .01em;
+  text-align: left; cursor: pointer; transition: all .25s var(--ease);
 }
-.showcase-switch-card:hover:not(.active) { color: var(--text); border-color: rgba(240,243,250,.3); }
+.showcase-switch-card:hover:not(.active) { color: #fff; border-color: rgba(255,255,255,.5); }
 .showcase-switch-card.active { background: #fff; color: #0a0a0c; border-color: #fff; }
-@media (max-width: 760px) {
-  .showcase-media-wrap { padding-right: 0; }
+@media (max-width: 640px) {
   .showcase-media { aspect-ratio: 4 / 5; }
-  .showcase-switch {
-    position: static; flex-direction: row; width: auto; height: auto; margin-top: 16px; gap: 10px;
-  }
-  .showcase-switch-card {
-    clip-path: none; border-radius: 100px; justify-content: center; text-align: center;
-    padding: 12px 20px;
-  }
+  .showcase-switch { top: 16px; left: 16px; right: 16px; gap: 8px; }
+  .showcase-switch-card { padding: 12px 16px; font-size: 14px; border-radius: 12px; }
 }
 
 /* reveal-on-scroll */
