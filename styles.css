@@ -264,61 +264,65 @@ button { font-family: inherit; }
   position: relative; flex: 0 0 auto; width: 320px; height: 200px; padding: 0;
   border: none; background: none; font-family: inherit; text-align: left; color: #fff;
   cursor: pointer; transform: translateY(var(--tuck));
-  transition: transform .6s var(--pull-ease), filter .4s ease;
-  filter: saturate(.6) brightness(.72);
+  transition: transform .6s var(--pull-ease);
 }
-.showcase-card.active { transform: translateY(0); filter: none; cursor: default; }
-.showcase-card:not(.active):hover { transform: translateY(calc(var(--tuck) - 14px)); filter: saturate(.8) brightness(.88); }
+.showcase-card.active { transform: translateY(0); cursor: default; }
+.showcase-card:not(.active):hover { transform: translateY(calc(var(--tuck) - 14px)); }
 .showcase-card-face {
   position: absolute; inset: 0; display: flex; flex-direction: column; gap: 8px;
-  padding: 18px 22px; border-radius: 24px 24px 0 0; overflow: hidden;
-  box-shadow: 0 -10px 40px -12px var(--card-glow), inset 0 1px 0 rgba(255,255,255,.45);
+  padding: 18px 22px; border-radius: var(--radius-lg) var(--radius-lg) 0 0; overflow: hidden;
+  border: 1px solid var(--border-2); border-bottom: none;
+  background: linear-gradient(180deg, var(--surface-2), var(--surface));
+  color: var(--text-faint);
+  transition: border-color .4s var(--ease), color .4s var(--ease), box-shadow .4s var(--ease);
 }
-.showcase-card--drama { --card-bg: linear-gradient(135deg, #ff9a5b 0%, #ff4f8b 55%, #b04dff 100%); --card-glow: rgba(255,90,140,.55); }
-.showcase-card--game { --card-bg: linear-gradient(135deg, #2fd4ff 0%, #4f7bff 50%, #8b5cff 100%); --card-glow: rgba(70,130,255,.55); }
-.showcase-card-face { background: var(--card-bg); background-size: 160% 160%; }
-.showcase-card.active .showcase-card-face { animation: showcase-card-flow 6s ease-in-out infinite alternate; }
-/* dotted texture fading out toward the bottom, plus a soft highlight */
+.showcase-card:not(.active):hover .showcase-card-face { color: var(--text-dim); }
+.showcase-card.active .showcase-card-face {
+  color: var(--text); border-color: rgba(26,122,248,.45);
+  box-shadow: 0 -12px 40px -18px rgba(26,122,248,.55);
+}
+/* blue hairline along the top edge plus a faint glow, matching the site's accent lines */
 .showcase-card-face::before {
-  content: ''; position: absolute; inset: 0; pointer-events: none;
-  background-image: radial-gradient(rgba(255,255,255,.28) 1px, transparent 1.4px);
-  background-size: 12px 12px;
-  -webkit-mask-image: linear-gradient(200deg, #000 0%, transparent 55%);
-          mask-image: linear-gradient(200deg, #000 0%, transparent 55%);
+  content: ''; position: absolute; top: 0; left: 18%; right: 18%; height: 1px; pointer-events: none;
+  background: var(--grad-line); opacity: 0; transition: opacity .4s var(--ease);
 }
 .showcase-card-face::after {
-  content: ''; position: absolute; width: 180px; height: 180px; top: -90px; left: -40px; pointer-events: none;
-  background: radial-gradient(circle, rgba(255,255,255,.4), transparent 65%);
+  content: ''; position: absolute; inset: 0; pointer-events: none;
+  background: radial-gradient(120% 70% at 50% 0%, rgba(26,122,248,.16), transparent 60%);
+  opacity: 0; transition: opacity .4s var(--ease);
 }
-@keyframes showcase-card-flow { from { background-position: 0% 0%; } to { background-position: 100% 100%; } }
-.showcase-card.pulled .showcase-card-face { animation: showcase-card-wiggle .7s ease-out, showcase-card-flow 6s ease-in-out infinite alternate; }
+.showcase-card.active .showcase-card-face::before,
+.showcase-card.active .showcase-card-face::after { opacity: 1; }
+.showcase-card.pulled .showcase-card-face { animation: showcase-card-wiggle .7s ease-out; }
 @keyframes showcase-card-wiggle {
   0% { transform: rotate(0); } 30% { transform: rotate(-2.2deg); } 55% { transform: rotate(1.6deg); }
   75% { transform: rotate(-.8deg); } 100% { transform: rotate(0); }
 }
 .showcase-card-head { position: relative; display: flex; align-items: center; gap: 10px; }
 .showcase-card-icon {
-  flex: 0 0 auto; width: 32px; height: 32px; border-radius: 10px; display: grid; place-items: center;
-  background: rgba(255,255,255,.22); box-shadow: inset 0 0 0 1px rgba(255,255,255,.35);
+  flex: 0 0 auto; width: 32px; height: 32px; border-radius: var(--radius-sm); display: grid; place-items: center;
+  border: 1px solid var(--border-2); transition: color .4s var(--ease), border-color .4s var(--ease), background .4s var(--ease);
 }
-.showcase-card-title { font-size: 21px; font-weight: 800; letter-spacing: .02em; white-space: nowrap; }
+.showcase-card.active .showcase-card-icon { color: var(--blue-pale); border-color: rgba(26,122,248,.45); background: rgba(26,122,248,.12); }
+.showcase-card-title { font-size: 20px; font-weight: 600; letter-spacing: .02em; white-space: nowrap; }
 .showcase-card-index {
   margin-left: auto; font-size: 12px; font-weight: 700; letter-spacing: .16em; opacity: .75;
   font-variant-numeric: tabular-nums;
 }
 .showcase-card-eq { display: none; margin-left: auto; height: 14px; align-items: flex-end; gap: 3px; }
-.showcase-card-eq i { width: 3px; height: 100%; border-radius: 2px; background: #fff; animation: showcase-eq 1s ease-in-out infinite; }
+.showcase-card-eq i { width: 3px; height: 100%; border-radius: 2px; background: var(--blue-light); animation: showcase-eq 1s ease-in-out infinite; }
 .showcase-card-eq i:nth-child(2) { animation-delay: -.35s; }
 .showcase-card-eq i:nth-child(3) { animation-delay: -.7s; }
 @keyframes showcase-eq { 0%, 100% { transform: scaleY(.3); } 50% { transform: scaleY(1); } }
 .showcase-card.active .showcase-card-index { display: none; }
 .showcase-card.active .showcase-card-eq { display: flex; }
-.showcase-card-en { position: relative; font-size: 10.5px; font-weight: 700; letter-spacing: .2em; text-transform: uppercase; opacity: .7; margin-top: -2px; }
-.showcase-card-desc { position: relative; font-size: 14px; font-weight: 500; opacity: .92; }
+.showcase-card-en { position: relative; font-size: 10.5px; font-weight: 600; letter-spacing: .2em; text-transform: uppercase; margin-top: -2px; }
+.showcase-card.active .showcase-card-en { color: var(--blue-pale); }
+.showcase-card-desc { position: relative; font-size: 14px; color: var(--text-dim); }
 .showcase-card-tags { position: relative; display: flex; gap: 6px; }
 .showcase-card-tags em {
-  font-style: normal; font-size: 12px; font-weight: 600; padding: 3px 10px; border-radius: 100px;
-  background: rgba(255,255,255,.2); box-shadow: inset 0 0 0 1px rgba(255,255,255,.3);
+  font-style: normal; font-size: 12px; padding: 3px 10px; border-radius: 100px;
+  border: 1px solid var(--border-2); color: var(--text-dim);
 }
 /* the cat rides on top of whichever card is active */
 .showcase-cat {
@@ -350,7 +354,7 @@ button { font-family: inherit; }
   .showcase-media { aspect-ratio: 4 / 5; }
   .showcase-switch { --tuck: 70px; height: 220px; margin-bottom: -50px; gap: 10px; }
   .showcase-card { width: calc(50% - 5px); height: 170px; }
-  .showcase-card-face { padding: 14px 14px; border-radius: 18px 18px 0 0; }
+  .showcase-card-face { padding: 14px 14px; border-radius: var(--radius-md) var(--radius-md) 0 0; }
   .showcase-card-title { font-size: 16px; }
   .showcase-card-icon { width: 26px; height: 26px; border-radius: 8px; }
   .showcase-card-icon svg { width: 15px; height: 15px; }
