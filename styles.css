@@ -253,120 +253,35 @@ button { font-family: inherit; }
   position: absolute; inset: 0; z-index: 1;
   background: linear-gradient(0deg, rgba(8,9,11,.6) 0%, rgba(8,9,11,.1) 32%, transparent 55%);
 }
-.showcase-media { z-index: 1; }
-/* cards are tucked behind the video's top edge; the active one is pulled out */
 .showcase-switch {
-  --tuck: 84px; --pull-ease: cubic-bezier(.34,1.45,.64,1);
-  position: relative; z-index: 0; height: 260px; margin-bottom: -56px;
-  display: flex; justify-content: center; align-items: flex-end; gap: 22px;
+  display: flex; justify-content: center; gap: clamp(56px, 12vw, 180px);
+  margin-bottom: 36px;
 }
-.showcase-card {
-  position: relative; flex: 0 0 auto; width: 320px; height: 200px; padding: 0;
-  border: none; background: none; font-family: inherit; text-align: left; color: #fff;
-  cursor: pointer; transform: translateY(var(--tuck));
-  transition: transform .6s var(--pull-ease);
+.showcase-tab {
+  display: flex; flex-direction: column; align-items: center; gap: 10px;
+  padding: 4px 8px; border: none; background: none; font-family: inherit; text-align: center;
+  cursor: pointer;
 }
-.showcase-card.active { transform: translateY(0); cursor: default; }
-.showcase-card:not(.active):hover { transform: translateY(calc(var(--tuck) - 14px)); }
-.showcase-card-face {
-  position: absolute; inset: 0; display: flex; flex-direction: column; gap: 8px;
-  padding: 18px 22px; border-radius: var(--radius-lg) var(--radius-lg) 0 0; overflow: hidden;
-  border: 1px solid var(--border-2); border-bottom: none;
-  background: linear-gradient(180deg, var(--surface-2), var(--surface));
-  color: var(--text-faint);
-  transition: border-color .4s var(--ease), color .4s var(--ease), box-shadow .4s var(--ease);
+.showcase-tab-title {
+  font-size: 20px; font-weight: 600; letter-spacing: .02em; color: var(--text-faint);
+  transition: color .4s var(--ease);
 }
-.showcase-card:not(.active):hover .showcase-card-face { color: var(--text-dim); }
-.showcase-card.active .showcase-card-face {
-  color: var(--text); border-color: rgba(26,122,248,.45);
-  box-shadow: 0 -12px 40px -18px rgba(26,122,248,.55);
+.showcase-tab-sub {
+  font-size: 14px; color: var(--text-faint); opacity: .8;
+  transition: color .4s var(--ease), opacity .4s var(--ease);
 }
-/* blue hairline along the top edge plus a faint glow, matching the site's accent lines */
-.showcase-card-face::before {
-  content: ''; position: absolute; top: 0; left: 18%; right: 18%; height: 1px; pointer-events: none;
-  background: var(--grad-line); opacity: 0; transition: opacity .4s var(--ease);
-}
-.showcase-card-face::after {
-  content: ''; position: absolute; inset: 0; pointer-events: none;
-  background: radial-gradient(120% 70% at 50% 0%, rgba(26,122,248,.16), transparent 60%);
-  opacity: 0; transition: opacity .4s var(--ease);
-}
-.showcase-card.active .showcase-card-face::before,
-.showcase-card.active .showcase-card-face::after { opacity: 1; }
-.showcase-card.pulled .showcase-card-face { animation: showcase-card-wiggle .7s ease-out; }
-@keyframes showcase-card-wiggle {
-  0% { transform: rotate(0); } 30% { transform: rotate(-2.2deg); } 55% { transform: rotate(1.6deg); }
-  75% { transform: rotate(-.8deg); } 100% { transform: rotate(0); }
-}
-.showcase-card-head { position: relative; display: flex; align-items: center; gap: 10px; }
-.showcase-card-icon {
-  flex: 0 0 auto; width: 32px; height: 32px; border-radius: var(--radius-sm); display: grid; place-items: center;
-  border: 1px solid var(--border-2); transition: color .4s var(--ease), border-color .4s var(--ease), background .4s var(--ease);
-}
-.showcase-card.active .showcase-card-icon { color: var(--blue-pale); border-color: rgba(26,122,248,.45); background: rgba(26,122,248,.12); }
-.showcase-card-title { font-size: 20px; font-weight: 600; letter-spacing: .02em; white-space: nowrap; }
-.showcase-card-index {
-  margin-left: auto; font-size: 12px; font-weight: 700; letter-spacing: .16em; opacity: .75;
-  font-variant-numeric: tabular-nums;
-}
-.showcase-card-eq { display: none; margin-left: auto; height: 14px; align-items: flex-end; gap: 3px; }
-.showcase-card-eq i { width: 3px; height: 100%; border-radius: 2px; background: var(--blue-light); animation: showcase-eq 1s ease-in-out infinite; }
-.showcase-card-eq i:nth-child(2) { animation-delay: -.35s; }
-.showcase-card-eq i:nth-child(3) { animation-delay: -.7s; }
-@keyframes showcase-eq { 0%, 100% { transform: scaleY(.3); } 50% { transform: scaleY(1); } }
-.showcase-card.active .showcase-card-index { display: none; }
-.showcase-card.active .showcase-card-eq { display: flex; }
-.showcase-card-en { position: relative; font-size: 10.5px; font-weight: 600; letter-spacing: .2em; text-transform: uppercase; margin-top: -2px; }
-.showcase-card.active .showcase-card-en { color: var(--blue-pale); }
-.showcase-card-desc { position: relative; font-size: 14px; color: var(--text-dim); }
-.showcase-card-tags { position: relative; display: flex; gap: 6px; }
-.showcase-card-tags em {
-  font-style: normal; font-size: 12px; padding: 3px 10px; border-radius: 100px;
-  border: 1px solid var(--border-2); color: var(--text-dim);
-}
-/* the cat rides on top of whichever card is active */
-.showcase-cat {
-  position: absolute; z-index: 2; left: var(--cat-x, 50%); top: var(--cat-y, 60px);
-  width: 96px; height: 72px; transform: translate(-50%, -64px); pointer-events: none;
-  transition: left .5s cubic-bezier(.45,0,.25,1), top .6s var(--pull-ease);
-}
-.showcase-cat-body { transform-origin: 50% 100%; }
-.showcase-cat.hopping .showcase-cat-body { animation: showcase-cat-hop .5s cubic-bezier(.3,0,.4,1); }
-.showcase-cat.tugging .showcase-cat-body { animation: showcase-cat-tug .6s ease-out; }
-@keyframes showcase-cat-hop {
-  0% { transform: translateY(0) scale(1, 1); }
-  15% { transform: translateY(0) scale(1.08, .88); }
-  50% { transform: translateY(-48px) scale(.94, 1.08); }
-  85% { transform: translateY(0) scale(1.1, .86); }
-  100% { transform: translateY(0) scale(1, 1); }
-}
-@keyframes showcase-cat-tug {
-  0% { transform: scale(1, 1); } 25% { transform: scale(1.06, .9) translateY(4px); }
-  60% { transform: scale(.96, 1.06) translateY(-3px); } 100% { transform: scale(1, 1); }
-}
-.showcase-cat-eyes { transform-box: fill-box; transform-origin: center; animation: showcase-cat-blink 4.5s infinite; }
-.showcase-cat[data-look="left"] .showcase-cat-eyes { translate: -2.5px 0; }
-.showcase-cat[data-look="right"] .showcase-cat-eyes { translate: 2.5px 0; }
-@keyframes showcase-cat-blink { 0%, 92%, 100% { transform: scaleY(1); } 95% { transform: scaleY(.1); } }
-.showcase-cat-tail { transform-origin: 76px 48px; animation: showcase-cat-tail 2.4s ease-in-out infinite; }
-@keyframes showcase-cat-tail { 0%, 100% { transform: rotate(0); } 50% { transform: rotate(-14deg); } }
+.showcase-tab:not(.active):hover .showcase-tab-title { color: var(--text-dim); }
+.showcase-tab.active { cursor: default; }
+.showcase-tab.active .showcase-tab-title { color: #fff; }
+.showcase-tab.active .showcase-tab-sub { color: var(--text-dim); opacity: 1; }
 @media (max-width: 640px) {
   .showcase-media { aspect-ratio: 4 / 5; }
-  .showcase-switch { --tuck: 70px; height: 220px; margin-bottom: -50px; gap: 10px; }
-  .showcase-card { width: calc(50% - 5px); height: 170px; }
-  .showcase-card-face { padding: 14px 14px; border-radius: var(--radius-md) var(--radius-md) 0 0; }
-  .showcase-card-title { font-size: 16px; }
-  .showcase-card-icon { width: 26px; height: 26px; border-radius: 8px; }
-  .showcase-card-icon svg { width: 15px; height: 15px; }
-  .showcase-card-en { display: none; }
-  .showcase-card-desc { font-size: 12px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-  .showcase-card-tags em { font-size: 11px; padding: 2px 8px; }
-  .showcase-card-tags em:nth-child(3) { display: none; }
-  .showcase-cat { transform: translate(-50%, -64px) scale(.75); transform-origin: 50% 100%; }
+  .showcase-switch { gap: 28px; margin-bottom: 24px; }
+  .showcase-tab-title { font-size: 16px; }
+  .showcase-tab-sub { font-size: 12px; }
 }
 @media (prefers-reduced-motion: reduce) {
-  .showcase-card, .showcase-cat, .showcase-video { transition-duration: .01s; }
-  .showcase-card-face, .showcase-cat-body, .showcase-cat-eyes, .showcase-cat-tail, .showcase-card-eq i { animation: none !important; }
+  .showcase-video { transition-duration: .01s; }
 }
 
 /* reveal-on-scroll */
