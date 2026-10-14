@@ -221,60 +221,30 @@ if (adv3Steps.length && adv3Slides.length) {
 }
 
 // ---------- skills (core skill points) ----------
-const skillsScroll = document.getElementById('skills-scroll');
-const skillsTriggers = document.querySelectorAll('.skills-item, .skills-rail-btn');
+const skillsItems = document.querySelectorAll('.skills-item');
 const skillsSlides = document.querySelectorAll('.skills-slide');
-const skillsDetails = document.querySelectorAll('.skills-detail-slide');
-const skillsMedia = document.querySelector('.skills-media');
-if (skillsTriggers.length && skillsSlides.length) {
-  const skillCount = skillsSlides.length;
-  let activeSkill = '0';
-  function setActiveSkill(target) {
-    if (target === activeSkill) return;
-    activeSkill = target;
-    skillsTriggers.forEach(t => t.classList.toggle('active', t.dataset.skill === target));
-    skillsDetails.forEach(d => d.classList.toggle('active', d.dataset.skillDetail === target));
+const skillsCaptions = document.querySelectorAll('.skills-caption');
+if (skillsItems.length && skillsSlides.length) {
+  const skillCount = skillsItems.length;
+  let activeSkill = 0;
+  function setActiveSkill(index) {
+    activeSkill = (index + skillCount) % skillCount;
+    const key = String(activeSkill);
+    skillsItems.forEach(item => item.classList.toggle('active', item.dataset.skillItem === key));
+    skillsCaptions.forEach(c => c.classList.toggle('active', c.dataset.skillCaption === key));
     skillsSlides.forEach(slide => {
-      const active = slide.dataset.skillSlide === target;
+      const active = slide.dataset.skillSlide === key;
       slide.classList.toggle('active', active);
       const video = slide.querySelector('video');
       if (video) { if (active) video.play().catch(() => {}); else video.pause(); }
     });
   }
-  function setSkillProgress(p) {
-    if (skillsMedia) skillsMedia.style.setProperty('--skills-progress', p);
-  }
-
-  skillsTriggers.forEach(t => {
-    t.addEventListener('click', () => {
-      setActiveSkill(t.dataset.skill);
-      setSkillProgress((parseInt(t.dataset.skill, 10) + 0.5) / skillCount);
-    });
+  document.querySelectorAll('.skills-item-head').forEach(head => {
+    head.addEventListener('click', () => setActiveSkill(parseInt(head.dataset.skill, 10)));
   });
-
-  if (skillsScroll) {
-    skillsScroll.style.setProperty('--skills-slides', skillCount);
-
-    let skillsTicking = false;
-    function updateSkillsScroll() {
-      skillsTicking = false;
-      const rect = skillsScroll.getBoundingClientRect();
-      const scrollable = skillsScroll.offsetHeight - window.innerHeight;
-      const progress = scrollable > 0 ? Math.min(1, Math.max(0, -rect.top / scrollable)) : 0;
-      const activeIndex = Math.min(skillCount - 1, Math.floor(progress * skillCount));
-      setActiveSkill(String(activeIndex));
-      setSkillProgress(progress);
-    }
-    function onSkillsScroll() {
-      if (!skillsTicking) {
-        skillsTicking = true;
-        requestAnimationFrame(updateSkillsScroll);
-      }
-    }
-    window.addEventListener('scroll', onSkillsScroll, { passive: true });
-    window.addEventListener('resize', onSkillsScroll);
-    updateSkillsScroll();
-  }
+  document.querySelectorAll('.skills-nav-btn').forEach(btn => {
+    btn.addEventListener('click', () => setActiveSkill(activeSkill + parseInt(btn.dataset.skillStep, 10)));
+  });
 }
 
 // ---------- partners (creator feedback) ----------

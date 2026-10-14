@@ -151,79 +151,83 @@
 <!-- FEEDBACK -->
 <section class="section" id="feedback">
   <div class="container">
-    <div class="skills-scroll" id="skills-scroll">
-    <div class="skills-pin">
     <div class="skills-head reveal">
       <h2 class="section-title">核心技能点</h2>
     </div>
-    <div class="skills-layout">
-      <div class="skills-left reveal">
-        <div class="skills-rail">
-            <button class="skills-rail-btn active" type="button" data-skill="0" aria-label="智能创作 Agent"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l1.8 4.7L18.5 9.5l-4.7 1.8L12 16l-1.8-4.7L5.5 9.5l4.7-1.8z"/><path d="M19 15l.8 2 2 .8-2 .8-.8 2-.8-2-2-.8 2-.8z"/></svg></button>
-            <button class="skills-rail-btn" type="button" data-skill="1" aria-label="智能镜头"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 8a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><path d="m16 10 5-3v10l-5-3z"/></svg></button>
-            <button class="skills-rail-btn" type="button" data-skill="2" aria-label="3D 片场"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3 4 7.5v9L12 21l8-4.5v-9z"/><path d="M4 7.5 12 12l8-4.5M12 12v9"/></svg></button>
+    <div class="skills-layout reveal">
+      <div class="skills-side">
+        <div class="skills-list">
+          <div class="skills-item active" data-skill-item="0">
+            <button class="skills-item-head" type="button" data-skill="0">
+              <span class="skills-item-icon" aria-hidden="true"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l1.8 4.7L18.5 9.5l-4.7 1.8L12 16l-1.8-4.7L5.5 9.5l4.7-1.8z"/><path d="M19 15l.8 2 2 .8-2 .8-.8 2-.8-2-2-.8 2-.8z"/></svg></span>
+              <span class="skills-item-name">智能创作 Agent</span>
+            </button>
+            <div class="skills-points-wrap">
+              <ul class="skills-points">
+                <li><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg><span>输入创意灵感，快速完成影视级剧本框架设定</span></li>
+                <li><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg><span>梳理故事结构，完善角色弧线、场景设定与人物对白</span></li>
+                <li><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg><span>自动拆解剧情节点，规划多线分支与叙事走向</span></li>
+                <li><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg><span>一键生成视觉提示词，衔接后续视频创作流程</span></li>
+              </ul>
+            </div>
+          </div>
+          <div class="skills-item" data-skill-item="1">
+            <button class="skills-item-head" type="button" data-skill="1">
+              <span class="skills-item-icon" aria-hidden="true"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 8a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><path d="m16 10 5-3v10l-5-3z"/></svg></span>
+              <span class="skills-item-name">智能镜头</span>
+            </button>
+            <div class="skills-points-wrap">
+              <ul class="skills-points">
+                <li><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg><span>跨片段自然衔接，统一规划整组镜头</span></li>
+                <li><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg><span>提前预览关键镜头，高效确认剧情画面</span></li>
+                <li><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg><span>统一规划分镜，动作、站位与空间关系自然延续</span></li>
+                <li><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg><span>自动识别镜头需求，智能匹配片段，一键完成整组生成</span></li>
+              </ul>
+            </div>
+          </div>
+          <div class="skills-item" data-skill-item="2">
+            <button class="skills-item-head" type="button" data-skill="2">
+              <span class="skills-item-icon" aria-hidden="true"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3 4 7.5v9L12 21l8-4.5v-9z"/><path d="M4 7.5 12 12l8-4.5M12 12v9"/></svg></span>
+              <span class="skills-item-name">3D 片场</span>
+            </button>
+            <div class="skills-points-wrap">
+              <ul class="skills-points">
+                <li><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg><span>还原人物、场景与空间关系，快速搭建 3D 拍摄现场</span></li>
+                <li><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg><span>场景与动作素材库自由组合，支持 AI 复刻创意参考</span></li>
+                <li><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg><span>自定义相机与关键帧，复杂运镜可反复调整、精准复现</span></li>
+                <li><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg><span>一键输出预演视频，为 AI 视频生成提供清晰参考</span></li>
+              </ul>
+            </div>
+          </div>
         </div>
-        <div class="skills-main">
-          <div class="skills-list">
-              <button class="skills-item active" type="button" data-skill="0"><span class="skills-arrow" aria-hidden="true">→</span>智能创作 Agent</button>
-              <button class="skills-item" type="button" data-skill="1"><span class="skills-arrow" aria-hidden="true">→</span>智能镜头</button>
-              <button class="skills-item" type="button" data-skill="2"><span class="skills-arrow" aria-hidden="true">→</span>3D 片场</button>
-          </div>
-          <div class="skills-detail">
-              <div class="skills-detail-slide active" data-skill-detail="0">
-                <p class="skills-eyebrow">放大创意的专业创作引擎</p>
-                <ul class="skills-points">
-                  <li><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg><span>输入创意灵感，快速完成影视级剧本框架设定</span></li>
-                  <li><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg><span>梳理故事结构，完善角色弧线、场景设定与人物对白</span></li>
-                  <li><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg><span>自动拆解剧情节点，规划多线分支与叙事走向</span></li>
-                  <li><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg><span>一键生成视觉提示词，衔接后续视频创作流程</span></li>
-                </ul>
-              </div>
-              <div class="skills-detail-slide" data-skill-detail="1">
-                <p class="skills-eyebrow">多片段中长叙事创作利器</p>
-                <ul class="skills-points">
-                  <li><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg><span>跨片段自然衔接，统一规划整组镜头</span></li>
-                  <li><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg><span>提前预览关键镜头，高效确认剧情画面</span></li>
-                  <li><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg><span>统一规划分镜，动作、站位与空间关系自然延续</span></li>
-                  <li><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg><span>自动识别镜头需求，智能匹配片段，一键完成整组生成</span></li>
-                </ul>
-              </div>
-              <div class="skills-detail-slide" data-skill-detail="2">
-                <p class="skills-eyebrow">视频创作的三维预演空间</p>
-                <ul class="skills-points">
-                  <li><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg><span>还原人物、场景与空间关系，快速搭建 3D 拍摄现场</span></li>
-                  <li><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg><span>场景与动作素材库自由组合，支持 AI 复刻创意参考</span></li>
-                  <li><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg><span>自定义相机与关键帧，复杂运镜可反复调整、精准复现</span></li>
-                  <li><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg><span>一键输出预演视频，为 AI 视频生成提供清晰参考</span></li>
-                </ul>
-              </div>
-          </div>
+        <div class="skills-nav">
+          <button class="skills-nav-btn" type="button" data-skill-step="-1" aria-label="上一个"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m15 18-6-6 6-6"/></svg></button>
+          <button class="skills-nav-btn" type="button" data-skill-step="1" aria-label="下一个"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m9 18 6-6-6-6"/></svg></button>
         </div>
       </div>
-
-      <div class="skills-media reveal">
-        <div class="skills-slide active" data-skill-slide="0">
-          <div class="skills-slide-copy">
-            <h3>放大创意的<br>专业创作引擎</h3>
-            <p><span>01 / 03</span>智能创作 Agent</p>
+      <div class="skills-panel">
+        <div class="skills-stage">
+          <div class="skills-frame">
+            <div class="skills-slide active" data-skill-slide="0">
+              <span class="skills-slide-icon" aria-hidden="true"><svg width="44" height="44" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l1.8 4.7L18.5 9.5l-4.7 1.8L12 16l-1.8-4.7L5.5 9.5l4.7-1.8z"/><path d="M19 15l.8 2 2 .8-2 .8-.8 2-.8-2-2-.8 2-.8z"/></svg></span>
+            </div>
+            <div class="skills-slide" data-skill-slide="1">
+              <span class="skills-slide-icon" aria-hidden="true"><svg width="44" height="44" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 8a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><path d="m16 10 5-3v10l-5-3z"/></svg></span>
+            </div>
+            <div class="skills-slide" data-skill-slide="2">
+              <span class="skills-slide-icon" aria-hidden="true"><svg width="44" height="44" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3 4 7.5v9L12 21l8-4.5v-9z"/><path d="M4 7.5 12 12l8-4.5M12 12v9"/></svg></span>
+            </div>
           </div>
         </div>
-        <div class="skills-slide" data-skill-slide="1">
-          <div class="skills-slide-copy">
-            <h3>多片段中长<br>叙事创作利器</h3>
-            <p><span>02 / 03</span>智能镜头</p>
+        <div class="skills-panel-foot">
+          <div class="skills-captions">
+            <p class="skills-caption active" data-skill-caption="0">放大创意的专业创作引擎</p>
+            <p class="skills-caption" data-skill-caption="1">多片段中长叙事创作利器</p>
+            <p class="skills-caption" data-skill-caption="2">视频创作的三维预演空间</p>
           </div>
+          <button class="skills-cta" type="button" data-open-auth="login">登录立即体验</button>
         </div>
-        <div class="skills-slide" data-skill-slide="2">
-          <div class="skills-slide-copy">
-            <h3>视频创作的<br>三维预演空间</h3>
-            <p><span>03 / 03</span>3D 片场</p>
-          </div>
-        </div>
-        <div class="skills-progress" aria-hidden="true"><i></i></div>
       </div>
-    </div>
-    </div>
     </div>
   </div>
 </section>
