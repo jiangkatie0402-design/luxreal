@@ -222,11 +222,18 @@ if (adv3Steps.length && adv3Slides.length) {
 
 // ---------- skills (core skill points) ----------
 const skillsScroll = document.getElementById('skills-scroll');
-const skillsItems = document.querySelectorAll('.skills-item');
+const skillsTriggers = document.querySelectorAll('.skills-item, .skills-rail-btn');
 const skillsSlides = document.querySelectorAll('.skills-slide');
-if (skillsItems.length && skillsSlides.length) {
+const skillsDetails = document.querySelectorAll('.skills-detail-slide');
+const skillsMedia = document.querySelector('.skills-media');
+if (skillsTriggers.length && skillsSlides.length) {
+  const skillCount = skillsSlides.length;
+  let activeSkill = '0';
   function setActiveSkill(target) {
-    skillsItems.forEach(i => i.classList.toggle('active', i.dataset.skill === target));
+    if (target === activeSkill) return;
+    activeSkill = target;
+    skillsTriggers.forEach(t => t.classList.toggle('active', t.dataset.skill === target));
+    skillsDetails.forEach(d => d.classList.toggle('active', d.dataset.skillDetail === target));
     skillsSlides.forEach(slide => {
       const active = slide.dataset.skillSlide === target;
       slide.classList.toggle('active', active);
@@ -234,13 +241,18 @@ if (skillsItems.length && skillsSlides.length) {
       if (video) { if (active) video.play().catch(() => {}); else video.pause(); }
     });
   }
+  function setSkillProgress(p) {
+    if (skillsMedia) skillsMedia.style.setProperty('--skills-progress', p);
+  }
 
-  skillsItems.forEach(item => {
-    item.addEventListener('click', () => setActiveSkill(item.dataset.skill));
+  skillsTriggers.forEach(t => {
+    t.addEventListener('click', () => {
+      setActiveSkill(t.dataset.skill);
+      setSkillProgress((parseInt(t.dataset.skill, 10) + 0.5) / skillCount);
+    });
   });
 
   if (skillsScroll) {
-    const skillCount = skillsItems.length;
     skillsScroll.style.setProperty('--skills-slides', skillCount);
 
     let skillsTicking = false;
@@ -251,6 +263,7 @@ if (skillsItems.length && skillsSlides.length) {
       const progress = scrollable > 0 ? Math.min(1, Math.max(0, -rect.top / scrollable)) : 0;
       const activeIndex = Math.min(skillCount - 1, Math.floor(progress * skillCount));
       setActiveSkill(String(activeIndex));
+      setSkillProgress(progress);
     }
     function onSkillsScroll() {
       if (!skillsTicking) {
