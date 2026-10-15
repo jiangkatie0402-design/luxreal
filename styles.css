@@ -247,6 +247,8 @@ button { font-family: inherit; }
 /* ---------- section shell ---------- */
 .section { padding: 130px 0; position: relative; }
 .section-tight { padding: 90px 0; }
+/* stacked homepage sections: drop the top padding so every title sits one 130px gap below the content above */
+#advantages, #feedback, #partners, #partners + .section-tight { padding-top: 0; }
 .section-head { max-width: 640px; margin-bottom: 64px; }
 .section-title { font-family: var(--font-sans); font-weight: 400; font-size: clamp(30px, 4vw, 46px); line-height: 1.28; letter-spacing: 0; }
 .section-desc { color: var(--text-dim); font-size: 16px; margin-top: 16px; line-height: 1.8; max-width: 560px; }
@@ -272,7 +274,7 @@ button { font-family: inherit; }
   background: linear-gradient(0deg, rgba(8,9,11,.6) 0%, rgba(8,9,11,.1) 32%, transparent 55%);
 }
 /* spacing mirrors the Kling Image reference: ~50px title→tabs, ~8px tab title→sub, ~42px tabs→media, tabs ~440px apart */
-#scenarios .showcase-head { margin-bottom: 44px; }
+#scenarios .showcase-head { margin-bottom: 48px; }
 .showcase-switch {
   display: grid; grid-template-columns: repeat(2, minmax(0, 440px)); justify-content: center;
   margin-bottom: 40px;
@@ -296,7 +298,7 @@ button { font-family: inherit; }
 .showcase-tab.active .showcase-tab-sub { color: var(--text-dim); opacity: 1; }
 @media (max-width: 640px) {
   .showcase-media { aspect-ratio: 4 / 5; }
-  #scenarios .showcase-head { margin-bottom: 28px; }
+  #scenarios .showcase-head { margin-bottom: 32px; }
   .showcase-switch { grid-template-columns: repeat(2, minmax(0, 1fr)); margin-bottom: 24px; }
   .showcase-tab-title { font-size: 16px; }
   .showcase-tab-sub { font-size: 12px; }
@@ -380,7 +382,7 @@ button { font-family: inherit; }
 }
 
 /* ---------- advantages v3 (top step tabs) ---------- */
-.adv3-head { text-align: center; margin-bottom: 40px; }
+.adv3-head { text-align: center; margin-bottom: 48px; }
 .adv3-steps {
   display: flex; align-items: center; justify-content: space-between; width: 100%;
   margin: 0 0 56px; padding: 0;
@@ -412,6 +414,7 @@ button { font-family: inherit; }
   .adv3-panel { grid-template-columns: 1fr; gap: 32px; }
 }
 @media (max-width: 640px) {
+  .adv3-head { margin-bottom: 32px; }
   .adv3-step { font-size: 12px; }
   .adv3-step-line { flex-basis: 16px; margin: 0 10px; }
 }
@@ -419,7 +422,7 @@ button { font-family: inherit; }
 /* ---------- skills (core skill points) ---------- */
 /* this section runs wider than the site's 1200px content column */
 #feedback .container { max-width: 1560px; padding: 0 56px; }
-.skills-head { text-align: center; margin-bottom: 64px; }
+.skills-head { text-align: center; margin-bottom: 48px; }
 .skills-layout { display: grid; grid-template-columns: minmax(0, 0.5fr) minmax(0, 1fr); gap: 72px; align-items: stretch; }
 .skills-side { display: flex; flex-direction: column; justify-content: space-between; gap: 32px; padding: 8px 0; }
 .skills-list { display: flex; flex-direction: column; gap: 36px; }
@@ -541,6 +544,7 @@ button { font-family: inherit; }
 .partners-showcase strong { color: var(--text); font-weight: 600; }
 .partners-quote { color: var(--text-faint); line-height: 1.75; }
 @media (max-width: 640px) {
+  .partners-head { margin-bottom: 32px; }
   .partners-avatars { gap: 10px; }
   .partners-avatar { width: 44px; height: 44px; }
   .partners-avatar.active { width: 68px; height: 68px; }
