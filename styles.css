@@ -26,6 +26,8 @@
     "Microsoft YaHei", "Hiragino Sans GB", "Noto Sans SC", sans-serif;
   /* display face for large headings; alternatives loaded below: "PangMenZhengDao" (标题体, heavier), "YouSheBiaoTiHei" (优设标题黑) */
   --font-title: "PangMenZhengDaoXiXian", var(--font-sans);
+  /* the hero headline keeps the heavier 庞门正道标题体 */
+  --font-title-hero: "PangMenZhengDao", var(--font-sans);
 }
 
 /* both files are subset to the characters used on the site (~49KB each) */
@@ -788,3 +790,4 @@ button { font-family: inherit; }
   font-family: var(--font-title); font-weight: 400; font-synthesis: none; letter-spacing: .02em;
 }
 .page-hero h1 .serif { font-family: inherit; }
+.hero-cinematic-title { font-family: var(--font-title-hero); }
