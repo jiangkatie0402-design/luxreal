@@ -24,6 +24,18 @@
 
   --font-sans: "PingFang SC", -apple-system, BlinkMacSystemFont, "Helvetica Neue",
     "Microsoft YaHei", "Hiragino Sans GB", "Noto Sans SC", sans-serif;
+  /* display face for large headings; swap to "YouSheBiaoTiHei" to try 优设标题黑 */
+  --font-title: "PangMenZhengDao", var(--font-sans);
+}
+
+/* both files are subset to the characters used on the site (~49KB each) */
+@font-face {
+  font-family: "PangMenZhengDao"; font-weight: 400; font-style: normal; font-display: swap;
+  src: url("assets/fonts/pangmenzhengdao-title.woff2") format("woff2");
+}
+@font-face {
+  font-family: "YouSheBiaoTiHei"; font-weight: 400; font-style: normal; font-display: swap;
+  src: url("assets/fonts/youshebiaotihei-title.woff2") format("woff2");
 }
 
 *, *::before, *::after,
@@ -766,3 +778,9 @@ button { font-family: inherit; }
   .hero-cinematic-chip { left: 16px; bottom: 16px; }
   .hero-cinematic-chip span { max-width: 46vw; }
 }
+
+/* large headings use the display face; single-weight fonts, so no faux bold */
+.hero-cinematic-title, .section-title, .cta-banner h2, .page-hero h1 {
+  font-family: var(--font-title); font-weight: 400; font-synthesis: none; letter-spacing: .02em;
+}
+.page-hero h1 .serif { font-family: inherit; }
