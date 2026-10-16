@@ -2183,7 +2183,10 @@ const JUDGES = [];
   const items = [...flow.querySelectorAll('.pzf-item')];
   // data-mode="still" on #pzFlow: the light inside stays put and only the tubes grow, each strand on its own (root-like) —
   // otherwise the light keeps flowing and the whole bundle is revealed as one
-  const STILL = flow.dataset.mode === 'still', LAG = [0, 60, 110, 170, 90, 210], TAIL = 130;   // still mode: how far each strand trails the lead; tapering tail length (px)
+  const STILL = flow.dataset.mode === 'still', LAG = [0, 60, 110, 170, 90, 210], TAIL = 130;
+  const LUM = [1, .4, .85, 0, .6, 0];                             // still mode: per-tube light strength (bright and dim mixed; 0 = plain grey glass, unlit)
+  // lit tip (still mode): [distance behind the tip as a fraction of the tail, segment length px] per strand
+  const TIP = [[[.06, 7], [.2, 12], [.38, 5]], [[.08, 9], [.3, 5]], [[.05, 5], [.17, 8], [.33, 4]], [[.1, 6], [.26, 4]], [[.07, 5], [.22, 7]], [[.12, 4], [.3, 6]]];   // still mode: how far each strand trails the lead; tapering tail length (px)
   const EX_T = 320, EX_B = 120;                                   // wrapper reaches 320px above / 120px below the section
   // strands run strictly parallel: px offset along the normal, glass width, dim light dashes, flow period (s); all dash sums = 380
   const STRANDS = [
@@ -2194,6 +2197,9 @@ const JUDGES = [];
     { off: 35, w: 1.6, dim: [40, 140, 60, 140], hot: [10, 26, 10, 334], dur: 10 },
     { off: -50, w: 1.1, dim: [30, 170, 40, 140], hot: [8, 30, 8, 334], dur: 12 }
   ];
+  // sleeves: [strand, position (0–1 along the tube), height px, rings]
+  const SLEEVES = [[0, .12, 36, 4], [0, .5, 34, 3], [0, .86, 36, 4], [1, .3, 24, 3], [1, .68, 22, 2], [2, .22, 15, 2], [2, .78, 15, 2], [3, .42, 9, 1], [3, .93, 9, 1], [4, .6, 6, 1]];
+  let sleeves = [];
   const rel = el => { const a = el.getBoundingClientRect(), b = flow.getBoundingClientRect(); return { top: a.top - b.top, bottom: a.bottom - b.top, h: a.height }; };
   // uniform B-spline through the waypoints (clamped) → cubic Bézier segments, sampled to an evenly spaced polyline
   function spline(V, STEP) {
@@ -2252,23 +2258,34 @@ const JUDGES = [];
       const o = st.off * k, w = st.w * k, g = [[strandPaths[si], w >= 6 ? 'rgba(46,34,104,.42)' : 'rgba(70,64,100,.4)', w], [offPath(o - w / 2 + .5), 'rgba(238,236,250,.85)', Math.max(.7, 1.1 * k)], [offPath(o + w / 2 - .5), 'rgba(176,166,220,.5)', Math.max(.5, .8 * k)]];
       if (w > 5) g.push([offPath(o - w * .22), 'rgba(255,255,255,.3)', Math.max(.7, w * .1)]);
       if (w < 3) g.splice(0, 3, [strandPaths[si], 'rgba(205,200,225,.55)', Math.max(.6, w * .55)]);   // hair-thin tubes: one fine glass line
+      if (STILL && !LUM[si]) g.forEach(e => { e[1] = e[1].replace(/rgba\((\d+),(\d+),(\d+),/, (m, r, gg, b) => { const v = Math.round((+r + +gg + +b) / 3); return `rgba(${v},${v},${v},`; }); });   // unlit tubes: neutral grey
       return g;
     });
     if (!STILL) glass.forEach(g => g.forEach(([p, col, lw]) => { c.strokeStyle = col; c.lineWidth = lw; c.stroke(p); }));   // flow mode: baked once
-    const sleeve = (o, t, h, n) => {                                 // chrome sleeves: bevelled rings, violet glow in the gaps
-      const [x, y, ang] = at(o, t), w = h * (n > 2 ? 1.25 : .9), gp = w * .1, ring = (w - gp * (n - 1)) / n;
-      c.save(); c.translate(x, y); c.rotate(ang);
-      c.save(); c.shadowColor = '#8f6bff'; c.shadowBlur = 10 * k; c.fillStyle = 'rgba(143,107,255,.85)'; c.fillRect(-w / 2 - 2, -h * .42, w + 4, h * .84); c.restore();
+    // chrome sleeves: each pre-rendered once as a sprite (bevelled rings, violet light in the gaps), stamped per frame on top of the glass
+    const SDPR = 2;
+    sleeves = SLEEVES.map(([si, t, h0, n]) => {
+      const h = h0 * k, w = h * (.36 * n + .3), gp = Math.max(1.2, w * .07), ring = (w - gp * (n - 1)) / n, pad = 16 * k;
+      const s = document.createElement('canvas'), cw = w + pad * 2, ch = h + pad * 2; s.width = Math.ceil(cw * SDPR); s.height = Math.ceil(ch * SDPR);
+      const c = s.getContext('2d'); c.scale(SDPR, SDPR); c.translate(cw / 2, ch / 2);
+      c.save(); c.shadowColor = '#8a64ff'; c.shadowBlur = 14 * k; c.fillStyle = 'rgba(138,100,255,.9)'; c.fillRect(-w / 2 - 1, -h * .4, w + 2, h * .8); c.restore();   // violet halo
       const gr = c.createLinearGradient(0, -h / 2, 0, h / 2);
-      [[0, '#3a3946'], [.12, '#e9e7f5'], [.22, '#fff'], [.34, '#9d9bb0'], [.52, '#3d3b4a'], [.64, '#77758a'], [.8, '#dcd9ea'], [.92, '#6e6c80'], [1, '#1c1b25']].forEach(([s, col]) => gr.addColorStop(s, col));
-      for (let i = 0; i < n; i++) { const x0 = -w / 2 + i * (ring + gp);
-        c.fillStyle = gr; c.fillRect(x0, -h / 2, ring, h);
-        c.fillStyle = 'rgba(0,0,0,.35)'; c.fillRect(x0, -h / 2, ring * .14, h); c.fillStyle = 'rgba(0,0,0,.28)'; c.fillRect(x0 + ring * .86, -h / 2, ring * .14, h);
-        c.fillStyle = 'rgba(255,255,255,.85)'; c.fillRect(x0 + ring * .1, -h * .36, ring * .8, h * .07); c.fillStyle = 'rgba(255,255,255,.3)'; c.fillRect(x0 + ring * .1, h * .18, ring * .8, h * .05); }
-      for (let i = 1; i < n; i++) { const gx = -w / 2 + i * (ring + gp) - gp; c.save(); c.shadowColor = '#9a7dff'; c.shadowBlur = 8 * k; c.fillStyle = '#e2d9ff'; c.fillRect(gx, -h * .4, gp, h * .8); c.restore(); }
-      c.restore();
-    };
-    [.12, .5, .86].forEach(t => sleeve(0, t, 32 * k, 3)); [.3, .68].forEach(t => sleeve(-22 * k, t, 19 * k, 2)); [.22, .78].forEach(t => sleeve(21 * k, t, 12 * k, 1)); [.42].forEach(t => sleeve(-38 * k, t, 7 * k, 1));
+      [[0, '#2a2933'], [.08, '#8d8b9e'], [.16, '#f4f2fc'], [.24, '#ffffff'], [.36, '#a6a4b8'], [.5, '#3a3846'], [.6, '#5d5b6e'], [.76, '#d8d5e6'], [.86, '#8a8899'], [1, '#18171f']].forEach(([q, col]) => gr.addColorStop(q, col));
+      for (let i = 0; i < n; i++) { const x0 = -w / 2 + i * (ring + gp), rr = Math.min(2.2 * k, ring * .18);
+        c.fillStyle = gr; c.beginPath(); c.roundRect ? c.roundRect(x0, -h / 2, ring, h, rr) : c.rect(x0, -h / 2, ring, h); c.fill();
+        const sh = c.createLinearGradient(x0, 0, x0 + ring, 0);                     // rounded-cylinder shading across each ring
+        sh.addColorStop(0, 'rgba(0,0,0,.5)'); sh.addColorStop(.18, 'rgba(0,0,0,0)'); sh.addColorStop(.82, 'rgba(0,0,0,0)'); sh.addColorStop(1, 'rgba(0,0,0,.45)');
+        c.fillStyle = sh; c.fillRect(x0, -h / 2, ring, h);
+        c.fillStyle = 'rgba(255,255,255,.9)'; c.fillRect(x0 + ring * .14, -h * .3, ring * .72, Math.max(.8, h * .06));   // specular line
+        c.fillStyle = 'rgba(255,255,255,.28)'; c.fillRect(x0 + ring * .14, h * .2, ring * .72, Math.max(.6, h * .04));
+        if (ring > 10 * k) { c.fillStyle = 'rgba(20,18,30,.55)'; [.33, .66].forEach(f => c.fillRect(x0 + ring * f, -h / 2, Math.max(.8, k), h)); }   // engraved grooves on wide rings
+      }
+      for (let i = 1; i < n; i++) { const gx = -w / 2 + i * (ring + gp) - gp;          // light leaking through the gaps
+        c.save(); c.shadowColor = '#a086ff'; c.shadowBlur = 10 * k; c.fillStyle = '#efe9ff'; c.fillRect(gx, -h * .38, gp, h * .76); c.restore(); }
+      [-1, 1].forEach(sd => { c.save(); c.shadowColor = '#9a7dff'; c.shadowBlur = 8 * k; c.fillStyle = 'rgba(214,202,255,.9)'; c.fillRect(sd < 0 ? -w / 2 - gp * .8 : w / 2, -h * .3, gp * .8, h * .6); c.restore(); });   // glow at both mouths
+      const [x, y, ang] = at(STRANDS[si].off * k, t);
+      return { si, d: t * len, x, y, ang, s, cw, ch, w };
+    });
     // reveal lookup: running max of y along the spine (monotonic) for scroll → length
     samples = []; for (let i = 0, m = -1e9; i < pts.length; i++) samples.push(m = Math.max(m, pts[i][1]));
     rowY = items.map(it => { const q = rel(it); return q.top + q.h * .5; });
@@ -2303,11 +2320,12 @@ const JUDGES = [];
   }
   // still mode: static light, each strand grows on its own with a small glowing tip
   function stillFrame(time, fr, cr) {
-    const lay = shown >= len - .5 ? len : Math.max(0, shown - (TAIL + 110) * k);   // specks and sleeves only where the tube bodies (not their thin tails) have reached
-    if (lay < len - .5) {
-      ctx.globalCompositeOperation = 'destination-in'; ctx.setLineDash([Math.max(.01, lay), len + 2000]); ctx.lineDashOffset = 0;
-      ctx.strokeStyle = '#000'; ctx.lineWidth = 260 * k; ctx.stroke(spinePath);
-      ctx.setLineDash([]); ctx.globalCompositeOperation = 'source-over';
+    const lay = shown >= len - .5 ? len : Math.max(0, shown - (TAIL + 40) * k);    // specks and haze only where the tube bodies (not their thin tails) have reached
+    if (lay < len - .5) {                                                    // feathered trim: fade the haze out over ~70px instead of a hard round edge
+      ctx.globalCompositeOperation = 'destination-out'; ctx.lineCap = 'butt'; ctx.strokeStyle = '#000'; ctx.lineWidth = 260 * k; ctx.lineDashOffset = 0;
+      for (let q = 0; q <= 7; q++) { const from = Math.max(0, lay - (7 - q) * 10 * k);
+        ctx.globalAlpha = q === 7 ? 1 : .26; ctx.setLineDash([0, from, len + 2000, 1]); ctx.stroke(spinePath); }
+      ctx.setLineDash([]); ctx.globalAlpha = 1; ctx.lineCap = 'round'; ctx.globalCompositeOperation = 'source-over';
     }
     twinkle.forEach(([x, y, rr, white, ph, sp], n) => { if ((n / twinkle.length) * len > shown) return; const a = .15 + .75 * (.5 + .5 * Math.sin(time * sp + ph));
       ctx.globalAlpha = a * .25; ctx.fillStyle = '#8f74ff'; ctx.beginPath(); ctx.arc(x, y, rr * 2.6, 0, 6.29); ctx.fill();
@@ -2327,14 +2345,33 @@ const JUDGES = [];
           ctx.setLineDash([0, a, seg, 1e6]); ctx.strokeStyle = `rgba(215,210,235,${(.2 + .3 * f).toFixed(2)})`; ctx.lineWidth = Math.max(.5, w * (.08 + .3 * f)); ctx.stroke(p); }
         ctx.lineCap = 'round';
       }
+      if (!LUM[si]) return;                                                  // plain grey tube: no light inside
+      ctx.globalAlpha = gtx.globalAlpha = LUM[si];                          // light strength differs per tube: some bright, some barely lit
       const dimD = cut(st.dim, ph, Ls); gtx.setLineDash(dimD); gtx.strokeStyle = 'rgba(125,98,255,.3)'; gtx.lineWidth = Math.max(2.5, w * .75); gtx.stroke(p);
       if (w >= 6) { ctx.setLineDash(dimD); ctx.strokeStyle = 'rgba(132,104,255,.3)'; ctx.lineWidth = w * .45; ctx.stroke(p); }   // thick tubes: a visible neon fill
       const hot = cut(st.hot, phH, Ls);
       gtx.setLineDash(hot); gtx.strokeStyle = 'rgba(130,98,255,.55)'; gtx.lineWidth = Math.max(4, Math.min(w * 1.6, 22)); gtx.stroke(p);
       ctx.setLineDash(hot); ctx.strokeStyle = '#b9a6ff'; ctx.lineWidth = Math.max(1.1, w * .7); ctx.stroke(p);
       ctx.strokeStyle = '#fff'; ctx.lineWidth = Math.max(.7, w * .32); ctx.stroke(p);
+      if (growing) {                                                         // lit tip: a few short bright segments riding just behind the growing end
+        const tl = Ls - body;
+        TIP[si % TIP.length].forEach(([dd, sl], q) => {
+          const d = dd * tl, a = Ls - d, f = d / tl, tw = Math.max(.6, w * (.08 + .3 * f));
+          const pulse = .75 + .25 * Math.sin(time * 3.2 + si * 1.7 + q * 2.1), dash = [0, Math.max(0, a - sl * k), sl * k, 1e6];
+          gtx.setLineDash(dash); gtx.strokeStyle = `rgba(138,104,255,${(.7 * pulse).toFixed(2)})`; gtx.lineWidth = Math.max(5, tw * 4); gtx.stroke(p);
+          ctx.lineCap = 'butt'; ctx.setLineDash(dash);
+          ctx.strokeStyle = `rgba(190,170,255,${pulse.toFixed(2)})`; ctx.lineWidth = Math.max(1.2, tw * 2); ctx.stroke(p);
+          ctx.strokeStyle = '#fff'; ctx.lineWidth = Math.max(.6, tw * .9); ctx.stroke(p); ctx.lineCap = 'round';
+        });
+      }
+      ctx.globalAlpha = gtx.globalAlpha = 1;
     });
     ctx.setLineDash([]); gtx.setLineDash([]);
+    stampSleeves(sl => shown >= len - .5 || sl.d <= shown - (LAG[sl.si] + TAIL - 20) * k);   // each sleeve appears once its tube's full-width body has reached it
+  }
+  function stampSleeves(ok) {
+    sleeves.forEach(sl => { if (!ok(sl)) return;
+      ctx.save(); ctx.translate(sl.x, sl.y); ctx.rotate(sl.ang); ctx.drawImage(sl.s, -sl.cw / 2, -sl.ch / 2, sl.cw, sl.ch); ctx.restore(); });
   }
   function frame(now) {
     raf = 0; if (!len) return;
@@ -2371,6 +2408,7 @@ const JUDGES = [];
         ctx.globalAlpha = a * .25; ctx.fillStyle = '#8f74ff'; ctx.beginPath(); ctx.arc(x, y, rr * 2.6, 0, 6.29); ctx.fill();
         ctx.globalAlpha = a; ctx.fillStyle = white ? '#fff' : '#d9cfff'; ctx.beginPath(); ctx.arc(x, y, rr, 0, 6.29); ctx.fill(); });
       ctx.globalAlpha = 1;
+      stampSleeves(() => true);
       if (shown < len - .5) {                                                  // trim to the revealed length
         ctx.globalCompositeOperation = 'destination-in'; ctx.setLineDash([shown, len + 2000]); ctx.lineDashOffset = 0;
         ctx.strokeStyle = '#000'; ctx.lineWidth = 260 * k; ctx.stroke(spinePath);
