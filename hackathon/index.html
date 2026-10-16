@@ -338,6 +338,9 @@ html[lang="zh-CN"] .sec-title { letter-spacing: .02em; line-height: 1.22; }
 .sec-head-stack { display: block; }
 .sec-head-stack .sec-desc { margin-top: 22px; max-width: 900px; }
 .sec-desc { font-size: 17px; color: var(--text-soft); font-weight: 500; max-width: 520px; }
+#prizes .pz-more-top { justify-self: end; text-align: right; max-width: none; }
+#prizes .pz-more-top .link-btn { font-size: inherit; padding: 0 2px; }
+@media (max-width: 760px) { #prizes .pz-more-top { justify-self: start; text-align: left; } }
 
 /* ---------- About ---------- */
 .about-grid { display: grid; grid-template-columns: 1.1fr 1fr; gap: 24px; }
@@ -499,6 +502,8 @@ html[lang="zh-CN"] .sec-title { letter-spacing: .02em; line-height: 1.22; }
 .pzf > div { position: relative; z-index: 1; }
 .pzf-k { display: block; font-family: var(--font-mono); font-size: 13.5px; font-weight: 600; letter-spacing: .16em; color: var(--ice); margin-bottom: 18px; }
 .pzf-hero { padding: 32px 0 120px; }
+.pzf-bigrow { display: flex; align-items: baseline; gap: 14px; }
+.pzf-x { font-style: normal; font-size: clamp(16px, 1.4vw, 20px); color: var(--text-muted); }
 /* 特等奖: its own, larger title above ¥100,000 (bigger than 一 · 二 · 三等奖) */
 .pzf-name.pzf-top { display: block; font-size: clamp(36px, 3.8vw, 58px); color: #fff; margin: 4px 0 14px; }
 .pzf-big { font-size: clamp(48px, 5.2vw, 76px); font-weight: 600; letter-spacing: -.05em; line-height: .9; background: linear-gradient(90deg, #fff 0%, #D6D0FF 35%, #9B8BFF 70%, #7B5CFF); -webkit-background-clip: text; background-clip: text; color: transparent; }
@@ -1556,7 +1561,7 @@ body.modal-open { overflow: hidden; }
       <div class="reveal">
         <h2 class="sec-title"><span class="grad-text pool-amt" id="poolAmt" aria-label="¥320,000">¥320,000</span><br><span data-i18n="prizes.title2">总奖金池</span></h2>
       </div>
-      <p class="sec-desc reveal d1" data-i18n="prizes.desc">共设 23 个奖项：3D AI 新物种奖与一、二、三等奖之外，还有应用单项奖、创意单项奖、人气单项奖。</p>
+      <p class="sec-desc pz-more-top reveal d1" data-i18n="pz.more">如需了解评审细则，请<button type="button" class="link-btn" data-open-community>加入社群</button>后查阅《选手手册》。</p>
     </div>
 
     <!-- prize flow: one KV-style glass tube threads 特别奖 → 一二三等奖 → 单项奖 and draws itself as you scroll -->
@@ -1565,8 +1570,8 @@ body.modal-open { overflow: hidden; }
       <div class="pzf-hero pzf-item">
         <span class="pzf-k">01</span>
         <h3 class="pzf-name pzf-top" data-i18n="p0.n">3D AI 新物种奖</h3>
-        <div class="pzf-big n"><sup>¥</sup>100,000</div>
-        <p class="pzf-sub">× 1<span class="pzf-dot">·</span><span data-i18n="usd.100k">约 $14,900</span></p>
+        <div class="pzf-bigrow"><div class="pzf-big n"><sup>¥</sup>100,000</div><i class="pzf-x">× 1</i></div>
+        <p class="pzf-sub"><span data-i18n="usd.100k">约 $14,900</span></p>
       </div>
       <div class="pzf-grp pzf-ranks">
         <span class="pzf-k">02 · <span data-i18n="pzf.k2">一 · 二 · 三等奖</span></span>
@@ -1584,7 +1589,6 @@ body.modal-open { overflow: hidden; }
         <p class="pzf-note" data-i18n="aw.note">单项奖每项 ¥5,000（约 $750）</p>
       </div>
     </div>
-    <p class="pz-more reveal" data-i18n="pz.more">如需了解评审细则，请<button type="button" class="link-btn" data-open-community>加入社群</button>后查阅《选手手册》。</p>
 
 
     <!-- 提交内容 -->
@@ -2190,27 +2194,32 @@ const JUDGES = [];
   const rv = svg.querySelector('.tb-rv'), G = c => svg.querySelector('.tb-' + c);
   let len = 0, samples = [], spine = null;
   const rel = el => { const a = el.getBoundingClientRect(), b = flow.getBoundingClientRect(); return { top: a.top - b.top, bottom: a.bottom - b.top, left: a.left - b.left, right: a.right - b.left, h: a.height, w: a.width }; };
-  // a polyline with every corner rounded by a quarter-ellipse between the edge midpoints (k = .5523, the circle constant):
-  // constant, generous curvature — the round, calm arcs of a ribbon — with no wobble between corners
-  const rounded = V => { const M = (a, b) => [(a[0] + b[0]) / 2, (a[1] + b[1]) / 2], f = n => n.toFixed(1), K = .5523;
-    let m = M(V[0], V[1]), d = `M${f(V[0][0])},${f(V[0][1])} L${f(m[0])},${f(m[1])}`;
-    for (let i = 1; i < V.length - 1; i++) { const a = m, b = i < V.length - 2 ? M(V[i], V[i + 1]) : V[i + 1], c = V[i];
-      d += ` C${f(a[0] + (c[0] - a[0]) * K)},${f(a[1] + (c[1] - a[1]) * K)} ${f(b[0] + (c[0] - b[0]) * K)},${f(b[1] + (c[1] - b[1]) * K)} ${f(b[0])},${f(b[1])}`; m = b; }
-    return d; };
+  // a polyline whose corners are true circular arcs of one fixed radius (clamped to fit): small, round bends
+  // joined by straight runs, like the reference ribbon — not one huge loop
+  const rounded = (V, R) => { const f = n => n.toFixed(1), sub2 = (a, b) => [a[0] - b[0], a[1] - b[1]], len2 = v => Math.hypot(v[0], v[1]), nrm = v => { const l = len2(v) || 1; return [v[0] / l, v[1] / l]; };
+    let d = `M${f(V[0][0])},${f(V[0][1])}`;
+    for (let i = 1; i < V.length - 1; i++) {
+      const P = V[i], ein = sub2(P, V[i - 1]), eout = sub2(V[i + 1], P), u = nrm(ein), v = nrm(eout);
+      const th = Math.acos(Math.max(-1, Math.min(1, u[0] * v[0] + u[1] * v[1])));      // turn angle
+      const r = Math.min(R, Math.min(len2(ein), len2(eout)) * .48 / Math.max(.01, Math.tan(th / 2))), t = r * Math.tan(th / 2), h = 4 / 3 * Math.tan(th / 4) * r;
+      const A = [P[0] - u[0] * t, P[1] - u[1] * t], B = [P[0] + v[0] * t, P[1] + v[1] * t];
+      d += ` L${f(A[0])},${f(A[1])} C${f(A[0] + u[0] * h)},${f(A[1] + u[1] * h)} ${f(B[0] - v[0] * h)},${f(B[1] - v[1] * h)} ${f(B[0])},${f(B[1])}`;
+    }
+    const L = V[V.length - 1]; return d + ` L${f(L[0])},${f(L[1])}`; };
   const el = (tag, attrs, parent) => { const e = document.createElementNS(NS, tag); for (const k in attrs) e.setAttribute(k, attrs[k]); parent.appendChild(e); return e; };
   function build() {
     const W = flow.clientWidth, H = flow.clientHeight, k = W < 760 ? .6 : 1;
     const sub = rel(flow.querySelector('.pzf-sub')), g = flow.querySelectorAll('.pzf-grp'), r = rel(g[0]), a = rel(g[1]), gap = (r.bottom + a.top) / 2;
     const V = W < 760
-      ? [[W + 80, sub.top - 40], [W * .06, sub.bottom + 90], [W * .06, gap + 10], [W + 90, gap + 10], [W + 90, H - 50], [-90, H - 50]]
-      : [[W + 180, sub.top - 110],                    // in from the top-right …
-         [W * .07, sub.bottom + 170],                 // … one long diagonal down to the open left half
-         [W * .07, gap - 25],                         // round corner, straight down beside 一 · 二 · 三等奖
-         [W + 650, gap - 25],                         // round corner, out to the right through the gap between the tiers
+      ? [[W + 80, sub.top - 40], [W * .05, r.top + r.h * .3], [W * .55, gap], [W + 300, gap], [W + 300, H - 50], [-90, H - 50]]
+      : [[W * 1.12, sub.top - 200],                   // in from beyond the top-right, one diagonal run …
+         [W * .06, r.top + r.h * .28],                // … a small round bend on the left, beside 一等奖 …
+         [W * .44, gap - 15],                         // … a diagonal run back, a second round bend under 三等奖 …
+         [W + 650, gap - 30],                         // … and out to the right through the gap between the tiers
          [W + 650, H - 70],                           // (off-screen) down past the single awards
          [-220, H - 70]];                             // and back in along the bottom, out to the left
     ['haze', 'specks', 'strands', 'sleeves'].forEach(c => { G(c).innerHTML = ''; });
-    const dMain = rounded(V);
+    const dMain = rounded(V, (W < 760 ? 160 : 330) * k);
     rv.setAttribute('d', dMain); rv.style.strokeWidth = 260 * k;
     const ref = el('path', { d: dMain, fill: 'none', stroke: 'none' }, G('haze'));
     el('path', { d: dMain, fill: 'none', stroke: '#6a48ff', 'stroke-width': 90 * k, opacity: .16, filter: 'url(#tbHaze)', 'stroke-linecap': 'round' }, G('haze'));
