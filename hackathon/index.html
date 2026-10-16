@@ -505,15 +505,23 @@ html[lang="zh-CN"] .sec-title { letter-spacing: .02em; line-height: 1.22; }
 .pzf-dot { margin: 0 .6em; color: var(--text-muted); }
 .pzf-grp { padding-bottom: 130px; }
 .pzf-grp:last-child { padding-bottom: 0; }
-.pzf-row { display: flex; align-items: baseline; justify-content: space-between; gap: 24px; padding: 28px 0; border-bottom: 1px solid var(--border-subtle); }
+.pzf-row { display: flex; align-items: center; justify-content: space-between; gap: 24px; padding: 30px 0; border-bottom: 1px solid var(--border-subtle); }
 .pzf-k + .pzf-row { border-top: 1px solid var(--border-subtle); }
-.pzf-name { font-size: clamp(40px, 5.6vw, 88px); font-weight: 500; letter-spacing: -.025em; line-height: 1; color: #34343c; transition: color .6s; }
+.pzf-name { font-size: clamp(30px, 3.6vw, 56px); font-weight: 500; letter-spacing: -.01em; line-height: 1.1; color: #34343c; transition: color .6s; }
+html[lang="zh-CN"] .pzf-name { font-family: var(--font-title); font-weight: 400; letter-spacing: .02em; }
+.tb-flow { animation: tbFlow 7s linear infinite paused; }
+.pzf-tube.run .tb-flow { animation-play-state: running; }
+@keyframes tbFlow { to { stroke-dashoffset: -760; } }
+.tb-speck { animation: tbSpeck 4s ease-in-out infinite paused; }
+.pzf-tube.run .tb-speck { animation-play-state: running; }
+@keyframes tbSpeck { 0%, 100% { opacity: .15; } 50% { opacity: .9; } }
+@media (prefers-reduced-motion: reduce) { .tb-flow, .tb-speck { animation: none; } }
 .pzf-amt { display: flex; align-items: baseline; gap: 10px; flex-wrap: wrap; justify-content: flex-end; text-align: right; }
 .pzf-amt b { font-size: clamp(26px, 2.8vw, 42px); font-weight: 600; color: #44444c; transition: color .6s; }
 .pzf-amt i { font-style: normal; font-size: 15px; color: var(--text-muted); }
 .pzf-amt small { flex-basis: 100%; font-size: 13px; color: var(--text-muted); }
 .pzf-row.sm { display: grid; grid-template-columns: minmax(220px, 300px) 1fr auto; align-items: baseline; }
-.pzf-row.sm .pzf-name { font-size: clamp(22px, 2.3vw, 34px); }
+.pzf-row.sm .pzf-name { font-size: clamp(22px, 2.1vw, 30px); }
 .pzf-name em { font-style: normal; font-size: .5em; color: var(--text-muted); margin-left: 10px; letter-spacing: 0; }
 .pzf-list { font-size: clamp(16px, 1.45vw, 21px); line-height: 1.6; color: #34343c; transition: color .6s; }
 .pzf-list em { font-style: normal; font-size: .8em; color: var(--text-muted); }
@@ -526,6 +534,7 @@ html[lang="zh-CN"] .sec-title { letter-spacing: .02em; line-height: 1.22; }
 .pzf-item.cur .pzf-amt b { color: var(--ice); }
 .pzf-item.cur .pzf-list { color: var(--text); }
 @media (max-width: 760px) {
+  .pzf-tube { opacity: .6; }   /* no side margins on phones: the strands cross the text, so keep them quieter */
   .pzf-big { font-size: 17vw; }
   .pzf-hero { padding-bottom: 90px; } .pzf-grp { padding-bottom: 80px; }
   .pzf-row { flex-direction: column; align-items: flex-start; gap: 10px; }
@@ -2136,76 +2145,98 @@ const JUDGES = [];
     else vids.forEach(v => v.pause());
   }, { rootMargin: '200px 0px' }).observe(vids[0].closest('.final-wrap') || vids[0]);
 })();
-/* 奖项: one glass tube (the KV's purple-core tubes) snakes 特别奖 → 一二三等奖 → 单项奖 and draws itself with the scroll.
-   The path is rebuilt from the blocks' positions; rows the tube has passed light up, the one it is passing is brightest. */
+/* 奖项: a bundle of thin glass tubes (the KV / //COMPONENTS look) sweeps in long silk-like arcs through 特别奖 → 一二三等奖 → 单项奖.
+   Inside, segments of violet light keep flowing; chrome sleeves and drifting light specks sit along it. The whole bundle is revealed
+   with the scroll through a mask; rows the tubes have passed light up, the one they are passing is brightest. */
 (function () {
   const flow = document.getElementById('pzFlow'); if (!flow) return;
   const svg = flow.querySelector('.pzf-tube'), NS = 'http://www.w3.org/2000/svg';
   const items = [...flow.querySelectorAll('.pzf-item')];
+  // every dash pattern sums to 380 so the 760px flow loop is seamless
+  // strands: offset (px, applied along the bundle's normal at each waypoint so they weave), glass width, light dash pattern, flow speed
+  const STRANDS = [
+    { off: [0, 0, 0, 0, 0, 0, 0], w: 15, dash: '70 46 14 38 100 60 20 32', dur: 7 },
+    { off: [-26, 18, -30, 22, -18, 26, -24], w: 9, dash: '40 70 90 40 80 60', dur: 9.5 },
+    { off: [30, -20, 34, -26, 28, -20, 30], w: 6, dash: '24 50 60 90 116 40', dur: 6 },
+    { off: [-52, -40, 50, 46, -48, -44, 52], w: 4, dash: '16 80 40 60 124 60', dur: 11 }
+  ];
   svg.innerHTML = `<defs>
-    <filter id="tbGlow" x="-20%" y="-20%" width="140%" height="140%"><feGaussianBlur stdDeviation="14"/></filter>
-    <filter id="tbCore" x="-20%" y="-20%" width="140%" height="140%"><feGaussianBlur stdDeviation="2.5"/></filter>
-    <linearGradient id="tbSleeve" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#3a3a46"/><stop offset=".28" stop-color="#f4f3ff"/><stop offset=".5" stop-color="#9a98ad"/><stop offset=".78" stop-color="#4a4858"/><stop offset="1" stop-color="#17161f"/></linearGradient>
-  </defs><g class="tb-body"></g><g class="tb-sleeves"></g>`;
-  const body = svg.querySelector('.tb-body'), sleevesG = svg.querySelector('.tb-sleeves');
-  // tube cross-section, outside → in: soft violet glow, dark glass shell, light rim, inner haze, neon core, hot centre line
-  const LAYERS = [['#6a48ff', 60, .3, 'url(#tbGlow)'], ['rgba(181,172,255,.42)', 42, 1], ['#0d0a1c', 38, 1], ['#3b2a9e', 20, .55, 'url(#tbCore)'], ['#a996ff', 6, 1, 'url(#tbCore)'], ['#b9adff', 4, 1], ['#ffffff', 1.4, .9]];
-  const paths = LAYERS.map(([c, w, o, f]) => { const el = document.createElementNS(NS, 'path'); Object.assign(el.style, { fill: 'none', stroke: c, opacity: o, strokeLinecap: 'round', strokeLinejoin: 'round' }); el.dataset.w = w; if (f) el.setAttribute('filter', f); body.appendChild(el); return el; });
-  const SLEEVES = [.1, .27, .45, .62, .8, .93];
-  let len = 0, samples = [], sleeves = [];
+    <filter id="tbGlow" x="-30%" y="-30%" width="160%" height="160%"><feGaussianBlur stdDeviation="3"/></filter>
+    <filter id="tbHaze" x="-30%" y="-30%" width="160%" height="160%"><feGaussianBlur stdDeviation="16"/></filter>
+    <linearGradient id="tbChrome" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#2c2b35"/><stop offset=".22" stop-color="#f6f5ff"/><stop offset=".42" stop-color="#b8b6c8"/><stop offset=".6" stop-color="#5d5b6c"/><stop offset=".82" stop-color="#d9d7e6"/><stop offset="1" stop-color="#1b1a22"/></linearGradient>
+    <mask id="tbReveal" maskUnits="userSpaceOnUse"><path class="tb-rv" fill="none" stroke="#fff" stroke-linecap="round" stroke-width="240"/></mask>
+  </defs><g mask="url(#tbReveal)"><g class="tb-haze"></g><g class="tb-specks"></g><g class="tb-strands"></g><g class="tb-sleeves"></g></g>`;
+  const rv = svg.querySelector('.tb-rv'), G = c => svg.querySelector('.tb-' + c);
+  let len = 0, samples = [], spine = null;
   const rel = el => { const a = el.getBoundingClientRect(), b = flow.getBoundingClientRect(); return { top: a.top - b.top, bottom: a.bottom - b.top, left: a.left - b.left, right: a.right - b.left, h: a.height, w: a.width }; };
-  // Catmull-Rom through the waypoints → smooth cubic Béziers
-  const curve = P => { let d = `M${P[0][0]},${P[0][1]}`; for (let i = 0; i < P.length - 1; i++) { const p0 = P[i - 1] || P[i], p1 = P[i], p2 = P[i + 1], p3 = P[i + 2] || p2;
-    d += ` C${p1[0] + (p2[0] - p0[0]) / 6},${p1[1] + (p2[1] - p0[1]) / 6} ${p2[0] - (p3[0] - p1[0]) / 6},${p2[1] - (p3[1] - p1[1]) / 6} ${p2[0]},${p2[1]}`; } return d; };
+  // Catmull-Rom → cubic Béziers; few, well-spaced waypoints give the long, even arcs of a silk ribbon
+  const curve = P => { let d = `M${P[0][0].toFixed(1)},${P[0][1].toFixed(1)}`; for (let i = 0; i < P.length - 1; i++) { const p0 = P[i - 1] || P[i], p1 = P[i], p2 = P[i + 1], p3 = P[i + 2] || p2;
+    d += ` C${(p1[0] + (p2[0] - p0[0]) / 6).toFixed(1)},${(p1[1] + (p2[1] - p0[1]) / 6).toFixed(1)} ${(p2[0] - (p3[0] - p1[0]) / 6).toFixed(1)},${(p2[1] - (p3[1] - p1[1]) / 6).toFixed(1)} ${p2[0].toFixed(1)},${p2[1].toFixed(1)}`; } return d; };
+  const el = (tag, attrs, parent) => { const e = document.createElementNS(NS, tag); for (const k in attrs) e.setAttribute(k, attrs[k]); parent.appendChild(e); return e; };
   function build() {
-    const W = flow.clientWidth, H = flow.clientHeight, k = W < 760 ? .55 : 1;
-    const hero = rel(flow.querySelector('.pzf-big')), sub = rel(flow.querySelector('.pzf-sub')), g = flow.querySelectorAll('.pzf-grp'), r = rel(g[0]), a = rel(g[1]);
-    const P = [
-      [W + 120, hero.top - 60],                       // enters from the right, above ¥100,000
-      [hero.right + W * .08, hero.top + hero.h * .45],
-      [W * .72, sub.bottom + 40],                     // swings under the 3D AI 新物种奖 line
-      [W * .05, sub.bottom + 120],
-      [-W * .05, r.top + r.h * .4],                 // hugs the left margin past 一 · 二等奖
-      [W * .16, r.bottom - r.h * .12],
-      [W * .62, r.bottom + 55],                       // crosses to the right under 三等奖
-      [W * .97, a.top - 10],
-      [W * 1.035, a.top + a.h * .6],                   // runs down the right margin, clear of the ¥5,000 column
-      [W * .86, H - 30],
-      [-120, H - 25]                                  // leaves bottom-left, under the footnote
-    ];
-    if (W < 760) P.splice(0, P.length,                // phones: no side margins, so the tube keeps to the screen edges
-      [W + 60, hero.top - 40], [W * .9, sub.bottom + 20], [W * .3, sub.bottom + 70], [-W * .04, r.top + r.h * .2],
-      [-W * .04, r.bottom - 20], [W * .5, r.bottom + 50], [W * 1.04, a.top + a.h * .2], [W * 1.04, a.bottom - 40], [W * .6, H - 30], [-60, H - 20]);
-    const d = curve(P);
-    paths.forEach(el => { el.setAttribute('d', d); el.style.strokeWidth = el.dataset.w * k; });
-    len = paths[0].getTotalLength();
-    samples = []; for (let i = 0; i <= 300; i++) { const pt = paths[0].getPointAtLength(len * i / 300); samples.push(pt.y); }
-    sleevesG.innerHTML = ''; sleeves = SLEEVES.map(f => {
-      const at = len * f, p0 = paths[0].getPointAtLength(at - 1), p1 = paths[0].getPointAtLength(at + 1), ang = Math.atan2(p1.y - p0.y, p1.x - p0.x) * 180 / Math.PI, h = 48 * k, w = 30 * k;
-      const gEl = document.createElementNS(NS, 'g');
-      gEl.setAttribute('transform', `translate(${(p0.x + p1.x) / 2},${(p0.y + p1.y) / 2}) rotate(${ang})`);
-      gEl.innerHTML = `<rect x="${-w / 2}" y="${-h / 2}" width="${w}" height="${h}" rx="${5 * k}" fill="url(#tbSleeve)"/>
-        <rect x="${-w / 2 + 5 * k}" y="${-h / 2}" width="${3.5 * k}" height="${h}" fill="#9b85ff" filter="url(#tbCore)"/><rect x="${w / 2 - 8.5 * k}" y="${-h / 2}" width="${3.5 * k}" height="${h}" fill="#9b85ff" filter="url(#tbCore)"/>
-        <rect x="${-w / 2}" y="${-h / 2 + 2}" width="${w}" height="${h * .18}" rx="2" fill="#fff" opacity=".35"/>`;
-      Object.assign(gEl.style, { transition: 'opacity .5s', opacity: 0 }); sleevesG.appendChild(gEl); return [at, gEl];
+    const W = flow.clientWidth, H = flow.clientHeight, k = W < 760 ? .6 : 1;
+    const sub = rel(flow.querySelector('.pzf-sub')), g = flow.querySelectorAll('.pzf-grp'), r = rel(g[0]), a = rel(g[1]);
+    const P = W < 760
+      ? [[W + 80, sub.top - 60], [W * .5, sub.bottom + 70], [-W * .06, r.top + r.h * .45], [W * .45, r.bottom + 45], [W * 1.06, a.top + a.h * .5], [W * .5, H - 25], [-80, H - 40]]
+      : [[W + 140, sub.top - 150],                    // enters top-right, beside ¥100,000
+         [W * .55, sub.bottom + 85],                  // one long sweep under the 3D AI 新物种奖 line
+         [-W * .05, r.top + r.h * .5],                // round the left edge past 一 · 二 · 三等奖
+         [W * .52, (r.bottom + a.top) / 2 + 10],      // a wide arc back across, in the gap between the tiers
+         [W * 1.16, a.top + 20],                      // slips out past the right edge above the single awards …
+         [W * 1.14, H - 85],                          // … and sweeps back in below them, so no row is crossed
+         [W * .45, H - 40],
+         [-140, H - 70]];                             // and out bottom-left
+    // normals at each waypoint, so strand offsets stay perpendicular to the bundle
+    const N = P.map((p, i) => { const q0 = P[Math.max(0, i - 1)], q1 = P[Math.min(P.length - 1, i + 1)], dx = q1[0] - q0[0], dy = q1[1] - q0[1], l = Math.hypot(dx, dy) || 1; return [-dy / l, dx / l]; });
+    ['haze', 'specks', 'strands', 'sleeves'].forEach(c => { G(c).innerHTML = ''; });
+    const dMain = curve(P);
+    rv.setAttribute('d', dMain); rv.style.strokeWidth = 260 * k;
+    el('path', { d: dMain, fill: 'none', stroke: '#6a48ff', 'stroke-width': 90 * k, opacity: .16, filter: 'url(#tbHaze)', 'stroke-linecap': 'round' }, G('haze'));
+    STRANDS.forEach((st, si) => {
+      const o = i => st.off[i % st.off.length] * k, d = curve(P.map((p, i) => [p[0] + N[i][0] * o(i), p[1] + N[i][1] * o(i)])), w = st.w * k;
+      const base = { d, fill: 'none', 'stroke-linecap': 'round' };
+      el('path', { ...base, stroke: 'rgba(196,188,255,.30)', 'stroke-width': w }, G('strands'));            // glass rim
+      el('path', { ...base, stroke: 'rgba(5,4,12,.82)', 'stroke-width': Math.max(1, w - 2.2) }, G('strands')); // clear body
+      el('path', { ...base, stroke: 'rgba(123,92,255,.14)', 'stroke-width': w * .55 }, G('strands'));           // faint inner tint
+      const lit = { ...base, 'stroke-dasharray': st.dash, class: 'tb-flow', style: `animation-duration:${st.dur}s;animation-delay:${-si * 1.7}s` };
+      el('path', { ...lit, stroke: '#9b82ff', 'stroke-width': Math.max(1.5, w * .42), filter: 'url(#tbGlow)' }, G('strands'));   // flowing light
+      el('path', { ...lit, stroke: '#efeaff', 'stroke-width': Math.max(.8, w * .16) }, G('strands'));                             // hot core
+      if (si === 0) spine = G('strands').lastChild;
     });
-    paths.forEach(el => { el.style.strokeDasharray = `${len} ${len}`; });
+    len = spine.getTotalLength();
+    samples = []; for (let i = 0; i <= 400; i++) samples.push(spine.getPointAtLength(len * i / 400).y);
+    // light specks drifting around the bundle
+    let seed = 7; const rnd = () => (seed = (seed * 16807) % 2147483647) / 2147483647;
+    for (let n = 0; n < (W < 760 ? 40 : 90); n++) {
+      const at = rnd() * len, p = spine.getPointAtLength(at), q = spine.getPointAtLength(Math.min(len, at + 2)), dx = q.x - p.x, dy = q.y - p.y, l = Math.hypot(dx, dy) || 1, o = (rnd() - .5) * 150 * k;
+      el('circle', { cx: p.x - dy / l * o, cy: p.y + dx / l * o, r: (.6 + rnd() * 1.6) * k, fill: rnd() > .3 ? '#b9a8ff' : '#fff', class: 'tb-speck', style: `animation-delay:${-rnd() * 4}s;animation-duration:${2.5 + rnd() * 3}s` }, G('specks'));
+    }
+    // chrome sleeves with two violet light bands, clamped on the main strand
+    [.14, .33, .52, .7, .88].forEach(f => {
+      const at = len * f, p0 = spine.getPointAtLength(at - 1), p1 = spine.getPointAtLength(at + 1), ang = Math.atan2(p1.y - p0.y, p1.x - p0.x) * 180 / Math.PI, h = 26 * k, w = 34 * k;
+      const gEl = el('g', { transform: `translate(${(p0.x + p1.x) / 2},${(p0.y + p1.y) / 2}) rotate(${ang})` }, G('sleeves'));
+      gEl.innerHTML = `<rect x="${-w / 2}" y="${-h / 2}" width="${w}" height="${h}" rx="${3 * k}" fill="url(#tbChrome)"/>
+        <rect x="${-w / 2 + w * .22}" y="${-h / 2 + 1}" width="${w * .13}" height="${h - 2}" fill="#a58fff" opacity=".95" filter="url(#tbGlow)"/>
+        <rect x="${w / 2 - w * .35}" y="${-h / 2 + 1}" width="${w * .13}" height="${h - 2}" fill="#a58fff" opacity=".95" filter="url(#tbGlow)"/>
+        <rect x="${-w / 2}" y="${-h / 2}" width="${w}" height="${h * .2}" rx="2" fill="#fff" opacity=".45"/>`;
+    });
+    rv.style.strokeDasharray = `${len} ${len}`;
     draw();
   }
   function draw() {
     if (!len) return;
-    const fr = flow.getBoundingClientRect(), tipY = reduceMotion ? 1e9 : innerHeight * .7 - fr.top;   // the tube's head follows ~70% down the viewport
+    const fr = flow.getBoundingClientRect(), tipY = reduceMotion ? 1e9 : innerHeight * .72 - fr.top;   // the bundle's head follows ~72% down the viewport
     let i = samples.findIndex(y => y > tipY); if (i < 0) i = samples.length - 1;
-    const L = reduceMotion ? len : Math.max(0, len * i / 300);
-    paths.forEach(el => { el.style.strokeDashoffset = len - L; });
-    sleeves.forEach(([at, el]) => { el.style.opacity = L >= at ? 1 : 0; });
-    let cur = -1; items.forEach((el, n) => { const c = rel(el), on = c.top + c.h * .5 < tipY; el.classList.toggle('on', on); if (on) cur = n; });
-    items.forEach((el, n) => el.classList.toggle('cur', n === cur));
+    rv.style.strokeDashoffset = len - (reduceMotion ? len : len * i / 400);
+    let cur = -1; items.forEach((it, n) => { const c = rel(it), on = c.top + c.h * .5 < tipY; it.classList.toggle('on', on); if (on) cur = n; });
+    items.forEach((it, n) => it.classList.toggle('cur', n === cur));
   }
   let raf = 0; const tick = () => { cancelAnimationFrame(raf); raf = requestAnimationFrame(draw); };
   addEventListener('scroll', tick, { passive: true });
   new ResizeObserver(() => requestAnimationFrame(build)).observe(flow);
   document.addEventListener('langchange', () => requestAnimationFrame(build));
+  // only animate the flowing light while the section is on screen
+  new IntersectionObserver(([e]) => svg.classList.toggle('run', e.isIntersecting)).observe(flow);
   (document.fonts ? document.fonts.ready : Promise.resolve()).then(build);
 })();
 const FINAL_ANCHOR = .35;   // closing CTA: which point of the slogan→date block sits on the section / globe centre (0 = slogan top, 1 = date bottom)
