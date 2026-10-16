@@ -497,7 +497,7 @@ html[lang="zh-CN"] .sec-title { letter-spacing: .02em; line-height: 1.22; }
 .aw-note { margin-top: 14px; font-size: 13px; color: var(--text-muted); }
 /* ---------- prize flow: a KV glass tube threads the three tiers; rows light up once the tube has passed ---------- */
 #prizes { overflow-x: clip; }
-.pzf { position: relative; padding: 24px 0 300px; }
+.pzf { position: relative; padding: 24px 0 170px; }
 .pzf-tube { position: absolute; left: 0; top: 0; width: 100%; height: 100%; overflow: visible; pointer-events: none; z-index: 0; }
 .pzf > div { position: relative; z-index: 1; }
 .pzf-k { display: block; font-family: var(--font-mono); font-size: 13.5px; font-weight: 600; letter-spacing: .16em; color: var(--ice); margin-bottom: 18px; }
@@ -514,7 +514,7 @@ html[lang="zh-CN"] .sec-title { letter-spacing: .02em; line-height: 1.22; }
 .pzf-grp:last-child { padding-bottom: 0; }
 /* 一二三等奖 sit in the right half, name and amount close together; the tube sweeps through the open left half */
 .pzf-ranks { width: min(600px, 52%); margin-left: auto; margin-top: -60px; }   /* centred between the tube runs above and below */
-.pzf-grp + .pzf-grp { margin-top: 270px; }   /* single awards sit midway between the middle and bottom tube runs */
+.pzf-grp + .pzf-grp { margin-top: 150px; }   /* single awards sit midway between the middle and bottom tube runs */
 .pzf-ranks .pzf-row { padding: 18px 0; }
 .pzf-ranks { width: min(520px, 46%); }
 .pzf-row { display: flex; align-items: center; justify-content: space-between; gap: 24px; padding: 22px 0; }
@@ -2178,14 +2178,10 @@ const JUDGES = [];
   // every dash pattern sums to 380 so the 760px flow loop is seamless
   // strands run strictly parallel (offset along the normal), like one ribbon of tubes: px offset, glass width, light dashes, flow speed
   const STRANDS = [
-    { off: 0, w: 16, dash: '70 46 14 38 100 60 20 32', dur: 7 },
-    { off: -34, w: 10, dash: '40 70 90 40 80 60', dur: 9.5 },
-    { off: 32, w: 9, dash: '24 50 60 90 116 40', dur: 6 },
-    { off: -68, w: 7, dash: '16 80 40 60 124 60', dur: 11 },
-    { off: 64, w: 12, dash: '90 40 30 70 60 90', dur: 8 },
-    { off: -100, w: 5, dash: '30 90 50 70 80 60', dur: 12.5 },
-    { off: 98, w: 6, dash: '50 60 20 90 100 60', dur: 10 },
-    { off: 128, w: 4, dash: '20 100 60 40 100 60', dur: 13 }
+    { off: 0, w: 15, dash: '70 46 14 38 100 60 20 32', dur: 7 },
+    { off: -24, w: 9, dash: '40 70 90 40 80 60', dur: 9.5 },
+    { off: 22, w: 7, dash: '24 50 60 90 116 40', dur: 6 },
+    { off: -42, w: 4, dash: '16 80 40 60 124 60', dur: 11 }
   ];
   svg.innerHTML = `<defs>
     <filter id="tbGlow" x="-30%" y="-30%" width="160%" height="160%"><feGaussianBlur stdDeviation="3"/></filter>
@@ -2217,14 +2213,14 @@ const JUDGES = [];
       : [[W * 1.13, -30],                              // from the top-right corner, one long gentle diagonal …
          [W * .33, sub.bottom + 70],                  // … round bend at the left third, below 3D AI 新物种奖
          [W * .33, r.bottom - 80],                    // straight down, well left of 一 · 二 · 三等奖
-         [W * 1.1, r.bottom + 230],                    // round bend, a diagonal run just under 三等奖 to the right edge
-         [W * 1.1, H - 120],                          // straight down the right margin, past 人气单项奖
-         [-240, H - 90]];                             // round bend, a long, slightly falling run out to the left                             // round bend, and a long run out to the left along the bottom                             // round bend, and a long run out to the left along the bottom                             // and back in along the bottom, out to the left
+         [W * 1.03, r.bottom + 150],                   // round bend, a diagonal run just under 三等奖 to the right edge
+         [W * 1.03, H - 80],                          // straight down the right margin, past 人气单项奖
+         [-240, H - 40]];                             // round bend, a long, slightly falling run out to the left                             // round bend, and a long run out to the left along the bottom                             // round bend, and a long run out to the left along the bottom                             // and back in along the bottom, out to the left
     ['haze', 'specks', 'strands', 'sleeves'].forEach(c => { G(c).innerHTML = ''; });
     const dMain = rounded(V, (W < 760 ? 160 : 330) * k);
-    rv.setAttribute('d', dMain); rv.style.strokeWidth = 520 * k;
+    rv.setAttribute('d', dMain); rv.style.strokeWidth = 260 * k;
     const ref = el('path', { d: dMain, fill: 'none', stroke: 'none' }, G('haze'));
-    el('path', { d: dMain, fill: 'none', stroke: '#6a48ff', 'stroke-width': 280 * k, opacity: .14, filter: 'url(#tbHaze)', 'stroke-linecap': 'round' }, G('haze'));
+    el('path', { d: dMain, fill: 'none', stroke: '#6a48ff', 'stroke-width': 90 * k, opacity: .16, filter: 'url(#tbHaze)', 'stroke-linecap': 'round' }, G('haze'));
     // strands: the spine sampled densely and pushed out along its normal — truly parallel tubes
     const RL = ref.getTotalLength(), pts = []; for (let t = 0; t <= RL; t += 6) { const p = ref.getPointAtLength(t), q = ref.getPointAtLength(Math.min(RL, t + 1)), p0 = ref.getPointAtLength(Math.max(0, t - 1)), dx = q.x - p0.x, dy = q.y - p0.y, l = Math.hypot(dx, dy) || 1; pts.push([p.x, p.y, -dy / l, dx / l]); }
     STRANDS.forEach((st, si) => {
@@ -2243,7 +2239,7 @@ const JUDGES = [];
     // light specks drifting around the bundle
     let seed = 7; const rnd = () => (seed = (seed * 16807) % 2147483647) / 2147483647;
     for (let n = 0; n < (W < 760 ? 40 : 90); n++) {
-      const at = rnd() * len, p = spine.getPointAtLength(at), q = spine.getPointAtLength(Math.min(len, at + 2)), dx = q.x - p.x, dy = q.y - p.y, l = Math.hypot(dx, dy) || 1, o = (rnd() - .5) * 360 * k;
+      const at = rnd() * len, p = spine.getPointAtLength(at), q = spine.getPointAtLength(Math.min(len, at + 2)), dx = q.x - p.x, dy = q.y - p.y, l = Math.hypot(dx, dy) || 1, o = (rnd() - .5) * 150 * k;
       el('circle', { cx: p.x - dy / l * o, cy: p.y + dx / l * o, r: (.6 + rnd() * 1.6) * k, fill: rnd() > .3 ? '#b9a8ff' : '#fff', class: 'tb-speck', style: `animation-delay:${-rnd() * 4}s;animation-duration:${2.5 + rnd() * 3}s` }, G('specks'));
     }
     // chrome sleeves with two violet light bands, clamped on the main strand
