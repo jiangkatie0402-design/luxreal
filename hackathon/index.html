@@ -514,7 +514,7 @@ html[lang="zh-CN"] .sec-title { letter-spacing: .02em; line-height: 1.22; }
 .pzf-grp:last-child { padding-bottom: 0; }
 /* 一二三等奖 sit in the right half, name and amount close together; the tube sweeps through the open left half */
 .pzf-ranks { width: min(600px, 52%); margin-left: auto; margin-top: -60px; }   /* centred between the tube runs above and below */
-.pzf-grp + .pzf-grp { margin-top: 150px; }   /* single awards sit midway between the middle and bottom tube runs */
+.pzf-grp + .pzf-grp { margin-top: 210px; }   /* single awards sit midway between the middle and bottom tube runs */
 .pzf-ranks .pzf-row { padding: 18px 0; }
 .pzf-ranks { width: min(520px, 46%); }
 .pzf-row { display: flex; align-items: center; justify-content: space-between; gap: 24px; padding: 22px 0; }
@@ -2185,8 +2185,10 @@ const JUDGES = [];
   ];
   svg.innerHTML = `<defs>
     <filter id="tbGlow" x="-30%" y="-30%" width="160%" height="160%"><feGaussianBlur stdDeviation="3"/></filter>
+    <filter id="tbBloom" x="-30%" y="-30%" width="160%" height="160%"><feGaussianBlur stdDeviation="5"/></filter>
+    <radialGradient id="tbDot"><stop offset="0" stop-color="#b9a4ff" stop-opacity=".55"/><stop offset="1" stop-color="#6a48ff" stop-opacity="0"/></radialGradient>
     <filter id="tbHaze" x="-30%" y="-30%" width="160%" height="160%"><feGaussianBlur stdDeviation="16"/></filter>
-    <linearGradient id="tbChrome" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#2c2b35"/><stop offset=".22" stop-color="#f6f5ff"/><stop offset=".42" stop-color="#b8b6c8"/><stop offset=".6" stop-color="#5d5b6c"/><stop offset=".82" stop-color="#d9d7e6"/><stop offset="1" stop-color="#1b1a22"/></linearGradient>
+    <linearGradient id="tbChrome" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#3a3946"/><stop offset=".12" stop-color="#e9e7f5"/><stop offset=".22" stop-color="#ffffff"/><stop offset=".34" stop-color="#9d9bb0"/><stop offset=".52" stop-color="#3d3b4a"/><stop offset=".64" stop-color="#77758a"/><stop offset=".8" stop-color="#dcd9ea"/><stop offset=".92" stop-color="#6e6c80"/><stop offset="1" stop-color="#1c1b25"/></linearGradient>
     <mask id="tbReveal" maskUnits="userSpaceOnUse" x="-2000" y="-2000" width="8000" height="12000"><path class="tb-rv" fill="none" stroke="#fff" stroke-linecap="round" stroke-width="240"/></mask>
   </defs><g mask="url(#tbReveal)"><g class="tb-haze"></g><g class="tb-specks"></g><g class="tb-strands"></g><g class="tb-sleeves"></g></g>`;
   const rv = svg.querySelector('.tb-rv'), G = c => svg.querySelector('.tb-' + c);
@@ -2223,34 +2225,50 @@ const JUDGES = [];
     el('path', { d: dMain, fill: 'none', stroke: '#6a48ff', 'stroke-width': 90 * k, opacity: .16, filter: 'url(#tbHaze)', 'stroke-linecap': 'round' }, G('haze'));
     // strands: the spine sampled densely and pushed out along its normal — truly parallel tubes
     const RL = ref.getTotalLength(), pts = []; for (let t = 0; t <= RL; t += 6) { const p = ref.getPointAtLength(t), q = ref.getPointAtLength(Math.min(RL, t + 1)), p0 = ref.getPointAtLength(Math.max(0, t - 1)), dx = q.x - p0.x, dy = q.y - p0.y, l = Math.hypot(dx, dy) || 1; pts.push([p.x, p.y, -dy / l, dx / l]); }
+    // a strand offset by o (+ extra) along the normal → path data
+    const offD = o => 'M' + pts.map(([x, y, nx, ny]) => `${(x + nx * o).toFixed(1)},${(y + ny * o).toFixed(1)}`).join(' L');
+    const ptAt = (o, t) => { const i = Math.max(1, Math.min(pts.length - 2, Math.round(t * (pts.length - 1)))), [x, y, nx, ny] = pts[i], [x2, y2] = pts[i + 1]; return [x + nx * o, y + ny * o, Math.atan2(y2 - y, x2 - x) * 180 / Math.PI]; };
     STRANDS.forEach((st, si) => {
-      const o = st.off * k, d = st.off ? 'M' + pts.map(([x, y, nx, ny]) => `${(x + nx * o).toFixed(1)},${(y + ny * o).toFixed(1)}`).join(' L') : dMain, w = st.w * k;
-      const base = { d, fill: 'none', 'stroke-linecap': 'round', 'stroke-linejoin': 'round' };
-      el('path', { ...base, stroke: 'rgba(196,188,255,.30)', 'stroke-width': w }, G('strands'));            // glass rim
-      el('path', { ...base, stroke: 'rgba(5,4,12,.82)', 'stroke-width': Math.max(1, w - 2.2) }, G('strands')); // clear body
-      el('path', { ...base, stroke: 'rgba(123,92,255,.14)', 'stroke-width': w * .55 }, G('strands'));           // faint inner tint
-      const lit = { ...base, 'stroke-dasharray': st.dash, class: 'tb-flow', style: `animation-duration:${st.dur}s;animation-delay:${-si * 1.7}s` };
-      el('path', { ...lit, stroke: '#9b82ff', 'stroke-width': Math.max(1.5, w * .42), filter: 'url(#tbGlow)' }, G('strands'));   // flowing light
-      el('path', { ...lit, stroke: '#efeaff', 'stroke-width': Math.max(.8, w * .16) }, G('strands'));                             // hot core
+      const o = st.off * k, w = st.w * k, d = st.off ? offD(o) : dMain, r = { fill: 'none', 'stroke-linecap': 'round', 'stroke-linejoin': 'round' };
+      // glass tube: dark translucent body, two crisp rims, one specular streak along the upper wall
+      el('path', { ...r, d, stroke: 'rgba(52,40,110,.42)', 'stroke-width': w }, G('strands'));
+      el('path', { ...r, d: offD(o - w / 2 + .5), stroke: 'rgba(228,222,255,.9)', 'stroke-width': Math.max(.8, 1.3 * k) }, G('strands'));
+      el('path', { ...r, d: offD(o + w / 2 - .5), stroke: 'rgba(170,156,240,.65)', 'stroke-width': Math.max(.6, 1 * k) }, G('strands'));
+      if (w > 6) el('path', { ...r, d: offD(o - w * .24), stroke: 'rgba(255,255,255,.4)', 'stroke-width': Math.max(.8, w * .12) }, G('strands'));
+      // light running inside: violet bloom → lilac body → white-hot core
+      const lit = { ...r, d, 'stroke-dasharray': st.dash, class: 'tb-flow', style: `animation-duration:${st.dur}s;animation-delay:${-si * 1.7}s` };
+      el('path', { ...lit, stroke: '#6a48ff', 'stroke-width': w * 1.6, opacity: .55, filter: 'url(#tbBloom)' }, G('strands'));
+      el('path', { ...lit, stroke: '#a690ff', 'stroke-width': Math.max(1.4, w * .62) }, G('strands'));
+      el('path', { ...lit, stroke: '#fbf9ff', 'stroke-width': Math.max(.7, w * .24) }, G('strands'));
       if (si === 0) spine = G('strands').lastChild;
     });
     len = spine.getTotalLength();
     samples = []; for (let i = 0; i <= 400; i++) samples.push(spine.getPointAtLength(len * i / 400).y);
-    // light specks drifting around the bundle
+    // light specks with soft halos drifting around the bundle
     let seed = 7; const rnd = () => (seed = (seed * 16807) % 2147483647) / 2147483647;
-    for (let n = 0; n < (W < 760 ? 40 : 90); n++) {
-      const at = rnd() * len, p = spine.getPointAtLength(at), q = spine.getPointAtLength(Math.min(len, at + 2)), dx = q.x - p.x, dy = q.y - p.y, l = Math.hypot(dx, dy) || 1, o = (rnd() - .5) * 150 * k;
-      el('circle', { cx: p.x - dy / l * o, cy: p.y + dx / l * o, r: (.6 + rnd() * 1.6) * k, fill: rnd() > .3 ? '#b9a8ff' : '#fff', class: 'tb-speck', style: `animation-delay:${-rnd() * 4}s;animation-duration:${2.5 + rnd() * 3}s` }, G('specks'));
+    for (let n = 0; n < (W < 760 ? 50 : 120); n++) {
+      const [x, y] = ptAt((rnd() - .5) * 170 * k, rnd()), rr = (.7 + rnd() * 1.8) * k, gEl = el('g', { class: 'tb-speck', style: `animation-delay:${-rnd() * 4}s;animation-duration:${2.5 + rnd() * 3}s` }, G('specks'));
+      el('circle', { cx: x, cy: y, r: rr * 4.5, fill: 'url(#tbDot)' }, gEl);
+      el('circle', { cx: x, cy: y, r: rr, fill: rnd() > .35 ? '#d9cfff' : '#fff' }, gEl);
     }
-    // chrome sleeves with two violet light bands, clamped on the main strand
-    [.14, .33, .52, .7, .88].forEach(f => {
-      const at = len * f, p0 = spine.getPointAtLength(at - 1), p1 = spine.getPointAtLength(at + 1), ang = Math.atan2(p1.y - p0.y, p1.x - p0.x) * 180 / Math.PI, h = 26 * k, w = 34 * k;
-      const gEl = el('g', { transform: `translate(${(p0.x + p1.x) / 2},${(p0.y + p1.y) / 2}) rotate(${ang})` }, G('sleeves'));
-      gEl.innerHTML = `<rect x="${-w / 2}" y="${-h / 2}" width="${w}" height="${h}" rx="${3 * k}" fill="url(#tbChrome)"/>
-        <rect x="${-w / 2 + w * .22}" y="${-h / 2 + 1}" width="${w * .13}" height="${h - 2}" fill="#a58fff" opacity=".95" filter="url(#tbGlow)"/>
-        <rect x="${w / 2 - w * .35}" y="${-h / 2 + 1}" width="${w * .13}" height="${h - 2}" fill="#a58fff" opacity=".95" filter="url(#tbGlow)"/>
-        <rect x="${-w / 2}" y="${-h / 2}" width="${w}" height="${h * .2}" rx="2" fill="#fff" opacity=".45"/>`;
-    });
+    // chrome sleeves: segmented cylinders (bevelled rings), violet light glowing through the gaps
+    const sleeve = (o, t, h, nRings) => {
+      const [x, y, ang] = ptAt(o, t), w = h * (nRings > 2 ? 1.25 : .9), gap = w * .1, ring = (w - gap * (nRings - 1)) / nRings;
+      const gEl = el('g', { transform: `translate(${x.toFixed(1)},${y.toFixed(1)}) rotate(${ang.toFixed(1)})` }, G('sleeves'));
+      let html = `<rect x="${-w / 2 - 2}" y="${-h * .42}" width="${w + 4}" height="${h * .84}" fill="#8f6bff" opacity=".9" filter="url(#tbGlow)"/>`;
+      for (let i = 0; i < nRings; i++) {
+        const x0 = -w / 2 + i * (ring + gap);
+        html += `<rect x="${x0}" y="${-h / 2}" width="${ring}" height="${h}" rx="${h * .08}" fill="url(#tbChrome)"/>
+          <rect x="${x0}" y="${-h / 2}" width="${ring * .14}" height="${h}" fill="#000" opacity=".35"/><rect x="${x0 + ring * .86}" y="${-h / 2}" width="${ring * .14}" height="${h}" fill="#000" opacity=".28"/>
+          <rect x="${x0 + ring * .1}" y="${-h * .36}" width="${ring * .8}" height="${h * .07}" rx="1" fill="#fff" opacity=".85"/>
+          <rect x="${x0 + ring * .1}" y="${h * .18}" width="${ring * .8}" height="${h * .05}" rx="1" fill="#fff" opacity=".3"/>`;
+      }
+      for (let i = 1; i < nRings; i++) { const gx = -w / 2 + i * (ring + gap) - gap; html += `<rect x="${gx}" y="${-h * .4}" width="${gap}" height="${h * .8}" fill="#e2d9ff"/><rect x="${gx - gap}" y="${-h * .4}" width="${gap * 3}" height="${h * .8}" fill="#9a7dff" opacity=".7" filter="url(#tbGlow)"/>`; }
+      gEl.innerHTML = html;
+    };
+    [.12, .5, .86].forEach(t => sleeve(0, t, 34 * k, 3));               // big three-ring sleeves on the main tube
+    [.3, .68].forEach(t => sleeve(-24 * k, t, 22 * k, 2));             // smaller two-ring sleeves on the second tube
+    [.22, .78].forEach(t => sleeve(22 * k, t, 17 * k, 1));             // single collars on the thin tube
     rv.style.strokeDasharray = `${len} ${len}`;
     draw();
   }
