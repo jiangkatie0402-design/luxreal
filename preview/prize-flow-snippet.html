@@ -18,6 +18,7 @@
 .pzf-tube { position: absolute; left: 0; top: -320px; height: calc(100% + 440px); width: 100%; pointer-events: none; z-index: 0; }   /* JS widens it to the viewport; 320/440px of room for the tube's ends */
 .pzf-tube canvas { position: fixed; top: 0; left: 0; display: block; width: 100vw; height: 100vh; visibility: hidden; }   /* one viewport-sized canvas: only on-screen pixels are ever drawn */
 .pzf-tube.on canvas { visibility: visible; }
+.pzf-tube .tb-glow { image-rendering: auto; }   /* soft light: drawn at ⅓ resolution and upscaled, so the browser's smoothing does the blur for free */
 .pzf > div { position: relative; z-index: 1; }
 .pzf-k { display: block; font-family: var(--font-mono); font-size: 13.5px; font-weight: 600; letter-spacing: .16em; color: var(--ice); margin-bottom: 18px; }
 .pzf-hero { padding: 32px 0 120px; }
@@ -97,7 +98,7 @@ html[lang="zh-CN"] .pzf-name { font-family: var(--font-title); font-weight: 400;
 
     <!-- prize flow: one KV-style glass tube threads 特别奖 → 一二三等奖 → 单项奖 and draws itself as you scroll -->
     <div class="pzf" id="pzFlow">
-      <div class="pzf-tube" aria-hidden="true"><canvas></canvas></div>
+      <div class="pzf-tube" aria-hidden="true"><canvas class="tb-glow"></canvas><canvas class="tb-sharp"></canvas></div>
       <div class="pzf-hero pzf-item">
         <h3 class="pzf-name pzf-top" data-i18n="p0.n">3D AI 新物种奖</h3>
         <div class="pzf-bigrow"><div class="pzf-big n"><sup>¥</sup>100,000</div><i class="pzf-x">× 1</i></div>
@@ -128,7 +129,7 @@ const reduceMotion = window.reduceMotion ?? matchMedia('(prefers-reduced-motion:
    on screen), so per-frame work is one screen. */
 (function () {
   const flow = document.getElementById('pzFlow'); if (!flow) return;
-  const wrap = flow.querySelector('.pzf-tube'), cv = wrap.querySelector('canvas'), ctx = cv.getContext('2d');
+  const wrap = flow.querySelector('.pzf-tube'), cv = wrap.querySelector('.tb-sharp'), ctx = cv.getContext('2d'), gcv = wrap.querySelector('.tb-glow'), gtx = gcv.getContext('2d');
   const items = [...flow.querySelectorAll('.pzf-item')];
   const EX_T = 320, EX_B = 120;                                   // wrapper reaches 320px above / 120px below the section
   // strands run strictly parallel: px offset along the normal, glass width, dim light dashes, flow period (s); all dash sums = 380
@@ -182,15 +183,15 @@ const reduceMotion = window.reduceMotion ?? matchMedia('(prefers-reduced-motion:
     layer.width = Math.round(LW * LDPR); layer.height = Math.round(LH * LDPR);
     const c = layer.getContext('2d'); c.setTransform(LDPR, 0, 0, LDPR, 0, 0); c.clearRect(0, 0, LW, LH); c.translate(flowLeft, EX_T);
     c.lineCap = c.lineJoin = 'round';
-    c.save(); c.shadowColor = 'rgba(106,72,255,.55)'; c.shadowBlur = 60 * k; c.strokeStyle = 'rgba(106,72,255,.06)'; c.lineWidth = 90 * k; c.stroke(spinePath); c.restore();   // haze
+    c.save(); if ('filter' in c) { c.filter = `blur(${Math.round(16 * k)}px)`; c.strokeStyle = 'rgba(106,72,255,.09)'; c.lineWidth = 90 * k; c.stroke(spinePath); } c.restore();   // haze (skipped where canvas filters are unsupported)
     let seed = 7; const rnd = () => (seed = (seed * 16807) % 2147483647) / 2147483647;
     twinkle = [];
-    for (let n = 0; n < (W < 760 ? 50 : 120); n++) {                // specks: most baked in, a few twinkle live
-      const [x, y] = at((rnd() - .5) * 170 * k, rnd()), rr = (.7 + rnd() * 1.8) * k, white = rnd() > .35;
+    for (let n = 0; n < (W < 760 ? 40 : 90); n++) {                  // specks: most baked in, a few twinkle live
+      const [x, y] = at((rnd() - .5) * 170 * k, rnd()), rr = (.5 + rnd() * 1.2) * k, white = rnd() > .35;
       if (n % 4 === 0) { twinkle.push([x, y, rr, white, rnd() * 6.28, 1.2 + rnd() * 1.6]); continue; }
-      const gr = c.createRadialGradient(x, y, 0, x, y, rr * 4.5); gr.addColorStop(0, 'rgba(185,164,255,.45)'); gr.addColorStop(1, 'rgba(106,72,255,0)');
+      const gr = c.createRadialGradient(x, y, 0, x, y, rr * 4.5); gr.addColorStop(0, 'rgba(185,164,255,.22)'); gr.addColorStop(1, 'rgba(106,72,255,0)');
       c.fillStyle = gr; c.beginPath(); c.arc(x, y, rr * 4.5, 0, 6.29); c.fill();
-      c.fillStyle = white ? 'rgba(255,255,255,.8)' : 'rgba(217,207,255,.75)'; c.beginPath(); c.arc(x, y, rr, 0, 6.29); c.fill();
+      c.fillStyle = white ? 'rgba(255,255,255,.5)' : 'rgba(217,207,255,.45)'; c.beginPath(); c.arc(x, y, rr, 0, 6.29); c.fill();
     }
     STRANDS.forEach((st, si) => {                                    // glass: dark body, crisp rims, a specular streak
       const o = st.off * k, w = st.w * k;
@@ -218,10 +219,12 @@ const reduceMotion = window.reduceMotion ?? matchMedia('(prefers-reduced-motion:
     rowY = items.map(it => { const q = rel(it); return q.top + q.h * .5; });
     sizeCanvas(); shown = Math.min(shown, len); target = targetLen(); if (reduceMotion) shown = target; wake();
   }
-  let DPR = 1;
+  let DPR = 1; const GS = .33;                                      // glow canvas scale
   function sizeCanvas() {
     DPR = Math.min(devicePixelRatio || 1, 2);
-    cv.style.height = innerHeight + 'px'; cv.width = Math.round(vw * DPR); cv.height = Math.round(innerHeight * DPR);
+    [cv, gcv].forEach(c => { c.style.height = innerHeight + 'px'; });
+    cv.width = Math.round(vw * DPR); cv.height = Math.round(innerHeight * DPR);
+    gcv.width = Math.round(vw * GS); gcv.height = Math.round(innerHeight * GS);
   }
   // ---- per frame ----
   let samples = [], rowY = [], shown = 0, target = 0, visible = false, raf = 0, lastOn = '', t0 = performance.now();
@@ -243,30 +246,37 @@ const reduceMotion = window.reduceMotion ?? matchMedia('(prefers-reduced-motion:
     const time = reduceMotion ? 0 : (now - t0) / 1000;
     const fr = flow.getBoundingClientRect(), cr = cv.getBoundingClientRect();
     ctx.setTransform(DPR, 0, 0, DPR, 0, 0); ctx.clearRect(0, 0, vw, innerHeight);
+    gtx.setTransform(1, 0, 0, 1, 0, 0); gtx.clearRect(0, 0, gcv.width, gcv.height);
     if (shown > 1) {
       ctx.translate(fr.left - cr.left, fr.top - cr.top);                       // world → this viewport-sized canvas
       const wy = cr.top - fr.top, sy = Math.max(0, (wy + EX_T) * LDPR), sh = Math.min(layer.height - sy, innerHeight * LDPR);   // blit only the on-screen slice
       if (sh > 0) ctx.drawImage(layer, 0, sy, layer.width, sh, -flowLeft, sy / LDPR - EX_T, layer.width / LDPR, sh / LDPR);
       ctx.lineCap = 'round'; ctx.lineJoin = 'round';
+      gtx.setTransform(GS, 0, 0, GS, 0, 0); gtx.translate(fr.left - cr.left, fr.top - cr.top);
+      gtx.lineCap = 'round'; gtx.lineJoin = 'round';
       STRANDS.forEach((st, si) => {
         const w = st.w * k, p = strandPaths[si], off = -(time * 760 / st.dur) - si * 97, offHot = -(time * 760 / (st.dur * .8)) - si * 131;
-        ctx.setLineDash(st.dim); ctx.lineDashOffset = off;
-        ctx.strokeStyle = 'rgba(125,98,255,.07)'; ctx.lineWidth = w * 1.2; ctx.stroke(p);
-        ctx.strokeStyle = 'rgba(125,98,255,.42)'; ctx.lineWidth = Math.max(1.2, w * .5); ctx.stroke(p);
-        ctx.setLineDash(st.hot); ctx.lineDashOffset = offHot;
-        ctx.strokeStyle = 'rgba(106,72,255,.22)'; ctx.lineWidth = w * 1.7; ctx.stroke(p);
+        gtx.setLineDash(st.dim); gtx.lineDashOffset = off;                       // dim light: soft, on the blurred canvas
+        gtx.strokeStyle = 'rgba(125,98,255,.42)'; gtx.lineWidth = Math.max(3, w * .7); gtx.stroke(p);
+        gtx.setLineDash(st.hot); gtx.lineDashOffset = offHot;                    // bloom around the bright sparks
+        gtx.strokeStyle = 'rgba(120,88,255,.55)'; gtx.lineWidth = Math.max(5, w * 1.5); gtx.stroke(p);
+        ctx.setLineDash(st.hot); ctx.lineDashOffset = offHot;                    // crisp spark body + white-hot core
         ctx.strokeStyle = '#b3a0ff'; ctx.lineWidth = Math.max(1.3, w * .6); ctx.stroke(p);
         ctx.strokeStyle = '#fff'; ctx.lineWidth = Math.max(.7, w * .22); ctx.stroke(p);
       });
+      gtx.setLineDash([]);
       ctx.setLineDash([]);
-      twinkle.forEach(([x, y, rr, white, ph, sp]) => { const a = .2 + .7 * (.5 + .5 * Math.sin(time * sp + ph));
-        ctx.globalAlpha = a * .5; ctx.fillStyle = '#8f74ff'; ctx.beginPath(); ctx.arc(x, y, rr * 3, 0, 6.29); ctx.fill();
+      twinkle.forEach(([x, y, rr, white, ph, sp]) => { const a = .15 + .75 * (.5 + .5 * Math.sin(time * sp + ph));
+        ctx.globalAlpha = a * .25; ctx.fillStyle = '#8f74ff'; ctx.beginPath(); ctx.arc(x, y, rr * 2.6, 0, 6.29); ctx.fill();
         ctx.globalAlpha = a; ctx.fillStyle = white ? '#fff' : '#d9cfff'; ctx.beginPath(); ctx.arc(x, y, rr, 0, 6.29); ctx.fill(); });
       ctx.globalAlpha = 1;
       if (shown < len - .5) {                                                  // trim to the revealed length
         ctx.globalCompositeOperation = 'destination-in'; ctx.setLineDash([shown, len + 2000]); ctx.lineDashOffset = 0;
         ctx.strokeStyle = '#000'; ctx.lineWidth = 260 * k; ctx.stroke(spinePath);
         ctx.setLineDash([]); ctx.globalCompositeOperation = 'source-over';
+        gtx.globalCompositeOperation = 'destination-in'; gtx.setLineDash([shown, len + 2000]); gtx.lineDashOffset = 0;
+        gtx.strokeStyle = '#000'; gtx.lineWidth = 260 * k; gtx.stroke(spinePath);
+        gtx.setLineDash([]); gtx.globalCompositeOperation = 'source-over';
       }
     }
     // rows light up when the head reaches them
