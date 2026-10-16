@@ -499,6 +499,8 @@ html[lang="zh-CN"] .sec-title { letter-spacing: .02em; line-height: 1.22; }
 .pzf > div { position: relative; z-index: 1; }
 .pzf-k { display: block; font-family: var(--font-mono); font-size: 13.5px; font-weight: 600; letter-spacing: .16em; color: var(--ice); margin-bottom: 18px; }
 .pzf-hero { padding: 32px 0 120px; }
+/* 特等奖: its own, larger title above ¥100,000 (bigger than 一 · 二 · 三等奖) */
+.pzf-name.pzf-top { display: block; font-size: clamp(36px, 3.8vw, 58px); color: #fff; margin: 4px 0 14px; }
 .pzf-big { font-size: clamp(48px, 5.2vw, 76px); font-weight: 600; letter-spacing: -.05em; line-height: .9; background: linear-gradient(90deg, #fff 0%, #D6D0FF 35%, #9B8BFF 70%, #7B5CFF); -webkit-background-clip: text; background-clip: text; color: transparent; }
 .pzf-big sup { color: #fff; -webkit-text-fill-color: #fff; font-size: .3em; vertical-align: top; position: relative; top: .35em; margin-right: .06em; letter-spacing: 0; }
 .pzf-sub { margin-top: 18px; font-size: clamp(15px, 1.25vw, 18px); color: var(--text-soft); }
@@ -1554,14 +1556,15 @@ body.modal-open { overflow: hidden; }
       <div class="reveal">
         <h2 class="sec-title"><span class="grad-text pool-amt" id="poolAmt" aria-label="¥320,000">¥320,000</span><br><span data-i18n="prizes.title2">总奖金池</span></h2>
       </div>
-      <p class="sec-desc reveal d1" data-i18n="prizes.desc">共设 23 个奖项：特别奖与一、二、三等奖之外，还有应用单项奖、创意单项奖、人气单项奖。</p>
+      <p class="sec-desc reveal d1" data-i18n="prizes.desc">共设 23 个奖项：特等奖与一、二、三等奖之外，还有应用单项奖、创意单项奖、人气单项奖。</p>
     </div>
 
     <!-- prize flow: one KV-style glass tube threads 特别奖 → 一二三等奖 → 单项奖 and draws itself as you scroll -->
     <div class="pzf" id="pzFlow">
       <svg class="pzf-tube" aria-hidden="true"></svg>
       <div class="pzf-hero pzf-item">
-        <span class="pzf-k">01 · <span data-i18n="p0.r">特别奖</span></span>
+        <span class="pzf-k">01</span>
+        <h3 class="pzf-name pzf-top" data-i18n="p0.r">特等奖</h3>
         <div class="pzf-big n"><sup>¥</sup>100,000</div>
         <p class="pzf-sub"><span data-i18n="p0.n">3D AI 新物种奖</span><span class="pzf-dot">·</span>× 1<span class="pzf-dot">·</span><span data-i18n="usd.100k">约 $14,900</span></p>
       </div>
@@ -1977,8 +1980,8 @@ const EN = {
   'res.opt':'Optional','res.api.t':'Aholo API','res.api.d':'Aholo API brings together APIs for 3D object generation, world generation, cloud rendering, reconstruction and more.','res.r3.t':'LuxReal','res.r3.d':'LuxReal is Manycore’s AI video-creation agent built on 3D technology. It keeps space and time consistent while quickly producing highly controllable, creative video.',
   'res.b.t':'Sign up to get creation credits and start your project','res.b.d':'Join the hackathon and explore new possibilities with your teammates.',
   'dv.title':'What to submit','dv.desc':'Every project submits the materials below: all required items, plus bonus items where you can.','dv.must':'Required','dv.bonus':'Bonus','dv.mustD':'All three are needed','dv.bonusD':'Encouraged','dv1.t':'Project report (PDF or PPT)','dv1.d':'Document the journey from idea to result — <b>including process screenshots, key asset iterations or key result shots</b> — so judges quickly see what you built, how, and why it’s worth trying.','dv2.t':'Full demo (link or video)','dv2.d':'Submit a link where the project can be tried or run directly; or submit a demo video — edits, voice-over and captions are fine, but it must include real running footage','dv4.t':'Social media post link','dv4.d':'Publish a project introduction on a public social platform and submit the link; the post must stay public until results are announced.','dv5.t':'Source code','dv5.d':'A Git repository or a zipped codebase is encouraged.','cr.title':'Judging criteria','cr.desc':'Judges score each project across five dimensions. Final score = expert judges 70% + player judges 30%.','cr1.t':'Use of Manycore tech stack','cr1.d':'Manycore’s technology plays a core role in the project.','cr2.t':'Fun factor','cr2.d':'Gameplay and spatial interaction are creative and fun; the video clearly shows the highlights and has the potential to spark public discussion.','cr3.t':'Innovation','cr3.d':'The approach, interaction or concept is fresh and different from common existing products.','cr4.t':'Completeness','cr4.d':'The core experience is complete, the demo runs reliably, and the materials match the result.','cr5.t':'Reach','cr5.d':'The project video is posted with the official hashtag on Xiaohongshu (China) / X (international).','cr.total':'Score breakdown','jg.title':'Judges','jg.pro':'Expert judges','jg.proD':'A professional lens to pick the strongest projects with real-world use','jg.tbaName':'Judges to be announced','jg.tbaD':'More names coming soon…','jg.player':'Player judges','jg.playerD':'Real hands-on play to pick the most loved and most fun projects','jg.playerN':'seasoned AI practitioners','jg.playerNote':'form the player jury and help choose the awards from a public point of view.',
-  'prizes.title2':'total prize pool','pz.more':'For the full judging rules, <button type="button" class="link-btn" data-open-community>join the community</button> and see the Participant Handbook.','prizes.desc':'23 awards in total: a special award and first, second and third prizes, plus single awards for application, creativity and popularity.',
-  'p0.r':'Special Award','p0.n':'3D AI New Species Award','usd.100k':'≈ $14,900','usd.50k':'≈ $7,500','usd.30k':'≈ $4,500','usd.10k':'≈ $1,500','aw.note':'Each single award: ¥5,000 (≈ $750)','pzf.k2':'First · Second · Third','pzf.k3':'Single awards · 16','pzf.each':'/ award','aw1a':'Gaming Award','aw1b':'Spatial Design Award','aw1c':'Film & Video Award','aw1d':'3D Printing Award','aw1e':'Embodied AI Award','aw2a':'VCs-Want-In Award','aw2b':'Tech Wizard Award','aw2c':'Wildest Idea Award','aw2d':'Most Useless Award','aw2e':'Good Karma Award','aw3a':'Popularity Award · China','aw3b':'Popularity Award · Global','p1.r':'First Prize','p2.r':'Second Prize','p3.r':'Third Prize',
+  'prizes.title2':'total prize pool','pz.more':'For the full judging rules, <button type="button" class="link-btn" data-open-community>join the community</button> and see the Participant Handbook.','prizes.desc':'23 awards in total: a grand prize and first, second and third prizes, plus single awards for application, creativity and popularity.',
+  'p0.r':'Grand Prize','p0.n':'3D AI New Species Award','usd.100k':'≈ $14,900','usd.50k':'≈ $7,500','usd.30k':'≈ $4,500','usd.10k':'≈ $1,500','aw.note':'Each single award: ¥5,000 (≈ $750)','pzf.k2':'First · Second · Third','pzf.k3':'Single awards · 16','pzf.each':'/ award','aw1a':'Gaming Award','aw1b':'Spatial Design Award','aw1c':'Film & Video Award','aw1d':'3D Printing Award','aw1e':'Embodied AI Award','aw2a':'VCs-Want-In Award','aw2b':'Tech Wizard Award','aw2c':'Wildest Idea Award','aw2d':'Most Useless Award','aw2e':'Good Karma Award','aw3a':'Popularity Award · China','aw3b':'Popularity Award · Global','p1.r':'First Prize','p2.r':'Second Prize','p3.r':'Third Prize',
   'aw1':'Application Award',
   'aw2':'Creativity Award',
   'aw3':'Popularity Award',
