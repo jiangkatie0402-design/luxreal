@@ -505,6 +505,9 @@ html[lang="zh-CN"] .sec-title { letter-spacing: .02em; line-height: 1.22; }
 .pzf-dot { margin: 0 .6em; color: var(--text-muted); }
 .pzf-grp { padding-bottom: 130px; }
 .pzf-grp:last-child { padding-bottom: 0; }
+/* 一二三等奖 sit in the right half, name and amount close together; the tube sweeps through the open left half */
+.pzf-ranks { width: min(600px, 52%); margin-left: auto; }
+.pzf-ranks .pzf-row { padding: 24px 0; }
 .pzf-row { display: flex; align-items: center; justify-content: space-between; gap: 24px; padding: 30px 0; border-bottom: 1px solid var(--border-subtle); }
 .pzf-k + .pzf-row { border-top: 1px solid var(--border-subtle); }
 .pzf-name { font-size: clamp(30px, 3.6vw, 56px); font-weight: 500; letter-spacing: -.01em; line-height: 1.1; color: #34343c; transition: color .6s; }
@@ -534,7 +537,8 @@ html[lang="zh-CN"] .pzf-name { font-family: var(--font-title); font-weight: 400;
 .pzf-item.cur .pzf-amt b { color: var(--ice); }
 .pzf-item.cur .pzf-list { color: var(--text); }
 @media (max-width: 760px) {
-  .pzf-tube { opacity: .6; }   /* no side margins on phones: the strands cross the text, so keep them quieter */
+  .pzf-tube { opacity: .6; }
+  .pzf-ranks { width: auto; margin-left: 0; }   /* no side margins on phones: the strands cross the text, so keep them quieter */
   .pzf-big { font-size: 17vw; }
   .pzf-hero { padding-bottom: 90px; } .pzf-grp { padding-bottom: 80px; }
   .pzf-row { flex-direction: column; align-items: flex-start; gap: 10px; }
@@ -1549,7 +1553,7 @@ body.modal-open { overflow: hidden; }
         <div class="pzf-big n"><sup>¥</sup>100,000</div>
         <p class="pzf-sub"><span data-i18n="p0.n">3D AI 新物种奖</span><span class="pzf-dot">·</span>× 1<span class="pzf-dot">·</span><span data-i18n="usd.100k">约 $14,900</span></p>
       </div>
-      <div class="pzf-grp">
+      <div class="pzf-grp pzf-ranks">
         <span class="pzf-k">02 · <span data-i18n="pzf.k2">一 · 二 · 三等奖</span></span>
       <div class="pzf-row pzf-item"><span class="pzf-name" data-i18n="p1.r">一等奖</span><span class="pzf-amt"><b class="n">¥50,000</b><i>× 1</i><small data-i18n="usd.50k">约 $7,500</small></span></div>
       <div class="pzf-row pzf-item"><span class="pzf-name" data-i18n="p2.r">二等奖</span><span class="pzf-amt"><b class="n">¥30,000</b><i>× 2</i><small data-i18n="usd.30k">约 $4,500</small></span></div>
@@ -2180,7 +2184,7 @@ const JUDGES = [];
       ? [[W + 80, sub.top - 60], [W * .5, sub.bottom + 70], [-W * .06, r.top + r.h * .45], [W * .45, r.bottom + 45], [W * 1.06, a.top + a.h * .5], [W * .5, H - 25], [-80, H - 40]]
       : [[W + 140, sub.top - 150],                    // enters top-right, beside ¥100,000
          [W * .55, sub.bottom + 85],                  // one long sweep under the 3D AI 新物种奖 line
-         [-W * .05, r.top + r.h * .5],                // round the left edge past 一 · 二 · 三等奖
+         [W * .12, r.top + r.h * .5],                 // a full round arc through the open left half, beside 一 · 二 · 三等奖
          [W * .52, (r.bottom + a.top) / 2 + 10],      // a wide arc back across, in the gap between the tiers
          [W * 1.16, a.top + 20],                      // slips out past the right edge above the single awards …
          [W * 1.14, H - 85],                          // … and sweeps back in below them, so no row is crossed
