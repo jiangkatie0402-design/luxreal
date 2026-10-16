@@ -1,5 +1,5 @@
 <!-- ================================================================
-  奖项区（管道串联版，Canvas 渲染） — 从 hackathon/index.html 抽出的完整代码
+  奖项区（管道串联版 · B 静止光 + 根须生长，Canvas 渲染） — 从 hackathon/index.html 抽出的完整代码
   1) CSS   2) HTML   3) JS
   「提交内容」上方加大的留白：.pzf { margin-bottom: clamp(100px, 10vw, 160px); }
   依赖：页面里已有的 reduceMotion 变量（下面 JS 顶部给了兜底）、标题字体 PMZD Title。
@@ -97,7 +97,7 @@ html[lang="zh-CN"] .pzf-name { font-family: var(--font-title); font-weight: 400;
     </div>
 
     <!-- prize flow: one KV-style glass tube threads 特别奖 → 一二三等奖 → 单项奖 and draws itself as you scroll -->
-    <div class="pzf" id="pzFlow">
+    <div class="pzf" id="pzFlow" data-mode="still">
       <div class="pzf-tube" aria-hidden="true"><canvas class="tb-glow"></canvas><canvas class="tb-sharp"></canvas></div>
       <div class="pzf-hero pzf-item">
         <h3 class="pzf-name pzf-top" data-i18n="p0.n">3D AI 新物种奖</h3>
@@ -131,6 +131,9 @@ const reduceMotion = window.reduceMotion ?? matchMedia('(prefers-reduced-motion:
   const flow = document.getElementById('pzFlow'); if (!flow) return;
   const wrap = flow.querySelector('.pzf-tube'), cv = wrap.querySelector('.tb-sharp'), ctx = cv.getContext('2d'), gcv = wrap.querySelector('.tb-glow'), gtx = gcv.getContext('2d');
   const items = [...flow.querySelectorAll('.pzf-item')];
+  // data-mode="still" on #pzFlow: the light inside stays put and only the tubes grow, each strand on its own (root-like) —
+  // otherwise the light keeps flowing and the whole bundle is revealed as one
+  const STILL = flow.dataset.mode === 'still', LAG = [0, 70, 35, 120];         // still mode: how far each strand trails the lead (px)
   const EX_T = 320, EX_B = 120;                                   // wrapper reaches 320px above / 120px below the section
   // strands run strictly parallel: px offset along the normal, glass width, dim light dashes, flow period (s); all dash sums = 380
   const STRANDS = [
@@ -157,7 +160,7 @@ const reduceMotion = window.reduceMotion ?? matchMedia('(prefers-reduced-motion:
     return pts.map((p, i) => { const a = pts[Math.max(0, i - 1)], b = pts[Math.min(pts.length - 1, i + 1)], dx = b[0] - a[0], dy = b[1] - a[1], l = Math.hypot(dx, dy) || 1; return [p[0], p[1], -dy / l, dx / l]; });
   }
   const STEP = 4;
-  let pts = [], len = 0, k = 1, strandPaths = [], spinePath = null, layer = null, LDPR = 1, twinkle = [], vw = 0, flowLeft = 0;
+  let glass = [], pts = [], len = 0, k = 1, strandPaths = [], spinePath = null, layer = null, LDPR = 1, twinkle = [], vw = 0, flowLeft = 0;
   const offPath = o => { const p = new Path2D(); pts.forEach(([x, y, nx, ny], i) => i ? p.lineTo(x + nx * o, y + ny * o) : p.moveTo(x + nx * o, y + ny * o)); return p; };
   const at = (o, t) => { const i = Math.max(1, Math.min(pts.length - 2, Math.round(t * (pts.length - 1)))), [x, y, nx, ny] = pts[i], [x2, y2] = pts[i + 1]; return [x + nx * o, y + ny * o, Math.atan2(y2 - y, x2 - x)]; };
   function build() {
@@ -193,13 +196,12 @@ const reduceMotion = window.reduceMotion ?? matchMedia('(prefers-reduced-motion:
       c.fillStyle = gr; c.beginPath(); c.arc(x, y, rr * 4.5, 0, 6.29); c.fill();
       c.fillStyle = white ? 'rgba(255,255,255,.5)' : 'rgba(217,207,255,.45)'; c.beginPath(); c.arc(x, y, rr, 0, 6.29); c.fill();
     }
-    STRANDS.forEach((st, si) => {                                    // glass: dark body, crisp rims, a specular streak
-      const o = st.off * k, w = st.w * k;
-      c.strokeStyle = 'rgba(30,26,48,.5)'; c.lineWidth = w; c.stroke(strandPaths[si]);
-      c.strokeStyle = 'rgba(226,226,236,.72)'; c.lineWidth = Math.max(.8, 1.2 * k); c.stroke(offPath(o - w / 2 + .5));
-      c.strokeStyle = 'rgba(160,158,178,.4)'; c.lineWidth = Math.max(.6, .9 * k); c.stroke(offPath(o + w / 2 - .5));
-      if (w > 6) { c.strokeStyle = 'rgba(255,255,255,.28)'; c.lineWidth = Math.max(.8, w * .12); c.stroke(offPath(o - w * .24)); }
+    glass = STRANDS.map((st, si) => {                                // glass: dark body, crisp rims, a specular streak
+      const o = st.off * k, w = st.w * k, g = [[strandPaths[si], 'rgba(30,26,48,.5)', w], [offPath(o - w / 2 + .5), 'rgba(226,226,236,.72)', Math.max(.8, 1.2 * k)], [offPath(o + w / 2 - .5), 'rgba(160,158,178,.4)', Math.max(.6, .9 * k)]];
+      if (w > 6) g.push([offPath(o - w * .24), 'rgba(255,255,255,.28)', Math.max(.8, w * .12)]);
+      return g;
     });
+    if (!STILL) glass.forEach(g => g.forEach(([p, col, lw]) => { c.strokeStyle = col; c.lineWidth = lw; c.stroke(p); }));   // flow mode: baked once
     const sleeve = (o, t, h, n) => {                                 // chrome sleeves: bevelled rings, violet glow in the gaps
       const [x, y, ang] = at(o, t), w = h * (n > 2 ? 1.25 : .9), gp = w * .1, ring = (w - gp * (n - 1)) / n;
       c.save(); c.translate(x, y); c.rotate(ang);
@@ -236,6 +238,46 @@ const reduceMotion = window.reduceMotion ?? matchMedia('(prefers-reduced-motion:
     while (hi - lo > 1) { const mid = (lo + hi) >> 1; samples[mid] < tipY ? lo = mid : hi = mid; }
     return (lo + (tipY - samples[lo]) / Math.max(1e-6, samples[hi] - samples[lo])) * STEP;
   }
+  // a dash array that draws `pat` (starting `phase` px into it) only up to length L, then nothing
+  function cut(pat, phase, L) {
+    const sum = pat.reduce((a, b) => a + b, 0), out = []; let i = 0, rem = ((phase % sum) + sum) % sum;
+    while (rem >= pat[i]) { rem -= pat[i]; i = (i + 1) % pat.length; }
+    let seg = pat[i] - rem, pos = 0;
+    if (i % 2) out.push(0);                                                  // starts inside a gap: zero-length dash first
+    while (pos < L) { const take = Math.min(seg, L - pos); out.push(take); pos += take; i = (i + 1) % pat.length; seg = pat[i]; }
+    if (out.length % 2) out.push(1e6); else out[out.length - 1] += 1e6;
+    return out;
+  }
+  // still mode: static light, each strand grows on its own with a small glowing tip
+  function stillFrame(time, fr, cr) {
+    if (shown < len - .5) {                                                  // haze, specks and sleeves only where the lead has been
+      ctx.globalCompositeOperation = 'destination-in'; ctx.setLineDash([shown, len + 2000]); ctx.lineDashOffset = 0;
+      ctx.strokeStyle = '#000'; ctx.lineWidth = 260 * k; ctx.stroke(spinePath);
+      ctx.setLineDash([]); ctx.globalCompositeOperation = 'source-over';
+    }
+    twinkle.forEach(([x, y, rr, white, ph, sp], n) => { if ((n / twinkle.length) * len > shown) return; const a = .15 + .75 * (.5 + .5 * Math.sin(time * sp + ph));
+      ctx.globalAlpha = a * .25; ctx.fillStyle = '#8f74ff'; ctx.beginPath(); ctx.arc(x, y, rr * 2.6, 0, 6.29); ctx.fill();
+      ctx.globalAlpha = a; ctx.fillStyle = white ? '#fff' : '#d9cfff'; ctx.beginPath(); ctx.arc(x, y, rr, 0, 6.29); ctx.fill(); });
+    ctx.globalAlpha = 1;
+    gtx.setTransform(GS, 0, 0, GS, 0, 0); gtx.translate(fr.left - cr.left, fr.top - cr.top); gtx.lineCap = 'round'; gtx.lineJoin = 'round';
+    STRANDS.forEach((st, si) => {
+      const Ls = shown >= len - .5 ? len : Math.max(0, Math.min(len, shown - LAG[si] * k)); if (Ls < 2) return;
+      const w = st.w * k, p = strandPaths[si], ph = si * 97, phH = si * 131;
+      ctx.setLineDash([Ls, 1e6]); ctx.lineDashOffset = 0;
+      glass[si].forEach(([gp, col, lw]) => { ctx.strokeStyle = col; ctx.lineWidth = lw; ctx.stroke(gp); });
+      gtx.setLineDash(cut(st.dim, ph, Ls)); gtx.strokeStyle = 'rgba(125,98,255,.42)'; gtx.lineWidth = Math.max(3, w * .7); gtx.stroke(p);
+      const hot = cut(st.hot, phH, Ls);
+      gtx.setLineDash(hot); gtx.strokeStyle = 'rgba(120,88,255,.55)'; gtx.lineWidth = Math.max(5, w * 1.5); gtx.stroke(p);
+      ctx.setLineDash(hot); ctx.strokeStyle = '#b3a0ff'; ctx.lineWidth = Math.max(1.3, w * .6); ctx.stroke(p);
+      ctx.strokeStyle = '#fff'; ctx.lineWidth = Math.max(.7, w * .22); ctx.stroke(p);
+      if (Ls < len - 1) {                                                    // the growing tip: a small lit end
+        const i = Math.min(pts.length - 1, Math.round(Ls / STEP)), [x, y, nx, ny] = pts[i], o = st.off * k, tx = x + nx * o, ty = y + ny * o;
+        gtx.setLineDash([]); gtx.fillStyle = 'rgba(150,120,255,.6)'; gtx.beginPath(); gtx.arc(tx, ty, Math.max(3, w * .6), 0, 6.29); gtx.fill();
+        ctx.setLineDash([]); ctx.fillStyle = '#efeaff'; ctx.beginPath(); ctx.arc(tx, ty, Math.max(1.2, w * .3), 0, 6.29); ctx.fill();
+      }
+    });
+    ctx.setLineDash([]); gtx.setLineDash([]);
+  }
   function frame(now) {
     raf = 0; if (!len) return;
     const fb = flow.getBoundingClientRect(), vis = fb.bottom + EX_B > 0 && fb.top - EX_T < innerHeight;   // section (with the tube's overhang) on screen?
@@ -252,6 +294,7 @@ const reduceMotion = window.reduceMotion ?? matchMedia('(prefers-reduced-motion:
       const wy = cr.top - fr.top, sy = Math.max(0, (wy + EX_T) * LDPR), sh = Math.min(layer.height - sy, innerHeight * LDPR);   // blit only the on-screen slice
       if (sh > 0) ctx.drawImage(layer, 0, sy, layer.width, sh, -flowLeft, sy / LDPR - EX_T, layer.width / LDPR, sh / LDPR);
       ctx.lineCap = 'round'; ctx.lineJoin = 'round';
+      if (STILL) { stillFrame(time, fr, cr); } else {
       gtx.setTransform(GS, 0, 0, GS, 0, 0); gtx.translate(fr.left - cr.left, fr.top - cr.top);
       gtx.lineCap = 'round'; gtx.lineJoin = 'round';
       STRANDS.forEach((st, si) => {
@@ -277,6 +320,7 @@ const reduceMotion = window.reduceMotion ?? matchMedia('(prefers-reduced-motion:
         gtx.globalCompositeOperation = 'destination-in'; gtx.setLineDash([shown, len + 2000]); gtx.lineDashOffset = 0;
         gtx.strokeStyle = '#000'; gtx.lineWidth = 260 * k; gtx.stroke(spinePath);
         gtx.setLineDash([]); gtx.globalCompositeOperation = 'source-over';
+      }
       }
     }
     // rows light up when the head reaches them
