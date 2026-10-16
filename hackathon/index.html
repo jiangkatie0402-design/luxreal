@@ -498,19 +498,19 @@ html[lang="zh-CN"] .sec-title { letter-spacing: .02em; line-height: 1.22; }
 .pzf-tube { position: absolute; left: 0; top: 0; width: 100%; height: 100%; overflow: visible; pointer-events: none; z-index: 0; }
 .pzf > div { position: relative; z-index: 1; }
 .pzf-k { display: block; font-family: var(--font-mono); font-size: 12px; font-weight: 600; letter-spacing: .16em; color: var(--ice); margin-bottom: 18px; }
-.pzf-hero { padding: 40px 0 150px; }
-.pzf-big { font-size: clamp(84px, 12.5vw, 210px); font-weight: 600; letter-spacing: -.05em; line-height: .9; background: linear-gradient(90deg, #fff 0%, #D6D0FF 35%, #9B8BFF 70%, #7B5CFF); -webkit-background-clip: text; background-clip: text; color: transparent; }
+.pzf-hero { padding: 32px 0 120px; }
+.pzf-big { font-size: clamp(48px, 5.2vw, 76px); font-weight: 600; letter-spacing: -.05em; line-height: .9; background: linear-gradient(90deg, #fff 0%, #D6D0FF 35%, #9B8BFF 70%, #7B5CFF); -webkit-background-clip: text; background-clip: text; color: transparent; }
 .pzf-big sup { color: #fff; -webkit-text-fill-color: #fff; font-size: .3em; vertical-align: top; position: relative; top: .35em; margin-right: .06em; letter-spacing: 0; }
-.pzf-sub { margin-top: 26px; font-size: clamp(18px, 1.6vw, 24px); color: var(--text-soft); }
+.pzf-sub { margin-top: 18px; font-size: clamp(15px, 1.25vw, 18px); color: var(--text-soft); }
 .pzf-dot { margin: 0 .6em; color: var(--text-muted); }
-.pzf-grp { padding-bottom: 130px; }
+.pzf-grp { padding-bottom: 110px; }
 .pzf-grp:last-child { padding-bottom: 0; }
 /* 一二三等奖 sit in the right half, name and amount close together; the tube sweeps through the open left half */
 .pzf-ranks { width: min(600px, 52%); margin-left: auto; }
-.pzf-ranks .pzf-row { padding: 24px 0; }
-.pzf-row { display: flex; align-items: center; justify-content: space-between; gap: 24px; padding: 30px 0; border-bottom: 1px solid var(--border-subtle); }
-.pzf-k + .pzf-row { border-top: 1px solid var(--border-subtle); }
-.pzf-name { font-size: clamp(30px, 3.6vw, 56px); font-weight: 500; letter-spacing: -.01em; line-height: 1.1; color: #34343c; transition: color .6s; }
+.pzf-ranks .pzf-row { padding: 18px 0; }
+.pzf-ranks { width: min(520px, 46%); }
+.pzf-row { display: flex; align-items: center; justify-content: space-between; gap: 24px; padding: 22px 0; }
+.pzf-name { font-size: clamp(24px, 2.4vw, 36px); font-weight: 500; letter-spacing: -.01em; line-height: 1.1; color: #34343c; transition: color .6s; }
 html[lang="zh-CN"] .pzf-name { font-family: var(--font-title); font-weight: 400; letter-spacing: .02em; }
 .tb-flow { animation: tbFlow 7s linear infinite paused; }
 .pzf-tube.run .tb-flow { animation-play-state: running; }
@@ -520,16 +520,28 @@ html[lang="zh-CN"] .pzf-name { font-family: var(--font-title); font-weight: 400;
 @keyframes tbSpeck { 0%, 100% { opacity: .15; } 50% { opacity: .9; } }
 @media (prefers-reduced-motion: reduce) { .tb-flow, .tb-speck { animation: none; } }
 .pzf-amt { display: flex; align-items: baseline; gap: 10px; flex-wrap: wrap; justify-content: flex-end; text-align: right; }
-.pzf-amt b { font-size: clamp(26px, 2.8vw, 42px); font-weight: 600; color: #44444c; transition: color .6s; }
+.pzf-amt b { font-size: clamp(22px, 2vw, 30px); font-weight: 600; color: #44444c; transition: color .6s; }
 .pzf-amt i { font-style: normal; font-size: 15px; color: var(--text-muted); }
 .pzf-amt small { flex-basis: 100%; font-size: 13px; color: var(--text-muted); }
-.pzf-row.sm { display: grid; grid-template-columns: minmax(220px, 300px) 1fr auto; align-items: baseline; }
-.pzf-row.sm .pzf-name { font-size: clamp(22px, 2.1vw, 30px); }
+.pzf-row.sm { padding: 16px 0; display: grid; grid-template-columns: minmax(220px, 300px) 1fr auto; align-items: baseline; }
+.pzf-row.sm .pzf-name { font-size: clamp(18px, 1.6vw, 24px); }
 .pzf-name em { font-style: normal; font-size: .5em; color: var(--text-muted); margin-left: 10px; letter-spacing: 0; }
-.pzf-list { font-size: clamp(16px, 1.45vw, 21px); line-height: 1.6; color: #34343c; transition: color .6s; }
+.pzf-list { font-size: clamp(14px, 1.15vw, 17px); line-height: 1.6; color: #34343c; transition: color .6s; }
 .pzf-list em { font-style: normal; font-size: .8em; color: var(--text-muted); }
-.pzf-row.sm .pzf-amt b { font-size: clamp(20px, 1.8vw, 26px); }
-.pzf-note { margin-top: 18px; font-size: 13px; color: var(--text-muted); }
+.pzf-row.sm .pzf-amt b { font-size: clamp(17px, 1.4vw, 21px); }
+/* single awards: three award lists side by side — group, amount, then the full award names */
+.pzf-aws { display: grid; grid-template-columns: repeat(3, 1fr); gap: 40px; }
+.pzf-aw { padding: 6px 0; }
+.pzf-aw .pzf-name { font-size: clamp(20px, 1.8vw, 26px); }
+.pzf-aw .pzf-amt { justify-content: flex-start; text-align: left; margin-top: 12px; }
+.pzf-aw .pzf-amt b { font-size: clamp(17px, 1.4vw, 21px); }
+.pzf-aw .pzf-list { list-style: none; margin: 22px 0 0; padding: 0; display: grid; gap: 12px; }
+.pzf-aw .pzf-list li { display: flex; align-items: center; gap: 10px; }
+.pzf-aw .pzf-list li::before { content: ''; width: 6px; height: 6px; transform: rotate(45deg); background: #7B5CFF; box-shadow: 0 0 8px rgba(123,92,255,.9); flex-shrink: 0; opacity: .5; transition: opacity .6s; }
+.pzf-aw.on .pzf-list li::before { opacity: 1; }
+.pzf-aw .pzf-list em { font-style: normal; font-size: .85em; color: var(--text-muted); }
+@media (max-width: 760px) { .pzf-aws { grid-template-columns: 1fr; gap: 28px; } }
+.pzf-note { margin-top: 30px; font-size: 13px; color: var(--text-muted); }
 /* lit: the tube has passed this row · cur: the row it is passing now */
 .pzf-item.on .pzf-name, .pzf-item.on .pzf-list { color: var(--text-soft); }
 .pzf-item.on .pzf-amt b { color: var(--text); }
@@ -539,7 +551,7 @@ html[lang="zh-CN"] .pzf-name { font-family: var(--font-title); font-weight: 400;
 @media (max-width: 760px) {
   .pzf-tube { opacity: .6; }
   .pzf-ranks { width: auto; margin-left: 0; }   /* no side margins on phones: the strands cross the text, so keep them quieter */
-  .pzf-big { font-size: 17vw; }
+  .pzf-big { font-size: 13vw; }
   .pzf-hero { padding-bottom: 90px; } .pzf-grp { padding-bottom: 80px; }
   .pzf-row { flex-direction: column; align-items: flex-start; gap: 10px; }
   .pzf-row.sm { display: flex; }
@@ -1561,9 +1573,11 @@ body.modal-open { overflow: hidden; }
       </div>
       <div class="pzf-grp">
         <span class="pzf-k">03 · <span data-i18n="pzf.k3">单项奖 · 16 名</span></span>
-      <div class="pzf-row pzf-item sm"><span class="pzf-name"><span data-i18n="aw1">应用单项奖</span><em>× 5</em></span><span class="pzf-list"><span data-i18n="aw1a">游戏</span> / <span data-i18n="aw1b">空间设计</span> / <span data-i18n="aw1c">影视</span> / <span data-i18n="aw1d">3D 打印</span> / <span data-i18n="aw1e">具身智能</span></span><span class="pzf-amt"><b class="n">¥5,000</b><i data-i18n="pzf.each">/ 项</i></span></div>
-      <div class="pzf-row pzf-item sm"><span class="pzf-name"><span data-i18n="aw2">创意单项奖</span><em>× 5</em></span><span class="pzf-list"><span data-i18n="aw2a">VC 看了都想投</span> / <span data-i18n="aw2b">技术学霸</span> / <span data-i18n="aw2c">怪点子</span> / <span data-i18n="aw2d">最没有用</span> / <span data-i18n="aw2e">功德无量</span></span><span class="pzf-amt"><b class="n">¥5,000</b><i data-i18n="pzf.each">/ 项</i></span></div>
-      <div class="pzf-row pzf-item sm"><span class="pzf-name"><span data-i18n="aw3">人气单项奖</span><em>× 6</em></span><span class="pzf-list"><span data-i18n="aw3a">国内人气</span><em> ×4</em> / <span data-i18n="aw3b">海外人气</span><em> ×2</em></span><span class="pzf-amt"><b class="n">¥5,000</b><i data-i18n="pzf.each">/ 项</i></span></div>
+        <div class="pzf-aws">
+          <div class="pzf-aw pzf-item"><h4 class="pzf-name"><span data-i18n="aw1">应用单项奖</span><em>× 5</em></h4><p class="pzf-amt"><b class="n">¥5,000</b><i data-i18n="pzf.each">/ 项</i></p><ul class="pzf-list"><li><span data-i18n="aw1a">游戏应用奖</span></li><li><span data-i18n="aw1b">空间设计应用奖</span></li><li><span data-i18n="aw1c">影视应用奖</span></li><li><span data-i18n="aw1d">3D 打印应用奖</span></li><li><span data-i18n="aw1e">具身智能应用奖</span></li></ul></div>
+          <div class="pzf-aw pzf-item"><h4 class="pzf-name"><span data-i18n="aw2">创意单项奖</span><em>× 5</em></h4><p class="pzf-amt"><b class="n">¥5,000</b><i data-i18n="pzf.each">/ 项</i></p><ul class="pzf-list"><li><span data-i18n="aw2a">VC 看了都想投奖</span></li><li><span data-i18n="aw2b">技术学霸奖</span></li><li><span data-i18n="aw2c">怪点子奖</span></li><li><span data-i18n="aw2d">最没有用奖</span></li><li><span data-i18n="aw2e">功德无量奖</span></li></ul></div>
+          <div class="pzf-aw pzf-item"><h4 class="pzf-name"><span data-i18n="aw3">人气单项奖</span><em>× 6</em></h4><p class="pzf-amt"><b class="n">¥5,000</b><i data-i18n="pzf.each">/ 项</i></p><ul class="pzf-list"><li><span data-i18n="aw3a">国内人气奖</span><em>× 4</em></li><li><span data-i18n="aw3b">海外人气奖</span><em>× 2</em></li></ul></div>
+        </div>
         <p class="pzf-note" data-i18n="aw.note">单项奖每项 ¥5,000（约 $750）</p>
       </div>
     </div>
@@ -1964,7 +1978,7 @@ const EN = {
   'res.b.t':'Sign up to get creation credits and start your project','res.b.d':'Join the hackathon and explore new possibilities with your teammates.',
   'dv.title':'What to submit','dv.desc':'Every project submits the materials below: all required items, plus bonus items where you can.','dv.must':'Required','dv.bonus':'Bonus','dv.mustD':'All three are needed','dv.bonusD':'Encouraged','dv1.t':'Project report (PDF or PPT)','dv1.d':'Document the journey from idea to result — <b>including process screenshots, key asset iterations or key result shots</b> — so judges quickly see what you built, how, and why it’s worth trying.','dv2.t':'Full demo (link or video)','dv2.d':'Submit a link where the project can be tried or run directly; or submit a demo video — edits, voice-over and captions are fine, but it must include real running footage','dv4.t':'Social media post link','dv4.d':'Publish a project introduction on a public social platform and submit the link; the post must stay public until results are announced.','dv5.t':'Source code','dv5.d':'A Git repository or a zipped codebase is encouraged.','cr.title':'Judging criteria','cr.desc':'Judges score each project across five dimensions. Final score = expert judges 70% + player judges 30%.','cr1.t':'Use of Manycore tech stack','cr1.d':'Manycore’s technology plays a core role in the project.','cr2.t':'Fun factor','cr2.d':'Gameplay and spatial interaction are creative and fun; the video clearly shows the highlights and has the potential to spark public discussion.','cr3.t':'Innovation','cr3.d':'The approach, interaction or concept is fresh and different from common existing products.','cr4.t':'Completeness','cr4.d':'The core experience is complete, the demo runs reliably, and the materials match the result.','cr5.t':'Reach','cr5.d':'The project video is posted with the official hashtag on Xiaohongshu (China) / X (international).','cr.total':'Score breakdown','jg.title':'Judges','jg.pro':'Expert judges','jg.proD':'A professional lens to pick the strongest projects with real-world use','jg.tbaName':'Judges to be announced','jg.tbaD':'More names coming soon…','jg.player':'Player judges','jg.playerD':'Real hands-on play to pick the most loved and most fun projects','jg.playerN':'seasoned AI practitioners','jg.playerNote':'form the player jury and help choose the awards from a public point of view.',
   'prizes.title2':'total prize pool','pz.more':'For the full judging rules, <button type="button" class="link-btn" data-open-community>join the community</button> and see the Participant Handbook.','prizes.desc':'23 awards in total: a special award and first, second and third prizes, plus single awards for application, creativity and popularity.',
-  'p0.r':'Special Award','p0.n':'3D AI New Species Award','usd.100k':'≈ $14,900','usd.50k':'≈ $7,500','usd.30k':'≈ $4,500','usd.10k':'≈ $1,500','aw.note':'Each single award: ¥5,000 (≈ $750)','pzf.k2':'First · Second · Third','pzf.k3':'Single awards · 16','pzf.each':'/ award','aw1a':'Gaming','aw1b':'Spatial Design','aw1c':'Film & Video','aw1d':'3D Printing','aw1e':'Embodied AI','aw2a':'VCs Want In','aw2b':'Tech Wizard','aw2c':'Wildest Idea','aw2d':'Most Useless','aw2e':'Good Karma','aw3a':'Popularity · China','aw3b':'Popularity · Global','p1.r':'First Prize','p2.r':'Second Prize','p3.r':'Third Prize',
+  'p0.r':'Special Award','p0.n':'3D AI New Species Award','usd.100k':'≈ $14,900','usd.50k':'≈ $7,500','usd.30k':'≈ $4,500','usd.10k':'≈ $1,500','aw.note':'Each single award: ¥5,000 (≈ $750)','pzf.k2':'First · Second · Third','pzf.k3':'Single awards · 16','pzf.each':'/ award','aw1a':'Gaming Award','aw1b':'Spatial Design Award','aw1c':'Film & Video Award','aw1d':'3D Printing Award','aw1e':'Embodied AI Award','aw2a':'VCs-Want-In Award','aw2b':'Tech Wizard Award','aw2c':'Wildest Idea Award','aw2d':'Most Useless Award','aw2e':'Good Karma Award','aw3a':'Popularity Award · China','aw3b':'Popularity Award · Global','p1.r':'First Prize','p2.r':'Second Prize','p3.r':'Third Prize',
   'aw1':'Application Award',
   'aw2':'Creativity Award',
   'aw3':'Popularity Award',
@@ -2185,8 +2199,8 @@ const JUDGES = [];
       : [[W + 140, sub.top - 150],                    // enters top-right, beside ¥100,000
          [W * .55, sub.bottom + 85],                  // one long sweep under the 3D AI 新物种奖 line
          [W * .12, r.top + r.h * .5],                 // a full round arc through the open left half, beside 一 · 二 · 三等奖
-         [W * .52, (r.bottom + a.top) / 2 + 10],      // a wide arc back across, in the gap between the tiers
-         [W * 1.16, a.top + 20],                      // slips out past the right edge above the single awards …
+         [W * .52, (r.bottom + a.top) / 2 - 10],      // a wide arc back across, in the gap between the tiers
+         [W * 1.16, a.top - 40],                      // slips out past the right edge above the single awards …
          [W * 1.14, H - 85],                          // … and sweeps back in below them, so no row is crossed
          [W * .45, H - 40],
          [-140, H - 70]];                             // and out bottom-left
