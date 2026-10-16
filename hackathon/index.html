@@ -2212,13 +2212,12 @@ const JUDGES = [];
     const sub = rel(flow.querySelector('.pzf-sub')), g = flow.querySelectorAll('.pzf-grp'), r = rel(g[0]), a = rel(g[1]), gap = (r.bottom + a.top) / 2;
     const V = W < 760
       ? [[W + 80, sub.top - 40], [W * .05, r.top + r.h * .3], [W * .55, gap], [W + 300, gap], [W + 300, H - 50], [-90, H - 50]]
-      : [[W * 1.07, -260],                            // from above the top-right corner, a steep run down …
-         [W * .97, sub.top - 40],                     // … round bend into a gentle run to the left …
-         [W * .34, sub.bottom + 70],                  // … passing under the 3D AI 新物种奖 block, round bend down
-         [W * .34, r.bottom - 10],                    // straight down, well left of 一 · 二 · 三等奖
-         [W * 1.03, a.top - 30],                      // round bend, a gentle run across to the right edge
-         [W * 1.03, H - 60],                          // straight down the right margin, past 人气单项奖
-         [-240, H - 60]];                             // round bend, and a long run out to the left along the bottom                             // round bend, and a long run out to the left along the bottom                             // and back in along the bottom, out to the left
+      : [[W * 1.13, -30],                              // from the top-right corner, one long gentle diagonal …
+         [W * .33, sub.bottom + 70],                  // … round bend at the left third, below 3D AI 新物种奖
+         [W * .33, r.bottom - 80],                    // straight down, well left of 一 · 二 · 三等奖
+         [W * 1.03, a.top + 40],                      // round bend, a diagonal run just under 三等奖 to the right edge
+         [W * 1.03, H - 80],                          // straight down the right margin, past 人气单项奖
+         [-240, H - 30]];                             // round bend, a long, slightly falling run out to the left                             // round bend, and a long run out to the left along the bottom                             // round bend, and a long run out to the left along the bottom                             // and back in along the bottom, out to the left
     ['haze', 'specks', 'strands', 'sleeves'].forEach(c => { G(c).innerHTML = ''; });
     const dMain = rounded(V, (W < 760 ? 160 : 330) * k);
     rv.setAttribute('d', dMain); rv.style.strokeWidth = 260 * k;
