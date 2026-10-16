@@ -1570,7 +1570,7 @@ body.modal-open { overflow: hidden; }
     </div>
 
     <!-- prize flow: one KV-style glass tube threads 特别奖 → 一二三等奖 → 单项奖 and draws itself as you scroll -->
-    <div class="pzf" id="pzFlow" data-mode="still">
+    <div class="pzf" id="pzFlow" data-mode="splat">
       <div class="pzf-tube" aria-hidden="true"><canvas class="tb-glow"></canvas><canvas class="tb-sharp"></canvas></div>
       <div class="pzf-hero pzf-item">
         <h3 class="pzf-name pzf-top" data-i18n="p0.n">3D AI 新物种奖</h3>
@@ -2183,6 +2183,8 @@ const JUDGES = [];
   const items = [...flow.querySelectorAll('.pzf-item')];
   // data-mode="still" on #pzFlow: the light inside stays put and only the tubes grow, each strand on its own (root-like) —
   // otherwise the light keeps flowing and the whole bundle is revealed as one
+  // data-mode="splat": a light streak with a ribbon of Gaussian particles instead of tubes; data-mode="plate": a twisting ribbon of metal plates
+  const SPLAT = flow.dataset.mode === 'splat' || flow.dataset.mode === 'plate';
   const STILL = flow.dataset.mode === 'still', LAG = [0, 60, 110, 170, 90, 210], TAIL = 130;
   const LUM = [1, .4, .85, 0, .6, 0];                             // still mode: per-tube light strength (bright and dim mixed; 0 = plain grey glass, unlit)
   // lit tip (still mode): [distance behind the tip as a fraction of the tail, segment length px] per strand
@@ -2286,10 +2288,91 @@ const JUDGES = [];
       const [x, y, ang] = at(STRANDS[si].off * k, t);
       return { si, d: t * len, x, y, ang, s, cw, ch, w };
     });
+    if (SPLAT) buildSplats(W);
     // reveal lookup: running max of y along the spine (monotonic) for scroll → length
     samples = []; for (let i = 0, m = -1e9; i < pts.length; i++) samples.push(m = Math.max(m, pts[i][1]));
     rowY = items.map(it => { const q = rel(it); return q.top + q.h * .5; });
     sizeCanvas(); shown = Math.min(shown, len); target = targetLen(); if (reduceMotion) shown = target; wake();
+  }
+  // ---- splat mode: a bright core streak with a ribbon of fine Gaussian particles fanning off one side (grey + violet) ----
+  // ---- plate mode: a twisting ribbon of translucent metal plates (violet and grey) catching the light ----
+  const PLATE = flow.dataset.mode === 'plate';
+  let dust = [], sprites = {}, silk = [], tipImg = null;
+  function sprite(col) {                                            // one soft Gaussian footprint per colour, drawn once
+    if (sprites[col]) return sprites[col];
+    const c = document.createElement('canvas'); c.width = c.height = 32; const x = c.getContext('2d'), g = x.createRadialGradient(16, 16, 0, 16, 16, 16);
+    [[0, 1], [.2, .85], [.4, .52], [.6, .22], [.8, .06], [1, 0]].forEach(([q, a]) => { g.addColorStop(q, col + Math.round(a * 255).toString(16).padStart(2, '0')); });
+    x.fillStyle = g; x.fillRect(0, 0, 32, 32); return sprites[col] = c;
+  }
+  function buildSplats(W) {
+    let seed = 11; const rnd = () => (seed = (seed * 16807) % 2147483647) / 2147483647, gauss = () => { let u = 0; for (let i = 0; i < 3; i++) u += rnd(); return (u - 1.5) / .5; };
+    const SPREAD = 170 * k, N = Math.round(len / (W < 760 ? 1.6 : (PLATE ? 3.2 : .6))); dust = [];
+    const VIO = ['#ffffff', '#d9ceff', '#b09cff', '#8a6cff', '#6a4cf2'], GRY = ['#f2f2f6', '#c9c8d3', '#a3a2af', '#7d7c89', '#5d5c68'];
+    for (let n = 0; n < N; n++) {
+      const d = rnd() * len, main = rnd() < .84, u = Math.pow(rnd(), main ? 2.1 : 1.5), o = (main ? 1 : -.35) * u * SPREAD * (PLATE ? .7 : 1) + gauss() * 2.5 * k;
+      const near = Math.exp(-Math.abs(o) / (55 * k)), spark = rnd() < .025, pal = rnd() < .5 ? VIO : GRY;
+      const ci = Math.min(4, Math.floor((1 - near) * 3 + rnd() * 2));                       // bright white near the core, deeper colour further out
+      dust.push({ d, o, v: (4 + rnd() * 16) * (1 - .6 * near), r: (spark ? 1.2 + rnd() * 1.2 : .4 + rnd() * .9) * (k < 1 ? .8 : 1),
+        img: sprite(pal[ci]), a: (.18 + .8 * near) * (.5 + rnd() * .5), spark, tw: rnd() * 6.283, ts: .8 + rnd() * 2 });
+    }
+    silk = []; for (let i = 1; i <= 16; i++) silk.push([offPath(i * 7.5 * k), .2 * Math.pow(1 - i / 17, 1.4)]);   // the broad soft sheen beside the core
+    tipImg = sprite('#e7e0ff');
+  }
+  const posAt = (d, o) => { const i = Math.max(0, Math.min(pts.length - 1, Math.round(d / STEP))), q = pts[i]; return [q[0] + q[2] * o, q[1] + q[3] * o]; };
+  function dustFrame(time, ox, oy, done, HEAD) {
+    const H = innerHeight; ctx.globalCompositeOperation = 'lighter';
+    for (const p of dust) {
+      const d = (p.d + time * p.v) % len, h = done ? 1e9 : shown - d; if (h < 0) continue;
+      const f = Math.min(1, h / HEAD), sc = 1 + (1 - f) * (1 - f) * 1.6;              // at the growing head particles arrive scattered and settle in
+      const [x, y] = posAt(d, p.o * sc), Y = y + oy; if (Y < -10 || Y > H + 10) continue;
+      const rr = p.r * (p.spark ? 3.2 : 2.2);
+      ctx.globalAlpha = p.a * f * (p.spark ? .55 + .45 * Math.sin(time * p.ts + p.tw) : 1);
+      ctx.drawImage(p.img, x + ox - rr, Y - rr, rr * 2, rr * 2);
+    }
+    ctx.globalAlpha = 1; ctx.globalCompositeOperation = 'source-over';
+  }
+  function splatFrame(time, fr, cr) {
+    const ox = fr.left - cr.left, oy = fr.top - cr.top, done = shown >= len - .5, HEAD = 200 * k, L = done ? len + 10 : shown;
+    gtx.setTransform(GS, 0, 0, GS, 0, 0); gtx.translate(ox, oy); gtx.lineCap = 'round'; gtx.setLineDash([L, 1e6]); gtx.lineDashOffset = 0;
+    silk.forEach(([pp, a]) => { gtx.strokeStyle = `rgba(122,92,255,${a.toFixed(3)})`; gtx.lineWidth = 14 * k; gtx.stroke(pp); });   // violet sheen fanning off the core
+    gtx.strokeStyle = 'rgba(132,104,255,.55)'; gtx.lineWidth = 26 * k; gtx.stroke(spinePath);                                        // core bloom
+    gtx.setLineDash([]);
+    dustFrame(time, ox, oy, done, HEAD);
+    ctx.translate(ox, oy); ctx.lineCap = 'round'; ctx.setLineDash([L, 1e6]); ctx.lineDashOffset = 0;
+    ctx.strokeStyle = 'rgba(176,156,255,.55)'; ctx.lineWidth = 5 * k; ctx.stroke(spinePath);                                         // the bright core streak
+    ctx.strokeStyle = 'rgba(255,255,255,.9)'; ctx.lineWidth = 1.6 * k; ctx.stroke(spinePath);
+    ctx.setLineDash([]);
+    if (!done) { const [x, y] = posAt(shown, 0), s = 46 * k; ctx.globalCompositeOperation = 'lighter'; ctx.globalAlpha = .9; ctx.drawImage(tipImg, x - s, y - s, s * 2, s * 2);   // flare at the growing tip
+      ctx.globalAlpha = 1; ctx.globalCompositeOperation = 'source-over'; }
+    ctx.setTransform(DPR, 0, 0, DPR, 0, 0);
+  }
+  function plateFrame(time, fr, cr) {
+    const ox = fr.left - cr.left, oy = fr.top - cr.top, done = shown >= len - .5, HEAD = 160 * k, H = innerHeight;
+    dustFrame(time, ox, oy, done, HEAD);
+    ctx.translate(ox, oy); gtx.setTransform(GS, 0, 0, GS, 0, 0); gtx.translate(ox, oy);
+    const P = 30 * k, PL = 27 * k;
+    for (let d0 = 0, n = 0; d0 < len - PL; d0 += P, n++) {
+      const h = done ? 1e9 : shown - d0; if (h < 0) break;
+      const f = Math.min(1, h / HEAD), d1 = d0 + PL * f;
+      const a0 = posAt(d0, 0), a1 = posAt(d1, 0); if (Math.max(a0[1], a1[1]) + oy < -80 || Math.min(a0[1], a1[1]) + oy > H + 80) continue;
+      const wb = 30 * k * (.75 + .35 * Math.sin(d0 * .0021 + .7)) * (.4 + .6 * f);
+      const ph0 = d0 * .0075 + time * .4, ph1 = d1 * .0075 + time * .4;          // ribbon twist: the visible width is the plate's half-width × cos(twist)
+      const w0 = wb * Math.cos(ph0), w1 = wb * Math.cos(ph1);
+      const q0 = posAt(d0, w0), q1 = posAt(d1, w1), q2 = posAt(d1, -w1), q3 = posAt(d0, -w0);
+      const spec = Math.pow(Math.abs(Math.sin(ph0 + .9)), 6), lit = .28 + .72 * Math.abs(Math.cos(ph0 - .5)), grey = n % 6 === 2 || n % 11 === 7;
+      const g = ctx.createLinearGradient(q0[0], q0[1], q3[0], q3[1]);
+      const base = grey ? [150, 150, 162] : [104, 78, 230], hi = grey ? [236, 236, 244] : [214, 200, 255];
+      const mix = t => `rgba(${base.map((c, i) => Math.round(c + (hi[i] - c) * t)).join(',')},`;
+      const mid = .5 - .3 * Math.sin(ph0);                                        // the highlight slides across the plate as it turns
+      g.addColorStop(0, mix(lit * .5) + (.42 * f).toFixed(2) + ')'); g.addColorStop(Math.max(.05, mid - .22), mix(lit * .15) + (.14 * f).toFixed(2) + ')');
+      g.addColorStop(mid, mix(Math.min(1, lit * .6 + spec)) + ((.3 + .55 * spec) * f).toFixed(2) + ')');
+      g.addColorStop(Math.min(.95, mid + .22), mix(lit * .15) + (.14 * f).toFixed(2) + ')'); g.addColorStop(1, mix(lit * .4) + (.38 * f).toFixed(2) + ')');
+      ctx.fillStyle = g; ctx.beginPath(); ctx.moveTo(q0[0], q0[1]); ctx.lineTo(q1[0], q1[1]); ctx.lineTo(q2[0], q2[1]); ctx.lineTo(q3[0], q3[1]); ctx.closePath(); ctx.fill();
+      ctx.strokeStyle = `rgba(240,236,255,${((.35 + .6 * spec) * f).toFixed(2)})`; ctx.lineWidth = Math.max(.6, 1.1 * k);   // bevelled edges catch the light
+      ctx.beginPath(); ctx.moveTo(q0[0], q0[1]); ctx.lineTo(q1[0], q1[1]); ctx.moveTo(q3[0], q3[1]); ctx.lineTo(q2[0], q2[1]); ctx.stroke();
+      if (!grey) { gtx.fillStyle = `rgba(130,98,255,${((.18 + .5 * spec) * f).toFixed(2)})`; gtx.beginPath(); gtx.moveTo(q0[0], q0[1]); gtx.lineTo(q1[0], q1[1]); gtx.lineTo(q2[0], q2[1]); gtx.lineTo(q3[0], q3[1]); gtx.closePath(); gtx.fill(); }
+    }
+    ctx.setTransform(DPR, 0, 0, DPR, 0, 0);
   }
   let DPR = 1; const GS = .33;                                      // glow canvas scale
   function sizeCanvas() {
@@ -2387,6 +2470,7 @@ const JUDGES = [];
     if (shown > 1) {
       ctx.translate(fr.left - cr.left, fr.top - cr.top);                       // world → this viewport-sized canvas
       const wy = cr.top - fr.top, sy = Math.max(0, (wy + EX_T) * LDPR), sh = Math.min(layer.height - sy, innerHeight * LDPR);   // blit only the on-screen slice
+      if (SPLAT) { ctx.setTransform(DPR, 0, 0, DPR, 0, 0); (PLATE ? plateFrame : splatFrame)(time, fr, cr); } else {
       if (sh > 0) ctx.drawImage(layer, 0, sy, layer.width, sh, -flowLeft, sy / LDPR - EX_T, layer.width / LDPR, sh / LDPR);
       ctx.lineCap = 'round'; ctx.lineJoin = 'round';
       if (STILL) { stillFrame(time, fr, cr); } else {
@@ -2416,6 +2500,7 @@ const JUDGES = [];
         gtx.globalCompositeOperation = 'destination-in'; gtx.setLineDash([shown, len + 2000]); gtx.lineDashOffset = 0;
         gtx.strokeStyle = '#000'; gtx.lineWidth = 260 * k; gtx.stroke(spinePath);
         gtx.setLineDash([]); gtx.globalCompositeOperation = 'source-over';
+      }
       }
       }
     }
