@@ -2171,12 +2171,12 @@ const JUDGES = [];
   const svg = flow.querySelector('.pzf-tube'), NS = 'http://www.w3.org/2000/svg';
   const items = [...flow.querySelectorAll('.pzf-item')];
   // every dash pattern sums to 380 so the 760px flow loop is seamless
-  // strands: offset (px, applied along the bundle's normal at each waypoint so they weave), glass width, light dash pattern, flow speed
+  // strands run strictly parallel (offset along the normal), like one ribbon of tubes: px offset, glass width, light dashes, flow speed
   const STRANDS = [
-    { off: [0, 0, 0, 0, 0, 0, 0], w: 15, dash: '70 46 14 38 100 60 20 32', dur: 7 },
-    { off: [-26, 18, -30, 22, -18, 26, -24], w: 9, dash: '40 70 90 40 80 60', dur: 9.5 },
-    { off: [30, -20, 34, -26, 28, -20, 30], w: 6, dash: '24 50 60 90 116 40', dur: 6 },
-    { off: [-52, -40, 50, 46, -48, -44, 52], w: 4, dash: '16 80 40 60 124 60', dur: 11 }
+    { off: 0, w: 15, dash: '70 46 14 38 100 60 20 32', dur: 7 },
+    { off: -24, w: 9, dash: '40 70 90 40 80 60', dur: 9.5 },
+    { off: 22, w: 7, dash: '24 50 60 90 116 40', dur: 6 },
+    { off: -42, w: 4, dash: '16 80 40 60 124 60', dur: 11 }
   ];
   svg.innerHTML = `<defs>
     <filter id="tbGlow" x="-30%" y="-30%" width="160%" height="160%"><feGaussianBlur stdDeviation="3"/></filter>
@@ -2187,32 +2187,35 @@ const JUDGES = [];
   const rv = svg.querySelector('.tb-rv'), G = c => svg.querySelector('.tb-' + c);
   let len = 0, samples = [], spine = null;
   const rel = el => { const a = el.getBoundingClientRect(), b = flow.getBoundingClientRect(); return { top: a.top - b.top, bottom: a.bottom - b.top, left: a.left - b.left, right: a.right - b.left, h: a.height, w: a.width }; };
-  // Catmull-Rom → cubic Béziers; few, well-spaced waypoints give the long, even arcs of a silk ribbon
-  const curve = P => { let d = `M${P[0][0].toFixed(1)},${P[0][1].toFixed(1)}`; for (let i = 0; i < P.length - 1; i++) { const p0 = P[i - 1] || P[i], p1 = P[i], p2 = P[i + 1], p3 = P[i + 2] || p2;
-    d += ` C${(p1[0] + (p2[0] - p0[0]) / 6).toFixed(1)},${(p1[1] + (p2[1] - p0[1]) / 6).toFixed(1)} ${(p2[0] - (p3[0] - p1[0]) / 6).toFixed(1)},${(p2[1] - (p3[1] - p1[1]) / 6).toFixed(1)} ${p2[0].toFixed(1)},${p2[1].toFixed(1)}`; } return d; };
+  // a polyline with every corner rounded by a quarter-ellipse between the edge midpoints (k = .5523, the circle constant):
+  // constant, generous curvature — the round, calm arcs of a ribbon — with no wobble between corners
+  const rounded = V => { const M = (a, b) => [(a[0] + b[0]) / 2, (a[1] + b[1]) / 2], f = n => n.toFixed(1), K = .5523;
+    let m = M(V[0], V[1]), d = `M${f(V[0][0])},${f(V[0][1])} L${f(m[0])},${f(m[1])}`;
+    for (let i = 1; i < V.length - 1; i++) { const a = m, b = i < V.length - 2 ? M(V[i], V[i + 1]) : V[i + 1], c = V[i];
+      d += ` C${f(a[0] + (c[0] - a[0]) * K)},${f(a[1] + (c[1] - a[1]) * K)} ${f(b[0] + (c[0] - b[0]) * K)},${f(b[1] + (c[1] - b[1]) * K)} ${f(b[0])},${f(b[1])}`; m = b; }
+    return d; };
   const el = (tag, attrs, parent) => { const e = document.createElementNS(NS, tag); for (const k in attrs) e.setAttribute(k, attrs[k]); parent.appendChild(e); return e; };
   function build() {
     const W = flow.clientWidth, H = flow.clientHeight, k = W < 760 ? .6 : 1;
-    const sub = rel(flow.querySelector('.pzf-sub')), g = flow.querySelectorAll('.pzf-grp'), r = rel(g[0]), a = rel(g[1]);
-    const P = W < 760
-      ? [[W + 80, sub.top - 60], [W * .5, sub.bottom + 70], [-W * .06, r.top + r.h * .45], [W * .45, r.bottom + 45], [W * 1.06, a.top + a.h * .5], [W * .5, H - 25], [-80, H - 40]]
-      : [[W + 140, sub.top - 150],                    // enters top-right, beside ¥100,000
-         [W * .55, sub.bottom + 85],                  // one long sweep under the 3D AI 新物种奖 line
-         [W * .12, r.top + r.h * .5],                 // a full round arc through the open left half, beside 一 · 二 · 三等奖
-         [W * .52, (r.bottom + a.top) / 2 - 10],      // a wide arc back across, in the gap between the tiers
-         [W * 1.16, a.top - 40],                      // slips out past the right edge above the single awards …
-         [W * 1.14, H - 85],                          // … and sweeps back in below them, so no row is crossed
-         [W * .45, H - 40],
-         [-140, H - 70]];                             // and out bottom-left
-    // normals at each waypoint, so strand offsets stay perpendicular to the bundle
-    const N = P.map((p, i) => { const q0 = P[Math.max(0, i - 1)], q1 = P[Math.min(P.length - 1, i + 1)], dx = q1[0] - q0[0], dy = q1[1] - q0[1], l = Math.hypot(dx, dy) || 1; return [-dy / l, dx / l]; });
+    const sub = rel(flow.querySelector('.pzf-sub')), g = flow.querySelectorAll('.pzf-grp'), r = rel(g[0]), a = rel(g[1]), gap = (r.bottom + a.top) / 2;
+    const V = W < 760
+      ? [[W + 80, sub.top - 40], [W * .06, sub.bottom + 90], [W * .06, gap + 10], [W + 90, gap + 10], [W + 90, H - 50], [-90, H - 50]]
+      : [[W + 180, sub.top - 110],                    // in from the top-right …
+         [W * .07, sub.bottom + 170],                 // … one long diagonal down to the open left half
+         [W * .07, gap - 25],                         // round corner, straight down beside 一 · 二 · 三等奖
+         [W + 650, gap - 25],                         // round corner, out to the right through the gap between the tiers
+         [W + 650, H - 70],                           // (off-screen) down past the single awards
+         [-220, H - 70]];                             // and back in along the bottom, out to the left
     ['haze', 'specks', 'strands', 'sleeves'].forEach(c => { G(c).innerHTML = ''; });
-    const dMain = curve(P);
+    const dMain = rounded(V);
     rv.setAttribute('d', dMain); rv.style.strokeWidth = 260 * k;
+    const ref = el('path', { d: dMain, fill: 'none', stroke: 'none' }, G('haze'));
     el('path', { d: dMain, fill: 'none', stroke: '#6a48ff', 'stroke-width': 90 * k, opacity: .16, filter: 'url(#tbHaze)', 'stroke-linecap': 'round' }, G('haze'));
+    // strands: the spine sampled densely and pushed out along its normal — truly parallel tubes
+    const RL = ref.getTotalLength(), pts = []; for (let t = 0; t <= RL; t += 6) { const p = ref.getPointAtLength(t), q = ref.getPointAtLength(Math.min(RL, t + 1)), p0 = ref.getPointAtLength(Math.max(0, t - 1)), dx = q.x - p0.x, dy = q.y - p0.y, l = Math.hypot(dx, dy) || 1; pts.push([p.x, p.y, -dy / l, dx / l]); }
     STRANDS.forEach((st, si) => {
-      const o = i => st.off[i % st.off.length] * k, d = curve(P.map((p, i) => [p[0] + N[i][0] * o(i), p[1] + N[i][1] * o(i)])), w = st.w * k;
-      const base = { d, fill: 'none', 'stroke-linecap': 'round' };
+      const o = st.off * k, d = st.off ? 'M' + pts.map(([x, y, nx, ny]) => `${(x + nx * o).toFixed(1)},${(y + ny * o).toFixed(1)}`).join(' L') : dMain, w = st.w * k;
+      const base = { d, fill: 'none', 'stroke-linecap': 'round', 'stroke-linejoin': 'round' };
       el('path', { ...base, stroke: 'rgba(196,188,255,.30)', 'stroke-width': w }, G('strands'));            // glass rim
       el('path', { ...base, stroke: 'rgba(5,4,12,.82)', 'stroke-width': Math.max(1, w - 2.2) }, G('strands')); // clear body
       el('path', { ...base, stroke: 'rgba(123,92,255,.14)', 'stroke-width': w * .55 }, G('strands'));           // faint inner tint
