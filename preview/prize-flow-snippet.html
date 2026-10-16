@@ -131,9 +131,9 @@ const reduceMotion = window.reduceMotion ?? matchMedia('(prefers-reduced-motion:
   const flow = document.getElementById('pzFlow'); if (!flow) return;
   const wrap = flow.querySelector('.pzf-tube'), cv = wrap.querySelector('.tb-sharp'), ctx = cv.getContext('2d'), gcv = wrap.querySelector('.tb-glow'), gtx = gcv.getContext('2d');
   const items = [...flow.querySelectorAll('.pzf-item')];
-  // data-mode="splat" on #pzFlow: the light inside stays put and only the tubes grow, each strand on its own (root-like) —
+  // data-mode="still" on #pzFlow: the light inside stays put and only the tubes grow, each strand on its own (root-like) —
   // otherwise the light keeps flowing and the whole bundle is revealed as one
-  // data-mode="splat": a light streak with a ribbon of Gaussian particles instead of tubes; data-mode="splat": a twisting ribbon of metal plates
+  // data-mode="splat": a light streak with a ribbon of Gaussian particles instead of tubes; data-mode="plate": a twisting ribbon of metal plates
   const SPLAT = flow.dataset.mode === 'splat' || flow.dataset.mode === 'plate';
   const STILL = flow.dataset.mode === 'still', LAG = [0, 60, 110, 170, 90, 210], TAIL = 130;
   const LUM = [1, .4, .85, 0, .6, 0];                             // still mode: per-tube light strength (bright and dim mixed; 0 = plain grey glass, unlit)
