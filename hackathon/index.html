@@ -2189,7 +2189,7 @@ const JUDGES = [];
     <filter id="tbGlow" x="-30%" y="-30%" width="160%" height="160%"><feGaussianBlur stdDeviation="3"/></filter>
     <filter id="tbHaze" x="-30%" y="-30%" width="160%" height="160%"><feGaussianBlur stdDeviation="16"/></filter>
     <linearGradient id="tbChrome" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#2c2b35"/><stop offset=".22" stop-color="#f6f5ff"/><stop offset=".42" stop-color="#b8b6c8"/><stop offset=".6" stop-color="#5d5b6c"/><stop offset=".82" stop-color="#d9d7e6"/><stop offset="1" stop-color="#1b1a22"/></linearGradient>
-    <mask id="tbReveal" maskUnits="userSpaceOnUse"><path class="tb-rv" fill="none" stroke="#fff" stroke-linecap="round" stroke-width="240"/></mask>
+    <mask id="tbReveal" maskUnits="userSpaceOnUse" x="-2000" y="-2000" width="8000" height="12000"><path class="tb-rv" fill="none" stroke="#fff" stroke-linecap="round" stroke-width="240"/></mask>
   </defs><g mask="url(#tbReveal)"><g class="tb-haze"></g><g class="tb-specks"></g><g class="tb-strands"></g><g class="tb-sleeves"></g></g>`;
   const rv = svg.querySelector('.tb-rv'), G = c => svg.querySelector('.tb-' + c);
   let len = 0, samples = [], spine = null;
@@ -2212,12 +2212,13 @@ const JUDGES = [];
     const sub = rel(flow.querySelector('.pzf-sub')), g = flow.querySelectorAll('.pzf-grp'), r = rel(g[0]), a = rel(g[1]), gap = (r.bottom + a.top) / 2;
     const V = W < 760
       ? [[W + 80, sub.top - 40], [W * .05, r.top + r.h * .3], [W * .55, gap], [W + 300, gap], [W + 300, H - 50], [-90, H - 50]]
-      : [[W + 80, sub.top - 200],                     // in from the top-right, one diagonal run …
-         [W * .44, r.top + 10],                       // … round bend into the open space left of 一 · 二 · 三等奖
-         [W * .44, r.bottom - 30],                    // straight down beside the tiers
-         [W * 1.0, a.top - 20],                       // round bend, a diagonal run to the right edge
-         [W * 1.0, H - 60],                           // straight down the right margin, past 人气单项奖
-         [-240, H - 60]];                             // round bend, and a long run out to the left along the bottom                             // and back in along the bottom, out to the left
+      : [[W * 1.07, -260],                            // from above the top-right corner, a steep run down …
+         [W * .97, sub.top - 40],                     // … round bend into a gentle run to the left …
+         [W * .34, sub.bottom + 70],                  // … passing under the 3D AI 新物种奖 block, round bend down
+         [W * .34, r.bottom - 10],                    // straight down, well left of 一 · 二 · 三等奖
+         [W * 1.03, a.top - 30],                      // round bend, a gentle run across to the right edge
+         [W * 1.03, H - 60],                          // straight down the right margin, past 人气单项奖
+         [-240, H - 60]];                             // round bend, and a long run out to the left along the bottom                             // round bend, and a long run out to the left along the bottom                             // and back in along the bottom, out to the left
     ['haze', 'specks', 'strands', 'sleeves'].forEach(c => { G(c).innerHTML = ''; });
     const dMain = rounded(V, (W < 760 ? 160 : 330) * k);
     rv.setAttribute('d', dMain); rv.style.strokeWidth = 260 * k;
