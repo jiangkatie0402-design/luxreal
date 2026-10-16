@@ -2249,7 +2249,7 @@ const JUDGES = [];
       if (si === 0) spine = G('strands').lastChild;
     });
     len = spine.getTotalLength();
-    samples = []; for (let i = 0; i <= 400; i++) samples.push(spine.getPointAtLength(len * i / 400).y);
+    samples = []; for (let i = 0, m = -1e9; i <= 1200; i++) samples.push(m = Math.max(m, spine.getPointAtLength(len * i / 1200).y));   // running max keeps it monotonic
     // light specks with soft halos drifting around the bundle
     let seed = 7; const rnd = () => (seed = (seed * 16807) % 2147483647) / 2147483647;
     for (let n = 0; n < (W < 760 ? 50 : 120); n++) {
@@ -2276,17 +2276,40 @@ const JUDGES = [];
     [.3, .68].forEach(t => sleeve(-24 * k, t, 22 * k, 2));             // smaller two-ring sleeves on the second tube
     [.22, .78].forEach(t => sleeve(22 * k, t, 17 * k, 1));             // single collars on the thin tube
     rv.style.strokeDasharray = `${len} ${len}`;
-    draw();
+    cacheRows(); shown = Math.min(shown, len); target = targetLen(); if (reduceMotion) shown = target; paint(); draw();
+  }
+  // the head of the bundle eases toward its scroll target every frame (no stepping, no jumps between wheel notches);
+  // rows light up when the head itself — not the raw scroll position — reaches them
+  let shown = 0, target = 0, anim = 0, rowY = [];
+  const cacheRows = () => { rowY = items.map(it => { const c = rel(it); return c.top + c.h * .5; }); };
+  function targetLen() {
+    if (reduceMotion) return len;
+    const tipY = innerHeight * .72 - flow.getBoundingClientRect().top;     // the head follows ~72% down the viewport
+    if (tipY <= samples[0]) return 0;
+    for (let i = 1; i < samples.length; i++) if (samples[i] >= tipY) {   // interpolate between samples → continuous length
+      const t = (tipY - samples[i - 1]) / Math.max(1e-6, samples[i] - samples[i - 1]);
+      return len * (i - 1 + t) / (samples.length - 1);
+    }
+    return len;
+  }
+  function paint() {
+    rv.style.strokeDashoffset = len - shown;
+    const headY = spine.getPointAtLength(Math.max(0, Math.min(len, shown))).y;
+    let cur = -1; rowY.forEach((y, n) => { const on = shown > 0 && headY >= y; items[n].classList.toggle('on', on); if (on) cur = n; });
+    items.forEach((it, n) => it.classList.toggle('cur', n === cur));
+  }
+  function step() {
+    const d = target - shown;
+    shown += Math.abs(d) < .5 ? d : d * .085;                               // critically-damped-ish ease
+    paint();
+    anim = Math.abs(target - shown) > .5 ? requestAnimationFrame(step) : 0;
   }
   function draw() {
     if (!len) return;
-    const fr = flow.getBoundingClientRect(), tipY = reduceMotion ? 1e9 : innerHeight * .72 - fr.top;   // the bundle's head follows ~72% down the viewport
-    let i = samples.findIndex(y => y > tipY); if (i < 0) i = samples.length - 1;
-    rv.style.strokeDashoffset = len - (reduceMotion ? len : len * i / 400);
-    let cur = -1; items.forEach((it, n) => { const c = rel(it), on = c.top + c.h * .5 < tipY; it.classList.toggle('on', on); if (on) cur = n; });
-    items.forEach((it, n) => it.classList.toggle('cur', n === cur));
+    target = targetLen();
+    if (!anim) anim = requestAnimationFrame(step);
   }
-  let raf = 0; const tick = () => { cancelAnimationFrame(raf); raf = requestAnimationFrame(draw); };
+  const tick = draw;
   addEventListener('scroll', tick, { passive: true });
   new ResizeObserver(() => requestAnimationFrame(build)).observe(flow);
   document.addEventListener('langchange', () => requestAnimationFrame(build));
