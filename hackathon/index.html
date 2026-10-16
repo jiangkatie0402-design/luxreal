@@ -2212,12 +2212,12 @@ const JUDGES = [];
     const sub = rel(flow.querySelector('.pzf-sub')), g = flow.querySelectorAll('.pzf-grp'), r = rel(g[0]), a = rel(g[1]), gap = (r.bottom + a.top) / 2;
     const V = W < 760
       ? [[W + 80, sub.top - 40], [W * .05, r.top + r.h * .3], [W * .55, gap], [W + 300, gap], [W + 300, H - 50], [-90, H - 50]]
-      : [[W * 1.12, sub.top - 200],                   // in from beyond the top-right, one diagonal run …
-         [W * .06, r.top + r.h * .28],                // … a small round bend on the left, beside 一等奖 …
-         [W * .44, gap - 15],                         // … a diagonal run back, a second round bend under 三等奖 …
-         [W + 650, gap - 30],                         // … and out to the right through the gap between the tiers
-         [W + 650, H - 70],                           // (off-screen) down past the single awards
-         [-220, H - 70]];                             // and back in along the bottom, out to the left
+      : [[W + 80, sub.top - 200],                     // in from the top-right, one diagonal run …
+         [W * .44, r.top + 10],                       // … round bend into the open space left of 一 · 二 · 三等奖
+         [W * .44, r.bottom - 30],                    // straight down beside the tiers
+         [W * 1.0, a.top - 20],                       // round bend, a diagonal run to the right edge
+         [W * 1.0, H - 60],                           // straight down the right margin, past 人气单项奖
+         [-240, H - 60]];                             // round bend, and a long run out to the left along the bottom                             // and back in along the bottom, out to the left
     ['haze', 'specks', 'strands', 'sleeves'].forEach(c => { G(c).innerHTML = ''; });
     const dMain = rounded(V, (W < 760 ? 160 : 330) * k);
     rv.setAttribute('d', dMain); rv.style.strokeWidth = 260 * k;
