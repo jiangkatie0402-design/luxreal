@@ -499,7 +499,7 @@ html[lang="zh-CN"] .sec-title { letter-spacing: .02em; line-height: 1.22; }
 .pzf > div { position: relative; z-index: 1; }
 .pzf-k { display: block; font-family: var(--font-mono); font-size: 12px; font-weight: 600; letter-spacing: .16em; color: var(--ice); margin-bottom: 18px; }
 .pzf-hero { padding: 32px 0 120px; }
-.pzf-big { display: inline-block; font-size: clamp(48px, 5.2vw, 76px); font-weight: 600; letter-spacing: -.05em; line-height: .9; background: linear-gradient(90deg, #fff 0%, #D6D0FF 35%, #9B8BFF 70%, #7B5CFF); -webkit-background-clip: text; background-clip: text; color: transparent; }
+.pzf-big { font-size: clamp(48px, 5.2vw, 76px); font-weight: 600; letter-spacing: -.05em; line-height: .9; background: linear-gradient(90deg, #fff 0%, #D6D0FF 35%, #9B8BFF 70%, #7B5CFF); -webkit-background-clip: text; background-clip: text; color: transparent; }
 .pzf-big sup { color: #fff; -webkit-text-fill-color: #fff; font-size: .3em; vertical-align: top; position: relative; top: .35em; margin-right: .06em; letter-spacing: 0; }
 .pzf-sub { margin-top: 18px; font-size: clamp(15px, 1.25vw, 18px); color: var(--text-soft); }
 .pzf-dot { margin: 0 .6em; color: var(--text-muted); }
@@ -2193,19 +2193,17 @@ const JUDGES = [];
   const el = (tag, attrs, parent) => { const e = document.createElementNS(NS, tag); for (const k in attrs) e.setAttribute(k, attrs[k]); parent.appendChild(e); return e; };
   function build() {
     const W = flow.clientWidth, H = flow.clientHeight, k = W < 760 ? .6 : 1;
-    const hero = rel(flow.querySelector('.pzf-big')), sub = rel(flow.querySelector('.pzf-sub')), g = flow.querySelectorAll('.pzf-grp'), r = rel(g[0]), a = rel(g[1]);
+    const sub = rel(flow.querySelector('.pzf-sub')), g = flow.querySelectorAll('.pzf-grp'), r = rel(g[0]), a = rel(g[1]);
     const P = W < 760
       ? [[W + 80, sub.top - 60], [W * .5, sub.bottom + 70], [-W * .06, r.top + r.h * .45], [W * .45, r.bottom + 45], [W * 1.06, a.top + a.h * .5], [W * .5, H - 25], [-80, H - 40]]
-      : [[W + 160, hero.top + hero.h * .35],          // enters from the right at the height of ¥100,000 …
-         [hero.right + W * .17, hero.top + hero.h * .55], // … and runs in to sit just beside the number
-         [W * .27, sub.bottom + 120],                 // then keeps curving left and down, under the 3D AI 新物种奖 line
-         [W * .08, r.top + r.h * .55],                 // a full round arc through the open left half, beside 一 · 二 · 三等奖
-         [W * .4, r.bottom - 10],
-         [W * .8, (r.bottom + a.top) / 2 - 45],       // back across in the gap between the tiers
+      : [[W + 140, sub.top - 150],                    // enters top-right, beside ¥100,000
+         [W * .55, sub.bottom + 85],                  // one long sweep under the 3D AI 新物种奖 line
+         [W * .12, r.top + r.h * .5],                 // a full round arc through the open left half, beside 一 · 二 · 三等奖
+         [W * .52, (r.bottom + a.top) / 2 - 10],      // a wide arc back across, in the gap between the tiers
          [W * 1.16, a.top - 40],                      // slips out past the right edge above the single awards …
-         [W * 1.14, H - 85],                          // … and sweeps back in below them, so no column is crossed
+         [W * 1.14, H - 85],                          // … and sweeps back in below them, so no row is crossed
          [W * .45, H - 40],
-         [-140, H - 70]];                             // and out bottom-left                             // and out bottom-left
+         [-140, H - 70]];                             // and out bottom-left
     // normals at each waypoint, so strand offsets stay perpendicular to the bundle
     const N = P.map((p, i) => { const q0 = P[Math.max(0, i - 1)], q1 = P[Math.min(P.length - 1, i + 1)], dx = q1[0] - q0[0], dy = q1[1] - q0[1], l = Math.hypot(dx, dy) || 1; return [-dy / l, dx / l]; });
     ['haze', 'specks', 'strands', 'sleeves'].forEach(c => { G(c).innerHTML = ''; });
