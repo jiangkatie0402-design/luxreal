@@ -133,14 +133,15 @@ const reduceMotion = window.reduceMotion ?? matchMedia('(prefers-reduced-motion:
   const items = [...flow.querySelectorAll('.pzf-item')];
   // data-mode="still" on #pzFlow: the light inside stays put and only the tubes grow, each strand on its own (root-like) —
   // otherwise the light keeps flowing and the whole bundle is revealed as one
-  const STILL = flow.dataset.mode === 'still', LAG = [0, 70, 35, 120];         // still mode: how far each strand trails the lead (px)
+  const STILL = flow.dataset.mode === 'still', LAG = [0, 110, 50, 190, 140], TAIL = 120;   // still mode: how far each strand trails the lead; tapering tail length (px)
   const EX_T = 320, EX_B = 120;                                   // wrapper reaches 320px above / 120px below the section
   // strands run strictly parallel: px offset along the normal, glass width, dim light dashes, flow period (s); all dash sums = 380
   const STRANDS = [
-    { off: 0, w: 15, dim: [70, 46, 14, 38, 100, 60, 20, 32], hot: [34, 150, 12, 184], dur: 7 },
-    { off: -24, w: 9, dim: [40, 70, 90, 40, 80, 60], hot: [18, 200, 26, 136], dur: 9.5 },
-    { off: 22, w: 7, dim: [24, 50, 60, 90, 116, 40], hot: [10, 120, 22, 228], dur: 6 },
-    { off: -42, w: 4, dim: [16, 80, 40, 60, 124, 60], hot: [14, 236, 8, 122], dur: 11 }
+    { off: 0, w: 5.5, dim: [120, 260], hot: [16, 20, 16, 20, 16, 292], dur: 7 },
+    { off: -27, w: 4, dim: [90, 290], hot: [12, 24, 12, 332], dur: 9.5 },
+    { off: 25, w: 4.5, dim: [60, 140, 80, 100], hot: [14, 18, 14, 18, 14, 18, 14, 270], dur: 6 },
+    { off: -52, w: 3, dim: [70, 310], hot: [10, 26, 10, 334], dur: 11 },
+    { off: 50, w: 2.5, dim: [50, 330], hot: [12, 22, 12, 22, 12, 300], dur: 10 }
   ];
   const rel = el => { const a = el.getBoundingClientRect(), b = flow.getBoundingClientRect(); return { top: a.top - b.top, bottom: a.bottom - b.top, h: a.height }; };
   // uniform B-spline through the waypoints (clamped) → cubic Bézier segments, sampled to an evenly spaced polyline
@@ -186,7 +187,7 @@ const reduceMotion = window.reduceMotion ?? matchMedia('(prefers-reduced-motion:
     layer.width = Math.round(LW * LDPR); layer.height = Math.round(LH * LDPR);
     const c = layer.getContext('2d'); c.setTransform(LDPR, 0, 0, LDPR, 0, 0); c.clearRect(0, 0, LW, LH); c.translate(flowLeft, EX_T);
     c.lineCap = c.lineJoin = 'round';
-    c.save(); if ('filter' in c) { c.filter = `blur(${Math.round(16 * k)}px)`; c.strokeStyle = 'rgba(106,72,255,.09)'; c.lineWidth = 90 * k; c.stroke(spinePath); } c.restore();   // haze (skipped where canvas filters are unsupported)
+    c.save(); if ('filter' in c && !STILL) { c.filter = `blur(${Math.round(16 * k)}px)`; c.strokeStyle = 'rgba(106,72,255,.09)'; c.lineWidth = 90 * k; c.stroke(spinePath); } c.restore();   // haze (skipped where canvas filters are unsupported)
     let seed = 7; const rnd = () => (seed = (seed * 16807) % 2147483647) / 2147483647;
     twinkle = [];
     for (let n = 0; n < (W < 760 ? 40 : 90); n++) {                  // specks: most baked in, a few twinkle live
@@ -197,8 +198,9 @@ const reduceMotion = window.reduceMotion ?? matchMedia('(prefers-reduced-motion:
       c.fillStyle = white ? 'rgba(255,255,255,.5)' : 'rgba(217,207,255,.45)'; c.beginPath(); c.arc(x, y, rr, 0, 6.29); c.fill();
     }
     glass = STRANDS.map((st, si) => {                                // glass: dark body, crisp rims, a specular streak
-      const o = st.off * k, w = st.w * k, g = [[strandPaths[si], 'rgba(30,26,48,.5)', w], [offPath(o - w / 2 + .5), 'rgba(226,226,236,.72)', Math.max(.8, 1.2 * k)], [offPath(o + w / 2 - .5), 'rgba(160,158,178,.4)', Math.max(.6, .9 * k)]];
-      if (w > 6) g.push([offPath(o - w * .24), 'rgba(255,255,255,.28)', Math.max(.8, w * .12)]);
+      const o = st.off * k, w = st.w * k, g = [[strandPaths[si], 'rgba(78,76,96,.42)', w], [offPath(o - w / 2 + .4), 'rgba(236,236,244,.78)', Math.max(.7, 1 * k)], [offPath(o + w / 2 - .4), 'rgba(170,168,188,.45)', Math.max(.5, .8 * k)]];
+      if (w > 3.5) g.push([offPath(o - w * .2), 'rgba(255,255,255,.22)', Math.max(.6, w * .14)]);
+      if (w < 3) g.splice(0, 3, [strandPaths[si], 'rgba(205,200,225,.55)', Math.max(.6, w * .55)]);   // hair-thin tubes: one fine glass line
       return g;
     });
     if (!STILL) glass.forEach(g => g.forEach(([p, col, lw]) => { c.strokeStyle = col; c.lineWidth = lw; c.stroke(p); }));   // flow mode: baked once
@@ -215,7 +217,7 @@ const reduceMotion = window.reduceMotion ?? matchMedia('(prefers-reduced-motion:
       for (let i = 1; i < n; i++) { const gx = -w / 2 + i * (ring + gp) - gp; c.save(); c.shadowColor = '#9a7dff'; c.shadowBlur = 8 * k; c.fillStyle = '#e2d9ff'; c.fillRect(gx, -h * .4, gp, h * .8); c.restore(); }
       c.restore();
     };
-    [.12, .5, .86].forEach(t => sleeve(0, t, 34 * k, 3)); [.3, .68].forEach(t => sleeve(-24 * k, t, 22 * k, 2)); [.22, .78].forEach(t => sleeve(22 * k, t, 17 * k, 1));
+    [.12, .5, .86].forEach(t => sleeve(0, t, 16 * k, 2)); [.3, .68].forEach(t => sleeve(-27 * k, t, 14 * k, 2)); [.22, .78].forEach(t => sleeve(25 * k, t, 12 * k, 1)); [.4, .93].forEach(t => sleeve(-52 * k, t, 9 * k, 1)); [.6].forEach(t => sleeve(50 * k, t, 8 * k, 1));
     // reveal lookup: running max of y along the spine (monotonic) for scroll → length
     samples = []; for (let i = 0, m = -1e9; i < pts.length; i++) samples.push(m = Math.max(m, pts[i][1]));
     rowY = items.map(it => { const q = rel(it); return q.top + q.h * .5; });
@@ -250,8 +252,9 @@ const reduceMotion = window.reduceMotion ?? matchMedia('(prefers-reduced-motion:
   }
   // still mode: static light, each strand grows on its own with a small glowing tip
   function stillFrame(time, fr, cr) {
-    if (shown < len - .5) {                                                  // haze, specks and sleeves only where the lead has been
-      ctx.globalCompositeOperation = 'destination-in'; ctx.setLineDash([shown, len + 2000]); ctx.lineDashOffset = 0;
+    const lay = shown >= len - .5 ? len : Math.max(0, shown - (TAIL + 110) * k);   // specks and sleeves only where the tube bodies (not their thin tails) have reached
+    if (lay < len - .5) {
+      ctx.globalCompositeOperation = 'destination-in'; ctx.setLineDash([Math.max(.01, lay), len + 2000]); ctx.lineDashOffset = 0;
       ctx.strokeStyle = '#000'; ctx.lineWidth = 260 * k; ctx.stroke(spinePath);
       ctx.setLineDash([]); ctx.globalCompositeOperation = 'source-over';
     }
@@ -263,18 +266,21 @@ const reduceMotion = window.reduceMotion ?? matchMedia('(prefers-reduced-motion:
     STRANDS.forEach((st, si) => {
       const Ls = shown >= len - .5 ? len : Math.max(0, Math.min(len, shown - LAG[si] * k)); if (Ls < 2) return;
       const w = st.w * k, p = strandPaths[si], ph = si * 97, phH = si * 131;
-      ctx.setLineDash([Ls, 1e6]); ctx.lineDashOffset = 0;
-      glass[si].forEach(([gp, col, lw]) => { ctx.strokeStyle = col; ctx.lineWidth = lw; ctx.stroke(gp); });
-      gtx.setLineDash(cut(st.dim, ph, Ls)); gtx.strokeStyle = 'rgba(125,98,255,.42)'; gtx.lineWidth = Math.max(3, w * .7); gtx.stroke(p);
-      const hot = cut(st.hot, phH, Ls);
-      gtx.setLineDash(hot); gtx.strokeStyle = 'rgba(120,88,255,.55)'; gtx.lineWidth = Math.max(5, w * 1.5); gtx.stroke(p);
-      ctx.setLineDash(hot); ctx.strokeStyle = '#b3a0ff'; ctx.lineWidth = Math.max(1.3, w * .6); ctx.stroke(p);
-      ctx.strokeStyle = '#fff'; ctx.lineWidth = Math.max(.7, w * .22); ctx.stroke(p);
-      if (Ls < len - 1) {                                                    // the growing tip: a small lit end
-        const i = Math.min(pts.length - 1, Math.round(Ls / STEP)), [x, y, nx, ny] = pts[i], o = st.off * k, tx = x + nx * o, ty = y + ny * o;
-        gtx.setLineDash([]); gtx.fillStyle = 'rgba(150,120,255,.6)'; gtx.beginPath(); gtx.arc(tx, ty, Math.max(3, w * .6), 0, 6.29); gtx.fill();
-        ctx.setLineDash([]); ctx.fillStyle = '#efeaff'; ctx.beginPath(); ctx.arc(tx, ty, Math.max(1.2, w * .3), 0, 6.29); ctx.fill();
+      const growing = Ls < len - 1, body = growing ? Math.max(0, Ls - TAIL * k) : Ls;
+      ctx.lineDashOffset = 0;
+      if (body > 0) { ctx.setLineDash([body, 1e6]); glass[si].forEach(([gp, col, lw]) => { ctx.strokeStyle = col; ctx.lineWidth = lw; ctx.stroke(gp); }); }
+      if (growing) {                                                         // tapering glass tail, thinning to a hairline at the tip
+        const from = body, segs = 10, seg = (Ls - from) / segs;
+        ctx.lineCap = 'butt';                                                  // butt caps: no beading where the segments meet
+        for (let q = 0; q < segs; q++) { const a = from + q * seg, f = 1 - q / segs;
+          ctx.setLineDash([0, a, seg, 1e6]); ctx.strokeStyle = `rgba(215,210,235,${(.2 + .3 * f).toFixed(2)})`; ctx.lineWidth = Math.max(.5, w * (.08 + .3 * f)); ctx.stroke(p); }
+        ctx.lineCap = 'round';
       }
+      gtx.setLineDash(cut(st.dim, ph, Ls)); gtx.strokeStyle = 'rgba(125,98,255,.26)'; gtx.lineWidth = Math.max(2.5, w * .8); gtx.stroke(p);
+      const hot = cut(st.hot, phH, Ls);
+      gtx.setLineDash(hot); gtx.strokeStyle = 'rgba(130,98,255,.75)'; gtx.lineWidth = Math.max(5, w * 2.6); gtx.stroke(p);
+      ctx.setLineDash(hot); ctx.strokeStyle = '#b9a6ff'; ctx.lineWidth = Math.max(1.1, w * .7); ctx.stroke(p);
+      ctx.strokeStyle = '#fff'; ctx.lineWidth = Math.max(.7, w * .32); ctx.stroke(p);
     });
     ctx.setLineDash([]); gtx.setLineDash([]);
   }
