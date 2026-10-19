@@ -465,7 +465,7 @@ button { font-family: inherit; }
 .skills-head { text-align: center; margin-bottom: var(--head-gap); }
 .skills-layout { display: grid; grid-template-columns: minmax(0, 0.5fr) minmax(0, 1fr); gap: 72px; align-items: stretch; }
 .skills-side { display: flex; flex-direction: column; justify-content: space-between; gap: 32px; padding: 8px 0; }
-.skills-list { display: flex; flex-direction: column; gap: 36px; }
+.skills-list { display: flex; flex-direction: column; gap: 48px; }
 .skills-item-head {
   display: flex; align-items: center; width: 100%; padding: 0; border: none; background: none;
   font-family: inherit; text-align: left; cursor: pointer;
@@ -477,13 +477,15 @@ button { font-family: inherit; }
   box-shadow: inset 0 0 0 1px rgba(26,122,248,.4);
   transition: width .4s var(--ease), margin .4s var(--ease), opacity .4s var(--ease);
 }
+/* same display face as the section titles (庞门正道细线体) */
 .skills-item-name {
+  font-family: var(--font-title); font-synthesis: none; letter-spacing: .02em;
   font-size: 19px; font-weight: 400; color: var(--text-faint); white-space: nowrap;
   transition: font-size .4s var(--ease), color .4s var(--ease);
 }
 .skills-item-head:hover .skills-item-name { color: var(--text-dim); }
 .skills-item.active .skills-item-icon { width: 48px; margin-right: 16px; opacity: 1; }
-.skills-item.active .skills-item-name { font-size: 30px; color: var(--text); }
+.skills-item.active .skills-item-name { font-size: 27px; color: var(--text); }
 /* points expand under the active item */
 .skills-points-wrap { display: grid; grid-template-rows: 0fr; transition: grid-template-rows .45s var(--ease); }
 .skills-item.active .skills-points-wrap { grid-template-rows: 1fr; }
@@ -547,10 +549,10 @@ button { font-family: inherit; }
 }
 @media (max-width: 640px) {
   #scenarios .container, #feedback .container { padding: 0 20px; }
-  .skills-list { gap: 22px; }
+  .skills-list { gap: 28px; }
   .skills-item-name { font-size: 16px; }
   .skills-item.active .skills-item-icon { width: 40px; height: 40px; margin-right: 12px; }
-  .skills-item.active .skills-item-name { font-size: 21px; }
+  .skills-item.active .skills-item-name { font-size: 19px; }
   .skills-points { padding-left: 52px; }
   .skills-points li { font-size: 13px; }
   .skills-stage { padding: 28px 20px 18px; }
