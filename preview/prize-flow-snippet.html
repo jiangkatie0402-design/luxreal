@@ -1,5 +1,5 @@
 <!-- ================================================================
-  奖项区（管道串联版 · 静态延伸 · 简洁弱化版） — 从 hackathon/index.html 抽出的完整代码
+  奖项区（可切换样式：data-mode = still 静态延伸 / line 极简光轨 / silk 丝绸光带 / orbit 星轨圆弧） — 从 hackathon/index.html 抽出的完整代码
   1) CSS   2) HTML   3) JS
   「提交内容」上方加大的留白：.pzf { margin-bottom: clamp(100px, 10vw, 160px); }
   依赖：页面里已有的 reduceMotion 变量（下面 JS 顶部给了兜底）、标题字体 PMZD Title。
@@ -17,6 +17,7 @@
 .pzf { margin-bottom: clamp(100px, 10vw, 160px); }   /* breathing room between the bottom tube run and 提交内容 */
 .pzf-tube { position: absolute; left: 0; top: -320px; height: calc(100% + 440px); width: 100%; pointer-events: none; z-index: 0; }   /* JS widens it to the viewport; 320/440px of room for the tube's ends */
 .pzf-tube { opacity: .85; }
+.pzf[data-mode="orbit"] .pzf-ranks .pzf-row + .pzf-row { border-top: 1px solid rgba(255,255,255,.07); }
 .pzf-tube canvas { position: fixed; top: 0; left: 0; display: block; width: 100vw; height: 100vh; visibility: hidden; }   /* one viewport-sized canvas: only on-screen pixels are ever drawn */
 .pzf-tube.on canvas { visibility: visible; }
 .pzf-tube .tb-glow { image-rendering: auto; }   /* soft light: drawn at ⅓ resolution and upscaled, so the browser's smoothing does the blur for free */
@@ -135,6 +136,8 @@ const reduceMotion = window.reduceMotion ?? matchMedia('(prefers-reduced-motion:
   // data-mode="still" on #pzFlow: the light inside stays put and only the tubes grow, each strand on its own (root-like) —
   // otherwise the light keeps flowing and the whole bundle is revealed as one
   // data-mode="splat": a light streak with a ribbon of Gaussian particles instead of tubes; data-mode="plate": a twisting ribbon of metal plates
+  // minimal looks: data-mode="line" (one hairline light trail), "silk" (a wide soft ribbon of light), "orbit" (large orbit arcs round the amounts)
+  const MIN = ['line', 'silk', 'orbit'].includes(flow.dataset.mode) ? flow.dataset.mode : '';
   const SPLAT = flow.dataset.mode === 'splat' || flow.dataset.mode === 'plate';
   const STILL = flow.dataset.mode === 'still', LAG = [0, 80, 150], TAIL = 120;
   const LUM = [.75, .4, 0];                             // still mode: per-tube light strength (bright and dim mixed; 0 = plain grey glass, unlit)
@@ -237,6 +240,7 @@ const reduceMotion = window.reduceMotion ?? matchMedia('(prefers-reduced-motion:
       return { si, d: t * len, x, y, ang, s, cw, ch, w };
     });
     if (SPLAT) buildSplats(W);
+    if (MIN) buildMin(W, H);
     // reveal lookup: running max of y along the spine (monotonic) for scroll → length
     samples = []; for (let i = 0, m = -1e9; i < pts.length; i++) samples.push(m = Math.max(m, pts[i][1]));
     rowY = items.map(it => { const q = rel(it); return q.top + q.h * .5; });
@@ -320,6 +324,50 @@ const reduceMotion = window.reduceMotion ?? matchMedia('(prefers-reduced-motion:
       ctx.beginPath(); ctx.moveTo(q0[0], q0[1]); ctx.lineTo(q1[0], q1[1]); ctx.moveTo(q3[0], q3[1]); ctx.lineTo(q2[0], q2[1]); ctx.stroke();
       if (!grey) { gtx.fillStyle = `rgba(130,98,255,${((.18 + .5 * spec) * f).toFixed(2)})`; gtx.beginPath(); gtx.moveTo(q0[0], q0[1]); gtx.lineTo(q1[0], q1[1]); gtx.lineTo(q2[0], q2[1]); gtx.lineTo(q3[0], q3[1]); gtx.closePath(); gtx.fill(); }
     }
+    ctx.setTransform(DPR, 0, 0, DPR, 0, 0);
+  }
+  // ---- minimal looks ----
+  let silkPaths = [], orbits = [], headImg = null;
+  function buildMin(W, H) {
+    headImg = sprite('#e9e3ff');
+    silkPaths = []; for (let i = -10; i <= 10; i++) silkPaths.push([offPath(i * 5.5 * k), Math.exp(-(i * i) / 30), i]);   // gaussian profile across the ribbon
+    const hero = rel(flow.querySelector('.pzf-big')), aws = rel(flow.querySelector('.pzf-aws'));
+    orbits = W < 760
+      ? [{ cx: W * .7, cy: hero.top + hero.h * .5, rx: [W * .55, W * .4], tilt: -.2, a0: 2.2 }]
+      : [{ cx: W * .62, cy: hero.top + hero.h * .5, rx: [W * .5, W * .38, W * .27], tilt: -.16, a0: 2.4 },     // round 新物种奖 / ¥100,000
+         { cx: W * .5, cy: aws.top - 150, rx: [W * .6, W * .46], tilt: .06, a0: -.6 }];                         // a wider, fainter pair over the single awards
+  }
+  function minFrame(time, fr, cr) {
+    const ox = fr.left - cr.left, oy = fr.top - cr.top, done = shown >= len - .5, L = done ? len + 10 : shown;
+    gtx.setTransform(GS, 0, 0, GS, 0, 0); gtx.translate(ox, oy); gtx.lineCap = ctx.lineCap = 'round';
+    ctx.translate(ox, oy);
+    if (MIN === 'line') {
+      gtx.setLineDash([L, 1e6]); gtx.strokeStyle = 'rgba(122,92,255,.22)'; gtx.lineWidth = 12 * k; gtx.stroke(spinePath);      // faint glow under the line
+      ctx.setLineDash([L, 1e6]); ctx.strokeStyle = 'rgba(226,222,240,.5)'; ctx.lineWidth = 1; ctx.stroke(spinePath);            // the hairline
+      ctx.setLineDash([Math.max(0, L - 14 * k), 1e6]); ctx.strokeStyle = 'rgba(150,124,255,.3)'; ctx.lineWidth = .8; ctx.stroke(silkPaths[12][0]);   // a second, violet hairline beside it
+    } else if (MIN === 'silk') {
+      gtx.globalCompositeOperation = 'lighter'; gtx.setLineDash([L, 1e6]);
+      silkPaths.forEach(([pp, a, i]) => { gtx.strokeStyle = i < 0 ? `rgba(150,150,170,${(a * .07).toFixed(3)})` : `rgba(122,92,255,${(a * .12).toFixed(3)})`; gtx.lineWidth = 10 * k; gtx.stroke(pp); });
+      gtx.globalCompositeOperation = 'source-over';
+      ctx.setLineDash([L, 1e6]); ctx.strokeStyle = 'rgba(236,232,250,.32)'; ctx.lineWidth = .8; ctx.stroke(silkPaths[4][0]);   // one crisp silk edge
+    } else {
+      orbits.forEach((o, gi) => {
+        const sy = o.cy + oy, p = Math.max(0, Math.min(1, (innerHeight * .9 - sy) / (innerHeight * .55)));   // each group draws itself as it scrolls in
+        if (p <= 0) return;
+        o.rx.forEach((rx, j) => {
+          const ry = rx * .3, sweep = p * Math.PI * 2 * (1 - j * .04);
+          ctx.setLineDash([]); ctx.strokeStyle = `rgba(210,206,226,${(gi ? .16 : .22) - j * .03})`; ctx.lineWidth = 1;
+          ctx.beginPath(); ctx.ellipse(o.cx, o.cy, rx, ry, o.tilt, o.a0 + j * .7, o.a0 + j * .7 + sweep); ctx.stroke();
+          const t = o.a0 + j * .7 + sweep * .999 + (p >= 1 ? time * (.05 + j * .02) : 0);                       // a small light travelling each orbit
+          const ct = Math.cos(o.tilt), st = Math.sin(o.tilt), ex = rx * Math.cos(t), ey = ry * Math.sin(t), x = o.cx + ex * ct - ey * st, y = o.cy + ex * st + ey * ct;
+          gtx.setLineDash([]); gtx.strokeStyle = `rgba(122,92,255,${gi ? .1 : .16})`; gtx.lineWidth = 6 * k;
+          gtx.beginPath(); gtx.ellipse(o.cx, o.cy, rx, ry, o.tilt, t - .5, t); gtx.stroke();
+          const r = (gi ? 14 : 18) * k; ctx.globalCompositeOperation = 'lighter'; ctx.globalAlpha = gi ? .5 : .75; ctx.drawImage(headImg, x - r, y - r, r * 2, r * 2); ctx.globalAlpha = 1; ctx.globalCompositeOperation = 'source-over';
+        });
+      });
+    }
+    gtx.setLineDash([]); ctx.setLineDash([]);
+    if (MIN !== 'orbit' && !done) { const [x, y] = posAt(shown, 0), r = 22 * k; ctx.globalCompositeOperation = 'lighter'; ctx.globalAlpha = .8; ctx.drawImage(headImg, x - r, y - r, r * 2, r * 2); ctx.globalAlpha = 1; ctx.globalCompositeOperation = 'source-over'; }
     ctx.setTransform(DPR, 0, 0, DPR, 0, 0);
   }
   let DPR = 1; const GS = .33;                                      // glow canvas scale
@@ -418,7 +466,7 @@ const reduceMotion = window.reduceMotion ?? matchMedia('(prefers-reduced-motion:
     if (shown > 1) {
       ctx.translate(fr.left - cr.left, fr.top - cr.top);                       // world → this viewport-sized canvas
       const wy = cr.top - fr.top, sy = Math.max(0, (wy + EX_T) * LDPR), sh = Math.min(layer.height - sy, innerHeight * LDPR);   // blit only the on-screen slice
-      if (SPLAT) { ctx.setTransform(DPR, 0, 0, DPR, 0, 0); (PLATE ? plateFrame : splatFrame)(time, fr, cr); } else {
+      if (MIN) { ctx.setTransform(DPR, 0, 0, DPR, 0, 0); minFrame(time, fr, cr); } else if (SPLAT) { ctx.setTransform(DPR, 0, 0, DPR, 0, 0); (PLATE ? plateFrame : splatFrame)(time, fr, cr); } else {
       if (sh > 0) ctx.drawImage(layer, 0, sy, layer.width, sh, -flowLeft, sy / LDPR - EX_T, layer.width / LDPR, sh / LDPR);
       ctx.lineCap = 'round'; ctx.lineJoin = 'round';
       if (STILL) { stillFrame(time, fr, cr); } else {
