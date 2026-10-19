@@ -191,13 +191,13 @@ button { font-family: inherit; }
 /* the beast clip (hero-seq) carries a matte strip under the picture; script.js sizes the element
    so only the picture shows (cover-fit) and the strip falls outside the clipped box */
 .hero-cinematic-bg video.hero-seq { inset: auto; left: 0; top: 0; width: 100%; height: auto; object-fit: fill; }
-/* the beast cut-out, drawn above the title but below the subtitle and button */
-.hero-fg { position: absolute; inset: 0; width: 100%; height: 100%; z-index: 3; pointer-events: none; }
+/* the beast cut-out, drawn above all the hero text; clicks pass through to the CTA */
+.hero-fg { position: absolute; inset: 0; width: 100%; height: 100%; z-index: 5; pointer-events: none; }
 .hero-cinematic-overlay {
   position: absolute; inset: 0; z-index: 1;
   background: linear-gradient(180deg, rgba(8,9,11,.6) 0%, rgba(8,9,11,.1) 32%, rgba(8,9,11,.15) 62%, rgba(8,9,11,.8) 100%);
 }
-/* no z-index here, so the title (2), the beast canvas (3) and the subtitle/button (4) interleave.
+/* no z-index here, so the hero text (2-4) and the beast canvas (5) share one stacking context.
    script.js pins the block so the title sits where the beast's leap clears it and its landing
    covers it (--hero-title-top / --hero-title-size, in step with the video's cover-fit) */
 .hero-cinematic-content {

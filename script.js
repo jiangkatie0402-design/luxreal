@@ -167,8 +167,8 @@ if (heroBgVideos.length > 0) {
 // Each frame of the beast clip (hero-seq) is 1920x1632: the 1920x1080 picture on top and a
 // 960x540 matte of the beast at y=1088 (16px-aligned so compression doesn't bleed picture
 // into it). The <video> is sized so only the picture shows; while it plays, a WebGL canvas
-// above the title redraws just the matted pixels from the same frame, darkened by the same
-// gradient as .hero-cinematic-overlay, so the cut-out lines up and matches exactly.
+// above all the hero text redraws just the matted pixels from the same frame, darkened by the
+// same gradient as .hero-cinematic-overlay, so the cut-out lines up and matches exactly.
 const heroSeq = document.querySelector('.hero-seq');
 const heroFg = document.querySelector('.hero-fg');
 if (heroSeq && heroFg) {
@@ -176,8 +176,9 @@ if (heroSeq && heroFg) {
   // title box in picture pixels: at the top of the leap the beast's feet pass just above row 580,
   // and the landed beast covers rows ~520-650 across the middle 770px, hiding the title fully
   const TITLE_TOP = 580, TITLE_SIZE = 66, TITLE_MAX_W = 760;
-  // on the way up the beast stays behind the title; it comes in front from frame 68, the first
-  // frame of the leap where it is entirely above the title, so the swap itself can't be seen
+  // on the way up the beast stays behind the text; it comes in front from frame 68, the first
+  // frame of the leap where it is entirely above the title and clear of the subtitle and CTA,
+  // so the swap itself can't be seen
   const FRONT_FROM = 67.5 / 24;
   const heroBox = heroSeq.parentElement;
   const heroHeader = heroBox.parentElement;
