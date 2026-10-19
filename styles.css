@@ -197,8 +197,14 @@ button { font-family: inherit; }
   position: absolute; inset: 0; z-index: 1;
   background: linear-gradient(180deg, rgba(8,9,11,.6) 0%, rgba(8,9,11,.1) 32%, rgba(8,9,11,.15) 62%, rgba(8,9,11,.8) 100%);
 }
-/* no z-index here, so the title (2), the beast canvas (3) and the subtitle/button (4) interleave */
-.hero-cinematic-content { position: relative; max-width: 900px; }
+/* no z-index here, so the title (2), the beast canvas (3) and the subtitle/button (4) interleave.
+   script.js pins the block so the title sits where the beast's leap clears it and its landing
+   covers it (--hero-title-top / --hero-title-size, in step with the video's cover-fit) */
+.hero-cinematic-content {
+  position: absolute; left: 0; right: 0; margin: 0 auto; padding: 0 16px; max-width: 900px;
+  top: var(--hero-title-top, 50%);
+}
+.hero-cinematic-content > .hero-cinematic-title { font-size: var(--hero-title-size, clamp(36px, 4vw, 64px)); }
 .hero-cinematic-content > * { position: relative; z-index: 4; opacity: 0; }
 .hero-cinematic-content > .hero-cinematic-title { z-index: 2; }
 /* an animation rather than a transition, so it doesn't clash with the CTA's own hover transition */

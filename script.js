@@ -173,19 +173,37 @@ const heroSeq = document.querySelector('.hero-seq');
 const heroFg = document.querySelector('.hero-fg');
 if (heroSeq && heroFg) {
   const PIC_W = 1920, PIC_H = 1080, FRAME_H = 1632, MATTE_Y = 1088, MATTE_W = 960, MATTE_H = 540;
+  // title box in picture pixels: at the top of the leap the beast's feet pass just above row 580,
+  // and the landed beast covers rows ~520-650 across the middle 770px, hiding the title fully
+  const TITLE_TOP = 580, TITLE_SIZE = 66, TITLE_MAX_W = 760;
+  // on the way up the beast stays behind the title; it comes in front from frame 68, the first
+  // frame of the leap where it is entirely above the title, so the swap itself can't be seen
+  const FRONT_FROM = 67.5 / 24;
   const heroBox = heroSeq.parentElement;
+  const heroHeader = heroBox.parentElement;
+  const heroTitle = heroHeader.querySelector('.hero-cinematic-title');
   const geo = { left: 0, top: 0, w: 0, h: 0, picW: PIC_W, picH: PIC_H };
   function layoutHeroSeq() {
     const w = heroBox.clientWidth, h = heroBox.clientHeight;
     const scale = Math.max(w / PIC_W, h / PIC_H);
     Object.assign(geo, { w, h, picW: PIC_W * scale, picH: PIC_H * scale, left: (w - PIC_W * scale) / 2, top: (h - PIC_H * scale) / 2 });
     Object.assign(heroSeq.style, { width: `${geo.picW}px`, height: `${FRAME_H * scale}px`, left: `${geo.left}px`, top: `${geo.top}px` });
+    if (heroTitle) {
+      let size = TITLE_SIZE * scale;
+      heroHeader.style.setProperty('--hero-title-size', `${size}px`);
+      // keep the title inside both the screen and the band the landed beast covers
+      const range = document.createRange(); range.selectNodeContents(heroTitle);
+      const maxW = Math.min(w - 32, TITLE_MAX_W * scale), titleW = range.getBoundingClientRect().width;
+      if (titleW > maxW) { size *= maxW / titleW; heroHeader.style.setProperty('--hero-title-size', `${size}px`); }
+      heroHeader.style.setProperty('--hero-title-top', `${geo.top + TITLE_TOP * scale}px`);
+    }
     const dpr = Math.min(window.devicePixelRatio || 1, 2);
     heroFg.width = Math.round(w * dpr);
     heroFg.height = Math.round(h * dpr);
   }
   layoutHeroSeq();
   window.addEventListener('resize', layoutHeroSeq);
+  if (document.fonts) document.fonts.ready.then(layoutHeroSeq); // title width changes once the display font loads
 
   const gl = heroFg.getContext('webgl', { premultipliedAlpha: true, antialias: false });
   if (gl) {
@@ -228,8 +246,9 @@ if (heroSeq && heroFg) {
         gl.clearColor(0, 0, 0, 0); gl.clear(gl.COLOR_BUFFER_BIT);
         cleared = true;
       }
-      function drawHeroFg() {
-        if (!heroSeq.classList.contains('active') || heroSeq.readyState < 2) { clearHeroFg(); return; }
+      function drawHeroFg(mediaTime) {
+        const t = mediaTime != null ? mediaTime : heroSeq.currentTime;
+        if (!heroSeq.classList.contains('active') || heroSeq.readyState < 2 || t < FRONT_FROM) { clearHeroFg(); return; }
         cleared = false;
         gl.viewport(0, 0, heroFg.width, heroFg.height);
         gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGB, gl.RGB, gl.UNSIGNED_BYTE, heroSeq);
@@ -239,7 +258,7 @@ if (heroSeq && heroFg) {
       }
       // redraw on every decoded frame so the cut-out stays locked to the picture
       if ('requestVideoFrameCallback' in HTMLVideoElement.prototype) {
-        const onFrame = () => { drawHeroFg(); heroSeq.requestVideoFrameCallback(onFrame); };
+        const onFrame = (now, meta) => { drawHeroFg(meta.mediaTime); heroSeq.requestVideoFrameCallback(onFrame); };
         heroSeq.requestVideoFrameCallback(onFrame);
       } else {
         const tick = () => { if (!heroSeq.paused) drawHeroFg(); requestAnimationFrame(tick); };
