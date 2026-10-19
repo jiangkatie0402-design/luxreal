@@ -500,6 +500,7 @@ html[lang="zh-CN"] .sec-title { letter-spacing: .02em; line-height: 1.22; }
 .pzf { position: relative; padding: 24px 0 200px; }
 .pzf { margin-bottom: clamp(100px, 10vw, 160px); }   /* breathing room between the bottom tube run and 提交内容 */
 .pzf-tube { position: absolute; left: 0; top: -320px; height: calc(100% + 440px); width: 100%; pointer-events: none; z-index: 0; }   /* JS widens it to the viewport; 320/440px of room for the tube's ends */
+.pzf-tube { opacity: .85; }
 .pzf-tube canvas { position: fixed; top: 0; left: 0; display: block; width: 100vw; height: 100vh; visibility: hidden; }   /* one viewport-sized canvas: only on-screen pixels are ever drawn */
 .pzf-tube.on canvas { visibility: visible; }
 .pzf-tube .tb-glow { image-rendering: auto; }   /* soft light: drawn at ⅓ resolution and upscaled, so the browser's smoothing does the blur for free */
@@ -522,7 +523,7 @@ html[lang="zh-CN"] .sec-title { letter-spacing: .02em; line-height: 1.22; }
 .pzf-ranks .pzf-row { padding: 18px 0; }
 .pzf-ranks { width: min(520px, 46%); }
 .pzf-row { display: flex; align-items: center; justify-content: space-between; gap: 24px; padding: 22px 0; }
-.pzf-name { font-size: clamp(28px, 2.9vw, 44px); font-weight: 500; letter-spacing: -.01em; line-height: 1.1; color: #34343c; transition: color .6s; }
+.pzf-name { font-size: clamp(28px, 2.9vw, 44px); font-weight: 500; letter-spacing: -.01em; line-height: 1.1; color: #4a4a55; transition: color .6s; }
 html[lang="zh-CN"] .pzf-name { font-family: var(--font-title); font-weight: 400; letter-spacing: .02em; }
 .tb-flow { animation: tbFlow 7s linear infinite paused; }
 .pzf-tube.run .tb-flow { animation-play-state: running; }
@@ -532,13 +533,13 @@ html[lang="zh-CN"] .pzf-name { font-family: var(--font-title); font-weight: 400;
 @keyframes tbSpeck { 0%, 100% { opacity: .15; } 50% { opacity: .9; } }
 @media (prefers-reduced-motion: reduce) { .tb-flow, .tb-speck { animation: none; } }
 .pzf-amt { display: flex; align-items: baseline; gap: 10px; flex-wrap: wrap; justify-content: flex-end; text-align: right; }
-.pzf-amt b { font-size: clamp(22px, 2vw, 30px); font-weight: 600; color: #44444c; transition: color .6s; }
+.pzf-amt b { font-size: clamp(22px, 2vw, 30px); font-weight: 600; color: #5c5c66; transition: color .6s; }
 .pzf-amt i { font-style: normal; font-size: 15px; color: var(--text-muted); }
 .pzf-amt small { flex-basis: 100%; font-size: 13px; color: var(--text-muted); }
 .pzf-row.sm { padding: 16px 0; display: grid; grid-template-columns: minmax(220px, 300px) 1fr auto; align-items: baseline; }
 .pzf-row.sm .pzf-name { font-size: clamp(18px, 1.6vw, 24px); }
 .pzf-name em { font-style: normal; font-size: .5em; color: var(--text-muted); margin-left: 10px; letter-spacing: 0; }
-.pzf-list { font-size: clamp(14px, 1.15vw, 17px); line-height: 1.6; color: #34343c; transition: color .6s; }
+.pzf-list { font-size: clamp(14px, 1.15vw, 17px); line-height: 1.6; color: #4a4a55; transition: color .6s; }
 .pzf-list em { font-style: normal; font-size: .8em; color: var(--text-muted); }
 .pzf-row.sm .pzf-amt b { font-size: clamp(17px, 1.4vw, 21px); }
 /* single awards: three award lists side by side — group, amount, then the full award names */
@@ -1570,7 +1571,7 @@ body.modal-open { overflow: hidden; }
     </div>
 
     <!-- prize flow: one KV-style glass tube threads 特别奖 → 一二三等奖 → 单项奖 and draws itself as you scroll -->
-    <div class="pzf" id="pzFlow" data-mode="splat">
+    <div class="pzf" id="pzFlow" data-mode="still">
       <div class="pzf-tube" aria-hidden="true"><canvas class="tb-glow"></canvas><canvas class="tb-sharp"></canvas></div>
       <div class="pzf-hero pzf-item">
         <h3 class="pzf-name pzf-top" data-i18n="p0.n">3D AI 新物种奖</h3>
@@ -2185,22 +2186,19 @@ const JUDGES = [];
   // otherwise the light keeps flowing and the whole bundle is revealed as one
   // data-mode="splat": a light streak with a ribbon of Gaussian particles instead of tubes; data-mode="plate": a twisting ribbon of metal plates
   const SPLAT = flow.dataset.mode === 'splat' || flow.dataset.mode === 'plate';
-  const STILL = flow.dataset.mode === 'still', LAG = [0, 60, 110, 170, 90, 210], TAIL = 130;
-  const LUM = [1, .4, .85, 0, .6, 0];                             // still mode: per-tube light strength (bright and dim mixed; 0 = plain grey glass, unlit)
+  const STILL = flow.dataset.mode === 'still', LAG = [0, 80, 150], TAIL = 120;
+  const LUM = [.75, .4, 0];                             // still mode: per-tube light strength (bright and dim mixed; 0 = plain grey glass, unlit)
   // lit tip (still mode): [distance behind the tip as a fraction of the tail, segment length px] per strand
   const TIP = [[[.06, 7], [.2, 12], [.38, 5]], [[.08, 9], [.3, 5]], [[.05, 5], [.17, 8], [.33, 4]], [[.1, 6], [.26, 4]], [[.07, 5], [.22, 7]], [[.12, 4], [.3, 6]]];   // still mode: how far each strand trails the lead; tapering tail length (px)
   const EX_T = 320, EX_B = 120;                                   // wrapper reaches 320px above / 120px below the section
   // strands run strictly parallel: px offset along the normal, glass width, dim light dashes, flow period (s); all dash sums = 380
   const STRANDS = [
-    { off: 0, w: 18, dim: [140, 60, 80, 100], hot: [56, 30, 14, 280], dur: 7 },
-    { off: -22, w: 10, dim: [90, 50, 120, 120], hot: [40, 24, 10, 306], dur: 9.5 },
-    { off: 21, w: 6, dim: [60, 80, 100, 140], hot: [18, 22, 18, 322], dur: 6 },
-    { off: -38, w: 3, dim: [50, 110, 70, 150], hot: [12, 20, 12, 336], dur: 11 },
-    { off: 35, w: 1.6, dim: [40, 140, 60, 140], hot: [10, 26, 10, 334], dur: 10 },
-    { off: -50, w: 1.1, dim: [30, 170, 40, 140], hot: [8, 30, 8, 334], dur: 12 }
+    { off: 0, w: 7, dim: [120, 110, 60, 90], hot: [26, 60, 8, 286], dur: 7 },              // quiet on purpose: the awards are the focus
+    { off: -15, w: 3, dim: [60, 160, 40, 120], hot: [10, 40, 6, 324], dur: 9.5 },
+    { off: 13, w: 1.2, dim: [40, 180, 40, 120], hot: [8, 30, 8, 334], dur: 11 }
   ];
   // sleeves: [strand, position (0–1 along the tube), height px, rings]
-  const SLEEVES = [[0, .12, 36, 4], [0, .5, 34, 3], [0, .86, 36, 4], [1, .3, 24, 3], [1, .68, 22, 2], [2, .22, 15, 2], [2, .78, 15, 2], [3, .42, 9, 1], [3, .93, 9, 1], [4, .6, 6, 1]];
+  const SLEEVES = [];                                             // none: kept minimal
   let sleeves = [];
   const rel = el => { const a = el.getBoundingClientRect(), b = flow.getBoundingClientRect(); return { top: a.top - b.top, bottom: a.bottom - b.top, h: a.height }; };
   // uniform B-spline through the waypoints (clamped) → cubic Bézier segments, sampled to an evenly spaced polyline
@@ -2246,18 +2244,18 @@ const JUDGES = [];
     layer.width = Math.round(LW * LDPR); layer.height = Math.round(LH * LDPR);
     const c = layer.getContext('2d'); c.setTransform(LDPR, 0, 0, LDPR, 0, 0); c.clearRect(0, 0, LW, LH); c.translate(flowLeft, EX_T);
     c.lineCap = c.lineJoin = 'round';
-    c.save(); if ('filter' in c) { c.filter = `blur(${Math.round(16 * k)}px)`; c.strokeStyle = 'rgba(106,72,255,.09)'; c.lineWidth = 90 * k; c.stroke(spinePath); } c.restore();   // haze (skipped where canvas filters are unsupported)
+    c.save(); if ('filter' in c) { c.filter = `blur(${Math.round(16 * k)}px)`; c.strokeStyle = 'rgba(106,72,255,.05)'; c.lineWidth = 60 * k; c.stroke(spinePath); } c.restore();   // haze (skipped where canvas filters are unsupported)
     let seed = 7; const rnd = () => (seed = (seed * 16807) % 2147483647) / 2147483647;
     twinkle = [];
-    for (let n = 0; n < (W < 760 ? 50 : 120); n++) {                  // specks: most baked in, a few twinkle live
-      const [x, y] = at((rnd() - .5) * 170 * k, rnd()), rr = (.5 + rnd() * 1.2) * k, white = rnd() > .35;
+    for (let n = 0; n < (W < 760 ? 16 : 36); n++) {                  // specks: most baked in, a few twinkle live
+      const [x, y] = at((rnd() - .5) * 110 * k, rnd()), rr = (.5 + rnd() * 1.2) * k, white = rnd() > .35;
       if (n % 4 === 0) { twinkle.push([x, y, rr, white, rnd() * 6.28, 1.2 + rnd() * 1.6]); continue; }
-      const gr = c.createRadialGradient(x, y, 0, x, y, rr * 4.5); gr.addColorStop(0, 'rgba(185,164,255,.32)'); gr.addColorStop(1, 'rgba(106,72,255,0)');
+      const gr = c.createRadialGradient(x, y, 0, x, y, rr * 4.5); gr.addColorStop(0, 'rgba(185,164,255,.18)'); gr.addColorStop(1, 'rgba(106,72,255,0)');
       c.fillStyle = gr; c.beginPath(); c.arc(x, y, rr * 4.5, 0, 6.29); c.fill();
-      c.fillStyle = white ? 'rgba(255,255,255,.7)' : 'rgba(217,207,255,.6)'; c.beginPath(); c.arc(x, y, rr, 0, 6.29); c.fill();
+      c.fillStyle = white ? 'rgba(255,255,255,.45)' : 'rgba(217,207,255,.4)'; c.beginPath(); c.arc(x, y, rr, 0, 6.29); c.fill();
     }
     glass = STRANDS.map((st, si) => {                                // glass: dark body, crisp rims, a specular streak
-      const o = st.off * k, w = st.w * k, g = [[strandPaths[si], w >= 6 ? 'rgba(46,34,104,.42)' : 'rgba(70,64,100,.4)', w], [offPath(o - w / 2 + .5), 'rgba(238,236,250,.85)', Math.max(.7, 1.1 * k)], [offPath(o + w / 2 - .5), 'rgba(176,166,220,.5)', Math.max(.5, .8 * k)]];
+      const o = st.off * k, w = st.w * k, g = [[strandPaths[si], w >= 6 ? 'rgba(46,38,90,.3)' : 'rgba(70,66,92,.3)', w], [offPath(o - w / 2 + .5), 'rgba(238,236,250,.55)', Math.max(.7, 1 * k)], [offPath(o + w / 2 - .5), 'rgba(176,166,220,.5)', Math.max(.5, .8 * k)]];
       if (w > 5) g.push([offPath(o - w * .22), 'rgba(255,255,255,.3)', Math.max(.7, w * .1)]);
       if (w < 3) g.splice(0, 3, [strandPaths[si], 'rgba(205,200,225,.55)', Math.max(.6, w * .55)]);   // hair-thin tubes: one fine glass line
       if (STILL && !LUM[si]) g.forEach(e => { e[1] = e[1].replace(/rgba\((\d+),(\d+),(\d+),/, (m, r, gg, b) => { const v = Math.round((+r + +gg + +b) / 3); return `rgba(${v},${v},${v},`; }); });   // unlit tubes: neutral grey
@@ -2430,17 +2428,17 @@ const JUDGES = [];
       }
       if (!LUM[si]) return;                                                  // plain grey tube: no light inside
       ctx.globalAlpha = gtx.globalAlpha = LUM[si];                          // light strength differs per tube: some bright, some barely lit
-      const dimD = cut(st.dim, ph, Ls); gtx.setLineDash(dimD); gtx.strokeStyle = 'rgba(125,98,255,.3)'; gtx.lineWidth = Math.max(2.5, w * .75); gtx.stroke(p);
-      if (w >= 6) { ctx.setLineDash(dimD); ctx.strokeStyle = 'rgba(132,104,255,.3)'; ctx.lineWidth = w * .45; ctx.stroke(p); }   // thick tubes: a visible neon fill
+      const dimD = cut(st.dim, ph, Ls); gtx.setLineDash(dimD); gtx.strokeStyle = 'rgba(125,98,255,.16)'; gtx.lineWidth = Math.max(2.5, w * .75); gtx.stroke(p);
+      if (w >= 6) { ctx.setLineDash(dimD); ctx.strokeStyle = 'rgba(132,104,255,.18)'; ctx.lineWidth = w * .45; ctx.stroke(p); }   // thick tubes: a visible neon fill
       const hot = cut(st.hot, phH, Ls);
-      gtx.setLineDash(hot); gtx.strokeStyle = 'rgba(130,98,255,.55)'; gtx.lineWidth = Math.max(4, Math.min(w * 1.6, 22)); gtx.stroke(p);
+      gtx.setLineDash(hot); gtx.strokeStyle = 'rgba(130,98,255,.32)'; gtx.lineWidth = Math.max(4, Math.min(w * 1.6, 22)); gtx.stroke(p);
       ctx.setLineDash(hot); ctx.strokeStyle = '#b9a6ff'; ctx.lineWidth = Math.max(1.1, w * .7); ctx.stroke(p);
       ctx.strokeStyle = '#fff'; ctx.lineWidth = Math.max(.7, w * .32); ctx.stroke(p);
       if (growing) {                                                         // lit tip: a few short bright segments riding just behind the growing end
         const tl = Ls - body;
         TIP[si % TIP.length].forEach(([dd, sl], q) => {
           const d = dd * tl, a = Ls - d, f = d / tl, tw = Math.max(.6, w * (.08 + .3 * f));
-          const pulse = .75 + .25 * Math.sin(time * 3.2 + si * 1.7 + q * 2.1), dash = [0, Math.max(0, a - sl * k), sl * k, 1e6];
+          const pulse = .5 + .2 * Math.sin(time * 3.2 + si * 1.7 + q * 2.1), dash = [0, Math.max(0, a - sl * k), sl * k, 1e6];
           gtx.setLineDash(dash); gtx.strokeStyle = `rgba(138,104,255,${(.7 * pulse).toFixed(2)})`; gtx.lineWidth = Math.max(5, tw * 4); gtx.stroke(p);
           ctx.lineCap = 'butt'; ctx.setLineDash(dash);
           ctx.strokeStyle = `rgba(190,170,255,${pulse.toFixed(2)})`; ctx.lineWidth = Math.max(1.2, tw * 2); ctx.stroke(p);
