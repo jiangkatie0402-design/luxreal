@@ -222,7 +222,13 @@ const reduceMotion = window.reduceMotion ?? matchMedia('(prefers-reduced-motion:
   }
   const STEP = 4;
   let glass = [], pts = [], len = 0, k = 1, strandPaths = [], spinePath = null, layer = null, LDPR = 1, twinkle = [], vw = 0, flowLeft = 0;
-  const offPath = o => { const p = new Path2D(); pts.forEach(([x, y, nx, ny], i) => i ? p.lineTo(x + nx * o, y + ny * o) : p.moveTo(x + nx * o, y + ny * o)); return p; };
+  // offset path drawn as a smooth curve: each sample is a control point and the curve passes through the midpoints,
+  // so thin rims have no tiny corner at every sample (a plain polyline reads as a stepped line at 1×)
+  const smoothPath = (o, i0, i1) => { const p = new Path2D(), P = i => [pts[i][0] + pts[i][2] * o, pts[i][1] + pts[i][3] * o];
+    let [ax, ay] = P(i0); p.moveTo(ax, ay);
+    for (let i = i0 + 1; i < i1; i++) { const [bx, by] = P(i), [cx, cy] = P(i + 1); p.quadraticCurveTo(bx, by, (bx + cx) / 2, (by + cy) / 2); }
+    const [ex, ey] = P(i1); p.lineTo(ex, ey); return p; };
+  const offPath = o => smoothPath(o, 0, pts.length - 1);
   const at = (o, t) => { const i = Math.max(1, Math.min(pts.length - 2, Math.round(t * (pts.length - 1)))), [x, y, nx, ny] = pts[i], [x2, y2] = pts[i + 1]; return [x + nx * o, y + ny * o, Math.atan2(y2 - y, x2 - x)]; };
   function build() {
     const W = flow.clientWidth, H = flow.clientHeight; k = W < 760 ? .6 : 1;
@@ -258,9 +264,9 @@ const reduceMotion = window.reduceMotion ?? matchMedia('(prefers-reduced-motion:
       c.fillStyle = white ? 'rgba(255,255,255,.58)' : 'rgba(217,207,255,.5)'; c.beginPath(); c.arc(x, y, rr, 0, 6.29); c.fill();
     }
     glass = STRANDS.map((st, si) => {                                // glass: dark body, crisp rims, a specular streak
-      const o = st.off * k, w = st.w * k, g = [[strandPaths[si], w >= 6 ? 'rgba(46,36,98,.36)' : 'rgba(70,65,96,.35)', w, o], [offPath(o - w / 2 + .5), 'rgba(242,240,252,.85)', Math.max(.7, 1 * k), o - w / 2 + .5], [offPath(o + w / 2 - .5), 'rgba(184,174,228,.62)', Math.max(.5, .8 * k), o + w / 2 - .5]];   // [path, colour, width, offset]
+      const o = st.off * k, w = st.w * k, g = [[strandPaths[si], w >= 6 ? 'rgba(46,36,98,.36)' : 'rgba(70,65,96,.35)', w, o], [offPath(o - w / 2 + .6), 'rgba(242,240,252,.72)', Math.max(1, 1.35 * k), o - w / 2 + .6], [offPath(o + w / 2 - .6), 'rgba(184,174,228,.52)', Math.max(.9, 1.15 * k), o + w / 2 - .6]];   // [path, colour, width, offset]
       if (w > 5) g.push([offPath(o - w * .22), 'rgba(255,255,255,.3)', Math.max(.7, w * .1), o - w * .22]);
-      if (w < 3) g.splice(0, 3, [strandPaths[si], 'rgba(215,212,232,.7)', Math.max(.7, w * .55), o]);   // hair-thin tubes: one fine glass line
+      if (w < 3) g.splice(0, 3, [strandPaths[si], 'rgba(215,212,232,.55)', Math.max(1.4, w * .75), o]);   // hair-thin tubes: one fine glass line
       if (STILL && !LUM[si]) g.forEach(e => { e[1] = e[1].replace(/rgba\((\d+),(\d+),(\d+),/, (m, r, gg, b) => { const v = Math.round((+r + +gg + +b) / 3); return `rgba(${v},${v},${v},`; }); });   // unlit tubes: neutral grey
       return g;
     });
@@ -453,7 +459,7 @@ const reduceMotion = window.reduceMotion ?? matchMedia('(prefers-reduced-motion:
   // only the stretch of tube that is on screen is stroked each frame (the full path is ~3× longer); dash patterns stay
   // continuous because every dash is offset by the stretch's start distance d0
   let smin = [];
-  function subPath(o, i0, i1) { const p = new Path2D(); for (let i = i0; i <= i1; i++) { const [x, y, nx, ny] = pts[i]; i > i0 ? p.lineTo(x + nx * o, y + ny * o) : p.moveTo(x + nx * o, y + ny * o); } return p; }
+  const subPath = (o, i0, i1) => smoothPath(o, i0, i1);
   function stillFrame(time, fr, cr) {
     const oy = fr.top - cr.top, yT = -oy - 160, yB = -oy + innerHeight + 160;
     let i0 = 0, i1 = pts.length - 1; while (i0 < i1 && samples[i0] < yT) i0++; while (i1 > i0 && smin[i1] > yB) i1--;
