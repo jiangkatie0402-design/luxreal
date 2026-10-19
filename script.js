@@ -176,14 +176,12 @@ const showcaseVideos = [...document.querySelectorAll('.showcase-video')];
 const showcaseTabs = [...document.querySelectorAll('.showcase-tab')];
 const showcaseInfos = document.querySelectorAll('.showcase-info');
 const showcaseControls = document.querySelector('.showcase-controls');
-const showcaseCount = document.querySelector('.showcase-count');
 const showcaseNext = document.querySelector('.showcase-next');
 if (showcaseVideos.length && showcaseTabs.length) {
   const clipsOf = tab => showcaseVideos.filter(v => v.dataset.tab === tab);
   const clipPosition = {}; // last clip shown per tab, so switching tabs back resumes there
   let activeTab = (showcaseTabs.find(t => t.classList.contains('active')) || showcaseTabs[0]).dataset.videoTo;
   let pauseTimer;
-  const pad = n => String(n).padStart(2, '0');
   function showClip(tab, index) {
     const clips = clipsOf(tab);
     if (!clips.length) return;
@@ -201,7 +199,6 @@ if (showcaseVideos.length && showcaseTabs.length) {
     showcaseVideos.forEach(v => v.classList.toggle('active', v === target));
     showcaseInfos.forEach(info => info.classList.toggle('active', info.dataset.clip === target.dataset.clip));
     if (showcaseControls) showcaseControls.hidden = clips.length < 2;
-    if (showcaseCount) showcaseCount.textContent = `${pad(index + 1)} / ${pad(clips.length)}`;
     clearTimeout(pauseTimer);
     pauseTimer = setTimeout(() => {
       showcaseVideos.forEach(v => { if (v !== target) v.pause(); });
