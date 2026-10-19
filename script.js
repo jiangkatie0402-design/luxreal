@@ -292,3 +292,19 @@ if ('IntersectionObserver' in window) {
   }, { threshold: 0.05 });
   document.querySelectorAll('video').forEach(video => videoIO.observe(video));
 }
+
+// ---------- buffer every showcase clip before it is needed ----------
+// clips start as preload="metadata"; once the section is close, let all of them download so
+// switching with the tab or next button plays from buffer instead of stalling mid-download
+const showcaseSection = document.getElementById('scenarios');
+if (showcaseSection && showcaseVideos.length) {
+  const bufferAll = () => showcaseVideos.forEach(video => { video.preload = 'auto'; });
+  if ('IntersectionObserver' in window) {
+    const preloadIO = new IntersectionObserver((entries) => {
+      if (entries.some(entry => entry.isIntersecting)) { bufferAll(); preloadIO.disconnect(); }
+    }, { rootMargin: '800px 0px' });
+    preloadIO.observe(showcaseSection);
+  } else {
+    bufferAll();
+  }
+}
