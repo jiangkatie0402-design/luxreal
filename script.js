@@ -97,23 +97,41 @@ if (authForm) {
 }
 
 // ---------- hero background video sequence ----------
+// the clips play back to back as a hard cut. Starting playback has some latency, so the next
+// clip (buffered and parked on its first frame) is started hidden a few frames before the
+// current one ends; when it ends the two simply swap, with no frozen frame in between
 const heroBgVideos = document.querySelectorAll('.hero-bg-video');
+const HERO_CUT_LEAD = 0.2; // seconds
 if (heroBgVideos.length > 1) {
   function playHeroBgVideo(index) {
-    heroBgVideos.forEach((video, i) => {
-      video.classList.toggle('active', i === index);
-      if (i === index) {
-        video.currentTime = 0;
-        video.play().catch(() => {});
-      } else {
-        video.pause();
-      }
+    const next = heroBgVideos[index];
+    if (next.paused) next.play().catch(() => {});
+    heroBgVideos.forEach(video => video.classList.toggle('active', video === next));
+    heroBgVideos.forEach(video => {
+      if (video !== next) { video.pause(); video.currentTime = 0; }
     });
   }
   heroBgVideos.forEach((video, i) => {
-    video.addEventListener('ended', () => {
-      playHeroBgVideo((i + 1) % heroBgVideos.length);
-    });
+    const nextIndex = (i + 1) % heroBgVideos.length;
+    const next = heroBgVideos[nextIndex];
+    let cutTimer = null;
+    const cut = () => {
+      clearTimeout(cutTimer); cutTimer = null;
+      if (video.classList.contains('active')) playHeroBgVideo(nextIndex);
+    };
+    if ('requestVideoFrameCallback' in video) {
+      const watch = (now, meta) => {
+        if (video.classList.contains('active')) {
+          const left = video.duration - meta.mediaTime;
+          if (left <= HERO_CUT_LEAD && next.paused) next.play().catch(() => {});
+          // last frame is on screen: hold it for one frame, then cut (the 'ended' event comes late)
+          if (left <= 1.5 / 24 && !cutTimer) cutTimer = setTimeout(cut, 1000 / 24);
+        }
+        video.requestVideoFrameCallback(watch);
+      };
+      video.requestVideoFrameCallback(watch);
+    }
+    video.addEventListener('ended', cut);
   });
 }
 if (heroBgVideos.length > 0) {
@@ -142,6 +160,94 @@ if (heroBgVideos.length > 0) {
       }
     });
     setTimeout(revealHeroContent, 4000);
+  }
+}
+
+// ---------- hero: the beast leaps in front of the title ----------
+// Each frame of the beast clip (hero-seq) is 1920x1632: the 1920x1080 picture on top and a
+// 960x540 matte of the beast at y=1088 (16px-aligned so compression doesn't bleed picture
+// into it). The <video> is sized so only the picture shows; while it plays, a WebGL canvas
+// above the title redraws just the matted pixels from the same frame, darkened by the same
+// gradient as .hero-cinematic-overlay, so the cut-out lines up and matches exactly.
+const heroSeq = document.querySelector('.hero-seq');
+const heroFg = document.querySelector('.hero-fg');
+if (heroSeq && heroFg) {
+  const PIC_W = 1920, PIC_H = 1080, FRAME_H = 1632, MATTE_Y = 1088, MATTE_W = 960, MATTE_H = 540;
+  const heroBox = heroSeq.parentElement;
+  const geo = { left: 0, top: 0, w: 0, h: 0, picW: PIC_W, picH: PIC_H };
+  function layoutHeroSeq() {
+    const w = heroBox.clientWidth, h = heroBox.clientHeight;
+    const scale = Math.max(w / PIC_W, h / PIC_H);
+    Object.assign(geo, { w, h, picW: PIC_W * scale, picH: PIC_H * scale, left: (w - PIC_W * scale) / 2, top: (h - PIC_H * scale) / 2 });
+    Object.assign(heroSeq.style, { width: `${geo.picW}px`, height: `${FRAME_H * scale}px`, left: `${geo.left}px`, top: `${geo.top}px` });
+    const dpr = Math.min(window.devicePixelRatio || 1, 2);
+    heroFg.width = Math.round(w * dpr);
+    heroFg.height = Math.round(h * dpr);
+  }
+  layoutHeroSeq();
+  window.addEventListener('resize', layoutHeroSeq);
+
+  const gl = heroFg.getContext('webgl', { premultipliedAlpha: true, antialias: false });
+  if (gl) {
+    const vsrc = 'attribute vec2 p; varying vec2 v; void main(){ v = vec2(p.x * .5 + .5, .5 - p.y * .5); gl_Position = vec4(p, 0., 1.); }';
+    const fsrc = `precision mediump float;
+      uniform sampler2D tex; uniform vec4 geo; uniform vec2 size; varying vec2 v;
+      float overlayA(float y) { // mirrors .hero-cinematic-overlay
+        if (y < .32) return mix(.6, .1, y / .32);
+        if (y < .62) return mix(.1, .15, (y - .32) / .30);
+        return mix(.15, .8, (y - .62) / .38);
+      }
+      void main() {
+        vec2 uv = (v * size - geo.xy) / geo.zw;
+        vec3 c = texture2D(tex, vec2(uv.x, uv.y * ${PIC_H}. / ${FRAME_H}.)).rgb;
+        vec2 mpx = clamp(vec2(uv.x * ${MATTE_W}., ${MATTE_Y}. + uv.y * ${MATTE_H}.), vec2(.5, ${MATTE_Y}.5), vec2(${MATTE_W}. - .5, ${MATTE_Y + MATTE_H}. - .5));
+        float m = smoothstep(.06, .94, texture2D(tex, mpx / vec2(${PIC_W}., ${FRAME_H}.)).r);
+        c = mix(c, vec3(8., 9., 11.) / 255., overlayA(v.y));
+        gl_FragColor = vec4(c * m, m);
+      }`;
+    const compile = (type, src) => { const sh = gl.createShader(type); gl.shaderSource(sh, src); gl.compileShader(sh); return sh; };
+    const prog = gl.createProgram();
+    gl.attachShader(prog, compile(gl.VERTEX_SHADER, vsrc));
+    gl.attachShader(prog, compile(gl.FRAGMENT_SHADER, fsrc));
+    gl.linkProgram(prog);
+    if (gl.getProgramParameter(prog, gl.LINK_STATUS)) {
+      gl.useProgram(prog);
+      gl.bindBuffer(gl.ARRAY_BUFFER, gl.createBuffer());
+      gl.bufferData(gl.ARRAY_BUFFER, new Float32Array([-1, -1, 1, -1, -1, 1, 1, 1]), gl.STATIC_DRAW);
+      const loc = gl.getAttribLocation(prog, 'p');
+      gl.enableVertexAttribArray(loc);
+      gl.vertexAttribPointer(loc, 2, gl.FLOAT, false, 0, 0);
+      gl.bindTexture(gl.TEXTURE_2D, gl.createTexture());
+      [gl.TEXTURE_WRAP_S, gl.TEXTURE_WRAP_T].forEach(k => gl.texParameteri(gl.TEXTURE_2D, k, gl.CLAMP_TO_EDGE));
+      [gl.TEXTURE_MIN_FILTER, gl.TEXTURE_MAG_FILTER].forEach(k => gl.texParameteri(gl.TEXTURE_2D, k, gl.LINEAR));
+      const uGeo = gl.getUniformLocation(prog, 'geo'), uSize = gl.getUniformLocation(prog, 'size');
+      let cleared = false;
+      function clearHeroFg() {
+        if (cleared) return;
+        gl.viewport(0, 0, heroFg.width, heroFg.height);
+        gl.clearColor(0, 0, 0, 0); gl.clear(gl.COLOR_BUFFER_BIT);
+        cleared = true;
+      }
+      function drawHeroFg() {
+        if (!heroSeq.classList.contains('active') || heroSeq.readyState < 2) { clearHeroFg(); return; }
+        cleared = false;
+        gl.viewport(0, 0, heroFg.width, heroFg.height);
+        gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGB, gl.RGB, gl.UNSIGNED_BYTE, heroSeq);
+        gl.uniform4f(uGeo, geo.left, geo.top, geo.picW, geo.picH);
+        gl.uniform2f(uSize, geo.w, geo.h);
+        gl.drawArrays(gl.TRIANGLE_STRIP, 0, 4);
+      }
+      // redraw on every decoded frame so the cut-out stays locked to the picture
+      if ('requestVideoFrameCallback' in HTMLVideoElement.prototype) {
+        const onFrame = () => { drawHeroFg(); heroSeq.requestVideoFrameCallback(onFrame); };
+        heroSeq.requestVideoFrameCallback(onFrame);
+      } else {
+        const tick = () => { if (!heroSeq.paused) drawHeroFg(); requestAnimationFrame(tick); };
+        requestAnimationFrame(tick);
+      }
+      // the clip is hidden the moment it ends, so drop the cut-out in the same task
+      heroSeq.addEventListener('ended', clearHeroFg);
+    }
   }
 }
 
