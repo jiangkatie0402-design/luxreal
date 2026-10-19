@@ -273,3 +273,22 @@ if (partnersAvatars.length && partnersSlides.length) {
     });
   });
 }
+
+// ---------- only decode the videos that are on screen ----------
+// looping clips otherwise keep playing after they scroll away, so several videos decode at once
+function videoShouldPlay(video) {
+  const slide = video.closest('.adv3-slide');
+  if (slide) return slide.classList.contains('active');
+  if (video.classList.contains('showcase-video') || video.classList.contains('hero-bg-video')) return video.classList.contains('active');
+  return video.autoplay;
+}
+if ('IntersectionObserver' in window) {
+  const videoIO = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      const video = entry.target;
+      if (!entry.isIntersecting) video.pause();
+      else if (videoShouldPlay(video)) video.play().catch(() => {});
+    });
+  }, { threshold: 0.05 });
+  document.querySelectorAll('video').forEach(video => videoIO.observe(video));
+}
