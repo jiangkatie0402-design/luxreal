@@ -76,26 +76,34 @@
       <h2 class="section-title">LuxReal，你的故事，由你导演</h2>
     </div>
     <div class="showcase-media-wrap reveal">
-      <div class="showcase-switch" role="tablist">
+      <div class="showcase-switch" role="tablist" aria-label="两种创作形态">
         <button class="showcase-tab active" type="button" role="tab" aria-selected="true" data-video-to="0">
-          <span class="showcase-tab-title">AI 短剧</span>
-          <span class="showcase-tab-sub">一键生成精品剧集</span>
+          <span class="showcase-tab-icon" aria-hidden="true"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="16" rx="2"/><path d="M7 4v16M17 4v16M3 9h4M3 15h4M17 9h4M17 15h4"/></svg></span>
+          <span class="showcase-tab-text">
+            <span class="showcase-tab-title">AI 短剧</span>
+            <span class="showcase-tab-sub">一键生成精品剧集</span>
+          </span>
+          <span class="showcase-tab-progress" aria-hidden="true"></span>
         </button>
         <button class="showcase-tab" type="button" role="tab" aria-selected="false" data-video-to="1">
-          <span class="showcase-tab-title">互动影游</span>
-          <span class="showcase-tab-sub">多线分支叙事，你来决定结局</span>
+          <span class="showcase-tab-icon" aria-hidden="true"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="6" cy="6" r="2.5"/><circle cx="6" cy="18" r="2.5"/><circle cx="18" cy="12" r="2.5"/><path d="M8.5 6h2a4 4 0 0 1 4 4v0M8.5 18h2a4 4 0 0 0 4-4v0M6 8.5v7"/></svg></span>
+          <span class="showcase-tab-text">
+            <span class="showcase-tab-title">互动影游</span>
+            <span class="showcase-tab-sub">多线分支叙事，你来决定结局</span>
+          </span>
+          <span class="showcase-tab-progress" aria-hidden="true"></span>
         </button>
       </div>
       <div class="showcase-media" id="showcase-media">
-        <video class="showcase-video active" data-tab="0" data-clip="drama-1" autoplay muted loop playsinline preload="metadata">
+        <video class="showcase-video active" data-tab="0" data-clip="drama-1" autoplay muted playsinline preload="metadata">
           <source src="assets/showcase-video.mp4" type="video/mp4">
           <source src="assets/showcase-video.webm" type="video/webm">
         </video>
-        <video class="showcase-video" data-tab="0" data-clip="drama-2" muted loop playsinline preload="metadata">
+        <video class="showcase-video" data-tab="0" data-clip="drama-2" muted playsinline preload="metadata">
           <source src="assets/showcase-video-1b.mp4" type="video/mp4">
           <source src="assets/showcase-video-1b.webm" type="video/webm">
         </video>
-        <video class="showcase-video" data-tab="1" data-clip="game-1" muted loop playsinline preload="metadata">
+        <video class="showcase-video" data-tab="1" data-clip="game-1" muted playsinline preload="metadata">
           <source src="assets/showcase-video-2.mp4" type="video/mp4">
           <source src="assets/showcase-video-2.webm" type="video/webm">
         </video>

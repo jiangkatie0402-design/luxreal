@@ -285,6 +285,9 @@ if (privacyLinks.length) {
 }
 
 // ---------- showcase tabs, each with its own playlist of clips ----------
+// The section auto-advances so visitors see both offerings without clicking: each clip plays
+// once, then the next clip in the tab, then the next tab; the active tab's bar shows progress
+// through its clips.
 const showcaseVideos = [...document.querySelectorAll('.showcase-video')];
 const showcaseTabs = [...document.querySelectorAll('.showcase-tab')];
 const showcaseInfos = document.querySelectorAll('.showcase-info');
@@ -292,7 +295,8 @@ const showcaseControls = document.querySelector('.showcase-controls');
 const showcaseNext = document.querySelector('.showcase-next');
 if (showcaseVideos.length && showcaseTabs.length) {
   const clipsOf = tab => showcaseVideos.filter(v => v.dataset.tab === tab);
-  const clipPosition = {}; // last clip shown per tab, so switching tabs back resumes there
+  const clipPosition = {};
+  const tabOrder = showcaseTabs.map(t => t.dataset.videoTo);
   let activeTab = (showcaseTabs.find(t => t.classList.contains('active')) || showcaseTabs[0]).dataset.videoTo;
   let pauseTimer;
   function showClip(tab, index) {
@@ -320,10 +324,26 @@ if (showcaseVideos.length && showcaseTabs.length) {
   showcaseTabs.forEach(tab => {
     tab.addEventListener('click', () => {
       if (tab.dataset.videoTo === activeTab) return;
-      showClip(tab.dataset.videoTo, clipPosition[tab.dataset.videoTo] || 0);
+      showClip(tab.dataset.videoTo, 0);
     });
   });
   if (showcaseNext) showcaseNext.addEventListener('click', () => showClip(activeTab, (clipPosition[activeTab] || 0) + 1));
+  showcaseVideos.forEach(video => video.addEventListener('ended', () => {
+    if (!video.classList.contains('active')) return;
+    const clips = clipsOf(activeTab), idx = clips.indexOf(video);
+    if (idx < clips.length - 1) showClip(activeTab, idx + 1);
+    else showClip(tabOrder[(tabOrder.indexOf(activeTab) + 1) % tabOrder.length], 0);
+  }));
+  const tick = () => {
+    const tabEl = showcaseTabs.find(t => t.dataset.videoTo === activeTab);
+    const clips = clipsOf(activeTab), video = clips[clipPosition[activeTab] || 0];
+    if (tabEl && video && video.duration) {
+      const p = ((clipPosition[activeTab] || 0) + Math.min(1, video.currentTime / video.duration)) / clips.length;
+      showcaseTabs.forEach(t => t.style.setProperty('--p', t === tabEl ? p.toFixed(4) : '0'));
+    }
+    requestAnimationFrame(tick);
+  };
+  requestAnimationFrame(tick);
   showClip(activeTab, 0);
 }
 
