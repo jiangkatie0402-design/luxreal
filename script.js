@@ -361,9 +361,13 @@ if (skillsItems.length && skillsSlides.length) {
     skillsCaptions.forEach(c => c.classList.toggle('active', c.dataset.skillCaption === key));
     skillsSlides.forEach(slide => {
       const active = slide.dataset.skillSlide === key;
+      const wasActive = slide.classList.contains('active');
       slide.classList.toggle('active', active);
       const video = slide.querySelector('video');
-      if (video) { if (active) video.play().catch(() => {}); else video.pause(); }
+      if (!video) return;
+      if (!active) { video.pause(); return; }
+      if (!wasActive) video.currentTime = 0; // each demo starts from the top when its skill is picked
+      video.play().catch(() => {});
     });
   }
   document.querySelectorAll('.skills-item-head').forEach(head => {
