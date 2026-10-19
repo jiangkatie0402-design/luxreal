@@ -2189,15 +2189,16 @@ const JUDGES = [];
   // minimal looks: data-mode="line" (one hairline light trail), "silk" (a wide soft ribbon of light), "orbit" (large orbit arcs round the amounts)
   const MIN = ['line', 'silk', 'orbit'].includes(flow.dataset.mode) ? flow.dataset.mode : '';
   const SPLAT = flow.dataset.mode === 'splat' || flow.dataset.mode === 'plate';
-  const STILL = flow.dataset.mode === 'still', LAG = [0, 90], TAIL = 120;
-  const LUM = [.85, 0];                             // still mode: per-tube light strength (bright and dim mixed; 0 = plain grey glass, unlit)
+  const STILL = flow.dataset.mode === 'still', LAG = [0, 80, 150], TAIL = 120;
+  const LUM = [.8, .45, 0];                             // still mode: per-tube light strength (bright and dim mixed; 0 = plain grey glass, unlit)
   // lit tip (still mode): [distance behind the tip as a fraction of the tail, segment length px] per strand
   const TIP = [[[.06, 7], [.2, 12], [.38, 5]], [[.08, 9], [.3, 5]], [[.05, 5], [.17, 8], [.33, 4]], [[.1, 6], [.26, 4]], [[.07, 5], [.22, 7]], [[.12, 4], [.3, 6]]];   // still mode: how far each strand trails the lead; tapering tail length (px)
   const EX_T = 320, EX_B = 120;                                   // wrapper reaches 320px above / 120px below the section
   // strands run strictly parallel: px offset along the normal, glass width, dim light dashes, flow period (s); all dash sums = 380
   const STRANDS = [
-    { off: 0, w: 9, dim: [220, 160], hot: [34, 346], dur: 7 },                              // minimal: one glass tube with sparse light …
-    { off: -14, w: 1.3, dim: [40, 340], hot: [8, 372], dur: 11 }                             // … and a plain grey hairline beside it
+    { off: 0, w: 9, dim: [120, 110, 60, 90], hot: [28, 60, 8, 284], dur: 7 },              // quiet on purpose: the awards are the focus
+    { off: -16, w: 4, dim: [60, 160, 40, 120], hot: [12, 40, 6, 322], dur: 9.5 },
+    { off: 14, w: 1.5, dim: [40, 180, 40, 120], hot: [8, 30, 8, 334], dur: 11 }
   ];
   // sleeves: [strand, position (0–1 along the tube), height px, rings]
   const SLEEVES = [];                                             // none: minimal
@@ -2246,11 +2247,11 @@ const JUDGES = [];
     layer.width = Math.round(LW * LDPR); layer.height = Math.round(LH * LDPR);
     const c = layer.getContext('2d'); c.setTransform(LDPR, 0, 0, LDPR, 0, 0); c.clearRect(0, 0, LW, LH); c.translate(flowLeft, EX_T);
     c.lineCap = c.lineJoin = 'round';
-    c.save(); if ('filter' in c) { c.filter = `blur(${Math.round(16 * k)}px)`; c.strokeStyle = 'rgba(106,72,255,.04)'; c.lineWidth = 50 * k; c.stroke(spinePath); } c.restore();   // haze (skipped where canvas filters are unsupported)
+    c.save(); if ('filter' in c) { c.filter = `blur(${Math.round(16 * k)}px)`; c.strokeStyle = 'rgba(106,72,255,.05)'; c.lineWidth = 64 * k; c.stroke(spinePath); } c.restore();   // haze (skipped where canvas filters are unsupported)
     let seed = 7; const rnd = () => (seed = (seed * 16807) % 2147483647) / 2147483647;
     twinkle = [];
-    for (let n = 0; n < (W < 760 ? 6 : 14); n++) {                  // specks: most baked in, a few twinkle live
-      const [x, y] = at((rnd() - .5) * 140 * k, rnd()), rr = (.5 + rnd() * 1.2) * k, white = rnd() > .35;
+    for (let n = 0; n < (W < 760 ? 16 : 36); n++) {                  // specks: most baked in, a few twinkle live
+      const [x, y] = at((rnd() - .5) * 110 * k, rnd()), rr = (.5 + rnd() * 1.2) * k, white = rnd() > .35;
       if (n % 4 === 0) { twinkle.push([x, y, rr, white, rnd() * 6.28, 1.2 + rnd() * 1.6]); continue; }
       const gr = c.createRadialGradient(x, y, 0, x, y, rr * 4.5); gr.addColorStop(0, 'rgba(185,164,255,.25)'); gr.addColorStop(1, 'rgba(106,72,255,0)');
       c.fillStyle = gr; c.beginPath(); c.arc(x, y, rr * 4.5, 0, 6.29); c.fill();
@@ -2476,8 +2477,8 @@ const JUDGES = [];
       }
       if (!LUM[si]) return;                                                  // plain grey tube: no light inside
       ctx.globalAlpha = gtx.globalAlpha = LUM[si];                          // light strength differs per tube: some bright, some barely lit
-      const dimD = cut(st.dim, ph, Ls); gtx.setLineDash(dimD); gtx.strokeStyle = 'rgba(125,98,255,.14)'; gtx.lineWidth = Math.max(2.5, w * .75); gtx.stroke(p);
-      if (w >= 6) { ctx.setLineDash(dimD); ctx.strokeStyle = 'rgba(132,104,255,.16)'; ctx.lineWidth = w * .45; ctx.stroke(p); }   // thick tubes: a visible neon fill
+      const dimD = cut(st.dim, ph, Ls); gtx.setLineDash(dimD); gtx.strokeStyle = 'rgba(125,98,255,.18)'; gtx.lineWidth = Math.max(2.5, w * .75); gtx.stroke(p);
+      if (w >= 6) { ctx.setLineDash(dimD); ctx.strokeStyle = 'rgba(132,104,255,.2)'; ctx.lineWidth = w * .45; ctx.stroke(p); }   // thick tubes: a visible neon fill
       const hot = cut(st.hot, phH, Ls);
       gtx.setLineDash(hot); gtx.strokeStyle = 'rgba(130,98,255,.35)'; gtx.lineWidth = Math.max(4, Math.min(w * 1.6, 22)); gtx.stroke(p);
       ctx.setLineDash(hot); ctx.strokeStyle = '#b9a6ff'; ctx.lineWidth = Math.max(1.1, w * .7); ctx.stroke(p);
