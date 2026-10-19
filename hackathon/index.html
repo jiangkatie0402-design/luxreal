@@ -2422,8 +2422,9 @@ const JUDGES = [];
   }
   let DPR = 1; const GS = .33;                                      // glow canvas scale
   function sizeCanvas() {
-    DPR = Math.min(devicePixelRatio || 1, 2);
-    [cv, gcv].forEach(c => { c.style.height = innerHeight + 'px'; });
+    DPR = Math.min(devicePixelRatio || 1, 3);                         // full device resolution (phones are 3×; browser zoom raises it too) — capping it upscales and blurs the hairlines
+    vw = document.documentElement.clientWidth;
+    [cv, gcv].forEach(c => { c.style.width = vw + 'px'; c.style.height = innerHeight + 'px'; });   // exact px, not 100vw: 100vw includes the scrollbar and would stretch the bitmap
     cv.width = Math.round(vw * DPR); cv.height = Math.round(innerHeight * DPR);
     gcv.width = Math.round(vw * GS); gcv.height = Math.round(innerHeight * GS);
   }
