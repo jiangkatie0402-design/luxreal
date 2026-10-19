@@ -480,7 +480,9 @@ const reduceMotion = window.reduceMotion ?? matchMedia('(prefers-reduced-motion:
       const dimD = cut(st.dim, ph, Ls); gtx.setLineDash(dimD); gtx.strokeStyle = 'rgba(125,98,255,.1)'; gtx.lineWidth = Math.max(2.5, w * .75); gtx.stroke(p);
       if (w >= 6) { ctx.setLineDash(dimD); ctx.strokeStyle = 'rgba(132,104,255,.2)'; ctx.lineWidth = w * .45; ctx.stroke(p); }   // thick tubes: a visible neon fill
       const hot = cut(st.hot, phH, Ls);
-      gtx.setLineDash(hot); gtx.strokeStyle = 'rgba(130,98,255,.2)'; gtx.lineWidth = Math.max(4, Math.min(w * 1.6, 22)); gtx.stroke(p);
+      ctx.setLineDash(hot); ctx.lineCap = 'round';                              // halo round the lit segments, drawn crisp at full resolution: capsule-shaped, never the
+      ctx.strokeStyle = 'rgba(140,110,255,.035)';                                // pointed/diamond bloom an upscaled low-res glow gives; five faint
+      [2.8, 2.35, 1.95, 1.6, 1.3].forEach(f => { ctx.lineWidth = Math.max(2.5, w * f); ctx.stroke(p); });   // nested strokes fade smoothly outwards
       ctx.setLineDash(hot); ctx.strokeStyle = '#c4b4ff'; ctx.lineWidth = Math.max(1.1, w * .7); ctx.stroke(p);
       ctx.strokeStyle = '#fff'; ctx.lineWidth = Math.max(.8, w * .36); ctx.stroke(p);
       if (growing) {                                                         // lit tip: a few short bright segments riding just behind the growing end
