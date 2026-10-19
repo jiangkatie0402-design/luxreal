@@ -173,39 +173,25 @@ const heroSeq = document.querySelector('.hero-seq');
 const heroFg = document.querySelector('.hero-fg');
 if (heroSeq && heroFg) {
   const PIC_W = 1920, PIC_H = 1080, FRAME_H = 1632, MATTE_Y = 1088, MATTE_W = 960, MATTE_H = 540;
-  // The leap in hero-beast is lifted 60px over the source, so at its apex (frame 69) the paws'
-  // lowest point is picture row ~494; the title's glyphs start there, so the paws just graze
-  // it, and the landed beast covers rows ~490-570 across the title completely.
-  const TITLE_INK_TOP = 492;
+  // The leap in hero-beast is lifted 130px over the source, so at its apex (frame 69) the
+  // paws reach picture row ~426: about where the centred title's glyphs start, so they graze it.
   // on the way up the beast stays behind the text; it comes in front from the apex frame,
   // where it is entirely above the title and clear of the subtitle and CTA, so the swap
   // itself can't be seen
   const FRONT_FROM = 68.5 / 24;
   const heroBox = heroSeq.parentElement;
-  const heroHeader = heroBox.parentElement;
-  const heroTitle = heroHeader.querySelector('.hero-cinematic-title');
   const geo = { left: 0, top: 0, w: 0, h: 0, picW: PIC_W, picH: PIC_H };
   function layoutHeroSeq() {
     const w = heroBox.clientWidth, h = heroBox.clientHeight;
     const scale = Math.max(w / PIC_W, h / PIC_H);
     Object.assign(geo, { w, h, picW: PIC_W * scale, picH: PIC_H * scale, left: (w - PIC_W * scale) / 2, top: (h - PIC_H * scale) / 2 });
     Object.assign(heroSeq.style, { width: `${geo.picW}px`, height: `${FRAME_H * scale}px`, left: `${geo.left}px`, top: `${geo.top}px` });
-    if (heroTitle) {
-      // glyphs start ~15% below the top of the title's line box
-      const range = document.createRange(); range.selectNodeContents(heroTitle);
-      const rect = range.getBoundingClientRect(), hb = heroHeader.getBoundingClientRect();
-      const current = parseFloat(heroHeader.style.getPropertyValue('--hero-title-shift')) || 0;
-      const inkTop = rect.top - hb.top - current + rect.height * 0.15;
-      const shift = geo.top + TITLE_INK_TOP * scale - inkTop;
-      heroHeader.style.setProperty('--hero-title-shift', `${Math.max(0, shift)}px`);
-    }
     const dpr = Math.min(window.devicePixelRatio || 1, 2);
     heroFg.width = Math.round(w * dpr);
     heroFg.height = Math.round(h * dpr);
   }
   layoutHeroSeq();
   window.addEventListener('resize', layoutHeroSeq);
-  if (document.fonts) document.fonts.ready.then(layoutHeroSeq); // the title's box changes once the display font loads
 
   const gl = heroFg.getContext('webgl', { premultipliedAlpha: true, antialias: false });
   if (gl) {
