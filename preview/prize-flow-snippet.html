@@ -258,9 +258,9 @@ const reduceMotion = window.reduceMotion ?? matchMedia('(prefers-reduced-motion:
       c.fillStyle = white ? 'rgba(255,255,255,.58)' : 'rgba(217,207,255,.5)'; c.beginPath(); c.arc(x, y, rr, 0, 6.29); c.fill();
     }
     glass = STRANDS.map((st, si) => {                                // glass: dark body, crisp rims, a specular streak
-      const o = st.off * k, w = st.w * k, g = [[strandPaths[si], w >= 6 ? 'rgba(46,36,98,.36)' : 'rgba(70,65,96,.35)', w], [offPath(o - w / 2 + .5), 'rgba(242,240,252,.85)', Math.max(.7, 1 * k)], [offPath(o + w / 2 - .5), 'rgba(184,174,228,.62)', Math.max(.5, .8 * k)]];
-      if (w > 5) g.push([offPath(o - w * .22), 'rgba(255,255,255,.3)', Math.max(.7, w * .1)]);
-      if (w < 3) g.splice(0, 3, [strandPaths[si], 'rgba(215,212,232,.7)', Math.max(.7, w * .55)]);   // hair-thin tubes: one fine glass line
+      const o = st.off * k, w = st.w * k, g = [[strandPaths[si], w >= 6 ? 'rgba(46,36,98,.36)' : 'rgba(70,65,96,.35)', w, o], [offPath(o - w / 2 + .5), 'rgba(242,240,252,.85)', Math.max(.7, 1 * k), o - w / 2 + .5], [offPath(o + w / 2 - .5), 'rgba(184,174,228,.62)', Math.max(.5, .8 * k), o + w / 2 - .5]];   // [path, colour, width, offset]
+      if (w > 5) g.push([offPath(o - w * .22), 'rgba(255,255,255,.3)', Math.max(.7, w * .1), o - w * .22]);
+      if (w < 3) g.splice(0, 3, [strandPaths[si], 'rgba(215,212,232,.7)', Math.max(.7, w * .55), o]);   // hair-thin tubes: one fine glass line
       if (STILL && !LUM[si]) g.forEach(e => { e[1] = e[1].replace(/rgba\((\d+),(\d+),(\d+),/, (m, r, gg, b) => { const v = Math.round((+r + +gg + +b) / 3); return `rgba(${v},${v},${v},`; }); });   // unlit tubes: neutral grey
       return g;
     });
@@ -293,6 +293,7 @@ const reduceMotion = window.reduceMotion ?? matchMedia('(prefers-reduced-motion:
     if (MIN) buildMin(W, H);
     // reveal lookup: running max of y along the spine (monotonic) for scroll → length
     samples = []; for (let i = 0, m = -1e9; i < pts.length; i++) samples.push(m = Math.max(m, pts[i][1]));
+    smin = new Array(pts.length); for (let i = pts.length - 1, m = 1e9; i >= 0; i--) smin[i] = m = Math.min(m, pts[i][1]);   // running min from the end: with samples, brackets the on-screen stretch
     rowY = items.map(it => { const q = rel(it); return q.top + q.h * .5; });
     sizeCanvas(); shown = Math.min(shown, len); target = targetLen(); if (reduceMotion) shown = target; wake();
   }
@@ -449,12 +450,20 @@ const reduceMotion = window.reduceMotion ?? matchMedia('(prefers-reduced-motion:
     return out;
   }
   // still mode: static light, each strand grows on its own with a small glowing tip
+  // only the stretch of tube that is on screen is stroked each frame (the full path is ~3× longer); dash patterns stay
+  // continuous because every dash is offset by the stretch's start distance d0
+  let smin = [];
+  function subPath(o, i0, i1) { const p = new Path2D(); for (let i = i0; i <= i1; i++) { const [x, y, nx, ny] = pts[i]; i > i0 ? p.lineTo(x + nx * o, y + ny * o) : p.moveTo(x + nx * o, y + ny * o); } return p; }
   function stillFrame(time, fr, cr) {
+    const oy = fr.top - cr.top, yT = -oy - 160, yB = -oy + innerHeight + 160;
+    let i0 = 0, i1 = pts.length - 1; while (i0 < i1 && samples[i0] < yT) i0++; while (i1 > i0 && smin[i1] > yB) i1--;
+    if (i1 - i0 < 2) return;
+    const d0 = i0 * STEP, cache = new Map(), sub = o => { const key = Math.round(o * 100); let q = cache.get(key); if (!q) cache.set(key, q = subPath(o, i0, i1)); return q; };
     const lay = shown >= len - .5 ? len : Math.max(0, shown - (TAIL + 40) * k);    // specks and haze only where the tube bodies (not their thin tails) have reached
     if (lay < len - .5) {                                                    // feathered trim: fade the haze out over ~70px instead of a hard round edge
-      ctx.globalCompositeOperation = 'destination-out'; ctx.lineCap = 'butt'; ctx.strokeStyle = '#000'; ctx.lineWidth = 260 * k; ctx.lineDashOffset = 0;
+      ctx.globalCompositeOperation = 'destination-out'; ctx.lineCap = 'butt'; ctx.strokeStyle = '#000'; ctx.lineWidth = 260 * k; ctx.lineDashOffset = d0; const sp = sub(0);
       for (let q = 0; q <= 7; q++) { const from = Math.max(0, lay - (7 - q) * 10 * k);
-        ctx.globalAlpha = q === 7 ? 1 : .26; ctx.setLineDash([0, from, len + 2000, 1]); ctx.stroke(spinePath); }
+        ctx.globalAlpha = q === 7 ? 1 : .26; ctx.setLineDash([0, from, len + 2000, 1]); ctx.stroke(sp); }
       ctx.setLineDash([]); ctx.globalAlpha = 1; ctx.lineCap = 'round'; ctx.globalCompositeOperation = 'source-over';
     }
     twinkle.forEach(([x, y, rr, white, ph, sp], n) => { if ((n / twinkle.length) * len > shown) return; const a = .15 + .75 * (.5 + .5 * Math.sin(time * sp + ph));
@@ -464,10 +473,10 @@ const reduceMotion = window.reduceMotion ?? matchMedia('(prefers-reduced-motion:
     gtx.setTransform(GS, 0, 0, GS, 0, 0); gtx.translate(fr.left - cr.left, fr.top - cr.top); gtx.lineCap = 'round'; gtx.lineJoin = 'round';
     STRANDS.forEach((st, si) => {
       const Ls = shown >= len - .5 ? len : Math.max(0, Math.min(len, shown - LAG[si] * k)); if (Ls < 2) return;
-      const w = st.w * k, p = strandPaths[si], ph = si * 97, phH = si * 131;
+      const w = st.w * k, p = sub(st.off * k), ph = si * 97, phH = si * 131;
       const growing = Ls < len - 1, body = growing ? Math.max(0, Ls - TAIL * k) : Ls;
-      ctx.lineDashOffset = 0;
-      if (body > 0) { ctx.setLineDash([body, 1e6]); glass[si].forEach(([gp, col, lw]) => { ctx.strokeStyle = col; ctx.lineWidth = lw; ctx.stroke(gp); }); }
+      ctx.lineDashOffset = gtx.lineDashOffset = d0;
+      if (body > 0) { ctx.setLineDash([body, 1e6]); glass[si].forEach(([gp, col, lw, go]) => { ctx.strokeStyle = col; ctx.lineWidth = lw; ctx.stroke(sub(go)); }); }
       if (growing) {                                                         // tapering glass tail, thinning to a hairline at the tip
         const from = body, segs = 10, seg = (Ls - from) / segs;
         ctx.lineCap = 'butt';                                                  // butt caps: no beading where the segments meet
