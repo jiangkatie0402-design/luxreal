@@ -278,6 +278,32 @@ button { font-family: inherit; }
   position: absolute; inset: 0; z-index: 1;
   background: linear-gradient(0deg, rgba(8,9,11,.6) 0%, rgba(8,9,11,.1) 32%, transparent 55%);
 }
+/* clip intro (bottom-left) and next-clip control (bottom-right), glass like the hero CTA */
+.showcase-info {
+  position: absolute; z-index: 2; left: 32px; bottom: 32px; max-width: min(440px, calc(100% - 180px));
+  padding: 16px 20px; border-radius: var(--radius-md);
+  border: 1px solid rgba(255,255,255,.14); background: rgba(8,9,11,.42); backdrop-filter: blur(10px);
+  opacity: 0; transform: translateY(8px); pointer-events: none;
+  transition: opacity .5s var(--ease), transform .5s var(--ease);
+}
+.showcase-info.active { opacity: 1; transform: none; transition-delay: .15s; }
+.showcase-info-tag { display: block; font-size: 12px; letter-spacing: .06em; color: rgba(255,255,255,.6); }
+.showcase-info-title { margin-top: 6px; font-size: 20px; font-weight: 600; line-height: 1.3; color: #fff; }
+.showcase-info-desc { margin-top: 6px; font-size: 14px; line-height: 1.6; color: rgba(255,255,255,.72); }
+.showcase-controls {
+  position: absolute; z-index: 2; right: 32px; bottom: 32px;
+  display: flex; align-items: center; gap: 14px;
+}
+.showcase-controls[hidden] { display: none; }
+.showcase-count { font-size: 13px; letter-spacing: .08em; color: rgba(255,255,255,.7); font-variant-numeric: tabular-nums; }
+.showcase-next {
+  width: 52px; height: 52px; border-radius: 50%; display: grid; place-items: center; cursor: pointer;
+  border: 1px solid rgba(255,255,255,.22); background: rgba(8,9,11,.42); backdrop-filter: blur(10px); color: #fff;
+  transition: background .25s var(--ease), color .25s var(--ease), border-color .25s var(--ease);
+}
+.showcase-next:hover { background: #fff; color: #0a0a0c; border-color: #fff; }
+.showcase-next svg { transition: transform .25s var(--ease); }
+.showcase-next:hover svg { transform: translateX(2px); }
 /* spacing follows the Kling Image reference: tab title→sub 8px, tabs→media 48px, tabs ~560px apart */
 #scenarios .showcase-head { margin-bottom: var(--head-gap); }
 .showcase-switch {
@@ -306,6 +332,12 @@ button { font-family: inherit; }
   .showcase-switch { grid-template-columns: repeat(2, minmax(0, 1fr)); margin-bottom: 24px; }
   .showcase-tab-title { font-size: 18px; }
   .showcase-tab-sub { font-size: 13px; }
+  .showcase-info { left: 14px; bottom: 14px; max-width: calc(100% - 86px); padding: 12px 14px; }
+  .showcase-info-title { font-size: 17px; }
+  .showcase-info-desc { font-size: 13px; }
+  .showcase-controls { right: 14px; bottom: 14px; }
+  .showcase-count { display: none; }
+  .showcase-next { width: 44px; height: 44px; }
 }
 @media (prefers-reduced-motion: reduce) {
   .showcase-video { transition-duration: .01s; }

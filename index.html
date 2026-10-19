@@ -82,15 +82,38 @@
         </button>
       </div>
       <div class="showcase-media" id="showcase-media">
-        <video class="showcase-video active" data-video="0" autoplay muted loop playsinline preload="metadata">
+        <video class="showcase-video active" data-tab="0" data-clip="drama-1" autoplay muted loop playsinline preload="metadata">
           <source src="assets/showcase-video.webm" type="video/webm">
           <source src="assets/showcase-video.mp4" type="video/mp4">
         </video>
-        <video class="showcase-video" data-video="1" muted loop playsinline preload="metadata">
+        <video class="showcase-video" data-tab="0" data-clip="drama-2" muted loop playsinline preload="metadata">
+          <source src="assets/showcase-video-1b.webm" type="video/webm">
+          <source src="assets/showcase-video-1b.mp4" type="video/mp4">
+        </video>
+        <video class="showcase-video" data-tab="1" data-clip="game-1" muted loop playsinline preload="metadata">
           <source src="assets/showcase-video-2.webm" type="video/webm">
           <source src="assets/showcase-video-2.mp4" type="video/mp4">
         </video>
         <div class="showcase-overlay-gradient"></div>
+        <div class="showcase-info active" data-clip="drama-1">
+          <span class="showcase-info-tag">AI 短剧 · 奇幻冒险</span>
+          <h3 class="showcase-info-title">《天海》</h3>
+          <p class="showcase-info-desc">海天倒悬的港城里，少女与骑士在惊涛中殊死相搏。</p>
+        </div>
+        <div class="showcase-info" data-clip="drama-2">
+          <span class="showcase-info-tag">AI 短剧 · 情感</span>
+          <h3 class="showcase-info-title">《旧照片》</h3>
+          <p class="showcase-info-desc">长椅上的老人握着一张泛黄的合影，记忆在泪光里回到那年。</p>
+        </div>
+        <div class="showcase-info" data-clip="game-1">
+          <span class="showcase-info-tag">互动影游 · 科幻</span>
+          <h3 class="showcase-info-title">《时间裂缝》</h3>
+          <p class="showcase-info-desc">留在寻常清晨，还是踏入时间裂缝？每个选择都通向不同的结局。</p>
+        </div>
+        <div class="showcase-controls">
+          <span class="showcase-count" aria-live="polite">01 / 02</span>
+          <button class="showcase-next" type="button" aria-label="下一个视频"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m9 18 6-6-6-6"/></svg></button>
+        </div>
       </div>
     </div>
   </div>

@@ -171,33 +171,50 @@ if (privacyLinks.length) {
   sections.forEach(s => s && spy.observe(s));
 }
 
-// ---------- showcase tabs ----------
-const showcaseVideos = document.querySelectorAll('.showcase-video');
-const showcaseTabs = document.querySelectorAll('.showcase-tab');
-if (showcaseVideos.length === 2 && showcaseTabs.length === 2) {
-  let showcaseIndex = 0;
+// ---------- showcase tabs, each with its own playlist of clips ----------
+const showcaseVideos = [...document.querySelectorAll('.showcase-video')];
+const showcaseTabs = [...document.querySelectorAll('.showcase-tab')];
+const showcaseInfos = document.querySelectorAll('.showcase-info');
+const showcaseControls = document.querySelector('.showcase-controls');
+const showcaseCount = document.querySelector('.showcase-count');
+const showcaseNext = document.querySelector('.showcase-next');
+if (showcaseVideos.length && showcaseTabs.length) {
+  const clipsOf = tab => showcaseVideos.filter(v => v.dataset.tab === tab);
+  const clipPosition = {}; // last clip shown per tab, so switching tabs back resumes there
+  let activeTab = (showcaseTabs.find(t => t.classList.contains('active')) || showcaseTabs[0]).dataset.videoTo;
   let pauseTimer;
-  showcaseVideos[0].play().catch(() => {});
+  const pad = n => String(n).padStart(2, '0');
+  function showClip(tab, index) {
+    const clips = clipsOf(tab);
+    if (!clips.length) return;
+    index = (index + clips.length) % clips.length;
+    clipPosition[tab] = index;
+    activeTab = tab;
+    const target = clips[index];
+    showcaseTabs.forEach(t => {
+      const on = t.dataset.videoTo === tab;
+      t.classList.toggle('active', on);
+      t.setAttribute('aria-selected', on ? 'true' : 'false');
+    });
+    if (!target.classList.contains('active')) target.currentTime = 0;
+    target.play().catch(() => {});
+    showcaseVideos.forEach(v => v.classList.toggle('active', v === target));
+    showcaseInfos.forEach(info => info.classList.toggle('active', info.dataset.clip === target.dataset.clip));
+    if (showcaseControls) showcaseControls.hidden = clips.length < 2;
+    if (showcaseCount) showcaseCount.textContent = `${pad(index + 1)} / ${pad(clips.length)}`;
+    clearTimeout(pauseTimer);
+    pauseTimer = setTimeout(() => {
+      showcaseVideos.forEach(v => { if (v !== target) v.pause(); });
+    }, 700);
+  }
   showcaseTabs.forEach(tab => {
     tab.addEventListener('click', () => {
-      const idx = parseInt(tab.dataset.videoTo, 10);
-      if (idx === showcaseIndex) return;
-      showcaseIndex = idx;
-      showcaseTabs.forEach(t => {
-        const on = t === tab;
-        t.classList.toggle('active', on);
-        t.setAttribute('aria-selected', on ? 'true' : 'false');
-      });
-      const next = showcaseVideos[idx];
-      next.currentTime = 0;
-      next.play().catch(() => {});
-      showcaseVideos.forEach((video, i) => video.classList.toggle('active', i === idx));
-      clearTimeout(pauseTimer);
-      pauseTimer = setTimeout(() => {
-        showcaseVideos.forEach((video, i) => { if (i !== showcaseIndex) video.pause(); });
-      }, 700);
+      if (tab.dataset.videoTo === activeTab) return;
+      showClip(tab.dataset.videoTo, clipPosition[tab.dataset.videoTo] || 0);
     });
   });
+  if (showcaseNext) showcaseNext.addEventListener('click', () => showClip(activeTab, (clipPosition[activeTab] || 0) + 1));
+  showClip(activeTab, 0);
 }
 
 // ---------- advantages step tabs ----------
