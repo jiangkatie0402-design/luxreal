@@ -497,6 +497,14 @@ html[lang="zh-CN"] .sec-title { letter-spacing: .02em; line-height: 1.22; }
 .aw-note { margin-top: 14px; font-size: 13px; color: var(--text-muted); }
 /* ---------- prize flow: a KV glass tube threads the three tiers; rows light up once the tube has passed ---------- */
 #prizes { overflow-x: clip; }
+/* 奖项 backdrop: quiet grey dot-matrix patches, small squares, crosshairs and short rules along both page edges (centre left clear) */
+.pzf > .pzf-deco { position: absolute; z-index: 0; top: -260px; bottom: 0; left: calc(50% - 50vw); width: 100vw; pointer-events: none; }
+.pzf-deco canvas { display: block; width: 100%; height: 100%; image-rendering: pixelated; }
+.pzf-deco i { position: absolute; width: 8px; height: 8px; background: #8b8a99; opacity: .15; animation: pzTw 5s ease-in-out infinite; }
+.pzf-deco i.o { background: none; border: 1px solid #8b8a99; width: 12px; height: 12px; }
+.pzf-deco i.v { background: #7B5CFF; }
+@keyframes pzTw { 0%, 100% { opacity: .1; } 50% { opacity: .5; } }
+@media (prefers-reduced-motion: reduce) { .pzf-deco i { animation: none; } }
 .pzf { position: relative; padding: 24px 0 200px; }
 .pzf { margin-bottom: clamp(100px, 10vw, 160px); }   /* breathing room between the bottom tube run and 提交内容 */
 .pzf-tube { position: absolute; left: 0; top: -320px; height: calc(100% + 440px); width: 100%; pointer-events: none; z-index: 0; }   /* JS widens it to the viewport; 320/440px of room for the tube's ends */
@@ -1573,6 +1581,7 @@ body.modal-open { overflow: hidden; }
 
     <!-- prize flow: one KV-style glass tube threads 特别奖 → 一二三等奖 → 单项奖 and draws itself as you scroll -->
     <div class="pzf" id="pzFlow" data-mode="still">
+      <div class="pzf-deco" aria-hidden="true"><canvas></canvas></div>
       <div class="pzf-tube" aria-hidden="true"><canvas class="tb-glow"></canvas><canvas class="tb-sharp"></canvas></div>
       <div class="pzf-hero pzf-item">
         <h3 class="pzf-name pzf-top" data-i18n="p0.n">3D AI 新物种奖</h3>
@@ -2174,6 +2183,47 @@ const JUDGES = [];
     else vids.forEach(v => v.pause());
   }, { rootMargin: '200px 0px' }).observe(vids[0].closest('.final-wrap') || vids[0]);
 })();
+/* 奖项 backdrop: drawn once per size into a CSS-px canvas (crisp squares via image-rendering: pixelated) */
+(function () {
+  const box = document.querySelector('#pzFlow .pzf-deco'); if (!box) return;
+  const cv = box.querySelector('canvas'); let lastW = 0, lastH = 0;
+  function draw() {
+    const W = box.clientWidth, H = box.clientHeight; if (!W || !H || (W === lastW && H === lastH)) return; lastW = W; lastH = H;
+    cv.width = W; cv.height = H; const c = cv.getContext('2d'); c.clearRect(0, 0, W, H);
+    let seed = 23; const rnd = () => (seed = (seed * 16807) % 2147483647) / 2147483647;
+    const mob = W < 760, edge = mob ? .1 : .14, G = mob ? 6 : 8;              // patches hug the outer ~14% on each side, clear of the text
+    const col = a => `rgba(139,138,153,${a.toFixed(3)})`;
+    const sideX = (side, f) => side ? W - f * W * edge : f * W * edge;
+    const n = Math.max(2, Math.round(H / (mob ? 700 : 520)));
+    for (let side = 0; side < 2; side++) for (let q = 0; q < n; q++) {
+      const cy = (q + .3 + rnd() * .5) / n * H, cx = sideX(side, .1 + rnd() * .5);
+      for (let r = 0; r < 2 + Math.floor(rnd() * 2); r++) {                 // each patch: a few overlapping dot grids that thin out at their edges
+        const pw = (60 + rnd() * 170) * (mob ? .6 : 1), ph = 40 + rnd() * 130, x0 = Math.round((cx - pw / 2 + (rnd() - .5) * 90) / G) * G, y0 = Math.round((cy - ph / 2 + (rnd() - .5) * 120) / G) * G;
+        const dens = .35 + rnd() * .45, big = rnd() < .4;
+        for (let y = y0; y < y0 + ph; y += G) for (let x = x0; x < x0 + pw; x += G) {
+          if (x < 0 || x > W) continue;
+          const fx = Math.min(x - x0, x0 + pw - x) / pw, fy = Math.min(y - y0, y0 + ph - y) / ph, fall = Math.min(1, Math.min(fx, fy) * 5);
+          if (rnd() > dens * (.4 + .6 * fall)) continue;
+          c.fillStyle = col(.1 + rnd() * .22); const d = big && rnd() < .5 ? 3 : 2; c.fillRect(x, y, d, d);
+        }
+      }
+      for (let m = 0; m < 5; m++) { const x = Math.round(sideX(side, rnd())), y = Math.round(cy + (rnd() - .5) * 360), d = 4 + Math.floor(rnd() * 8);   // loose squares
+        c.fillStyle = col(.12 + rnd() * .2); c.fillRect(x, y, d, d); }
+      if (rnd() < .8) { const x = Math.round(sideX(side, rnd())) + .5, y = Math.round(cy + (rnd() - .5) * 300) + .5, d = 12 + Math.floor(rnd() * 6);   // outlined square
+        c.strokeStyle = col(.28); c.lineWidth = 1; c.strokeRect(x, y, d, d); }
+      if (rnd() < .5) { const x = Math.round(sideX(side, rnd())) + .5, y = Math.round(cy + (rnd() - .5) * 300) + .5;   // crosshair
+        c.strokeStyle = col(.3); c.beginPath(); c.moveTo(x - 8, y); c.lineTo(x + 8, y); c.moveTo(x, y - 8); c.lineTo(x, y + 8); c.stroke(); }
+      if (rnd() < .7) { const x = Math.round(sideX(side, .05 + rnd() * .5)) + .5, y = Math.round(cy + (rnd() - .5) * 300) + .5, l = 40 + rnd() * 80;   // a short rule
+        c.strokeStyle = col(.18); c.beginPath(); if (rnd() < .5) { c.moveTo(x, y); c.lineTo(x + (side ? -l : l), y); } else { c.moveTo(x, y); c.lineTo(x, y + l); } c.stroke(); }
+    }
+    box.querySelectorAll('i').forEach(e => e.remove());                       // a handful of squares that slowly breathe
+    for (let t = 0; t < (mob ? 4 : 8); t++) { const e = document.createElement('i'), side = t % 2;
+      e.className = rnd() < .35 ? 'o' : (rnd() < .3 ? 'v' : '');
+      e.style.left = Math.round(sideX(side, .1 + rnd() * .8)) + 'px'; e.style.top = Math.round(rnd() * H) + 'px'; e.style.animationDelay = (-rnd() * 5).toFixed(2) + 's'; e.style.animationDuration = (4 + rnd() * 3).toFixed(2) + 's';
+      box.appendChild(e); }
+  }
+  new ResizeObserver(() => requestAnimationFrame(draw)).observe(box);
+})();
 /* 奖项: a bundle of thin glass tubes (the //COMPONENTS look) sweeps in silk-like Bézier arcs through 新物种奖 → 一二三等奖 → 单项奖.
    Rendered on canvas for smoothness: everything static (glass, rims, haze, chrome sleeves, specks) is painted once into an
    offscreen layer; each frame only blits that layer and strokes the flowing light (no blur filters), then trims the bundle to
@@ -2196,9 +2246,9 @@ const JUDGES = [];
   const EX_T = 320, EX_B = 120;                                   // wrapper reaches 320px above / 120px below the section
   // strands run strictly parallel: px offset along the normal, glass width, dim light dashes, flow period (s); all dash sums = 380
   const STRANDS = [
-    { off: 0, w: 9, dim: [120, 110, 60, 90], hot: [28, 60, 8, 284], dur: 7 },              // quiet on purpose: the awards are the focus
-    { off: -16, w: 4, dim: [60, 160, 40, 120], hot: [12, 40, 6, 322], dur: 9.5 },
-    { off: 14, w: 1.5, dim: [40, 180, 40, 120], hot: [8, 30, 8, 334], dur: 11 }
+    { off: 0, w: 11, dim: [120, 110, 60, 90], hot: [28, 60, 8, 284], dur: 7 },              // quiet on purpose: the awards are the focus
+    { off: -19, w: 5.5, dim: [60, 160, 40, 120], hot: [12, 40, 6, 322], dur: 9.5 },
+    { off: 17, w: 2, dim: [40, 180, 40, 120], hot: [8, 30, 8, 334], dur: 11 }
   ];
   // sleeves: [strand, position (0–1 along the tube), height px, rings]
   const SLEEVES = [];                                             // none: minimal
