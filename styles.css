@@ -255,6 +255,24 @@ button { font-family: inherit; }
 .section { padding: 130px 0; position: relative; }
 .section-tight { padding: 90px 0; }
 /* stacked homepage sections: drop the top padding so every title sits one 130px gap below the content above */
+/* on desktop each showcase-style section fits one screen: the 68px nav, the ~59px title, the
+   title gap and ~24px breathing room above and below leave --fit-h for the section's content */
+@media (min-width: 1025px) {
+  :root { --fit-h: calc(100svh - 68px - 59px - var(--head-gap) - 48px); }
+  /* tabs (~62px) + 32px gap above the 16:9 video */
+  #scenarios .showcase-media-wrap { max-width: min(1320px, max(640px, (var(--fit-h) - 94px) * 16 / 9)); }
+  #feedback .skills-panel { height: clamp(480px, var(--fit-h), 760px); min-height: 0; }
+  /* stage padding (64px) + caption/CTA row (~80px) around the 16:9 frame */
+  #feedback .skills-frame { width: min(84%, 820px, (clamp(480px, var(--fit-h), 760px) - 144px) * 16 / 9); }
+}
+/* short desktop screens: tighten the skills list so it stays within the shortened panel */
+@media (min-width: 1025px) and (max-height: 820px) {
+  #feedback .skills-side { gap: 20px; padding: 0; }
+  #feedback .skills-list { gap: 26px; }
+  #feedback .skills-points { gap: 4px; }
+  #feedback .skills-item.active .skills-points { padding-top: 14px; }
+  #feedback .skills-points li { line-height: 1.5; }
+}
 /* homepage rhythm: one gap between sections, one gap from each title to its content */
 :root { --section-gap: 180px; --head-gap: 64px; }
 @media (max-width: 640px) { :root { --section-gap: 112px; --head-gap: 40px; } }
@@ -313,7 +331,7 @@ button { font-family: inherit; }
 #scenarios .showcase-head { margin-bottom: var(--head-gap); }
 .showcase-switch {
   display: grid; grid-template-columns: repeat(2, minmax(0, 560px)); justify-content: center;
-  margin-bottom: 48px;
+  margin-bottom: 32px;
 }
 .showcase-tab {
   justify-self: center; display: flex; flex-direction: column; align-items: center; gap: 8px;
@@ -515,7 +533,7 @@ button { font-family: inherit; }
   -webkit-mask-image: radial-gradient(70% 70% at 50% 45%, #000 20%, transparent 80%);
           mask-image: radial-gradient(70% 70% at 50% 45%, #000 20%, transparent 80%);
 }
-.skills-stage { position: relative; flex: 1 1 auto; display: grid; place-items: center; padding: 56px 56px 28px; }
+.skills-stage { position: relative; flex: 1 1 auto; display: grid; place-items: center; padding: 40px 56px 24px; }
 .skills-frame {
   position: relative; width: min(84%, 820px); aspect-ratio: 16 / 9; overflow: hidden;
   border-radius: var(--radius-md); border: 1px solid var(--border-2); background: var(--surface-2);
