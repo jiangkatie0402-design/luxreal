@@ -198,13 +198,9 @@ button { font-family: inherit; }
   background: linear-gradient(180deg, rgba(8,9,11,.6) 0%, rgba(8,9,11,.1) 32%, rgba(8,9,11,.15) 62%, rgba(8,9,11,.8) 100%);
 }
 /* no z-index here, so the hero text (2-4) and the beast canvas (5) share one stacking context.
-   script.js pins the block so the title sits where the beast's leap clears it and its landing
-   covers it (--hero-title-top / --hero-title-size, in step with the video's cover-fit) */
-.hero-cinematic-content {
-  position: absolute; left: 0; right: 0; margin: 0 auto; padding: 0 16px; max-width: 900px;
-  top: var(--hero-title-top, 50%);
-}
-.hero-cinematic-content > .hero-cinematic-title { font-size: var(--hero-title-size, clamp(36px, 4vw, 64px)); }
+   script.js nudges the block down (--hero-title-shift, via top so no stacking context is made)
+   until the title sits where the beast's paws just graze it at the top of the leap */
+.hero-cinematic-content { position: relative; top: var(--hero-title-shift, 0px); max-width: 900px; }
 .hero-cinematic-content > * { position: relative; z-index: 4; opacity: 0; }
 .hero-cinematic-content > .hero-cinematic-title { z-index: 2; }
 /* an animation rather than a transition, so it doesn't clash with the CTA's own hover transition */
