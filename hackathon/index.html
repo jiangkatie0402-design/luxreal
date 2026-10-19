@@ -508,7 +508,7 @@ html[lang="zh-CN"] .sec-title { letter-spacing: .02em; line-height: 1.22; }
 .pzf { position: relative; padding: 24px 0 200px; }
 .pzf { margin-bottom: clamp(100px, 10vw, 160px); }   /* breathing room between the bottom tube run and 提交内容 */
 .pzf-tube { position: absolute; left: 0; top: -320px; height: calc(100% + 440px); width: 100%; pointer-events: none; z-index: 0; }   /* JS widens it to the viewport; 320/440px of room for the tube's ends */
-.pzf-tube { opacity: 1; }
+.pzf-tube { opacity: .68; }   /* kept faint: a backdrop, the awards lead */
 .pzf[data-mode="orbit"] .pzf-ranks .pzf-row + .pzf-row { border-top: 1px solid rgba(255,255,255,.07); }
 .pzf-tube canvas { position: fixed; top: 0; left: 0; display: block; width: 100vw; height: 100vh; visibility: hidden; }   /* one viewport-sized canvas: only on-screen pixels are ever drawn */
 .pzf-tube.on canvas { visibility: visible; }
@@ -2308,9 +2308,9 @@ const JUDGES = [];
       c.fillStyle = white ? 'rgba(255,255,255,.58)' : 'rgba(217,207,255,.5)'; c.beginPath(); c.arc(x, y, rr, 0, 6.29); c.fill();
     }
     glass = STRANDS.map((st, si) => {                                // glass: dark body, crisp rims, a specular streak
-      const o = st.off * k, w = st.w * k, g = [[strandPaths[si], w >= 6 ? 'rgba(20,16,38,.82)' : 'rgba(26,24,38,.8)', w], [offPath(o - w / 2 + .6), 'rgba(246,244,255,.95)', Math.max(1, 1.2 * k)], [offPath(o + w / 2 - .6), 'rgba(178,168,226,.7)', Math.max(.5, .8 * k)]];
-      if (w > 5) g.push([offPath(o - w * .2), 'rgba(255,255,255,.42)', Math.max(.8, w * .09)]);   // specular streak
-      if (w < 3) g.splice(0, 3, [strandPaths[si], 'rgba(222,220,236,.85)', Math.max(1, w * .6)]);   // hair-thin tubes: one fine glass line
+      const o = st.off * k, w = st.w * k, g = [[strandPaths[si], w >= 6 ? 'rgba(46,36,98,.36)' : 'rgba(70,65,96,.35)', w], [offPath(o - w / 2 + .5), 'rgba(238,236,250,.7)', Math.max(.7, 1 * k)], [offPath(o + w / 2 - .5), 'rgba(176,166,220,.5)', Math.max(.5, .8 * k)]];
+      if (w > 5) g.push([offPath(o - w * .22), 'rgba(255,255,255,.3)', Math.max(.7, w * .1)]);
+      if (w < 3) g.splice(0, 3, [strandPaths[si], 'rgba(205,200,225,.55)', Math.max(.6, w * .55)]);   // hair-thin tubes: one fine glass line
       if (STILL && !LUM[si]) g.forEach(e => { e[1] = e[1].replace(/rgba\((\d+),(\d+),(\d+),/, (m, r, gg, b) => { const v = Math.round((+r + +gg + +b) / 3); return `rgba(${v},${v},${v},`; }); });   // unlit tubes: neutral grey
       return g;
     });
@@ -2470,7 +2470,7 @@ const JUDGES = [];
     if (MIN !== 'orbit' && !done) { const [x, y] = posAt(shown, 0), r = 22 * k; ctx.globalCompositeOperation = 'lighter'; ctx.globalAlpha = .8; ctx.drawImage(headImg, x - r, y - r, r * 2, r * 2); ctx.globalAlpha = 1; ctx.globalCompositeOperation = 'source-over'; }
     ctx.setTransform(DPR, 0, 0, DPR, 0, 0);
   }
-  let DPR = 1; const GS = .5;                                       // glow canvas scale
+  let DPR = 1; const GS = .33;                                      // glow canvas scale
   function sizeCanvas() {
     DPR = Math.min(devicePixelRatio || 1, 3);                         // full device resolution (phones are 3×; browser zoom raises it too) — capping it upscales and blurs the hairlines
     vw = document.documentElement.clientWidth;
@@ -2527,12 +2527,11 @@ const JUDGES = [];
       }
       if (!LUM[si]) return;                                                  // plain grey tube: no light inside
       ctx.globalAlpha = gtx.globalAlpha = LUM[si];                          // light strength differs per tube: some bright, some barely lit
-      const dimD = cut(st.dim, ph, Ls); gtx.setLineDash(dimD); gtx.strokeStyle = 'rgba(125,98,255,.18)'; gtx.lineWidth = Math.max(2.5, w * .75); gtx.stroke(p);
+      const dimD = cut(st.dim, ph, Ls); gtx.setLineDash(dimD); gtx.strokeStyle = 'rgba(125,98,255,.1)'; gtx.lineWidth = Math.max(2.5, w * .75); gtx.stroke(p);
       if (w >= 6) { ctx.setLineDash(dimD); ctx.strokeStyle = 'rgba(132,104,255,.2)'; ctx.lineWidth = w * .45; ctx.stroke(p); }   // thick tubes: a visible neon fill
       const hot = cut(st.hot, phH, Ls);
-      gtx.setLineDash(hot); gtx.strokeStyle = 'rgba(130,98,255,.3)'; gtx.lineWidth = Math.max(4, Math.min(w * 1.5, 20)); gtx.stroke(p);
-      ctx.setLineDash(hot); ctx.strokeStyle = 'rgba(140,110,255,.38)'; ctx.lineWidth = Math.max(2, w * 1.15); ctx.stroke(p);   // tight, crisp halo on the sharp canvas
-      ctx.strokeStyle = '#b9a6ff'; ctx.lineWidth = Math.max(1.1, w * .7); ctx.stroke(p);
+      gtx.setLineDash(hot); gtx.strokeStyle = 'rgba(130,98,255,.2)'; gtx.lineWidth = Math.max(4, Math.min(w * 1.6, 22)); gtx.stroke(p);
+      ctx.setLineDash(hot); ctx.strokeStyle = '#b9a6ff'; ctx.lineWidth = Math.max(1.1, w * .7); ctx.stroke(p);
       ctx.strokeStyle = '#fff'; ctx.lineWidth = Math.max(.7, w * .32); ctx.stroke(p);
       if (growing) {                                                         // lit tip: a few short bright segments riding just behind the growing end
         const tl = Ls - body;
