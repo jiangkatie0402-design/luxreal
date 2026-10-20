@@ -467,3 +467,16 @@ if (ctaWall) {
     new IntersectionObserver(entries => entries.forEach(e => ctaWall.classList.toggle('in-view', e.isIntersecting))).observe(ctaWall);
   } else ctaWall.classList.add('in-view');
 }
+
+// ---------- FAQ accordion: one answer open at a time ----------
+const faqItems = [...document.querySelectorAll('.faq-item')];
+faqItems.forEach(item => {
+  item.querySelector('.faq-q').addEventListener('click', () => {
+    const opening = !item.classList.contains('open');
+    faqItems.forEach(other => {
+      const on = other === item && opening;
+      other.classList.toggle('open', on);
+      other.querySelector('.faq-q').setAttribute('aria-expanded', on ? 'true' : 'false');
+    });
+  });
+});
