@@ -222,65 +222,48 @@
       <p class="partners-sub">他们用 LuxReal 完成了自己的作品，也想把真实的创作体验分享给你。</p>
     </div>
 
-    <div class="partners-avatars reveal" role="tablist">
-      <button class="partners-avatar active" type="button" data-partner="0" aria-label="林晚"><img src="assets/creators/girl.jpg" alt="" width="92" height="92" loading="lazy"></button>
-      <button class="partners-avatar" type="button" data-partner="1" aria-label="陈砚"><img src="assets/creators/old.jpg" alt="" width="92" height="92" loading="lazy"></button>
-      <button class="partners-avatar" type="button" data-partner="2" aria-label="苏绮"><img src="assets/creators/hero.jpg" alt="" width="92" height="92" loading="lazy"></button>
-      <button class="partners-avatar" type="button" data-partner="3" aria-label="Elena Ward"><img src="assets/creators/pwoman.jpg" alt="" width="92" height="92" loading="lazy"></button>
-      <button class="partners-avatar" type="button" data-partner="4" aria-label="周屿"><img src="assets/creators/pman.jpg" alt="" width="92" height="92" loading="lazy"></button>
-      <button class="partners-avatar" type="button" data-partner="5" aria-label="宋知意"><img src="assets/creators/cwoman.jpg" alt="" width="92" height="92" loading="lazy"></button>
-      <button class="partners-avatar" type="button" data-partner="6" aria-label="韩烈"><img src="assets/creators/patch.jpg" alt="" width="92" height="92" loading="lazy"></button>
-      <button class="partners-avatar" type="button" data-partner="7" aria-label="老周"><img src="assets/creators/cold.jpg" alt="" width="92" height="92" loading="lazy"></button>
-    </div>
-
-    <div class="partners-detail reveal">
-      <div class="partners-slide active" data-partner-slide="0">
-        <h3 class="partners-name">林晚</h3>
-        <p class="partners-role">独立短剧导演 · 杭州</p>
-        <p class="partners-showcase">代表作：<strong>《天海》奇幻短剧 · 12 集</strong></p>
-        <p class="partners-quote">“以前拍一集奇幻戏要搭景、做特效，现在一个人一周就能出完整一季。最惊喜的是角色在每一集里都保持一致，观众根本看不出是 AI 做的。”</p>
+    <!-- featured quote: portrait on the left, one creator's words on the right; thumbnails switch
+         creators and the section rotates on its own -->
+    <div class="partners-feature reveal">
+      <div class="partners-photos">
+        <img class="partners-photo active" data-partner-slide="0" src="assets/creators/portrait-girl.jpg" alt="林晚" width="480" height="640" loading="lazy">
+        <img class="partners-photo" data-partner-slide="1" src="assets/creators/portrait-hero.jpg" alt="苏绮" width="480" height="640" loading="lazy">
+        <img class="partners-photo" data-partner-slide="2" src="assets/creators/portrait-patch.jpg" alt="韩烈" width="480" height="640" loading="lazy">
+        <img class="partners-photo" data-partner-slide="3" src="assets/creators/portrait-cold.jpg" alt="老周" width="480" height="640" loading="lazy">
       </div>
-      <div class="partners-slide" data-partner-slide="1">
-        <h3 class="partners-name">陈砚</h3>
-        <p class="partners-role">编剧 · 前电视剧策划</p>
-        <p class="partners-showcase">代表作：<strong>《旧照片》情感短片</strong></p>
-        <p class="partners-quote">“写了二十年剧本，第一次看到自己的文字这么快变成画面。智能拆分剧情节点帮我理清了结构，我只需要专注在故事本身。”</p>
-      </div>
-      <div class="partners-slide" data-partner-slide="2">
-        <h3 class="partners-name">苏绮</h3>
-        <p class="partners-role">国风短剧制片人</p>
-        <p class="partners-showcase">代表作：<strong>《长安夜行》 · 播放量 3200 万</strong></p>
-        <p class="partners-quote">“国风题材最难的是服化道，过去一场夜市戏要几十万预算。用 LuxReal 做出来的长安街景，连合作方都以为是实拍。”</p>
-      </div>
-      <div class="partners-slide" data-partner-slide="3">
-        <h3 class="partners-name">Elena Ward</h3>
-        <p class="partners-role">广告创意总监 · 新加坡</p>
-        <p class="partners-showcase">代表作：<strong>《Golden Hour》品牌短片</strong></p>
-        <p class="partners-quote">“我们用它在提案阶段直接做出成片质感的样片，客户当场拍板。从脚本到交付，周期缩短了一大半。”</p>
-      </div>
-      <div class="partners-slide" data-partner-slide="4">
-        <h3 class="partners-name">周屿</h3>
-        <p class="partners-role">互动影游制作人</p>
-        <p class="partners-showcase">代表作：<strong>《时间裂缝》多结局互动影游</strong></p>
-        <p class="partners-quote">“分支叙事最怕剧情乱、画面不统一。LuxReal 让每条支线都能快速出片，我们一个三人小团队做出了 6 种结局。”</p>
-      </div>
-      <div class="partners-slide" data-partner-slide="5">
-        <h3 class="partners-name">宋知意</h3>
-        <p class="partners-role">古装剧美术指导</p>
-        <p class="partners-showcase">代表作：<strong>《锦绣长歌》美术概念片</strong></p>
-        <p class="partners-quote">“角色定妆、场景氛围可以反复调到满意为止，3D 片场预演让我在开拍前就看到了最终画面。”</p>
-      </div>
-      <div class="partners-slide" data-partner-slide="6">
-        <h3 class="partners-name">韩烈</h3>
-        <p class="partners-role">动作短剧导演</p>
-        <p class="partners-showcase">代表作：<strong>《独眼刀客》 · 平台年度热剧</strong></p>
-        <p class="partners-quote">“打戏最考验镜头衔接。智能镜头能一次规划整组分镜，动作和站位都接得上，节奏比我预想的还要利落。”</p>
-      </div>
-      <div class="partners-slide" data-partner-slide="7">
-        <h3 class="partners-name">老周</h3>
-        <p class="partners-role">退休导演 · AI 创作爱好者</p>
-        <p class="partners-showcase">代表作：<strong>《悦来客栈》系列短片</strong></p>
-        <p class="partners-quote">“七十岁学会用 AI 拍片，没想到这么顺手。把年轻时没拍成的故事一个个做出来，是这两年最开心的事。”</p>
+      <div class="partners-text">
+        <span class="partners-mark" aria-hidden="true">“</span>
+        <div class="partners-slides">
+          <div class="partners-slide active" data-partner-slide="0">
+            <p class="partners-quote">以前拍一集奇幻戏要搭景、做特效，现在一个人一周就能出完整一季，角色在每一集里都保持一致。</p>
+            <p class="partners-name">林晚</p>
+            <p class="partners-role">独立短剧导演 · 杭州 · 代表作 《天海》奇幻短剧</p>
+          </div>
+          <div class="partners-slide" data-partner-slide="1">
+            <p class="partners-quote">过去一场夜市戏要几十万预算。用 LuxReal 做出来的长安街景，连合作方都以为是实拍。</p>
+            <p class="partners-name">苏绮</p>
+            <p class="partners-role">国风短剧制片人 · 代表作 《长安夜行》</p>
+          </div>
+          <div class="partners-slide" data-partner-slide="2">
+            <p class="partners-quote">智能镜头能一次规划整组分镜，动作和站位都接得上，节奏比我预想的还要利落。</p>
+            <p class="partners-name">韩烈</p>
+            <p class="partners-role">动作短剧导演 · 代表作 《独眼刀客》</p>
+          </div>
+          <div class="partners-slide" data-partner-slide="3">
+            <p class="partners-quote">七十岁学会用 AI 拍片，把年轻时没拍成的故事一个个做出来，是这两年最开心的事。</p>
+            <p class="partners-name">老周</p>
+            <p class="partners-role">退休导演 · AI 创作爱好者 · 代表作 《悦来客栈》系列短片</p>
+          </div>
+        </div>
+        <div class="partners-nav">
+          <div class="partners-avatars" role="tablist">
+            <button class="partners-avatar active" type="button" role="tab" data-partner="0" aria-label="林晚"><img src="assets/creators/girl.jpg" alt="" width="44" height="44" loading="lazy"></button>
+            <button class="partners-avatar" type="button" role="tab" data-partner="1" aria-label="苏绮"><img src="assets/creators/hero.jpg" alt="" width="44" height="44" loading="lazy"></button>
+            <button class="partners-avatar" type="button" role="tab" data-partner="2" aria-label="韩烈"><img src="assets/creators/patch.jpg" alt="" width="44" height="44" loading="lazy"></button>
+            <button class="partners-avatar" type="button" role="tab" data-partner="3" aria-label="老周"><img src="assets/creators/cold.jpg" alt="" width="44" height="44" loading="lazy"></button>
+          </div>
+          <span class="partners-count" aria-hidden="true">01 / 04</span>
+        </div>
       </div>
     </div>
     <p class="partners-note">示例内容：头像取自 LuxReal 生成的角色，人物与评价为演示用，上线前替换为真实创作者。</p>

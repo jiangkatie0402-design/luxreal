@@ -392,17 +392,39 @@ if (skillsItems.length && skillsSlides.length) {
   });
 }
 
-// ---------- partners (creator feedback) ----------
-const partnersAvatars = document.querySelectorAll('.partners-avatar');
-const partnersSlides = document.querySelectorAll('.partners-slide');
-if (partnersAvatars.length && partnersSlides.length) {
-  partnersAvatars.forEach(avatar => {
-    avatar.addEventListener('click', () => {
-      const target = avatar.dataset.partner;
-      partnersAvatars.forEach(a => a.classList.toggle('active', a === avatar));
-      partnersSlides.forEach(slide => slide.classList.toggle('active', slide.dataset.partnerSlide === target));
+// ---------- partners (creator feedback): featured quote that rotates ----------
+const partnersFeature = document.querySelector('.partners-feature');
+if (partnersFeature) {
+  const avatars = [...partnersFeature.querySelectorAll('.partners-avatar')];
+  const panes = [...partnersFeature.querySelectorAll('[data-partner-slide]')];
+  const count = partnersFeature.querySelector('.partners-count');
+  const pad = n => String(n).padStart(2, '0');
+  let current = 0, timer = null, hovering = false;
+  function showPartner(i) {
+    current = (i + avatars.length) % avatars.length;
+    avatars.forEach((a, k) => { a.classList.toggle('active', k === current); a.setAttribute('aria-selected', k === current ? 'true' : 'false'); });
+    panes.forEach(p => p.classList.toggle('active', p.dataset.partnerSlide === String(current)));
+    if (count) count.textContent = `${pad(current + 1)} / ${pad(avatars.length)}`;
+  }
+  // advance every 7s while the section is on screen and not hovered
+  const schedule = () => { clearInterval(timer); timer = setInterval(() => { if (!hovering) showPartner(current + 1); }, 7000); };
+  avatars.forEach((a, k) => a.addEventListener('click', () => { showPartner(k); schedule(); }));
+  partnersFeature.addEventListener('mouseenter', () => { hovering = true; });
+  partnersFeature.addEventListener('mouseleave', () => { hovering = false; });
+  if ('IntersectionObserver' in window) {
+    new IntersectionObserver(entries => entries.forEach(e => { if (e.isIntersecting) schedule(); else clearInterval(timer); }), { threshold: 0.3 }).observe(partnersFeature);
+  } else schedule();
+  showPartner(0);
+}
+if ('IntersectionObserver' in window) {
+  const videoIO = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      const video = entry.target;
+      if (!entry.isIntersecting) video.pause();
+      else if (videoShouldPlay(video)) video.play().catch(() => {});
     });
-  });
+  }, { threshold: 0.05 });
+  document.querySelectorAll('video').forEach(video => videoIO.observe(video));
 }
 
 // ---------- only decode the videos that are on screen ----------
