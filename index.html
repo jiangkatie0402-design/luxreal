@@ -75,58 +75,49 @@
     <div class="showcase-head reveal">
       <h2 class="section-title">LuxReal，你的故事，由你导演</h2>
     </div>
+    <!-- two side-by-side panels, one per offering; the active one is wide and plays, the other
+         is a narrow darkened still you can click to expand -->
     <div class="showcase-media-wrap reveal">
-      <div class="showcase-switch" role="tablist" aria-label="两种创作形态">
-        <button class="showcase-tab active" type="button" role="tab" aria-selected="true" data-video-to="0">
-          <span class="showcase-tab-text">
-            <span class="showcase-tab-title">AI 短剧</span>
-            <span class="showcase-tab-sub">一键生成精品剧集</span>
-          </span>
-          <span class="showcase-tab-progress" aria-hidden="true"></span>
-        </button>
-        <button class="showcase-tab" type="button" role="tab" aria-selected="false" data-video-to="1">
-          <span class="showcase-tab-text">
-            <span class="showcase-tab-title">互动影游</span>
-            <span class="showcase-tab-sub">多线分支叙事，你来决定结局</span>
-          </span>
-          <span class="showcase-tab-progress" aria-hidden="true"></span>
-        </button>
-      </div>
-      <div class="showcase-media" id="showcase-media">
-        <video class="showcase-video active" data-tab="0" data-clip="drama-1" autoplay muted playsinline preload="metadata">
+      <div class="showcase-panels" role="tablist" aria-label="两种创作形态">
+      <div class="showcase-panel active" data-tab="0" role="tab" aria-selected="true" tabindex="0">
+        <video class="showcase-video" data-clip="drama-1" data-still="3" muted playsinline preload="metadata">
           <source src="assets/showcase-video.mp4" type="video/mp4">
           <source src="assets/showcase-video.webm" type="video/webm">
         </video>
-        <video class="showcase-video" data-tab="0" data-clip="drama-2" muted playsinline preload="metadata">
+        <video class="showcase-video" data-clip="drama-2" data-still="3" muted playsinline preload="metadata">
           <source src="assets/showcase-video-1b.mp4" type="video/mp4">
           <source src="assets/showcase-video-1b.webm" type="video/webm">
         </video>
-        <video class="showcase-video" data-tab="1" data-clip="game-1" muted playsinline preload="metadata">
-          <source src="assets/showcase-video-2.mp4" type="video/mp4">
-          <source src="assets/showcase-video-2.webm" type="video/webm">
-        </video>
-      </div>
-      <div class="showcase-foot">
+        <div class="showcase-panel-label"><span class="showcase-panel-title">AI 短剧</span><span class="showcase-panel-sub">一键生成精品剧集</span></div>
         <div class="showcase-infos">
-          <div class="showcase-info active" data-clip="drama-1">
-            <span class="showcase-info-tag">AI 短剧 · 奇幻冒险</span>
+          <div class="showcase-info" data-clip="drama-1">
+            <span class="showcase-info-tag">奇幻冒险</span>
             <h3 class="showcase-info-title">《天海》</h3>
             <p class="showcase-info-desc">海天倒悬的港城里，少女与骑士在惊涛中殊死相搏。</p>
           </div>
           <div class="showcase-info" data-clip="drama-2">
-            <span class="showcase-info-tag">AI 短剧 · 东方神话</span>
+            <span class="showcase-info-tag">东方神话</span>
             <h3 class="showcase-info-title">《封神》</h3>
             <p class="showcase-info-desc">殷商城下战火未熄，神兽睁开双眼，一场人神之战就此拉开。</p>
           </div>
+        </div>
+        <div class="showcase-controls"><button class="showcase-next" type="button" aria-label="下一个视频"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m9 18 6-6-6-6"/></svg></button></div>
+      </div>
+      <div class="showcase-panel" data-tab="1" role="tab" aria-selected="false" tabindex="0">
+        <video class="showcase-video" data-clip="game-1" data-still="6" muted playsinline preload="metadata">
+          <source src="assets/showcase-video-2.mp4" type="video/mp4">
+          <source src="assets/showcase-video-2.webm" type="video/webm">
+        </video>
+        <div class="showcase-panel-label"><span class="showcase-panel-title">互动影游</span><span class="showcase-panel-sub">多线分支叙事，你来决定结局</span></div>
+        <div class="showcase-infos">
           <div class="showcase-info" data-clip="game-1">
-            <span class="showcase-info-tag">互动影游 · 科幻</span>
+            <span class="showcase-info-tag">科幻</span>
             <h3 class="showcase-info-title">《时间裂缝》</h3>
             <p class="showcase-info-desc">留在寻常清晨，还是踏入时间裂缝？每个选择都通向不同的结局。</p>
           </div>
         </div>
-        <div class="showcase-controls">
-          <button class="showcase-next" type="button" aria-label="下一个视频"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m9 18 6-6-6-6"/></svg></button>
-        </div>
+        <div class="showcase-controls"><button class="showcase-next" type="button" aria-label="下一个视频"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m9 18 6-6-6-6"/></svg></button></div>
+      </div>
       </div>
     </div>
   </div>

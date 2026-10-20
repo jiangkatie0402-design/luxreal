@@ -260,9 +260,6 @@ button { font-family: inherit; }
 @media (min-width: 1025px) {
   :root { --fit-h: calc(100svh - 68px - 59px - var(--head-gap) - 48px); }
   /* tabs (~62px) + 32px gap above the 16:9 video */
-  /* this section runs tighter so the video can be as large as the screen allows:
-     nav 68 + title 59 + 28 gap + tabs ~66 + 20 gap + 24px breathing room */
-  #scenarios .showcase-media-wrap { max-width: min(1320px, max(640px, (100svh - 265px) * 16 / 9)); }
   #feedback .skills-panel { height: clamp(480px, var(--fit-h), 760px); min-height: 0; }
   /* stage padding (64px) + caption/CTA row (~80px) around the 16:9 frame */
   #feedback .skills-frame { width: min(84%, 820px, (clamp(480px, var(--fit-h), 760px) - 144px) * 16 / 9); }
@@ -290,24 +287,52 @@ button { font-family: inherit; }
 .showcase-head { max-width: 680px; margin: 0 auto 48px; text-align: center; }
 .showcase-head .section-desc { margin-left: auto; margin-right: auto; }
 .showcase-media-wrap { position: relative; max-width: 1320px; margin: 0 auto; }
-.showcase-media {
-  position: relative; aspect-ratio: 16 / 9;
+#scenarios .showcase-head { margin-bottom: 40px; }
+/* two panels side by side, one per offering: the active one is wide and plays; the other is a
+   narrow, darkened still that widens when picked. Height follows the screen on desktop so the
+   section (nav + title + panels) fits in one view. */
+.showcase-panels { display: flex; gap: 14px; height: clamp(380px, calc(100svh - 220px), 700px); }
+.showcase-panel {
+  position: relative; flex: 1 1 0; min-width: 0; overflow: hidden; cursor: pointer;
   border-radius: var(--radius-lg); border: 1px solid var(--border-2); background: var(--surface);
-  overflow: hidden;
+  transition: flex-grow .8s cubic-bezier(.65,0,.35,1), border-color .4s var(--ease);
 }
+.showcase-panel.active { flex-grow: 3.4; cursor: default; }
+.showcase-panel:not(.active):hover { border-color: rgba(255,255,255,.28); }
+.showcase-panel:focus-visible { outline: 2px solid var(--blue-light); outline-offset: 3px; }
 .showcase-video {
   position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; display: block;
-  opacity: 0; transform: scale(1.05);
-  transition: opacity .7s ease, transform 1.4s cubic-bezier(.16,.8,.24,1);
+  opacity: 0; transition: opacity .6s ease;
 }
-.showcase-video.active { opacity: 1; transform: scale(1); }
-/* compact clip intro (bottom-left) and next-clip button (bottom-right) over the video;
+.showcase-video.active { opacity: 1; }
+/* shade: light at the top of the active panel (for its label), heavy over the narrow one */
+.showcase-panel::after {
+  content: ''; position: absolute; inset: 0; z-index: 1; pointer-events: none;
+  background: linear-gradient(180deg, rgba(8,9,11,.55), rgba(8,9,11,0) 28%);
+  transition: opacity .6s var(--ease);
+}
+.showcase-panel::before {
+  content: ''; position: absolute; inset: 0; z-index: 1; pointer-events: none; opacity: 0;
+  background: linear-gradient(0deg, rgba(8,9,11,.9), rgba(8,9,11,.45));
+  transition: opacity .6s var(--ease);
+}
+.showcase-panel:not(.active)::before { opacity: 1; }
+.showcase-panel:not(.active):hover::before { opacity: .8; }
+/* offering name: top-left on the wide panel, bottom-left on the narrow one */
+.showcase-panel-label {
+  position: absolute; z-index: 2; left: 26px; right: 26px; bottom: 26px; pointer-events: none;
+  display: flex; flex-direction: column; gap: 8px;
+}
+.showcase-panel.active .showcase-panel-label { top: 24px; bottom: auto; gap: 6px; }
+.showcase-panel-title {
+  font-family: var(--font-title); font-weight: 400; font-synthesis: none; letter-spacing: .04em;
+  font-size: 30px; line-height: 1.2; color: #fff; white-space: nowrap;
+}
+.showcase-panel.active .showcase-panel-title { font-size: 22px; }
+.showcase-panel-sub { font-size: 13px; line-height: 1.4; color: rgba(255,255,255,.72); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+/* clip intro (bottom-left) and next-clip button (bottom-right), only on the active panel;
    solid tint instead of backdrop blur so the playing video isn't re-blurred every frame */
-.showcase-foot {
-  position: absolute; z-index: 2; left: 20px; right: 20px; bottom: 20px;
-  display: flex; align-items: flex-end; justify-content: space-between; gap: 16px; pointer-events: none;
-}
-.showcase-infos { display: grid; min-width: 0; max-width: 340px; }
+.showcase-infos { position: absolute; z-index: 2; left: 20px; bottom: 20px; display: grid; max-width: min(340px, calc(100% - 100px)); pointer-events: none; }
 .showcase-info {
   grid-area: 1 / 1; justify-self: start; align-self: end;
   padding: 10px 14px; border-radius: 12px;
@@ -315,11 +340,12 @@ button { font-family: inherit; }
   opacity: 0; transform: translateY(6px);
   transition: opacity .45s var(--ease), transform .45s var(--ease);
 }
-.showcase-info.active { opacity: 1; transform: none; transition-delay: .12s; }
+.showcase-panel.active .showcase-info.active { opacity: 1; transform: none; transition-delay: .35s; }
 .showcase-info-tag { display: block; font-size: 11px; letter-spacing: .06em; color: rgba(255,255,255,.6); }
 .showcase-info-title { margin-top: 3px; font-size: 15px; font-weight: 600; line-height: 1.35; color: #fff; }
 .showcase-info-desc { margin-top: 2px; font-size: 12.5px; line-height: 1.55; color: rgba(255,255,255,.75); }
-.showcase-controls { flex-shrink: 0; pointer-events: auto; }
+.showcase-controls { position: absolute; z-index: 2; right: 20px; bottom: 20px; opacity: 0; pointer-events: none; transition: opacity .4s var(--ease); }
+.showcase-panel.active .showcase-controls { opacity: 1; pointer-events: auto; transition-delay: .35s; }
 .showcase-controls[hidden] { display: none; }
 .showcase-next {
   width: 44px; height: 44px; border-radius: 50%; display: grid; place-items: center; cursor: pointer;
@@ -329,55 +355,25 @@ button { font-family: inherit; }
 .showcase-next:hover { background: #fff; color: #0a0a0c; border-color: #fff; }
 .showcase-next svg { transition: transform .25s var(--ease); }
 .showcase-next:hover svg { transform: translateX(2px); }
-/* spacing follows the Kling Image reference: tab title→sub 8px, tabs→media 48px, tabs ~560px apart */
-#scenarios .showcase-head { margin-bottom: 28px; }
-/* two equal-weight options side by side, plain text: the active one turns white, and the thin
-   line under each option fills with blue as the section auto-advances */
-.showcase-switch {
-  display: grid; grid-template-columns: repeat(2, minmax(0, 300px)); justify-content: center; gap: 48px;
-  margin: 0 auto 20px;
-}
-.showcase-tab {
-  position: relative; display: flex; justify-content: center; padding: 0 0 14px;
-  border: none; background: none; font-family: inherit; text-align: center; cursor: pointer;
-}
-.showcase-tab::after { /* track */
-  content: ''; position: absolute; left: 0; right: 0; bottom: 0; height: 2px; border-radius: 2px;
-  background: rgba(255,255,255,.1);
-}
-.showcase-tab-text { display: flex; flex-direction: column; align-items: center; gap: 2px; min-width: 0; }
-.showcase-tab-title {
-  font-size: 20px; font-weight: 600; line-height: 1.3; letter-spacing: .02em; color: var(--text-dim);
-  transition: color .35s var(--ease);
-}
-.showcase-tab-sub {
-  font-size: 13px; line-height: 1.4; color: var(--text-faint); white-space: nowrap;
-  transition: color .35s var(--ease);
-}
-.showcase-tab-progress {
-  position: absolute; z-index: 1; left: 0; right: 0; bottom: 0; height: 2px; border-radius: 2px;
-  background: var(--blue-light); transform-origin: left; transform: scaleX(var(--p, 0)); opacity: 0;
-}
-.showcase-tab:not(.active):hover .showcase-tab-title { color: var(--text); }
-.showcase-tab.active { cursor: default; }
-.showcase-tab.active .showcase-tab-title { color: #fff; }
-.showcase-tab.active .showcase-tab-sub { color: var(--text-dim); }
-.showcase-tab.active .showcase-tab-progress { opacity: 1; }
+/* phones: stack the panels; the narrow one becomes a short strip under the active one */
 @media (max-width: 640px) {
-  .showcase-media { aspect-ratio: 4 / 5; }
-  .showcase-switch { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px; margin-bottom: 18px; }
-  .showcase-tab { padding-bottom: 10px; }
-  .showcase-tab-title { font-size: 16px; }
-  .showcase-tab-sub { font-size: 11px; overflow: hidden; text-overflow: ellipsis; }
-  .showcase-foot { left: 12px; right: 12px; bottom: 12px; gap: 10px; }
-  .showcase-infos { max-width: calc(100% - 54px); }
+  .showcase-panels { flex-direction: column; height: auto; gap: 10px; }
+  .showcase-panel { flex: none; height: 92px; transition: height .8s cubic-bezier(.65,0,.35,1), border-color .4s var(--ease); }
+  .showcase-panel.active { height: min(118vw, 500px); }
+  .showcase-panel-label { left: 16px; right: 16px; bottom: 18px; gap: 4px; }
+  .showcase-panel.active .showcase-panel-label { top: 16px; }
+  .showcase-panel-title { font-size: 22px; }
+  .showcase-panel.active .showcase-panel-title { font-size: 19px; }
+  .showcase-panel-sub { font-size: 12px; }
+  .showcase-infos { left: 12px; bottom: 12px; max-width: calc(100% - 66px); }
   .showcase-info { padding: 8px 12px; }
   .showcase-info-title { font-size: 14px; }
   .showcase-info-desc { font-size: 12px; }
+  .showcase-controls { right: 12px; bottom: 12px; }
   .showcase-next { width: 40px; height: 40px; }
 }
 @media (prefers-reduced-motion: reduce) {
-  .showcase-video { transition-duration: .01s; }
+  .showcase-video, .showcase-panel { transition-duration: .01s; }
 }
 
 /* reveal-on-scroll */

@@ -284,67 +284,61 @@ if (privacyLinks.length) {
   sections.forEach(s => s && spy.observe(s));
 }
 
-// ---------- showcase tabs, each with its own playlist of clips ----------
-// The section auto-advances so visitors see both offerings without clicking: each clip plays
-// once, then the next clip in the tab, then the next tab; the active tab's bar shows progress
-// through its clips.
+// ---------- showcase: two panels (AI 短剧 / 互动影游), each with its own playlist ----------
+// The active panel is wide and plays its clips; the other is a narrow, darkened still that expands
+// when clicked. The section auto-advances so visitors see both offerings without clicking: each
+// clip plays once, then the next clip in the panel, then the other panel.
+const showcasePanels = [...document.querySelectorAll('.showcase-panel')];
 const showcaseVideos = [...document.querySelectorAll('.showcase-video')];
-const showcaseTabs = [...document.querySelectorAll('.showcase-tab')];
-const showcaseInfos = document.querySelectorAll('.showcase-info');
-const showcaseControls = document.querySelector('.showcase-controls');
-const showcaseNext = document.querySelector('.showcase-next');
-if (showcaseVideos.length && showcaseTabs.length) {
-  const clipsOf = tab => showcaseVideos.filter(v => v.dataset.tab === tab);
-  const clipPosition = {};
-  const tabOrder = showcaseTabs.map(t => t.dataset.videoTo);
-  let activeTab = (showcaseTabs.find(t => t.classList.contains('active')) || showcaseTabs[0]).dataset.videoTo;
-  let pauseTimer;
-  function showClip(tab, index) {
-    const clips = clipsOf(tab);
+if (showcasePanels.length) {
+  const clipsOf = panel => [...panel.querySelectorAll('.showcase-video')];
+  const clipIndex = new Map(showcasePanels.map(panel => [panel, 0]));
+  let activePanel = showcasePanels.find(panel => panel.classList.contains('active')) || showcasePanels[0];
+  // park a panel's current clip on a representative frame (its first frame can be black)
+  const park = video => { video.pause(); const t = parseFloat(video.dataset.still || '0'); if (video.duration ? t < video.duration : true) video.currentTime = t; };
+  function showClip(panel, index) {
+    const clips = clipsOf(panel);
     if (!clips.length) return;
     index = (index + clips.length) % clips.length;
-    clipPosition[tab] = index;
-    activeTab = tab;
+    clipIndex.set(panel, index);
     const target = clips[index];
-    showcaseTabs.forEach(t => {
-      const on = t.dataset.videoTo === tab;
-      t.classList.toggle('active', on);
-      t.setAttribute('aria-selected', on ? 'true' : 'false');
+    if (panel !== activePanel) {
+      clipsOf(activePanel).forEach(park);
+      activePanel = panel;
+    }
+    showcasePanels.forEach(p => {
+      const on = p === panel;
+      p.classList.toggle('active', on);
+      p.setAttribute('aria-selected', on ? 'true' : 'false');
     });
-    if (!target.classList.contains('active')) target.currentTime = 0;
+    clips.forEach(v => v.classList.toggle('active', v === target));
+    clips.forEach(v => { if (v !== target) v.pause(); });
+    panel.querySelectorAll('.showcase-info').forEach(info => info.classList.toggle('active', info.dataset.clip === target.dataset.clip));
+    const controls = panel.querySelector('.showcase-controls');
+    if (controls) controls.hidden = clips.length < 2;
+    target.currentTime = 0;
     target.play().catch(() => {});
-    showcaseVideos.forEach(v => v.classList.toggle('active', v === target));
-    showcaseInfos.forEach(info => info.classList.toggle('active', info.dataset.clip === target.dataset.clip));
-    if (showcaseControls) showcaseControls.hidden = clips.length < 2;
-    clearTimeout(pauseTimer);
-    pauseTimer = setTimeout(() => {
-      showcaseVideos.forEach(v => { if (v !== target) v.pause(); });
-    }, 700);
   }
-  showcaseTabs.forEach(tab => {
-    tab.addEventListener('click', () => {
-      if (tab.dataset.videoTo === activeTab) return;
-      showClip(tab.dataset.videoTo, 0);
+  showcasePanels.forEach(panel => {
+    const first = clipsOf(panel)[0];
+    if (first) first.classList.add('active');
+    const open = () => { if (panel !== activePanel) showClip(panel, 0); };
+    panel.addEventListener('click', e => { if (!e.target.closest('.showcase-next')) open(); });
+    panel.addEventListener('keydown', e => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); open(); } });
+    const next = panel.querySelector('.showcase-next');
+    if (next) next.addEventListener('click', () => showClip(panel, clipIndex.get(panel) + 1));
+    clipsOf(panel).forEach(video => {
+      video.addEventListener('loadedmetadata', () => { if (panel !== activePanel && video.classList.contains('active')) park(video); }, { once: true });
+      video.addEventListener('ended', () => {
+        if (panel !== activePanel || !video.classList.contains('active')) return;
+        const clips = clipsOf(panel), idx = clips.indexOf(video);
+        if (idx < clips.length - 1) showClip(panel, idx + 1);
+        else showClip(showcasePanels[(showcasePanels.indexOf(panel) + 1) % showcasePanels.length], 0);
+      });
     });
   });
-  if (showcaseNext) showcaseNext.addEventListener('click', () => showClip(activeTab, (clipPosition[activeTab] || 0) + 1));
-  showcaseVideos.forEach(video => video.addEventListener('ended', () => {
-    if (!video.classList.contains('active')) return;
-    const clips = clipsOf(activeTab), idx = clips.indexOf(video);
-    if (idx < clips.length - 1) showClip(activeTab, idx + 1);
-    else showClip(tabOrder[(tabOrder.indexOf(activeTab) + 1) % tabOrder.length], 0);
-  }));
-  const tick = () => {
-    const tabEl = showcaseTabs.find(t => t.dataset.videoTo === activeTab);
-    const clips = clipsOf(activeTab), video = clips[clipPosition[activeTab] || 0];
-    if (tabEl && video && video.duration) {
-      const p = ((clipPosition[activeTab] || 0) + Math.min(1, video.currentTime / video.duration)) / clips.length;
-      showcaseTabs.forEach(t => t.style.setProperty('--p', t === tabEl ? p.toFixed(4) : '0'));
-    }
-    requestAnimationFrame(tick);
-  };
-  requestAnimationFrame(tick);
-  showClip(activeTab, 0);
+  showcasePanels.filter(panel => panel !== activePanel).forEach(panel => clipsOf(panel).forEach(park));
+  showClip(activePanel, 0);
 }
 
 // ---------- advantages step tabs ----------
@@ -416,7 +410,8 @@ if (partnersAvatars.length && partnersSlides.length) {
 function videoShouldPlay(video) {
   const slide = video.closest('.adv3-slide, .skills-slide');
   if (slide) return slide.classList.contains('active');
-  if (video.classList.contains('showcase-video') || video.classList.contains('hero-bg-video')) return video.classList.contains('active');
+  if (video.classList.contains('showcase-video')) return video.classList.contains('active') && video.closest('.showcase-panel').classList.contains('active');
+  if (video.classList.contains('hero-bg-video')) return video.classList.contains('active');
   return video.autoplay;
 }
 if ('IntersectionObserver' in window) {
