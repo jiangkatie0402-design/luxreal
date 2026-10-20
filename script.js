@@ -397,14 +397,11 @@ const partnersFeature = document.querySelector('.partners-feature');
 if (partnersFeature) {
   const avatars = [...partnersFeature.querySelectorAll('.partners-avatar')];
   const panes = [...partnersFeature.querySelectorAll('[data-partner-slide]')];
-  const count = partnersFeature.querySelector('.partners-count');
-  const pad = n => String(n).padStart(2, '0');
   let current = 0, timer = null, hovering = false;
   function showPartner(i) {
     current = (i + avatars.length) % avatars.length;
     avatars.forEach((a, k) => { a.classList.toggle('active', k === current); a.setAttribute('aria-selected', k === current ? 'true' : 'false'); });
     panes.forEach(p => p.classList.toggle('active', p.dataset.partnerSlide === String(current)));
-    if (count) count.textContent = `${pad(current + 1)} / ${pad(avatars.length)}`;
   }
   // advance every 7s while the section is on screen and not hovered
   const schedule = () => { clearInterval(timer); timer = setInterval(() => { if (!hovering) showPartner(current + 1); }, 7000); };
