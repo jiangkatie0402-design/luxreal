@@ -176,28 +176,28 @@ if (heroBgVideos.length > 0) {
 }
 
 // ---------- hero: the beast leaps in front of the title ----------
-// Each frame of the beast clip (hero-seq) is 1920x1632: the 1920x1080 picture on top and a
+// Each frame of the beast clips (.hero-seq: the leap and the idle clip after it) is 1920x1632: the 1920x1080 picture on top and a
 // 960x540 matte of the beast at y=1088 (16px-aligned so compression doesn't bleed picture
 // into it). The <video> is sized so only the picture shows; while it plays, a WebGL canvas
 // above all the hero text redraws just the matted pixels from the same frame, darkened by the
 // same gradient as .hero-cinematic-overlay, so the cut-out lines up and matches exactly.
-const heroSeq = document.querySelector('.hero-seq');
+const heroSeqs = [...document.querySelectorAll('.hero-seq')];
 const heroFg = document.querySelector('.hero-fg');
-if (heroSeq && heroFg) {
+if (heroSeqs.length && heroFg) {
   const PIC_W = 1920, PIC_H = 1080, FRAME_H = 1632, MATTE_Y = 1088, MATTE_W = 960, MATTE_H = 540;
   // The leap in hero-beast is lifted 130px over the source, so at its apex (frame 69) the
   // paws reach picture row ~426: about where the centred title's glyphs start, so they graze it.
-  // on the way up the beast stays behind the text; it comes in front from the apex frame,
-  // where it is entirely above the title and clear of the subtitle and CTA, so the swap
-  // itself can't be seen
-  const FRONT_FROM = 68.5 / 24;
-  const heroBox = heroSeq.parentElement;
+  // On the way up the beast stays behind the text; it comes in front from the apex frame
+  // (data-front-from), where it is entirely above the title and clear of the subtitle and CTA,
+  // so the swap itself can't be seen. The idle clip that follows keeps it in front throughout.
+  const frontFrom = v => parseFloat(v.dataset.frontFrom || '0');
+  const heroBox = heroSeqs[0].parentElement;
   const geo = { left: 0, top: 0, w: 0, h: 0, picW: PIC_W, picH: PIC_H };
   function layoutHeroSeq() {
     const w = heroBox.clientWidth, h = heroBox.clientHeight;
     const scale = Math.max(w / PIC_W, h / PIC_H);
     Object.assign(geo, { w, h, picW: PIC_W * scale, picH: PIC_H * scale, left: (w - PIC_W * scale) / 2, top: (h - PIC_H * scale) / 2 });
-    Object.assign(heroSeq.style, { width: `${geo.picW}px`, height: `${FRAME_H * scale}px`, left: `${geo.left}px`, top: `${geo.top}px` });
+    heroSeqs.forEach(v => Object.assign(v.style, { width: `${geo.picW}px`, height: `${FRAME_H * scale}px`, left: `${geo.left}px`, top: `${geo.top}px` }));
     const dpr = Math.min(window.devicePixelRatio || 1, 2);
     heroFg.width = Math.round(w * dpr);
     heroFg.height = Math.round(h * dpr);
@@ -246,27 +246,33 @@ if (heroSeq && heroFg) {
         gl.clearColor(0, 0, 0, 0); gl.clear(gl.COLOR_BUFFER_BIT);
         cleared = true;
       }
-      function drawHeroFg(mediaTime) {
-        const t = mediaTime != null ? mediaTime : heroSeq.currentTime;
-        if (!heroSeq.classList.contains('active') || heroSeq.readyState < 2 || t < FRONT_FROM) { clearHeroFg(); return; }
+      function drawHeroFg(video, mediaTime) {
+        const t = mediaTime != null ? mediaTime : video.currentTime;
+        if (!video.classList.contains('active')) return;
+        if (video.readyState < 2 || t < frontFrom(video)) { clearHeroFg(); return; }
         cleared = false;
         gl.viewport(0, 0, heroFg.width, heroFg.height);
-        gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGB, gl.RGB, gl.UNSIGNED_BYTE, heroSeq);
+        gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGB, gl.RGB, gl.UNSIGNED_BYTE, video);
         gl.uniform4f(uGeo, geo.left, geo.top, geo.picW, geo.picH);
         gl.uniform2f(uSize, geo.w, geo.h);
         gl.drawArrays(gl.TRIANGLE_STRIP, 0, 4);
       }
       // redraw on every decoded frame so the cut-out stays locked to the picture
-      if ('requestVideoFrameCallback' in HTMLVideoElement.prototype) {
-        const onFrame = (now, meta) => { drawHeroFg(meta.mediaTime); heroSeq.requestVideoFrameCallback(onFrame); };
-        heroSeq.requestVideoFrameCallback(onFrame);
-      } else {
-        const tick = () => { if (!heroSeq.paused) drawHeroFg(); requestAnimationFrame(tick); };
-        requestAnimationFrame(tick);
-      }
-      // the clip is hidden the moment it is cut away from, so drop the cut-out in the same task
-      heroSeq.addEventListener('ended', clearHeroFg);
-      document.addEventListener('hero:cut', () => { if (!heroSeq.classList.contains('active')) clearHeroFg(); });
+      heroSeqs.forEach(video => {
+        if ('requestVideoFrameCallback' in HTMLVideoElement.prototype) {
+          const onFrame = (now, meta) => { drawHeroFg(video, meta.mediaTime); video.requestVideoFrameCallback(onFrame); };
+          video.requestVideoFrameCallback(onFrame);
+        } else {
+          const tick = () => { if (!video.paused) drawHeroFg(video); requestAnimationFrame(tick); };
+          requestAnimationFrame(tick);
+        }
+      });
+      // in the same task as a cut: carry the cut-out straight over to the incoming beast clip
+      // (so the text never shows through the beast for a frame), or drop it for other clips
+      document.addEventListener('hero:cut', () => {
+        const act = heroSeqs.find(v => v.classList.contains('active'));
+        if (act) drawHeroFg(act); else clearHeroFg();
+      });
     }
   }
 }

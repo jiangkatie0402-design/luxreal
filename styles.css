@@ -932,16 +932,16 @@ button { font-family: inherit; }
 @media (prefers-reduced-motion: reduce) { .faq-a, .faq-a p, .faq-icon::before, .faq-icon::after { transition: none; } }
 
 /* ---------- hero: the two choices shown over the idle beast clip ---------- */
-.hero-cinematic.hero-choice .hero-cinematic-content > * { visibility: hidden; animation: none; opacity: 0; }
+/* the pair sits close together near the bottom centre, as in the reference frame */
 .hero-choices {
-  position: absolute; z-index: 6; left: 0; right: 0; bottom: clamp(24px, 6vh, 64px);
-  display: flex; justify-content: space-between; padding: 0 clamp(16px, 5vw, 96px);
+  position: absolute; z-index: 6; left: 0; right: 0; bottom: clamp(24px, 7vh, 72px);
+  display: flex; justify-content: center; gap: clamp(24px, 22vw, 420px); padding: 0 16px;
   opacity: 0; transform: translateY(12px); pointer-events: none;
   transition: opacity .6s var(--ease), transform .6s var(--ease);
 }
 .hero-cinematic.hero-choice .hero-choices { opacity: 1; transform: none; pointer-events: auto; transition-delay: .7s; }
 .hero-choice-btn {
-  padding: 0; border: none; background: none; cursor: pointer; width: clamp(160px, 22vw, 360px);
+  padding: 0; border: none; background: none; cursor: pointer; width: clamp(160px, 24vw, 400px);
   transition: transform .3s var(--ease), filter .3s var(--ease);
   filter: drop-shadow(0 10px 24px rgba(0,0,0,.55));
 }
