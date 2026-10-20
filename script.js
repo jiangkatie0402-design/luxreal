@@ -106,9 +106,16 @@ if (heroBgVideos.length > 1) {
   function playHeroBgVideo(index) {
     const next = heroBgVideos[index];
     if (next.paused) next.play().catch(() => {});
-    heroBgVideos.forEach(video => video.classList.toggle('active', video === next));
+    // the outgoing clip stays visible underneath for a moment, so if the incoming one hasn't
+    // painted its frame yet (Safari doesn't always decode hidden video) there is no blank flash
     heroBgVideos.forEach(video => {
-      if (video !== next) { video.pause(); video.currentTime = 0; }
+      if (video === next) { video.classList.remove('leaving'); video.classList.add('active'); return; }
+      if (!video.classList.contains('active')) return;
+      video.classList.remove('active'); video.classList.add('leaving');
+      setTimeout(() => {
+        video.classList.remove('leaving');
+        if (!video.classList.contains('active')) { video.pause(); video.currentTime = 0; }
+      }, 300);
     });
     // in the same task as the cut: during the idle clip the hero text gives way to the two
     // choices, and the beast cut-out layer is cleared
