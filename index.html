@@ -8,10 +8,11 @@
 <link rel="icon" href="data:,">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,opsz,wght@0,8..60,600;0,8..60,700;0,8..60,900;1,8..60,900&family=Noto+Serif+SC:wght@600;700;900&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,opsz,wght@0,8..60,600;0,8..60,700;0,8..60,900;1,8..60,900&family=Noto+Serif+SC:wght@600;700;900&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="styles.css">
 </head>
 <body>
+<a class="skip-link" href="#home">跳到主要内容</a>
 
 <nav class="nav">
   <a href="index.html" class="nav-logo">
@@ -25,7 +26,7 @@
     <a href="#" data-open-auth="register">开始创作</a>
   </div>
   <div class="nav-right">
-    <div class="lang-toggle">
+    <div class="lang-toggle" role="group" aria-label="切换语言">
       <button type="button" data-lang="en">English</button>
       <button type="button" class="active" data-lang="zh">中文</button>
     </div>
@@ -46,6 +47,10 @@
   <a href="#" data-open-auth="register">开始创作</a>
   <a href="about.html">关于我们</a>
   <a href="privacy.html">隐私政策</a>
+  <div class="lang-toggle" role="group" aria-label="切换语言">
+    <button type="button" data-lang="en">English</button>
+    <button type="button" class="active" data-lang="zh">中文</button>
+  </div>
 </div>
 
 <!-- HERO -->
@@ -68,13 +73,14 @@
   <div class="hero-cinematic-overlay"></div>
   <canvas class="hero-fg" aria-hidden="true"></canvas>
   <div class="hero-cinematic-content">
-    <h1 class="hero-cinematic-title">专业级<span class="hero-serif">AI</span>影视<span class="hero-serif">Agent</span></h1>
+    <h1 class="hero-cinematic-title" data-i18n="hero-title">专业级<span class="hero-serif">AI</span>影视<span class="hero-serif">Agent</span></h1>
     <p class="hero-cinematic-sub">线上影视工业化，从 LuxReal 开始</p>
     <button class="pill-cta" data-open-auth="register">开始创作</button>
   </div>
+  <button class="hero-pause" type="button" aria-label="暂停背景视频" aria-pressed="false"><svg class="i-pause" width="16" height="16" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><rect x="6" y="5" width="4" height="14" rx="1"/><rect x="14" y="5" width="4" height="14" rx="1"/></svg><svg class="i-play" width="16" height="16" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M8 5.5v13a1 1 0 0 0 1.5.86l10.5-6.5a1 1 0 0 0 0-1.72L9.5 4.64A1 1 0 0 0 8 5.5Z"/></svg></button>
   <div class="hero-choices">
-    <button class="hero-choice-btn" type="button" data-open-auth="register"><img src="assets/hero/choice-fight.webp" alt="拔剑迎战" width="720" height="206"></button>
-    <button class="hero-choice-btn" type="button" data-open-auth="register"><img src="assets/hero/choice-tame.webp" alt="驯服神兽" width="720" height="206"></button>
+    <button class="hero-choice-btn" type="button" data-open-auth="register"><img src="assets/hero/choice-fight.webp" alt="" width="720" height="206"><span class="hero-choice-label">拔剑迎战</span></button>
+    <button class="hero-choice-btn" type="button" data-open-auth="register"><img src="assets/hero/choice-tame.webp" alt="" width="720" height="206"><span class="hero-choice-label">驯服神兽</span></button>
   </div>
 </header>
 
@@ -261,12 +267,13 @@
         </div>
         </div>
         <div class="partners-nav">
-          <div class="partners-avatars" role="tablist">
+          <div class="partners-avatars" role="tablist" aria-label="创作者">
             <button class="partners-avatar active" type="button" role="tab" data-partner="0" aria-label="林晚"><img src="assets/creators/girl.jpg" alt="" width="44" height="44" loading="lazy"></button>
             <button class="partners-avatar" type="button" role="tab" data-partner="1" aria-label="苏绮"><img src="assets/creators/hero.jpg" alt="" width="44" height="44" loading="lazy"></button>
             <button class="partners-avatar" type="button" role="tab" data-partner="2" aria-label="韩烈"><img src="assets/creators/patch.jpg" alt="" width="44" height="44" loading="lazy"></button>
             <button class="partners-avatar" type="button" role="tab" data-partner="3" aria-label="老周"><img src="assets/creators/cold.jpg" alt="" width="44" height="44" loading="lazy"></button>
           </div>
+          <button class="partners-pause" type="button" aria-label="暂停轮播" aria-pressed="false"><svg class="i-pause" width="14" height="14" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><rect x="6" y="5" width="4" height="14" rx="1"/><rect x="14" y="5" width="4" height="14" rx="1"/></svg><svg class="i-play" width="14" height="14" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M8 5.5v13a1 1 0 0 0 1.5.86l10.5-6.5a1 1 0 0 0 0-1.72L9.5 4.64A1 1 0 0 0 8 5.5Z"/></svg></button>
         </div>
       </div>
     </div>
@@ -393,36 +400,37 @@
 
 <!-- AUTH MODAL -->
 <div class="modal-overlay" id="auth-modal">
-  <div class="modal-card">
+  <div class="modal-card" role="dialog" aria-modal="true" aria-labelledby="modal-title">
     <button class="modal-close" data-close-auth aria-label="关闭">
       <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 6l12 12M18 6L6 18"/></svg>
     </button>
     <div class="modal-tabs">
-      <div class="modal-tab active" data-mode="login">登录</div>
-      <div class="modal-tab" data-mode="register">注册</div>
+      <button type="button" class="modal-tab active" data-mode="login">登录</button>
+      <button type="button" class="modal-tab" data-mode="register">注册</button>
     </div>
     <h3 class="modal-title" id="modal-title">欢迎回来</h3>
     <p class="modal-sub" id="modal-sub">登录以继续你的创作</p>
     <form id="auth-form">
       <div class="field" id="register-only" style="display:none;">
-        <label>品牌 / 姓名</label>
-        <input type="text" placeholder="你的品牌或姓名">
+        <label for="auth-name">品牌 / 姓名</label>
+        <input id="auth-name" type="text" autocomplete="organization" placeholder="你的品牌或姓名">
       </div>
       <div class="field">
-        <label>邮箱地址</label>
-        <input type="email" placeholder="you@brand.com" required>
+        <label for="auth-email">邮箱地址</label>
+        <input id="auth-email" type="email" autocomplete="email" placeholder="you@brand.com" required>
       </div>
       <div class="field">
-        <label>密码</label>
-        <input type="password" placeholder="••••••••" required>
+        <label for="auth-password">密码</label>
+        <input id="auth-password" type="password" autocomplete="current-password" placeholder="••••••••" required>
       </div>
       <button type="submit" class="btn btn-primary modal-submit" id="modal-submit-btn">登录</button>
-      <div class="modal-toast" id="auth-toast">演示环境 · 表单交互已就绪，实际账户系统即将上线</div>
+      <div class="modal-toast" id="auth-toast" role="status">演示环境 · 表单交互已就绪，实际账户系统即将上线</div>
     </form>
     <p class="modal-note">继续即表示你同意 LuxReal 的 <a href="privacy.html" class="link" style="color:var(--blue-pale);">隐私政策</a></p>
   </div>
 </div>
 
+<script src="i18n.js"></script>
 <script src="script.js"></script>
 </body>
 </html>

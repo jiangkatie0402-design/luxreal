@@ -7,16 +7,6 @@ function onScroll() {
 window.addEventListener('scroll', onScroll, { passive: true });
 onScroll();
 
-// ---------- language toggle (visual only) ----------
-document.querySelectorAll('.lang-toggle').forEach(group => {
-  group.querySelectorAll('button').forEach(btn => {
-    btn.addEventListener('click', () => {
-      group.querySelectorAll('button').forEach(b => b.classList.remove('active'));
-      btn.classList.add('active');
-    });
-  });
-});
-
 // ---------- mobile menu ----------
 const burger = document.querySelector('.nav-burger');
 const mobilePanel = document.querySelector('.mobile-panel');
@@ -76,7 +66,10 @@ function setAuthMode(mode) {
   if (modalTitle) modalTitle.textContent = mode === 'register' ? '创建账户' : '欢迎回来';
   if (modalSub) modalSub.textContent = mode === 'register' ? '注册 LuxReal，开启电影级影像创作' : '登录以继续你的创作';
   if (modalSubmitBtn) modalSubmitBtn.textContent = mode === 'register' ? '创建账户' : '登录';
+  const pw = document.getElementById('auth-password');
+  if (pw) pw.autocomplete = mode === 'register' ? 'new-password' : 'current-password';
   if (authToast) authToast.classList.remove('show');
+  if (window.luxI18n && modalOverlay) luxI18n.apply(modalOverlay);
 }
 
 openTriggers.forEach(el => el.addEventListener('click', (e) => {
@@ -94,6 +87,14 @@ if (authForm) {
     e.preventDefault();
     if (authToast) authToast.classList.add('show');
   });
+}
+
+// ---------- motion preferences ----------
+// The English layout follows the ui-ux-pro-max rules: it honours prefers-reduced-motion (the hero
+// holds a still and nothing auto-rotates) and gives the hero video a visible pause control.
+const reduceMotionQuery = window.matchMedia ? window.matchMedia('(prefers-reduced-motion: reduce)') : null;
+function motionOff() {
+  return document.documentElement.lang === 'en' && !!reduceMotionQuery && reduceMotionQuery.matches;
 }
 
 // ---------- hero background video sequence ----------
@@ -173,6 +174,36 @@ if (heroBgVideos.length > 0) {
     });
     setTimeout(revealHeroContent, 4000);
   }
+}
+
+// ---------- hero pause control (English layout) ----------
+const heroPauseBtn = document.querySelector('.hero-pause');
+if (heroPauseBtn && heroBgVideos.length) {
+  const root = document.documentElement;
+  function setHeroPaused(on) {
+    root.classList.toggle('hero-paused', on);
+    heroPauseBtn.setAttribute('aria-pressed', on ? 'true' : 'false');
+    heroPauseBtn.setAttribute('aria-label', on ? '播放背景视频' : '暂停背景视频');
+    if (window.luxI18n) luxI18n.apply(heroPauseBtn.parentElement);
+    const active = document.querySelector('.hero-bg-video.active');
+    if (on) heroBgVideos.forEach(v => v.pause());
+    else if (active) active.play().catch(() => {});
+  }
+  heroPauseBtn.addEventListener('click', () => setHeroPaused(!root.classList.contains('hero-paused')));
+  // reduced motion: hold the opening clip on the frame where the headline comes in
+  function holdForReducedMotion() {
+    if (!motionOff()) return;
+    const first = heroBgVideos[0];
+    setHeroPaused(true);
+    const still = () => { first.currentTime = Math.min(2, (first.duration || 2) - 0.05); };
+    if (first.readyState >= 1) still(); else first.addEventListener('loadedmetadata', still, { once: true });
+    const content = document.querySelector('.hero-cinematic-content');
+    if (content) content.classList.add('revealed');
+  }
+  holdForReducedMotion();
+  document.addEventListener('lang:change', holdForReducedMotion);
+  // leaving English drops the control, so never leave the hero stuck paused
+  document.addEventListener('lang:change', e => { if (e.detail !== 'en' && root.classList.contains('hero-paused')) setHeroPaused(false); });
 }
 
 // ---------- hero: the beast leaps in front of the title ----------
@@ -416,40 +447,39 @@ const partnersFeature = document.querySelector('.partners-feature');
 if (partnersFeature) {
   const avatars = [...partnersFeature.querySelectorAll('.partners-avatar')];
   const panes = [...partnersFeature.querySelectorAll('[data-partner-slide]')];
-  let current = 0, timer = null, hovering = false;
+  let current = 0, timer = null, hovering = false, focused = false, paused = false;
   function showPartner(i) {
     current = (i + avatars.length) % avatars.length;
     avatars.forEach((a, k) => { a.classList.toggle('active', k === current); a.setAttribute('aria-selected', k === current ? 'true' : 'false'); });
     panes.forEach(p => p.classList.toggle('active', p.dataset.partnerSlide === String(current)));
   }
   // advance every 7s while the section is on screen and not hovered
-  const schedule = () => { clearInterval(timer); timer = setInterval(() => { if (!hovering) showPartner(current + 1); }, 7000); };
+  const schedule = () => { clearInterval(timer); timer = setInterval(() => { if (!hovering && !focused && !paused && !motionOff()) showPartner(current + 1); }, 7000); };
   avatars.forEach((a, k) => a.addEventListener('click', () => { showPartner(k); schedule(); }));
   partnersFeature.addEventListener('mouseenter', () => { hovering = true; });
   partnersFeature.addEventListener('mouseleave', () => { hovering = false; });
+  partnersFeature.addEventListener('focusin', () => { focused = true; });
+  partnersFeature.addEventListener('focusout', e => { if (!partnersFeature.contains(e.relatedTarget)) focused = false; });
+  // English layout: a visible pause control for the rotation
+  const partnersPause = partnersFeature.querySelector('.partners-pause');
+  const syncPartnersPause = () => {
+    partnersPause.setAttribute('aria-pressed', paused ? 'true' : 'false');
+    partnersPause.setAttribute('aria-label', paused ? '继续轮播' : '暂停轮播');
+    if (window.luxI18n) luxI18n.apply(partnersPause.parentElement);
+  };
+  if (partnersPause) partnersPause.addEventListener('click', () => { paused = !paused; syncPartnersPause(); });
   if ('IntersectionObserver' in window) {
     new IntersectionObserver(entries => entries.forEach(e => { if (e.isIntersecting) schedule(); else clearInterval(timer); }), { threshold: 0.3 }).observe(partnersFeature);
   } else schedule();
   showPartner(0);
 }
-if ('IntersectionObserver' in window) {
-  const videoIO = new IntersectionObserver((entries) => {
-    entries.forEach(entry => {
-      const video = entry.target;
-      if (!entry.isIntersecting) video.pause();
-      else if (videoShouldPlay(video)) video.play().catch(() => {});
-    });
-  }, { threshold: 0.05 });
-  document.querySelectorAll('video').forEach(video => videoIO.observe(video));
-}
-
 // ---------- only decode the videos that are on screen ----------
 // looping clips otherwise keep playing after they scroll away, so several videos decode at once
 function videoShouldPlay(video) {
   const slide = video.closest('.adv3-slide, .skills-slide');
   if (slide) return slide.classList.contains('active');
   if (video.classList.contains('showcase-video')) return video.classList.contains('active') && video.closest('.showcase-panel').classList.contains('active');
-  if (video.classList.contains('hero-bg-video')) return video.classList.contains('active');
+  if (video.classList.contains('hero-bg-video')) return video.classList.contains('active') && !document.documentElement.classList.contains('hero-paused');
   return video.autoplay;
 }
 if ('IntersectionObserver' in window) {

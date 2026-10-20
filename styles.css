@@ -746,6 +746,7 @@ button { font-family: inherit; }
 .modal-tabs { display: flex; gap: 4px; background: var(--surface); border-radius: 100px; padding: 4px; margin-bottom: 28px; }
 .modal-tab {
   flex: 1; text-align: center; padding: 9px 0; border-radius: 100px; font-size: 13px; font-weight: 600;
+  border: none; background: transparent; font-family: inherit;
   color: var(--text-dim); cursor: pointer; transition: all .25s;
 }
 .modal-tab.active { background: var(--grad-btn); color: #fff; }
@@ -952,3 +953,124 @@ button { font-family: inherit; }
   .hero-choices { padding: 0 12px; gap: 10px; }
   .hero-choice-btn { width: calc(50% - 5px); }
 }
+
+/* ---------- accessibility basics (both languages; invisible until used) ---------- */
+:focus-visible { outline: 2px solid var(--blue-light); outline-offset: 3px; }
+.skip-link {
+  position: fixed; z-index: 400; left: 16px; top: 16px; padding: 12px 20px; border-radius: 100px;
+  background: #fff; color: #0a0a0c; font-size: 14px; font-weight: 600;
+  transform: translateY(-200%); transition: transform .2s var(--ease);
+}
+.skip-link:focus { transform: none; }
+/* the choice art carries its label as pixels; the text is there for screen readers (and is
+   shown on a blank plate in English) */
+.hero-choice-btn { position: relative; }
+.hero-choice-label {
+  position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap;
+}
+/* phones: the language switch lives in the menu panel */
+.mobile-panel .lang-toggle { display: flex; margin-top: 20px; }
+.mobile-panel .lang-toggle button { padding: 10px 22px; font-size: 15px; }
+/* pause controls: part of the English layout only */
+.hero-pause, .partners-pause { display: none; }
+
+/* =====================================================================================
+   English layout. Fonts and UI/UX follow the ui-ux-pro-max skill: its design-system pick for a
+   dark, cinematic AI video product is "Modern Dark Cinema (Inter System)": Inter only,
+   Display 700 with tight tracking, headings 600, body 400 at 16px / 1.6, labels 500 uppercase
+   with open tracking, a white-to-70% gradient on major headings. Plus the skill's priority
+   rules: 4.5:1 text contrast, 44px targets, visible focus, pause controls for moving content,
+   prefers-reduced-motion, wrapping over truncation.
+   ===================================================================================== */
+html:lang(en) {
+  --font-sans: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", sans-serif;
+  --font-title: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", sans-serif;
+  --text-faint: rgba(242,244,248,.56); /* was .36 (about 3:1); now 4.5:1+ on the page background */
+}
+html:lang(en) body { line-height: 1.6; }
+
+/* type scale */
+html:lang(en) .hero-cinematic-title { font-weight: 700; letter-spacing: -0.03em; line-height: 1.05; }
+html:lang(en) .hero-cinematic-sub { letter-spacing: 0; }
+html:lang(en) .section-title, html:lang(en) .cta-wall-content h2, html:lang(en) .page-hero h1, html:lang(en) .cta-banner h2 {
+  font-weight: 600; letter-spacing: -0.02em; line-height: 1.15;
+  background: linear-gradient(180deg, #fff 0%, rgba(255,255,255,.7) 100%);
+  -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent; color: transparent;
+}
+html:lang(en) .page-hero h1 .grad-text { background: var(--grad-text); -webkit-background-clip: text; background-clip: text; }
+html:lang(en) .showcase-panel-title, html:lang(en) .skills-item-name { font-weight: 600; letter-spacing: -0.01em; }
+html:lang(en) .skills-item.active .skills-item-name { font-weight: 700; letter-spacing: -0.02em; }
+html:lang(en) .skills-item-name { font-weight: 500; }
+html:lang(en) .partners-quote { font-weight: 500; letter-spacing: -0.01em; line-height: 1.5; }
+html:lang(en) .faq-q { letter-spacing: -0.005em; }
+html:lang(en) .modal-title { font-weight: 600; letter-spacing: -0.02em; }
+html:lang(en) .btn, html:lang(en) .pill-cta, html:lang(en) .lang-toggle button { letter-spacing: 0; }
+/* labels */
+html:lang(en) .showcase-info-tag, html:lang(en) .footer-col h4, html:lang(en) .eyebrow, html:lang(en) .privacy-updated {
+  font-weight: 500; text-transform: uppercase; letter-spacing: .1em;
+}
+html:lang(en) .showcase-info-tag { font-size: 11px; color: rgba(255,255,255,.72); }
+html:lang(en) .footer-col h4 { font-size: 12px; }
+/* body copy at the 16px base */
+html:lang(en) .faq-a p, html:lang(en) .partners-sub, html:lang(en) .faq-sub, html:lang(en) .page-hero p { font-size: 16px; line-height: 1.7; }
+html:lang(en) .showcase-info-desc { font-size: 13px; }
+html:lang(en) .field input { font-size: 16px; } /* no iOS zoom on focus */
+/* wrap instead of truncating: English labels run longer than the Chinese ones */
+html:lang(en) .showcase-panel-sub { white-space: normal; overflow: visible; }
+html:lang(en) .showcase-panel:not(.active) .showcase-panel-title { white-space: normal; font-size: 26px; }
+
+/* touch targets: 44px or a hit area extended to 44px */
+html:lang(en) .nav-links a { padding: 11px 12px; }
+html:lang(en) .icon-btn, html:lang(en) .nav-burger, html:lang(en) .modal-close, html:lang(en) .showcase-next, html:lang(en) .partners-avatar { min-width: 44px; min-height: 44px; }
+html:lang(en) .lang-toggle button, html:lang(en) .avatar-btn { position: relative; }
+html:lang(en) .lang-toggle button::after { content: ''; position: absolute; inset: -7px -1px; }
+html:lang(en) .avatar-btn::after { content: ''; position: absolute; inset: -3px; border-radius: 50%; }
+html:lang(en) .modal-tab { padding: 12px 0; }
+html:lang(en) .skills-item-head, html:lang(en) .privacy-nav a { min-height: 44px; }
+html:lang(en) .privacy-nav a { display: flex; align-items: center; }
+html:lang(en) .nav-logo { min-height: 44px; }
+
+/* hero choices: blank plate + live label */
+html:lang(en) .hero-choice-btn {
+  aspect-ratio: 720 / 206; display: grid; place-items: center;
+  background: url("assets/hero/choice-plate.webp") center / 100% 100% no-repeat;
+}
+html:lang(en) .hero-choice-btn img { display: none; }
+html:lang(en) .hero-choice-label {
+  position: static; width: auto; height: auto; overflow: visible; clip-path: none;
+  font-weight: 600; font-size: clamp(11px, 1.25vw, 20px); letter-spacing: .14em; text-transform: uppercase;
+  color: #eef1f6; text-shadow: 0 1px 0 rgba(0,0,0,.6), 0 0 14px rgba(150,190,255,.25);
+  padding-bottom: 1%;
+}
+
+/* pause controls for moving content */
+html:lang(en) .hero-pause, html:lang(en) .partners-pause {
+  display: grid; place-items: center; width: 44px; height: 44px; border-radius: 50%; cursor: pointer;
+  transition: background .25s var(--ease), color .25s var(--ease), border-color .25s var(--ease);
+}
+html:lang(en) .hero-pause {
+  position: absolute; z-index: 7; right: 32px; bottom: 32px;
+  border: 1px solid rgba(255,255,255,.28); background: rgba(8,9,11,.5); color: #fff;
+}
+html:lang(en) .hero-pause:hover { background: #fff; color: #0a0a0c; border-color: #fff; }
+html:lang(en) .partners-pause {
+  margin-left: auto; border: 1px solid var(--border); background: var(--surface-2); color: var(--text-dim);
+}
+html:lang(en) .partners-pause:hover { color: var(--text); border-color: var(--border-2); }
+.hero-pause .i-play, .partners-pause .i-play { display: none; }
+.hero-pause[aria-pressed="true"] .i-play, .partners-pause[aria-pressed="true"] .i-play { display: block; }
+.hero-pause[aria-pressed="true"] .i-pause, .partners-pause[aria-pressed="true"] .i-pause { display: none; }
+
+@media (max-width: 640px) {
+  /* the English headline is longer: let it wrap instead of overflowing a phone screen */
+  html:lang(en) .hero-cinematic-title { white-space: normal; font-size: 40px; }
+  html:lang(en) .hero-pause { right: 16px; bottom: 16px; }
+  html:lang(en) .faq-a p { font-size: 15px; }
+  html:lang(en) .hero-choice-label { font-size: 10px; letter-spacing: .1em; }
+}
+@media (prefers-reduced-motion: reduce) {
+  html:lang(en) .reveal { opacity: 1; transform: none; transition: none; }
+  html:lang(en) .hero-cinematic-content > * { animation: none; opacity: 1; }
+  html:lang(en) .showcase-panel, html:lang(en) .showcase-video, html:lang(en) .partners-slide, html:lang(en) .partners-photo { transition: none; }
+}
+.page-hero { overflow-x: clip; } /* its glow is wider than the viewport */
