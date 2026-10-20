@@ -59,6 +59,11 @@
       <source src="assets/hero-beast.mp4" type="video/mp4">
       <source src="assets/hero-beast.webm" type="video/webm">
     </video>
+    <!-- picks up exactly where the beast clip lands; the text gives way to the two choices -->
+    <video class="hero-bg-video hero-idle" muted playsinline preload="auto">
+      <source src="assets/hero-idle.mp4" type="video/mp4">
+      <source src="assets/hero-idle.webm" type="video/webm">
+    </video>
   </div>
   <div class="hero-cinematic-overlay"></div>
   <canvas class="hero-fg" aria-hidden="true"></canvas>
@@ -66,6 +71,10 @@
     <h1 class="hero-cinematic-title">专业级<span class="hero-serif">AI</span>影视<span class="hero-serif">Agent</span></h1>
     <p class="hero-cinematic-sub">线上影视工业化，从 LuxReal 开始</p>
     <button class="pill-cta" data-open-auth="register">开始创作</button>
+  </div>
+  <div class="hero-choices">
+    <button class="hero-choice-btn" type="button" data-open-auth="register"><img src="assets/hero/choice-fight.webp" alt="拔剑迎战" width="720" height="206"></button>
+    <button class="hero-choice-btn" type="button" data-open-auth="register"><img src="assets/hero/choice-tame.webp" alt="驯服神兽" width="720" height="206"></button>
   </div>
 </header>
 

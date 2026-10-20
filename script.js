@@ -110,6 +110,11 @@ if (heroBgVideos.length > 1) {
     heroBgVideos.forEach(video => {
       if (video !== next) { video.pause(); video.currentTime = 0; }
     });
+    // in the same task as the cut: during the idle clip the hero text gives way to the two
+    // choices, and the beast cut-out layer is cleared
+    const header = next.closest('.hero-cinematic');
+    if (header) header.classList.toggle('hero-choice', next.classList.contains('hero-idle'));
+    document.dispatchEvent(new CustomEvent('hero:cut'));
   }
   heroBgVideos.forEach((video, i) => {
     const nextIndex = (i + 1) % heroBgVideos.length;
@@ -252,8 +257,9 @@ if (heroSeq && heroFg) {
         const tick = () => { if (!heroSeq.paused) drawHeroFg(); requestAnimationFrame(tick); };
         requestAnimationFrame(tick);
       }
-      // the clip is hidden the moment it ends, so drop the cut-out in the same task
+      // the clip is hidden the moment it is cut away from, so drop the cut-out in the same task
       heroSeq.addEventListener('ended', clearHeroFg);
+      document.addEventListener('hero:cut', () => { if (!heroSeq.classList.contains('active')) clearHeroFg(); });
     }
   }
 }
