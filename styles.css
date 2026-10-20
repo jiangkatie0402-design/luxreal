@@ -1032,7 +1032,7 @@ html:lang(en) .nav-logo { min-height: 44px; }
 
 /* hero choices: blank plate + live label */
 html:lang(en) .hero-choice-btn {
-  aspect-ratio: 720 / 206; display: grid; place-items: center;
+  aspect-ratio: 720 / 206; display: grid; place-items: center; container-type: inline-size;
   background: url("assets/hero/choice-plate.webp") center / 100% 100% no-repeat;
 }
 html:lang(en) .hero-choice-btn img { display: none; }
@@ -1040,7 +1040,11 @@ html:lang(en) .hero-choice-label {
   position: static; width: auto; height: auto; overflow: visible; clip-path: none;
   font-weight: 600; font-size: clamp(11px, 1.25vw, 20px); letter-spacing: .14em; text-transform: uppercase;
   color: #eef1f6; text-shadow: 0 1px 0 rgba(0,0,0,.6), 0 0 14px rgba(150,190,255,.25);
-  padding-bottom: 1%;
+  line-height: 1; margin-right: -.14em; /* tracking leaves a gap after the last letter: cancel it */
+  /* centre the capitals themselves, not the line box (whose spare room depends on the font's
+     ascent/descent and differs between browsers) */
+  text-box: trim-both cap alphabetic;
+  transform: translateY(.8cqw); /* the plate's panel sits a touch below the image centre */
 }
 
 /* pause controls for moving content */
