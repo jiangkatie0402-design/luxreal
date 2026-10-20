@@ -24,11 +24,10 @@
 
   --font-sans: "PingFang SC", -apple-system, BlinkMacSystemFont, "Helvetica Neue",
     "Microsoft YaHei", "Hiragino Sans GB", "Noto Sans SC", sans-serif;
-  /* display face for large headings; alternatives loaded below: "PangMenZhengDao" (标题体, heavier), "YouSheBiaoTiHei" (优设标题黑) */
-  --font-title: "PangMenZhengDaoXiXian", var(--font-sans);
-  /* hero headline: Source Serif 4 (the renamed Source Serif Pro) for Latin, paired with its CJK
-     sibling Source Han Serif / Noto Serif SC for the Chinese; was "PangMenZhengDao" */
-  --font-title-hero: "Source Serif 4", "Noto Serif SC", "Songti SC", serif;
+  /* all headings: Source Serif 4 (the renamed Source Serif Pro) for Latin, with its CJK sibling
+     Source Han Serif / Noto Serif SC for Chinese. Was "PangMenZhengDaoXiXian" (still loaded below). */
+  --font-title: "Source Serif 4", "Noto Serif SC", "Songti SC", serif;
+  --font-title-hero: var(--font-title);
 }
 
 /* both files are subset to the characters used on the site (~49KB each) */
@@ -326,7 +325,7 @@ button { font-family: inherit; }
 }
 .showcase-panel.active .showcase-panel-label { top: 24px; bottom: auto; gap: 6px; }
 .showcase-panel-title {
-  font-family: var(--font-title); font-weight: 400; font-synthesis: none; letter-spacing: .04em;
+  font-family: var(--font-title); font-weight: 700; font-synthesis: none; letter-spacing: .03em;
   font-size: 30px; line-height: 1.2; color: #fff; white-space: nowrap;
 }
 .showcase-panel.active .showcase-panel-title { font-size: 22px; }
@@ -499,14 +498,14 @@ button { font-family: inherit; }
   display: flex; align-items: center; width: 100%; min-height: 40px; padding: 0; border: none; background: none;
   font-family: inherit; text-align: left; cursor: pointer;
 }
-/* same display face as the section titles (庞门正道细线体) */
+/* same face as the section titles */
 .skills-item-name {
   font-family: var(--font-title); font-synthesis: none; letter-spacing: .02em;
-  font-size: 19px; font-weight: 400; color: var(--text-faint); white-space: nowrap;
+  font-size: 19px; font-weight: 600; color: var(--text-faint); white-space: nowrap;
   transition: font-size .4s var(--ease), color .4s var(--ease);
 }
 .skills-item-head:hover .skills-item-name { color: var(--text-dim); }
-.skills-item.active .skills-item-name { font-size: 27px; color: var(--text); }
+.skills-item.active .skills-item-name { font-size: 27px; font-weight: 700; color: var(--text); }
 /* points expand under the active item */
 .skills-points-wrap { display: grid; grid-template-rows: 0fr; transition: grid-template-rows .45s var(--ease); }
 .skills-item.active .skills-points-wrap { grid-template-rows: 1fr; }
@@ -581,7 +580,7 @@ button { font-family: inherit; }
 }
 .partners-slide.active { opacity: 1; transform: none; pointer-events: auto; transition-delay: .15s; }
 .partners-quote {
-  font-family: var(--font-title); font-weight: 400; font-synthesis: none; letter-spacing: .02em;
+  font-family: var(--font-title); font-weight: 600; font-synthesis: none; letter-spacing: .02em;
   font-size: clamp(20px, 1.8vw, 26px); line-height: 1.6; color: #fff;
 }
 .partners-name { margin-top: 28px; font-size: 17px; font-weight: 600; color: #fff; }
@@ -850,9 +849,9 @@ button { font-family: inherit; }
   .hero-cinematic-chip span { max-width: 46vw; }
 }
 
-/* large headings use the display face; single-weight fonts, so no faux bold */
+/* large headings: the serif title face in bold (the hero headline goes to Black below) */
 .hero-cinematic-title, .section-title, .cta-banner h2, .page-hero h1 {
-  font-family: var(--font-title); font-weight: 400; font-synthesis: none; letter-spacing: .02em;
+  font-family: var(--font-title); font-weight: 700; font-synthesis: none; letter-spacing: .02em;
 }
 .page-hero h1 .serif { font-family: inherit; }
 .hero-cinematic-title { font-family: var(--font-title-hero); font-weight: 900; letter-spacing: .04em; }
@@ -878,7 +877,7 @@ button { font-family: inherit; }
 }
 .cta-wall-content { position: relative; z-index: 1; text-align: center; padding: 0 24px; }
 .cta-wall-content h2 {
-  font-family: var(--font-title); font-weight: 400; font-synthesis: none; letter-spacing: .03em;
+  font-family: var(--font-title); font-weight: 700; font-synthesis: none; letter-spacing: .03em;
   font-size: clamp(32px, 3.6vw, 52px); line-height: 1.25; color: #fff;
 }
 .cta-wall-content p { margin-top: 14px; font-size: 16px; color: rgba(255,255,255,.72); }
