@@ -595,7 +595,7 @@ button { font-family: inherit; }
 .partners-head { text-align: center; margin-bottom: var(--head-gap); }
 .partners-sub { color: var(--text-dim); margin-top: 12px; max-width: 560px; margin-left: auto; margin-right: auto; }
 .partners-feature {
-  display: grid; grid-template-columns: minmax(0, 420px) minmax(0, 1fr); gap: 72px; align-items: center;
+  display: grid; grid-template-columns: minmax(0, 420px) minmax(0, 1fr); gap: 72px; align-items: stretch;
   max-width: 1100px; margin: 0 auto;
 }
 .partners-photos { position: relative; aspect-ratio: 4 / 5; border-radius: var(--radius-lg); overflow: hidden; background: var(--surface); }
@@ -604,7 +604,9 @@ button { font-family: inherit; }
   opacity: 0; transform: scale(1.04); transition: opacity .8s var(--ease), transform 1.6s var(--ease);
 }
 .partners-photo.active { opacity: 1; transform: none; }
-.partners-text { min-width: 0; }
+/* text column spans the photo's height: quote centred in the space, thumbnails on the photo's bottom line */
+.partners-text { min-width: 0; display: flex; flex-direction: column; }
+.partners-quote-wrap { flex: 1 1 auto; display: flex; flex-direction: column; justify-content: center; }
 .partners-mark { display: block; height: 44px; font: 400 96px/1 Georgia, "Times New Roman", serif; color: var(--blue-light); }
 .partners-slides { display: grid; }
 .partners-slide {
@@ -619,6 +621,7 @@ button { font-family: inherit; }
 .partners-name { margin-top: 28px; font-size: 17px; font-weight: 600; color: #fff; }
 .partners-role { margin-top: 4px; font-size: 13px; color: var(--text-faint); }
 .partners-nav { margin-top: 44px; display: flex; align-items: center; gap: 12px; }
+.partners-avatars { padding: 0 0 4px 4px; } /* room for the active ring, so it lands on the photo's bottom line */
 .partners-avatars { display: flex; gap: 12px; }
 .partners-avatar {
   width: 44px; height: 44px; border-radius: 50%; padding: 0; overflow: hidden; cursor: pointer;
