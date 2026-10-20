@@ -939,7 +939,7 @@ button { font-family: inherit; }
   opacity: 0; transform: translateY(12px); pointer-events: none;
   transition: opacity .6s var(--ease), transform .6s var(--ease);
 }
-.hero-cinematic.hero-choice .hero-choices { opacity: 1; transform: none; pointer-events: auto; transition-delay: .7s; }
+.hero-cinematic.hero-choice .hero-choices { opacity: 1; transform: none; pointer-events: auto; transition-duration: .3s; }
 .hero-choice-btn {
   padding: 0; border: none; background: none; cursor: pointer; width: clamp(160px, 24vw, 400px);
   transition: transform .3s var(--ease), filter .3s var(--ease);
