@@ -26,8 +26,9 @@
     "Microsoft YaHei", "Hiragino Sans GB", "Noto Sans SC", sans-serif;
   /* display face for large headings; alternatives loaded below: "PangMenZhengDao" (标题体, heavier), "YouSheBiaoTiHei" (优设标题黑) */
   --font-title: "PangMenZhengDaoXiXian", var(--font-sans);
-  /* the hero headline keeps the heavier 庞门正道标题体 */
-  --font-title-hero: "PangMenZhengDao", var(--font-sans);
+  /* hero headline: Source Serif 4 (the renamed Source Serif Pro) for Latin, paired with its CJK
+     sibling Source Han Serif / Noto Serif SC for the Chinese; was "PangMenZhengDao" */
+  --font-title-hero: "Source Serif 4", "Noto Serif SC", "Songti SC", serif;
 }
 
 /* both files are subset to the characters used on the site (~49KB each) */
@@ -212,8 +213,8 @@ button { font-family: inherit; }
   text-shadow: 0 2px 16px rgba(0,0,0,.5), 0 1px 4px rgba(0,0,0,.4);
 }
 .hero-serif {
-  font-family: "Playfair Display", Georgia, "Times New Roman", serif;
-  font-style: italic; font-weight: 800; font-size: 1.12em; font-synthesis: none; margin: 0 0.06em;
+  font-family: "Source Serif 4", Georgia, "Times New Roman", serif;
+  font-style: italic; font-weight: 900; font-size: 1.06em; font-synthesis: none; margin: 0 0.08em;
 }
 .hero-cinematic-sub {
   font-size: clamp(15px, 1.25vw, 20px); letter-spacing: 0.02em; color: rgba(255,255,255,.82); font-weight: 400;
@@ -854,7 +855,7 @@ button { font-family: inherit; }
   font-family: var(--font-title); font-weight: 400; font-synthesis: none; letter-spacing: .02em;
 }
 .page-hero h1 .serif { font-family: inherit; }
-.hero-cinematic-title { font-family: var(--font-title-hero); }
+.hero-cinematic-title { font-family: var(--font-title-hero); font-weight: 900; letter-spacing: .04em; }
 
 /* ---------- closing CTA: full-screen wall of frames ---------- */
 .cta-wall { position: relative; height: 100svh; min-height: 620px; max-height: 1000px; overflow: hidden; display: grid; place-items: center; }
