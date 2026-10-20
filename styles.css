@@ -277,7 +277,7 @@ button { font-family: inherit; }
 @media (max-width: 640px) { :root { --section-gap: 112px; --head-gap: 40px; } }
 #scenarios { padding-top: var(--section-gap); }
 #scenarios, #advantages, #feedback, #partners { padding-bottom: var(--section-gap); }
-#advantages, #feedback, #partners, #partners + .section-tight { padding-top: 0; }
+#advantages, #feedback, #partners { padding-top: 0; }
 .section-head { max-width: 640px; margin-bottom: 64px; }
 .section-title { font-family: var(--font-sans); font-weight: 400; font-size: clamp(30px, 4vw, 46px); line-height: 1.28; letter-spacing: 0; }
 .section-desc { color: var(--text-dim); font-size: 16px; margin-top: 16px; line-height: 1.8; max-width: 560px; }
@@ -890,3 +890,43 @@ button { font-family: inherit; }
 }
 .page-hero h1 .serif { font-family: inherit; }
 .hero-cinematic-title { font-family: var(--font-title-hero); }
+
+/* ---------- closing CTA: full-screen wall of frames ---------- */
+.cta-wall { position: relative; height: 100svh; min-height: 620px; max-height: 1000px; overflow: hidden; display: grid; place-items: center; }
+.cta-wall-grid { position: absolute; inset: 0 -40px; display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 16px; }
+.cta-wall-col { overflow: hidden; }
+/* each track holds its tiles twice, so moving it by half its height loops seamlessly */
+.cta-wall-track { display: flex; flex-direction: column; gap: 16px; padding-bottom: 16px; animation: cta-wall-up 70s linear infinite; will-change: transform; }
+.cta-wall-col:nth-child(even) .cta-wall-track { animation-name: cta-wall-down; animation-duration: 84s; }
+.cta-wall-col:nth-child(3) .cta-wall-track { animation-duration: 62s; }
+.cta-wall-track img { width: 100%; height: auto; aspect-ratio: 6 / 5; object-fit: cover; border-radius: 18px; display: block; }
+.cta-wall-col:nth-child(even) .cta-wall-track img:nth-child(3n+1) { aspect-ratio: 4 / 5; }
+@keyframes cta-wall-up { from { transform: translateY(0); } to { transform: translateY(-50%); } }
+@keyframes cta-wall-down { from { transform: translateY(-50%); } to { transform: translateY(0); } }
+.cta-wall:not(.in-view) .cta-wall-track { animation-play-state: paused; }
+.cta-wall-shade {
+  position: absolute; inset: 0; pointer-events: none;
+  background:
+    radial-gradient(50% 45% at 50% 50%, rgba(8,9,11,.9), rgba(8,9,11,.6) 75%),
+    linear-gradient(180deg, var(--bg) 0%, rgba(8,9,11,0) 16%, rgba(8,9,11,0) 84%, var(--bg) 100%);
+}
+.cta-wall-content { position: relative; z-index: 1; text-align: center; padding: 0 24px; }
+.cta-wall-content h2 {
+  font-family: var(--font-title); font-weight: 400; font-synthesis: none; letter-spacing: .03em;
+  font-size: clamp(32px, 3.6vw, 52px); line-height: 1.25; color: #fff;
+}
+.cta-wall-content p { margin-top: 14px; font-size: 16px; color: rgba(255,255,255,.72); }
+.cta-wall-content .cta-btns { margin-top: 32px; display: flex; gap: 14px; justify-content: center; flex-wrap: wrap; }
+.btn-white { background: #fff; color: #0a0a0c; }
+.btn-white:hover { background: rgba(255,255,255,.88); transform: translateY(-1px); }
+.cta-wall-content .btn-ghost { background: rgba(8,9,11,.4); border-color: rgba(255,255,255,.35); color: #fff; }
+@media (max-width: 900px) {
+  .cta-wall-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 10px; inset: 0 -30px; }
+  .cta-wall-col:nth-child(n+4) { display: none; }
+  .cta-wall-track { gap: 10px; padding-bottom: 10px; }
+  .cta-wall-track img { border-radius: 12px; }
+  .cta-wall { height: 80svh; min-height: 520px; }
+  .cta-wall-content h2 { font-size: 28px; }
+  .cta-wall-content p { font-size: 14px; }
+}
+@media (prefers-reduced-motion: reduce) { .cta-wall-track { animation: none; } }

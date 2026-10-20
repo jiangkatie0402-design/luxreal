@@ -459,3 +459,11 @@ if (showcaseSection && showcaseVideos.length) {
     bufferAll();
   }
 }
+
+// ---------- closing CTA wall: only animate while on screen ----------
+const ctaWall = document.querySelector('.cta-wall');
+if (ctaWall) {
+  if ('IntersectionObserver' in window) {
+    new IntersectionObserver(entries => entries.forEach(e => ctaWall.classList.toggle('in-view', e.isIntersecting))).observe(ctaWall);
+  } else ctaWall.classList.add('in-view');
+}
