@@ -35,7 +35,8 @@ if ('IntersectionObserver' in window && revealEls.length) {
 document.querySelectorAll('.stagger').forEach(group => {
   [...group.children].forEach((child, i) => child.style.setProperty('--i', i));
 });
-// bullet points under each skill come in one after another
+// FAQ questions and the bullet points under each skill come in one after another
+document.querySelectorAll('.faq-item').forEach((item, i) => item.style.setProperty('--i', i));
 document.querySelectorAll('.skills-points').forEach(list => {
   [...list.children].forEach((li, i) => li.style.setProperty('--i', i));
 });
@@ -45,7 +46,7 @@ document.querySelectorAll('.skills-points').forEach(list => {
 // span clips, the inner one moves. The original child nodes are kept and put back before a
 // language switch (i18n.js swaps those very text nodes), then the new copy is split again.
 // Screen readers get the plain heading text through aria-label.
-const SPLIT_SEL = '.hero-cinematic-title, .section-title, .cta-wall-content h2, .page-hero h1, .cta-banner h2';
+const SPLIT_SEL = '.hero-cinematic-title, .section-title, .cta-wall-content h2, .page-hero h1, .cta-banner h2, .partners-quote';
 const CJK = /[㐀-鿿]/;
 const CJK_CLOSE = /^[、。，：；！？》」』）”’]$/; // 、。，：；！？》」』）”’ stay on the previous character
 const CJK_OPEN = /^[《「『（“‘]$/; // 《「『（“‘ stay on the next one
@@ -80,7 +81,7 @@ function splitHeading(el) {
   el.setAttribute('aria-label', label);
   el.classList.add('split');
   const lead = el.closest('.reveal');
-  if (lead && lead !== el) lead.classList.add('text-lead');
+  if (lead && lead !== el && !el.classList.contains('partners-quote')) lead.classList.add('text-lead');
 }
 function unsplitHeading(el) {
   if (!el.__orig) return;
