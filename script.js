@@ -35,6 +35,63 @@ if ('IntersectionObserver' in window && revealEls.length) {
 document.querySelectorAll('.stagger').forEach(group => {
   [...group.children].forEach((child, i) => child.style.setProperty('--i', i));
 });
+// bullet points under each skill come in one after another
+document.querySelectorAll('.skills-points').forEach(list => {
+  [...list.children].forEach((li, i) => li.style.setProperty('--i', i));
+});
+
+// ---------- headings: words (Chinese: characters) rise in one after another ----------
+// Each unit becomes <span class="sw"><span class="si" style="--i:n">…</span></span>; the outer
+// span clips, the inner one moves. The original child nodes are kept and put back before a
+// language switch (i18n.js swaps those very text nodes), then the new copy is split again.
+// Screen readers get the plain heading text through aria-label.
+const SPLIT_SEL = '.hero-cinematic-title, .section-title, .cta-wall-content h2, .page-hero h1, .cta-banner h2';
+const CJK = /[㐀-鿿]/;
+const CJK_CLOSE = /^[、。，：；！？》」』）”’]$/; // 、。，：；！？》」』）”’ stay on the previous character
+const CJK_OPEN = /^[《「『（“‘]$/; // 《「『（“‘ stay on the next one
+function splitHeading(el) {
+  if (el.__orig) return;
+  el.__orig = [...el.childNodes];
+  const label = el.textContent.replace(/\s+/g, ' ').trim();
+  const out = document.createDocumentFragment();
+  let index = 0, prev = null, pending = '';
+  const unit = (text, parent) => {
+    const sw = document.createElement('span'); sw.className = 'sw'; sw.setAttribute('aria-hidden', 'true');
+    const si = document.createElement('span'); si.className = 'si'; si.style.setProperty('--i', index++);
+    si.textContent = text; sw.appendChild(si); parent.appendChild(sw); prev = si;
+  };
+  const walk = (nodes, parent) => nodes.forEach(node => {
+    if (node.nodeType === Node.TEXT_NODE) {
+      const tokens = node.nodeValue.match(/\s+|[㐀-鿿]|[^\s㐀-鿿]+/g) || [];
+      tokens.forEach(tok => {
+        if (/^\s+$/.test(tok)) { parent.appendChild(document.createTextNode(' ')); prev = null; return; }
+        if (CJK_CLOSE.test(tok) && prev) { prev.textContent += tok; return; }
+        if (CJK_OPEN.test(tok)) { pending += tok; return; }
+        unit(pending + tok, parent); pending = '';
+      });
+    } else if (node.nodeType === Node.ELEMENT_NODE) {
+      if (node.tagName === 'BR') { parent.appendChild(node.cloneNode()); prev = null; return; }
+      const copy = node.cloneNode(false); parent.appendChild(copy);
+      walk([...node.childNodes], copy);
+    }
+  });
+  walk(el.__orig, out);
+  el.replaceChildren(out);
+  el.setAttribute('aria-label', label);
+  el.classList.add('split');
+  const lead = el.closest('.reveal');
+  if (lead && lead !== el) lead.classList.add('text-lead');
+}
+function unsplitHeading(el) {
+  if (!el.__orig) return;
+  el.replaceChildren(...el.__orig);
+  el.__orig = null;
+  el.removeAttribute('aria-label');
+}
+const splitHeadings = () => document.querySelectorAll(SPLIT_SEL).forEach(splitHeading);
+splitHeadings();
+document.addEventListener('lang:before', () => document.querySelectorAll(SPLIT_SEL).forEach(unsplitHeading));
+document.addEventListener('lang:change', splitHeadings);
 
 // ---------- auth modal ----------
 const modalOverlay = document.getElementById('auth-modal');

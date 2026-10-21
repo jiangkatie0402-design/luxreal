@@ -274,6 +274,8 @@ function applyLang(root) {
   root.querySelectorAll(I18N_ATTRS.map(a => `[${a}]`).join(',')).forEach(el => translateAttrs(el, en));
 }
 function setLang(lang) {
+  // lets script.js put split headings back to plain text before their words are swapped
+  document.dispatchEvent(new CustomEvent('lang:before'));
   currentLang = lang === 'en' ? 'en' : 'zh';
   const en = currentLang === 'en';
   document.documentElement.lang = en ? 'en' : 'zh-CN';
