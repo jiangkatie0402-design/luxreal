@@ -831,7 +831,7 @@ footer { padding: 72px 0 40px; margin-top: clamp(48px, 6vw, 96px); border-top: 1
 /* hero */
 .wn-hero { position: relative; min-height: min(100vh, 920px); display: flex; align-items: center; padding: 120px 0 110px; overflow: hidden; --px: 0; --py: 0; }
 .wn-hero-bg { position: absolute; inset: 0; }
-.wn-kvbg { position: absolute; inset: -3%; width: 106%; height: 106%; object-fit: cover; opacity: .9; transform: translate3d(calc(var(--px) * -10px), calc(var(--py) * -8px), 0); transition: transform .6s var(--ease); }
+.wn-kvbg { clip-path: inset(0 .6% 0 0); position: absolute; inset: -3%; width: 106%; height: 106%; object-fit: cover; opacity: .9; transform: translate3d(calc(var(--px) * -10px), calc(var(--py) * -8px), 0); transition: transform .6s var(--ease); }
 .wn-glow { position: absolute; right: 8%; top: 22%; width: 46vw; height: 46vw; max-width: 760px; max-height: 760px; border-radius: 50%; background: radial-gradient(closest-side, rgba(106,72,255,.32), transparent 70%); filter: blur(10px); animation: wnBreath 6s ease-in-out infinite; }
 .wn-lotus { position: absolute; right: -2%; top: 52%; width: min(64vw, 1040px); aspect-ratio: 1040 / 750; object-fit: cover; mix-blend-mode: lighten; transform: translate3d(calc(var(--px) * 22px), calc(-50% + var(--py) * 16px), 0); transition: transform .6s var(--ease);
   -webkit-mask: linear-gradient(#000 70%, transparent), linear-gradient(90deg, transparent, #000 12%); -webkit-mask-composite: source-in; mask: linear-gradient(#000 70%, transparent) intersect, linear-gradient(90deg, transparent, #000 12%); }
@@ -856,22 +856,22 @@ footer { padding: 72px 0 40px; margin-top: clamp(48px, 6vw, 96px); border-top: 1
 .wn-panel { position: absolute; pointer-events: auto; display: block; padding: 8px; border: 1.5px dashed rgba(150,130,255,.85); background: rgba(5,4,12,.72); backdrop-filter: blur(4px); transition: border-color .25s, transform .25s var(--ease), box-shadow .25s; }
 .wn-panel:hover { border-style: solid; border-color: #B5ACFF; transform: translateY(-3px); box-shadow: 0 0 32px rgba(106,72,255,.35); }
 .wn-panel .lab { display: block; font-family: var(--font-mono); font-size: 10.5px; letter-spacing: .12em; color: #fff; margin: 0 0 7px 2px; }
-.wn-p1 { right: 3%; top: 4%; width: clamp(200px, 16vw, 250px); }
+.wn-p1 { right: 2%; top: 2%; width: clamp(200px, 15vw, 240px); }
 .wn-p1-media { position: relative; display: block; aspect-ratio: 16 / 10; overflow: hidden; background: #000; }
 .wn-p1-media img, .wn-p1-media video { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
 .wn-p1-cap { display: block; margin: 8px 2px 2px; font-size: 13px; font-weight: 600; color: var(--text); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-.wn-p2 { right: 17%; bottom: 4%; width: clamp(200px, 16vw, 250px); }
+.wn-p2 { right: 2%; bottom: 2%; width: clamp(200px, 15vw, 240px); }
 .wn-p2-list { display: grid; gap: 2px; }
 .wn-p2-list span { display: flex; justify-content: space-between; gap: 12px; padding: 6px 4px; font-size: 12.5px; color: var(--text-soft); border-top: 1px solid rgba(150,130,255,.18); }
 .wn-p2-list span:first-child { border-top: 0; }
 .wn-p2-list em { font-style: normal; font-family: var(--font-mono); color: var(--ice); }
-.wn-hud-words { position: absolute; right: 3%; bottom: 14%; font-size: 10.5px; line-height: 1.55; letter-spacing: .14em; color: rgba(212,212,216,.55); }
+.wn-hud-words { position: absolute; right: calc(4% + clamp(200px, 15vw, 240px)); bottom: 4%; font-size: 10.5px; line-height: 1.55; letter-spacing: .14em; color: rgba(212,212,216,.55); }
 .wn-hud-words b { display: block; color: #9C8CFF; font-weight: 600; }
 .wn-cross { position: absolute; width: 14px; height: 14px; }
 .wn-cross::before, .wn-cross::after { content: ''; position: absolute; background: rgba(181,172,255,.8); }
 .wn-cross::before { left: 6px; top: 0; width: 1.5px; height: 14px; } .wn-cross::after { top: 6px; left: 0; width: 14px; height: 1.5px; }
-.wn-cross.c1 { right: 44%; bottom: 12%; } .wn-cross.c2 { right: 3%; bottom: 6%; } .wn-cross.c3 { right: 36%; top: 14%; }
-.wn-sq { position: absolute; right: 26%; top: 0; width: 18px; height: 18px; background: linear-gradient(135deg, #8C7BFF 50%, transparent 50%), linear-gradient(135deg, transparent 50%, #6A48FF 50%); background-size: 9px 9px; background-position: 0 0, 9px 9px; background-repeat: no-repeat; }
+.wn-cross.c1 { right: 46%; bottom: 10%; } .wn-cross.c2 { right: calc(2% + clamp(200px, 15vw, 240px) + 18px); top: 30%; } .wn-cross.c3 { right: 38%; top: 10%; }
+.wn-sq { position: absolute; right: calc(2% + clamp(200px, 15vw, 240px) + 14px); top: 2%; width: 18px; height: 18px; background: linear-gradient(135deg, #8C7BFF 50%, transparent 50%), linear-gradient(135deg, transparent 50%, #6A48FF 50%); background-size: 9px 9px; background-position: 0 0, 9px 9px; background-repeat: no-repeat; }
 .wn-scroll { position: absolute; left: 50%; bottom: 28px; z-index: 3; transform: translateX(-50%); display: grid; justify-items: center; gap: 8px; font-size: 11px; letter-spacing: .3em; color: var(--text-muted); }
 .wn-scroll span { width: 1px; height: 34px; background: linear-gradient(var(--ice), transparent); animation: wnDrop 1.8s ease-in-out infinite; transform-origin: top; }
 @keyframes wnDrop { 0% { transform: scaleY(0); } 50% { transform: scaleY(1); } 100% { transform: scaleY(1); opacity: 0; } }
@@ -958,7 +958,7 @@ html[lang="zh-CN"] .wn-group h3 { font-family: var(--font-title); font-weight: 4
 .wn-peek video { display: block; width: 100%; aspect-ratio: 16 / 10; object-fit: cover; background: #000; }
 /* outro */
 .wn-outro { position: relative; margin-top: clamp(80px, 10vw, 140px); min-height: 420px; display: flex; align-items: center; overflow: hidden; border-top: 1px solid var(--border-subtle); }
-.wn-outro-bg { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; opacity: .55; }
+.wn-outro-bg { clip-path: inset(0 .6% 0 0); position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; opacity: .55; }
 .wn-outro-lotus { position: absolute; left: 50%; top: 58%; width: min(70vw, 900px); transform: translate(-50%, -50%); mix-blend-mode: lighten; opacity: .45; -webkit-mask: radial-gradient(closest-side, #000 55%, transparent); mask: radial-gradient(closest-side, #000 55%, transparent); }
 .wn-outro::after { content: ''; position: absolute; inset: 0; background: linear-gradient(var(--bg), rgba(5,5,6,.2) 40%, rgba(5,5,6,.2) 70%, var(--bg)); pointer-events: none; }
 .wn-outro-in { position: relative; z-index: 2; text-align: center; }
@@ -1572,8 +1572,7 @@ body.modal-open { overflow: hidden; }
       <div class="wn-hud" aria-hidden="true">
         <a class="wn-panel wn-p1" href="#wn-grand" data-wn-jump tabindex="-1"><span class="lab">//GRAND_PRIZE</span><span class="wn-p1-media"><img alt=""><video muted loop playsinline preload="none"></video></span><span class="wn-p1-cap"></span></a>
         <a class="wn-panel wn-p2" href="#wn-ranks" data-wn-jump tabindex="-1"><span class="lab">//AWARDS</span><span class="wn-p2-list"></span></a>
-        <span class="wn-hud-words mono"><b>PLAY</b>CREATE<br>SHARE<br>A BRIGHTER<br>WORLD</span>
-        <i class="wn-cross c1"></i><i class="wn-cross c2"></i><i class="wn-cross c3"></i><i class="wn-sq"></i>
+        <i class="wn-cross c2"></i><i class="wn-cross c3"></i><i class="wn-sq"></i>
       </div>
     </div>
     <a class="wn-scroll mono" href="#wn-grand" data-wn-jump>SCROLL<span></span></a>
