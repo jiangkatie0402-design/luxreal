@@ -831,7 +831,7 @@ footer { padding: 72px 0 40px; margin-top: clamp(48px, 6vw, 96px); border-top: 1
 .wn-intro.gone { display: none; }
 .wn-intro::after { content: ''; position: absolute; inset: 0; pointer-events: none; opacity: .5; background: radial-gradient(1.2px 1.2px at 20% 30%, rgba(255,255,255,.35), transparent), radial-gradient(1px 1px at 70% 60%, rgba(214,204,255,.3), transparent), radial-gradient(1px 1px at 40% 80%, rgba(214,204,255,.25), transparent); }
 .wn-in-stage { position: absolute; inset: 0; perspective: 1800px; perspective-origin: 50% 46%; }
-.wn-in-stack { position: absolute; left: 50%; top: 46%; transform-style: preserve-3d; transform: rotateX(var(--sx, 86deg)) rotateY(var(--sy, 0deg)) rotateZ(var(--sz, 0deg)); }
+.wn-in-stack { position: absolute; left: 50%; top: 46%; transform-style: preserve-3d; transform: scale(var(--ss, 1)) rotateX(var(--sx, 0deg)) rotateY(var(--sy, -28deg)) rotateZ(var(--sz, 0deg)); }
 .wn-in-p { --pw: min(44vw, 720px); position: absolute; width: var(--pw); height: calc(var(--pw) * 9 / 16); left: calc(var(--pw) / -2); top: calc(var(--pw) * 9 / -32);
   background-size: cover; background-position: center; border: 1px solid rgba(214,204,255,.32); box-shadow: 0 0 60px rgba(106,72,255,.22); backface-visibility: visible; }
 .wn-in-p::after { content: ''; position: absolute; inset: 0; mix-blend-mode: color; background: linear-gradient(135deg, #8b6bff, #3b28b8); opacity: var(--tint, .85); }
@@ -4267,7 +4267,8 @@ document.querySelectorAll('.res-main').forEach(card => card.addEventListener('po
   const tabsIO = new IntersectionObserver(es => es.forEach(e => { if (e.isIntersecting) tabs.forEach(a => a.classList.toggle('on', a.getAttribute('href') === '#' + e.target.id)); }), { rootMargin: '-40% 0px -55% 0px' });
   root.querySelectorAll('.wn-sec').forEach(sec => tabsIO.observe(sec));
   let built = false;
-  /* opening animation (ms): line 0–900 · turn into a block 700–2000 · fan open 1800–3200 · fly apart 3200–4300 */
+  /* opening animation (ms): open fan 0–900 · close into a block 900–1800 · shrink and turn edge-on into a bar 1800–2700 ·
+     grow and fan open again 2700–3800 · fly apart into the hero 3800–4900 */
   const intro = root.querySelector('.wn-intro'), stack = intro.querySelector('.wn-in-stack'); let introPlayed = false;
   const iNow = () => window.__relicClock ? window.__relicClock() : performance.now();
   function playIntro(done) {
@@ -4279,22 +4280,25 @@ document.querySelectorAll('.res-main').forEach(card => card.addEventListener('po
     const cl = k => Math.max(0, Math.min(1, k)), eo = k => 1 - Math.pow(1 - k, 3), eio = k => k < .5 ? 4 * k * k * k : 1 - Math.pow(-2 * k + 2, 3) / 2;
     let t0 = iNow(), raf = 0, ended = false;
     const end = () => { if (ended) return; ended = true; cancelAnimationFrame(raf); intro.classList.add('gone'); document.body.classList.remove('modal-open'); root.classList.remove('intro-on'); done(); };
-    intro.querySelector('.wn-in-skip').onclick = () => { const t = iNow() - t0; if (t < 3200) t0 -= 3200 - t; };
+    intro.querySelector('.wn-in-skip').onclick = () => { const t = iNow() - t0; if (t < 3800) t0 -= 3800 - t; };
     const frame = () => {
-      const t = iNow() - t0, kA = cl(t / 900), kB = cl((t - 700) / 1300), kC = cl((t - 1800) / 1400);
-      intro.style.setProperty('--sx', (86 - 86 * eio(kB)).toFixed(2) + 'deg');
-      intro.style.setProperty('--sy', (-34 * eio(kB) + 8 * eio(kC)).toFixed(2) + 'deg');
-      intro.style.setProperty('--sz', (-2 * eio(kB)).toFixed(2) + 'deg');
-      intro.style.setProperty('--co', (cl((t - 1900) / 500) * (1 - cl((t - 3300) / 500))).toFixed(3));
-      intro.style.setProperty('--io', (1 - eo(cl((t - 3600) / 700))).toFixed(3));
+      const t = iNow() - t0, k1 = cl((t - 900) / 900), k2 = cl((t - 1800) / 900), k3 = cl((t - 2700) / 1100), kA = cl(t / 450);
+      // spread between layers: open → closed → (bar) → open wide
+      const spread = 1 - eio(k1) + 1.25 * eio(k3);
+      intro.style.setProperty('--ss', ((.78 + .22 * eio(k1)) * (1 - .62 * eio(k2)) + .6 * eio(k3)).toFixed(3));
+      intro.style.setProperty('--sx', (84 * eio(k2) - 84 * eio(k3)).toFixed(2) + 'deg');
+      intro.style.setProperty('--sy', (-28 + 18 * eio(k2) - 14 * eio(k3) + Math.sin(t / 900) * 2 * (1 - k2)).toFixed(2) + 'deg');
+      intro.style.setProperty('--sz', (-3 * eio(k2) + 3 * eio(k3)).toFixed(2) + 'deg');
+      intro.style.setProperty('--co', (cl((t - 3000) / 500) * (1 - cl((t - 3900) / 500))).toFixed(3));
+      intro.style.setProperty('--io', (1 - eo(cl((t - 4200) / 700))).toFixed(3));
       ps.forEach((p, i) => {
-        const c = i - (N - 1) / 2, kD = cl((t - 3200 - (N - 1 - i) * 45) / 750);
-        const z = -c * (2.5 + 115 * eio(kC)) + eo(kD) * 2200, x = c * 52 * eio(kC) + 150 * eio(kC);
+        const c = i - (N - 1) / 2, kD = cl((t - 3800 - (N - 1 - i) * 45) / 750);
+        const z = -c * (2.5 + 105 * spread) + eo(kD) * 2200, x = c * 48 * spread + 230 * spread;
         p.style.transform = `translate3d(${x.toFixed(1)}px, 0, ${z.toFixed(1)}px)`;
-        p.style.opacity = (Math.min(1, kA * 1.6) * (1 - eo(kD)) * (1 - .2 * eio(kC)) * (.6 + .4 * (i / (N - 1)))).toFixed(3);
-        p.style.setProperty('--tint', (.85 - .5 * eio(kC)).toFixed(3));
+        p.style.opacity = (kA * (1 - eo(kD)) * (1 - .2 * Math.min(1, spread)) * (.6 + .4 * (i / (N - 1)))).toFixed(3);
+        p.style.setProperty('--tint', (.85 - .45 * Math.min(1, spread)).toFixed(3));
       });
-      if (t >= 4300) end(); else raf = requestAnimationFrame(frame);
+      if (t >= 4900) end(); else raf = requestAnimationFrame(frame);
     };
     raf = requestAnimationFrame(frame);
   }
