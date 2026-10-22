@@ -860,7 +860,8 @@ footer { padding: 72px 0 40px; margin-top: clamp(48px, 6vw, 96px); border-top: 1
 .wn-hero-bg::after { content: ''; position: absolute; inset: 0; background: linear-gradient(90deg, var(--bg) 0%, rgba(5,5,6,.82) 30%, rgba(5,5,6,0) 62%), linear-gradient(0deg, var(--bg) 0%, rgba(5,5,6,0) 22%); }
 @keyframes wnBreath { 0%, 100% { opacity: .75; transform: scale(1); } 50% { opacity: 1; transform: scale(1.06); } }
 .wn-hero-in { position: relative; z-index: 2; width: 100%; }
-.wn-hero-copy { max-width: 640px; }
+.wn-hero-copy { max-width: 640px; margin-left: max(-4vw, -90px, calc(40px - var(--gutter))); }   /* sits a little left of the content edge to balance the lotus */
+@media (max-width: 960px) { .wn-hero-copy { margin-left: 0; } }
 .wn-kicker { display: flex; align-items: center; gap: 14px; font-size: 14px; color: var(--text-muted); margin-bottom: 18px; }
 .wn-kicker .mono { font-size: 12px; font-weight: 600; letter-spacing: .16em; color: var(--ice); }
 .wn-title { font-size: clamp(64px, 9.4vw, 156px); font-weight: 700; letter-spacing: -.02em; line-height: .98; background: linear-gradient(180deg, #fff 30%, #CFC6FF 100%); -webkit-background-clip: text; background-clip: text; color: transparent; }
@@ -908,7 +909,7 @@ html[lang="zh-CN"] .wn-tabs a { font-family: var(--font-title); font-weight: 400
 @media (max-width: 640px) { .wn-tabs { gap: 22px; } .wn-tabs a { font-size: 14px; } .wn-tabs a::before { font-size: 24px; } }
 .wn-sec { margin-top: clamp(48px, 6vw, 88px); scroll-margin-top: 130px; }
 .wn-sec-title { display: flex; align-items: baseline; gap: 16px; font-size: clamp(28px, 3vw, 42px); font-weight: 700; margin-bottom: 26px; }
-.wn-sec-title .mono { font-size: 12px; letter-spacing: .16em; color: var(--ice); font-weight: 600; font-family: var(--font-mono); }
+.wn-sec-title .mono { order: 2; font-size: 11px; letter-spacing: .22em; color: rgba(181,172,255,.7); font-weight: 600; font-family: var(--font-mono); }
 .wn-hint { margin: -12px 0 22px; font-size: 13px; color: var(--text-muted); }
 html[lang="zh-CN"] .wn-title, html[lang="zh-CN"] .wn-sec-title > span:last-child, html[lang="zh-CN"] .wn-award { font-family: var(--font-title); font-weight: 400; letter-spacing: .02em; }
 /* reveal */
@@ -1022,8 +1023,9 @@ html[lang="zh-CN"] .wn-outro-t { font-family: var(--font-title); font-weight: 40
 .wn-dt-name { margin-top: 10px; font-size: clamp(24px, 2.2vw, 32px); font-weight: 700; }
 .wn-dt-team { margin-top: 6px; font-size: 14px; color: var(--text-muted); }
 .wn-dt-body section { margin-top: 26px; padding-top: 20px; border-top: 1px solid var(--border-subtle); }
-.wn-dt-body h4 { display: flex; align-items: baseline; gap: 10px; font-size: 15px; font-weight: 700; margin-bottom: 10px; }
-.wn-dt-body h4 .mono { font-size: 10.5px; letter-spacing: .16em; color: var(--ice); font-weight: 600; }
+.wn-dt-body h4 { display: flex; align-items: center; gap: 10px; font-size: 15px; font-weight: 700; margin-bottom: 10px; flex-direction: row-reverse; justify-content: flex-end; }
+.wn-dt-body h4::before { content: ''; order: 3; width: 3px; height: 14px; border-radius: 2px; background: linear-gradient(#B5ACFF, #6A48FF); }
+.wn-dt-body h4 .mono { font-size: 10px; letter-spacing: .18em; color: rgba(181,172,255,.7); font-weight: 600; }
 .wn-dt-body p { font-size: 14.5px; line-height: 1.75; color: var(--text-soft); }
 .wn-dt-topic { font-weight: 600; color: #fff !important; margin-bottom: 6px; }
 .wn-dt-body blockquote { margin: 0 0 12px; padding: 14px 16px; border-left: 2px solid #8C7BFF; background: rgba(123,92,255,.07); border-radius: 0 10px 10px 0; font-size: 14.5px; line-height: 1.7; color: var(--text); }
@@ -2155,11 +2157,11 @@ body.modal-open { overflow: hidden; }
     <section class="wn-sec" id="wn-grand"><div id="wnGrand"></div>
     </section>
     <section class="wn-sec" id="wn-ranks">
-      <h2 class="wn-sec-title wn-rv"><span class="mono">//RANKED</span><span data-i18n="wn.ranks">一 · 二 · 三等奖</span></h2>
+      <h2 class="wn-sec-title wn-rv"><span class="mono">RANKED</span><span data-i18n="wn.ranks">一 · 二 · 三等奖</span></h2>
       <div id="wnRanks"></div>
     </section>
     <section class="wn-sec" id="wn-single">
-      <h2 class="wn-sec-title wn-rv"><span class="mono">//SPECIAL</span><span data-i18n="wn.single">单项奖</span></h2>
+      <h2 class="wn-sec-title wn-rv"><span class="mono">SPECIAL</span><span data-i18n="wn.single">单项奖</span></h2>
       <p class="wn-hint" data-i18n="wn.hint">把鼠标移到作品上预览，点击观看完整演示</p>
       <div class="wn-singles" id="wnSingles"></div>
     </section>
@@ -4256,10 +4258,10 @@ document.querySelectorAll('.res-main').forEach(card => card.addEventListener('po
     lb.querySelector('.wn-dt-body').innerHTML = `
       <p class="wn-dt-aw"><em>${esc(L(it.aw))}</em></p>
       <h3 class="wn-dt-name">${esc(L(w.t))}</h3><p class="wn-dt-team">${esc(L(it.team))}</p><div class="wn-tags">${w.tags.map(t => `<span>${esc(t)}</span>`).join('')}</div>
-      ${sec('//TOPIC', en() ? 'Topic' : '选题', d.topic ? `<p class="wn-dt-topic">${esc(L(d.topic))}</p><p>${esc(L(d.idea))}</p>` : '')}
-      ${sec('//CONCEPT', en() ? 'Team concept' : '团队构思', d.concept ? `<p>${esc(L(d.concept))}</p>` : '')}
-      ${sec('//NOTES', en() ? 'Making-of notes' : '创作心得', d.notes ? `<p>${esc(L(d.notes))}</p>` : '')}
-      ${sec('//JUDGES', en() ? 'Judges’ comments' : '评委评语', (d.judges || []).map(([zh, enT, who]) => `<blockquote>“${esc(en() ? enT : zh)}”<cite>— ${esc(en() ? (who === '玩家评委' ? 'Player judge' : 'Expert judge') : who)}</cite></blockquote>`).join(''))}`;
+      ${sec('TOPIC', en() ? 'Topic' : '选题', d.topic ? `<p class="wn-dt-topic">${esc(L(d.topic))}</p><p>${esc(L(d.idea))}</p>` : '')}
+      ${sec('CONCEPT', en() ? 'Team concept' : '团队构思', d.concept ? `<p>${esc(L(d.concept))}</p>` : '')}
+      ${sec('NOTES', en() ? 'Making-of notes' : '创作心得', d.notes ? `<p>${esc(L(d.notes))}</p>` : '')}
+      ${sec('JUDGES', en() ? 'Judges’ comments' : '评委评语', (d.judges || []).map(([zh, enT, who]) => `<blockquote>“${esc(en() ? enT : zh)}”<cite>— ${esc(en() ? (who === '玩家评委' ? 'Player judge' : 'Expert judge') : who)}</cite></blockquote>`).join(''))}`;
     lb.querySelector('.wn-dt-body').scrollTop = 0; }
   function open(i) { show(i); lb.hidden = false; document.body.classList.add('modal-open'); peek.classList.remove('on'); lb.querySelector('.lb-x').focus(); }
   const close = () => { if (lb.hidden) return; lbv.pause(); lbv.removeAttribute('src'); lbv.load(); lb.hidden = true; document.body.classList.remove('modal-open'); };
