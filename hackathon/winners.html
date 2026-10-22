@@ -949,6 +949,9 @@ html[lang="zh-CN"] .wn-group h3 { font-family: var(--font-title); font-weight: 4
 .wn-row .wn-aw { font-size: 12.5px; font-weight: 600; color: var(--ice); }
 .wn-row .wn-name { font-size: 15px; margin-top: 3px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 .wn-row .wn-team { margin-top: 2px; font-size: 13px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.wn-petals { position: fixed; inset: 0; width: 100vw; height: 100vh; z-index: 40; pointer-events: none; }
+.wn-pf-t { font-weight: inherit; transition: opacity .9s var(--ease), filter .9s var(--ease); }
+.wn-pf-t.wait { opacity: 0; filter: blur(6px); }
 .wn-peek { position: fixed; left: 0; top: 0; z-index: 60; width: 300px; padding: 7px; border: 1.5px dashed rgba(150,130,255,.9); background: rgba(5,4,12,.85); pointer-events: none; opacity: 0; transform: translate3d(-999px, 0, 0) scale(.92); transition: opacity .2s; }
 .wn-peek.on { opacity: 1; }
 .wn-peek .lab { display: block; font-family: var(--font-mono); font-size: 10px; letter-spacing: .12em; color: #fff; margin: 0 0 6px 2px; }
@@ -1567,7 +1570,6 @@ body.modal-open { overflow: hidden; }
         <p class="wn-note" data-i18n="wn.demo">示例展示 · 正式获奖名单将于 12 月初公布</p>
       </div>
       <div class="wn-hud" aria-hidden="true">
-        <svg class="wn-hud-lines" viewBox="0 0 100 100" preserveAspectRatio="none"><polyline points="10,60 24,46 52,46"/><polyline points="88,40 88,58 74,70"/></svg>
         <a class="wn-panel wn-p1" href="#wn-grand" data-wn-jump tabindex="-1"><span class="lab">//GRAND_PRIZE</span><span class="wn-p1-media"><img alt=""><video muted loop playsinline preload="none"></video></span><span class="wn-p1-cap"></span></a>
         <a class="wn-panel wn-p2" href="#wn-ranks" data-wn-jump tabindex="-1"><span class="lab">//AWARDS</span><span class="wn-p2-list"></span></a>
         <span class="wn-hud-words mono"><b>PLAY</b>CREATE<br>SHARE<br>A BRIGHTER<br>WORLD</span>
@@ -1604,6 +1606,7 @@ body.modal-open { overflow: hidden; }
       <p class="wn-outro-t" data-i18n="wn.thanks">感谢每一位参赛者，所有作品都值得被看见。</p>
     </div>
   </section>
+  <canvas class="wn-petals" aria-hidden="true"></canvas>
   <div class="wn-peek" aria-hidden="true"><span class="lab">//PREVIEW</span><video muted loop playsinline></video></div>
 </main>
 <script>
@@ -1665,10 +1668,10 @@ const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').match
     const add = (w, aw, team) => (LIST.push({ w, aw, team }), LIST.length - 1);
     const g = WINNERS.grand, gw = W[g.w], gi = add(g.w, ['3D AI 新物种奖', '3D AI New Species Award'], g.team);
     document.getElementById('wnGrand').innerHTML = `<article class="wn-grand wn-rv"><span class="wn-grand-no">//NO.01 · GRAND PRIZE</span><div class="wn-tilt">${media(g.w, L(gw.t), gi)}</div><div>
-      <p class="wn-award">${en() ? '3D AI New Species Award' : '3D AI 新物种奖'}</p><span class="wn-amt" data-count="100000" data-prefix="¥">¥100,000</span>
+      <p class="wn-award"><b class="wn-pf-t">${en() ? '3D AI New Species Award' : '3D AI 新物种奖'}</b></p><span class="wn-amt" data-count="100000" data-prefix="¥">¥100,000</span>
       <h3 class="wn-name">${esc(L(gw.t))}</h3><p class="wn-team">${esc(L(g.team))}</p><p class="wn-desc">${esc(L(gw.d))}</p>${tags(g.w)}
       <div class="wn-acts"><button type="button" class="btn btn-primary" data-i="${gi}">${en() ? 'Watch the demo' : '观看演示'}</button></div></div></article>`;
-    document.getElementById('wnRanks').innerHTML = WINNERS.ranks.map((r, ri) => `<div class="wn-rank"><div class="wn-rank-head wn-rv"><span class="wn-rank-no">0${ri + 1}</span><span class="wn-award">${esc(L(r.name))} <i>${r.amt} × ${r.items.length}</i></span></div>
+    document.getElementById('wnRanks').innerHTML = WINNERS.ranks.map((r, ri) => `<div class="wn-rank"><div class="wn-rank-head wn-rv"><span class="wn-rank-no">0${ri + 1}</span><span class="wn-award"><b class="wn-pf-t">${esc(L(r.name))}</b> <i>${r.amt} × ${r.items.length}</i></span></div>
       <div class="wn-grid n${r.items.length}">${r.items.map((it, k) => { const w = W[it.w], i = add(it.w, r.name, it.team); return `<article class="wn-card wn-rv" style="--d:${k * .08}s"><div class="wn-tilt">${media(it.w, L(w.t), i)}</div><div>
         <h3 class="wn-name">${esc(L(w.t))}</h3><p class="wn-team">${esc(L(it.team))}</p><p class="wn-desc">${esc(L(w.d))}</p>${r.items.length === 1 ? tags(it.w) : ''}</div></article>`; }).join('')}</div></div>`).join('');
     let n = 7;
@@ -1679,7 +1682,63 @@ const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').match
     p1.querySelector('img').src = SRC.poster(gw.v); p1.querySelector('.wn-p1-cap').textContent = L(gw.t);
     root.querySelector('.wn-p2-list').innerHTML = [[['3D AI 新物种奖', 'New Species'], 1], [['一等奖', 'First'], 1], [['二等奖', 'Second'], 2], [['三等奖', 'Third'], 3], [['单项奖', 'Single awards'], 16]]
       .map(([t, c]) => `<span>${esc(L(t))}<em>×${c}</em></span>`).join('');
-    wire();
+    wire(); armPetals();
+  }
+  /* lotus petals: they drift down from the top-right (where the lotus sits) and settle into the award name, which then fades in */
+  const pcv = root.querySelector('.wn-petals'), pctx = pcv.getContext('2d'); let petals = [], praf = 0, pdpr = 1;
+  const sizeP = () => { pdpr = Math.min(2, devicePixelRatio || 1); pcv.width = innerWidth * pdpr; pcv.height = innerHeight * pdpr; };
+  sizeP(); addEventListener('resize', sizeP);
+  function sample(el) {
+    const st = getComputedStyle(el), r = el.getBoundingClientRect(), c = document.createElement('canvas'), W = Math.ceil(r.width) + 20, H = Math.ceil(r.height) + 20;
+    c.width = W; c.height = H; const x = c.getContext('2d');
+    x.font = `${st.fontWeight} ${st.fontSize} ${st.fontFamily}`; if ('letterSpacing' in x) x.letterSpacing = st.letterSpacing;
+    x.textBaseline = 'middle'; x.fillStyle = '#fff'; x.fillText(el.textContent, 10, H / 2);
+    const d = x.getImageData(0, 0, W, H).data, pts = [], step = Math.max(2, Math.round(parseFloat(st.fontSize) / 11));
+    for (let y = 0; y < H; y += step) for (let xx = 0; xx < W; xx += step) if (d[(y * W + xx) * 4 + 3] > 128) pts.push([xx - 10, y - H / 2]);
+    for (let i = pts.length - 1; i > 0; i--) { const j = Math.random() * (i + 1) | 0; [pts[i], pts[j]] = [pts[j], pts[i]]; }
+    return pts.slice(0, 520);
+  }
+  function form(el) {
+    if (reduceMotion) { el.classList.remove('wait'); return; }
+    const pts = sample(el), t0 = performance.now();
+    pts.forEach(([ox, oy], i) => petals.push({ el, ox, oy, t0: t0 + (i / pts.length) * 700 + Math.random() * 250,
+      sx: innerWidth * (.55 + Math.random() * .45), sy: -30 - Math.random() * innerHeight * .5,
+      sway: 30 + Math.random() * 60, ph: Math.random() * 6.28, rot: Math.random() * 6.28, spin: (Math.random() - .5) * 8,
+      len: 6 + Math.random() * 6, wid: 2.4 + Math.random() * 2.2, hue: Math.random() }));
+    setTimeout(() => el.classList.remove('wait'), 2300);
+    if (!praf) praf = requestAnimationFrame(tickP);
+  }
+  function petal(x, y, a, len, wid, hue, alpha) {
+    pctx.save(); pctx.translate(x, y); pctx.rotate(a); pctx.globalAlpha = alpha;
+    const g = pctx.createLinearGradient(-len, 0, len, 0);
+    g.addColorStop(0, hue > .5 ? '#3a2290' : '#2a2340'); g.addColorStop(.55, hue > .3 ? '#9d86ff' : '#c9c3dc'); g.addColorStop(1, '#efeaff');
+    pctx.fillStyle = g; pctx.beginPath(); pctx.moveTo(-len, 0); pctx.quadraticCurveTo(0, -wid, len, 0); pctx.quadraticCurveTo(0, wid, -len, 0); pctx.fill(); pctx.restore();
+  }
+  function tickP(now) {
+    praf = 0; pctx.setTransform(pdpr, 0, 0, pdpr, 0, 0); pctx.clearRect(0, 0, innerWidth, innerHeight);
+    const rects = new Map(); pctx.globalCompositeOperation = 'lighter';
+    petals = petals.filter(p => {
+      const t = (now - p.t0) / 1000; if (t < 0) return true;
+      const r = rects.get(p.el) || (rects.set(p.el, p.el.getBoundingClientRect()), rects.get(p.el)), tx = r.left + p.ox, ty = r.top + r.height / 2 + p.oy;
+      const FALL = 1.1, SET = .8, HOLD = .5, FADE = .6;
+      let x, y, a, al = 1;
+      if (t < FALL) { const k = t / FALL; x = p.sx + Math.sin(p.ph + t * 3) * p.sway - (p.sx - tx) * k * k * .35; y = p.sy + (ty - p.sy) * k * .55 + k * 60; a = p.rot + p.spin * t; }
+      else { const fx = p.sx + Math.sin(p.ph + FALL * 3) * p.sway - (p.sx - tx) * .35, fy = p.sy + (ty - p.sy) * .55 + 60, k = Math.min(1, (t - FALL) / SET), e = 1 - Math.pow(1 - k, 3);
+        x = fx + (tx - fx) * e; y = fy + (ty - fy) * e; a = (p.rot + p.spin * FALL) * (1 - e) + .35 * e;
+        if (t > FALL + SET + HOLD) al = Math.max(0, 1 - (t - FALL - SET - HOLD) / FADE); }
+      if (al <= 0) return false;
+      const sc = t > FALL ? 1 - .55 * Math.min(1, (t - FALL) / SET) : 1;
+      petal(x, y, a, p.len * sc, p.wid * sc, p.hue, al * .9);
+      return true;
+    });
+    pctx.globalCompositeOperation = 'source-over';
+    if (petals.length) praf = requestAnimationFrame(tickP);
+  }
+  let pfIO;
+  function armPetals() {
+    if (pfIO) pfIO.disconnect();
+    pfIO = new IntersectionObserver(es => es.forEach(e => { if (e.isIntersecting) { pfIO.unobserve(e.target); form(e.target); } }), { threshold: 1, rootMargin: '0px 0px -15% 0px' });
+    root.querySelectorAll('.wn-pf-t').forEach(el => { if (!reduceMotion) el.classList.add('wait'); pfIO.observe(el); });
   }
   /* ---- interactions ---- */
   let io, rv, cnt;
