@@ -1011,9 +1011,9 @@ html[lang="zh-CN"] .wn-group h3 { font-family: var(--font-title); font-weight: 4
 .wn-outro-t { margin-top: 22px; font-size: clamp(28px, 3.4vw, 50px); font-weight: 700; color: #fff; text-shadow: 0 2px 24px rgba(0,0,0,.9), 0 0 2px rgba(0,0,0,.8); }
 html[lang="zh-CN"] .wn-outro-t { font-family: var(--font-title); font-weight: 400; letter-spacing: .03em; }
 /* project detail popup */
-.wn-lb .lb-box.wn-dt { width: min(1180px, 100%); display: grid; grid-template-columns: minmax(0, 1.35fr) minmax(0, 1fr); gap: 0; max-height: calc(100vh - 48px); background: var(--surface); border: 1px solid rgba(181,172,255,.25); border-radius: var(--radius); overflow: hidden; }
+.wn-lb .lb-box.wn-dt { width: min(1480px, 100%); display: grid; grid-template-columns: minmax(0, 2.1fr) minmax(340px, 1fr); gap: 0; max-height: calc(100vh - 48px); background: var(--surface); border: 1px solid rgba(181,172,255,.25); border-radius: var(--radius); overflow: hidden; }
 .wn-dt-media { background: #000; display: flex; align-items: center; }
-.wn-dt-media video { width: 100%; max-height: calc(100vh - 48px); border: 0; border-radius: 0; }
+.wn-dt-media video { width: 100%; height: 100%; min-height: min(62vh, 620px); max-height: calc(100vh - 48px); object-fit: contain; background: #000; border: 0; border-radius: 0; }
 .wn-dt-body { overflow-y: auto; padding: 30px 30px 34px; max-height: calc(100vh - 48px); }
 .wn-dt-aw { display: flex; justify-content: space-between; gap: 12px; font-size: 13px; padding-right: 48px; }
 .wn-dt-aw em { font-style: normal; font-weight: 600; color: var(--ice); }
@@ -1032,7 +1032,7 @@ html[lang="zh-CN"] .wn-outro-t { font-family: var(--font-title); font-weight: 40
 .wn-more { all: unset; cursor: pointer; transition: color .2s; }
 .wn-more:hover { color: var(--ice); }
 .wn-more:focus-visible { outline: 2px solid var(--ice); outline-offset: 3px; }
-@media (max-width: 860px) { .wn-dt .lb-nav { top: 21vh; width: 36px; height: 36px; } .wn-lb .lb-box.wn-dt { grid-template-columns: 1fr; overflow-y: auto; } .wn-dt-body { max-height: none; overflow: visible; } .wn-dt-media video { max-height: 42vh; } }
+@media (max-width: 860px) { .wn-dt .lb-nav { top: 21vh; width: 36px; height: 36px; } .wn-lb .lb-box.wn-dt { grid-template-columns: 1fr; overflow-y: auto; } .wn-dt-body { max-height: none; overflow: visible; } .wn-dt-media video { min-height: 0; height: auto; max-height: 46vh; } }
 /* gallery player */
 .wn-lb .lb-nav { position: absolute; top: 50%; z-index: 2; width: 44px; height: 44px; margin-top: -40px; border-radius: 50%; border: 1px solid var(--border-strong); background: rgba(5,5,6,.7); color: #fff; font-size: 20px; cursor: pointer; }
 .wn-lb .lb-nav:hover { border-color: var(--ice); }
@@ -1860,7 +1860,7 @@ const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').match
     + '<div class="wn-dt-media"><video controls playsinline loop></video></div><div class="wn-dt-body"></div></div>';
   document.body.append(lb); const lbv = lb.querySelector('video'); let cur = 0;
   function show(i) { cur = (i + LIST.length) % LIST.length; const it = LIST[cur], w = W[it.w], d = DETAIL[it.w] || {};
-    lbv.src = SRC.clip(w.v); lbv.play().catch(() => {});
+    lbv.poster = SRC.poster(w.v); lbv.src = SRC.clip(w.v); lbv.play().catch(() => {});
     const sec = (k, h, body) => body ? `<section><h4><span class="mono">${k}</span>${h}</h4>${body}</section>` : '';
     lb.querySelector('.wn-dt-body').innerHTML = `
       <p class="wn-dt-aw"><em>${esc(L(it.aw))}</em><span class="mono">${cur + 1} / ${LIST.length}</span></p>
