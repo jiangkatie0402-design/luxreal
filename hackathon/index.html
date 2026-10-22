@@ -857,6 +857,11 @@ footer { padding: 72px 0 40px; margin-top: clamp(48px, 6vw, 96px); border-top: 1
 .wn-glow { position: absolute; right: 8%; top: 22%; width: 46vw; height: 46vw; max-width: 760px; max-height: 760px; border-radius: 50%; background: radial-gradient(closest-side, rgba(106,72,255,.32), transparent 70%); filter: blur(10px); animation: wnBreath 6s ease-in-out infinite; }
 .wn-lotus { position: absolute; right: -2%; top: 52%; width: min(64vw, 1040px); aspect-ratio: 1040 / 750; object-fit: cover; mix-blend-mode: lighten; transform: translate3d(calc(var(--px) * 22px), calc(-50% + var(--py) * 16px), 0); transition: transform .6s var(--ease);
   -webkit-mask: linear-gradient(#000 70%, transparent), linear-gradient(90deg, transparent, #000 12%); -webkit-mask-composite: source-in; mask: linear-gradient(#000 70%, transparent) intersect, linear-gradient(90deg, transparent, #000 12%); }
+.wn-lotus-light { position: absolute; inset: 0; z-index: 1; pointer-events: none; opacity: 0; transition: opacity .5s; mix-blend-mode: screen;
+  background: radial-gradient(260px circle at var(--lx, 70%) var(--ly, 50%), rgba(196,180,255,.22), rgba(106,72,255,.08) 45%, transparent 70%); }
+.wn-lotus-light.on { opacity: 1; }
+.wn-hero.pulse .wn-glow { animation: wnBloomPulse 1.6s ease-out, wnBreath 6s ease-in-out infinite 1.6s; }
+@keyframes wnBloomPulse { 0% { opacity: 1; transform: scale(.7); } 40% { opacity: 1; transform: scale(1.25); } 100% { opacity: .8; transform: scale(1); } }
 .wn-hero-bg::after { content: ''; position: absolute; inset: 0; background: linear-gradient(90deg, var(--bg) 0%, rgba(5,5,6,.82) 30%, rgba(5,5,6,0) 62%), linear-gradient(0deg, var(--bg) 0%, rgba(5,5,6,0) 22%); }
 @keyframes wnBreath { 0%, 100% { opacity: .75; transform: scale(1); } 50% { opacity: 1; transform: scale(1.06); } }
 .wn-hero-in { position: relative; z-index: 2; width: 100%; }
@@ -2125,7 +2130,8 @@ body.modal-open { overflow: hidden; }
     <div class="wn-hero-bg" aria-hidden="true">
       <img class="wn-kvbg" alt="">
       <span class="wn-glow"></span>
-      <video class="wn-lotus" muted loop playsinline preload="none"></video>
+      <video class="wn-lotus" muted playsinline preload="none"></video>
+      <span class="wn-lotus-light"></span>
     </div>
     <div class="container wn-hero-in">
       <div class="wn-hero-copy">
@@ -4233,12 +4239,22 @@ document.querySelectorAll('.res-main').forEach(card => card.addEventListener('po
     hero.querySelector('.wn-kvbg').src = SRC.bg();
     root.querySelector('.wn-outro-bg').src = SRC.bg(); root.querySelector('.wn-outro-lotus').src = SRC.lotusPoster();
     const lv = hero.querySelector('.wn-lotus'); lv.poster = SRC.lotusPoster();
-    if (!reduceMotion) { lv.src = SRC.lotus(); lv.play().catch(() => {}); }
+    if (!reduceMotion) { lv.src = SRC.lotus(); lv.loop = false; lv.preload = 'auto'; lv.pause(); }
   }
   hero.addEventListener('pointermove', e => { if (e.pointerType !== 'mouse' || reduceMotion) return; const r = hero.getBoundingClientRect();
     hero.style.setProperty('--px', ((e.clientX - r.left) / r.width - .5).toFixed(3)); hero.style.setProperty('--py', ((e.clientY - r.top) / r.height - .5).toFixed(3)); });
   hero.addEventListener('pointerleave', () => { hero.style.setProperty('--px', 0); hero.style.setProperty('--py', 0); });
-  new IntersectionObserver(([e]) => { const v = hero.querySelector('.wn-lotus'); if (!v.src) return; e.isIntersecting ? v.play().catch(() => {}) : v.pause(); }).observe(hero);
+  // the lotus blooms like the KV: played from the start when the hero appears, then held open (it re-blooms on click)
+  const lotusV = hero.querySelector('.wn-lotus'); let bloomed = false;
+  const bloom = () => { if (reduceMotion || !lotusV.src) return; bloomed = true; try { lotusV.currentTime = 0; } catch (e) {} lotusV.play().catch(() => {}); };
+  lotusV.addEventListener('ended', () => { lotusV.loop = true; lotusV.play().catch(() => {}); });      // after the bloom the flower keeps breathing on its loop
+  new IntersectionObserver(([e]) => { if (!lotusV.src || !bloomed) return; e.isIntersecting ? lotusV.play().catch(() => {}) : lotusV.pause(); }).observe(hero);
+  // new interactions on the flower: a soft light follows the pointer across the petals, and a click makes it bloom again
+  const glowEl = hero.querySelector('.wn-lotus-light');
+  hero.addEventListener('pointermove', e => { if (e.pointerType !== 'mouse' || reduceMotion) return; const r = hero.getBoundingClientRect();
+    glowEl.style.setProperty('--lx', (e.clientX - r.left) + 'px'); glowEl.style.setProperty('--ly', (e.clientY - r.top) + 'px'); glowEl.classList.add('on'); });
+  hero.addEventListener('pointerleave', () => glowEl.classList.remove('on'));
+  hero.addEventListener('click', e => { if (e.target.closest('a, button, .wn-panel') || e.clientX < innerWidth * .45) return; lotusV.loop = false; bloom(); hero.classList.remove('pulse'); void hero.offsetWidth; hero.classList.add('pulse'); });
   // single awards: a HUD preview window follows the pointer
   const peek = root.querySelector('.wn-peek'), pv = peek.querySelector('video');
   root.addEventListener('pointerover', e => { const r = e.target.closest('.wn-row'); if (!r || e.pointerType !== 'mouse' || reduceMotion) return;
@@ -4320,7 +4336,7 @@ document.querySelectorAll('.res-main').forEach(card => card.addEventListener('po
     raf = requestAnimationFrame(frame);
   }
   window.wnRender = () => { const first = !built; heroInit(); render(); built = true;
-    if (first) playIntro(() => hero.querySelectorAll('[data-count]').forEach(countUp)); };
+    if (first) playIntro(bloom); else if (!bloomed) bloom(); };
   if (!root.hidden) window.wnRender();                                   // opened straight on #/winners: the router ran before this script
   document.addEventListener('langchange', () => { if (built) render(); });
 })();
