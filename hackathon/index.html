@@ -836,9 +836,11 @@ footer { padding: 72px 0 40px; margin-top: clamp(48px, 6vw, 96px); border-top: 1
   background-size: cover; background-position: center; border: 1px solid rgba(214,204,255,.32); box-shadow: 0 0 60px rgba(106,72,255,.22); backface-visibility: visible; }
 .wn-in-p::after { content: ''; position: absolute; inset: 0; mix-blend-mode: color; background: linear-gradient(135deg, #8b6bff, #3b28b8); opacity: var(--tint, .85); }
 .wn-in-p::before { content: ''; position: absolute; inset: 0; z-index: 1; background: linear-gradient(180deg, rgba(255,255,255,.10), transparent 40%, rgba(5,4,14,.45)); }
-.wn-in-band { position: absolute; left: 50%; top: 46%; width: var(--bw, 0px); height: var(--bh, 6px); transform: translate(-50%, -50%); opacity: var(--bo, 0);
-  background: linear-gradient(90deg, #2a1d8f 0%, #4a36d6 45%, #6d58f2 75%, #8c7bff 100%); box-shadow: 0 0 40px rgba(106,72,255,.55), 0 0 120px rgba(106,72,255,.25); }
-.wn-in-band::after { content: ''; position: absolute; inset: 0; opacity: .18; background: radial-gradient(1px 1px at 30% 40%, #fff, transparent), radial-gradient(1px 1px at 70% 60%, #fff, transparent); background-size: 6px 6px, 9px 9px; mix-blend-mode: overlay; }
+.wn-in-band { position: absolute; left: 50%; top: 46%; width: var(--bw, 0px); height: var(--bh, 6px); transform: translate(-50%, -50%); opacity: var(--bo, 0); overflow: hidden;
+  background: #120c2e; box-shadow: 0 0 40px rgba(106,72,255,.5), 0 0 120px rgba(106,72,255,.22); }
+.wn-in-band video, .wn-in-band img { position: absolute; left: 50%; top: 50%; width: 100vw; height: 100vh; object-fit: cover; transform: translate(-50%, -50%) scale(var(--vs, 1.08)); }
+.wn-in-band::after { content: ''; position: absolute; inset: 0; background: linear-gradient(135deg, #8b6bff, #3b28b8); mix-blend-mode: color; opacity: var(--bt, .6); }
+.wn-in-band::before { content: ''; position: absolute; inset: 0; z-index: 1; background: linear-gradient(180deg, transparent 60%, rgba(5,4,14,.7)); }
 .wn-in-cap { position: absolute; left: var(--gutter); bottom: 40px; display: grid; gap: 6px; font-size: 12px; letter-spacing: .24em; color: rgba(214,204,255,.75); opacity: var(--co, 0); }
 .wn-in-cap .wn-in-count { font-size: clamp(22px, 2.4vw, 34px); letter-spacing: .06em; color: #fff; font-weight: 600; }
 .wn-in-skip { position: absolute; right: var(--gutter); bottom: 40px; padding: 10px 16px; font-size: 12px; letter-spacing: .2em; color: var(--text-soft); background: rgba(255,255,255,.04); border: 1px solid var(--border); border-radius: var(--radius-pill); cursor: pointer; }
@@ -2098,8 +2100,8 @@ body.modal-open { overflow: hidden; }
   <!-- opening: a stack of project frames, edge-on as a line of light, turns into a block, fans open like pages, then flies apart into the page -->
   <div class="wn-intro" aria-hidden="true">
     <div class="wn-in-stage"><div class="wn-in-stack"></div></div>
-    <div class="wn-in-band"></div>
-    <p class="wn-in-cap mono"><span>//AHOLO 3D AI HACKATHON</span><span class="wn-in-count">23 WINNING PROJECTS</span></p>
+    <div class="wn-in-band"><img alt=""><video muted loop playsinline preload="auto"></video></div>
+    <p class="wn-in-cap mono"><span class="wn-in-k">//AHOLO 3D AI HACKATHON</span><span class="wn-in-count">23 WINNING PROJECTS</span></p>
     <button type="button" class="wn-in-skip mono">SKIP →</button>
   </div>
   <!-- hero: the KV world — dot-matrix backdrop, the glass lotus, HUD panels that lead into the results -->
@@ -4280,10 +4282,14 @@ document.querySelectorAll('.res-main').forEach(card => card.addEventListener('po
     introPlayed = true; root.classList.add('intro-on'); intro.classList.remove('gone'); document.body.classList.add('modal-open');
     const ids = ['demoZen', 'demoVillage', 'demoElf', 'demoSnow', 'demoFly'], N = 11, ps = [];
     stack.innerHTML = '';
+    // the band that opens up is the grand prize itself, playing
+    const gv = W[WINNERS.grand.w], bandV = intro.querySelector('.wn-in-band video');
+    intro.querySelector('.wn-in-band img').src = SRC.poster(gv.v); bandV.src = SRC.clip(gv.v); bandV.play().catch(() => {});
+    const capK = intro.querySelector('.wn-in-k'), capN = intro.querySelector('.wn-in-count'); let capGrand = false;
     for (let i = 0; i < N; i++) { const d = document.createElement('div'); d.className = 'wn-in-p'; d.style.backgroundImage = `url(${SRC.poster(ids[(i * 3) % ids.length])})`; stack.append(d); ps.push(d); }
     const cl = k => Math.max(0, Math.min(1, k)), eo = k => 1 - Math.pow(1 - k, 3), eio = k => k < .5 ? 4 * k * k * k : 1 - Math.pow(-2 * k + 2, 3) / 2;
     let t0 = iNow(), raf = 0, ended = false;
-    const end = () => { if (ended) return; ended = true; cancelAnimationFrame(raf); intro.classList.add('gone'); document.body.classList.remove('modal-open'); root.classList.remove('intro-on'); done(); };
+    const end = () => { if (ended) return; ended = true; bandV.pause(); cancelAnimationFrame(raf); intro.classList.add('gone'); document.body.classList.remove('modal-open'); root.classList.remove('intro-on'); done(); };
     intro.querySelector('.wn-in-skip').onclick = () => { const t = iNow() - t0; if (t < 3200) t0 -= 3200 - t; };
     const frame = () => {
       const t = iNow() - t0, k1 = cl((t - 900) / 900), k2 = cl((t - 1800) / 800), kX = cl((t - 2600) / 600), kY = cl((t - 3200) / 900), kA = cl(t / 450);
@@ -4295,9 +4301,12 @@ document.querySelectorAll('.res-main').forEach(card => card.addEventListener('po
       const W = innerWidth, H = innerHeight, bw0 = Math.min(W * .44, 720) * .38;
       intro.style.setProperty('--bw', (bw0 + (W + 40 - bw0) * eio(kX)).toFixed(1) + 'px');
       intro.style.setProperty('--bh', (5 + (H * 1.1 - 5) * eio(kY)).toFixed(1) + 'px');
-      intro.style.setProperty('--bo', (swap * (1 - eo(cl((t - 4100) / 600)))).toFixed(3));
-      intro.style.setProperty('--co', (cl((t - 2900) / 400) * (1 - cl((t - 3700) / 400))).toFixed(3));
-      intro.style.setProperty('--io', (1 - eo(cl((t - 4100) / 600))).toFixed(3));
+      intro.style.setProperty('--bo', (swap * (1 - eo(cl((t - 4600) / 700)))).toFixed(3));
+      intro.style.setProperty('--vs', (1.15 - .07 * eio(kY)).toFixed(3));
+      intro.style.setProperty('--bt', (.7 - .7 * eio(kY)).toFixed(3));                 // purple-washed while thin, true colour once open
+      if ((kY > .55) !== capGrand) { capGrand = kY > .55; capK.textContent = capGrand ? (en() ? '//GRAND PRIZE · 3D AI NEW SPECIES AWARD' : '//GRAND PRIZE · 3D AI 新物种奖') : '//AHOLO 3D AI HACKATHON'; capN.textContent = capGrand ? L(gv.t) : '23 WINNING PROJECTS'; }
+      intro.style.setProperty('--co', (cl((t - 2900) / 400) * (1 - cl((t - 4300) / 400))).toFixed(3));
+      intro.style.setProperty('--io', (1 - eo(cl((t - 4600) / 700))).toFixed(3));
       ps.forEach((p, i) => {
         const c = i - (N - 1) / 2;
         const z = -c * (2.5 + 105 * spread), x = c * 48 * spread + 230 * spread;
@@ -4305,7 +4314,7 @@ document.querySelectorAll('.res-main').forEach(card => card.addEventListener('po
         p.style.opacity = (kA * (1 - swap) * (1 - .2 * spread) * (.6 + .4 * (i / (N - 1)))).toFixed(3);
         p.style.setProperty('--tint', (.85 - .45 * spread).toFixed(3));
       });
-      if (t >= 4700) end(); else raf = requestAnimationFrame(frame);
+      if (t >= 5300) end(); else raf = requestAnimationFrame(frame);
     };
     raf = requestAnimationFrame(frame);
   }
