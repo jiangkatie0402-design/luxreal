@@ -826,6 +826,22 @@ footer { padding: 72px 0 40px; margin-top: clamp(48px, 6vw, 96px); border-top: 1
 .faq-more { display: flex; align-items: center; justify-content: space-between; gap: 16px; flex-wrap: wrap; padding: 24px 0 0; color: var(--text-soft); font-size: 15px; }
 
 /* ---------- 获奖作品 ---------- */
+.wn-intro { position: fixed; inset: 0; z-index: 90; overflow: hidden; background: radial-gradient(70% 60% at 50% 46%, #15102e 0%, #08070f 55%, #050506 100%); opacity: var(--io, 1); }
+.wn-intro.gone { display: none; }
+.wn-intro::after { content: ''; position: absolute; inset: 0; pointer-events: none; opacity: .5; background: radial-gradient(1.2px 1.2px at 20% 30%, rgba(255,255,255,.35), transparent), radial-gradient(1px 1px at 70% 60%, rgba(214,204,255,.3), transparent), radial-gradient(1px 1px at 40% 80%, rgba(214,204,255,.25), transparent); }
+.wn-in-stage { position: absolute; inset: 0; perspective: 1800px; perspective-origin: 50% 46%; }
+.wn-in-stack { position: absolute; left: 50%; top: 46%; transform-style: preserve-3d; transform: rotateX(var(--sx, 86deg)) rotateY(var(--sy, 0deg)) rotateZ(var(--sz, 0deg)); }
+.wn-in-p { --pw: min(44vw, 720px); position: absolute; width: var(--pw); height: calc(var(--pw) * 9 / 16); left: calc(var(--pw) / -2); top: calc(var(--pw) * 9 / -32);
+  background-size: cover; background-position: center; border: 1px solid rgba(214,204,255,.32); box-shadow: 0 0 60px rgba(106,72,255,.22); backface-visibility: visible; }
+.wn-in-p::after { content: ''; position: absolute; inset: 0; mix-blend-mode: color; background: linear-gradient(135deg, #8b6bff, #3b28b8); opacity: var(--tint, .85); }
+.wn-in-p::before { content: ''; position: absolute; inset: 0; z-index: 1; background: linear-gradient(180deg, rgba(255,255,255,.10), transparent 40%, rgba(5,4,14,.45)); }
+.wn-in-cap { position: absolute; left: var(--gutter); bottom: 40px; display: grid; gap: 6px; font-size: 12px; letter-spacing: .24em; color: rgba(214,204,255,.75); opacity: var(--co, 0); }
+.wn-in-cap .wn-in-count { font-size: clamp(22px, 2.4vw, 34px); letter-spacing: .06em; color: #fff; font-weight: 600; }
+.wn-in-skip { position: absolute; right: var(--gutter); bottom: 40px; padding: 10px 16px; font-size: 12px; letter-spacing: .2em; color: var(--text-soft); background: rgba(255,255,255,.04); border: 1px solid var(--border); border-radius: var(--radius-pill); cursor: pointer; }
+.wn-in-skip:hover { color: #fff; border-color: var(--ice); }
+.wn-hero-copy, .wn-hud { transition: opacity 1s var(--ease), transform 1.2s var(--ease); }
+.wn-page.intro-on .wn-hero-copy { opacity: 0; transform: translateY(30px); }
+.wn-page.intro-on .wn-hud { opacity: 0; }
 @property --wn-ang { syntax: '<angle>'; inherits: false; initial-value: 0deg; }
 .wn-page { padding: 0 0 0; min-height: 80vh; overflow-x: clip; }
 /* hero */
@@ -1584,6 +1600,12 @@ body.modal-open { overflow: hidden; }
   <div class="lang-toggle" role="group" aria-label="Language"><button type="button" data-lang="zh-CN" aria-pressed="true">中</button><button type="button" data-lang="en" aria-pressed="false">EN</button></div>
 </header>
 <main id="winners" class="wn-page">
+  <!-- opening: a stack of project frames, edge-on as a line of light, turns into a block, fans open like pages, then flies apart into the page -->
+  <div class="wn-intro" aria-hidden="true">
+    <div class="wn-in-stage"><div class="wn-in-stack"></div></div>
+    <p class="wn-in-cap mono"><span>//AHOLO 3D AI HACKATHON</span><span class="wn-in-count">23 WINNING PROJECTS</span></p>
+    <button type="button" class="wn-in-skip mono">SKIP →</button>
+  </div>
   <!-- hero: the KV world — dot-matrix backdrop, the glass lotus, HUD panels that lead into the results -->
   <section class="wn-hero" id="wnHero">
     <div class="wn-hero-bg" aria-hidden="true">
@@ -1825,7 +1847,6 @@ const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').match
     root.querySelector('.wn-outro-bg').src = SRC.bg(); root.querySelector('.wn-outro-lotus').src = SRC.lotusPoster();
     const lv = hero.querySelector('.wn-lotus'); lv.poster = SRC.lotusPoster();
     if (!reduceMotion) { lv.src = SRC.lotus(); lv.play().catch(() => {}); }
-    hero.querySelectorAll('[data-count]').forEach(countUp);
   }
   hero.addEventListener('pointermove', e => { if (e.pointerType !== 'mouse' || reduceMotion) return; const r = hero.getBoundingClientRect();
     hero.style.setProperty('--px', ((e.clientX - r.left) / r.width - .5).toFixed(3)); hero.style.setProperty('--py', ((e.clientY - r.top) / r.height - .5).toFixed(3)); });
@@ -1856,7 +1877,39 @@ const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').match
   const tabsIO = new IntersectionObserver(es => es.forEach(e => { if (e.isIntersecting) tabs.forEach(a => a.classList.toggle('on', a.getAttribute('href') === '#' + e.target.id)); }), { rootMargin: '-40% 0px -55% 0px' });
   root.querySelectorAll('.wn-sec').forEach(sec => tabsIO.observe(sec));
   let built = false;
-  window.wnRender = () => { heroInit(); render(); built = true; };
+  /* opening animation (ms): line 0–900 · turn into a block 700–2000 · fan open 1800–3200 · fly apart 3200–4300 */
+  const intro = root.querySelector('.wn-intro'), stack = intro.querySelector('.wn-in-stack'); let introPlayed = false;
+  const iNow = () => window.__relicClock ? window.__relicClock() : performance.now();
+  function playIntro(done) {
+    if (introPlayed || reduceMotion) { intro.classList.add('gone'); done(); return; }
+    introPlayed = true; root.classList.add('intro-on'); intro.classList.remove('gone'); document.body.classList.add('modal-open');
+    const ids = ['demoZen', 'demoVillage', 'demoElf', 'demoSnow', 'demoFly'], N = 11, ps = [];
+    stack.innerHTML = '';
+    for (let i = 0; i < N; i++) { const d = document.createElement('div'); d.className = 'wn-in-p'; d.style.backgroundImage = `url(${SRC.poster(ids[(i * 3) % ids.length])})`; stack.append(d); ps.push(d); }
+    const cl = k => Math.max(0, Math.min(1, k)), eo = k => 1 - Math.pow(1 - k, 3), eio = k => k < .5 ? 4 * k * k * k : 1 - Math.pow(-2 * k + 2, 3) / 2;
+    let t0 = iNow(), raf = 0, ended = false;
+    const end = () => { if (ended) return; ended = true; cancelAnimationFrame(raf); intro.classList.add('gone'); document.body.classList.remove('modal-open'); root.classList.remove('intro-on'); done(); };
+    intro.querySelector('.wn-in-skip').onclick = () => { const t = iNow() - t0; if (t < 3200) t0 -= 3200 - t; };
+    const frame = () => {
+      const t = iNow() - t0, kA = cl(t / 900), kB = cl((t - 700) / 1300), kC = cl((t - 1800) / 1400);
+      intro.style.setProperty('--sx', (86 - 86 * eio(kB)).toFixed(2) + 'deg');
+      intro.style.setProperty('--sy', (-34 * eio(kB) + 8 * eio(kC)).toFixed(2) + 'deg');
+      intro.style.setProperty('--sz', (-2 * eio(kB)).toFixed(2) + 'deg');
+      intro.style.setProperty('--co', (cl((t - 1900) / 500) * (1 - cl((t - 3300) / 500))).toFixed(3));
+      intro.style.setProperty('--io', (1 - eo(cl((t - 3600) / 700))).toFixed(3));
+      ps.forEach((p, i) => {
+        const c = i - (N - 1) / 2, kD = cl((t - 3200 - (N - 1 - i) * 45) / 750);
+        const z = -c * (2.5 + 115 * eio(kC)) + eo(kD) * 2200, x = c * 52 * eio(kC) + 150 * eio(kC);
+        p.style.transform = `translate3d(${x.toFixed(1)}px, 0, ${z.toFixed(1)}px)`;
+        p.style.opacity = (Math.min(1, kA * 1.6) * (1 - eo(kD)) * (1 - .2 * eio(kC)) * (.6 + .4 * (i / (N - 1)))).toFixed(3);
+        p.style.setProperty('--tint', (.85 - .5 * eio(kC)).toFixed(3));
+      });
+      if (t >= 4300) end(); else raf = requestAnimationFrame(frame);
+    };
+    raf = requestAnimationFrame(frame);
+  }
+  window.wnRender = () => { const first = !built; heroInit(); render(); built = true;
+    if (first) playIntro(() => hero.querySelectorAll('[data-count]').forEach(countUp)); };
   if (!root.hidden) window.wnRender();                                   // opened straight on #/winners: the router ran before this script
   document.addEventListener('langchange', () => { if (built) render(); });
 })();
