@@ -1900,9 +1900,10 @@ const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').match
     const cl = k => Math.max(0, Math.min(1, k)), eo = k => 1 - Math.pow(1 - k, 3), eio = k => k < .5 ? 4 * k * k * k : 1 - Math.pow(-2 * k + 2, 3) / 2;
     let t0 = iNow(), raf = 0, ended = false;
     const end = () => { if (ended) return; ended = true; bandV.pause(); cancelAnimationFrame(raf); intro.classList.add('gone'); document.body.classList.remove('modal-open'); root.classList.remove('intro-on'); done(); };
-    intro.querySelector('.wn-in-skip').onclick = () => { const t = iNow() - t0; if (t < 3200) t0 -= 3200 - t; };
+    const SPD = 1.33;                                                     // the timeline below is authored for ~5.3s; played at 1.33× it runs in 4s
+    intro.querySelector('.wn-in-skip').onclick = () => { const t = (iNow() - t0) * SPD; if (t < 3200) t0 -= (3200 - t) / SPD; };
     const frame = () => {
-      const t = iNow() - t0, k1 = cl((t - 900) / 900), k2 = cl((t - 1800) / 800), kX = cl((t - 2600) / 600), kY = cl((t - 3200) / 900), kA = cl(t / 450);
+      const t = (iNow() - t0) * SPD, k1 = cl((t - 900) / 900), k2 = cl((t - 1800) / 800), kX = cl((t - 2600) / 600), kY = cl((t - 3200) / 900), kA = cl(t / 450);
       const spread = 1 - eio(k1), swap = cl((t - 2550) / 150);            // the 3D stack hands over to a flat band once it is a thin bar
       intro.style.setProperty('--ss', ((.78 + .22 * eio(k1)) * (1 - .62 * eio(k2))).toFixed(3));
       intro.style.setProperty('--sx', (84 * eio(k2)).toFixed(2) + 'deg');
