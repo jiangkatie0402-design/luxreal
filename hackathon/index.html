@@ -2117,7 +2117,7 @@ body.modal-open { overflow: hidden; }
   <div class="wn-intro" aria-hidden="true">
     <div class="wn-in-stage"><div class="wn-in-stack"></div></div>
     <div class="wn-in-band"><img alt=""><video muted loop playsinline preload="auto"></video></div>
-    <p class="wn-in-cap mono"><span class="wn-in-k">//AHOLO 3D AI HACKATHON</span><span class="wn-in-count">23 WINNING PROJECTS</span></p>
+    <p class="wn-in-cap mono"><span class="wn-in-k">AHOLO 3D AI HACKATHON</span><span class="wn-in-count">23 WINNING PROJECTS</span></p>
     <button type="button" class="wn-in-skip mono">SKIP →</button>
   </div>
   <!-- hero: the KV world — dot-matrix backdrop, the glass lotus, HUD panels that lead into the results -->
@@ -2129,7 +2129,7 @@ body.modal-open { overflow: hidden; }
     </div>
     <div class="container wn-hero-in">
       <div class="wn-hero-copy">
-        <p class="wn-kicker"><span class="mono">//WINNERS · 2026</span><span data-i18n="wn.kicker">Aholo 全球 3D AI 黑客松</span></p>
+        <p class="wn-kicker"><span class="mono">WINNERS · 2026</span><span data-i18n="wn.kicker">Aholo 全球 3D AI 黑客松</span></p>
         <h1 class="wn-title" data-i18n="wn.title">获奖作品</h1>
         <p class="wn-tag mono">PLAY IN 3D, CREATE WITH AHOLO</p>
         <div class="wn-stats">
@@ -2140,8 +2140,8 @@ body.modal-open { overflow: hidden; }
         <p class="wn-note" data-i18n="wn.demo">示例展示 · 正式获奖名单将于 12 月初公布</p>
       </div>
       <div class="wn-hud" aria-hidden="true">
-        <a class="wn-panel wn-p1" href="#wn-grand" data-wn-jump tabindex="-1"><span class="lab">//GRAND_PRIZE</span><span class="wn-p1-media"><img alt=""><video muted loop playsinline preload="none"></video></span><span class="wn-p1-cap"></span></a>
-        <a class="wn-panel wn-p2" href="#wn-ranks" data-wn-jump tabindex="-1"><span class="lab">//AWARDS</span><span class="wn-p2-list"></span></a>
+        <a class="wn-panel wn-p1" href="#wn-grand" data-wn-jump tabindex="-1"><span class="lab" data-i18n="p0.n">3D AI 新物种奖</span><span class="wn-p1-media"><img alt=""><video muted loop playsinline preload="none"></video></span><span class="wn-p1-cap"></span></a>
+        <a class="wn-panel wn-p2" href="#wn-ranks" data-wn-jump tabindex="-1"><span class="lab">AWARDS</span><span class="wn-p2-list"></span></a>
         <i class="wn-cross c2"></i><i class="wn-cross c3"></i><i class="wn-sq"></i>
       </div>
     </div>
@@ -2161,7 +2161,7 @@ body.modal-open { overflow: hidden; }
       <div id="wnRanks"></div>
     </section>
     <section class="wn-sec" id="wn-single">
-      <h2 class="wn-sec-title wn-rv"><span class="mono">SPECIAL</span><span data-i18n="wn.single">单项奖</span></h2>
+      <h2 class="wn-sec-title wn-rv"><span class="mono">¥5,000 × 16</span><span data-i18n="wn.single">单项奖</span></h2>
       <p class="wn-hint" data-i18n="wn.hint">把鼠标移到作品上预览，点击观看完整演示</p>
       <div class="wn-singles" id="wnSingles"></div>
     </section>
@@ -2176,7 +2176,7 @@ body.modal-open { overflow: hidden; }
       <p class="wn-outro-t" data-i18n="wn.thanks">感谢每一位参赛者，所有作品都值得被看见。</p>
     </div>
   </section>
-  <div class="wn-peek" aria-hidden="true"><span class="lab">//PREVIEW</span><video muted loop playsinline></video></div>
+  <div class="wn-peek" aria-hidden="true"><span class="lab">PREVIEW</span><video muted loop playsinline></video></div>
 </main>
 
 
@@ -4305,7 +4305,7 @@ document.querySelectorAll('.res-main').forEach(card => card.addEventListener('po
       intro.style.setProperty('--bo', (swap * (1 - eo(cl((t - 4600) / 700)))).toFixed(3));
       intro.style.setProperty('--vs', (1.15 - .07 * eio(kY)).toFixed(3));
       intro.style.setProperty('--bt', (.75 - .2 * eio(kY)).toFixed(3)); intro.style.setProperty('--vb', (6 + 10 * eio(kY)).toFixed(1) + 'px');   // stays a hazy violet silhouette: the winner is not revealed yet
-      if ((kY > .55) !== capGrand) { capGrand = kY > .55; capK.textContent = capGrand ? (en() ? '//GRAND PRIZE · 3D AI NEW SPECIES AWARD' : '//GRAND PRIZE · 3D AI 新物种奖') : '//AHOLO 3D AI HACKATHON'; capN.textContent = capGrand ? (en() ? 'TO BE REVEALED' : '即将揭晓') : '23 WINNING PROJECTS'; }
+      if ((kY > .55) !== capGrand) { capGrand = kY > .55; capK.textContent = capGrand ? (en() ? '3D AI NEW SPECIES AWARD' : '3D AI 新物种奖') : 'AHOLO 3D AI HACKATHON'; capN.textContent = capGrand ? (en() ? 'TO BE REVEALED' : '即将揭晓') : '23 WINNING PROJECTS'; }
       intro.style.setProperty('--co', (cl((t - 2900) / 400) * (1 - cl((t - 4300) / 400))).toFixed(3));
       intro.style.setProperty('--io', (1 - eo(cl((t - 4600) / 700))).toFixed(3));
       ps.forEach((p, i) => {
