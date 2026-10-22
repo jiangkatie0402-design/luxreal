@@ -1015,6 +1015,8 @@ html[lang="zh-CN"] .wn-outro-t { font-family: var(--font-title); font-weight: 40
 .wn-lb .lb-box.wn-dt { width: min(1480px, 100%); display: grid; grid-template-columns: minmax(0, 2.1fr) minmax(340px, 1fr); gap: 0; max-height: calc(100vh - 48px); background: var(--surface); border: 1px solid rgba(181,172,255,.25); border-radius: var(--radius); overflow: hidden; }
 .wn-dt-media { background: #000; display: flex; align-items: center; }
 .wn-dt-media video { width: 100%; height: 100%; min-height: min(62vh, 620px); max-height: calc(100vh - 48px); object-fit: contain; background: #000; border: 0; border-radius: 0; }
+.wn-dt-body, .wn-lb .lb-box.wn-dt { scrollbar-width: none; -ms-overflow-style: none; }
+.wn-dt-body::-webkit-scrollbar, .wn-lb .lb-box.wn-dt::-webkit-scrollbar { display: none; width: 0; height: 0; }
 .wn-dt-body { overflow-y: auto; padding: 30px 30px 34px; max-height: calc(100vh - 48px); }
 .wn-dt-aw { display: flex; justify-content: space-between; gap: 12px; font-size: 13px; padding-right: 48px; }
 .wn-dt-aw em { font-style: normal; font-weight: 600; color: var(--ice); }
@@ -4155,7 +4157,7 @@ document.querySelectorAll('.res-main').forEach(card => card.addEventListener('po
     LIST = [];
     const add = (w, aw, team) => (LIST.push({ w, aw, team }), LIST.length - 1);
     const g = WINNERS.grand, gw = W[g.w], gi = add(g.w, ['3D AI 新物种奖', '3D AI New Species Award'], g.team);
-    document.getElementById('wnGrand').innerHTML = `<article class="wn-grand wn-rv"><button type="button" class="wn-grand-no" data-relic-replay title="${en() ? 'Replay' : '重播揭晓'}">//NO.01 · GRAND PRIZE ✦</button><div class="wn-tilt">${media(g.w, L(gw.t), gi)}</div><div>
+    document.getElementById('wnGrand').innerHTML = `<article class="wn-grand wn-rv"><div class="wn-tilt">${media(g.w, L(gw.t), gi)}</div><div>
       <p class="wn-award"><b class="wn-pf-t">${en() ? '3D AI New Species Award' : '3D AI 新物种奖'}</b></p><span class="wn-amt" data-count="100000" data-prefix="¥">¥100,000</span>
       <h3 class="wn-name"><button type="button" class="wn-more" data-i="${gi}">${esc(L(gw.t))}</button></h3><p class="wn-team">${esc(L(g.team))}</p><p class="wn-desc">${esc(L(gw.d))}</p>${tags(g.w)}
       <div class="wn-acts"><button type="button" class="btn btn-primary" data-i="${gi}">${en() ? 'View project' : '查看作品详情'}</button></div></div></article>`;
