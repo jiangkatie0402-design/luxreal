@@ -857,21 +857,6 @@ footer { padding: 72px 0 40px; margin-top: clamp(48px, 6vw, 96px); border-top: 1
 .wn-glow { position: absolute; right: 8%; top: 22%; width: 46vw; height: 46vw; max-width: 760px; max-height: 760px; border-radius: 50%; background: radial-gradient(closest-side, rgba(106,72,255,.32), transparent 70%); filter: blur(10px); animation: wnBreath 6s ease-in-out infinite; }
 .wn-lotus { position: absolute; right: -2%; top: 52%; width: min(64vw, 1040px); aspect-ratio: 1040 / 750; object-fit: cover; mix-blend-mode: lighten; transform: translate3d(calc(var(--px) * 22px), calc(-50% + var(--py) * 16px), 0); transition: transform .6s var(--ease);
   -webkit-mask: linear-gradient(#000 70%, transparent), linear-gradient(90deg, transparent, #000 12%); -webkit-mask-composite: source-in; mask: linear-gradient(#000 70%, transparent) intersect, linear-gradient(90deg, transparent, #000 12%); }
-/* bloom: the flower is held as a bud (drawn in to its core, petals masked away), then unfolds from the core outward */
-@property --br { syntax: '<percentage>'; inherits: false; initial-value: 150%; }
-.wn-lotus.bud, .wn-lotus.unfold { transform-origin: 41% 37%;
-  -webkit-mask: radial-gradient(circle at 41% 37%, #000 calc(var(--br) - 16%), transparent var(--br)), linear-gradient(#000 70%, transparent), linear-gradient(90deg, transparent, #000 12%); -webkit-mask-composite: source-in, source-in;
-  mask: radial-gradient(circle at 41% 37%, #000 calc(var(--br) - 16%), transparent var(--br)) intersect, linear-gradient(#000 70%, transparent) intersect, linear-gradient(90deg, transparent, #000 12%); }
-.wn-lotus.bud { --br: 4%; scale: .38; rotate: -28deg; opacity: 0; }
-.wn-lotus.unfold { animation: wnUnfold 2.6s cubic-bezier(.22,.7,.14,1) both; }
-@keyframes wnUnfold {
-  0% { --br: 4%; scale: .38; rotate: -28deg; opacity: 0; filter: blur(8px) brightness(2.2) saturate(1.5); }
-  55% { filter: blur(0) brightness(1.3) saturate(1.15); }
-  100% { --br: 150%; scale: 1; rotate: 0deg; filter: none; } }
-.wn-lotus-core { position: absolute; z-index: 1; left: var(--cx, 70%); top: var(--cy, 40%); width: 520px; height: 520px; margin: -260px 0 0 -260px; border-radius: 50%; pointer-events: none; opacity: 0; mix-blend-mode: screen;
-  background: radial-gradient(closest-side, rgba(236,228,255,.95), rgba(160,130,255,.55) 22%, rgba(106,72,255,.18) 55%, transparent 75%); }
-.wn-lotus-core.go { animation: wnCore 2s cubic-bezier(.2,.7,.2,1) both; }
-@keyframes wnCore { 0% { opacity: 0; transform: scale(.08); } 14% { opacity: 1; transform: scale(.32); } 100% { opacity: 0; transform: scale(1.6); } }
 .wn-lotus-light { position: absolute; inset: 0; z-index: 1; pointer-events: none; opacity: 0; transition: opacity .5s; mix-blend-mode: screen;
   background: radial-gradient(260px circle at var(--lx, 70%) var(--ly, 50%), rgba(196,180,255,.22), rgba(106,72,255,.08) 45%, transparent 70%); }
 .wn-lotus-light.on { opacity: 1; }
@@ -2146,7 +2131,6 @@ body.modal-open { overflow: hidden; }
       <img class="wn-kvbg" alt="">
       <span class="wn-glow"></span>
       <video class="wn-lotus" muted playsinline preload="none"></video>
-      <span class="wn-lotus-core"></span>
       <span class="wn-lotus-light"></span>
     </div>
     <div class="container wn-hero-in">
@@ -4255,25 +4239,21 @@ document.querySelectorAll('.res-main').forEach(card => card.addEventListener('po
     hero.querySelector('.wn-kvbg').src = SRC.bg();
     root.querySelector('.wn-outro-bg').src = SRC.bg(); root.querySelector('.wn-outro-lotus').src = SRC.lotusPoster();
     const lv = hero.querySelector('.wn-lotus'); lv.poster = SRC.lotusPoster();
-    if (!reduceMotion) { lv.src = SRC.lotus(); lv.loop = false; lv.preload = 'auto'; lv.pause(); lv.classList.add('bud'); }
+    if (!reduceMotion) { lv.src = SRC.lotus(); lv.loop = true; lv.preload = 'auto'; lv.pause(); }
   }
   hero.addEventListener('pointermove', e => { if (e.pointerType !== 'mouse' || reduceMotion) return; const r = hero.getBoundingClientRect();
     hero.style.setProperty('--px', ((e.clientX - r.left) / r.width - .5).toFixed(3)); hero.style.setProperty('--py', ((e.clientY - r.top) / r.height - .5).toFixed(3)); });
   hero.addEventListener('pointerleave', () => { hero.style.setProperty('--px', 0); hero.style.setProperty('--py', 0); });
-  // the lotus blooms: it waits as a bud, then unfolds from its core outward with a burst of light, and keeps breathing on the KV loop (it re-blooms on click)
-  const lotusV = hero.querySelector('.wn-lotus'), coreEl = hero.querySelector('.wn-lotus-core'); let bloomed = false;
-  const bloom = () => { if (reduceMotion || !lotusV.src) return; bloomed = true; try { lotusV.currentTime = 0; } catch (e) {} lotusV.play().catch(() => {});
-    const r = lotusV.getBoundingClientRect(), h = hero.getBoundingClientRect();
-    coreEl.style.setProperty('--cx', (r.left - h.left + r.width * .41) + 'px'); coreEl.style.setProperty('--cy', (r.top - h.top + r.height * .37) + 'px');
-    lotusV.classList.remove('bud', 'unfold'); coreEl.classList.remove('go'); void lotusV.offsetWidth; lotusV.classList.add('unfold'); coreEl.classList.add('go'); };
-  lotusV.addEventListener('ended', () => { lotusV.loop = true; lotusV.play().catch(() => {}); });      // after the bloom the flower keeps breathing on its loop
+  // the lotus is the KV's own loop, played exactly as on the home page once the intro has finished
+  const lotusV = hero.querySelector('.wn-lotus'); let bloomed = false;
+  const bloom = () => { if (reduceMotion || !lotusV.src) return; bloomed = true; lotusV.play().catch(() => {}); };
   new IntersectionObserver(([e]) => { if (!lotusV.src || !bloomed) return; e.isIntersecting ? lotusV.play().catch(() => {}) : lotusV.pause(); }).observe(hero);
-  // new interactions on the flower: a soft light follows the pointer across the petals, and a click makes it bloom again
+  // interactions on the flower: a soft light follows the pointer across the petals, and a click sends a pulse of light through it
   const glowEl = hero.querySelector('.wn-lotus-light');
   hero.addEventListener('pointermove', e => { if (e.pointerType !== 'mouse' || reduceMotion) return; const r = hero.getBoundingClientRect();
     glowEl.style.setProperty('--lx', (e.clientX - r.left) + 'px'); glowEl.style.setProperty('--ly', (e.clientY - r.top) + 'px'); glowEl.classList.add('on'); });
   hero.addEventListener('pointerleave', () => glowEl.classList.remove('on'));
-  hero.addEventListener('click', e => { if (e.target.closest('a, button, .wn-panel') || e.clientX < innerWidth * .45) return; lotusV.loop = false; bloom(); hero.classList.remove('pulse'); void hero.offsetWidth; hero.classList.add('pulse'); });
+  hero.addEventListener('click', e => { if (e.target.closest('a, button, .wn-panel') || e.clientX < innerWidth * .45) return; hero.classList.remove('pulse'); void hero.offsetWidth; hero.classList.add('pulse'); });
   // single awards: a HUD preview window follows the pointer
   const peek = root.querySelector('.wn-peek'), pv = peek.querySelector('video');
   root.addEventListener('pointerover', e => { const r = e.target.closest('.wn-row'); if (!r || e.pointerType !== 'mouse' || reduceMotion) return;
