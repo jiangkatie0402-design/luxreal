@@ -879,11 +879,11 @@ footer { padding: 72px 0 40px; margin-top: clamp(48px, 6vw, 96px); border-top: 1
 .wn-panel { position: absolute; pointer-events: auto; display: block; padding: 8px; border: 1.5px dashed rgba(150,130,255,.85); background: rgba(5,4,12,.72); backdrop-filter: blur(4px); transition: border-color .25s, transform .25s var(--ease), box-shadow .25s; }
 .wn-panel:hover { border-style: solid; border-color: #B5ACFF; transform: translateY(-3px); box-shadow: 0 0 32px rgba(106,72,255,.35); }
 .wn-panel .lab { display: block; font-family: var(--font-mono); font-size: 10px; letter-spacing: .12em; color: #fff; margin: 0 0 7px 2px; }
-.wn-p1 { right: calc(-2% + clamp(0px, (1920px - 100vw) * .12, 60px)); top: 19%; width: clamp(170px, 12.5vw, 205px); z-index: 1; }
+.wn-p1 { right: calc(-2% + clamp(0px, (1920px - 100vw) * .06, 28px)); top: 27%; width: clamp(170px, 12.5vw, 205px); z-index: 1; }
 .wn-p1-media { position: relative; display: block; aspect-ratio: 16 / 10; overflow: hidden; background: #000; }
 .wn-p1-media img, .wn-p1-media video { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
 .wn-p1-cap { display: block; margin: 7px 2px 1px; font-size: 12.5px; font-weight: 600; color: var(--text); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-.wn-p2 { right: calc(calc(-2% + clamp(0px, (1920px - 100vw) * .12, 60px)) + clamp(170px, 12.5vw, 205px) * .55); bottom: -5%; width: clamp(170px, 12.5vw, 205px); z-index: 2; }
+.wn-p2 { right: calc(calc(-2% + clamp(0px, (1920px - 100vw) * .06, 28px)) + clamp(170px, 12.5vw, 205px) * .55); bottom: -13%; width: clamp(170px, 12.5vw, 205px); z-index: 2; }
 .wn-p2-list { display: grid; gap: 2px; }
 .wn-p2-list span { display: flex; justify-content: space-between; gap: 12px; padding: 5px 4px; font-size: 12px; color: var(--text-soft); border-top: 1px solid rgba(150,130,255,.18); }
 .wn-p2-list span:first-child { border-top: 0; }
@@ -894,7 +894,7 @@ footer { padding: 72px 0 40px; margin-top: clamp(48px, 6vw, 96px); border-top: 1
 .wn-cross::before, .wn-cross::after { content: ''; position: absolute; background: rgba(181,172,255,.8); }
 .wn-cross::before { left: 6px; top: 0; width: 1.5px; height: 14px; } .wn-cross::after { top: 6px; left: 0; width: 14px; height: 1.5px; }
 .wn-cross.c1 { right: 46%; bottom: 10%; } .wn-cross.c2 { right: 3%; bottom: 7%; } .wn-cross.c3 { right: 38%; top: 10%; }
-.wn-sq { position: absolute; right: calc(calc(-2% + clamp(0px, (1920px - 100vw) * .12, 60px)) + clamp(170px, 12.5vw, 205px) + 12px); top: 17%; width: 18px; height: 18px; background: linear-gradient(135deg, #8C7BFF 50%, transparent 50%), linear-gradient(135deg, transparent 50%, #6A48FF 50%); background-size: 9px 9px; background-position: 0 0, 9px 9px; background-repeat: no-repeat; }
+.wn-sq { position: absolute; right: calc(calc(-2% + clamp(0px, (1920px - 100vw) * .06, 28px)) + clamp(170px, 12.5vw, 205px) + 12px); top: 25%; width: 18px; height: 18px; background: linear-gradient(135deg, #8C7BFF 50%, transparent 50%), linear-gradient(135deg, transparent 50%, #6A48FF 50%); background-size: 9px 9px; background-position: 0 0, 9px 9px; background-repeat: no-repeat; }
 .wn-scroll { position: absolute; left: 50%; bottom: 28px; z-index: 3; transform: translateX(-50%); display: grid; justify-items: center; gap: 8px; font-size: 11px; letter-spacing: .3em; color: var(--text-muted); }
 .wn-scroll span { width: 1px; height: 34px; background: linear-gradient(var(--ice), transparent); animation: wnDrop 1.8s ease-in-out infinite; transform-origin: top; }
 @keyframes wnDrop { 0% { transform: scaleY(0); } 50% { transform: scaleY(1); } 100% { transform: scaleY(1); opacity: 0; } }
@@ -4158,7 +4158,7 @@ document.querySelectorAll('.res-main').forEach(card => card.addEventListener('po
     const add = (w, aw, team) => (LIST.push({ w, aw, team }), LIST.length - 1);
     const g = WINNERS.grand, gw = W[g.w], gi = add(g.w, ['3D AI 新物种奖', '3D AI New Species Award'], g.team);
     document.getElementById('wnGrand').innerHTML = `<article class="wn-grand wn-rv"><div class="wn-tilt">${media(g.w, L(gw.t), gi)}</div><div>
-      <p class="wn-award"><b class="wn-pf-t">${en() ? '3D AI New Species Award' : '3D AI 新物种奖'}</b></p><span class="wn-amt" data-count="100000" data-prefix="¥">¥100,000</span>
+      <p class="wn-award"><b class="wn-pf-t">${en() ? '3D AI New Species Award' : '3D AI 新物种奖'}</b></p><span class="wn-amt">¥100,000</span>
       <h3 class="wn-name"><button type="button" class="wn-more" data-i="${gi}">${esc(L(gw.t))}</button></h3><p class="wn-team">${esc(L(g.team))}</p><p class="wn-desc">${esc(L(gw.d))}</p>${tags(g.w)}
       <div class="wn-acts"><button type="button" class="btn btn-primary" data-i="${gi}">${en() ? 'View project' : '查看作品详情'}</button></div></div></article>`;
     document.getElementById('wnRanks').innerHTML = WINNERS.ranks.map((r, ri) => `<div class="wn-rank"><div class="wn-rank-head wn-rv"><span class="wn-rank-no">0${ri + 1}</span><span class="wn-award"><b>${esc(L(r.name))}</b> <i>${r.amt} × ${r.items.length}</i></span></div>
@@ -4180,9 +4180,8 @@ document.querySelectorAll('.res-main').forEach(card => card.addEventListener('po
     const amt = card.querySelector('.wn-amt');
     if (reduceMotion) { card.classList.remove('turn-wait'); card.classList.add('shine'); return; }
     card.classList.remove('turn-in', 'shine'); card.classList.add('turn-wait'); void card.offsetWidth;
-    if (amt) amt.textContent = '¥0';
     requestAnimationFrame(() => { card.classList.add('turn-in'); card.classList.remove('turn-wait');
-      setTimeout(() => { if (amt) countUp(amt); card.classList.add('shine'); }, 1100); });
+      setTimeout(() => card.classList.add('shine'), 1100); });
   }
   let relicIO, relicDone = false;
   function armPetals() {
