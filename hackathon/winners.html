@@ -844,8 +844,7 @@ footer { padding: 72px 0 40px; margin-top: clamp(48px, 6vw, 96px); border-top: 1
 .wn-in-cap .wn-in-count { font-size: clamp(22px, 2.4vw, 34px); letter-spacing: .06em; color: #fff; font-weight: 600; }
 .wn-in-skip { position: absolute; right: var(--gutter); bottom: 40px; padding: 10px 16px; font-size: 12px; letter-spacing: .2em; color: var(--text-soft); background: rgba(255,255,255,.04); border: 1px solid var(--border); border-radius: var(--radius-pill); cursor: pointer; }
 .wn-in-skip:hover { color: #fff; border-color: var(--ice); }
-.wn-hero-copy, .wn-hud { transition: opacity 1s var(--ease), transform 1.2s var(--ease); }
-.wn-page.intro-on .wn-hero-copy { opacity: 0; transform: translateY(30px); }
+.wn-hud { transition: opacity .6s var(--ease); }
 .wn-page.intro-on .wn-hud { opacity: 0; }
 @property --wn-ang { syntax: '<angle>'; inherits: false; initial-value: 0deg; }
 .wn-page { padding: 0 0 0; min-height: 80vh; overflow-x: clip; }
@@ -1625,9 +1624,9 @@ body.modal-open { overflow: hidden; }
         <h1 class="wn-title" data-i18n="wn.title">获奖作品</h1>
         <p class="wn-tag mono">PLAY IN 3D, CREATE WITH AHOLO</p>
         <div class="wn-stats">
-          <div><b data-count="23">0</b><span data-i18n="wn.stAwards">奖项</span></div>
-          <div><b data-count="320000" data-prefix="¥">¥0</b><span data-i18n="wn.stPool">总奖金</span></div>
-          <div><b data-count="16">0</b><span data-i18n="wn.stSingle">单项奖</span></div>
+          <div><b>23</b><span data-i18n="wn.stAwards">奖项</span></div>
+          <div><b>¥320,000</b><span data-i18n="wn.stPool">总奖金</span></div>
+          <div><b>16</b><span data-i18n="wn.stSingle">单项奖</span></div>
         </div>
         <p class="wn-note" data-i18n="wn.demo">示例展示 · 正式获奖名单将于 12 月初公布</p>
       </div>
