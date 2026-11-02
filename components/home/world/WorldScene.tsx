@@ -2,6 +2,7 @@
 /* Imperative three.js scene graph: objects are positioned per frame by design. */
 /* eslint-disable react-hooks/immutability */
 import { Environment, Lightformer, Sparkles } from '@react-three/drei';
+import { Bloom, EffectComposer, Vignette } from '@react-three/postprocessing';
 import { Canvas, useFrame, useThree } from '@react-three/fiber';
 import { useEffect, useMemo, useRef, useState, type RefObject } from 'react';
 import * as THREE from 'three';
@@ -30,19 +31,19 @@ interface Item {
 const STARTERS: Item[] = [
   {
     id: 'houseA',
-    build: () => P.house({ wall: '#f3e6cf', roof: '#d0603f' }),
+    build: () => P.house({ wall: '#f1e4cc', roof: '#c4553a' }),
     pos: [-2.6, -1.7],
     rot: 0.35,
   },
   {
     id: 'houseB',
-    build: () => P.house({ wall: '#e9eef5', roof: '#2f5fbf', w: 1.6, h: 1.2 }),
+    build: () => P.house({ wall: '#b5654a', roof: '#3a4f6e', w: 1.6, h: 1.2, wallKind: 'brick' }),
     pos: [0.3, -3.1],
     rot: 0,
   },
   {
     id: 'houseC',
-    build: () => P.house({ wall: '#f6d9b8', roof: '#3f8a6b', w: 1.2 }),
+    build: () => P.house({ wall: '#f2d6b3', roof: '#2f6e58', w: 1.2, solarPanel: false }),
     pos: [3.0, -1.6],
     rot: -0.4,
   },
@@ -52,7 +53,7 @@ const STARTERS: Item[] = [
 export const QUEUE: Item[] = [
   {
     id: 'house',
-    build: () => P.house({ wall: '#fbe3e1', roof: '#8a4fd1', w: 1.3, h: 1.05 }),
+    build: () => P.house({ wall: '#d9d4cc', roof: '#5b3f8f', w: 1.3, h: 1.05, wallKind: 'brick' }),
     pos: [-3.7, 1.0],
     rot: 0.7,
   },
@@ -231,6 +232,11 @@ function World({
     for (const o of [...items.map((x) => x.obj), ...starters.map((x) => x.obj)]) {
       const seat = o.getObjectByName('swingSeat');
       if (seat) seat.rotation.x = reduced ? 0 : Math.sin(now * 1.8) * 0.45;
+      const water = o.getObjectByName('water') as THREE.Mesh | undefined;
+      if (water) {
+        const nm = (water.material as THREE.MeshPhysicalMaterial).normalMap;
+        if (nm && !reduced) nm.offset.set(now * 0.02, now * 0.013);
+      }
       const blades = o.getObjectByName('blades');
       if (blades) blades.rotation.z = reduced ? 0.3 : now * 1.2;
     }
@@ -289,11 +295,13 @@ function World({
         />
       </mesh>
       <Environment resolution={64} frames={1}>
-        <Lightformer intensity={1.2} position={[0, 5, 4]} scale={[8, 3, 1]} color="#ffe9d0" />
-        <Lightformer intensity={0.8} position={[-6, 2, -3]} scale={[4, 4, 1]} color="#6f9dff" />
+        <Lightformer intensity={2.2} position={[0, 6, 5]} scale={[10, 3, 1]} color="#ffe9d0" />
+        <Lightformer intensity={1.6} position={[-7, 2, -3]} scale={[4, 6, 1]} color="#5b8dff" />
+        <Lightformer intensity={1.2} position={[7, 3, -2]} scale={[3, 5, 1]} color="#9fd0ff" />
       </Environment>
 
       <primitive object={useMemo(() => P.island(), [])} />
+      <primitive object={useMemo(() => P.energyFloor(), [])} />
       {starters.map((s) => (
         <primitive
           key={s.id}
@@ -324,21 +332,17 @@ function World({
           <circleGeometry args={[1.58, 64]} />
           <meshBasicMaterial color="#2c5ad8" transparent opacity={0.16} depthWrite={false} />
         </mesh>
-        <mesh position-y={1.5}>
-          <cylinderGeometry args={[1.58, 1.58, 3.0, 48, 1, true]} />
-          <meshBasicMaterial
-            color="#5ea8ff"
-            transparent
-            opacity={0.025}
-            side={THREE.DoubleSide}
-            depthWrite={false}
-          />
-        </mesh>
       </group>
       <mesh ref={pulse} rotation-x={-Math.PI / 2} visible={false}>
         <ringGeometry args={[0.9, 1, 48]} />
         <meshBasicMaterial color="#9fd1ff" transparent opacity={0} depthWrite={false} />
       </mesh>
+      {tier !== 'low' && (
+        <EffectComposer multisampling={0}>
+          <Bloom mipmapBlur intensity={0.9} luminanceThreshold={0.85} luminanceSmoothing={0.2} />
+          <Vignette eskil={false} offset={0.25} darkness={0.55} />
+        </EffectComposer>
+      )}
       <Sparkles
         count={tier === 'high' ? 70 : 30}
         scale={[22, 9, 14]}
