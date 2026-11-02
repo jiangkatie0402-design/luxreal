@@ -1,0 +1,532 @@
+{
+  "meta": {
+    "siteTitle": "Lux3D · 一张图，生成真实材质的 3D 模型",
+    "siteDescription": "Lux3D 是 AI 原生的 3D 生成与创作平台：上传一张图片或写一句话，生成带真实 PBR 材质的 3D 资产，可编辑、绑骨动画、批量生成并集成进你的工作流。"
+  },
+  "common": {
+    "skipToContent": "跳到正文",
+    "startCreating": "开始创作",
+    "getApi": "获取 API",
+    "login": "登录",
+    "learnMore": "了解更多",
+    "tryNow": "立即试用",
+    "contactSales": "联系销售",
+    "viewDocs": "查看文档",
+    "comingSoon": "即将上线",
+    "placeholder": "占位内容",
+    "backHome": "返回首页",
+    "copy": "复制",
+    "copied": "已复制",
+    "menu": "菜单",
+    "close": "关闭",
+    "language": "语言",
+    "themeLabel": "外观",
+    "theme": {
+      "system": "跟随系统",
+      "light": "浅色",
+      "dark": "深色"
+    }
+  },
+  "nav": {
+    "create": "创作",
+    "developers": "开发",
+    "useCases": "场景",
+    "gallery": "作品",
+    "technology": "技术",
+    "pricing": "定价",
+    "resources": "资源",
+    "menuTitle": {
+      "create": "从一张图开始的全部创作能力",
+      "developers": "API、SDK 与工作流集成",
+      "useCases": "Lux3D 正在被用在哪里",
+      "resources": "学习、灵感与工具"
+    },
+    "viewAll": "查看全部"
+  },
+  "home": {
+    "hero": {
+      "eyebrow": "AI 原生 3D 生成平台",
+      "titleA": "拍下身边的东西，",
+      "titleB": "让它在 3D 里活过来",
+      "subtitle": "上传一张图片或写一句话，几十秒得到带真实 PBR 材质的 3D 模型。可编辑、可绑骨动画，直接用于游戏、3D 打印、电商与影视。",
+      "tabImage": "图片生成 3D",
+      "tabText": "文字生成 3D",
+      "dropHint": "拖入一张图片，或点击上传",
+      "dropFormats": "PNG / JPG / WEBP，最大 10MB",
+      "replace": "更换图片",
+      "promptLabel": "描述你想要的模型",
+      "promptPlaceholder": "例如：一只戴红色项圈的柯基，坐着歪头，写实风格",
+      "generate": "免费生成",
+      "errorType": "只支持 PNG、JPG 或 WEBP 格式的图片",
+      "errorSize": "图片不能超过 10MB",
+      "errorEmpty": "请先上传图片或输入描述",
+      "perks": "无需安装 · 每日免费额度 · 导出 GLB / FBX / OBJ / USDZ / STL",
+      "scroll": "向下看看怎么做",
+      "stageLabel": "一只占位小狗正在被生成为 3D 模型：生成切面从下往上扫过，切面下方是完成的材质，上方是柔和的高斯颗粒与线框。",
+      "statusGenerating": "生成中",
+      "statusDone": "已完成",
+      "chipInput": "输入：1 张照片",
+      "chipFaces": "12.4k 面 · 四边面",
+      "chipMaterial": "PBR 材质 · 4K"
+    },
+    "how": {
+      "eyebrow": "怎么做",
+      "title": "三步，从一张照片到能用的 3D 资产",
+      "subtitle": "不用懂建模。Lux3D 把建模、展 UV、贴图、绑骨这些专业步骤都藏在了一次点击后面。",
+      "steps": {
+        "upload": {
+          "title": "上传或描述",
+          "desc": "一张照片、几张多角度图，或者一句话。手机随手拍就够。"
+        },
+        "generate": {
+          "title": "AI 生成",
+          "desc": "几十秒内补全看不见的侧面与背面，输出干净拓扑和完整 PBR 材质。"
+        },
+        "refine": {
+          "title": "编辑与导出",
+          "desc": "重贴图、重拓扑、拆部件、自动绑骨，然后导出到 Blender、Unity、UE 或打印机。"
+        }
+      },
+      "viewerLabel": "查看模式",
+      "modes": {
+        "clay": "白模",
+        "wireframe": "线框",
+        "pbr": "PBR 材质"
+      },
+      "stageLabel": "可旋转的 3D 展台，展示同一个模型的白模、线框与 PBR 材质三种状态。",
+      "exit": "查看全部创作功能"
+    },
+    "advantages": {
+      "eyebrow": "为什么是 Lux3D",
+      "title": "不只是看起来像，而是真的能用",
+      "subtitle": "我们把功夫花在专业用户真正在意的地方：材质、拓扑、可动、可集成。",
+      "items": {
+        "materials": {
+          "title": "真实的 PBR 材质",
+          "desc": "颜色、粗糙度、金属度、法线分通道输出，换任何光照都站得住。"
+        },
+        "representations": {
+          "title": "三种输出表征",
+          "desc": "Mesh 网格、PBR 材质、3D 高斯，一次生成，按用途选择。"
+        },
+        "topology": {
+          "title": "干净的拓扑",
+          "desc": "四边面重拓扑与可控面数，直接进游戏引擎，不用再手动修。"
+        },
+        "speed": {
+          "title": "快，而且可以批量",
+          "desc": "极速版几十秒出模；API 支持批量任务与 Agent 工作流。"
+        },
+        "animation": {
+          "title": "能动起来",
+          "desc": "自动绑骨与动画片段，人物、四足动物都能一键活过来。"
+        },
+        "integration": {
+          "title": "进入你的工作流",
+          "desc": "Python / TypeScript / Java SDK、ComfyUI、MCP、Blender 插件。"
+        }
+      },
+      "stats": {
+        "time": {
+          "value": "< 60s",
+          "label": "平均生成时间（占位）"
+        },
+        "texture": {
+          "value": "4K",
+          "label": "PBR 贴图分辨率（占位）"
+        },
+        "formats": {
+          "value": "6+",
+          "label": "可导出格式"
+        },
+        "reps": {
+          "value": "3",
+          "label": "种输出表征"
+        }
+      }
+    },
+    "testimonials": {
+      "eyebrow": "用户怎么说",
+      "title": "创作者和团队已经在用它造东西",
+      "note": "以下为示例证言，正式上线前替换为真实用户反馈。",
+      "items": {
+        "a": {
+          "quote": "以前一个道具要建一下午，现在拍张照片，喝口咖啡的工夫就能拖进 Unity 里了。",
+          "name": "林一舟",
+          "role": "独立游戏开发者"
+        },
+        "b": {
+          "quote": "材质是我最惊讶的地方。金属就是金属，布料就是布料，打光之后不会穿帮。",
+          "name": "Mia Hart",
+          "role": "3D 美术 · 动画工作室"
+        },
+        "c": {
+          "quote": "我给我家的猫做了个手办，打印出来摆在它旁边，它闻了半天。",
+          "name": "周小满",
+          "role": "3D 打印爱好者"
+        },
+        "d": {
+          "quote": "API 很好接，我们一晚上跑完了 3000 个 SKU 的商品模型。",
+          "name": "Daniel Okafor",
+          "role": "电商平台技术负责人"
+        },
+        "e": {
+          "quote": "用 3D 高斯输出做镜头预演，导演第一次在开拍前就看到了完整的场景。",
+          "name": "陈默",
+          "role": "影视预演导演"
+        },
+        "f": {
+          "quote": "我们把它接进了仿真管线，几百种日常物体一下子有了带物理材质的数字孪生。",
+          "name": "Sofia Lindqvist",
+          "role": "具身智能研究员"
+        }
+      }
+    },
+    "community": {
+      "eyebrow": "社群作品",
+      "title": "大家都在用 Lux3D 造什么",
+      "subtitle": "每一件作品都是从一张照片或一句话开始的。悬停看看它们转起来。",
+      "viewAll": "进入作品广场",
+      "likes": "{count} 喜欢",
+      "by": "作者 {author}",
+      "filters": {
+        "all": "全部",
+        "characters": "角色",
+        "props": "道具",
+        "nature": "自然",
+        "architecture": "建筑与器物"
+      },
+      "items": {
+        "corgi": "戴红项圈的柯基",
+        "oak": "后院的橡树",
+        "bench": "公园长椅",
+        "lamp": "街灯",
+        "chest": "宝箱",
+        "robot": "铁皮玩具机器人",
+        "mushroom": "毒蝇伞",
+        "vase": "釉面花瓶",
+        "house": "小木屋",
+        "rock": "河边的石头",
+        "pup": "打盹的小狗",
+        "pine": "小松树"
+      }
+    },
+    "cta": {
+      "title": "现在轮到你了",
+      "subtitle": "拍下你身边的一样东西，看看它在 3D 世界里是什么样子。",
+      "note": "免费开始，无需信用卡"
+    },
+    "faq": {
+      "title": "常见问题",
+      "items": {
+        "q1": {
+          "q": "Lux3D 能生成什么样的 3D 模型？",
+          "a": "角色、动物、道具、家具、建筑、器物等大部分物体。输出带完整 PBR 材质的网格模型，也可以输出 3D 高斯。"
+        },
+        "q2": {
+          "q": "需要会 3D 建模吗？",
+          "a": "不需要。上传一张图片或写一句话即可；专业用户可以继续在编辑器里重拓扑、重贴图和绑骨。"
+        },
+        "q3": {
+          "q": "支持导出哪些格式？",
+          "a": "GLB、FBX、OBJ、USDZ、STL 等常用格式，可直接用于 Blender、Unity、Unreal 和 3D 打印。"
+        },
+        "q4": {
+          "q": "生成的模型可以商用吗？",
+          "a": "付费套餐生成的模型可用于商业用途，具体以服务条款为准。"
+        },
+        "q5": {
+          "q": "怎么接入 API？",
+          "a": "在开发者控制台创建 API Key，使用 Python / TypeScript / Java SDK 或直接调用 REST 接口，几分钟即可跑通第一个任务。"
+        }
+      }
+    }
+  },
+  "footer": {
+    "tagline": "一张图，生成真实材质的 3D 世界。",
+    "columns": {
+      "product": "产品",
+      "developers": "开发者",
+      "useCases": "场景",
+      "resources": "资源",
+      "company": "公司",
+      "legal": "法律"
+    },
+    "links": {
+      "pricing": "定价",
+      "gallery": "作品广场"
+    },
+    "rights": "© {year} Lux3D。保留所有权利。",
+    "social": {
+      "x": "X",
+      "discord": "Discord",
+      "youtube": "YouTube",
+      "github": "GitHub"
+    }
+  },
+  "templates": {
+    "overview": {
+      "explore": "探索"
+    },
+    "feature": {
+      "inputLabel": "输入",
+      "outputLabel": "3D 结果",
+      "howTitle": "怎么用",
+      "steps": ["上传图片或输入描述", "选择版本与输出表征，开始生成", "预览、编辑并导出"],
+      "casesTitle": "效果案例",
+      "specsTitle": "参数与规格",
+      "specs": {
+        "input": "输入要求",
+        "inputValue": "PNG / JPG / WEBP，≤ 10MB（占位）",
+        "output": "输出格式",
+        "outputValue": "GLB / FBX / OBJ / USDZ / STL",
+        "time": "耗时",
+        "timeValue": "标准版约 60 秒，极速版约 20 秒（占位）",
+        "credits": "积分消耗",
+        "creditsValue": "10–30 积分 / 次（占位）"
+      },
+      "useCasesTitle": "适用场景",
+      "relatedTitle": "相关功能",
+      "ctaTitle": "现在就试试"
+    },
+    "usecase": {
+      "personalTitle": "个人如何用",
+      "personalSteps": ["拍下或找到参考图", "在工作台生成并微调", "导出到你的工具里"],
+      "teamTitle": "团队如何集成",
+      "teamDesc": "通过 API 把生成能力接进你的资产管线、商品系统或仿真环境。",
+      "resultsTitle": "客户案例与效果数据",
+      "relatedTitle": "相关功能"
+    },
+    "developer": {
+      "sidebarTitle": "开发者",
+      "codeTitle": "最短上手路径",
+      "docsNote": "完整文档请前往开发者文档站。"
+    },
+    "tool": {
+      "desc": "免费在线工具，第三阶段上线。"
+    },
+    "simple": {
+      "body": "本页内容正在准备中，正式文案上线前这里显示占位内容。"
+    }
+  },
+  "gallery": {
+    "title": "作品广场",
+    "desc": "看看社群用 Lux3D 生成的模型，找到灵感，用同样的方式生成你的版本。",
+    "detail": {
+      "input": "输入",
+      "inputValue": "1 张照片",
+      "author": "作者",
+      "formats": "可下载格式",
+      "representation": "输出表征",
+      "remix": "用同样的方式生成",
+      "back": "返回作品广场"
+    }
+  },
+  "pricing": {
+    "title": "定价",
+    "desc": "从免费开始。按创作订阅，或按 API 用量付费。",
+    "tabCreators": "创作者订阅",
+    "tabApi": "API 按量",
+    "perMonth": "/ 月",
+    "credits": "{count} 积分 / 月",
+    "choose": "选择方案",
+    "popular": "最受欢迎",
+    "plans": {
+      "free": {
+        "name": "免费",
+        "desc": "体验全部基础能力"
+      },
+      "personal": {
+        "name": "个人",
+        "desc": "独立创作者与爱好者"
+      },
+      "pro": {
+        "name": "专业",
+        "desc": "高频创作与商用"
+      },
+      "team": {
+        "name": "团队",
+        "desc": "协作空间与统一账单"
+      }
+    },
+    "calc": {
+      "title": "API 价格计算器",
+      "version": "版本",
+      "standard": "标准版",
+      "turbo": "极速版",
+      "representation": "输出表征",
+      "mesh": "Mesh 网格",
+      "pbr": "PBR 材质",
+      "gaussian": "3D 高斯",
+      "quantity": "生成数量",
+      "estimate": "预估费用",
+      "note": "单价为占位数值。"
+    },
+    "enterprise": "需要私有化部署或更大用量？"
+  },
+  "notFound": {
+    "title": "这里还什么都没长出来",
+    "desc": "你访问的页面不存在。"
+  },
+  "pages": {
+    "create": {
+      "title": "创作",
+      "desc": "从一张图或一句话开始的全部 3D 创作能力。"
+    },
+    "imageTo3d": {
+      "title": "图片生成 3D",
+      "desc": "一张照片生成带真实材质的 3D 模型。"
+    },
+    "textTo3d": {
+      "title": "文字生成 3D",
+      "desc": "用一句话描述，得到你想要的模型。"
+    },
+    "multiView": {
+      "title": "多视图生成",
+      "desc": "多张角度图，还原更准确的形状。"
+    },
+    "texture": {
+      "title": "AI 贴图",
+      "desc": "为已有模型生成或替换 PBR 材质。"
+    },
+    "remesh": {
+      "title": "重拓扑",
+      "desc": "干净的四边面与可控面数。"
+    },
+    "split": {
+      "title": "部件拆分",
+      "desc": "把模型拆成可单独编辑的部件。"
+    },
+    "rigging": {
+      "title": "自动绑骨",
+      "desc": "一键生成骨骼与蒙皮权重。"
+    },
+    "animation": {
+      "title": "动画",
+      "desc": "为绑好骨的模型套用动画片段。"
+    },
+    "developers": {
+      "title": "开发者",
+      "desc": "用 API 与 SDK 把 3D 生成接进你的产品。"
+    },
+    "quickstart": {
+      "title": "快速开始",
+      "desc": "五分钟跑通第一个生成任务。"
+    },
+    "sdk": {
+      "title": "SDK",
+      "desc": "Python、TypeScript、Java 官方 SDK。"
+    },
+    "integrations": {
+      "title": "集成",
+      "desc": "ComfyUI、MCP、Blender 与游戏引擎。"
+    },
+    "batch": {
+      "title": "批量生成",
+      "desc": "批量任务与 Agent 工作流。"
+    },
+    "changelog": {
+      "title": "更新日志",
+      "desc": "模型与 API 的每一次更新。"
+    },
+    "useCases": {
+      "title": "应用场景",
+      "desc": "Lux3D 在各行各业的用法。"
+    },
+    "gameAssets": {
+      "title": "游戏资产",
+      "desc": "道具、角色与场景，直接进引擎。"
+    },
+    "printing": {
+      "title": "3D 打印",
+      "desc": "把照片变成可打印的手办与模型。"
+    },
+    "ecommerce": {
+      "title": "电商",
+      "desc": "商品 3D 展示与 AR 试看。"
+    },
+    "film": {
+      "title": "AI 视频与影视",
+      "desc": "镜头预演与 3D 高斯场景。"
+    },
+    "embodied": {
+      "title": "具身智能与仿真",
+      "desc": "带物理材质的数字孪生资产。"
+    },
+    "heritage": {
+      "title": "数字文博",
+      "desc": "文物与藏品的数字化保存与展示。"
+    },
+    "technology": {
+      "title": "技术",
+      "desc": "材质、三种表征、数据底座、评测与路线图。"
+    },
+    "resources": {
+      "title": "资源",
+      "desc": "博客、教程与免费工具。"
+    },
+    "blog": {
+      "title": "博客",
+      "desc": "产品动态与技术文章。"
+    },
+    "tutorials": {
+      "title": "教程",
+      "desc": "从入门到进阶的使用指南。"
+    },
+    "tools": {
+      "title": "免费工具",
+      "desc": "在线 3D 查看、转换、修复与压缩。"
+    },
+    "viewer": {
+      "title": "3D 查看器",
+      "desc": "在浏览器里打开任意 3D 文件。"
+    },
+    "converter": {
+      "title": "格式转换",
+      "desc": "GLB、FBX、OBJ、STL 等格式互转。"
+    },
+    "stlRepair": {
+      "title": "STL 修复",
+      "desc": "自动修复打印前的破面与漏洞。"
+    },
+    "compressor": {
+      "title": "模型压缩",
+      "desc": "Draco / Meshopt 压缩，体积更小。"
+    },
+    "about": {
+      "title": "关于我们",
+      "desc": "我们为什么做 Lux3D。"
+    },
+    "careers": {
+      "title": "加入我们",
+      "desc": "一起建造 3D 的未来。"
+    },
+    "contact": {
+      "title": "联系我们",
+      "desc": "商务合作、媒体与支持。"
+    },
+    "news": {
+      "title": "新闻",
+      "desc": "公司新闻与媒体报道。"
+    },
+    "trust": {
+      "title": "安全与合规",
+      "desc": "安全、合规与数据政策。"
+    },
+    "terms": {
+      "title": "服务条款",
+      "desc": "使用 Lux3D 的条款。"
+    },
+    "privacy": {
+      "title": "隐私政策",
+      "desc": "我们如何处理你的数据。"
+    }
+  },
+  "technologySections": {
+    "materials": "材质（PBR）",
+    "representations": "三种表征：Mesh / PBR / 3D 高斯",
+    "data": "数据底座",
+    "benchmark": "评测",
+    "roadmap": "路线图：动态资产 → 可交互世界"
+  }
+}

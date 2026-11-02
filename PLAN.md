@@ -5,19 +5,19 @@
 
 ## 1. 技术选型与版本（npm 当前稳定版，`package.json` 锁定精确版本）
 
-| 包 | 版本 | 备注 |
-|---|---|---|
-| next | 16.4.3 | App Router，`app/[locale]` |
-| react / react-dom | 19.3.1 | |
-| typescript | 5.x 最新 | npm 上 `latest` 已是 7.0（Go 原生版），Next 16 的类型检查链尚未确认兼容，先锁 5.x |
-| tailwindcss | 4.3.3 | v4 用 CSS 的 `@theme` 直接映射 CSS 变量，正好符合「token 驱动」 |
-| next-intl | 4.14.9 | `/zh`、`/en`，middleware 按 `Accept-Language` 跳转 |
-| three / @react-three/fiber / @react-three/drei | 0.187.0 / 9.8.2 / 10.7.9 | |
-| gsap（含 ScrollTrigger） | 3.15.0 | |
-| lenis | 1.3.27 | 可关闭；reduced-motion 时自动关闭 |
-| zustand | 5.0.16 | cursor / narrative / perf 三个 store |
-| next-mdx-remote | 6.0.0 | 从 `content/` 读 MDX，接口抽象成 `lib/content.ts`，后续换 CMS 只改这一层 |
-| eslint / prettier | 最新稳定 | `eslint-config-next` + prettier |
+| 包                                             | 版本                     | 备注                                                                              |
+| ---------------------------------------------- | ------------------------ | --------------------------------------------------------------------------------- |
+| next                                           | 16.4.3                   | App Router，`app/[locale]`                                                        |
+| react / react-dom                              | 19.3.1                   |                                                                                   |
+| typescript                                     | 5.x 最新                 | npm 上 `latest` 已是 7.0（Go 原生版），Next 16 的类型检查链尚未确认兼容，先锁 5.x |
+| tailwindcss                                    | 4.3.3                    | v4 用 CSS 的 `@theme` 直接映射 CSS 变量，正好符合「token 驱动」                   |
+| next-intl                                      | 4.14.9                   | `/zh`、`/en`，middleware 按 `Accept-Language` 跳转                                |
+| three / @react-three/fiber / @react-three/drei | 0.187.0 / 9.8.2 / 10.7.9 |                                                                                   |
+| gsap（含 ScrollTrigger）                       | 3.15.0                   |                                                                                   |
+| lenis                                          | 1.3.27                   | 可关闭；reduced-motion 时自动关闭                                                 |
+| zustand                                        | 5.0.16                   | cursor / narrative / perf 三个 store                                              |
+| next-mdx-remote                                | 6.0.0                    | 从 `content/` 读 MDX，接口抽象成 `lib/content.ts`，后续换 CMS 只改这一层          |
+| eslint / prettier                              | 最新稳定                 | `eslint-config-next` + prettier                                                   |
 
 ## 2. 目录结构
 

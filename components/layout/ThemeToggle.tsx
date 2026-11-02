@@ -1,0 +1,57 @@
+'use client';
+import { useTranslations } from 'next-intl';
+import { useEffect, useState } from 'react';
+
+type Theme = 'system' | 'light' | 'dark';
+const KEY = 'lux3d-theme';
+
+/** Inline script to apply the saved theme before paint. */
+export const themeScript = `try{var t=localStorage.getItem('${KEY}');if(t==='light'||t==='dark')document.documentElement.dataset.theme=t}catch(e){}`;
+
+function persistTheme(next: Theme) {
+  try {
+    const root = document.documentElement;
+    if (next === 'system') {
+      localStorage.removeItem(KEY);
+      delete root.dataset.theme;
+    } else {
+      localStorage.setItem(KEY, next);
+      root.dataset.theme = next;
+    }
+  } catch {}
+}
+
+export function ThemeToggle() {
+  const t = useTranslations('common');
+  const [theme, setTheme] = useState<Theme>('system');
+  useEffect(() => {
+    try {
+      const saved = localStorage.getItem(KEY);
+      // eslint-disable-next-line react-hooks/set-state-in-effect -- sync from storage after hydration
+      if (saved === 'light' || saved === 'dark') setTheme(saved);
+    } catch {}
+  }, []);
+  const apply = (next: Theme) => {
+    setTheme(next);
+    persistTheme(next);
+  };
+  return (
+    <div
+      role="group"
+      aria-label={t('themeLabel')}
+      className="inline-flex rounded-full border border-line p-0.5 text-xs"
+    >
+      {(['system', 'light', 'dark'] as Theme[]).map((v) => (
+        <button
+          key={v}
+          type="button"
+          aria-pressed={theme === v}
+          onClick={() => apply(v)}
+          className={`rounded-full px-2.5 py-1 ${theme === v ? 'bg-surface-2 text-text' : 'text-subtle hover:text-text'}`}
+        >
+          {t(`theme.${v}`)}
+        </button>
+      ))}
+    </div>
+  );
+}

@@ -1,0 +1,441 @@
+{
+  "meta": {
+    "siteTitle": "Lux3D · Turn one photo into a 3D model with real materials",
+    "siteDescription": "Lux3D is an AI-native 3D generation and creation platform. Upload an image or write a sentence to get 3D assets with real PBR materials — then edit, rig, animate, batch-generate and plug them into your workflow."
+  },
+  "common": {
+    "skipToContent": "Skip to content",
+    "startCreating": "Start creating",
+    "getApi": "Get API",
+    "login": "Log in",
+    "learnMore": "Learn more",
+    "tryNow": "Try it now",
+    "contactSales": "Contact sales",
+    "viewDocs": "View docs",
+    "comingSoon": "Coming soon",
+    "placeholder": "Placeholder",
+    "backHome": "Back to home",
+    "copy": "Copy",
+    "copied": "Copied",
+    "menu": "Menu",
+    "close": "Close",
+    "language": "Language",
+    "themeLabel": "Appearance",
+    "theme": {
+      "system": "System",
+      "light": "Light",
+      "dark": "Dark"
+    }
+  },
+  "nav": {
+    "create": "Create",
+    "developers": "Developers",
+    "useCases": "Use cases",
+    "gallery": "Gallery",
+    "technology": "Technology",
+    "pricing": "Pricing",
+    "resources": "Resources",
+    "menuTitle": {
+      "create": "Everything you can make from a single image",
+      "developers": "API, SDKs and workflow integrations",
+      "useCases": "Where Lux3D is being used",
+      "resources": "Learning, inspiration and tools"
+    },
+    "viewAll": "View all"
+  },
+  "home": {
+    "hero": {
+      "eyebrow": "AI-native 3D generation",
+      "titleA": "Snap something real.",
+      "titleB": "Watch it come alive in 3D.",
+      "subtitle": "Upload a photo or write a sentence and get a 3D model with real PBR materials in seconds. Edit it, rig it, and use it in games, 3D printing, e-commerce and film.",
+      "tabImage": "Image to 3D",
+      "tabText": "Text to 3D",
+      "dropHint": "Drop an image here, or click to upload",
+      "dropFormats": "PNG / JPG / WEBP, up to 10MB",
+      "replace": "Replace image",
+      "promptLabel": "Describe the model you want",
+      "promptPlaceholder": "e.g. A corgi with a red collar, sitting with its head tilted, realistic",
+      "generate": "Generate for free",
+      "errorType": "Only PNG, JPG or WEBP images are supported",
+      "errorSize": "Images must be 10MB or smaller",
+      "errorEmpty": "Upload an image or enter a description first",
+      "perks": "No install · Free daily credits · Export GLB / FBX / OBJ / USDZ / STL",
+      "scroll": "See how it works",
+      "stageLabel": "A placeholder dog being generated into a 3D model: a generation slice sweeps upward, finished materials below it, soft gaussian particles and wireframe above.",
+      "statusGenerating": "Generating",
+      "statusDone": "Done",
+      "chipInput": "Input: 1 photo",
+      "chipFaces": "12.4k faces · quads",
+      "chipMaterial": "PBR material · 4K"
+    },
+    "how": {
+      "eyebrow": "How it works",
+      "title": "Three steps from a photo to a usable 3D asset",
+      "subtitle": "No modeling skills needed. Lux3D hides modeling, UV unwrapping, texturing and rigging behind a single click.",
+      "steps": {
+        "upload": {
+          "title": "Upload or describe",
+          "desc": "One photo, a few angles, or a single sentence. A quick phone snap is enough."
+        },
+        "generate": {
+          "title": "AI generates",
+          "desc": "Within seconds it fills in the unseen sides and outputs clean topology with full PBR materials."
+        },
+        "refine": {
+          "title": "Edit and export",
+          "desc": "Retexture, remesh, split parts, auto-rig — then export to Blender, Unity, Unreal or your printer."
+        }
+      },
+      "viewerLabel": "View mode",
+      "modes": {
+        "clay": "Clay",
+        "wireframe": "Wireframe",
+        "pbr": "PBR material"
+      },
+      "stageLabel": "A rotatable 3D stage showing the same model as clay, wireframe and PBR material.",
+      "exit": "See all creation tools"
+    },
+    "advantages": {
+      "eyebrow": "Why Lux3D",
+      "title": "Not just lookalike. Actually usable.",
+      "subtitle": "We put the work where professionals care most: materials, topology, motion and integration.",
+      "items": {
+        "materials": {
+          "title": "Real PBR materials",
+          "desc": "Base color, roughness, metalness and normal as separate channels — they hold up under any lighting."
+        },
+        "representations": {
+          "title": "Three representations",
+          "desc": "Mesh, PBR material and 3D Gaussians from one generation. Pick what the job needs."
+        },
+        "topology": {
+          "title": "Clean topology",
+          "desc": "Quad remeshing with controllable face counts, ready for game engines without manual cleanup."
+        },
+        "speed": {
+          "title": "Fast, and batchable",
+          "desc": "Turbo mode delivers a model in seconds; the API supports batch jobs and agent workflows."
+        },
+        "animation": {
+          "title": "Ready to move",
+          "desc": "Auto-rigging and animation clips bring characters and quadrupeds to life in one click."
+        },
+        "integration": {
+          "title": "Fits your workflow",
+          "desc": "Python / TypeScript / Java SDKs, ComfyUI, MCP and a Blender add-on."
+        }
+      },
+      "stats": {
+        "time": { "value": "< 60s", "label": "Average generation time (placeholder)" },
+        "texture": { "value": "4K", "label": "PBR texture resolution (placeholder)" },
+        "formats": { "value": "6+", "label": "Export formats" },
+        "reps": { "value": "3", "label": "Output representations" }
+      }
+    },
+    "testimonials": {
+      "eyebrow": "What people say",
+      "title": "Creators and teams are already building with it",
+      "note": "Sample testimonials — to be replaced with real user feedback before launch.",
+      "items": {
+        "a": {
+          "quote": "A prop used to take me an afternoon. Now I snap a photo and it's in Unity before my coffee's done.",
+          "name": "Lin Yizhou",
+          "role": "Indie game developer"
+        },
+        "b": {
+          "quote": "The materials surprised me most. Metal reads as metal, fabric as fabric — nothing breaks once it's lit.",
+          "name": "Mia Hart",
+          "role": "3D artist · Animation studio"
+        },
+        "c": {
+          "quote": "I made a figurine of my cat, printed it and set it next to her. She sniffed it for ages.",
+          "name": "Zhou Xiaoman",
+          "role": "3D printing hobbyist"
+        },
+        "d": {
+          "quote": "The API was easy to wire up. We generated models for 3,000 SKUs overnight.",
+          "name": "Daniel Okafor",
+          "role": "Engineering lead · E-commerce platform"
+        },
+        "e": {
+          "quote": "With Gaussian output for previs, our director saw the full set before a single day of shooting.",
+          "name": "Chen Mo",
+          "role": "Previs director"
+        },
+        "f": {
+          "quote": "We plugged it into our simulation pipeline and got physically-textured twins of hundreds of everyday objects.",
+          "name": "Sofia Lindqvist",
+          "role": "Embodied AI researcher"
+        }
+      }
+    },
+    "community": {
+      "eyebrow": "Community",
+      "title": "What people are making with Lux3D",
+      "subtitle": "Every piece started as a photo or a sentence. Hover to see them turn.",
+      "viewAll": "Open the gallery",
+      "likes": "{count} likes",
+      "by": "by {author}",
+      "filters": {
+        "all": "All",
+        "characters": "Characters",
+        "props": "Props",
+        "nature": "Nature",
+        "architecture": "Objects & buildings"
+      },
+      "items": {
+        "corgi": "Corgi with a red collar",
+        "oak": "Backyard oak",
+        "bench": "Park bench",
+        "lamp": "Street lamp",
+        "chest": "Treasure chest",
+        "robot": "Tin toy robot",
+        "mushroom": "Fly agaric",
+        "vase": "Glazed vase",
+        "house": "Tiny cottage",
+        "rock": "River stone",
+        "pup": "Sleepy pup",
+        "pine": "Little pine"
+      }
+    },
+    "cta": {
+      "title": "Now it's your turn",
+      "subtitle": "Snap something near you and see what it looks like in a 3D world.",
+      "note": "Start free — no credit card required"
+    },
+    "faq": {
+      "title": "FAQ",
+      "items": {
+        "q1": {
+          "q": "What kind of 3D models can Lux3D generate?",
+          "a": "Most objects — characters, animals, props, furniture, buildings and artifacts. Output is a mesh with full PBR materials, or 3D Gaussians."
+        },
+        "q2": {
+          "q": "Do I need to know 3D modeling?",
+          "a": "No. Upload an image or write a sentence. Pros can keep going in the editor with remeshing, retexturing and rigging."
+        },
+        "q3": {
+          "q": "Which formats can I export?",
+          "a": "GLB, FBX, OBJ, USDZ, STL and more — ready for Blender, Unity, Unreal and 3D printing."
+        },
+        "q4": {
+          "q": "Can I use generated models commercially?",
+          "a": "Models generated on paid plans can be used commercially, subject to the Terms of Service."
+        },
+        "q5": {
+          "q": "How do I use the API?",
+          "a": "Create an API key in the developer console and use the Python / TypeScript / Java SDK or REST endpoints. Your first job runs in minutes."
+        }
+      }
+    }
+  },
+  "footer": {
+    "tagline": "One photo in. A 3D world with real materials out.",
+    "columns": {
+      "product": "Product",
+      "developers": "Developers",
+      "useCases": "Use cases",
+      "resources": "Resources",
+      "company": "Company",
+      "legal": "Legal"
+    },
+    "links": {
+      "pricing": "Pricing",
+      "gallery": "Gallery"
+    },
+    "rights": "© {year} Lux3D. All rights reserved.",
+    "social": {
+      "x": "X",
+      "discord": "Discord",
+      "youtube": "YouTube",
+      "github": "GitHub"
+    }
+  },
+  "templates": {
+    "overview": {
+      "explore": "Explore"
+    },
+    "feature": {
+      "inputLabel": "Input",
+      "outputLabel": "3D result",
+      "howTitle": "How to use it",
+      "steps": [
+        "Upload an image or enter a description",
+        "Pick a version and representation, then generate",
+        "Preview, edit and export"
+      ],
+      "casesTitle": "Examples",
+      "specsTitle": "Specs",
+      "specs": {
+        "input": "Input",
+        "inputValue": "PNG / JPG / WEBP, ≤ 10MB (placeholder)",
+        "output": "Output formats",
+        "outputValue": "GLB / FBX / OBJ / USDZ / STL",
+        "time": "Time",
+        "timeValue": "~60s standard, ~20s turbo (placeholder)",
+        "credits": "Credits",
+        "creditsValue": "10–30 credits per run (placeholder)"
+      },
+      "useCasesTitle": "Use cases",
+      "relatedTitle": "Related features",
+      "ctaTitle": "Try it now"
+    },
+    "usecase": {
+      "personalTitle": "For individuals",
+      "personalSteps": [
+        "Snap or find a reference image",
+        "Generate and refine in the studio",
+        "Export into your tools"
+      ],
+      "teamTitle": "For teams",
+      "teamDesc": "Use the API to plug generation into your asset pipeline, product catalog or simulation.",
+      "resultsTitle": "Customer stories and results",
+      "relatedTitle": "Related features"
+    },
+    "developer": {
+      "sidebarTitle": "Developers",
+      "codeTitle": "Shortest path to a first result",
+      "docsNote": "Full documentation lives on the developer docs site."
+    },
+    "tool": {
+      "desc": "Free online tool, launching in phase three."
+    },
+    "simple": {
+      "body": "This page is being prepared. Placeholder content is shown until the final copy is ready."
+    }
+  },
+  "gallery": {
+    "title": "Gallery",
+    "desc": "Browse models the community made with Lux3D, find inspiration, and generate your own version the same way.",
+    "detail": {
+      "input": "Input",
+      "inputValue": "1 photo",
+      "author": "Author",
+      "formats": "Download formats",
+      "representation": "Representation",
+      "remix": "Generate one like this",
+      "back": "Back to gallery"
+    }
+  },
+  "pricing": {
+    "title": "Pricing",
+    "desc": "Start free. Subscribe as a creator, or pay as you go with the API.",
+    "tabCreators": "Creator plans",
+    "tabApi": "API usage",
+    "perMonth": "/ mo",
+    "credits": "{count} credits / mo",
+    "choose": "Choose plan",
+    "popular": "Most popular",
+    "plans": {
+      "free": { "name": "Free", "desc": "Try every core feature" },
+      "personal": { "name": "Personal", "desc": "Indie creators and hobbyists" },
+      "pro": { "name": "Pro", "desc": "Heavy creation and commercial use" },
+      "team": { "name": "Team", "desc": "Shared workspace and billing" }
+    },
+    "calc": {
+      "title": "API price calculator",
+      "version": "Version",
+      "standard": "Standard",
+      "turbo": "Turbo",
+      "representation": "Representation",
+      "mesh": "Mesh",
+      "pbr": "PBR material",
+      "gaussian": "3D Gaussians",
+      "quantity": "Quantity",
+      "estimate": "Estimate",
+      "note": "Unit prices are placeholders."
+    },
+    "enterprise": "Need private deployment or higher volume?"
+  },
+  "notFound": {
+    "title": "Nothing has grown here yet",
+    "desc": "The page you're looking for doesn't exist."
+  },
+  "pages": {
+    "create": {
+      "title": "Create",
+      "desc": "Every 3D creation tool, starting from an image or a sentence."
+    },
+    "imageTo3d": {
+      "title": "Image to 3D",
+      "desc": "Turn one photo into a 3D model with real materials."
+    },
+    "textTo3d": {
+      "title": "Text to 3D",
+      "desc": "Describe it in a sentence, get the model you want."
+    },
+    "multiView": { "title": "Multi-view", "desc": "Several angles for more accurate shapes." },
+    "texture": { "title": "AI Texture", "desc": "Generate or replace PBR materials on any model." },
+    "remesh": { "title": "Remesh", "desc": "Clean quads with controllable face counts." },
+    "split": { "title": "Part split", "desc": "Separate a model into editable parts." },
+    "rigging": { "title": "Auto-rigging", "desc": "Skeleton and skin weights in one click." },
+    "animation": { "title": "Animation", "desc": "Apply animation clips to rigged models." },
+    "developers": {
+      "title": "Developers",
+      "desc": "Bring 3D generation into your product with the API and SDKs."
+    },
+    "quickstart": { "title": "Quickstart", "desc": "Run your first generation in five minutes." },
+    "sdk": { "title": "SDKs", "desc": "Official Python, TypeScript and Java SDKs." },
+    "integrations": { "title": "Integrations", "desc": "ComfyUI, MCP, Blender and game engines." },
+    "batch": { "title": "Batch generation", "desc": "Batch jobs and agent workflows." },
+    "changelog": { "title": "Changelog", "desc": "Every model and API update." },
+    "useCases": { "title": "Use cases", "desc": "How Lux3D is used across industries." },
+    "gameAssets": {
+      "title": "Game assets",
+      "desc": "Props, characters and scenes, straight into the engine."
+    },
+    "printing": {
+      "title": "3D printing",
+      "desc": "Turn photos into printable figurines and models."
+    },
+    "ecommerce": { "title": "E-commerce", "desc": "3D product views and AR try-on." },
+    "film": { "title": "AI video & film", "desc": "Previs and 3D Gaussian scenes." },
+    "embodied": {
+      "title": "Embodied AI & simulation",
+      "desc": "Digital-twin assets with physical materials."
+    },
+    "heritage": {
+      "title": "Cultural heritage",
+      "desc": "Digitizing and presenting artifacts and collections."
+    },
+    "technology": {
+      "title": "Technology",
+      "desc": "Materials, three representations, data, benchmarks and roadmap."
+    },
+    "resources": { "title": "Resources", "desc": "Blog, tutorials and free tools." },
+    "blog": { "title": "Blog", "desc": "Product news and technical writing." },
+    "tutorials": { "title": "Tutorials", "desc": "Guides from first steps to advanced use." },
+    "tools": {
+      "title": "Free tools",
+      "desc": "View, convert, repair and compress 3D files online."
+    },
+    "viewer": { "title": "3D viewer", "desc": "Open any 3D file in your browser." },
+    "converter": {
+      "title": "Format converter",
+      "desc": "Convert between GLB, FBX, OBJ, STL and more."
+    },
+    "stlRepair": {
+      "title": "STL repair",
+      "desc": "Automatically fix holes and bad faces before printing."
+    },
+    "compressor": {
+      "title": "Model compressor",
+      "desc": "Draco / Meshopt compression for smaller files."
+    },
+    "about": { "title": "About", "desc": "Why we're building Lux3D." },
+    "careers": { "title": "Careers", "desc": "Help build the future of 3D." },
+    "contact": { "title": "Contact", "desc": "Partnerships, press and support." },
+    "news": { "title": "News", "desc": "Company news and press coverage." },
+    "trust": { "title": "Trust & safety", "desc": "Security, compliance and data policy." },
+    "terms": { "title": "Terms of Service", "desc": "The terms for using Lux3D." },
+    "privacy": { "title": "Privacy Policy", "desc": "How we handle your data." }
+  },
+  "technologySections": {
+    "materials": "Materials (PBR)",
+    "representations": "Three representations: Mesh / PBR / 3D Gaussians",
+    "data": "Data foundation",
+    "benchmark": "Benchmarks",
+    "roadmap": "Roadmap: dynamic assets → interactive worlds"
+  }
+}
