@@ -339,14 +339,14 @@ export function ImageTo3DExplainer() {
           </div>
 
           {/* ---------- copy ---------- */}
-          <div className="min-w-0 lg:max-w-[520px]">
+          <div className="min-w-0 lg:flex lg:h-[min(100%,760px)] lg:max-w-[580px] lg:flex-col lg:justify-center">
             <p className="hidden text-sm font-medium tracking-wide text-[#5ea8ff] lg:block">
               {t('eyebrow')}
             </p>
             <div
               role="tablist"
               aria-label={t('eyebrow')}
-              className="inline-flex rounded-full border border-white/10 bg-white/[0.04] p-1 lg:mt-5"
+              className="inline-flex w-fit rounded-full border border-white/10 bg-white/[0.04] p-1 lg:mt-7"
               onKeyDown={(e) => {
                 if (e.key !== 'ArrowLeft' && e.key !== 'ArrowRight') return;
                 const n = mode === 'image' ? 'text' : 'image';
@@ -379,7 +379,7 @@ export function ImageTo3DExplainer() {
             <h2
               id="explain-title"
               key={`h-${mode}`}
-              className="story-in mt-5 text-balance font-display text-[1.7rem] font-bold leading-[1.15] tracking-tight md:text-[2.6rem] lg:mt-7 lg:text-[3rem]"
+              className="story-in mt-5 text-balance font-display text-[1.7rem] font-bold leading-[1.15] tracking-tight md:text-[2.6rem] lg:mt-10 lg:text-[3.1rem]"
             >
               {t(`${mode}.title`)}
             </h2>
@@ -390,11 +390,11 @@ export function ImageTo3DExplainer() {
               {t(`${mode}.desc`)}
             </p>
 
-            <ul className="mt-6 hidden gap-2.5 lg:grid">
+            <ul className="mt-6 hidden gap-3.5 lg:mt-10 lg:grid">
               {(['a', 'b', 'c'] as const).map((k) => (
                 <li
                   key={`${mode}-${k}`}
-                  className="story-in flex items-center gap-3.5 rounded-2xl border border-white/[0.07] bg-white/[0.03] px-4 py-3"
+                  className="story-in flex items-center gap-3.5 rounded-2xl border border-white/[0.07] bg-white/[0.03] px-5 py-3 lg:py-[1.1rem]"
                 >
                   <span className="grid size-9 shrink-0 place-items-center rounded-xl bg-[#4d8dff]/15 text-[#7fb6ff]">
                     <Icon name={k} />
@@ -411,7 +411,7 @@ export function ImageTo3DExplainer() {
               ))}
             </ul>
 
-            <div className="mt-5 flex flex-wrap items-center gap-x-6 gap-y-3 lg:mt-8">
+            <div className="mt-5 flex flex-wrap items-center gap-x-6 gap-y-3 lg:mt-12">
               <a
                 href={appUrl({ mode, source: 'www' })}
                 className="group inline-flex h-12 items-center gap-2.5 rounded-full bg-[linear-gradient(135deg,#5b9bff,#3a6ff0)] pl-6 pr-2 text-[15px] font-medium text-white shadow-[0_10px_30px_-10px_rgba(77,141,255,0.9)] transition-transform hover:scale-[1.02] md:h-14 md:text-base"
@@ -428,7 +428,7 @@ export function ImageTo3DExplainer() {
                 {t('secondary')} →
               </Link>
             </div>
-            <p className="mt-3 hidden text-xs text-white/35 sm:block">{t('note')}</p>
+            <p className="mt-3 hidden lg:mt-4 text-xs text-white/35 sm:block">{t('note')}</p>
           </div>
         </div>
       </div>
