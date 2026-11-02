@@ -527,6 +527,83 @@
       "partnersTitle": "Partners",
       "partnerSlot": "Partner {n}",
       "partnersNote": "Partner logos will be added once approved."
+    },
+    "voices": {
+      "eyebrow": "What people say",
+      "title": "They're already creating their worlds with Lux3D",
+      "note": "Sample testimonials — to be replaced with real user feedback before launch.",
+      "fields": {
+        "print": "3D printing",
+        "game": "Games",
+        "ecommerce": "E-commerce",
+        "film": "Film",
+        "heritage": "Heritage"
+      },
+      "items": {
+        "a": {
+          "quote": "I snapped a photo of my corgi and printed the figurine the next day. He sniffed his little statue for ages.",
+          "name": "Zhou Xiaoman",
+          "role": "3D printing hobbyist"
+        },
+        "b": {
+          "quote": "A character used to take a week of modeling, UVs and rigging. Now it goes from concept art to running in Unity in an afternoon.",
+          "name": "Lin Yizhou",
+          "role": "Indie game developer"
+        },
+        "c": {
+          "quote": "We ran a whole season of 1,200 SKUs through the API overnight — product pages got 3D views and AR try-on.",
+          "name": "Daniel Okafor",
+          "role": "Engineering lead, e-commerce"
+        },
+        "d": {
+          "quote": "The same robot across twenty shots, with no drift in shape or material. AI video can finally tell a continuous story.",
+          "name": "Chen Mo",
+          "role": "AI short-film director"
+        },
+        "e": {
+          "quote": "Digitizing our bronzes used to need scanning rigs. Now a few photos give us a model we can exhibit.",
+          "name": "Wang Qing",
+          "role": "Museum digitization lead"
+        },
+        "f": {
+          "quote": "Prop delivery is several times faster and the PBR maps go straight into the engine. No more late nights fixing textures.",
+          "name": "Mia Hart",
+          "role": "Game art lead"
+        }
+      }
+    },
+    "midCta": {
+      "title": "Now it's your turn to create",
+      "subtitle": "Snap something near you — in seconds it's part of your world.",
+      "primary": "Start creating free",
+      "secondary": "Get API",
+      "note": "Free daily credits · No credit card"
+    },
+    "community2": {
+      "eyebrow": "Community",
+      "title": "See what people are making",
+      "subtitle": "Every piece started as a photo or a sentence.",
+      "viewAll": "Open the gallery",
+      "tags": {
+        "image": "Image to 3D",
+        "text": "Text to 3D",
+        "game": "Games",
+        "heritage": "Heritage",
+        "ecommerce": "E-commerce",
+        "print": "3D print"
+      },
+      "works": {
+        "corgi": "Corgi with a red collar",
+        "knight": "Blue knight",
+        "cat": "Chubby ginger cat",
+        "ding": "Bronze ding",
+        "sneaker": "Blue runner",
+        "robot": "Tin robot",
+        "chest": "Gold chest",
+        "camera": "Rangefinder camera",
+        "figurine": "Corgi figurine",
+        "pup": "Running pup"
+      }
     }
   },
   "footer": {
