@@ -80,6 +80,125 @@
         "errorSize": "Images must be 10MB or smaller"
       }
     },
+    "explain": {
+      "eyebrow": "Image to 3D · How it works",
+      "title": "How one photo becomes a 3D model",
+      "subtitle": "Scroll to follow the same corgi from photo to usable 3D asset, and what happens at each step.",
+      "note": "Times, face counts and resolutions are illustrative.",
+      "stage": {
+        "subject": "Subject · corgi",
+        "faces": "faces",
+        "view": {
+          "front": "Front",
+          "side": "Side",
+          "back": "Back (inferred)",
+          "top": "Top (inferred)"
+        },
+        "channel": {
+          "albedo": "Base color",
+          "normal": "Normal",
+          "roughness": "Roughness",
+          "metalness": "Metalness"
+        }
+      },
+      "steps": {
+        "input": {
+          "short": "Detecting subject",
+          "title": "Input and subject detection",
+          "desc": "Upload a photo. The model finds the subject, removes the background and estimates camera angle and lighting to set up the rest of the pipeline.",
+          "facts": [
+            [
+              "Formats",
+              "PNG / JPG / WEBP, up to 10MB"
+            ],
+            [
+              "Tip",
+              "Whole subject, even light, 512px+"
+            ],
+            [
+              "Automatic",
+              "Segmentation · background removal · light estimation"
+            ]
+          ]
+        },
+        "views": {
+          "short": "Inferring views",
+          "title": "Multi-view inference",
+          "desc": "A photo shows one side. The model infers the unseen sides, back and top as consistent views that guide the 3D reconstruction.",
+          "facts": [
+            [
+              "Views",
+              "4–6, around and above"
+            ],
+            [
+              "Consistency",
+              "Shape and patterns aligned across views"
+            ],
+            [
+              "More accuracy",
+              "Or upload 2–6 views yourself"
+            ]
+          ]
+        },
+        "geometry": {
+          "short": "Building geometry",
+          "title": "Geometry reconstruction",
+          "desc": "The views are reconstructed into a 3D mesh and auto-retopologized into clean quads. Models come out watertight and manifold, ready to print or drop into an engine.",
+          "facts": [
+            [
+              "Topology",
+              "Quads · clean edge flow"
+            ],
+            [
+              "Face count",
+              "5k – 200k, your choice"
+            ],
+            [
+              "Print-ready",
+              "Watertight · manifold · no holes"
+            ]
+          ]
+        },
+        "material": {
+          "short": "Generating materials",
+          "title": "PBR materials",
+          "desc": "Finally a full PBR set is generated: base color, normal, roughness and metalness as separate maps. Fur, metal and fabric hold up under any light.",
+          "facts": [
+            [
+              "Maps",
+              "Base color · normal · roughness · metalness"
+            ],
+            [
+              "Resolution",
+              "Up to 4K"
+            ],
+            [
+              "Editable",
+              "Retexture or restyle in one click"
+            ]
+          ]
+        },
+        "export": {
+          "short": "Done · ready to export",
+          "title": "Export and use",
+          "desc": "In seconds you have a usable 3D asset: bring it into Blender, Unity or Unreal, send it to your slicer, or put it in a shot.",
+          "facts": [
+            [
+              "Formats",
+              "GLB · FBX · OBJ · USDZ · STL"
+            ],
+            [
+              "Time",
+              "~60s standard · ~20s turbo"
+            ],
+            [
+              "Next",
+              "Remesh · split · auto-rig · animate"
+            ]
+          ]
+        }
+      }
+    },
     "cover": {
       "titleA": "Create",
       "titleB": "your world here",

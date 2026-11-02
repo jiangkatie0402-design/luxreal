@@ -1,5 +1,6 @@
 import { setRequestLocale } from 'next-intl/server';
 import { CoreCapabilities } from '@/components/home/core/CoreCapabilities';
+import { ImageTo3DExplainer } from '@/components/home/explain/ImageTo3DExplainer';
 import { WorldHero } from '@/components/home/world/WorldHero';
 import { Scenes } from '@/components/home/scenes/Scenes';
 import { CommunityWall } from '@/components/home/social/CommunityWall';
@@ -12,6 +13,7 @@ export default async function HomePage({ params }: { params: Promise<{ locale: s
   return (
     <>
       <WorldHero />
+      <ImageTo3DExplainer />
       <CoreCapabilities />
       <Scenes />
       <Voices />
