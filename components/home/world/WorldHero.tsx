@@ -4,6 +4,7 @@ import { useLocale, useTranslations } from 'next-intl';
 import { useCallback, useRef, useState } from 'react';
 import { appUrl, site } from '@/config/site';
 import { titleEn, titleZh } from './fonts';
+import { GridCursor } from './GridCursor';
 import { QUEUE, type WorldStatus } from './WorldScene';
 
 const WorldScene = dynamic(() => import('./WorldScene'), { ssr: false });
@@ -16,6 +17,7 @@ export function WorldHero() {
   const t = useTranslations('home.world');
   const zh = useLocale() === 'zh';
   const bar = useRef<HTMLSpanElement>(null);
+  const section = useRef<HTMLElement>(null);
   const file = useRef<HTMLInputElement>(null);
   const [s, setS] = useState<WorldStatus | null>(null);
   const [err, setErr] = useState<string | null>(null);
@@ -42,10 +44,12 @@ export function WorldHero() {
 
   return (
     <section
+      ref={section}
       aria-labelledby="hero-title"
       className="relative h-[100svh] min-h-[680px] overflow-hidden bg-[#050a16] text-white"
     >
       <WorldScene onStatus={onStatus} progressEl={bar} />
+      <GridCursor area={section} />
 
       {/* legibility scrims */}
       <div

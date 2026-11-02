@@ -361,3 +361,12 @@
     display: none;
   }
 }
+
+/* Grid cursor area: system cursor hidden, interactive elements keep theirs */
+.grid-cursor-area,
+.grid-cursor-area canvas {
+  cursor: none;
+}
+.grid-cursor-area :is(a, button, input, textarea, select, label, [role='button']) {
+  cursor: pointer;
+}
