@@ -130,6 +130,128 @@
         "download": "Download GLB"
       }
     },
+    "scenes": {
+      "eyebrow": "Use cases",
+      "cta": "Start creating",
+      "formats": "Formats",
+      "tryIt": "Try it",
+      "print": {
+        "tab": "3D Printing",
+        "headline": "3D AI built for printing",
+        "sub": "Lux3D models are generated with printing in mind — watertight, manifold, ready to slice.",
+        "cards": {
+          "a": {
+            "title": "Born printable, not patched",
+            "desc": "Watertight and manifold out of the box, and every export still runs a printability check that repairs holes and non-manifold edges. Click to watch it print layer by layer."
+          },
+          "b": {
+            "title": "Print in multi-color, or split to fit",
+            "desc": "Color regions map cleanly to filaments; when a model is too complex, Auto Split breaks it into watertight parts arranged on the plate."
+          }
+        },
+        "split": {
+          "label": "Print mode",
+          "color": "Multi-color",
+          "split": "Auto Split",
+          "filaments": "4 colors · mapped to filaments",
+          "parts": "3 watertight parts · arranged"
+        },
+        "start": "Click to start printing",
+        "again": "Print another",
+        "ready": "Ready",
+        "printing": "Printing",
+        "done": "Print finished",
+        "layer": "Layer",
+        "nozzle": "Nozzle",
+        "remaining": "Remaining",
+        "check": "✓ Printability check passed · watertight · 0 holes"
+      },
+      "game": {
+        "tab": "Game Dev",
+        "headline": "Game assets that drop into your engine",
+        "sub": "Characters that move, complete materials and face counts you control — from one image to something playable.",
+        "cards": {
+          "a": {
+            "title": "One-click PBR texturing",
+            "desc": "A full PBR set — albedo, normal, metalness and roughness — with no shader setup. Turn on HD textures for crisp 4K detail in seconds."
+          },
+          "b": {
+            "title": "Rig and animate your characters",
+            "desc": "Auto-rigging for humanoids and quadrupeds, with presets for walking, running, jumping, idling and attacks. Click the ground to send it running."
+          },
+          "c": {
+            "title": "Low poly for real-time performance",
+            "desc": "Low Poly mode gives clean quad topology at a face count you choose, light enough to drop into your project. Drag the divider to compare."
+          }
+        },
+        "pbr": {
+          "label": "Texture maps",
+          "maps": "4K · 4 maps",
+          "albedo": "Base color",
+          "normal": "Normal",
+          "roughness": "Roughness",
+          "metalness": "Metalness",
+          "pbr": "Full material"
+        },
+        "hint": "Click the ground to run there",
+        "name": "Corgi",
+        "lowpoly": {
+          "low": "Low poly · 2.4k faces",
+          "high": "Final · PBR"
+        }
+      },
+      "film": {
+        "tab": "Film & AI Video",
+        "headline": "One asset, every shot",
+        "sub": "Fixed 3D assets keep characters and props identical from shot to shot — renders in seconds, with any camera and any light.",
+        "cards": {
+          "a": {
+            "title": "Render in seconds, move the camera freely",
+            "desc": "Drop the asset into a shot and a progressive render resolves in seconds; drag to move the camera and it re-renders on release."
+          },
+          "b": {
+            "title": "Relight without breaking",
+            "desc": "Real PBR materials respond correctly to every light — neon, daylight or backlight — so relighting in post never falls apart."
+          },
+          "c": {
+            "title": "Consistent characters across shots",
+            "desc": "The hardest part of AI video is keeping a character the same from shot to shot. A fixed asset gives wide, medium and close-ups with no drift in shape or material."
+          }
+        },
+        "relight": {
+          "label": "Lighting presets",
+          "neon": "Neon night",
+          "day": "Daylight",
+          "back": "Backlight",
+          "note": "Same asset · live relight"
+        },
+        "render": "Click to render",
+        "preview": "Preview · clay",
+        "samples": "Samples",
+        "drag": "Drag to move the camera",
+        "hint": "Click render, then drag to move the camera",
+        "assets": "Choose asset",
+        "asset": {
+          "robot": "Robot",
+          "corgi": "Corgi"
+        },
+        "shots": {
+          "label": "Shots",
+          "wide": "Wide",
+          "medium": "Medium",
+          "close": "Close-up"
+        }
+      },
+      "compatible": "Compatible with",
+      "other": "Other use cases",
+      "others": {
+        "ecommerce": "E-commerce",
+        "embodied": "Embodied AI",
+        "heritage": "Cultural heritage",
+        "gameAssets": "Game art outsourcing",
+        "useCases": "All use cases"
+      }
+    },
     "features": {
       "eyebrow": "Creation tools",
       "title": "One workspace, from input to a usable 3D asset",
