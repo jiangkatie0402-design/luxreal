@@ -8,6 +8,7 @@ import { Header } from '@/components/layout/Header';
 import { MobileCTA } from '@/components/layout/MobileNav';
 import { themeScript } from '@/components/layout/ThemeToggle';
 import { JsonLd } from '@/components/seo/JsonLd';
+import { ViewCanvas } from '@/components/three/ViewCanvas';
 import { buildMetadata } from '@/components/seo/meta';
 import { site } from '@/config/site';
 import { routing } from '@/i18n/routing';
@@ -73,6 +74,7 @@ export default async function LocaleLayout({
           <main id="main">{children}</main>
           <Footer />
           <MobileCTA />
+          <ViewCanvas />
         </NextIntlClientProvider>
       </body>
     </html>

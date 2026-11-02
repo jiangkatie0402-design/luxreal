@@ -26,6 +26,11 @@
   --stage-ground: #1b2945;
   --stage-fill: #7fb0ff;
   --slice-color: #5ea8ff;
+  /* Scenario secondary colors (one per use case, inside the blue-black base) */
+  --scene-printing: #2dd4bf;
+  --scene-games: #8b7cff;
+  --scene-ecommerce: #f2b56b;
+  --scene-film: #f472b6;
   --particle-palette: #6cb6ff, #8f9dff, #5fd4e0, #c3d3ff, #3f6fe0;
   --shadow-card: 0 1px 2px rgba(0, 0, 0, 0.4), 0 10px 30px rgba(0, 0, 0, 0.35);
 
@@ -99,6 +104,10 @@
   --stage-ground: #b4c3de;
   --stage-fill: #9cc2ff;
   --slice-color: #2563eb;
+  --scene-printing: #0d9488;
+  --scene-games: #6d5ef0;
+  --scene-ecommerce: #c07a18;
+  --scene-film: #db2777;
   --particle-palette: #3b82f6, #7c8cff, #22b8cf, #93b4ff, #1e40af;
   --shadow-card: 0 1px 2px rgba(11, 18, 32, 0.05), 0 8px 24px rgba(11, 18, 32, 0.07);
 }
@@ -127,6 +136,10 @@
     --stage-ground: #b4c3de;
     --stage-fill: #9cc2ff;
     --slice-color: #2563eb;
+    --scene-printing: #0d9488;
+    --scene-games: #6d5ef0;
+    --scene-ecommerce: #c07a18;
+    --scene-film: #db2777;
     --particle-palette: #3b82f6, #7c8cff, #22b8cf, #93b4ff, #1e40af;
     --shadow-card: 0 1px 2px rgba(11, 18, 32, 0.05), 0 8px 24px rgba(11, 18, 32, 0.07);
   }

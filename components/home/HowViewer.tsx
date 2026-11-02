@@ -3,18 +3,19 @@ import { useState } from 'react';
 import { Asset, type RenderMode } from '@/components/three/AssetLoader';
 import { ModelStage } from '@/components/three/ModelStage';
 
-const MODES: RenderMode[] = ['clay', 'wireframe', 'pbr'];
+type ViewMode = Extract<RenderMode, 'clay' | 'wireframe' | 'pbr'>;
+const MODES: ViewMode[] = ['clay', 'wireframe', 'pbr'];
 
 export function HowViewer({
   labels,
   groupLabel,
   stageLabel,
 }: {
-  labels: Record<RenderMode, string>;
+  labels: Record<ViewMode, string>;
   groupLabel: string;
   stageLabel: string;
 }) {
-  const [mode, setMode] = useState<RenderMode>('pbr');
+  const [mode, setMode] = useState<ViewMode>('pbr');
   return (
     <div className="relative aspect-[4/3] overflow-hidden rounded-lg border border-line bg-surface-2 lg:aspect-auto lg:h-full lg:min-h-[480px]">
       <ModelStage

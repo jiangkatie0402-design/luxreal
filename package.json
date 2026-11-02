@@ -9,7 +9,8 @@
     "lint": "eslint .",
     "typecheck": "tsc --noEmit",
     "format": "prettier --write .",
-    "check:messages": "node scripts/check-messages.mjs"
+    "check:messages": "node scripts/check-messages.mjs",
+    "thumbs": "node scripts/render-thumbs.mjs"
   },
   "dependencies": {
     "@react-three/drei": "10.7.9",

@@ -96,6 +96,166 @@
       "stageLabel": "A rotatable 3D stage showing the same model as clay, wireframe and PBR material.",
       "exit": "See all creation tools"
     },
+    "features": {
+      "eyebrow": "Creation tools",
+      "title": "One workspace, from input to a usable 3D asset",
+      "learnMore": "Learn more",
+      "cta": "Start creating",
+      "mockLabel": "Lux3D workspace preview: {feature}",
+      "prompt": "A vintage tin toy robot with blue arms and an antenna, realistic materials",
+      "rigSource": "Corgi · generated model",
+      "input": {
+        "image": "Image",
+        "text": "Prompt",
+        "views": "Multi-view (4)",
+        "rig": "Model"
+      },
+      "settings": {
+        "version": "Model",
+        "standard": "Standard",
+        "turbo": "Turbo",
+        "output": "Output",
+        "motion": "Motion",
+        "walk": "Walk",
+        "idle": "Idle",
+        "jump": "Jump",
+        "generate": "Generate"
+      },
+      "tabs": {
+        "imageTo3d": {
+          "tab": "Image to 3D",
+          "title": "One photo in, a 3D model with real materials out",
+          "desc": "Upload a photo, sketch or concept art. Lux3D fills in the unseen sides and outputs clean topology with full PBR materials.",
+          "points": [
+            "Automatic background removal — a phone snap is enough",
+            "Base color, roughness, metalness and normal as separate maps",
+            "Export straight to your printer or game engine"
+          ]
+        },
+        "textTo3d": {
+          "tab": "Text to 3D",
+          "title": "Write a sentence, get the model you want",
+          "desc": "Describe shape, style and material in plain language. Get several candidates at once, then refine the one you like.",
+          "points": [
+            "Prompts in English or Chinese",
+            "Control style, material and pose separately",
+            "Results stay editable and retexturable"
+          ]
+        },
+        "multiView": {
+          "tab": "Multi-view",
+          "title": "Several angles for a more accurate shape",
+          "desc": "Upload front, side and back views of the same object so the model guesses less. Ideal for products and artifacts.",
+          "points": [
+            "Combine 2–6 views",
+            "Views and scale are aligned automatically",
+            "Proportions and detail stay true to the object"
+          ]
+        },
+        "rigging": {
+          "tab": "Auto-rigging",
+          "title": "Rig in one click and make it move",
+          "desc": "Humanoids and quadrupeds are detected automatically. Get a skeleton and skin weights, then apply walk, run or jump clips.",
+          "points": [
+            "Works for humanoids and quadrupeds",
+            "Built-in motion library with preview",
+            "Export FBX / GLB with animation"
+          ]
+        }
+      }
+    },
+    "scenarios": {
+      "eyebrow": "Use cases",
+      "title": "Find how Lux3D fits your work",
+      "cta": "Start creating",
+      "learnMore": "See this use case",
+      "tools": "Opens in",
+      "formats": "Export formats",
+      "other": "Other use cases",
+      "allCases": "All use cases",
+      "labels": {
+        "printability": "Printability",
+        "yes": "Yes",
+        "watertight": "Watertight",
+        "volume": "Volume",
+        "holes": "Holes",
+        "nonManifold": "Non-manifold edges",
+        "autoSplit": "Auto split",
+        "channels": "Material channels",
+        "channel": {
+          "albedo": "Base color",
+          "normal": "Normal",
+          "roughness": "Roughness",
+          "metalness": "Metalness",
+          "pbr": "Full material"
+        },
+        "compareLeft": "PBR result",
+        "compareRight": "Topology",
+        "compareDrag": "Drag to compare",
+        "batchJob": "Batch job #2481 (example)",
+        "gaussian": "3D Gaussians · real-time"
+      },
+      "printing": {
+        "tab": "3D printing",
+        "tagline": "Generated for printing: watertight, manifold and ready to slice.",
+        "cards": {
+          "printable": {
+            "title": "Born printable, not patched",
+            "desc": "Every model gets a printability check — watertight, volume, holes and non-manifold edges — and issues are repaired before export."
+          },
+          "split": {
+            "title": "Print in multi-color, or split to fit",
+            "desc": "Color regions map to filaments; complex models split into watertight parts, laid out on the build plate."
+          }
+        }
+      },
+      "games": {
+        "tab": "Game dev",
+        "tagline": "Engine-ready: full PBR, characters that move, face counts you control.",
+        "cards": {
+          "pbr": {
+            "title": "Full PBR in one click",
+            "desc": "Base color, normal, roughness and metalness maps in one pass — no shader setup."
+          },
+          "rig": {
+            "title": "Rig and animate",
+            "desc": "Auto-rigging for humanoids and quadrupeds, with built-in walk, run and jump clips."
+          },
+          "lowpoly": {
+            "title": "Low poly, still clean",
+            "desc": "Quad topology with controllable face counts that won't cost you frame rate."
+          }
+        }
+      },
+      "ecommerce": {
+        "tab": "E-commerce",
+        "tagline": "Put products in 3D: 360° views, AR try-on and whole catalogs at once.",
+        "cards": {
+          "ar": {
+            "title": "360° views and AR try-on",
+            "desc": "Export GLB and USDZ together for web 3D viewers and phone AR."
+          },
+          "batch": {
+            "title": "Generate whole catalogs",
+            "desc": "Submit batch jobs through the API: product photos in, 3D models out."
+          }
+        }
+      },
+      "film": {
+        "tab": "Film & AI video",
+        "tagline": "From one reference image to a shootable set: 3D Gaussians plus editable assets.",
+        "cards": {
+          "gaussian": {
+            "title": "3D Gaussians, photoreal sets",
+            "desc": "Gaussian output keeps real lighting and detail, ready for previs."
+          },
+          "previs": {
+            "title": "Editable previs assets",
+            "desc": "The same run also outputs meshes to stage and light in Blender or Unreal."
+          }
+        }
+      }
+    },
     "advantages": {
       "eyebrow": "Why Lux3D",
       "title": "Not just lookalike. Actually usable.",
@@ -127,46 +287,21 @@
         }
       },
       "stats": {
-        "time": { "value": "< 60s", "label": "Average generation time (placeholder)" },
-        "texture": { "value": "4K", "label": "PBR texture resolution (placeholder)" },
-        "formats": { "value": "6+", "label": "Export formats" },
-        "reps": { "value": "3", "label": "Output representations" }
-      }
-    },
-    "testimonials": {
-      "eyebrow": "What people say",
-      "title": "Creators and teams are already building with it",
-      "note": "Sample testimonials — to be replaced with real user feedback before launch.",
-      "items": {
-        "a": {
-          "quote": "A prop used to take me an afternoon. Now I snap a photo and it's in Unity before my coffee's done.",
-          "name": "Lin Yizhou",
-          "role": "Indie game developer"
+        "time": {
+          "value": "< 60s",
+          "label": "Average generation time (placeholder)"
         },
-        "b": {
-          "quote": "The materials surprised me most. Metal reads as metal, fabric as fabric — nothing breaks once it's lit.",
-          "name": "Mia Hart",
-          "role": "3D artist · Animation studio"
+        "texture": {
+          "value": "4K",
+          "label": "PBR texture resolution (placeholder)"
         },
-        "c": {
-          "quote": "I made a figurine of my cat, printed it and set it next to her. She sniffed it for ages.",
-          "name": "Zhou Xiaoman",
-          "role": "3D printing hobbyist"
+        "formats": {
+          "value": "6+",
+          "label": "Export formats"
         },
-        "d": {
-          "quote": "The API was easy to wire up. We generated models for 3,000 SKUs overnight.",
-          "name": "Daniel Okafor",
-          "role": "Engineering lead · E-commerce platform"
-        },
-        "e": {
-          "quote": "With Gaussian output for previs, our director saw the full set before a single day of shooting.",
-          "name": "Chen Mo",
-          "role": "Previs director"
-        },
-        "f": {
-          "quote": "We plugged it into our simulation pipeline and got physically-textured twins of hundreds of everyday objects.",
-          "name": "Sofia Lindqvist",
-          "role": "Embodied AI researcher"
+        "reps": {
+          "value": "3",
+          "label": "Output representations"
         }
       }
     },
@@ -228,6 +363,26 @@
           "a": "Create an API key in the developer console and use the Python / TypeScript / Java SDK or REST endpoints. Your first job runs in minutes."
         }
       }
+    },
+    "trust": {
+      "eyebrow": "Benchmarks & partners",
+      "title": "Measured, not claimed",
+      "subtitle": "Compared against an industry baseline on public benchmarks, and shipped with partners across industries.",
+      "chartTitle": "Public benchmark comparison",
+      "metricCol": "Metric",
+      "series": {
+        "lux": "Lux3D",
+        "base": "Industry baseline"
+      },
+      "metrics": {
+        "geometry": "Geometry fidelity (higher is better)",
+        "material": "Material consistency (higher is better)",
+        "preference": "Blind-test preference"
+      },
+      "chartNote": "Benchmark figures are placeholders until the algorithm team provides final results.",
+      "partnersTitle": "Partners",
+      "partnerSlot": "Partner {n}",
+      "partnersNote": "Partner logos will be added once approved."
     }
   },
   "footer": {
@@ -328,10 +483,22 @@
     "choose": "Choose plan",
     "popular": "Most popular",
     "plans": {
-      "free": { "name": "Free", "desc": "Try every core feature" },
-      "personal": { "name": "Personal", "desc": "Indie creators and hobbyists" },
-      "pro": { "name": "Pro", "desc": "Heavy creation and commercial use" },
-      "team": { "name": "Team", "desc": "Shared workspace and billing" }
+      "free": {
+        "name": "Free",
+        "desc": "Try every core feature"
+      },
+      "personal": {
+        "name": "Personal",
+        "desc": "Indie creators and hobbyists"
+      },
+      "pro": {
+        "name": "Pro",
+        "desc": "Heavy creation and commercial use"
+      },
+      "team": {
+        "name": "Team",
+        "desc": "Shared workspace and billing"
+      }
     },
     "calc": {
       "title": "API price calculator",
@@ -365,22 +532,58 @@
       "title": "Text to 3D",
       "desc": "Describe it in a sentence, get the model you want."
     },
-    "multiView": { "title": "Multi-view", "desc": "Several angles for more accurate shapes." },
-    "texture": { "title": "AI Texture", "desc": "Generate or replace PBR materials on any model." },
-    "remesh": { "title": "Remesh", "desc": "Clean quads with controllable face counts." },
-    "split": { "title": "Part split", "desc": "Separate a model into editable parts." },
-    "rigging": { "title": "Auto-rigging", "desc": "Skeleton and skin weights in one click." },
-    "animation": { "title": "Animation", "desc": "Apply animation clips to rigged models." },
+    "multiView": {
+      "title": "Multi-view",
+      "desc": "Several angles for more accurate shapes."
+    },
+    "texture": {
+      "title": "AI Texture",
+      "desc": "Generate or replace PBR materials on any model."
+    },
+    "remesh": {
+      "title": "Remesh",
+      "desc": "Clean quads with controllable face counts."
+    },
+    "split": {
+      "title": "Part split",
+      "desc": "Separate a model into editable parts."
+    },
+    "rigging": {
+      "title": "Auto-rigging",
+      "desc": "Skeleton and skin weights in one click."
+    },
+    "animation": {
+      "title": "Animation",
+      "desc": "Apply animation clips to rigged models."
+    },
     "developers": {
       "title": "Developers",
       "desc": "Bring 3D generation into your product with the API and SDKs."
     },
-    "quickstart": { "title": "Quickstart", "desc": "Run your first generation in five minutes." },
-    "sdk": { "title": "SDKs", "desc": "Official Python, TypeScript and Java SDKs." },
-    "integrations": { "title": "Integrations", "desc": "ComfyUI, MCP, Blender and game engines." },
-    "batch": { "title": "Batch generation", "desc": "Batch jobs and agent workflows." },
-    "changelog": { "title": "Changelog", "desc": "Every model and API update." },
-    "useCases": { "title": "Use cases", "desc": "How Lux3D is used across industries." },
+    "quickstart": {
+      "title": "Quickstart",
+      "desc": "Run your first generation in five minutes."
+    },
+    "sdk": {
+      "title": "SDKs",
+      "desc": "Official Python, TypeScript and Java SDKs."
+    },
+    "integrations": {
+      "title": "Integrations",
+      "desc": "ComfyUI, MCP, Blender and game engines."
+    },
+    "batch": {
+      "title": "Batch generation",
+      "desc": "Batch jobs and agent workflows."
+    },
+    "changelog": {
+      "title": "Changelog",
+      "desc": "Every model and API update."
+    },
+    "useCases": {
+      "title": "Use cases",
+      "desc": "How Lux3D is used across industries."
+    },
     "gameAssets": {
       "title": "Game assets",
       "desc": "Props, characters and scenes, straight into the engine."
@@ -389,8 +592,14 @@
       "title": "3D printing",
       "desc": "Turn photos into printable figurines and models."
     },
-    "ecommerce": { "title": "E-commerce", "desc": "3D product views and AR try-on." },
-    "film": { "title": "AI video & film", "desc": "Previs and 3D Gaussian scenes." },
+    "ecommerce": {
+      "title": "E-commerce",
+      "desc": "3D product views and AR try-on."
+    },
+    "film": {
+      "title": "AI video & film",
+      "desc": "Previs and 3D Gaussian scenes."
+    },
     "embodied": {
       "title": "Embodied AI & simulation",
       "desc": "Digital-twin assets with physical materials."
@@ -403,14 +612,26 @@
       "title": "Technology",
       "desc": "Materials, three representations, data, benchmarks and roadmap."
     },
-    "resources": { "title": "Resources", "desc": "Blog, tutorials and free tools." },
-    "blog": { "title": "Blog", "desc": "Product news and technical writing." },
-    "tutorials": { "title": "Tutorials", "desc": "Guides from first steps to advanced use." },
+    "resources": {
+      "title": "Resources",
+      "desc": "Blog, tutorials and free tools."
+    },
+    "blog": {
+      "title": "Blog",
+      "desc": "Product news and technical writing."
+    },
+    "tutorials": {
+      "title": "Tutorials",
+      "desc": "Guides from first steps to advanced use."
+    },
     "tools": {
       "title": "Free tools",
       "desc": "View, convert, repair and compress 3D files online."
     },
-    "viewer": { "title": "3D viewer", "desc": "Open any 3D file in your browser." },
+    "viewer": {
+      "title": "3D viewer",
+      "desc": "Open any 3D file in your browser."
+    },
     "converter": {
       "title": "Format converter",
       "desc": "Convert between GLB, FBX, OBJ, STL and more."
@@ -423,13 +644,34 @@
       "title": "Model compressor",
       "desc": "Draco / Meshopt compression for smaller files."
     },
-    "about": { "title": "About", "desc": "Why we're building Lux3D." },
-    "careers": { "title": "Careers", "desc": "Help build the future of 3D." },
-    "contact": { "title": "Contact", "desc": "Partnerships, press and support." },
-    "news": { "title": "News", "desc": "Company news and press coverage." },
-    "trust": { "title": "Trust & safety", "desc": "Security, compliance and data policy." },
-    "terms": { "title": "Terms of Service", "desc": "The terms for using Lux3D." },
-    "privacy": { "title": "Privacy Policy", "desc": "How we handle your data." }
+    "about": {
+      "title": "About",
+      "desc": "Why we're building Lux3D."
+    },
+    "careers": {
+      "title": "Careers",
+      "desc": "Help build the future of 3D."
+    },
+    "contact": {
+      "title": "Contact",
+      "desc": "Partnerships, press and support."
+    },
+    "news": {
+      "title": "News",
+      "desc": "Company news and press coverage."
+    },
+    "trust": {
+      "title": "Trust & safety",
+      "desc": "Security, compliance and data policy."
+    },
+    "terms": {
+      "title": "Terms of Service",
+      "desc": "The terms for using Lux3D."
+    },
+    "privacy": {
+      "title": "Privacy Policy",
+      "desc": "How we handle your data."
+    }
   },
   "technologySections": {
     "materials": "Materials (PBR)",
