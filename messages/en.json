@@ -739,6 +739,58 @@
         "figurine": "Corgi figurine",
         "pup": "Running pup"
       }
+    },
+    "agents": {
+      "eyebrow": "Built for AI agents · MCP",
+      "titleA": "Give your AI agent",
+      "titleB": "the power to build 3D",
+      "subtitle": "One command connects Lux3D to Claude Code, Cursor, Codex or any MCP-compatible agent. It calls image-to-3D and text-to-3D on its own and drops the models straight into your project.",
+      "clientsLabel": "Choose your agent",
+      "anyClient": "Any MCP client",
+      "copy": "Copy",
+      "copied": "Copied",
+      "getKey": "Get an API key",
+      "guide": "MCP setup guide",
+      "chat": {
+        "ask": "Generate 4 props for my game: a treasure chest, a knight, a corgi statue and a tin robot. Export GLB into assets/props",
+        "running": "running",
+        "reply": "All 4 models are generated and saved to ./assets/props as GLB with PBR materials, each under 15k faces — ready to drop into your engine.",
+        "calls": [
+          "medieval chest, gold trim",
+          "blue-armored knight with sword",
+          "photo: corgi.jpg",
+          "vintage tin toy robot"
+        ]
+      },
+      "showcaseTitle": "See what agents build with Lux3D",
+      "showcaseSub": "From a single request to batches of usable 3D assets — no modeling software opened.",
+      "showcase": {
+        "game": {
+          "agent": "Claude Code",
+          "title": "A full prop library for an indie game",
+          "desc": "The agent reads the level design doc, generates 60 props and files them by folder.",
+          "prompt": "Generate every medieval prop for level 3"
+        },
+        "shop": {
+          "agent": "Cursor",
+          "title": "3D product pages",
+          "desc": "Hooked to the catalog: every new SKU gets a 3D model and AR preview.",
+          "prompt": "Make a 3D view for the new running shoe"
+        },
+        "print": {
+          "agent": "Codex",
+          "title": "Custom figurines from photos",
+          "desc": "Customers upload pet photos; the agent makes a printable model and checks it's watertight.",
+          "prompt": "Turn this photo into a printable figurine"
+        },
+        "museum": {
+          "agent": "Custom agent",
+          "title": "A museum's digital gallery",
+          "desc": "Collection photos turned into 3D in bulk, assembled into an interactive online gallery.",
+          "prompt": "Make the 120 bronzes in this hall 3D"
+        }
+      },
+      "note": "Package name, commands and examples are illustrative; see the developer docs for the official setup."
     }
   },
   "footer": {

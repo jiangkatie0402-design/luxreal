@@ -739,6 +739,58 @@
         "figurine": "柯基手办",
         "pup": "奔跑的小狗"
       }
+    },
+    "agents": {
+      "eyebrow": "为 AI Agent 打造 · MCP",
+      "titleA": "让你的 AI Agent",
+      "titleB": "也能造 3D 世界",
+      "subtitle": "一行命令，把 Lux3D 接进 Claude Code、Cursor、Codex 或任何支持 MCP 的 Agent。它会自己调用图片生成 3D、文字生成 3D，把模型直接放进你的项目。",
+      "clientsLabel": "选择你的 Agent",
+      "anyClient": "任意 MCP 客户端",
+      "copy": "复制",
+      "copied": "已复制",
+      "getKey": "获取 API Key",
+      "guide": "MCP 接入指南",
+      "chat": {
+        "ask": "给我的游戏生成 4 个道具：宝箱、骑士、柯基雕像和铁皮机器人，导出 GLB 放进 assets/props",
+        "running": "生成中",
+        "reply": "4 个模型都已生成并保存到 ./assets/props，均为 GLB 格式、带 PBR 材质，面数控制在 15k 以内，可以直接拖进引擎。",
+        "calls": [
+          "中世纪宝箱，金色包边",
+          "蓝甲骑士，手持长剑",
+          "photo: corgi.jpg",
+          "复古铁皮玩具机器人"
+        ]
+      },
+      "showcaseTitle": "看看 Agent 用 Lux3D 做了什么",
+      "showcaseSub": "从一句需求到成批可用的 3D 资产，全程不用打开建模软件。",
+      "showcase": {
+        "game": {
+          "agent": "Claude Code",
+          "title": "独立游戏的整套道具库",
+          "desc": "Agent 读完关卡设计文档，批量生成 60 个道具并按目录归档。",
+          "prompt": "为关卡 3 生成所有中世纪道具"
+        },
+        "shop": {
+          "agent": "Cursor",
+          "title": "电商 3D 商品页",
+          "desc": "接入商品库，每上新一个 SKU，自动生成 3D 模型和 AR 预览。",
+          "prompt": "给新上架的跑鞋生成 3D 展示"
+        },
+        "print": {
+          "agent": "Codex",
+          "title": "照片定制手办小店",
+          "desc": "顾客上传宠物照片，Agent 生成可打印模型并检查水密性。",
+          "prompt": "把这张照片做成可打印的手办"
+        },
+        "museum": {
+          "agent": "自建 Agent",
+          "title": "博物馆数字展厅",
+          "desc": "批量把藏品照片转成 3D，生成可交互的线上展厅。",
+          "prompt": "把青铜器展区的 120 件藏品做成 3D"
+        }
+      },
+      "note": "包名、命令和案例为示意，正式接入方式以开发者文档为准。"
     }
   },
   "footer": {

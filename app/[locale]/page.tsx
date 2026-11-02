@@ -1,4 +1,5 @@
 import { setRequestLocale } from 'next-intl/server';
+import { AgentSection } from '@/components/home/agents/AgentSection';
 import { ImageTo3DExplainer } from '@/components/home/explain/ImageTo3DExplainer';
 import { WorldHero } from '@/components/home/world/WorldHero';
 import { Scenes } from '@/components/home/scenes/Scenes';
@@ -14,6 +15,7 @@ export default async function HomePage({ params }: { params: Promise<{ locale: s
       <WorldHero />
       <ImageTo3DExplainer />
       <Scenes />
+      <AgentSection />
       <Voices />
       <MidCTA />
       <CommunityWall />
