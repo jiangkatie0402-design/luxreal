@@ -1,8 +1,9 @@
 'use client';
 import dynamic from 'next/dynamic';
-import { useTranslations } from 'next-intl';
+import { useLocale, useTranslations } from 'next-intl';
 import { useCallback, useRef, useState } from 'react';
 import { appUrl, site } from '@/config/site';
+import { titleEn, titleZh } from './fonts';
 import { QUEUE, type WorldStatus } from './WorldScene';
 
 const WorldScene = dynamic(() => import('./WorldScene'), { ssr: false });
@@ -13,6 +14,7 @@ const WorldScene = dynamic(() => import('./WorldScene'), { ssr: false });
  */
 export function WorldHero() {
   const t = useTranslations('home.world');
+  const zh = useLocale() === 'zh';
   const bar = useRef<HTMLSpanElement>(null);
   const file = useRef<HTMLInputElement>(null);
   const [s, setS] = useState<WorldStatus | null>(null);
@@ -63,10 +65,15 @@ export function WorldHero() {
         {/* top-left: the title alone, in the empty sky above the world */}
         <h1
           id="hero-title"
-          className="absolute left-5 top-[calc(var(--header-h)+6vh)] text-[clamp(1.75rem,2.4vw,2.5rem)] font-medium leading-[1.28] tracking-[-0.01em] md:left-10 [text-shadow:0_2px_20px_rgba(0,0,0,0.65)]"
+          className={`hero-title absolute left-5 top-[calc(var(--header-h)+5vh)] md:left-10 ${
+            zh
+              ? `${titleZh.className} text-[clamp(2.6rem,4.4vw,4.6rem)] leading-[1.05] tracking-[0.04em]`
+              : `${titleEn.className} text-[clamp(1.6rem,2.5vw,2.75rem)] font-black uppercase leading-[1.08] tracking-[0.02em]`
+          }`}
         >
-          {t('titleA')}
-          <span className="block text-[#8fb8ff]">{t('titleB')}</span>
+          <span className="hero-title-line">{t('titleA')}</span>
+          <span className="hero-title-line hero-title-accent block">{t('titleB')}</span>
+          <span aria-hidden className="hero-title-scan" />
         </h1>
         <span aria-hidden className="lg:flex-1" />
 

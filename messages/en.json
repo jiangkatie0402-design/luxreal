@@ -46,8 +46,8 @@
   "home": {
     "world": {
       "welcome": "Welcome to Lux3D",
-      "titleA": "Start here, ",
-      "titleB": "and create your world.",
+      "titleA": "Start here.",
+      "titleB": "Create your world.",
       "lead": "Snap something near you and Lux3D turns it into a 3D model with real materials. A house, a lawn, a swing — the world grows piece by piece.",
       "side": "Every piece is a 3D asset generated live: complete materials, ready to rig and animate, to print, or to drop into games and film.",
       "live": "Generating live",

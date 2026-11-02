@@ -279,3 +279,85 @@
     background-position: -30px 120px;
   }
 }
+
+/* Hero title: gradient fill with a travelling sheen, glow, and a scan-line reveal */
+.hero-title {
+  filter: drop-shadow(0 0 18px rgba(77, 141, 255, 0.45)) drop-shadow(0 2px 2px rgba(0, 0, 0, 0.6));
+  animation: hero-title-reveal 1.4s var(--ease-out) 0.2s backwards;
+}
+.hero-title-line {
+  display: block;
+  background: linear-gradient(
+    100deg,
+    #ffffff 0%,
+    #dbe8ff 35%,
+    #ffffff 45%,
+    #ffffff 50%,
+    #dbe8ff 60%,
+    #ffffff 100%
+  );
+  background-size: 250% 100%;
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  animation: hero-title-sheen 6s linear 1.6s infinite;
+}
+.hero-title-accent {
+  background-image: linear-gradient(
+    100deg,
+    #6fa8ff 0%,
+    #5fe0ff 30%,
+    #ffffff 45%,
+    #ffffff 50%,
+    #5fe0ff 62%,
+    #8f9dff 100%
+  );
+}
+.hero-title-scan {
+  position: absolute;
+  left: -4%;
+  right: -4%;
+  height: 2px;
+  background: #7fb6ff;
+  box-shadow: 0 0 14px 3px rgba(94, 168, 255, 0.85);
+  pointer-events: none;
+  animation: hero-title-scan 1.4s var(--ease-out) 0.2s both;
+}
+@keyframes hero-title-reveal {
+  from {
+    clip-path: inset(100% -60% -60% -60%);
+  }
+  to {
+    clip-path: inset(-60% -60% -60% -60%);
+  }
+}
+@keyframes hero-title-scan {
+  from {
+    bottom: 0;
+    opacity: 1;
+  }
+  85% {
+    opacity: 1;
+  }
+  to {
+    bottom: 100%;
+    opacity: 0;
+  }
+}
+@keyframes hero-title-sheen {
+  from {
+    background-position: 125% 0;
+  }
+  to {
+    background-position: -125% 0;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .hero-title,
+  .hero-title-line {
+    animation: none;
+  }
+  .hero-title-scan {
+    display: none;
+  }
+}
