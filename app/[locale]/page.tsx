@@ -1,6 +1,6 @@
 import { setRequestLocale } from 'next-intl/server';
 import { CoreCapabilities } from '@/components/home/core/CoreCapabilities';
-import { CoverHero } from '@/components/home/cover/CoverHero';
+import { WorldHero } from '@/components/home/world/WorldHero';
 import { Scenes } from '@/components/home/scenes/Scenes';
 import { CommunityWall } from '@/components/home/social/CommunityWall';
 import { MidCTA } from '@/components/home/social/MidCTA';
@@ -11,7 +11,7 @@ export default async function HomePage({ params }: { params: Promise<{ locale: s
   setRequestLocale(locale);
   return (
     <>
-      <CoverHero locale={locale} />
+      <WorldHero />
       <CoreCapabilities />
       <Scenes />
       <Voices />

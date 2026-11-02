@@ -44,6 +44,42 @@
     "viewAll": "View all"
   },
   "home": {
+    "world": {
+      "welcome": "Welcome to Lux3D",
+      "titleA": "Create your world,",
+      "titleB": "starting here",
+      "lead": "Snap something near you and Lux3D turns it into a 3D model with real materials. A house, a lawn, a swing — your world grows piece by piece.",
+      "side": "Every piece is a 3D asset generated live: complete materials, ready to rig and animate, to print, or to drop into games and film.",
+      "live": "Generating live",
+      "count": "World {placed} / {total}",
+      "status": {
+        "loading": "Preparing the world…",
+        "generating": "Generating: {name}",
+        "placing": "Placing: {name}",
+        "reset": "World complete — starting over",
+        "done": "World complete"
+      },
+      "pieces": {
+        "house": "Little house",
+        "lawn": "A patch of lawn",
+        "swing": "Swing",
+        "tree": "Tree",
+        "windmill": "Windmill",
+        "pond": "Pond",
+        "doghouse": "Doghouse",
+        "bench": "Bench",
+        "lamp": "Street lamp",
+        "fence": "Picket fence",
+        "mailbox": "Mailbox",
+        "pine": "Pine tree"
+      },
+      "upload": {
+        "placeholder": "Upload a photo to generate the next piece of your world",
+        "cta": "Generate",
+        "errorType": "Only PNG, JPG or WEBP images are supported",
+        "errorSize": "Images must be 10MB or smaller"
+      }
+    },
     "cover": {
       "titleA": "Create",
       "titleB": "your world here",

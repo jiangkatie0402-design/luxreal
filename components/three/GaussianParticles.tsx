@@ -39,29 +39,73 @@ export function createParticleCloud(
   size = 0.05,
 ): ParticleCloud {
   root.updateWorldMatrix(true, true);
-  const weights = meshes.map((m) => m.geometry.attributes.position.count);
-  const total = weights.reduce((a, b) => a + b, 0) || 1;
+  // Area-weighted sampling over every triangle (in root-local space), so flat
+  // low-poly faces get covered evenly instead of particles bunching at corners.
+  const inv = new THREE.Matrix4().copy(root.matrixWorld).invert();
+  const tris: number[] = [];
+  const cum: number[] = [];
+  let total = 0;
+  const a = new THREE.Vector3(),
+    b = new THREE.Vector3(),
+    c = new THREE.Vector3();
+  const ab = new THREE.Vector3(),
+    ac = new THREE.Vector3();
+  for (const m of meshes) {
+    const pos = m.geometry.attributes.position;
+    const idx = m.geometry.index;
+    const toLocal = new THREE.Matrix4().multiplyMatrices(inv, m.matrixWorld);
+    const n = idx ? idx.count : pos.count;
+    for (let i = 0; i + 2 < n; i += 3) {
+      const i0 = idx ? idx.getX(i) : i,
+        i1 = idx ? idx.getX(i + 1) : i + 1,
+        i2 = idx ? idx.getX(i + 2) : i + 2;
+      a.fromBufferAttribute(pos, i0).applyMatrix4(toLocal);
+      b.fromBufferAttribute(pos, i1).applyMatrix4(toLocal);
+      c.fromBufferAttribute(pos, i2).applyMatrix4(toLocal);
+      const area = ab.subVectors(b, a).cross(ac.subVectors(c, a)).length() / 2;
+      if (area <= 0) continue;
+      tris.push(a.x, a.y, a.z, b.x, b.y, b.z, c.x, c.y, c.z);
+      total += area;
+      cum.push(total);
+    }
+  }
   const pos = new Float32Array(count * 3);
   const col = new Float32Array(count * 3);
   const phase = new Float32Array(count);
-  const v = new THREE.Vector3();
-  const color = new THREE.Color();
   const colors = palette.map((p) => new THREE.Color(p));
+  const fallback = new THREE.Color('#6cb6ff');
   for (let i = 0; i < count; i++) {
-    let r = Math.random() * total;
-    let mi = 0;
-    while (r > weights[mi] && mi < meshes.length - 1) r -= weights[mi++];
-    const m = meshes[mi];
-    const attr = m.geometry.attributes.position;
-    v.fromBufferAttribute(attr, Math.floor(Math.random() * attr.count));
-    m.localToWorld(v);
-    root.worldToLocal(v);
-    v.x += (Math.random() - 0.5) * 0.06;
-    v.y += (Math.random() - 0.5) * 0.06;
-    v.z += (Math.random() - 0.5) * 0.06;
-    v.toArray(pos, i * 3);
-    color.copy(colors[i % colors.length] ?? color.set('#6cb6ff'));
-    color.toArray(col, i * 3);
+    let x = 0,
+      y = 0,
+      z = 0;
+    if (cum.length) {
+      const r = Math.random() * total;
+      let lo = 0,
+        hi = cum.length - 1;
+      while (lo < hi) {
+        const mid = (lo + hi) >> 1;
+        if (cum[mid] < r) lo = mid + 1;
+        else hi = mid;
+      }
+      let u = Math.random(),
+        v = Math.random();
+      if (u + v > 1) {
+        u = 1 - u;
+        v = 1 - v;
+      }
+      const k = lo * 9;
+      for (let d = 0; d < 3; d++) {
+        const val =
+          tris[k + d] + (tris[k + 3 + d] - tris[k + d]) * u + (tris[k + 6 + d] - tris[k + d]) * v;
+        if (d === 0) x = val;
+        else if (d === 1) y = val;
+        else z = val;
+      }
+    }
+    pos[i * 3] = x + (Math.random() - 0.5) * 0.04;
+    pos[i * 3 + 1] = y + (Math.random() - 0.5) * 0.04;
+    pos[i * 3 + 2] = z + (Math.random() - 0.5) * 0.04;
+    (colors[i % colors.length] ?? fallback).toArray(col, i * 3);
     phase[i] = Math.random() * Math.PI * 2;
   }
   const geo = new THREE.BufferGeometry();

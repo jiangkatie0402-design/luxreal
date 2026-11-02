@@ -44,6 +44,42 @@
     "viewAll": "查看全部"
   },
   "home": {
+    "world": {
+      "welcome": "欢迎来到 Lux3D",
+      "titleA": "从这里，",
+      "titleB": "创造你的世界",
+      "lead": "拍下身边的一样东西，Lux3D 把它变成真实材质的 3D 模型。一栋房子、一片草坪、一架秋千，你的世界一块块长出来。",
+      "side": "每一件都是实时生成的 3D 资产：带完整材质、可以绑骨动起来，也能打印出来、放进游戏和影片里。",
+      "live": "实时生成",
+      "count": "世界 {placed} / {total}",
+      "status": {
+        "loading": "正在准备世界…",
+        "generating": "正在生成：{name}",
+        "placing": "放进世界：{name}",
+        "reset": "世界已建成，重新开始",
+        "done": "世界已建成"
+      },
+      "pieces": {
+        "house": "小房子",
+        "lawn": "一块草坪",
+        "swing": "秋千",
+        "tree": "大树",
+        "windmill": "风车",
+        "pond": "池塘",
+        "doghouse": "狗屋",
+        "bench": "长椅",
+        "lamp": "路灯",
+        "fence": "白栅栏",
+        "mailbox": "邮筒",
+        "pine": "松树"
+      },
+      "upload": {
+        "placeholder": "上传一张照片，生成你世界里的下一件",
+        "cta": "开始生成",
+        "errorType": "只支持 PNG、JPG 或 WEBP 格式的图片",
+        "errorSize": "图片不能超过 10MB"
+      }
+    },
     "cover": {
       "titleA": "从这里，",
       "titleB": "创造你的世界",
