@@ -44,50 +44,42 @@
     "viewAll": "查看全部"
   },
   "home": {
-    "story": {
-      "eyebrow": "Lux3D · AI 原生 3D 生成",
+    "cover": {
       "titleA": "从这里，",
       "titleB": "创造你的世界",
       "subtitle": "拍下身边的一样东西，它就能变成 3D 模型：打印出来摆在桌上，或者跑进你的游戏里。",
-      "primary": "上传照片，开始创作",
-      "secondary": "获取 API",
-      "stageRole": "演示",
-      "tabsLabel": "四个阶段",
-      "pause": "暂停演示",
-      "play": "播放演示",
-      "stages": {
+      "carousel": "轮播",
+      "carouselLabel": "从照片到你的世界",
+      "pause": "暂停轮播",
+      "play": "播放轮播",
+      "slides": {
         "capture": {
-          "tab": "拍下",
-          "title": "随手拍下身边的它",
-          "desc": "一张手机照片就够了，不需要专业设备。"
+          "label": "拍下照片",
+          "alt": "用手机拍下一只戴红项圈的柯基"
         },
-        "generate": {
-          "tab": "生成 3D",
-          "title": "上传，几十秒生成 3D 模型",
-          "desc": "补全看不见的背面，带真实的 PBR 材质。"
+        "model": {
+          "label": "生成 3D 模型",
+          "alt": "同一只柯基正在被生成为 3D 模型，上半身是线框和颗粒，下半身已有真实毛发材质"
         },
         "print": {
-          "tab": "3D 打印",
-          "title": "打印出来，摆上书桌",
-          "desc": "水密模型，导出 STL 就能切片打印。"
+          "label": "3D 打印上桌",
+          "alt": "书桌上的白色柯基 3D 打印手办，真实的柯基凑过来闻它"
         },
         "game": {
-          "tab": "放进游戏",
-          "title": "放进游戏，让它跑起来",
-          "desc": "自动绑骨和动画，直接导入游戏引擎。"
+          "label": "放进游戏",
+          "alt": "柯基作为游戏角色在花园小路上奔跑"
         }
       },
-      "overlay": {
-        "photo": "照片 · 1×",
-        "uploaded": "照片已上传",
-        "generating": "正在生成 3D 模型",
-        "generated": "完成 · PBR 材质 · 12.4k 面",
-        "printing": "3D 打印中",
-        "printed": "打印完成 · PLA",
-        "petName": "柯基",
-        "level": "Lv.1",
-        "quest": "任务：在花园里找到宝箱",
-        "rig": "已绑骨 · 奔跑动画"
+      "upload": {
+        "placeholder": "拖入一张照片，或点击上传，和 Lux3D 一起创造你的世界",
+        "formats": "PNG / JPG / WEBP，最大 10MB",
+        "replace": "更换照片",
+        "model": "模型：标准",
+        "output": "输出：Mesh · PBR",
+        "generate": "上传并生成",
+        "errorType": "只支持 PNG、JPG 或 WEBP 格式的图片",
+        "errorSize": "图片不能超过 10MB",
+        "errorEmpty": "先选一张照片"
       }
     },
     "features": {

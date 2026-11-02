@@ -44,50 +44,42 @@
     "viewAll": "View all"
   },
   "home": {
-    "story": {
-      "eyebrow": "Lux3D · AI-native 3D generation",
-      "titleA": "Create your world, ",
-      "titleB": "starting here",
+    "cover": {
+      "titleA": "Create",
+      "titleB": "your world here",
       "subtitle": "Snap something near you and it becomes a 3D model — print it for your desk, or set it loose in your game.",
-      "primary": "Upload a photo to start",
-      "secondary": "Get API",
-      "stageRole": "demo",
-      "tabsLabel": "Four stages",
-      "pause": "Pause demo",
-      "play": "Play demo",
-      "stages": {
+      "carousel": "carousel",
+      "carouselLabel": "From a photo to your world",
+      "pause": "Pause slideshow",
+      "play": "Play slideshow",
+      "slides": {
         "capture": {
-          "tab": "Snap",
-          "title": "Snap something near you",
-          "desc": "A phone photo is all it takes."
+          "label": "Snap a photo",
+          "alt": "A phone taking a photo of a corgi with a red collar"
         },
-        "generate": {
-          "tab": "Generate",
-          "title": "Upload it, get a 3D model in seconds",
-          "desc": "The unseen back is filled in, with real PBR materials."
+        "model": {
+          "label": "Generate the 3D model",
+          "alt": "The same corgi being generated as a 3D model, wireframe and particles on top, real fur below"
         },
         "print": {
-          "tab": "3D print",
-          "title": "Print it for your desk",
-          "desc": "Watertight models, ready to slice as STL."
+          "label": "Print it for your desk",
+          "alt": "A white 3D-printed corgi figurine on a desk, the real corgi sniffing it"
         },
         "game": {
-          "tab": "Into your game",
-          "title": "Drop it into your game",
-          "desc": "Auto-rigged and animated, straight into your engine."
+          "label": "Drop it into a game",
+          "alt": "The corgi as a game character running along a garden path"
         }
       },
-      "overlay": {
-        "photo": "Photo · 1×",
-        "uploaded": "Photo uploaded",
-        "generating": "Generating 3D model",
-        "generated": "Done · PBR material · 12.4k faces",
-        "printing": "3D printing",
-        "printed": "Print finished · PLA",
-        "petName": "Corgi",
-        "level": "Lv.1",
-        "quest": "Quest: find the chest in the garden",
-        "rig": "Rigged · run cycle"
+      "upload": {
+        "placeholder": "Drop a photo or click to upload — create your world with Lux3D",
+        "formats": "PNG / JPG / WEBP, up to 10MB",
+        "replace": "Replace photo",
+        "model": "Model: Standard",
+        "output": "Output: Mesh · PBR",
+        "generate": "Upload & generate",
+        "errorType": "Only PNG, JPG or WEBP images are supported",
+        "errorSize": "Images must be 10MB or smaller",
+        "errorEmpty": "Pick a photo first"
       }
     },
     "features": {

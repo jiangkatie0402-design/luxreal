@@ -182,3 +182,19 @@
 .story-paused *::before {
   animation-play-state: paused !important;
 }
+
+/* Homepage cover */
+@keyframes cover-kenburns {
+  from {
+    transform: scale(1.06);
+  }
+  to {
+    transform: scale(1);
+  }
+}
+.cover-kenburns {
+  animation: cover-kenburns 6s var(--ease-out) both;
+}
+.cover-caption {
+  animation: story-in var(--dur-slow) var(--ease-out) both;
+}
