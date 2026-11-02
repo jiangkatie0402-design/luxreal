@@ -81,13 +81,79 @@
       }
     },
     "explain": {
-      "eyebrow": "Image to 3D · How it works",
-      "title": "How one photo becomes a 3D model",
-      "subtitle": "Scroll to follow the same corgi from photo to usable 3D asset, and what happens at each step.",
-      "note": "Times, face counts and resolutions are illustrative.",
+      "eyebrow": "Core capabilities",
+      "tabs": {
+        "image": "Image to 3D",
+        "text": "Text to 3D"
+      },
+      "progress": "Generation",
+      "secondary": "Integrate via API",
+      "note": "Free daily credits · No credit card · Demo values are illustrative",
+      "image": {
+        "title": "Upload a photo, get a complete 3D model in seconds",
+        "desc": "The unseen sides are filled in, with clean topology and real PBR materials.",
+        "cta": "Upload a photo — it's free",
+        "points": {
+          "a": {
+            "title": "A phone snap is enough",
+            "desc": "Subject detected, background removed"
+          },
+          "b": {
+            "title": "Full PBR materials",
+            "desc": "Base color, roughness, metalness, normal maps"
+          },
+          "c": {
+            "title": "Ready to use",
+            "desc": "Export GLB / FBX / OBJ / USDZ / STL"
+          }
+        }
+      },
+      "text": {
+        "title": "Write a sentence, get the 3D model you want",
+        "desc": "Describe shape, style and material in plain language and Lux3D generates a fully textured 3D model.",
+        "cta": "Describe it — it's free",
+        "points": {
+          "a": {
+            "title": "Say what you want",
+            "desc": "English or Chinese; style, material, pose"
+          },
+          "b": {
+            "title": "Several candidates",
+            "desc": "Pick the best one and refine it"
+          },
+          "c": {
+            "title": "Keep editing",
+            "desc": "Retexture, remesh, auto-rig"
+          }
+        }
+      },
+      "steps": {
+        "image": [
+          "Detecting subject",
+          "Inferring views",
+          "Building geometry",
+          "Generating materials",
+          "Done · ready to export"
+        ],
+        "text": [
+          "Reading the prompt",
+          "Inferring views",
+          "Building geometry",
+          "Generating materials",
+          "Done · ready to export"
+        ]
+      },
       "stage": {
         "subject": "Subject · corgi",
         "faces": "faces",
+        "promptLabel": "Prompt",
+        "prompt": "A vintage tin toy robot, cream body, blue arms, an antenna on top and glowing eyes",
+        "parsed": [
+          "Subject: robot",
+          "Style: vintage tin",
+          "Material: painted metal",
+          "Details: antenna · glowing eyes"
+        ],
         "view": {
           "front": "Front",
           "side": "Side",
@@ -99,103 +165,6 @@
           "normal": "Normal",
           "roughness": "Roughness",
           "metalness": "Metalness"
-        }
-      },
-      "steps": {
-        "input": {
-          "short": "Detecting subject",
-          "title": "Input and subject detection",
-          "desc": "Upload a photo. The model finds the subject, removes the background and estimates camera angle and lighting to set up the rest of the pipeline.",
-          "facts": [
-            [
-              "Formats",
-              "PNG / JPG / WEBP, up to 10MB"
-            ],
-            [
-              "Tip",
-              "Whole subject, even light, 512px+"
-            ],
-            [
-              "Automatic",
-              "Segmentation · background removal · light estimation"
-            ]
-          ]
-        },
-        "views": {
-          "short": "Inferring views",
-          "title": "Multi-view inference",
-          "desc": "A photo shows one side. The model infers the unseen sides, back and top as consistent views that guide the 3D reconstruction.",
-          "facts": [
-            [
-              "Views",
-              "4–6, around and above"
-            ],
-            [
-              "Consistency",
-              "Shape and patterns aligned across views"
-            ],
-            [
-              "More accuracy",
-              "Or upload 2–6 views yourself"
-            ]
-          ]
-        },
-        "geometry": {
-          "short": "Building geometry",
-          "title": "Geometry reconstruction",
-          "desc": "The views are reconstructed into a 3D mesh and auto-retopologized into clean quads. Models come out watertight and manifold, ready to print or drop into an engine.",
-          "facts": [
-            [
-              "Topology",
-              "Quads · clean edge flow"
-            ],
-            [
-              "Face count",
-              "5k – 200k, your choice"
-            ],
-            [
-              "Print-ready",
-              "Watertight · manifold · no holes"
-            ]
-          ]
-        },
-        "material": {
-          "short": "Generating materials",
-          "title": "PBR materials",
-          "desc": "Finally a full PBR set is generated: base color, normal, roughness and metalness as separate maps. Fur, metal and fabric hold up under any light.",
-          "facts": [
-            [
-              "Maps",
-              "Base color · normal · roughness · metalness"
-            ],
-            [
-              "Resolution",
-              "Up to 4K"
-            ],
-            [
-              "Editable",
-              "Retexture or restyle in one click"
-            ]
-          ]
-        },
-        "export": {
-          "short": "Done · ready to export",
-          "title": "Export and use",
-          "desc": "In seconds you have a usable 3D asset: bring it into Blender, Unity or Unreal, send it to your slicer, or put it in a shot.",
-          "facts": [
-            [
-              "Formats",
-              "GLB · FBX · OBJ · USDZ · STL"
-            ],
-            [
-              "Time",
-              "~60s standard · ~20s turbo"
-            ],
-            [
-              "Next",
-              "Remesh · split · auto-rig · animate"
-            ]
-          ]
         }
       }
     },
