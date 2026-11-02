@@ -14,9 +14,8 @@ const PARTS = [
   },
   { id: 'legs', clip: 'inset(70% 0 0 0)', move: 'translate(0, 9%)' },
 ] as const;
-const FILAMENTS = ['#d98a3d', '#f3ead8', '#c4282c', '#1d1d1f'];
 
-/** Multi-color print vs. Auto Split: the model separates into watertight parts. */
+/** Auto Split: the model separates into watertight parts arranged for printing. */
 export function PrintSplit() {
   const t = useTranslations('home.scenes.print.split');
   const [mode, pick] = useCycle(2, 2600);
@@ -59,7 +58,7 @@ export function PrintSplit() {
         role="group"
         aria-label={t('label')}
       >
-        {(['color', 'split'] as const).map((m, i) => (
+        {(['merged', 'split'] as const).map((m, i) => (
           <button
             key={m}
             type="button"
@@ -72,22 +71,7 @@ export function PrintSplit() {
         ))}
       </div>
       <div className="absolute bottom-3 left-3 flex items-center gap-2 rounded-full bg-black/55 px-3 py-1.5 text-[11px] text-white/80 backdrop-blur-md">
-        {split ? (
-          t('parts')
-        ) : (
-          <>
-            <span className="flex gap-1">
-              {FILAMENTS.map((c) => (
-                <span
-                  key={c}
-                  className="size-3 rounded-full border border-white/30"
-                  style={{ background: c }}
-                />
-              ))}
-            </span>
-            {t('filaments')}
-          </>
-        )}
+        {split ? t('parts') : t('whole')}
       </div>
     </div>
   );

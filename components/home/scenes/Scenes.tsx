@@ -9,6 +9,7 @@ import { GameScene } from './GameScene';
 import { LowPoly } from './LowPoly';
 import { PbrChannels } from './PbrChannels';
 import { PrintScene } from './PrintScene';
+import { PrintMultiColor } from './PrintMultiColor';
 import { PrintSplit } from './PrintSplit';
 import { Relight } from './Relight';
 import { ShotBoard } from './ShotBoard';
@@ -27,7 +28,8 @@ const FIELDS: Field[] = [
     color: 'var(--scene-printing)',
     cards: [
       { id: 'a', Visual: PrintScene, interactive: true },
-      { id: 'b', Visual: PrintSplit },
+      { id: 'b', Visual: PrintMultiColor },
+      { id: 'c', Visual: PrintSplit },
     ],
     tools: [
       'Bambu Studio',

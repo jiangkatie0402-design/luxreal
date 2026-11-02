@@ -300,15 +300,19 @@
             "desc": "Watertight and manifold out of the box, and every export still runs a printability check that repairs holes and non-manifold edges. Click to watch it print layer by layer."
           },
           "b": {
-            "title": "Print in multi-color, or split to fit",
-            "desc": "Color regions map cleanly to filaments; when a model is too complex, Auto Split breaks it into watertight parts arranged on the plate."
+            "title": "Multi-color, mapped to your filaments",
+            "desc": "Color regions are cleaned into a few flat zones and mapped to the slots of an AMS or other multi-color system — crisp borders, no hand painting."
+          },
+          "c": {
+            "title": "Auto Split for big or complex models",
+            "desc": "Large or complex models are split into watertight parts with aligned joints, laid out on the plate, ready to print and assemble."
           }
         },
         "split": {
-          "label": "Print mode",
-          "color": "Multi-color",
+          "label": "Split mode",
+          "merged": "Whole",
           "split": "Auto Split",
-          "filaments": "4 colors · mapped to filaments",
+          "whole": "Whole · heavy supports needed",
           "parts": "3 watertight parts · arranged"
         },
         "start": "Click to start printing",
@@ -319,7 +323,14 @@
         "layer": "Layer",
         "nozzle": "Nozzle",
         "remaining": "Remaining",
-        "check": "✓ Printability check passed · watertight · 0 holes"
+        "check": "✓ Printability check passed · watertight · 0 holes",
+        "multi": {
+          "label": "Print mode",
+          "single": "Single",
+          "multi": "Multi-color",
+          "slotsSingle": "Single color · 1 slot",
+          "slotsMulti": "4 colors · mapped to slots"
+        }
       },
       "game": {
         "tab": "Game Dev",
