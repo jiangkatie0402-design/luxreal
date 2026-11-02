@@ -791,6 +791,13 @@
         }
       },
       "note": "包名、命令和案例为示意，正式接入方式以开发者文档为准。"
+    },
+    "agentStrip": {
+      "title": "在你的 AI Agent 里使用 Lux3D",
+      "sub": "一行命令接入 MCP，支持",
+      "copy": "复制",
+      "copied": "已复制",
+      "more": "看 Agent 能做什么"
     }
   },
   "footer": {

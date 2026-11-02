@@ -791,6 +791,13 @@
         }
       },
       "note": "Package name, commands and examples are illustrative; see the developer docs for the official setup."
+    },
+    "agentStrip": {
+      "title": "Use Lux3D in your AI agent",
+      "sub": "One command adds the MCP server to",
+      "copy": "Copy",
+      "copied": "Copied",
+      "more": "See what agents build"
     }
   },
   "footer": {

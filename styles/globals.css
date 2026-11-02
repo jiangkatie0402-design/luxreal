@@ -370,3 +370,30 @@
 .grid-cursor-area :is(a, button, input, textarea, select, label, [role='button']) {
   cursor: pointer;
 }
+
+/* Agent strip: slowly rotating gradient hairline */
+@property --strip-angle {
+  syntax: '<angle>';
+  initial-value: 0deg;
+  inherits: false;
+}
+.agent-strip {
+  background: conic-gradient(
+    from var(--strip-angle),
+    rgba(94, 168, 255, 0.15),
+    rgba(95, 224, 255, 0.85),
+    rgba(167, 180, 255, 0.2),
+    rgba(94, 168, 255, 0.15)
+  );
+  animation: strip-spin 8s linear infinite;
+}
+@keyframes strip-spin {
+  to {
+    --strip-angle: 360deg;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .agent-strip {
+    animation: none;
+  }
+}
