@@ -397,3 +397,13 @@
     animation: none;
   }
 }
+
+/* Reel hero: each clip fades in over the previous one */
+@keyframes reel-in {
+  from {
+    opacity: 0;
+  }
+}
+.reel-in {
+  animation: reel-in 500ms ease-out both;
+}

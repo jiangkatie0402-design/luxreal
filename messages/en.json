@@ -835,6 +835,31 @@
         }
       },
       "note": "Videos are placeholders; cases, package name and command are illustrative."
+    },
+    "reel": {
+      "title": "Create your world, starting here",
+      "subtitle": "One image or one sentence, a 3D asset you can use",
+      "cta": "Create Now",
+      "clipsLabel": "Showcase",
+      "pause": "Pause",
+      "play": "Play",
+      "clips": {
+        "print": {
+          "label": "3D model → printed figurine",
+          "prompt": "Turn this dragon knight into a printable 8-inch figurine with a base",
+          "inputAlt": "Input: dragon knight 3D model"
+        },
+        "film": {
+          "label": "Film frame → 3D model",
+          "prompt": "Make the astronaut in this frame a 3D model, keep the weathered suit",
+          "inputAlt": "Input: sci-fi film still"
+        },
+        "game": {
+          "label": "Game scene → interactive 3D prop",
+          "prompt": "Turn the crown in this temple into a pickup-able game prop",
+          "inputAlt": "Input: game temple scene"
+        }
+      }
     }
   },
   "footer": {

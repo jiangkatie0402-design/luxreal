@@ -64,9 +64,9 @@ export function AgentVideoShowcase() {
         aria-hidden
         className="pointer-events-none absolute inset-x-0 top-0 h-[60%] [background:radial-gradient(50%_60%_at_50%_0%,rgba(77,141,255,0.2),transparent_70%)]"
       />
-      <div className="relative mx-auto w-full max-w-[1400px] px-4 md:px-8">
-        <div className="flex flex-col gap-4 md:flex-row md:items-end md:justify-between">
-          <div>
+      <div className="relative mx-auto w-full max-w-[1320px] px-4 md:px-8">
+        <div className="flex flex-col items-center gap-4 text-center">
+          <div className="flex flex-col items-center">
             <p className="inline-flex items-center gap-2 rounded-full border border-[#5ea8ff]/40 bg-[#5ea8ff]/10 px-3.5 py-1.5 text-xs font-medium text-[#9cc8ff]">
               <span className="size-1.5 rounded-full bg-[#5ea8ff]" />
               {t('eyebrow')}
@@ -77,11 +77,11 @@ export function AgentVideoShowcase() {
             >
               {t('title')}
             </h2>
-            <p className="mt-4 max-w-2xl text-pretty text-white/60 md:text-lg">{t('subtitle')}</p>
+            <p className="mt-4 max-w-2xl text-balance text-white/60 md:text-lg">{t('subtitle')}</p>
           </div>
           <a
             href={site.links.docs}
-            className="shrink-0 text-sm text-white/70 underline-offset-4 hover:text-white hover:underline"
+            className="-mt-1 text-sm text-[#9cc8ff] underline-offset-4 hover:text-white hover:underline"
           >
             {t('guide')} ↗
           </a>
@@ -135,7 +135,10 @@ export function AgentVideoShowcase() {
                   </span>
                   {t(`cases.${v.id}.tag`)}
                 </p>
-                <p key={v.id} className="story-in mt-2 max-w-xl text-balance text-xl font-semibold md:text-[1.7rem] md:leading-snug">
+                <p
+                  key={v.id}
+                  className="story-in mt-2 max-w-xl text-balance text-xl font-semibold md:text-[1.7rem] md:leading-snug"
+                >
                   {t(`cases.${v.id}.title`)}
                 </p>
                 <p className="mt-3 max-w-xl truncate rounded-lg bg-black/45 px-3 py-2 font-mono text-[12px] text-[#9cc8ff] backdrop-blur md:text-[13px]">
@@ -218,7 +221,7 @@ export function AgentVideoShowcase() {
             </li>
           </ul>
         </div>
-        <p className="mt-4 text-xs text-white/35">{t('note')}</p>
+        <p className="mt-4 text-center text-xs text-white/35">{t('note')}</p>
       </div>
     </section>
   );
