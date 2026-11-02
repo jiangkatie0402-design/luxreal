@@ -265,7 +265,7 @@ export function ImageTo3DExplainer() {
               />
             </div>
             <div
-              className={`absolute inset-x-4 bottom-4 flex flex-wrap justify-center gap-2 ${show(3)}`}
+              className={`absolute inset-x-4 bottom-[5.5rem] flex flex-wrap justify-center gap-2 ${show(3)}`}
             >
               {CHANNELS.map((c, i) => (
                 <span
@@ -320,6 +320,21 @@ export function ImageTo3DExplainer() {
             </div>
             <div className="absolute right-4 top-4 rounded-full bg-black/50 px-3 py-1.5 font-mono text-xs text-white/70 backdrop-blur-md">
               <span ref={faces}>0</span> {t('stage.faces')}
+            </div>
+            {/* generation progress, follows scroll */}
+            <div className="absolute inset-x-5 bottom-5 z-10 rounded-2xl bg-[rgba(4,8,18,0.7)] px-4 py-3 backdrop-blur-md md:inset-x-6 md:bottom-6">
+              <div className="flex items-center justify-between text-xs text-white/50">
+                <span>{t('progress')}</span>
+                <span className="font-mono text-white/80">{t(`steps.${mode}.${active}`)}</span>
+              </div>
+              <div className="mt-2 grid grid-cols-5 gap-1.5">
+                {STEPS.map((s, i) => (
+                  <span
+                    key={s}
+                    className={`h-1 rounded-full transition-colors duration-500 ${i <= active ? 'bg-[#5ea8ff]' : 'bg-white/10'}`}
+                  />
+                ))}
+              </div>
             </div>
           </div>
 
@@ -395,22 +410,6 @@ export function ImageTo3DExplainer() {
                 </li>
               ))}
             </ul>
-
-            {/* generation progress, follows scroll */}
-            <div className="mt-5 lg:mt-7">
-              <div className="flex items-center justify-between text-xs text-white/45">
-                <span>{t('progress')}</span>
-                <span className="font-mono text-white/70">{t(`steps.${mode}.${active}`)}</span>
-              </div>
-              <div className="mt-2 grid grid-cols-5 gap-1.5">
-                {STEPS.map((s, i) => (
-                  <span
-                    key={s}
-                    className={`h-1 rounded-full transition-colors duration-500 ${i <= active ? 'bg-[#5ea8ff]' : 'bg-white/10'}`}
-                  />
-                ))}
-              </div>
-            </div>
 
             <div className="mt-5 flex flex-wrap items-center gap-x-6 gap-y-3 lg:mt-8">
               <a
