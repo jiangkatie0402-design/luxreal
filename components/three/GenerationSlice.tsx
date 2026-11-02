@@ -28,7 +28,7 @@ const AXES = {
   z: new THREE.Vector3(0, 0, 1),
 };
 const AXIS_INDEX = { x: 0, y: 1, z: 2 } as const;
-const DEFAULT_PALETTE = ['#ff8a5c', '#ffc46b', '#7fc8a9', '#8fa8ff', '#f2a3c4'];
+const DEFAULT_PALETTE = ['#6cb6ff', '#8f9dff', '#5fd4e0', '#c3d3ff', '#3f6fe0'];
 
 type SliceUniforms = {
   uSliceH: { value: number };
@@ -81,9 +81,9 @@ export function GenerationSlice({
   particleCount,
 }: GenerationSliceProps) {
   const gl = useThree((s) => s.gl);
-  const tokenColor = useToken('--slice-color', '#ff5b2e');
+  const tokenColor = useToken('--slice-color', '#5ea8ff');
   const palette = useTokenList('--particle-palette', DEFAULT_PALETTE);
-  const textColor = useToken('--color-text-secondary', '#5d5a63');
+  const textColor = useToken('--color-text-secondary', '#9aa8c7');
   const tier = usePerfStore((s) => s.tier);
   const color = sliceColor ?? tokenColor;
   const count = particleCount ?? (tier === 'high' ? 2200 : 900);

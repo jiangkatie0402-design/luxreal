@@ -21,7 +21,7 @@ export function PricingTabs() {
             type="button"
             aria-selected={tab === v}
             onClick={() => setTab(v)}
-            className={`rounded-full px-5 py-2 text-sm ${tab === v ? 'bg-text text-bg' : 'text-muted hover:text-text'}`}
+            className={`rounded-full px-5 py-2 text-sm ${tab === v ? 'bg-accent text-on-accent' : 'text-muted hover:text-text'}`}
           >
             {v === 'creators' ? t('tabCreators') : t('tabApi')}
           </button>

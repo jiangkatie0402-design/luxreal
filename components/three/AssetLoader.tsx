@@ -70,7 +70,7 @@ const GltfAsset = forwardRef<THREE.Group, InnerProps & { url: string }>(function
 });
 
 const clayMat = new THREE.MeshStandardMaterial({ color: '#e7e2d8', roughness: 0.85 });
-const wireMat = new THREE.MeshBasicMaterial({ color: '#6b6670', wireframe: true });
+const wireMat = new THREE.MeshBasicMaterial({ color: '#7f97c8', wireframe: true });
 
 /** Swap materials for clay / wireframe preview without losing the originals. */
 function useRenderMode(object: THREE.Object3D, mode: RenderMode) {

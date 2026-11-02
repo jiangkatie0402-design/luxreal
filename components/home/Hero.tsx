@@ -7,7 +7,7 @@ export function Hero() {
   return (
     <section
       aria-labelledby="hero-title"
-      className="relative flex min-h-[100svh] flex-col overflow-hidden bg-hero pt-[var(--header-h)]"
+      className="relative flex min-h-[100svh] flex-col overflow-hidden pt-[var(--header-h)] [background:var(--hero-gradient)]"
     >
       <div className="container-x relative grid flex-1 items-center gap-6 py-8 lg:grid-cols-2 lg:py-12">
         <div className="relative z-10 max-w-xl">

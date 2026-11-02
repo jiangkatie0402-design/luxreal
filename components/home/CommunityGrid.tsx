@@ -8,21 +8,24 @@ import { Asset } from '@/components/three/AssetLoader';
 import { galleryItems, type GalleryItem } from '@/config/gallery';
 import { Link } from '@/i18n/navigation';
 import { usePerfStore } from '@/lib/perf';
+import { useToken } from '@/lib/tokens';
 
 const FILTERS = ['all', 'characters', 'props', 'nature', 'architecture'] as const;
 
 function Spinner({ item, hovered }: { item: GalleryItem; hovered: boolean }) {
   const ref = useRef<THREE.Group>(null);
   const reduced = usePerfStore((s) => s.reducedMotion);
+  const ground = useToken('--stage-ground', '#1b2945');
+  const fill = useToken('--stage-fill', '#7fb0ff');
   useFrame((_, dt) => {
     if (!ref.current || reduced) return;
     ref.current.rotation.y += dt * (hovered ? 1.6 : 0.25);
   });
   return (
     <>
-      <hemisphereLight args={['#ffffff', '#b9a98f', 1]} />
+      <hemisphereLight args={['#ffffff', ground, 1]} />
       <directionalLight position={[3, 5, 3]} intensity={1.6} />
-      <directionalLight position={[-3, 2, -2]} intensity={0.5} color="#ffd9c2" />
+      <directionalLight position={[-3, 2, -2]} intensity={0.9} color={fill} />
       <group ref={ref} rotation={[0.18, 0, 0]}>
         <Asset id={item.asset} fit={1.45} center />
       </group>
@@ -45,7 +48,7 @@ function CommunityCard({ item, show3d }: { item: GalleryItem; show3d: boolean })
       >
         <div
           className={`relative overflow-hidden rounded-lg border border-line ${item.tall ? 'aspect-[4/5]' : 'aspect-square'}`}
-          style={{ background: item.tint }}
+          style={{ background: `color-mix(in srgb, ${item.tint} 14%, var(--color-surface-2))` }}
         >
           {show3d && (
             <View className="absolute inset-0">
@@ -88,7 +91,7 @@ export function CommunityGrid({ limit }: { limit?: number }) {
             onClick={() => setFilter(f)}
             className={`rounded-full border px-4 py-1.5 text-sm transition-colors ${
               filter === f
-                ? 'border-text bg-text text-bg'
+                ? 'border-accent bg-accent text-on-accent'
                 : 'border-line text-muted hover:text-text'
             }`}
           >

@@ -14,7 +14,7 @@ export function PageHero({
   aside?: ReactNode;
 }) {
   return (
-    <section className="border-b border-line bg-hero pt-[var(--header-h)]">
+    <section className="border-b border-line pt-[var(--header-h)] [background:var(--hero-gradient)]">
       <div
         className={`container-x grid gap-10 py-14 md:py-20 ${aside ? 'lg:grid-cols-2 lg:items-center' : ''}`}
       >

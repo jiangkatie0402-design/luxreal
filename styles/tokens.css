@@ -1,26 +1,33 @@
 /*
- * Lux3D design tokens — placeholder values until the visual direction is final.
+ * Lux3D design tokens — blue-black direction (dark default, light opt-in).
  * Components must only reference these variables (directly or via Tailwind theme).
  */
 :root {
-  color-scheme: light;
-
-  /* Color */
-  --color-bg: #f6f4ef;
-  --color-surface: #ffffff;
-  --color-surface-2: #ece8df;
-  --color-text: #17161a;
-  --color-text-secondary: #5d5a63;
-  --color-text-tertiary: #8d8992;
-  --color-accent: #ff5b2e;
+  color-scheme: dark;
+  --color-bg: #060a13;
+  --color-surface: #0c1322;
+  --color-surface-2: #131d33;
+  --color-text: #e8eefc;
+  --color-text-secondary: #9aa8c7;
+  --color-text-tertiary: #67769a;
+  --color-accent: #4d8dff;
   --color-accent-contrast: #ffffff;
-  --color-accent-soft: #ffe3d8;
-  --color-border: rgba(23, 22, 26, 0.1);
-  --color-border-strong: rgba(23, 22, 26, 0.22);
-  --color-hero-bg: #e9e4d8;
-  --color-stage-floor: #ddd6c6;
-  --slice-color: #ff5b2e;
-  --particle-palette: #ff8a5c, #ffc46b, #7fc8a9, #8fa8ff, #f2a3c4;
+  --color-accent-soft: rgba(77, 141, 255, 0.16);
+  --color-border: rgba(148, 172, 224, 0.12);
+  --color-border-strong: rgba(148, 172, 224, 0.26);
+  --color-hero-bg: #04070e;
+  --hero-gradient:
+    radial-gradient(60% 55% at 78% 45%, rgba(56, 116, 255, 0.22), transparent 70%),
+    radial-gradient(40% 40% at 10% 0%, rgba(77, 141, 255, 0.1), transparent 70%), #04070e;
+  --color-stage-floor: #0f1a30;
+  --cta-gradient: linear-gradient(135deg, #0a1a44 0%, #1440b8 55%, #3b7bff 100%);
+  --color-on-cta: #ffffff;
+  --color-cta-ink: #07112a;
+  --stage-ground: #1b2945;
+  --stage-fill: #7fb0ff;
+  --slice-color: #5ea8ff;
+  --particle-palette: #6cb6ff, #8f9dff, #5fd4e0, #c3d3ff, #3f6fe0;
+  --shadow-card: 0 1px 2px rgba(0, 0, 0, 0.4), 0 10px 30px rgba(0, 0, 0, 0.35);
 
   /* Typography */
   --font-display: 'Inter Tight', 'PingFang SC', 'Noto Sans SC', system-ui, sans-serif;
@@ -56,9 +63,6 @@
   --radius-lg: 24px;
   --radius-full: 999px;
 
-  /* Shadow */
-  --shadow-card: 0 1px 2px rgba(23, 22, 26, 0.04), 0 8px 24px rgba(23, 22, 26, 0.06);
-
   /* Motion */
   --ease-out: cubic-bezier(0.22, 1, 0.36, 1);
   --ease-snap: cubic-bezier(0.68, -0.4, 0.27, 1.4);
@@ -71,42 +75,59 @@
   --container: 1240px;
 }
 
-:root[data-theme='dark'] {
-  color-scheme: dark;
-  --color-bg: #141317;
-  --color-surface: #1d1c21;
-  --color-surface-2: #26252b;
-  --color-text: #f3f1ec;
-  --color-text-secondary: #b3afb8;
-  --color-text-tertiary: #7f7b85;
-  --color-accent: #ff7148;
-  --color-accent-contrast: #1a0d08;
-  --color-accent-soft: #3a2119;
-  --color-border: rgba(243, 241, 236, 0.1);
-  --color-border-strong: rgba(243, 241, 236, 0.22);
-  --color-hero-bg: #1a191e;
-  --color-stage-floor: #2a2830;
-  --slice-color: #ff7148;
-  --shadow-card: 0 1px 2px rgba(0, 0, 0, 0.3), 0 8px 24px rgba(0, 0, 0, 0.3);
+/* Default is blue-black. Light is opt-in, or follows the OS when data-theme="system". */
+:root[data-theme='light'] {
+  color-scheme: light;
+  --color-bg: #f4f7fc;
+  --color-surface: #ffffff;
+  --color-surface-2: #e9eef8;
+  --color-text: #0b1220;
+  --color-text-secondary: #4a5878;
+  --color-text-tertiary: #7c89a6;
+  --color-accent: #2563eb;
+  --color-accent-contrast: #ffffff;
+  --color-accent-soft: #dbe7ff;
+  --color-border: rgba(11, 18, 32, 0.1);
+  --color-border-strong: rgba(11, 18, 32, 0.22);
+  --color-hero-bg: #e8eef9;
+  --hero-gradient:
+    radial-gradient(60% 55% at 78% 45%, rgba(37, 99, 235, 0.14), transparent 70%), #e8eef9;
+  --color-stage-floor: #d3ddef;
+  --cta-gradient: linear-gradient(135deg, #0b1a44 0%, #1d4ed8 60%, #3b82f6 100%);
+  --color-on-cta: #ffffff;
+  --color-cta-ink: #07112a;
+  --stage-ground: #b4c3de;
+  --stage-fill: #9cc2ff;
+  --slice-color: #2563eb;
+  --particle-palette: #3b82f6, #7c8cff, #22b8cf, #93b4ff, #1e40af;
+  --shadow-card: 0 1px 2px rgba(11, 18, 32, 0.05), 0 8px 24px rgba(11, 18, 32, 0.07);
 }
 
-@media (prefers-color-scheme: dark) {
-  :root:not([data-theme='light']) {
-    color-scheme: dark;
-    --color-bg: #141317;
-    --color-surface: #1d1c21;
-    --color-surface-2: #26252b;
-    --color-text: #f3f1ec;
-    --color-text-secondary: #b3afb8;
-    --color-text-tertiary: #7f7b85;
-    --color-accent: #ff7148;
-    --color-accent-contrast: #1a0d08;
-    --color-accent-soft: #3a2119;
-    --color-border: rgba(243, 241, 236, 0.1);
-    --color-border-strong: rgba(243, 241, 236, 0.22);
-    --color-hero-bg: #1a191e;
-    --color-stage-floor: #2a2830;
-    --slice-color: #ff7148;
-    --shadow-card: 0 1px 2px rgba(0, 0, 0, 0.3), 0 8px 24px rgba(0, 0, 0, 0.3);
+@media (prefers-color-scheme: light) {
+  :root[data-theme='system'] {
+    color-scheme: light;
+    --color-bg: #f4f7fc;
+    --color-surface: #ffffff;
+    --color-surface-2: #e9eef8;
+    --color-text: #0b1220;
+    --color-text-secondary: #4a5878;
+    --color-text-tertiary: #7c89a6;
+    --color-accent: #2563eb;
+    --color-accent-contrast: #ffffff;
+    --color-accent-soft: #dbe7ff;
+    --color-border: rgba(11, 18, 32, 0.1);
+    --color-border-strong: rgba(11, 18, 32, 0.22);
+    --color-hero-bg: #e8eef9;
+    --hero-gradient:
+      radial-gradient(60% 55% at 78% 45%, rgba(37, 99, 235, 0.14), transparent 70%), #e8eef9;
+    --color-stage-floor: #d3ddef;
+    --cta-gradient: linear-gradient(135deg, #0b1a44 0%, #1d4ed8 60%, #3b82f6 100%);
+    --color-on-cta: #ffffff;
+    --color-cta-ink: #07112a;
+    --stage-ground: #b4c3de;
+    --stage-fill: #9cc2ff;
+    --slice-color: #2563eb;
+    --particle-palette: #3b82f6, #7c8cff, #22b8cf, #93b4ff, #1e40af;
+    --shadow-card: 0 1px 2px rgba(11, 18, 32, 0.05), 0 8px 24px rgba(11, 18, 32, 0.07);
   }
 }

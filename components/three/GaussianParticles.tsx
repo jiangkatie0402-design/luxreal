@@ -60,7 +60,7 @@ export function createParticleCloud(
     v.y += (Math.random() - 0.5) * 0.06;
     v.z += (Math.random() - 0.5) * 0.06;
     v.toArray(pos, i * 3);
-    color.copy(colors[i % colors.length] ?? color.set('#ffb08a'));
+    color.copy(colors[i % colors.length] ?? color.set('#6cb6ff'));
     color.toArray(col, i * 3);
     phase[i] = Math.random() * Math.PI * 2;
   }

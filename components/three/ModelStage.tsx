@@ -39,7 +39,9 @@ export function ModelStage({
 }: ModelStageProps) {
   const { tier, reducedMotion, ready, init } = usePerfStore();
   useEffect(() => init(), [init]);
-  const floorColor = useToken('--color-stage-floor', '#ddd6c6');
+  const floorColor = useToken('--color-stage-floor', '#0f1a30');
+  const ground = useToken('--stage-ground', '#1b2945');
+  const fill = useToken('--stage-fill', '#7fb0ff');
 
   if (ready && tier === 'low' && fallback) return <div className={className}>{fallback}</div>;
 
@@ -51,7 +53,7 @@ export function ModelStage({
         camera={{ position: camera, fov }}
         gl={{ antialias: true, alpha: true }}
       >
-        <hemisphereLight args={['#ffffff', '#b9a98f', 0.7]} />
+        <hemisphereLight args={['#ffffff', ground, 0.7]} />
         <directionalLight
           position={[3, 5, 2.5]}
           intensity={1.8}
@@ -59,11 +61,11 @@ export function ModelStage({
           shadow-mapSize={[1024, 1024]}
           shadow-bias={-0.0004}
         />
-        <directionalLight position={[-3, 2, -2]} intensity={0.5} color="#ffd9c2" />
+        <directionalLight position={[-3, 2, -2]} intensity={0.9} color={fill} />
         <Environment resolution={64} frames={1}>
           <Lightformer intensity={1.5} position={[0, 4, 3]} scale={[6, 2, 1]} />
-          <Lightformer intensity={0.8} position={[-4, 1, -2]} scale={[3, 3, 1]} color="#ffd9c2" />
-          <Lightformer intensity={0.6} position={[4, 1, -2]} scale={[3, 3, 1]} color="#cfe0ff" />
+          <Lightformer intensity={0.8} position={[-4, 1, -2]} scale={[3, 3, 1]} color={fill} />
+          <Lightformer intensity={0.6} position={[4, 1, -2]} scale={[3, 3, 1]} color="#ffffff" />
         </Environment>
         <Suspense fallback={null}>{children}</Suspense>
         {floor && (

@@ -32,10 +32,7 @@ export async function generateMetadata({
 }
 
 export const viewport: Viewport = {
-  themeColor: [
-    { media: '(prefers-color-scheme: light)', color: '#f6f4ef' },
-    { media: '(prefers-color-scheme: dark)', color: '#141317' },
-  ],
+  themeColor: '#060a13',
 };
 
 export default async function LocaleLayout({

@@ -6,12 +6,13 @@ type Theme = 'system' | 'light' | 'dark';
 const KEY = 'lux3d-theme';
 
 /** Inline script to apply the saved theme before paint. */
-export const themeScript = `try{var t=localStorage.getItem('${KEY}');if(t==='light'||t==='dark')document.documentElement.dataset.theme=t}catch(e){}`;
+export const themeScript = `try{var t=localStorage.getItem('${KEY}');if(t==='light'||t==='system')document.documentElement.dataset.theme=t}catch(e){}`;
 
 function persistTheme(next: Theme) {
   try {
     const root = document.documentElement;
-    if (next === 'system') {
+    // Blue-black (dark) is the brand default and needs no attribute.
+    if (next === 'dark') {
       localStorage.removeItem(KEY);
       delete root.dataset.theme;
     } else {
@@ -23,12 +24,12 @@ function persistTheme(next: Theme) {
 
 export function ThemeToggle() {
   const t = useTranslations('common');
-  const [theme, setTheme] = useState<Theme>('system');
+  const [theme, setTheme] = useState<Theme>('dark');
   useEffect(() => {
     try {
       const saved = localStorage.getItem(KEY);
       // eslint-disable-next-line react-hooks/set-state-in-effect -- sync from storage after hydration
-      if (saved === 'light' || saved === 'dark') setTheme(saved);
+      if (saved === 'light' || saved === 'system') setTheme(saved);
     } catch {}
   }, []);
   const apply = (next: Theme) => {
@@ -41,7 +42,7 @@ export function ThemeToggle() {
       aria-label={t('themeLabel')}
       className="inline-flex rounded-full border border-line p-0.5 text-xs"
     >
-      {(['system', 'light', 'dark'] as Theme[]).map((v) => (
+      {(['dark', 'light', 'system'] as Theme[]).map((v) => (
         <button
           key={v}
           type="button"
