@@ -798,6 +798,43 @@
       "copy": "Copy",
       "copied": "Copied",
       "more": "See what agents build"
+    },
+    "agentVideo": {
+      "eyebrow": "Agents in action",
+      "title": "Watch agents ship real projects with Lux3D",
+      "subtitle": "Each video is a real agent workflow: one request, and the agent calls Lux3D to generate, organize and deliver 3D assets. Copy the command below and your agent can do the same.",
+      "guide": "MCP setup guide",
+      "placeholder": "Preview frame · replace with the final video",
+      "cmdTitle": "Copy this, and your agent can do it too",
+      "cmdSub": "Works with Claude Code · Cursor · Codex · any MCP client",
+      "copy": "Copy command",
+      "copied": "Copied ✓",
+      "listLabel": "Choose a case video",
+      "more": "No API key yet?",
+      "getKey": "Get one free",
+      "cases": {
+        "game": {
+          "tag": "Game dev",
+          "title": "One sentence, a whole level of props",
+          "prompt": "Generate every medieval prop for level 3, export GLB into assets/props"
+        },
+        "shop": {
+          "tag": "E-commerce",
+          "title": "New arrivals get 3D views automatically",
+          "prompt": "Make 3D models and AR previews for today's 12 new SKUs"
+        },
+        "print": {
+          "tag": "3D printing",
+          "title": "A pet photo becomes a printable figurine",
+          "prompt": "Turn this corgi photo into an 8cm printable figurine and check it's watertight"
+        },
+        "film": {
+          "tag": "Film & AI video",
+          "title": "One fixed asset, a consistent sequence",
+          "prompt": "Use this robot asset to shoot wide, medium and close-up shots"
+        }
+      },
+      "note": "Videos are placeholders; cases, package name and command are illustrative."
     }
   },
   "footer": {

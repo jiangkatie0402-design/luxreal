@@ -798,6 +798,43 @@
       "copy": "复制",
       "copied": "已复制",
       "more": "看 Agent 能做什么"
+    },
+    "agentVideo": {
+      "eyebrow": "Agent 实战案例",
+      "title": "看 Agent 用 Lux3D 完成真实项目",
+      "subtitle": "每段视频都是一次真实的 Agent 工作流：一句需求，自动调用 Lux3D 生成、整理、交付 3D 资产。看完复制下面这行命令，你的 Agent 也能做到。",
+      "guide": "MCP 接入指南",
+      "placeholder": "示意画面 · 替换为正式视频",
+      "cmdTitle": "复制这行命令，你的 Agent 也能做到",
+      "cmdSub": "支持 Claude Code · Cursor · Codex · 任意 MCP 客户端",
+      "copy": "复制命令",
+      "copied": "已复制 ✓",
+      "listLabel": "选择案例视频",
+      "more": "还没有 API Key？",
+      "getKey": "免费获取",
+      "cases": {
+        "game": {
+          "tag": "游戏开发",
+          "title": "一句话，生成一整关的游戏道具",
+          "prompt": "为关卡 3 生成所有中世纪道具，导出 GLB 放进 assets/props"
+        },
+        "shop": {
+          "tag": "电商",
+          "title": "新品上架，3D 展示自动生成",
+          "prompt": "给今天上新的 12 个 SKU 生成 3D 模型和 AR 预览"
+        },
+        "print": {
+          "tag": "3D 打印",
+          "title": "宠物照片变成可打印的手办",
+          "prompt": "把这张柯基照片做成 8cm 高的可打印手办，检查水密性"
+        },
+        "film": {
+          "tag": "影视与 AI 视频",
+          "title": "固定资产，拍出一组连贯镜头",
+          "prompt": "用这个机器人资产生成全景、中景、特写三个镜头"
+        }
+      },
+      "note": "视频为占位画面，案例、包名和命令为示意，正式内容以公司提供的视频和开发者文档为准。"
     }
   },
   "footer": {
