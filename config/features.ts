@@ -8,15 +8,11 @@ import type { AssetId } from './assets';
  * to replace the coded workspace mock — no component changes needed.
  */
 export interface FeatureTab {
-  id: 'imageTo3d' | 'textTo3d' | 'multiView' | 'rigging';
+  id: 'imageTo3d' | 'multiView' | 'rigging';
   output: AssetId;
   /** Thumbnail shown when live 3D isn't available. */
   outputThumb: string;
-  input:
-    | { kind: 'image'; thumb: string }
-    | { kind: 'text' }
-    | { kind: 'views'; thumbs: string[] }
-    | { kind: 'rig' };
+  input: { kind: 'image'; thumb: string } | { kind: 'views'; thumbs: string[] } | { kind: 'rig' };
   stats: string;
   screenshot?: string;
 }
@@ -28,13 +24,6 @@ export const featureTabs: FeatureTab[] = [
     outputThumb: 'gallery-corgi',
     input: { kind: 'image', thumb: 'gallery-corgi' },
     stats: '12.4k · PBR · 58s',
-  },
-  {
-    id: 'textTo3d',
-    output: 'robot',
-    outputThumb: 'gallery-robot',
-    input: { kind: 'text' },
-    stats: '8.1k · PBR · 41s',
   },
   {
     id: 'multiView',

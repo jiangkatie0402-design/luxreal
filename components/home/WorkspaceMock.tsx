@@ -117,12 +117,6 @@ function InputSlot({ tab }: { tab: FeatureTab }) {
         ))}
       </div>
     );
-  if (input.kind === 'text')
-    return (
-      <p className="rounded border border-line bg-surface-2 p-2.5 leading-relaxed text-text">
-        {t('prompt')}
-      </p>
-    );
   return (
     <div className="flex items-center gap-2 rounded border border-line bg-surface-2 p-2">
       <div className="relative size-12 shrink-0">

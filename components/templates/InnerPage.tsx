@@ -12,7 +12,6 @@ import { StageCard } from './StageCard';
 
 const HERO_ASSET: Partial<Record<string, AssetId>> = {
   imageTo3d: 'dog',
-  textTo3d: 'robot',
   multiView: 'chest',
   texture: 'vase',
   remesh: 'rock',

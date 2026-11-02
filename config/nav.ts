@@ -13,16 +13,7 @@ export const mainNav: NavEntry[] = [
   {
     type: 'menu',
     key: 'create',
-    items: [
-      'imageTo3d',
-      'textTo3d',
-      'multiView',
-      'texture',
-      'remesh',
-      'split',
-      'rigging',
-      'animation',
-    ],
+    items: ['imageTo3d', 'multiView', 'texture', 'remesh', 'split', 'rigging', 'animation'],
   },
   {
     type: 'menu',
@@ -48,7 +39,7 @@ export const footerColumns: {
     key: 'product',
     items: [
       { id: 'imageTo3d' },
-      { id: 'textTo3d' },
+
       { id: 'texture' },
       { id: 'rigging' },
       { href: '/pricing', label: 'pricing' },

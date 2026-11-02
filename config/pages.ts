@@ -23,7 +23,6 @@ const p = (id: string, path: string, template: PageTemplate, group: PageGroup): 
 export const pages: PageDef[] = [
   p('create', 'create', 'overview', 'create'),
   p('imageTo3d', 'create/image-to-3d', 'feature', 'create'),
-  p('textTo3d', 'create/text-to-3d', 'feature', 'create'),
   p('multiView', 'create/multi-view', 'feature', 'create'),
   p('texture', 'create/texture', 'feature', 'create'),
   p('remesh', 'create/remesh', 'feature', 'create'),

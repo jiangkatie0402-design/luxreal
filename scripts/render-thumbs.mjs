@@ -13,7 +13,8 @@ const browser = await chromium.launch({
 const page = await browser.newPage({ viewport: { width: 1600, height: 1200 } });
 await page.goto(`${base}/zh/dev/thumbs`, { waitUntil: 'load', timeout: 120000 });
 await page.addStyleTag({
-  content: 'header,nextjs-portal{display:none!important} html,body{background:transparent!important}',
+  content:
+    'header,nextjs-portal{display:none!important} html,body{background:transparent!important}',
 });
 await page.waitForSelector('[data-thumb] canvas');
 await page.waitForTimeout(6000);

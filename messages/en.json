@@ -1,7 +1,7 @@
 {
   "meta": {
     "siteTitle": "Lux3D · Turn one photo into a 3D model with real materials",
-    "siteDescription": "Lux3D is an AI-native 3D generation and creation platform. Upload an image or write a sentence to get 3D assets with real PBR materials — then edit, rig, animate, batch-generate and plug them into your workflow."
+    "siteDescription": "Lux3D is an AI-native 3D generation and creation platform. Upload an image to get 3D assets with real PBR materials — then edit, rig, animate, batch-generate and plug them into your workflow."
   },
   "common": {
     "skipToContent": "Skip to content",
@@ -48,18 +48,14 @@
       "eyebrow": "AI-native 3D generation",
       "titleA": "Snap something real.",
       "titleB": "Watch it come alive in 3D.",
-      "subtitle": "Upload a photo or write a sentence and get a 3D model with real PBR materials in seconds. Edit it, rig it, and use it in games, 3D printing, e-commerce and film.",
-      "tabImage": "Image to 3D",
-      "tabText": "Text to 3D",
+      "subtitle": "Upload a photo and get a 3D model with real PBR materials in seconds. Edit it, rig it, and use it in games, 3D printing, e-commerce and film.",
       "dropHint": "Drop an image here, or click to upload",
       "dropFormats": "PNG / JPG / WEBP, up to 10MB",
       "replace": "Replace image",
-      "promptLabel": "Describe the model you want",
-      "promptPlaceholder": "e.g. A corgi with a red collar, sitting with its head tilted, realistic",
       "generate": "Generate for free",
       "errorType": "Only PNG, JPG or WEBP images are supported",
       "errorSize": "Images must be 10MB or smaller",
-      "errorEmpty": "Upload an image or enter a description first",
+      "errorEmpty": "Upload an image first",
       "perks": "No install · Free daily credits · Export GLB / FBX / OBJ / USDZ / STL",
       "scroll": "See how it works",
       "stageLabel": "A placeholder dog being generated into a 3D model: a generation slice sweeps upward, finished materials below it, soft gaussian particles and wireframe above.",
@@ -67,7 +63,8 @@
       "statusDone": "Done",
       "chipInput": "Input: 1 photo",
       "chipFaces": "12.4k faces · quads",
-      "chipMaterial": "PBR material · 4K"
+      "chipMaterial": "PBR material · 4K",
+      "inputTitle": "Image to 3D"
     },
     "how": {
       "eyebrow": "How it works",
@@ -75,8 +72,8 @@
       "subtitle": "No modeling skills needed. Lux3D hides modeling, UV unwrapping, texturing and rigging behind a single click.",
       "steps": {
         "upload": {
-          "title": "Upload or describe",
-          "desc": "One photo, a few angles, or a single sentence. A quick phone snap is enough."
+          "title": "Upload a photo",
+          "desc": "One photo, or a few angles. A quick phone snap is enough."
         },
         "generate": {
           "title": "AI generates",
@@ -102,11 +99,9 @@
       "learnMore": "Learn more",
       "cta": "Start creating",
       "mockLabel": "Lux3D workspace preview: {feature}",
-      "prompt": "A vintage tin toy robot with blue arms and an antenna, realistic materials",
       "rigSource": "Corgi · generated model",
       "input": {
         "image": "Image",
-        "text": "Prompt",
         "views": "Multi-view (4)",
         "rig": "Model"
       },
@@ -130,16 +125,6 @@
             "Automatic background removal — a phone snap is enough",
             "Base color, roughness, metalness and normal as separate maps",
             "Export straight to your printer or game engine"
-          ]
-        },
-        "textTo3d": {
-          "tab": "Text to 3D",
-          "title": "Write a sentence, get the model you want",
-          "desc": "Describe shape, style and material in plain language. Get several candidates at once, then refine the one you like.",
-          "points": [
-            "Prompts in English or Chinese",
-            "Control style, material and pose separately",
-            "Results stay editable and retexturable"
           ]
         },
         "multiView": {
@@ -308,7 +293,7 @@
     "community": {
       "eyebrow": "Community",
       "title": "What people are making with Lux3D",
-      "subtitle": "Every piece started as a photo or a sentence. Hover to see them turn.",
+      "subtitle": "Every piece started as a photo. Hover to see them turn.",
       "viewAll": "Open the gallery",
       "likes": "{count} likes",
       "by": "by {author}",
@@ -348,7 +333,7 @@
         },
         "q2": {
           "q": "Do I need to know 3D modeling?",
-          "a": "No. Upload an image or write a sentence. Pros can keep going in the editor with remeshing, retexturing and rigging."
+          "a": "No. Upload an image. Pros can keep going in the editor with remeshing, retexturing and rigging."
         },
         "q3": {
           "q": "Which formats can I export?",
@@ -416,7 +401,7 @@
       "outputLabel": "3D result",
       "howTitle": "How to use it",
       "steps": [
-        "Upload an image or enter a description",
+        "Upload an image",
         "Pick a version and representation, then generate",
         "Preview, edit and export"
       ],
@@ -522,15 +507,11 @@
   "pages": {
     "create": {
       "title": "Create",
-      "desc": "Every 3D creation tool, starting from an image or a sentence."
+      "desc": "Every 3D creation tool, starting from a single image."
     },
     "imageTo3d": {
       "title": "Image to 3D",
       "desc": "Turn one photo into a 3D model with real materials."
-    },
-    "textTo3d": {
-      "title": "Text to 3D",
-      "desc": "Describe it in a sentence, get the model you want."
     },
     "multiView": {
       "title": "Multi-view",
