@@ -60,19 +60,15 @@ export function WorldHero() {
       />
 
       <div className="pointer-events-none relative mx-auto flex h-full max-w-[1600px] flex-col justify-between px-5 pb-8 pt-[calc(var(--header-h)+1.5rem)] md:px-10 lg:flex-row lg:items-center lg:pb-0 lg:pt-0">
-        {/* left: the idea */}
-        <div className="max-w-[460px] [text-shadow:0_2px_24px_rgba(0,0,0,0.6)]">
-          <p className="text-sm font-medium text-[#9cc2ff]">{t('welcome')}</p>
-          <h1
-            id="hero-title"
-            className="mt-3 font-display text-[clamp(2.6rem,5vw,4.6rem)] font-bold leading-[1.02] tracking-tight"
-          >
-            {t('titleA')}
-            <br />
-            <span className="text-[#8fb8ff]">{t('titleB')}</span>
-          </h1>
-          <p className="mt-5 hidden text-lg leading-relaxed text-white/80 sm:block">{t('lead')}</p>
-        </div>
+        {/* top-left: the title alone, in the empty sky above the world */}
+        <h1
+          id="hero-title"
+          className="absolute left-5 top-[calc(var(--header-h)+6vh)] text-[clamp(1.75rem,2.4vw,2.5rem)] font-medium leading-[1.28] tracking-[-0.01em] md:left-10 [text-shadow:0_2px_20px_rgba(0,0,0,0.65)]"
+        >
+          {t('titleA')}
+          <span className="block text-[#8fb8ff]">{t('titleB')}</span>
+        </h1>
+        <span aria-hidden className="lg:flex-1" />
 
         {/* right: live status */}
         <div className="hidden w-full max-w-[320px] sm:block lg:text-right">
