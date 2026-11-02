@@ -198,3 +198,29 @@
 .cover-caption {
   animation: story-in var(--dur-slow) var(--ease-out) both;
 }
+
+/* Core capabilities demo */
+@keyframes core-float {
+  50% {
+    transform: translateY(-6px);
+  }
+}
+.core-float {
+  animation: core-float 3.2s ease-in-out infinite;
+}
+@keyframes core-particle {
+  0% {
+    opacity: 0;
+    transform: translateY(6px);
+  }
+  40% {
+    opacity: 0.9;
+  }
+  100% {
+    opacity: 0;
+    transform: translateY(-18px);
+  }
+}
+.core-particle {
+  animation: core-particle 1.1s ease-out infinite;
+}

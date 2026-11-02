@@ -82,6 +82,54 @@
         "errorEmpty": "先选一张照片"
       }
     },
+    "core": {
+      "eyebrow": "核心能力",
+      "title": "一张图，或一句话，实时生成 3D 模型",
+      "cta": "免费试试",
+      "tabs": {
+        "image": {
+          "tab": "图片生成 3D",
+          "title": "上传一张照片，几十秒得到完整 3D 模型",
+          "desc": "补全看不见的侧面和背面，输出干净拓扑和真实的 PBR 材质。",
+          "points": [
+            "手机随手拍就够，自动去背景",
+            "颜色、粗糙度、金属度、法线分通道输出",
+            "导出 GLB / FBX / OBJ / USDZ / STL"
+          ]
+        },
+        "text": {
+          "tab": "文字生成 3D",
+          "title": "写一句话，得到你想要的模型",
+          "desc": "用自然语言描述形状、风格和材质，Lux3D 直接生成带材质的 3D 模型。",
+          "points": [
+            "支持中英文提示词",
+            "风格、材质、姿态都能描述",
+            "生成后可继续编辑、重贴图和绑骨"
+          ]
+        }
+      },
+      "demo": {
+        "imageLabel": "参考图",
+        "promptLabel": "提示词",
+        "dropHint": "拖入一张图片",
+        "promptHint": "描述你想要的模型…",
+        "prompt": "一个复古铁皮玩具机器人，奶白色身体，蓝色手臂，头顶有天线，眼睛会发光",
+        "uploading": "上传中",
+        "uploaded": "已上传",
+        "model": "模型版本",
+        "standard": "标准",
+        "turbo": "极速",
+        "output": "输出表征",
+        "generate": "生成",
+        "generatingShort": "生成中…",
+        "idle": "等待输入",
+        "generating": "生成中 {p}%",
+        "done": "完成",
+        "empty": "生成结果会出现在这里",
+        "faces": "面",
+        "download": "下载 GLB"
+      }
+    },
     "features": {
       "eyebrow": "创作能力",
       "title": "一个工作台，从输入到可用的 3D",

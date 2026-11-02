@@ -82,6 +82,54 @@
         "errorEmpty": "Pick a photo first"
       }
     },
+    "core": {
+      "eyebrow": "Core capabilities",
+      "title": "From one image or one sentence to a 3D model, live",
+      "cta": "Try it free",
+      "tabs": {
+        "image": {
+          "tab": "Image to 3D",
+          "title": "Upload a photo, get a complete 3D model in seconds",
+          "desc": "The unseen sides are filled in, with clean topology and real PBR materials.",
+          "points": [
+            "A phone snap is enough — background removed automatically",
+            "Base color, roughness, metalness and normal as separate maps",
+            "Export GLB / FBX / OBJ / USDZ / STL"
+          ]
+        },
+        "text": {
+          "tab": "Text to 3D",
+          "title": "Write a sentence, get the model you want",
+          "desc": "Describe shape, style and material in plain language and Lux3D generates a textured 3D model.",
+          "points": [
+            "Prompts in English or Chinese",
+            "Describe style, material and pose",
+            "Keep editing, retexturing and rigging afterwards"
+          ]
+        }
+      },
+      "demo": {
+        "imageLabel": "Reference image",
+        "promptLabel": "Prompt",
+        "dropHint": "Drop an image",
+        "promptHint": "Describe the model you want…",
+        "prompt": "A vintage tin toy robot, cream body, blue arms, an antenna on top and glowing eyes",
+        "uploading": "Uploading",
+        "uploaded": "Uploaded",
+        "model": "Model",
+        "standard": "Standard",
+        "turbo": "Turbo",
+        "output": "Output",
+        "generate": "Generate",
+        "generatingShort": "Generating…",
+        "idle": "Waiting for input",
+        "generating": "Generating {p}%",
+        "done": "Done",
+        "empty": "Your model will appear here",
+        "faces": "faces",
+        "download": "Download GLB"
+      }
+    },
     "features": {
       "eyebrow": "Creation tools",
       "title": "One workspace, from input to a usable 3D asset",
