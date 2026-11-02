@@ -44,54 +44,51 @@
     "viewAll": "View all"
   },
   "home": {
-    "hero": {
-      "eyebrow": "AI-native 3D generation",
-      "titleA": "Snap something real.",
-      "titleB": "Watch it come alive in 3D.",
-      "subtitle": "Upload a photo and get a 3D model with real PBR materials in seconds. Edit it, rig it, and use it in games, 3D printing, e-commerce and film.",
-      "dropHint": "Drop an image here, or click to upload",
-      "dropFormats": "PNG / JPG / WEBP, up to 10MB",
-      "replace": "Replace image",
-      "generate": "Generate for free",
-      "errorType": "Only PNG, JPG or WEBP images are supported",
-      "errorSize": "Images must be 10MB or smaller",
-      "errorEmpty": "Upload an image first",
-      "perks": "No install · Free daily credits · Export GLB / FBX / OBJ / USDZ / STL",
-      "scroll": "See how it works",
-      "stageLabel": "A placeholder dog being generated into a 3D model: a generation slice sweeps upward, finished materials below it, soft gaussian particles and wireframe above.",
-      "statusGenerating": "Generating",
-      "statusDone": "Done",
-      "chipInput": "Input: 1 photo",
-      "chipFaces": "12.4k faces · quads",
-      "chipMaterial": "PBR material · 4K",
-      "inputTitle": "Image to 3D"
-    },
-    "how": {
-      "eyebrow": "How it works",
-      "title": "Three steps from a photo to a usable 3D asset",
-      "subtitle": "No modeling skills needed. Lux3D hides modeling, UV unwrapping, texturing and rigging behind a single click.",
-      "steps": {
-        "upload": {
-          "title": "Upload a photo",
-          "desc": "One photo, or a few angles. A quick phone snap is enough."
+    "story": {
+      "eyebrow": "Lux3D · AI-native 3D generation",
+      "titleA": "Create your world, ",
+      "titleB": "starting here",
+      "subtitle": "Snap something near you and it becomes a 3D model — print it for your desk, or set it loose in your game.",
+      "primary": "Upload a photo to start",
+      "secondary": "Get API",
+      "stageRole": "demo",
+      "tabsLabel": "Four stages",
+      "pause": "Pause demo",
+      "play": "Play demo",
+      "stages": {
+        "capture": {
+          "tab": "Snap",
+          "title": "Snap something near you",
+          "desc": "A phone photo is all it takes."
         },
         "generate": {
-          "title": "AI generates",
-          "desc": "Within seconds it fills in the unseen sides and outputs clean topology with full PBR materials."
+          "tab": "Generate",
+          "title": "Upload it, get a 3D model in seconds",
+          "desc": "The unseen back is filled in, with real PBR materials."
         },
-        "refine": {
-          "title": "Edit and export",
-          "desc": "Retexture, remesh, split parts, auto-rig — then export to Blender, Unity, Unreal or your printer."
+        "print": {
+          "tab": "3D print",
+          "title": "Print it for your desk",
+          "desc": "Watertight models, ready to slice as STL."
+        },
+        "game": {
+          "tab": "Into your game",
+          "title": "Drop it into your game",
+          "desc": "Auto-rigged and animated, straight into your engine."
         }
       },
-      "viewerLabel": "View mode",
-      "modes": {
-        "clay": "Clay",
-        "wireframe": "Wireframe",
-        "pbr": "PBR material"
-      },
-      "stageLabel": "A rotatable 3D stage showing the same model as clay, wireframe and PBR material.",
-      "exit": "See all creation tools"
+      "overlay": {
+        "photo": "Photo · 1×",
+        "uploaded": "Photo uploaded",
+        "generating": "Generating 3D model",
+        "generated": "Done · PBR material · 12.4k faces",
+        "printing": "3D printing",
+        "printed": "Print finished · PLA",
+        "petName": "Corgi",
+        "level": "Lv.1",
+        "quest": "Quest: find the chest in the garden",
+        "rig": "Rigged · run cycle"
+      }
     },
     "features": {
       "eyebrow": "Creation tools",

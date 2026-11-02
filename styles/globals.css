@@ -117,3 +117,68 @@
     animation: none;
   }
 }
+
+/* Homepage story overlays. Timed to each stage's 3D animation; paused with the stage. */
+@keyframes story-in {
+  from {
+    opacity: 0;
+    transform: translateY(6px);
+  }
+}
+@keyframes story-flash {
+  0%,
+  100% {
+    opacity: 0;
+  }
+  8% {
+    opacity: 0.9;
+  }
+}
+@keyframes story-focus {
+  0% {
+    transform: scale(1.25);
+    opacity: 0;
+  }
+  40% {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+@keyframes story-polaroid {
+  from {
+    opacity: 0;
+    transform: translate(-30%, -40%) rotate(-12deg) scale(1.6);
+  }
+}
+@keyframes story-fill {
+  from {
+    width: 0;
+  }
+}
+@keyframes story-out {
+  to {
+    opacity: 0;
+  }
+}
+.story-in {
+  animation: story-in var(--dur-slow) var(--ease-out) both;
+}
+.story-flash {
+  animation: story-flash 700ms ease-out both;
+}
+.story-focus {
+  animation: story-focus 1200ms var(--ease-out) both;
+}
+.story-polaroid {
+  animation: story-polaroid 700ms var(--ease-snap) both;
+}
+.story-fill {
+  animation: story-fill linear both;
+}
+.story-out {
+  animation: story-out 400ms ease-out both;
+}
+.story-paused *,
+.story-paused *::before {
+  animation-play-state: paused !important;
+}

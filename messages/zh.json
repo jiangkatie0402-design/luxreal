@@ -44,54 +44,51 @@
     "viewAll": "查看全部"
   },
   "home": {
-    "hero": {
-      "eyebrow": "AI 原生 3D 生成平台",
-      "titleA": "拍下身边的东西，",
-      "titleB": "让它在 3D 里活过来",
-      "subtitle": "上传一张照片，几十秒得到带真实 PBR 材质的 3D 模型。可编辑、可绑骨动画，直接用于游戏、3D 打印、电商与影视。",
-      "dropHint": "拖入一张图片，或点击上传",
-      "dropFormats": "PNG / JPG / WEBP，最大 10MB",
-      "replace": "更换图片",
-      "generate": "免费生成",
-      "errorType": "只支持 PNG、JPG 或 WEBP 格式的图片",
-      "errorSize": "图片不能超过 10MB",
-      "errorEmpty": "请先上传一张图片",
-      "perks": "无需安装 · 每日免费额度 · 导出 GLB / FBX / OBJ / USDZ / STL",
-      "scroll": "向下看看怎么做",
-      "stageLabel": "一只占位小狗正在被生成为 3D 模型：生成切面从下往上扫过，切面下方是完成的材质，上方是柔和的高斯颗粒与线框。",
-      "statusGenerating": "生成中",
-      "statusDone": "已完成",
-      "chipInput": "输入：1 张照片",
-      "chipFaces": "12.4k 面 · 四边面",
-      "chipMaterial": "PBR 材质 · 4K",
-      "inputTitle": "图片生成 3D"
-    },
-    "how": {
-      "eyebrow": "怎么做",
-      "title": "三步，从一张照片到能用的 3D 资产",
-      "subtitle": "不用懂建模。Lux3D 把建模、展 UV、贴图、绑骨这些专业步骤都藏在了一次点击后面。",
-      "steps": {
-        "upload": {
-          "title": "上传照片",
-          "desc": "一张照片，或几张多角度图。手机随手拍就够。"
+    "story": {
+      "eyebrow": "Lux3D · AI 原生 3D 生成",
+      "titleA": "从这里，",
+      "titleB": "创造你的世界",
+      "subtitle": "拍下身边的一样东西，它就能变成 3D 模型：打印出来摆在桌上，或者跑进你的游戏里。",
+      "primary": "上传照片，开始创作",
+      "secondary": "获取 API",
+      "stageRole": "演示",
+      "tabsLabel": "四个阶段",
+      "pause": "暂停演示",
+      "play": "播放演示",
+      "stages": {
+        "capture": {
+          "tab": "拍下",
+          "title": "随手拍下身边的它",
+          "desc": "一张手机照片就够了，不需要专业设备。"
         },
         "generate": {
-          "title": "AI 生成",
-          "desc": "几十秒内补全看不见的侧面与背面，输出干净拓扑和完整 PBR 材质。"
+          "tab": "生成 3D",
+          "title": "上传，几十秒生成 3D 模型",
+          "desc": "补全看不见的背面，带真实的 PBR 材质。"
         },
-        "refine": {
-          "title": "编辑与导出",
-          "desc": "重贴图、重拓扑、拆部件、自动绑骨，然后导出到 Blender、Unity、UE 或打印机。"
+        "print": {
+          "tab": "3D 打印",
+          "title": "打印出来，摆上书桌",
+          "desc": "水密模型，导出 STL 就能切片打印。"
+        },
+        "game": {
+          "tab": "放进游戏",
+          "title": "放进游戏，让它跑起来",
+          "desc": "自动绑骨和动画，直接导入游戏引擎。"
         }
       },
-      "viewerLabel": "查看模式",
-      "modes": {
-        "clay": "白模",
-        "wireframe": "线框",
-        "pbr": "PBR 材质"
-      },
-      "stageLabel": "可旋转的 3D 展台，展示同一个模型的白模、线框与 PBR 材质三种状态。",
-      "exit": "查看全部创作功能"
+      "overlay": {
+        "photo": "照片 · 1×",
+        "uploaded": "照片已上传",
+        "generating": "正在生成 3D 模型",
+        "generated": "完成 · PBR 材质 · 12.4k 面",
+        "printing": "3D 打印中",
+        "printed": "打印完成 · PLA",
+        "petName": "柯基",
+        "level": "Lv.1",
+        "quest": "任务：在花园里找到宝箱",
+        "rig": "已绑骨 · 奔跑动画"
+      }
     },
     "features": {
       "eyebrow": "创作能力",

@@ -20,6 +20,8 @@ export interface GenerationSliceProps {
   /** Show the translucent slice plane itself. Default true. */
   showPlane?: boolean;
   particleCount?: number;
+  /** Use this material on the finished side instead of the model's own (e.g. printed PLA). */
+  solidMaterial?: THREE.Material;
 }
 
 const AXES = {
@@ -79,6 +81,7 @@ export function GenerationSlice({
   showPlane = true,
   sliceColor,
   particleCount,
+  solidMaterial,
 }: GenerationSliceProps) {
   const gl = useThree((s) => s.gl);
   const tokenColor = useToken('--slice-color', '#5ea8ff');
@@ -144,7 +147,7 @@ export function GenerationSlice({
     for (const m of meshes) {
       const orig = (m.userData.original ?? m.material) as THREE.Material;
       originals.set(m, orig);
-      const c = orig.clone();
+      const c = (solidMaterial ?? orig).clone();
       c.clippingPlanes = [planes.solid];
       patchGlow(c, uniforms);
       m.userData.original = c;
@@ -176,7 +179,7 @@ export function GenerationSlice({
       state.current = { meshes: [], wire: [], cloud: null };
     };
     // palette identity changes with theme; rebuild then.
-  }, [target, planes, uniforms, wireMat, count, palette]);
+  }, [target, planes, uniforms, wireMat, count, palette, solidMaterial]);
 
   useFrame(({ clock }) => {
     const { meshes, wire, cloud } = state.current;

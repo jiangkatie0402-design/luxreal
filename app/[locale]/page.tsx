@@ -4,9 +4,8 @@ import { Community } from '@/components/home/Community';
 import { FAQ } from '@/components/home/FAQ';
 import { FeatureTabs } from '@/components/home/FeatureTabs';
 import { FinalCTA } from '@/components/home/FinalCTA';
-import { Hero } from '@/components/home/Hero';
-import { HowItWorks } from '@/components/home/HowItWorks';
 import { Scenarios } from '@/components/home/Scenarios';
+import { StoryHero } from '@/components/home/story/StoryHero';
 import { Trust } from '@/components/home/Trust';
 
 export default async function HomePage({ params }: { params: Promise<{ locale: string }> }) {
@@ -14,8 +13,7 @@ export default async function HomePage({ params }: { params: Promise<{ locale: s
   setRequestLocale(locale);
   return (
     <>
-      <Hero />
-      <HowItWorks />
+      <StoryHero />
       <FeatureTabs />
       <Scenarios />
       <Advantages />
