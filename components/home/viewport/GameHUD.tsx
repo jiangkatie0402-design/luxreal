@@ -8,6 +8,27 @@ const HITS = [
   { at: 0.78, n: '4,021', crit: true, x: 63, y: 41 },
 ];
 
+const KEYS = ['Q', 'E', 'R', 'F'];
+const SKILLS = [
+  'M5 19 19 5M14 5h5v5M5 15l4 4', // sword
+  'M12 3 5 6v6c0 4 3 7 7 9 4-2 7-5 7-9V6z', // shield
+  'M13 2 4 14h7l-1 8 9-12h-7z', // bolt
+  'M4 12h10M10 6l6 6-6 6M18 6v12', // dash
+];
+
+function Bar({ pct, fill, h, w = 'w-full' }: { pct: number; fill: string; h: string; w?: string }) {
+  return (
+    <span
+      className={`relative block ${h} ${w} overflow-hidden rounded-full bg-[rgba(8,10,16,0.7)] shadow-[inset_0_0_0_1px_rgba(255,255,255,0.08)]`}
+    >
+      <span
+        className="absolute inset-y-0 left-0 rounded-full transition-[width] duration-300"
+        style={{ width: `${pct}%`, background: fill }}
+      />
+    </span>
+  );
+}
+
 /** Game overlay for the boss-fight scene: boss bar, player bars, skills, slashes and damage numbers. */
 export function GameHUD({ progress, reduced }: { progress: number; reduced: boolean }) {
   const t = useTranslations('home.viewport.hud');
@@ -17,21 +38,37 @@ export function GameHUD({ progress, reduced }: { progress: number; reduced: bool
   return (
     <div aria-hidden className="pointer-events-none absolute inset-0 z-[1]">
       {/* boss bar */}
-      <div className="absolute left-1/2 bottom-[calc(6rem+250px)] md:bottom-auto md:top-[calc(var(--header-h)+18px)] w-[min(560px,80vw)] -translate-x-1/2 text-center">
-        <p className="font-serif text-sm tracking-[0.3em] text-[#f3e2b8] [text-shadow:0_2px_8px_#000] md:text-base">
-          {t('boss')}
-        </p>
-        <div className="relative mt-2 h-2.5 overflow-hidden rounded-sm border border-[#c9a96a]/70 bg-black/70 md:h-3">
-          <span
-            className="absolute inset-y-0 left-0 bg-[#f7d6a0] transition-[width] duration-700"
-            style={{ width: `${hp + 6}%` }}
-          />
-          <span
-            className="absolute inset-y-0 left-0 bg-[linear-gradient(#e0473f,#9b1c1c)] transition-[width] duration-150"
-            style={{ width: `${hp}%` }}
-          />
+      <div className="absolute left-1/2 bottom-[calc(6rem+250px)] w-[min(720px,86vw)] -translate-x-1/2 md:bottom-auto md:top-[calc(var(--header-h)+22px)]">
+        <div className="flex items-end justify-between px-1">
+          <p className="flex items-baseline gap-3 [text-shadow:0_1px_10px_rgba(0,0,0,0.9)]">
+            <span className="font-serif text-[15px] tracking-[0.35em] text-[#f1e6cf] md:text-lg">
+              {t('boss')}
+            </span>
+            <span className="hidden font-mono text-[10px] uppercase tracking-[0.25em] text-[#e0473f]/90 sm:inline">
+              {t('phase')}
+            </span>
+          </p>
+          <span className="font-mono text-[11px] tabular-nums text-white/60">{hp}%</span>
         </div>
-        <p className="mt-1 text-right font-mono text-[10px] text-white/70">{t('phase')}</p>
+        <div className="relative mt-2 flex items-center">
+          <span className="h-px w-6 bg-gradient-to-l from-[#d9c39a]/70 to-transparent md:w-10" />
+          <span className="mx-1 size-1.5 rotate-45 border border-[#d9c39a]/80" />
+          <div className="relative h-[7px] flex-1 overflow-hidden rounded-full bg-[rgba(10,6,8,0.72)] shadow-[inset_0_0_0_1px_rgba(217,195,154,0.28),0_0_24px_rgba(0,0,0,0.6)]">
+            <span
+              className="absolute inset-y-0 left-0 rounded-full bg-[rgba(255,236,200,0.55)] transition-[width] delay-300 duration-700 ease-out"
+              style={{ width: `${hp}%` }}
+            />
+            <span
+              className="absolute inset-y-0 left-0 rounded-full bg-[linear-gradient(90deg,#5e0f14,#b3232a_60%,#ff5a4a)] shadow-[0_0_12px_rgba(255,70,60,0.55)] transition-[width] duration-150"
+              style={{ width: `${Math.max(hp - 6, 0)}%` }}
+            >
+              <span className="absolute inset-x-0 top-0 h-px bg-white/35" />
+            </span>
+            <span className="absolute inset-y-0 left-1/2 w-px bg-black/70" />
+          </div>
+          <span className="mx-1 size-1.5 rotate-45 border border-[#d9c39a]/80" />
+          <span className="h-px w-6 bg-gradient-to-r from-[#d9c39a]/70 to-transparent md:w-10" />
+        </div>
       </div>
 
       {/* slashes + hit flash */}
@@ -61,11 +98,11 @@ export function GameHUD({ progress, reduced }: { progress: number; reduced: bool
               </svg>
               <span className="hud-flash absolute inset-0 bg-white" />
               <span
-                className={`hud-dmg absolute font-black italic [text-shadow:0_3px_0_#000,0_0_18px_rgba(0,0,0,0.8)] ${h.crit ? 'text-4xl text-[#ffd34d] md:text-6xl' : 'text-2xl text-white md:text-4xl'}`}
+                className={`hud-dmg absolute font-semibold tabular-nums tracking-tight [text-shadow:0_2px_12px_rgba(0,0,0,0.85)] ${h.crit ? 'text-3xl text-[#ffd98a] md:text-5xl' : 'text-xl text-white/95 md:text-3xl'}`}
                 style={{ left: `${h.x}%`, top: `${h.y}%` }}
               >
                 {h.crit && (
-                  <span className="mr-2 align-middle text-base not-italic text-[#ff7a45] md:text-xl">
+                  <span className="mr-2 align-middle font-mono text-[11px] uppercase tracking-[0.2em] text-[#ff8a5c] md:text-xs">
                     {t('crit')}
                   </span>
                 )}
@@ -76,39 +113,50 @@ export function GameHUD({ progress, reduced }: { progress: number; reduced: bool
         )}
 
       {/* player HUD */}
-      <div className="absolute bottom-[calc(2rem+170px)] left-5 hidden w-[260px] md:left-8 xl:block">
-        <div className="flex items-center gap-3">
-          <span className="grid size-12 place-items-center rounded-full border-2 border-[#c9a96a]/80 bg-black/70 font-serif text-lg text-[#f3e2b8]">
-            {t('avatar')}
-          </span>
-          <div className="flex-1">
-            <p className="text-xs text-white/85 [text-shadow:0_1px_4px_#000]">{t('player')}</p>
-            <span className="mt-1 block h-2 overflow-hidden rounded-sm bg-black/70">
-              <span className="block h-full w-[78%] bg-[linear-gradient(#5ee08a,#1f9d55)]" />
-            </span>
-            <span className="mt-1 block h-1.5 overflow-hidden rounded-sm bg-black/70">
-              <span
-                className="block h-full bg-[linear-gradient(#7fb6ff,#2f6bff)] transition-[width] duration-300"
-                style={{ width: `${90 - (landed % 2) * 25}%` }}
-              />
-            </span>
-          </div>
+      <div className="absolute bottom-[calc(2rem+186px)] left-5 hidden w-[280px] md:left-8 xl:block">
+        <p className="flex items-baseline gap-2 [text-shadow:0_1px_6px_#000]">
+          <span className="text-[13px] font-medium tracking-wide text-white/90">{t('player')}</span>
+        </p>
+        <div className="mt-2 space-y-1.5">
+          <Bar pct={78} fill="linear-gradient(90deg,#8a1c22,#e04a3f)" h="h-[6px]" />
+          <Bar
+            pct={90 - (landed % 2) * 28}
+            fill="linear-gradient(90deg,#2a8f5e,#7be0a0)"
+            h="h-[3px]"
+            w="w-[78%]"
+          />
         </div>
-        <div className="mt-3 flex gap-2">
-          {['Q', 'E', 'R', 'F'].map((key, i) => (
-            <span
-              key={key}
-              className={`relative grid size-10 place-items-center rounded-md border bg-black/65 font-mono text-xs ${i === landed % 4 ? 'border-[#7fd0ff] text-white shadow-[0_0_12px_rgba(127,208,255,0.6)]' : 'border-white/20 text-white/60'}`}
-            >
-              {key}
-              {i === 2 && (
-                <span
-                  className="absolute inset-0 rounded-md bg-black/60"
-                  style={{ clipPath: `inset(${k * 100}% 0 0 0)` }}
-                />
-              )}
-            </span>
-          ))}
+        <div className="mt-4 flex gap-2">
+          {SKILLS.map((d, i) => {
+            const active = i === landed % 4;
+            return (
+              <span
+                key={i}
+                className={`relative grid size-11 place-items-center overflow-hidden rounded-[10px] border bg-[rgba(8,12,22,0.62)] backdrop-blur-sm transition-colors ${active ? 'border-[#9cc8ff]/80 shadow-[0_0_16px_rgba(127,190,255,0.45),inset_0_0_12px_rgba(127,190,255,0.25)]' : 'border-white/12'}`}
+              >
+                <svg
+                  viewBox="0 0 24 24"
+                  className={`size-5 ${active ? 'text-white' : 'text-white/55'}`}
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="1.6"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                >
+                  <path d={d} />
+                </svg>
+                {i === 2 && (
+                  <span
+                    className="absolute inset-0 bg-black/55"
+                    style={{ clipPath: `inset(${k * 100}% 0 0 0)` }}
+                  />
+                )}
+                <span className="absolute bottom-0.5 right-1 font-mono text-[9px] text-white/50">
+                  {KEYS[i]}
+                </span>
+              </span>
+            );
+          })}
         </div>
       </div>
     </div>
