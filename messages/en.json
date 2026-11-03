@@ -892,6 +892,24 @@
         "chest": "Chest · chest.glb",
         "sneaker": "Sneaker · sneaker.glb",
         "ding": "Bronze ding · ding.glb"
+      },
+      "scenesLabel": "From model to world",
+      "scenes": {
+        "model": {
+          "label": "Generate the 3D model",
+          "tag": "Lux3D Viewer · PBR",
+          "alt": ""
+        },
+        "print": {
+          "label": "3D-print a figurine",
+          "tag": "3D print · resin · hand-painted",
+          "alt": "A 3D-printed qilin figurine on a desk next to a printer"
+        },
+        "game": {
+          "label": "Into the game · boss fight",
+          "tag": "In-game · boss fight",
+          "alt": "A player with a glowing sword fighting a giant qilin boss"
+        }
       }
     }
   },

@@ -26,6 +26,12 @@ type Mode = 'wire' | 'clay' | 'pbr';
 const MODES: Mode[] = ['wire', 'clay', 'pbr'];
 const GEN_MS = 2600;
 const HOLD_MS = 4200;
+const SCENE_MS = [GEN_MS + HOLD_MS, 5000, 5000];
+const SCENES = [
+  { id: 'model', img: null, pos: '' },
+  { id: 'print', img: '/community/qilin-print.webp', pos: '62% 50%' },
+  { id: 'game', img: '/community/qilin-game.webp', pos: '58% 30%' },
+] as const;
 
 const gridMask =
   '[mask-image:var(--m)] [mask-position:bottom] [mask-repeat:no-repeat] [mask-size:contain] [background:radial-gradient(circle,rgba(225,240,255,1)_1.2px,transparent_1.9px)_0_0/12px_12px,repeating-linear-gradient(0deg,rgba(120,180,255,0.8)_0_1px,transparent_1px_12px),repeating-linear-gradient(90deg,rgba(120,180,255,0.8)_0_1px,transparent_1px_12px)]';
@@ -42,29 +48,34 @@ export function ViewportHero({ locale }: { locale: string }) {
   const brush = locale === 'zh' ? titleZh : titleEn;
   const m = MODELS[idx];
 
-  // generate on change, then hold, then advance (until the viewer takes over)
+  // One timeline: scene 0 generates the model and holds, then the same model is
+  // shown 3D-printed (scene 1) and fighting in a game (scene 2), then it loops.
+  const [scene, setScene] = useState(0);
+  const [sceneK, setSceneK] = useState(0);
+  const sceneStart = useRef(0);
   useEffect(() => {
     if (reduced) {
-      // eslint-disable-next-line react-hooks/set-state-in-effect -- static finished model
+      // eslint-disable-next-line react-hooks/set-state-in-effect -- static finished frame
       setGen(1);
       return;
     }
     let raf = 0;
-    const t0 = performance.now();
+    sceneStart.current = performance.now();
+    if (scene === 0) setGen(0);
     const tick = (now: number) => {
-      const k = (now - t0) / GEN_MS;
-      setGen(Math.min(k, 1));
-      if (k < 1) raf = requestAnimationFrame(tick);
+      const el = now - sceneStart.current;
+      if (scene === 0) setGen(Math.min(el / GEN_MS, 1));
+      const dur = SCENE_MS[scene];
+      setSceneK(Math.min(el / dur, 1));
+      if (auto && el >= dur) {
+        setScene((n) => (n + 1) % SCENE_MS.length);
+        return;
+      }
+      raf = requestAnimationFrame(tick);
     };
     raf = requestAnimationFrame(tick);
-    const next = auto
-      ? setTimeout(() => setIdx((i) => (i + 1) % MODELS.length), GEN_MS + HOLD_MS)
-      : undefined;
-    return () => {
-      cancelAnimationFrame(raf);
-      clearTimeout(next);
-    };
-  }, [idx, auto, reduced]);
+    return () => cancelAnimationFrame(raf);
+  }, [scene, idx, auto, reduced]);
 
   const eased = 1 - Math.pow(1 - gen, 2.4);
   const clayCut = Math.min(eased / 0.6, 1); // clay rises first
@@ -85,10 +96,12 @@ export function ViewportHero({ locale }: { locale: string }) {
 
   const pick = (i: number) => {
     setAuto(false);
-    if (i !== idx) {
-      setIdx(i);
-      setGen(0);
-    }
+    setScene(0);
+    if (i !== idx) setIdx(i);
+  };
+  const pickScene = (n: number) => {
+    setAuto(false);
+    setScene(n);
   };
 
   const modelStyle = {
@@ -230,6 +243,40 @@ export function ViewportHero({ locale }: { locale: string }) {
         </div>
       </div>
 
+      {/* ---------- scenes 2 & 3: the same model, printed and in a game ---------- */}
+      {SCENES.map(
+        (sc, n) =>
+          sc.img && (
+            <div
+              key={`${sc.id}-${scene === n}`}
+              aria-hidden={scene !== n}
+              className={`absolute inset-0 transition-opacity duration-500 ${scene === n ? 'opacity-100' : 'pointer-events-none opacity-0'}`}
+            >
+              {scene === n && (
+                <>
+                  <div className="vp-reveal absolute inset-0">
+                    <Image
+                      src={sc.img}
+                      alt={t(`scenes.${sc.id}.alt`)}
+                      fill
+                      style={{ objectPosition: sc.pos }}
+                      sizes="100vw"
+                      className={`object-cover ${reduced ? '' : 'cover-kenburns'}`}
+                    />
+                  </div>
+                  <span className="vp-reveal-line absolute inset-x-0 h-[2px] bg-[#9cc8ff] shadow-[0_0_24px_6px_rgba(94,168,255,0.85)]" />
+                  <div className="absolute inset-0 bg-[linear-gradient(90deg,rgba(5,8,15,0.85)_0%,rgba(5,8,15,0.35)_38%,transparent_60%),linear-gradient(0deg,rgba(5,8,15,0.9)_0%,transparent_35%)]" />
+                </>
+              )}
+            </div>
+          ),
+      )}
+      {scene !== 0 && (
+        <span className="absolute left-5 top-[calc(var(--header-h)+14px)] rounded bg-black/50 px-2 py-1 font-mono text-[11px] text-white/80 backdrop-blur md:left-8">
+          {t(`scenes.${SCENES[scene].id}.tag`)}
+        </span>
+      )}
+
       {/* ---------- title ---------- */}
       <div className="pointer-events-none absolute left-5 top-[calc(var(--header-h)+64px)] max-w-[440px] md:left-10 lg:top-[30%]">
         <h1
@@ -247,7 +294,9 @@ export function ViewportHero({ locale }: { locale: string }) {
       </div>
 
       {/* ---------- inspector ---------- */}
-      <aside className="absolute right-5 top-[30%] hidden w-[248px] rounded-2xl border border-white/10 bg-[rgba(11,19,34,0.72)] p-4 font-mono text-[11px] text-white/70 backdrop-blur-xl lg:block xl:right-10">
+      <aside
+        className={`absolute right-5 top-[30%] hidden w-[248px] transition-opacity duration-500 ${scene === 0 ? 'opacity-100' : 'pointer-events-none opacity-0'} rounded-2xl border border-white/10 bg-[rgba(11,19,34,0.72)] p-4 font-mono text-[11px] text-white/70 backdrop-blur-xl lg:block xl:right-10`}
+      >
         <p className="flex items-center justify-between text-white">
           <span className="text-[13px] font-semibold">{t(`models.${m.id}`)}</span>
           <span
@@ -314,6 +363,22 @@ export function ViewportHero({ locale }: { locale: string }) {
             </button>
           ))}
         </div>
+        <p className="mt-4 border-t border-white/10 pt-3 text-white/40">{t('outliner')}</p>
+        <div className="mt-2 grid grid-cols-4 gap-1.5" role="tablist" aria-label={t('outliner')}>
+          {MODELS.map((x, i) => (
+            <button
+              key={x.id}
+              type="button"
+              role="tab"
+              aria-selected={i === idx}
+              aria-label={t(`models.${x.id}`)}
+              onClick={() => pick(i)}
+              className={`relative aspect-square overflow-hidden rounded-lg border bg-black/30 transition-colors ${i === idx ? 'border-[#6FA8FF]' : 'border-white/10 hover:border-white/30'}`}
+            >
+              <Image src={x.src} alt="" fill sizes="48px" className="object-contain p-1" />
+            </button>
+          ))}
+        </div>
       </aside>
 
       {/* ---------- outliner + upload ---------- */}
@@ -340,29 +405,32 @@ export function ViewportHero({ locale }: { locale: string }) {
           </a>
         </div>
         <div
-          className="flex max-w-full items-center gap-2 overflow-x-auto px-1 pb-1"
+          className="flex w-full max-w-[760px] gap-3"
           role="tablist"
-          aria-label={t('outliner')}
+          aria-label={t('scenesLabel')}
         >
-          {MODELS.map((x, i) => (
+          {SCENES.map((sc, n) => (
             <button
-              key={x.id}
+              key={sc.id}
               type="button"
               role="tab"
-              aria-selected={i === idx}
-              aria-label={t(`models.${x.id}`)}
-              onClick={() => pick(i)}
-              className={`relative size-12 shrink-0 overflow-hidden rounded-xl border bg-[#0B1322]/80 transition-colors md:size-14 ${i === idx ? 'border-[#6FA8FF]' : 'border-white/10 hover:border-white/30'}`}
+              aria-selected={scene === n}
+              onClick={() => pickScene(n)}
+              className="group flex-1 text-left"
             >
-              <Image src={x.src} alt="" fill sizes="56px" className="object-contain p-1.5" />
-              {i === idx && (
-                <span className="absolute inset-x-1 bottom-0.5 h-0.5 rounded-full bg-[#6FA8FF]" />
-              )}
+              <span className="block h-[3px] overflow-hidden rounded-full bg-white/15">
+                <span
+                  className="block h-full rounded-full bg-[#6FA8FF]"
+                  style={{ width: `${n < scene ? 100 : n === scene ? sceneK * 100 : 0}%` }}
+                />
+              </span>
+              <span
+                className={`mt-2 block truncate text-xs md:text-sm ${scene === n ? 'text-white' : 'text-white/45 group-hover:text-white/75'}`}
+              >
+                0{n + 1} {t(`scenes.${sc.id}.label`)}
+              </span>
             </button>
           ))}
-          <span className="ml-1 hidden font-mono text-[11px] text-white/40 md:inline">
-            {t('drag')}
-          </span>
         </div>
       </div>
     </section>

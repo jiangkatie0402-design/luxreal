@@ -892,6 +892,24 @@
         "chest": "宝箱 · chest.glb",
         "sneaker": "跑鞋 · sneaker.glb",
         "ding": "青铜鼎 · ding.glb"
+      },
+      "scenesLabel": "从模型到世界",
+      "scenes": {
+        "model": {
+          "label": "生成 3D 模型",
+          "tag": "Lux3D Viewer · PBR",
+          "alt": ""
+        },
+        "print": {
+          "label": "3D 打印成手办",
+          "tag": "3D 打印 · 树脂 · 手工上色",
+          "alt": "书桌上的麒麟 3D 打印手办，旁边是打印机"
+        },
+        "game": {
+          "label": "放进游戏 · Boss 战",
+          "tag": "游戏实机 · Boss 战",
+          "alt": "游戏中玩家手持发光长剑对战巨大的麒麟 Boss"
+        }
       }
     }
   },
