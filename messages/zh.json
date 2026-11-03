@@ -885,6 +885,7 @@
       "outliner": "模型列表",
       "drag": "移动鼠标，从不同角度看",
       "models": {
+        "qilin": "麒麟 · qilin.glb",
         "corgi": "柯基 · corgi.glb",
         "knight": "骑士 · knight.glb",
         "robot": "铁皮机器人 · robot.glb",

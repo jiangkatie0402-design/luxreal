@@ -885,6 +885,7 @@
       "outliner": "Models",
       "drag": "Move your mouse to look around",
       "models": {
+        "qilin": "Qilin · qilin.glb",
         "corgi": "Corgi · corgi.glb",
         "knight": "Knight · knight.glb",
         "robot": "Tin robot · robot.glb",

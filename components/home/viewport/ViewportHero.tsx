@@ -14,6 +14,7 @@ import { titleEn, titleZh } from '../world/fonts';
  * Images are transparent renders; swap for GLB + three.js later for true orbit.
  */
 const MODELS = [
+  { id: 'qilin', src: '/community/qilin-v3.webp', faces: 48600, verts: 24410, maps: 4 },
   { id: 'corgi', src: '/core/corgi-model-cut.webp', faces: 12400, verts: 6218, maps: 4 },
   { id: 'knight', src: '/community/knight.webp', faces: 18900, verts: 9504, maps: 4 },
   { id: 'robot', src: '/core/robot-model-cut.webp', faces: 9800, verts: 4936, maps: 4 },
@@ -319,7 +320,13 @@ export function ViewportHero({ locale }: { locale: string }) {
       <div className="absolute inset-x-0 bottom-24 flex flex-col items-center gap-3 px-4 md:bottom-8">
         <div className="flex w-full max-w-[760px] items-center gap-3 rounded-full border border-white/15 bg-[rgba(11,19,34,0.78)] p-2 pl-2.5 backdrop-blur-xl">
           <span className="relative size-11 shrink-0 overflow-hidden rounded-full border border-white/15 bg-[#0B1322] md:size-12">
-            <Image src="/core/corgi-photo.webp" alt="" fill sizes="48px" className="object-cover" />
+            <Image
+              src="/community/qilin-photo.webp"
+              alt=""
+              fill
+              sizes="48px"
+              className="object-cover"
+            />
           </span>
           <span aria-hidden className="h-6 w-px bg-white/20" />
           <p className="min-w-0 flex-1 truncate text-sm text-white/75 md:text-base">
