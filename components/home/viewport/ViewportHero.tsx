@@ -2,9 +2,10 @@
 import Image from 'next/image';
 import { useTranslations } from 'next-intl';
 import { useEffect, useRef, useState, type CSSProperties } from 'react';
-import { appUrl } from '@/config/site';
 import { usePerfStore } from '@/lib/perf';
+import { CoverUpload } from '../cover/CoverUpload';
 import { titleEn, titleZh } from '../world/fonts';
+import { GameHUD } from './GameHUD';
 
 /**
  * Homepage hero as a 3D software viewport: perspective grid floor, axis gizmo,
@@ -29,8 +30,8 @@ const HOLD_MS = 4200;
 const SCENE_MS = [GEN_MS + HOLD_MS, 5000, 5000];
 const SCENES = [
   { id: 'model', img: null, pos: '' },
-  { id: 'print', img: '/community/qilin-print.webp', pos: '62% 50%' },
-  { id: 'game', img: '/community/qilin-game.webp', pos: '58% 30%' },
+  { id: 'print', img: '/community/qilin-print-v2.webp', pos: '58% 50%' },
+  { id: 'game', img: '/community/qilin-game-v2.webp', pos: '55% 35%' },
 ] as const;
 
 const gridMask =
@@ -98,10 +99,6 @@ export function ViewportHero({ locale }: { locale: string }) {
     setAuto(false);
     setScene(0);
     if (i !== idx) setIdx(i);
-  };
-  const pickScene = (n: number) => {
-    setAuto(false);
-    setScene(n);
   };
 
   const modelStyle = {
@@ -179,7 +176,7 @@ export function ViewportHero({ locale }: { locale: string }) {
       </svg>
 
       {/* ---------- the model on its turntable ---------- */}
-      <div className="absolute inset-x-0 bottom-[30%] top-[calc(var(--header-h)+40px)] md:bottom-[17%] flex items-end justify-center [perspective:1200px] md:bottom-[15%]">
+      <div className="absolute inset-x-0 bottom-[40%] top-[calc(var(--header-h)+40px)] flex items-end justify-center [perspective:1200px] md:bottom-[27%]">
         <div className="relative aspect-square h-full max-h-[64svh] max-w-[92vw]">
           {/* turntable */}
           <div
@@ -265,12 +262,13 @@ export function ViewportHero({ locale }: { locale: string }) {
                     />
                   </div>
                   <span className="vp-reveal-line absolute inset-x-0 h-[2px] bg-[#9cc8ff] shadow-[0_0_24px_6px_rgba(94,168,255,0.85)]" />
-                  <div className="absolute inset-0 bg-[linear-gradient(90deg,rgba(5,8,15,0.85)_0%,rgba(5,8,15,0.35)_38%,transparent_60%),linear-gradient(0deg,rgba(5,8,15,0.9)_0%,transparent_35%)]" />
+                  <div className="absolute inset-0 bg-[linear-gradient(90deg,rgba(5,8,15,0.85)_0%,rgba(5,8,15,0.35)_38%,transparent_60%),linear-gradient(0deg,rgba(5,8,15,0.9)_0%,transparent_35%),linear-gradient(180deg,rgba(5,8,15,0.75)_0%,transparent_16%)]" />
                 </>
               )}
             </div>
           ),
       )}
+      {scene === 2 && <GameHUD progress={sceneK} reduced={reduced} />}
       {scene !== 0 && (
         <span className="absolute left-5 top-[calc(var(--header-h)+14px)] rounded bg-black/50 px-2 py-1 font-mono text-[11px] text-white/80 backdrop-blur md:left-8">
           {t(`scenes.${SCENES[scene].id}.tag`)}
@@ -381,56 +379,10 @@ export function ViewportHero({ locale }: { locale: string }) {
         </div>
       </aside>
 
-      {/* ---------- outliner + upload ---------- */}
-      <div className="absolute inset-x-0 bottom-24 flex flex-col items-center gap-3 px-4 md:bottom-8">
-        <div className="flex w-full max-w-[760px] items-center gap-3 rounded-full border border-white/15 bg-[rgba(11,19,34,0.78)] p-2 pl-2.5 backdrop-blur-xl">
-          <span className="relative size-11 shrink-0 overflow-hidden rounded-full border border-white/15 bg-[#0B1322] md:size-12">
-            <Image
-              src="/community/qilin-photo.webp"
-              alt=""
-              fill
-              sizes="48px"
-              className="object-cover"
-            />
-          </span>
-          <span aria-hidden className="h-6 w-px bg-white/20" />
-          <p className="min-w-0 flex-1 truncate text-sm text-white/75 md:text-base">
-            {t('upload')}
-          </p>
-          <a
-            href={appUrl({ source: 'www' })}
-            className="shrink-0 rounded-full bg-[#2F6BFF] px-5 py-3 text-sm font-semibold text-white transition-colors hover:bg-[#3d77ff] md:px-7"
-          >
-            {t('cta')} →
-          </a>
-        </div>
-        <div
-          className="flex w-full max-w-[760px] gap-3"
-          role="tablist"
-          aria-label={t('scenesLabel')}
-        >
-          {SCENES.map((sc, n) => (
-            <button
-              key={sc.id}
-              type="button"
-              role="tab"
-              aria-selected={scene === n}
-              onClick={() => pickScene(n)}
-              className="group flex-1 text-left"
-            >
-              <span className="block h-[3px] overflow-hidden rounded-full bg-white/15">
-                <span
-                  className="block h-full rounded-full bg-[#6FA8FF]"
-                  style={{ width: `${n < scene ? 100 : n === scene ? sceneK * 100 : 0}%` }}
-                />
-              </span>
-              <span
-                className={`mt-2 block truncate text-xs md:text-sm ${scene === n ? 'text-white' : 'text-white/45 group-hover:text-white/75'}`}
-              >
-                0{n + 1} {t(`scenes.${sc.id}.label`)}
-              </span>
-            </button>
-          ))}
+      {/* ---------- upload ---------- */}
+      <div className="absolute inset-x-0 bottom-24 z-10 flex justify-center px-4 md:bottom-8">
+        <div className="w-full max-w-[860px]">
+          <CoverUpload />
         </div>
       </div>
     </section>

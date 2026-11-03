@@ -471,3 +471,50 @@
     display: none;
   }
 }
+
+/* Game HUD */
+@keyframes hud-slash {
+  from {
+    stroke-dasharray: 0 200;
+    opacity: 1;
+  }
+  60% {
+    opacity: 1;
+  }
+  to {
+    stroke-dasharray: 200 0;
+    opacity: 0;
+  }
+}
+.hud-slash path {
+  animation: hud-slash 0.45s ease-out both;
+  filter: drop-shadow(0 0 6px #7fd0ff);
+}
+@keyframes hud-flash {
+  from {
+    opacity: 0.22;
+  }
+  to {
+    opacity: 0;
+  }
+}
+.hud-flash {
+  animation: hud-flash 0.25s ease-out both;
+}
+@keyframes hud-dmg {
+  0% {
+    transform: translateY(10px) scale(0.6);
+    opacity: 0;
+  }
+  20% {
+    transform: translateY(0) scale(1.15);
+    opacity: 1;
+  }
+  100% {
+    transform: translateY(-40px) scale(1);
+    opacity: 0;
+  }
+}
+.hud-dmg {
+  animation: hud-dmg 0.8s ease-out both;
+}

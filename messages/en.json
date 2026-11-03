@@ -910,6 +910,13 @@
           "tag": "In-game · boss fight",
           "alt": "A player with a glowing sword fighting a giant qilin boss"
         }
+      },
+      "hud": {
+        "boss": "QILIN · WARDEN OF THUNDER",
+        "phase": "Phase II",
+        "crit": "CRIT",
+        "player": "Nameless Blade Lv.42",
+        "avatar": "剑"
       }
     }
   },
