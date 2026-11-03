@@ -860,6 +860,38 @@
           "inputAlt": "输入：游戏神庙画面"
         }
       }
+    },
+    "viewport": {
+      "titleA": "从这里，",
+      "titleB": "创造你的世界",
+      "subtitle": "上传一张照片或写一句话，几十秒生成带真实材质、可编辑、可打印、可绑骨的 3D 模型。",
+      "perspective": "透视视图",
+      "generating": "生成中",
+      "ready": "已生成",
+      "faces": "面数",
+      "verts": "顶点",
+      "topology": "拓扑",
+      "watertight": "水密",
+      "maps": "PBR 贴图",
+      "export": "导出格式",
+      "display": "显示模式",
+      "modes": {
+        "wire": "线框",
+        "clay": "白模",
+        "pbr": "PBR"
+      },
+      "upload": "拖入一张照片，或描述你想要的模型",
+      "cta": "开始生成",
+      "outliner": "模型列表",
+      "drag": "移动鼠标，从不同角度看",
+      "models": {
+        "corgi": "柯基 · corgi.glb",
+        "knight": "骑士 · knight.glb",
+        "robot": "铁皮机器人 · robot.glb",
+        "chest": "宝箱 · chest.glb",
+        "sneaker": "跑鞋 · sneaker.glb",
+        "ding": "青铜鼎 · ding.glb"
+      }
     }
   },
   "footer": {

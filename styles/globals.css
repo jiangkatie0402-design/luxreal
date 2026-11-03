@@ -407,3 +407,29 @@
 .reel-in {
   animation: reel-in 500ms ease-out both;
 }
+
+/* Viewport hero */
+@keyframes vp-floor {
+  to {
+    background-position:
+      0 64px,
+      0 0;
+  }
+}
+.vp-floor {
+  animation: vp-floor 6s linear infinite;
+}
+@keyframes vp-ring {
+  to {
+    transform: rotate(360deg);
+  }
+}
+.vp-ring {
+  animation: vp-ring 14s linear infinite;
+}
+@media (prefers-reduced-motion: reduce) {
+  .vp-floor,
+  .vp-ring {
+    animation: none;
+  }
+}

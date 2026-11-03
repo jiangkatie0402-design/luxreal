@@ -3,6 +3,7 @@ import { AgentSection } from '@/components/home/agents/AgentSection';
 import { AgentVideoShowcase } from '@/components/home/agents/AgentVideoShowcase';
 import { ImageTo3DExplainer } from '@/components/home/explain/ImageTo3DExplainer';
 import { ReelHero } from '@/components/home/reel/ReelHero';
+import { ViewportHero } from '@/components/home/viewport/ViewportHero';
 import { WorldHero } from '@/components/home/world/WorldHero';
 import { Scenes } from '@/components/home/scenes/Scenes';
 import { CommunityWall } from '@/components/home/social/CommunityWall';
@@ -21,7 +22,13 @@ export default async function HomePage({
   setRequestLocale(locale);
   return (
     <>
-      {hero === 'world' ? <WorldHero /> : <ReelHero locale={locale} />}
+      {hero === 'world' ? (
+        <WorldHero />
+      ) : hero === 'reel' ? (
+        <ReelHero locale={locale} />
+      ) : (
+        <ViewportHero locale={locale} />
+      )}
       <ImageTo3DExplainer />
       <AgentVideoShowcase />
       <Scenes />

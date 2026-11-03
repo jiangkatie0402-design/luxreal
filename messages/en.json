@@ -860,6 +860,38 @@
           "inputAlt": "Input: game temple scene"
         }
       }
+    },
+    "viewport": {
+      "titleA": "Create your world,",
+      "titleB": "starting here",
+      "subtitle": "Upload a photo or write a sentence. Get a 3D model with real materials in seconds — editable, printable, ready to rig.",
+      "perspective": "Perspective",
+      "generating": "Generating",
+      "ready": "Ready",
+      "faces": "Faces",
+      "verts": "Vertices",
+      "topology": "Topology",
+      "watertight": "Watertight",
+      "maps": "PBR maps",
+      "export": "Export",
+      "display": "Display",
+      "modes": {
+        "wire": "Wire",
+        "clay": "Clay",
+        "pbr": "PBR"
+      },
+      "upload": "Drop a photo, or describe the model you want",
+      "cta": "Generate",
+      "outliner": "Models",
+      "drag": "Move your mouse to look around",
+      "models": {
+        "corgi": "Corgi · corgi.glb",
+        "knight": "Knight · knight.glb",
+        "robot": "Tin robot · robot.glb",
+        "chest": "Chest · chest.glb",
+        "sneaker": "Sneaker · sneaker.glb",
+        "ding": "Bronze ding · ding.glb"
+      }
     }
   },
   "footer": {
