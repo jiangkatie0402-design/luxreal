@@ -626,7 +626,7 @@
 /* Hero page change: tint bands, then the new page, slide in right → left */
 @keyframes hero-slide {
   from {
-    clip-path: inset(0 0 0 100%);
+    clip-path: inset(0 0 0 var(--from, 50%));
   }
   to {
     clip-path: inset(0 0 0 0);

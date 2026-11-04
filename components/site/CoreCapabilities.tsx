@@ -1,7 +1,6 @@
 'use client';
 import * as TabsPrimitive from '@radix-ui/react-tabs';
-import { ArrowRight, Check, ImageUp } from 'lucide-react';
-import Image from 'next/image';
+import { ArrowRight, Check } from 'lucide-react';
 import { useTranslations } from 'next-intl';
 import { ButtonLink } from '@/components/ui/button';
 import { site } from '@/config/site';
@@ -97,36 +96,8 @@ export function CoreCapabilities() {
                       <div className="absolute inset-x-0 bottom-0 top-10 overflow-hidden [background:radial-gradient(60%_60%_at_55%_50%,rgba(47,107,255,0.2),transparent_70%)]">
                         <span className="absolute inset-x-[-30%] bottom-0 h-[50%] [background:linear-gradient(rgba(111,168,255,0.14)_1px,transparent_1px)_0_0/44px_44px,linear-gradient(90deg,rgba(111,168,255,0.14)_1px,transparent_1px)_0_0/44px_44px] [mask-image:radial-gradient(60%_90%_at_50%_100%,#000,transparent)] [transform:perspective(600px)_rotateX(62deg)] [transform-origin:bottom]" />
                         <span className="absolute bottom-[12%] left-1/2 h-[10%] w-[52%] -translate-x-[40%] rounded-[50%] border border-[#6FA8FF]/30 [background:radial-gradient(closest-side,rgba(47,107,255,0.25),transparent)]" />
-                        <div className="absolute inset-x-[8%] bottom-[14%] top-[10%] lg:left-[16%] lg:right-[2%]">
-                          <Image
-                            src="/community/qilin-pbr-v2.webp"
-                            alt=""
-                            fill
-                            sizes="(min-width:1024px) 640px, 90vw"
-                            className="object-contain object-bottom"
-                          />
-                        </div>
                       </div>
                     </div>
-                    {id === 'image' && (
-                      <div
-                        aria-hidden
-                        className="absolute bottom-6 left-3 z-10 w-[38%] max-w-[220px] -rotate-3 rounded-2xl border border-border-strong bg-[#0b1322]/90 p-2 shadow-[0_20px_50px_rgba(0,0,0,0.6)] backdrop-blur md:left-6 lg:-left-10 lg:bottom-10"
-                      >
-                        <div className="relative aspect-[3/2] overflow-hidden rounded-xl">
-                          <Image
-                            src="/community/qilin-src-v2.webp"
-                            alt=""
-                            fill
-                            sizes="220px"
-                            className="object-cover"
-                          />
-                        </div>
-                        <span className="absolute -right-3 -top-3 grid size-8 place-items-center rounded-full bg-primary text-primary-foreground shadow-[0_6px_16px_rgba(77,141,255,0.5)]">
-                          <ImageUp className="size-4" />
-                        </span>
-                      </div>
-                    )}
                   </div>
                 </div>
               </div>
