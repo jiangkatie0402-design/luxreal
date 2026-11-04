@@ -1,6 +1,7 @@
 'use client';
 import * as TabsPrimitive from '@radix-ui/react-tabs';
-import { ArrowRight, Check } from 'lucide-react';
+import { ArrowRight, Check, ImageUp } from 'lucide-react';
+import Image from 'next/image';
 import { useTranslations } from 'next-intl';
 import { ButtonLink } from '@/components/ui/button';
 import { site } from '@/config/site';
@@ -37,7 +38,7 @@ export function CoreCapabilities() {
               <TabsPrimitive.Trigger
                 key={id}
                 value={id}
-                className="h-10 whitespace-nowrap rounded-full px-3 text-sm font-medium text-muted-foreground outline-none transition-[color,background-color] duration-[var(--dur-fast)] hover:text-foreground focus-visible:ring-[3px] focus-visible:ring-ring/50 data-[state=active]:bg-secondary data-[state=active]:text-foreground data-[state=active]:shadow-[inset_0_0_0_1px_var(--border-strong)]"
+                className="h-10 whitespace-nowrap rounded-full px-3 text-sm font-medium text-muted-foreground outline-none transition-[color,background-color] duration-[var(--dur-fast)] hover:text-foreground focus-visible:ring-1 focus-visible:ring-ring/60 data-[state=active]:bg-secondary data-[state=active]:text-foreground data-[state=active]:shadow-[inset_0_0_0_1px_var(--border-strong)]"
               >
                 {t(`${id}.tab`)}
               </TabsPrimitive.Trigger>
@@ -50,10 +51,10 @@ export function CoreCapabilities() {
               value={id}
               className="core-panel mt-8 w-full outline-none md:mt-10"
             >
-              <div className="relative isolate overflow-hidden rounded-[28px] border border-border-strong [background:radial-gradient(70%_80%_at_0%_100%,rgba(47,107,255,0.28),transparent_60%),radial-gradient(50%_60%_at_100%_0%,rgba(77,141,255,0.10),transparent_70%),linear-gradient(180deg,#0a1222,#060a13)]">
-                <div className="grid lg:min-h-[560px] lg:grid-cols-[minmax(0,5fr)_minmax(0,7fr)]">
+              <div className="relative isolate overflow-hidden rounded-[28px] border border-border-strong before:pointer-events-none before:absolute before:inset-x-[10%] before:top-0 before:h-px before:bg-[linear-gradient(90deg,transparent,rgba(156,200,255,0.55),transparent)] [background:radial-gradient(70%_80%_at_0%_100%,rgba(47,107,255,0.28),transparent_60%),radial-gradient(50%_60%_at_100%_0%,rgba(77,141,255,0.10),transparent_70%),linear-gradient(180deg,#0a1222,#060a13)]">
+                <div className="grid lg:min-h-[520px] lg:grid-cols-[minmax(0,5fr)_minmax(0,7fr)]">
                   {/* copy + action */}
-                  <div className="flex flex-col p-7 md:p-10 lg:p-12">
+                  <div className="flex flex-col justify-center p-7 md:p-10 lg:p-12">
                     <h3 className="text-balance font-display text-[1.75rem] font-semibold leading-[1.15] tracking-tight md:text-4xl">
                       {t(`${id}.title`)}
                     </h3>
@@ -74,7 +75,7 @@ export function CoreCapabilities() {
                     <ButtonLink
                       href={site.links.app}
                       size="lg"
-                      className="mt-10 w-full max-w-[22rem] lg:mt-auto"
+                      className="mt-10 w-full max-w-[18rem]"
                     >
                       {c('startCreating')}
                       <ArrowRight aria-hidden />
@@ -93,8 +94,39 @@ export function CoreCapabilities() {
                         <span className="size-2.5 rounded-full bg-white/15" />
                         <span className="ml-3 h-5 w-48 max-w-[40%] rounded-md bg-white/[0.06]" />
                       </div>
-                      <div className="absolute inset-x-0 bottom-0 top-10 [background:radial-gradient(60%_60%_at_55%_45%,rgba(47,107,255,0.14),transparent_70%)]" />
+                      <div className="absolute inset-x-0 bottom-0 top-10 overflow-hidden [background:radial-gradient(60%_60%_at_55%_50%,rgba(47,107,255,0.2),transparent_70%)]">
+                        <span className="absolute inset-x-[-30%] bottom-0 h-[50%] [background:linear-gradient(rgba(111,168,255,0.14)_1px,transparent_1px)_0_0/44px_44px,linear-gradient(90deg,rgba(111,168,255,0.14)_1px,transparent_1px)_0_0/44px_44px] [mask-image:radial-gradient(60%_90%_at_50%_100%,#000,transparent)] [transform:perspective(600px)_rotateX(62deg)] [transform-origin:bottom]" />
+                        <span className="absolute bottom-[12%] left-1/2 h-[10%] w-[52%] -translate-x-[40%] rounded-[50%] border border-[#6FA8FF]/30 [background:radial-gradient(closest-side,rgba(47,107,255,0.25),transparent)]" />
+                        <div className="absolute inset-x-[8%] bottom-[14%] top-[10%] lg:left-[16%] lg:right-[2%]">
+                          <Image
+                            src="/community/qilin-pbr-v2.webp"
+                            alt=""
+                            fill
+                            sizes="(min-width:1024px) 640px, 90vw"
+                            className="object-contain object-bottom"
+                          />
+                        </div>
+                      </div>
                     </div>
+                    {id === 'image' && (
+                      <div
+                        aria-hidden
+                        className="absolute bottom-6 left-3 z-10 w-[38%] max-w-[220px] -rotate-3 rounded-2xl border border-border-strong bg-[#0b1322]/90 p-2 shadow-[0_20px_50px_rgba(0,0,0,0.6)] backdrop-blur md:left-6 lg:-left-10 lg:bottom-10"
+                      >
+                        <div className="relative aspect-[3/2] overflow-hidden rounded-xl">
+                          <Image
+                            src="/community/qilin-src-v2.webp"
+                            alt=""
+                            fill
+                            sizes="220px"
+                            className="object-cover"
+                          />
+                        </div>
+                        <span className="absolute -right-3 -top-3 grid size-8 place-items-center rounded-full bg-primary text-primary-foreground shadow-[0_6px_16px_rgba(77,141,255,0.5)]">
+                          <ImageUp className="size-4" />
+                        </span>
+                      </div>
+                    )}
                   </div>
                 </div>
               </div>
