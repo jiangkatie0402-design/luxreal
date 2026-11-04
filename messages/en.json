@@ -916,6 +916,20 @@
         "phase": "Phase II",
         "crit": "CRIT",
         "player": "Nameless Blade Lv.42"
+      },
+      "stats": {
+        "s1": {
+          "v": "~30s",
+          "l": "Per image"
+        },
+        "s2": {
+          "v": "4K PBR",
+          "l": "Real material maps"
+        },
+        "s3": {
+          "v": "5",
+          "l": "Formats incl. GLB · FBX · USDZ"
+        }
       }
     }
   },

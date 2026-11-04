@@ -15,10 +15,10 @@ export default async function HomePage({
   searchParams,
 }: {
   params: Promise<{ locale: string }>;
-  searchParams: Promise<{ hero?: string }>;
+  searchParams: Promise<{ hero?: string; layout?: string }>;
 }) {
   const { locale } = await params;
-  const { hero } = await searchParams;
+  const { hero, layout } = await searchParams;
   setRequestLocale(locale);
   return (
     <>
@@ -27,7 +27,10 @@ export default async function HomePage({
       ) : hero === 'reel' ? (
         <ReelHero locale={locale} />
       ) : (
-        <ViewportHero locale={locale} />
+        <ViewportHero
+          locale={locale}
+          layout={layout === 'split' || layout === 'mono' ? layout : 'stage'}
+        />
       )}
       <ImageTo3DExplainer />
       <AgentVideoShowcase />

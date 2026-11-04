@@ -45,7 +45,6 @@ const MODELS: readonly Model[] = [
   { id: 'ding', src: '/community/ding.webp', faces: 15300, verts: 7702, maps: 4 },
 ];
 type Mode = 'wire' | 'clay' | 'pbr';
-const MODES: Mode[] = ['wire', 'clay', 'pbr'];
 const GEN_MS = 3600;
 const HOLD_MS = 4200;
 const SCENE_MS = [GEN_MS + HOLD_MS, 5000, 5000];
@@ -55,16 +54,67 @@ const SCENES = [
   { id: 'game', img: '/community/qilin-game-v2.webp', pos: '55% 35%' },
 ] as const;
 
+const STAGE: Record<HeroLayout, string> = {
+  stage: 'top-[calc(var(--header-h)+150px)] md:top-[calc(var(--header-h)+170px)] md:bottom-[27%]',
+  split:
+    'top-[calc(var(--header-h)+40px)] md:left-[36%] md:right-0 md:top-[calc(var(--header-h)+30px)] md:bottom-[10%]',
+  mono: 'top-[calc(var(--header-h)+120px)] md:top-[calc(var(--header-h)+90px)] md:bottom-[27%]',
+};
+
+function Grad({
+  children,
+  className = 'block',
+}: {
+  children: React.ReactNode;
+  className?: string;
+}) {
+  return (
+    <span
+      className={`block bg-[linear-gradient(100deg,#9cc8ff,#6FA8FF_50%,#c7d7ff)] bg-clip-text text-transparent ${className}`}
+    >
+      {children}
+    </span>
+  );
+}
+
 const gridMask =
   '[mask-image:var(--m)] [mask-position:bottom] [mask-repeat:no-repeat] [mask-size:contain] [background:radial-gradient(circle,rgba(225,240,255,1)_1.2px,transparent_1.9px)_0_0/12px_12px,repeating-linear-gradient(0deg,rgba(120,180,255,0.8)_0_1px,transparent_1px_12px),repeating-linear-gradient(90deg,rgba(120,180,255,0.8)_0_1px,transparent_1px_12px)]';
 
-export function ViewportHero({ locale }: { locale: string }) {
+export type HeroLayout = 'stage' | 'split' | 'mono';
+
+/** Status chip shown next to the model while it is being generated. */
+function GenChip({ gen, label, faces }: { gen: number; label: string; faces: string }) {
+  return (
+    <span className="inline-flex items-center gap-2.5 rounded-full border border-white/10 bg-[rgba(8,12,22,0.55)] py-1.5 pl-2.5 pr-3.5 font-mono text-[11px] text-white/70 backdrop-blur-md">
+      <span
+        className={`size-1.5 rounded-full ${gen < 1 ? 'animate-pulse bg-[#6FA8FF]' : 'bg-[#4ade80]'}`}
+      />
+      <span className="text-white/90">qilin.glb</span>
+      <span className="relative h-[3px] w-14 overflow-hidden rounded-full bg-white/10">
+        <span
+          className="absolute inset-y-0 left-0 rounded-full bg-[#6FA8FF]"
+          style={{ width: `${gen * 100}%` }}
+        />
+      </span>
+      <span className="tabular-nums">{label}</span>
+      <span className="hidden text-white/40 sm:inline">{faces}</span>
+    </span>
+  );
+}
+
+export function ViewportHero({
+  locale,
+  layout = 'stage',
+}: {
+  locale: string;
+  layout?: HeroLayout;
+}) {
   const t = useTranslations('home.viewport');
   const reduced = usePerfStore((s) => s.reducedMotion);
-  const [idx, setIdx] = useState(0);
-  const [mode, setMode] = useState<Mode>('pbr');
+  const [idx] = useState(0);
+  const [mode] = useState<Mode>('pbr');
   const [gen, setGen] = useState(reduced ? 1 : 0); // 0..1 generation progress
-  const [auto, setAuto] = useState(true);
+  const [auto] = useState(true);
   const [tilt, setTilt] = useState({ x: 0, y: 0 });
   const stage = useRef<HTMLDivElement>(null);
   const brush = locale === 'zh' ? titleZh : titleEn;
@@ -116,12 +166,6 @@ export function ViewportHero({ locale }: { locale: string }) {
     });
   };
 
-  const pick = (i: number) => {
-    setAuto(false);
-    setScene(0);
-    if (i !== idx) setIdx(i);
-  };
-
   const modelStyle = {
     '--m': `url(${m.src})`,
     transform: `rotateY(${tilt.x * 14}deg) rotateX(${-tilt.y * 6}deg)`,
@@ -146,61 +190,26 @@ export function ViewportHero({ locale }: { locale: string }) {
         className="absolute inset-x-[-40%] bottom-[-10%] h-[62%] origin-bottom [perspective:700px]"
       >
         <div className="vp-floor absolute inset-0 [transform:rotateX(68deg)] [background:linear-gradient(rgba(111,168,255,0.22)_1px,transparent_1px)_0_0/64px_64px,linear-gradient(90deg,rgba(111,168,255,0.22)_1px,transparent_1px)_0_0/64px_64px] [mask-image:radial-gradient(55%_75%_at_50%_100%,#000,transparent)]" />
-        {/* axis lines */}
-        <div className="absolute inset-0 [transform:rotateX(68deg)] [mask-image:radial-gradient(55%_75%_at_50%_100%,#000,transparent)]">
-          <span className="absolute inset-y-0 left-1/2 w-[2px] -translate-x-1/2 bg-[#4ade80]/50" />
-          <span className="absolute inset-x-0 top-[58%] h-[2px] bg-[#f87171]/50" />
-        </div>
       </div>
-
-      {/* top-left viewport labels */}
-      <div className="absolute left-5 top-[calc(var(--header-h)+14px)] flex items-center gap-2 font-mono text-[11px] text-white/45 md:left-8">
-        <span className="rounded bg-white/[0.06] px-2 py-1">{t('perspective')}</span>
-        <span className="rounded bg-white/[0.06] px-2 py-1">Lux3D Viewer</span>
-        <span className="hidden rounded bg-white/[0.06] px-2 py-1 sm:inline">
-          {t(`modes.${mode}`)}
-        </span>
-      </div>
-      {/* axis gizmo */}
-      <svg
-        aria-hidden
-        className="absolute right-5 top-[calc(var(--header-h)+12px)] md:right-8"
-        width="64"
-        height="64"
-        viewBox="-32 -32 64 64"
-      >
-        <g strokeWidth="2.2" strokeLinecap="round">
-          <line x1="0" y1="0" x2="22" y2="8" stroke="#f87171" />
-          <line x1="0" y1="0" x2="0" y2="-24" stroke="#4ade80" />
-          <line x1="0" y1="0" x2="-16" y2="14" stroke="#60a5fa" />
-        </g>
-        <g
-          fontSize="9"
-          fontFamily="monospace"
-          fontWeight="700"
-          textAnchor="middle"
-          dominantBaseline="middle"
-        >
-          <circle cx="24" cy="9" r="7" fill="#f87171" />
-          <text x="24" y="9.5" fill="#1a0505">
-            X
-          </text>
-          <circle cx="0" cy="-26" r="7" fill="#4ade80" />
-          <text x="0" y="-25.5" fill="#03180b">
-            Y
-          </text>
-          <circle cx="-18" cy="15" r="7" fill="#60a5fa" />
-          <text x="-18" y="15.5" fill="#03101f">
-            Z
-          </text>
-        </g>
-      </svg>
 
       {/* ---------- the model on its turntable ---------- */}
-      <div className="absolute inset-x-0 bottom-[40%] top-[calc(var(--header-h)+40px)] flex items-end justify-center [perspective:1200px] md:bottom-[27%]">
+      <div
+        className={`absolute inset-x-0 bottom-[40%] flex items-end justify-center [perspective:1200px] ${STAGE[layout]}`}
+      >
         <div
-          className={`relative h-full max-w-[92vw] ${m.wide ? 'aspect-[8/5] max-h-[58svh]' : 'aspect-square max-h-[64svh]'}`}
+          className={`relative h-full max-w-[92vw] ${m.wide ? 'aspect-[8/5]' : 'aspect-square'}`}
         >
+          {scene === 0 && (
+            <div
+              className={`absolute z-10 ${layout === 'split' ? 'left-[6%] top-[2%]' : layout === 'stage' ? 'left-1/2 top-[-7%] -translate-x-1/2' : 'right-[2%] top-[4%]'} hidden md:block`}
+            >
+              <GenChip
+                gen={gen}
+                label={gen < 1 ? `${t('generating')} ${Math.round(gen * 100)}%` : t('ready')}
+                faces={`${faces.toLocaleString()} ${t('faces')}`}
+              />
+            </div>
+          )}
           {/* turntable */}
           <div
             aria-hidden
@@ -330,113 +339,82 @@ export function ViewportHero({ locale }: { locale: string }) {
         </span>
       )}
 
-      {/* ---------- title ---------- */}
-      <div className="pointer-events-none absolute left-5 top-[calc(var(--header-h)+64px)] max-w-[440px] md:left-10 lg:top-[30%]">
-        <h1
-          id="hero-title"
-          className={`${brush.className} text-[clamp(2.4rem,4.6vw,4.4rem)] leading-[1.06] [text-shadow:0_4px_30px_rgba(0,0,0,0.6)] ${locale === 'zh' ? 'tracking-[0.04em]' : 'font-black uppercase'}`}
+      {/* ---------- copy + upload, per layout ---------- */}
+      {layout === 'mono' && (
+        <p
+          aria-hidden
+          className={`${titleEn.className} pointer-events-none absolute inset-x-0 top-[calc(var(--header-h)+150px)] select-none md:top-[calc(var(--header-h)+2svh)] text-center text-[clamp(5rem,22vw,22rem)] font-black leading-none tracking-[-0.02em] text-transparent transition-opacity duration-500 [-webkit-text-stroke:1px_rgba(156,200,255,0.28)] ${scene === 0 ? 'opacity-100' : 'opacity-0'}`}
         >
-          {t('titleA')}
-          <span className="block bg-[linear-gradient(100deg,#9cc8ff,#6FA8FF_50%,#c7d7ff)] bg-clip-text text-transparent">
-            {t('titleB')}
+          <span className="bg-[linear-gradient(180deg,rgba(111,168,255,0.22),rgba(111,168,255,0)_75%)] bg-clip-text">
+            LUX3D
           </span>
-        </h1>
-        <p className="mt-4 hidden max-w-[360px] text-[15px] leading-relaxed text-white/65 sm:block">
-          {t('subtitle')}
         </p>
-      </div>
+      )}
 
-      {/* ---------- inspector ---------- */}
-      <aside
-        className={`absolute right-5 top-[30%] hidden w-[248px] transition-opacity duration-500 ${scene === 0 ? 'opacity-100' : 'pointer-events-none opacity-0'} rounded-2xl border border-white/10 bg-[rgba(11,19,34,0.72)] p-4 font-mono text-[11px] text-white/70 backdrop-blur-xl lg:block xl:right-10`}
-      >
-        <p className="flex items-center justify-between text-white">
-          <span className="text-[13px] font-semibold">{t(`models.${m.id}`)}</span>
-          <span
-            className={`flex items-center gap-1.5 rounded-full px-2 py-0.5 ${gen < 1 ? 'bg-[#2F6BFF]/25 text-[#9cc8ff]' : 'bg-[#4ade80]/15 text-[#86efac]'}`}
+      {layout === 'stage' && (
+        <div className="pointer-events-none absolute inset-x-0 top-[calc(var(--header-h)+18px)] z-[2] px-5 text-center md:top-[calc(var(--header-h)+28px)]">
+          <h1
+            id="hero-title"
+            className={`${brush.className} text-[clamp(2.2rem,4.4vw,4.2rem)] leading-[1.1] [text-shadow:0_4px_30px_rgba(0,0,0,0.6)] ${locale === 'zh' ? 'tracking-[0.04em]' : 'font-black uppercase'}`}
           >
-            <span
-              className={`size-1.5 rounded-full ${gen < 1 ? 'animate-pulse bg-[#6FA8FF]' : 'bg-[#4ade80]'}`}
-            />
-            {gen < 1 ? `${t('generating')} ${Math.round(gen * 100)}%` : t('ready')}
-          </span>
-        </p>
-        <dl className="mt-3 grid grid-cols-2 gap-y-1.5 border-t border-white/10 pt-3">
-          <dt className="text-white/40">{t('faces')}</dt>
-          <dd className="text-right tabular-nums">{faces.toLocaleString()}</dd>
-          <dt className="text-white/40">{t('verts')}</dt>
-          <dd className="text-right tabular-nums">
-            {Math.round(m.verts * clayCut).toLocaleString()}
-          </dd>
-          <dt className="text-white/40">{t('topology')}</dt>
-          <dd className="text-right">Quad</dd>
-          <dt className="text-white/40">{t('watertight')}</dt>
-          <dd className="text-right text-[#86efac]">{clayCut >= 1 ? '✓' : '…'}</dd>
-        </dl>
-        <p className="mt-3 border-t border-white/10 pt-3 text-white/40">{t('maps')}</p>
-        <div className="mt-2 grid grid-cols-4 gap-1.5">
-          {[
-            ['C', 'brightness(1.15) contrast(0.8)'],
-            ['N', 'grayscale(1) sepia(1) hue-rotate(195deg) saturate(3.5)'],
-            ['R', 'grayscale(1) invert(0.85) contrast(1.25)'],
-            ['M', 'grayscale(1) contrast(3) brightness(0.6)'],
-          ].map(([k, f], i) => (
-            <span
-              key={k}
-              className={`relative aspect-square overflow-hidden rounded-md border transition-opacity ${pbrCut > i / 4 ? 'border-[#6FA8FF]/50 opacity-100' : 'border-white/10 opacity-30'}`}
-            >
-              <Image
-                src={m.src}
-                alt=""
-                fill
-                sizes="48px"
-                className="object-contain"
-                style={{ filter: f }}
-              />
-              <span className="absolute bottom-0.5 left-1 text-[9px] text-white">{k}</span>
-            </span>
-          ))}
+            {t('titleA')}
+            <Grad className="md:inline">{t('titleB')}</Grad>
+          </h1>
+          <p className="mx-auto mt-3 hidden max-w-[680px] text-[15px] leading-relaxed text-white/65 sm:block">
+            {t('subtitle')}
+          </p>
         </div>
-        <p className="mt-3 border-t border-white/10 pt-3 text-white/40">{t('export')}</p>
-        <p className="mt-1.5 text-white/80">GLB · FBX · OBJ · USDZ · STL</p>
-        <div
-          className="mt-4 flex rounded-lg bg-black/40 p-0.5"
-          role="group"
-          aria-label={t('display')}
-        >
-          {MODES.map((x) => (
-            <button
-              key={x}
-              type="button"
-              aria-pressed={mode === x}
-              onClick={() => setMode(x)}
-              className={`flex-1 rounded-md py-1.5 text-[11px] transition-colors ${mode === x ? 'bg-[#2F6BFF] text-white' : 'text-white/55 hover:text-white'}`}
-            >
-              {t(`modes.${x}`)}
-            </button>
-          ))}
-        </div>
-        <p className="mt-4 border-t border-white/10 pt-3 text-white/40">{t('outliner')}</p>
-        <div className="mt-2 grid grid-cols-4 gap-1.5" role="tablist" aria-label={t('outliner')}>
-          {MODELS.map((x, i) => (
-            <button
-              key={x.id}
-              type="button"
-              role="tab"
-              aria-selected={i === idx}
-              aria-label={t(`models.${x.id}`)}
-              onClick={() => pick(i)}
-              className={`relative aspect-square overflow-hidden rounded-lg border bg-black/30 transition-colors ${i === idx ? 'border-[#6FA8FF]' : 'border-white/10 hover:border-white/30'}`}
-            >
-              <Image src={x.src} alt="" fill sizes="48px" className="object-contain p-1" />
-            </button>
-          ))}
-        </div>
-      </aside>
+      )}
 
-      {/* ---------- upload ---------- */}
-      <div className="absolute inset-x-0 bottom-24 z-10 flex justify-center px-4 md:bottom-8">
-        <div className="w-full max-w-[860px]">
+      {layout === 'split' && (
+        <div className="absolute left-5 right-5 top-[calc(var(--header-h)+40px)] z-[2] md:left-10 md:right-auto md:top-1/2 md:w-[min(540px,40vw)] md:-translate-y-1/2 xl:left-16">
+          <h1
+            id="hero-title"
+            className={`${brush.className} text-[clamp(2.4rem,4.8vw,4.8rem)] leading-[1.06] [text-shadow:0_4px_30px_rgba(0,0,0,0.6)] ${locale === 'zh' ? 'tracking-[0.04em]' : 'font-black uppercase'}`}
+          >
+            {t('titleA')}
+            <Grad>{t('titleB')}</Grad>
+          </h1>
+          <p className="mt-4 hidden max-w-[440px] text-[15px] leading-relaxed text-white/65 sm:block">
+            {t('subtitle')}
+          </p>
+          <div className="mt-8 hidden md:block">
+            <CoverUpload />
+          </div>
+          <dl className="mt-8 hidden grid-cols-3 gap-6 border-t border-white/10 pt-6 md:grid">
+            {(['s1', 's2', 's3'] as const).map((k) => (
+              <div key={k}>
+                <dt className="sr-only">{t(`stats.${k}.l`)}</dt>
+                <dd className="text-2xl font-semibold tabular-nums text-white">
+                  {t(`stats.${k}.v`)}
+                </dd>
+                <dd className="mt-1 text-xs text-white/50">{t(`stats.${k}.l`)}</dd>
+              </div>
+            ))}
+          </dl>
+        </div>
+      )}
+
+      {layout === 'mono' && (
+        <div className="pointer-events-none absolute left-5 top-[calc(var(--header-h)+40px)] z-[2] md:bottom-10 md:left-10 md:top-auto md:w-[min(420px,30vw)] xl:left-16">
+          <h1
+            id="hero-title"
+            className={`${brush.className} text-[clamp(2.2rem,3.6vw,3.6rem)] leading-[1.08] [text-shadow:0_4px_30px_rgba(0,0,0,0.6)] ${locale === 'zh' ? 'tracking-[0.04em]' : 'font-black uppercase'}`}
+          >
+            {t('titleA')}
+            <Grad>{t('titleB')}</Grad>
+          </h1>
+          <p className="mt-3 hidden text-sm leading-relaxed text-white/60 sm:block">
+            {t('subtitle')}
+          </p>
+        </div>
+      )}
+
+      {/* upload: bottom-centre (stage), bottom-right (mono), mobile-only for split */}
+      <div
+        className={`absolute inset-x-0 bottom-24 z-10 flex px-4 md:bottom-8 ${layout === 'mono' ? 'justify-center md:justify-end md:px-10 xl:px-16' : 'justify-center'} ${layout === 'split' ? 'md:hidden' : ''}`}
+      >
+        <div className={`w-full ${layout === 'mono' ? 'max-w-[640px]' : 'max-w-[860px]'}`}>
           <CoverUpload />
         </div>
       </div>
