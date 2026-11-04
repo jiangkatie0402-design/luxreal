@@ -37,13 +37,13 @@ export function SiteHeader() {
         scrolled && 'border-border bg-background/75 backdrop-blur-xl',
       )}
     >
-      <div className="container-x flex h-full items-center gap-6">
-        <Logo />
+      <div className="flex h-full items-center gap-6 px-5 md:px-8 lg:grid lg:grid-cols-[1fr_auto_1fr] xl:px-10">
+        <Logo className="justify-self-start" />
         <nav aria-label={t('main')} className="hidden lg:block">
-          <ul className="flex items-center gap-1">
+          <ul className="flex items-center lg:gap-0 xl:gap-1">
             {NAV.map((n) => (
               <li key={n.id}>
-                <span className="inline-flex items-center gap-1 rounded-full px-3 py-2 text-sm text-muted-foreground">
+                <span className="inline-flex items-center gap-1 whitespace-nowrap rounded-full px-2.5 py-2 text-sm text-muted-foreground xl:px-3">
                   {t(n.id)}
                   {n.menu && <ChevronDown className="size-3.5 opacity-70" aria-hidden />}
                 </span>
@@ -51,10 +51,10 @@ export function SiteHeader() {
             ))}
           </ul>
         </nav>
-        <div className="ml-auto flex items-center gap-2">
+        <div className="ml-auto flex items-center gap-2 lg:ml-0 lg:justify-self-end">
           <a
             href={site.links.login}
-            className="hidden px-3 text-sm text-muted-foreground transition-colors hover:text-foreground lg:inline-flex"
+            className="hidden whitespace-nowrap px-3 text-sm text-muted-foreground transition-colors hover:text-foreground lg:inline-flex"
           >
             {c('login')}
           </a>
