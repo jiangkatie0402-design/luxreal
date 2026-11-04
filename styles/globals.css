@@ -67,7 +67,14 @@
   }
   /* UI/UX: touch targets ≥ 44px on touch devices (visual size can stay smaller on desktop) */
   @media (pointer: coarse) {
-    :where(button, [role='tab'], [role='button'], summary, a[class*='inline-flex'], a[class*='flex']) {
+    :where(
+      button,
+      [role='tab'],
+      [role='button'],
+      summary,
+      a[class*='inline-flex'],
+      a[class*='flex']
+    ) {
       min-height: 44px;
     }
     :where(button, [role='tab'], [role='button']) {
@@ -570,5 +577,32 @@
 @media (prefers-reduced-motion: reduce) {
   .vp-mote {
     animation: none;
+  }
+}
+
+/* shadcn/ui motion: sheet */
+@keyframes sheet-in {
+  from {
+    transform: translateX(var(--sheet-from, 100%));
+  }
+}
+@keyframes fade-in {
+  from {
+    opacity: 0;
+  }
+}
+.sheet-overlay[data-state='open'] {
+  animation: fade-in 0.2s ease-out;
+}
+.sheet-panel[data-state='open'] {
+  animation: sheet-in 0.28s var(--ease-out);
+}
+.sheet-panel[data-side='left'] {
+  --sheet-from: -100%;
+}
+@media (prefers-reduced-motion: reduce) {
+  .sheet-overlay,
+  .sheet-panel {
+    animation: none !important;
   }
 }

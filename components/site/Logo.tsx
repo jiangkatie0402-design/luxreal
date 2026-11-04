@@ -1,11 +1,15 @@
 import { Link } from '@/i18n/navigation';
+import { cn } from '@/lib/utils';
 
 /** Placeholder mark: a cube cut by the generation slice. */
 export function Logo({ className = '' }: { className?: string }) {
   return (
     <Link
       href="/"
-      className={`flex items-center gap-2 font-display text-lg font-semibold tracking-tight ${className}`}
+      className={cn(
+        'flex items-center gap-2 font-display text-lg font-semibold tracking-tight',
+        className,
+      )}
     >
       <svg width="26" height="26" viewBox="0 0 26 26" aria-hidden>
         <path

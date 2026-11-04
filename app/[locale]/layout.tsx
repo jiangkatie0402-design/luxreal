@@ -3,12 +3,8 @@ import { hasLocale, NextIntlClientProvider } from 'next-intl';
 import { getTranslations, setRequestLocale } from 'next-intl/server';
 import { notFound } from 'next/navigation';
 import type { ReactNode } from 'react';
-import { Footer } from '@/components/layout/Footer';
-import { Header } from '@/components/layout/Header';
-import { MobileCTA } from '@/components/layout/MobileNav';
-import { themeScript } from '@/components/layout/ThemeToggle';
+import { SiteHeader } from '@/components/site/SiteHeader';
 import { JsonLd } from '@/components/seo/JsonLd';
-import { ViewCanvas } from '@/components/three/ViewCanvas';
 import { buildMetadata } from '@/components/seo/meta';
 import { site } from '@/config/site';
 import { routing } from '@/i18n/routing';
@@ -49,10 +45,7 @@ export default async function LocaleLayout({
   const t = await getTranslations({ locale, namespace: 'common' });
 
   return (
-    <html lang={locale === 'zh' ? 'zh-CN' : 'en'} suppressHydrationWarning>
-      <head>
-        <script dangerouslySetInnerHTML={{ __html: themeScript }} />
-      </head>
+    <html lang={locale === 'zh' ? 'zh-CN' : 'en'} className="dark">
       <body>
         <JsonLd
           data={{
@@ -70,11 +63,8 @@ export default async function LocaleLayout({
           >
             {t('skipToContent')}
           </a>
-          <Header />
+          <SiteHeader />
           <main id="main">{children}</main>
-          <Footer />
-          <MobileCTA />
-          <ViewCanvas />
         </NextIntlClientProvider>
       </body>
     </html>

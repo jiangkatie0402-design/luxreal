@@ -4,7 +4,7 @@ import { useTranslations } from 'next-intl';
 import { useEffect, useRef, useState, type CSSProperties } from 'react';
 import { usePerfStore } from '@/lib/perf';
 import { CoverUpload } from '../cover/CoverUpload';
-import { titleEn, titleZh } from '../world/fonts';
+import { titleEn, titleZh } from '@/components/site/fonts';
 import { GameHUD } from './GameHUD';
 import { PrintPins, PrintStatus } from './PrintHUD';
 
