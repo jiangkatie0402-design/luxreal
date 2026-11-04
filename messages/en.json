@@ -938,6 +938,25 @@
       "io": {
         "input": "INPUT",
         "output": "OUTPUT"
+      },
+      "printHud": {
+        "printing": "Printing",
+        "done": "Printed",
+        "layer": "Layer",
+        "pins": {
+          "layer": {
+            "t": "0.08mm layers",
+            "d": "Auto-generated supports"
+          },
+          "mesh": {
+            "t": "Watertight mesh",
+            "d": "No holes · no repair"
+          },
+          "base": {
+            "t": "One-piece base",
+            "d": "Export STL / 3MF"
+          }
+        }
       }
     }
   },

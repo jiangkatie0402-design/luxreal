@@ -38,10 +38,10 @@ export function GameHUD({ progress, reduced }: { progress: number; reduced: bool
   return (
     <div aria-hidden className="pointer-events-none absolute inset-0 z-[1]">
       {/* boss bar */}
-      <div className="absolute left-1/2 bottom-[calc(6rem+250px)] w-[min(720px,86vw)] -translate-x-1/2 md:bottom-auto md:top-[calc(var(--header-h)+22px)]">
+      <div className="absolute left-1/2 top-3 w-[80%] -translate-x-1/2 md:top-5 md:w-[70%]">
         <div className="flex items-end justify-between px-1">
           <p className="flex items-baseline gap-3 [text-shadow:0_1px_10px_rgba(0,0,0,0.9)]">
-            <span className="font-serif text-[15px] tracking-[0.35em] text-[#f1e6cf] md:text-lg">
+            <span className="font-serif text-xs tracking-[0.35em] text-[#f1e6cf] md:text-base">
               {t('boss')}
             </span>
             <span className="hidden font-mono text-[10px] uppercase tracking-[0.25em] text-[#e0473f]/90 sm:inline">
@@ -98,7 +98,7 @@ export function GameHUD({ progress, reduced }: { progress: number; reduced: bool
               </svg>
               <span className="hud-flash absolute inset-0 bg-white" />
               <span
-                className={`hud-dmg absolute font-semibold tabular-nums tracking-tight [text-shadow:0_2px_12px_rgba(0,0,0,0.85)] ${h.crit ? 'text-3xl text-[#ffd98a] md:text-5xl' : 'text-xl text-white/95 md:text-3xl'}`}
+                className={`hud-dmg absolute font-semibold tabular-nums tracking-tight [text-shadow:0_2px_12px_rgba(0,0,0,0.85)] ${h.crit ? 'text-2xl text-[#ffd98a] md:text-4xl' : 'text-lg text-white/95 md:text-2xl'}`}
                 style={{ left: `${h.x}%`, top: `${h.y}%` }}
               >
                 {h.crit && (
@@ -113,7 +113,7 @@ export function GameHUD({ progress, reduced }: { progress: number; reduced: bool
         )}
 
       {/* player HUD */}
-      <div className="absolute bottom-[calc(2rem+186px)] left-5 hidden w-[280px] md:left-8 xl:block">
+      <div className="absolute bottom-4 left-4 hidden w-[240px] lg:block">
         <p className="flex items-baseline gap-2 [text-shadow:0_1px_6px_#000]">
           <span className="text-[13px] font-medium tracking-wide text-white/90">{t('player')}</span>
         </p>
@@ -126,13 +126,13 @@ export function GameHUD({ progress, reduced }: { progress: number; reduced: bool
             w="w-[78%]"
           />
         </div>
-        <div className="mt-4 flex gap-2">
+        <div className="mt-3 flex gap-1.5">
           {SKILLS.map((d, i) => {
             const active = i === landed % 4;
             return (
               <span
                 key={i}
-                className={`relative grid size-11 place-items-center overflow-hidden rounded-[10px] border bg-[rgba(8,12,22,0.62)] backdrop-blur-sm transition-colors ${active ? 'border-[#9cc8ff]/80 shadow-[0_0_16px_rgba(127,190,255,0.45),inset_0_0_12px_rgba(127,190,255,0.25)]' : 'border-white/12'}`}
+                className={`relative grid size-9 place-items-center overflow-hidden rounded-[10px] border bg-[rgba(8,12,22,0.62)] backdrop-blur-sm transition-colors ${active ? 'border-[#9cc8ff]/80 shadow-[0_0_16px_rgba(127,190,255,0.45),inset_0_0_12px_rgba(127,190,255,0.25)]' : 'border-white/12'}`}
               >
                 <svg
                   viewBox="0 0 24 24"
