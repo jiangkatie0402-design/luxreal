@@ -9,7 +9,7 @@ const VB_H = 900;
 
 function surface(x: number, y: number) {
   return (
-    0.95 * Math.exp(-((x + 0.25) ** 2 + (y - 0.1) ** 2) / 0.14) +
+    0.8 * Math.exp(-((x + 0.25) ** 2 + (y - 0.1) ** 2) / 0.14) +
     0.55 * Math.exp(-((x - 0.55) ** 2 + (y + 0.25) ** 2) / 0.08) -
     0.18 * Math.exp(-((x - 0.15) ** 2 + (y + 0.75) ** 2) / 0.18)
   );
@@ -24,7 +24,7 @@ function project(x: number, y: number, z: number): [number, number] {
   const up = yr * Math.sin(tilt) + z * Math.cos(tilt);
   const d = 3.4;
   const f = d / (d + depth);
-  return [VB_W / 2 + xr * f * 640, VB_H * 0.76 - up * f * 540];
+  return [VB_W / 2 + xr * f * 640, VB_H * 0.88 - up * f * 520];
 }
 
 function buildPaths() {
