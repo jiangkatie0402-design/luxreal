@@ -14,18 +14,39 @@ import { GameHUD } from './GameHUD';
  * (point grid -> clay -> PBR). Display modes: wireframe / clay / PBR.
  * Images are transparent renders; swap for GLB + three.js later for true orbit.
  */
-const MODELS = [
-  { id: 'qilin', src: '/community/qilin-v3.webp', faces: 48600, verts: 24410, maps: 4 },
+type Model = {
+  id: string;
+  src: string;
+  faces: number;
+  verts: number;
+  maps: number;
+  /** untextured sculpt shown during the clay pass */
+  clay?: string;
+  /** triangulated wireframe render aligned to src */
+  wire?: string;
+  wide?: boolean;
+};
+const MODELS: readonly Model[] = [
+  {
+    id: 'qilin',
+    src: '/community/qilin-pbr.webp',
+    clay: '/community/qilin-clay.webp',
+    wire: '/community/qilin-wire.webp',
+    wide: true,
+    faces: 128400,
+    verts: 64215,
+    maps: 4,
+  },
   { id: 'corgi', src: '/core/corgi-model-cut.webp', faces: 12400, verts: 6218, maps: 4 },
   { id: 'knight', src: '/community/knight.webp', faces: 18900, verts: 9504, maps: 4 },
   { id: 'robot', src: '/core/robot-model-cut.webp', faces: 9800, verts: 4936, maps: 4 },
   { id: 'chest', src: '/community/chest.webp', faces: 7200, verts: 3655, maps: 4 },
   { id: 'sneaker', src: '/community/sneaker.webp', faces: 10600, verts: 5321, maps: 4 },
   { id: 'ding', src: '/community/ding.webp', faces: 15300, verts: 7702, maps: 4 },
-] as const;
+];
 type Mode = 'wire' | 'clay' | 'pbr';
 const MODES: Mode[] = ['wire', 'clay', 'pbr'];
-const GEN_MS = 2600;
+const GEN_MS = 3600;
 const HOLD_MS = 4200;
 const SCENE_MS = [GEN_MS + HOLD_MS, 5000, 5000];
 const SCENES = [
@@ -177,7 +198,9 @@ export function ViewportHero({ locale }: { locale: string }) {
 
       {/* ---------- the model on its turntable ---------- */}
       <div className="absolute inset-x-0 bottom-[40%] top-[calc(var(--header-h)+40px)] flex items-end justify-center [perspective:1200px] md:bottom-[27%]">
-        <div className="relative aspect-square h-full max-h-[64svh] max-w-[92vw]">
+        <div
+          className={`relative h-full max-w-[92vw] ${m.wide ? 'aspect-[8/5] max-h-[58svh]' : 'aspect-square max-h-[64svh]'}`}
+        >
           {/* turntable */}
           <div
             aria-hidden
@@ -192,9 +215,30 @@ export function ViewportHero({ locale }: { locale: string }) {
             style={modelStyle}
           >
             {/* wireframe / point grid (always under) */}
-            <div
-              className={`absolute inset-0 ${gridMask} transition-opacity duration-500 ${mode === 'wire' ? 'opacity-100' : 'opacity-70'}`}
-            />
+            {m.wire ? (
+              <div className="absolute inset-0">
+                <Image
+                  key={`wb-${m.id}`}
+                  src={m.src}
+                  alt=""
+                  fill
+                  sizes="(min-width:1024px) 900px, 90vw"
+                  className="object-contain object-bottom opacity-40 [filter:grayscale(1)_brightness(0.5)_sepia(1)_hue-rotate(180deg)_saturate(2.2)]"
+                />
+                <Image
+                  key={`w-${m.id}`}
+                  src={m.wire}
+                  alt=""
+                  fill
+                  sizes="(min-width:1024px) 900px, 90vw"
+                  className="object-contain object-bottom [filter:drop-shadow(0_0_6px_rgba(94,168,255,0.55))]"
+                />
+              </div>
+            ) : (
+              <div
+                className={`absolute inset-0 ${gridMask} transition-opacity duration-500 ${mode === 'wire' ? 'opacity-100' : 'opacity-70'}`}
+              />
+            )}
             {/* clay */}
             {showClay && (
               <div
@@ -203,14 +247,14 @@ export function ViewportHero({ locale }: { locale: string }) {
               >
                 <Image
                   key={`c-${m.id}`}
-                  src={m.src}
+                  src={m.clay ?? m.src}
                   alt=""
                   fill
                   priority
-                  sizes="(min-width:1024px) 640px, 90vw"
-                  className="object-contain object-bottom [filter:grayscale(1)_brightness(1.55)_contrast(0.78)]"
+                  sizes="(min-width:1024px) 900px, 90vw"
+                  className={`object-contain object-bottom ${m.clay ? '' : '[filter:grayscale(1)_brightness(1.55)_contrast(0.78)]'}`}
                 />
-                <div className={`absolute inset-0 ${gridMask} opacity-20`} />
+                {!m.clay && <div className={`absolute inset-0 ${gridMask} opacity-20`} />}
               </div>
             )}
             {/* PBR */}
@@ -225,10 +269,21 @@ export function ViewportHero({ locale }: { locale: string }) {
                   alt={t(`models.${m.id}`)}
                   fill
                   priority
-                  sizes="(min-width:1024px) 640px, 90vw"
+                  sizes="(min-width:1024px) 900px, 90vw"
                   className="object-contain object-bottom"
                 />
               </div>
+            )}
+            {/* mesh mask: triangulated wireframe over the surface while generating */}
+            {m.wire && mode !== 'wire' && (
+              <Image
+                key={`wm-${m.id}`}
+                src={m.wire}
+                alt=""
+                fill
+                sizes="(min-width:1024px) 900px, 90vw"
+                className={`pointer-events-none object-contain object-bottom mix-blend-screen transition-opacity duration-1000 ${gen < 1 ? 'opacity-60' : 'opacity-[0.12]'}`}
+              />
             )}
             {gen < 1 && (
               <span
