@@ -640,21 +640,3 @@
     animation: none;
   }
 }
-
-/* Hero background: slow drift of the Gaussian wireframe */
-@keyframes gauss-drift {
-  from {
-    transform: translate3d(-1.5%, 0, 0) scale(1.02);
-  }
-  to {
-    transform: translate3d(1.5%, -1.5%, 0) scale(1.06);
-  }
-}
-.gauss-mesh {
-  animation: gauss-drift 16s ease-in-out infinite alternate;
-}
-@media (prefers-reduced-motion: reduce) {
-  .gauss-mesh {
-    animation: none;
-  }
-}
