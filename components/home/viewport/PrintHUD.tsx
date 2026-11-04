@@ -1,11 +1,11 @@
 'use client';
 import { useTranslations } from 'next-intl';
 
-/** Pins in % of the 3:2 print photo; side = which way the label extends. */
+/** Pins in % of the print photo; side = which way the label extends. */
 const PINS = [
-  { id: 'layer', x: 56, y: 30, side: 'l', len: 120, at: 0.2 },
-  { id: 'mesh', x: 64, y: 48, side: 'r', len: 120, at: 0.35 },
-  { id: 'base', x: 83, y: 32, side: 'r', len: 40, at: 0.5 },
+  { id: 'layer', x: 45, y: 40, side: 'l', len: 150, at: 0.2 },
+  { id: 'mesh', x: 64, y: 40, side: 'r', len: 150, at: 0.35 },
+  { id: 'base', x: 10, y: 33, side: 'r', len: 50, at: 0.5 },
 ] as const;
 const LAYERS = 650;
 

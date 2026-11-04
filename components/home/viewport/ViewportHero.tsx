@@ -50,9 +50,9 @@ const GEN_MS = 3600;
 const HOLD_MS = 4200;
 const SCENE_MS = [GEN_MS + HOLD_MS, 5000, 5000];
 const SCENES = [
-  { id: 'model', img: null, px: 0, py: 0 },
-  { id: 'print', img: '/community/qilin-print-v2.webp', px: 0.7, py: 0 },
-  { id: 'game', img: '/community/qilin-game-v2.webp', px: 0.55, py: 0 },
+  { id: 'model', img: null, px: 0, py: 0, ar: 1 },
+  { id: 'print', img: '/community/qilin-print-v3.webp', px: 0.5, py: 0.5, ar: 16 / 9 },
+  { id: 'game', img: '/community/qilin-game-v2.webp', px: 0.55, py: 0, ar: 1.5 },
 ] as const;
 
 const STAGE: Record<HeroLayout, string> = {
@@ -364,7 +364,7 @@ export function ViewportHero({
       </div>
 
       {/* ---------- scenes 2 & 3: the same model, printed and in a game ----------
-          Full-bleed. The 3:2 shot is laid out in an object-cover box sized with
+          Full-bleed. Each shot is laid out in an object-cover box sized with
           container units, so pins can be placed in % of the image itself. */}
       {SCENES.map(
         (sc, n) =>
@@ -378,11 +378,12 @@ export function ViewportHero({
                 <>
                   <div className="vp-reveal absolute inset-0">
                     <div
-                      className="absolute aspect-[3/2]"
+                      className="absolute"
                       style={{
-                        width: 'max(100cqw, 150cqh)',
-                        left: `calc((100cqw - max(100cqw, 150cqh)) * ${sc.px})`,
-                        top: `calc((100cqh - max(100cqw, 150cqh) / 1.5) * ${sc.py})`,
+                        aspectRatio: sc.ar,
+                        width: `max(100cqw, ${sc.ar * 100}cqh)`,
+                        left: `calc((100cqw - max(100cqw, ${sc.ar * 100}cqh)) * ${sc.px})`,
+                        top: `calc((100cqh - max(100cqw, ${sc.ar * 100}cqh) / ${sc.ar}) * ${sc.py})`,
                       }}
                     >
                       <Image

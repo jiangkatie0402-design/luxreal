@@ -902,8 +902,8 @@
         },
         "print": {
           "label": "3D-print a figurine",
-          "tag": "3D print · resin · hand-painted",
-          "alt": "A 3D-printed qilin figurine on a desk next to a printer"
+          "tag": "3D print · resin · unpainted",
+          "alt": "A grey resin 3D-printed qilin standing on a walnut workbench in a 3D-printing studio at dusk"
         },
         "game": {
           "label": "Into the game · boss fight",
@@ -946,15 +946,15 @@
         "pins": {
           "layer": {
             "t": "0.08mm layers",
-            "d": "Auto-generated supports"
+            "d": "Fine detail, one pass"
           },
           "mesh": {
             "t": "Watertight mesh",
             "d": "No holes · no repair"
           },
           "base": {
-            "t": "Batch prints",
-            "d": "Same model · many copies"
+            "t": "One-click slicing",
+            "d": "Export STL / 3MF"
           }
         }
       }

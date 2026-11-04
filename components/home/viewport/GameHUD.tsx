@@ -29,6 +29,22 @@ function Bar({ pct, fill, h, w = 'w-full' }: { pct: number; fill: string; h: str
   );
 }
 
+/** Stacks a label one glyph per line (CJK) — sturdier than writing-mode across fonts. */
+function Stack({ text, className }: { text: string; className: string }) {
+  const parts = /[\u4e00-\u9fff]/.test(text) ? [...text.replace(/\s+/g, '')] : text.split(/\s+/);
+  return (
+    <span className={`flex flex-col items-center leading-none ${className}`}>
+      {parts.map((c, i) =>
+        c === '·' ? (
+          <span key={i} className="my-0.5 size-[3px] rounded-full bg-current opacity-60" />
+        ) : (
+          <span key={i}>{c}</span>
+        ),
+      )}
+    </span>
+  );
+}
+
 /** Game overlay for the boss-fight scene: boss bar, player bars, skills, slashes and damage numbers. */
 export function GameHUD({ progress, reduced }: { progress: number; reduced: boolean }) {
   const t = useTranslations('home.viewport.hud');
@@ -37,37 +53,37 @@ export function GameHUD({ progress, reduced }: { progress: number; reduced: bool
   const hp = 100 - landed * 11 - 4;
   return (
     <div aria-hidden className="pointer-events-none absolute inset-0 z-[1]">
-      {/* boss bar */}
-      <div className="absolute bottom-[calc(6rem+236px)] left-1/2 w-[min(640px,86vw)] -translate-x-1/2 md:bottom-[calc(2rem+222px)]">
-        <div className="flex items-end justify-between px-1">
-          <p className="flex items-baseline gap-3 [text-shadow:0_1px_10px_rgba(0,0,0,0.9)]">
-            <span className="font-serif text-sm tracking-[0.35em] text-[#f1e6cf] md:text-base">
-              {t('boss')}
-            </span>
-            <span className="hidden font-mono text-[10px] uppercase tracking-[0.25em] text-[#e0473f]/90 sm:inline">
-              {t('phase')}
-            </span>
-          </p>
-          <span className="font-mono text-[11px] tabular-nums text-white/60">{hp}%</span>
-        </div>
-        <div className="relative mt-2 flex items-center">
-          <span className="h-px w-6 bg-gradient-to-l from-[#d9c39a]/70 to-transparent md:w-10" />
-          <span className="mx-1 size-1.5 rotate-45 border border-[#d9c39a]/80" />
-          <div className="relative h-[7px] flex-1 overflow-hidden rounded-full bg-[rgba(10,6,8,0.72)] shadow-[inset_0_0_0_1px_rgba(217,195,154,0.28),0_0_24px_rgba(0,0,0,0.6)]">
+      {/* boss bar: vertical, on the right edge so it never covers the fight */}
+      <div className="absolute right-3 top-[calc(var(--header-h)+120px)] flex items-start gap-3 md:right-10 md:top-1/2 md:-translate-y-1/2 md:items-center">
+        <p className="flex flex-col items-center gap-4 [text-shadow:0_1px_10px_rgba(0,0,0,0.9)]">
+          <Stack
+            text={t('boss')}
+            className="gap-1 font-serif text-sm text-[#f1e6cf] md:gap-1.5 md:text-lg"
+          />
+          <Stack
+            text={t('phase')}
+            className="hidden gap-0.5 rounded-sm border border-[#e0473f]/50 px-1 py-1.5 font-serif text-[11px] text-[#ff7a6e] md:flex"
+          />
+        </p>
+        <div className="flex flex-col items-center">
+          <span className="font-mono text-[11px] tabular-nums text-white/70">{hp}%</span>
+          <span className="mt-2 h-5 w-px bg-gradient-to-t from-[#d9c39a]/70 to-transparent" />
+          <span className="my-1 size-1.5 rotate-45 border border-[#d9c39a]/80" />
+          <div className="relative h-[28svh] w-[7px] overflow-hidden rounded-full bg-[rgba(10,6,8,0.72)] shadow-[inset_0_0_0_1px_rgba(217,195,154,0.28),0_0_24px_rgba(0,0,0,0.6)] md:h-[min(46svh,420px)]">
             <span
-              className="absolute inset-y-0 left-0 rounded-full bg-[rgba(255,236,200,0.55)] transition-[width] delay-300 duration-700 ease-out"
-              style={{ width: `${hp}%` }}
+              className="absolute inset-x-0 bottom-0 rounded-full bg-[rgba(255,236,200,0.55)] transition-[height] delay-300 duration-700 ease-out"
+              style={{ height: `${hp}%` }}
             />
             <span
-              className="absolute inset-y-0 left-0 rounded-full bg-[linear-gradient(90deg,#5e0f14,#b3232a_60%,#ff5a4a)] shadow-[0_0_12px_rgba(255,70,60,0.55)] transition-[width] duration-150"
-              style={{ width: `${Math.max(hp - 6, 0)}%` }}
+              className="absolute inset-x-0 bottom-0 rounded-full bg-[linear-gradient(0deg,#5e0f14,#b3232a_60%,#ff5a4a)] shadow-[0_0_12px_rgba(255,70,60,0.55)] transition-[height] duration-150"
+              style={{ height: `${Math.max(hp - 6, 0)}%` }}
             >
-              <span className="absolute inset-x-0 top-0 h-px bg-white/35" />
+              <span className="absolute inset-y-0 left-0 w-px bg-white/35" />
             </span>
-            <span className="absolute inset-y-0 left-1/2 w-px bg-black/70" />
+            <span className="absolute inset-x-0 top-1/2 h-px bg-black/70" />
           </div>
-          <span className="mx-1 size-1.5 rotate-45 border border-[#d9c39a]/80" />
-          <span className="h-px w-6 bg-gradient-to-r from-[#d9c39a]/70 to-transparent md:w-10" />
+          <span className="my-1 size-1.5 rotate-45 border border-[#d9c39a]/80" />
+          <span className="h-5 w-px bg-gradient-to-b from-[#d9c39a]/70 to-transparent" />
         </div>
       </div>
 
