@@ -5,28 +5,52 @@ import { useTranslations } from 'next-intl';
 import { ButtonLink } from '@/components/ui/button';
 import { site } from '@/config/site';
 
-const ITEMS = ['image', 'text', 'agent'] as const;
+/** "Lead：rest" points render the lead in bold (zh full-width colon or en ": "). */
+function Point({ text }: { text: string }) {
+  const m = text.match(/^(.+?)(：|: )(.+)$/);
+  if (!m) return <>{text}</>;
+  return (
+    <span>
+      <strong className="font-semibold text-foreground">{m[1]}</strong>
+      {m[2]}
+      {m[3]}
+    </span>
+  );
+}
 
 /**
- * 核心能力: pill tabs above one large glowing card. Text and the primary action
- * sit on the left; an app-window media frame bleeds off the card's right/bottom
- * edge. The window is empty until assets are decided.
+ * Pill tabs above one large glowing card. Text (and optional primary action) on
+ * the left; an app-window media frame bleeds off the card's right/bottom edge.
+ * The window is empty until assets are decided.
  */
-export function CoreCapabilities() {
-  const t = useTranslations('site.core');
+export function Showcase({
+  ns,
+  id,
+  items,
+  cta = false,
+  footer,
+}: {
+  ns: string;
+  id: string;
+  items: readonly string[];
+  cta?: boolean;
+  footer?: string;
+}) {
+  const t = useTranslations(ns);
   const c = useTranslations('common');
+  const ITEMS = items;
   return (
-    <section aria-labelledby="core-title" id="core" className="scroll-mt-20 py-24 md:py-32">
+    <section aria-labelledby={`${id}-title`} id={id} className="scroll-mt-20 py-24 md:py-32">
       <div className="container-x">
         <h2
-          id="core-title"
+          id={`${id}-title`}
           className="text-center font-display text-3xl font-semibold tracking-tight md:text-[2.5rem]"
         >
           {t('title')}
         </h2>
 
         <TabsPrimitive.Root
-          defaultValue="image"
+          defaultValue={items[0]}
           className="mt-8 flex flex-col items-center md:mt-10"
         >
           <TabsPrimitive.List
@@ -67,18 +91,20 @@ export function CoreCapabilities() {
                           className="flex gap-2.5 text-sm leading-relaxed text-foreground/85"
                         >
                           <Check className="mt-1 size-3.5 shrink-0 text-primary" aria-hidden />
-                          {p}
+                          <Point text={p} />
                         </li>
                       ))}
                     </ul>
-                    <ButtonLink
-                      href={site.links.app}
-                      size="lg"
-                      className="mt-10 w-full max-w-[18rem]"
-                    >
-                      {c('startCreating')}
-                      <ArrowRight aria-hidden />
-                    </ButtonLink>
+                    {cta && (
+                      <ButtonLink
+                        href={site.links.app}
+                        size="lg"
+                        className="mt-10 w-full max-w-[18rem]"
+                      >
+                        {c('startCreating')}
+                        <ArrowRight aria-hidden />
+                      </ButtonLink>
+                    )}
                   </div>
 
                   {/* app-window media frame, bleeding off the right/bottom edge */}
@@ -104,7 +130,21 @@ export function CoreCapabilities() {
             </TabsPrimitive.Content>
           ))}
         </TabsPrimitive.Root>
+        {footer && <p className="mt-8 text-center text-sm text-muted-foreground">{footer}</p>}
       </div>
     </section>
+  );
+}
+
+/** 核心能力 */
+export function CoreCapabilities() {
+  return <Showcase ns="site.core" id="core" items={['image', 'text', 'agent']} cta />;
+}
+
+/** 应用场景 */
+export function UseCases() {
+  const t = useTranslations('site.scenes');
+  return (
+    <Showcase ns="site.scenes" id="scenes" items={['print', 'game', 'film']} footer={t('more')} />
   );
 }

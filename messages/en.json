@@ -84,6 +84,125 @@
           "For full scenes, use Blender to place objects and set up lights and cameras."
         ]
       }
+    },
+    "scenes": {
+      "title": "Use cases",
+      "more": "More use cases: product design · interior design · digital heritage · e-commerce",
+      "print": {
+        "tab": "3D printing",
+        "title": "Turn photos and ideas into figurines, ornaments and custom pieces",
+        "intro": "Convert images or text into detailed 3D models, export print files and make your own figurines, ornaments and custom objects.",
+        "points": [
+          "Watertight by design, less hole-fixing: closed, manifold models cut slicing errors from holes and non-manifold edges and reduce pre-print repair.",
+          "Fine structures still print: thin walls, slim rods and local detail hold their shape and strength at the target size.",
+          "Standard print formats for mainstream slicers: export STL / 3MF and drop into your existing print workflow."
+        ]
+      },
+      "game": {
+        "tab": "Game assets",
+        "title": "Generate characters, props and scenes to prototype games faster",
+        "intro": "Turn concept art or text into textured 3D assets, skip modelling from scratch and validate gameplay and scenes sooner.",
+        "points": [
+          "Controllable face count, detail and performance: tune geometry per asset so characters, props and set pieces fit your budget.",
+          "Full PBR materials, less manual setup: colour, roughness, metallic and normal channels for faithful materials in-engine.",
+          "Multi-format delivery for your tools: GLB / FBX / OBJ and more for editing, level building and prototyping."
+        ]
+      },
+      "film": {
+        "tab": "Film previs",
+        "title": "Previs the scene and shots first, then generate AI video",
+        "intro": "Use an agent with Blender to turn shot descriptions into grey-box reference video, giving AI video clear composition, space and motion.",
+        "points": [
+          "One scene, many shots: lock characters, props and layout, then switch camera positions to previs different shots without rebuilding.",
+          "Real 3D cameras, controllable framing and moves: focal length, position and path previs dolly, pan and tracking before you generate.",
+          "Continuous grey-box video, clear action and timing: spatial relationships, character motion and shot timing as a coherent reference."
+        ]
+      }
+    },
+    "agents": {
+      "title": "Built for agents",
+      "lead": "Composable model generation, material processing and format conversion that an agent can run end to end — executing tasks, tracking progress and organising results with fewer manual steps.",
+      "items": {
+        "gen": {
+          "label": "Model generation",
+          "t": "Many inputs for different needs",
+          "d": "Text, single-image and multi-image generation. Ideas without references, existing concept art and multi-angle photos can all be a starting point."
+        },
+        "material": {
+          "label": "Materials",
+          "t": "Keep the shape, generate new material versions",
+          "d": "Regenerate materials from a reference image — texture, colour and surface finish — without remodelling."
+        },
+        "format": {
+          "label": "Format conversion",
+          "t": "One model for every tool",
+          "d": "Convert between model formats so assets keep working for web, games or printing without regenerating."
+        },
+        "batch": {
+          "label": "Multi-asset production",
+          "t": "One list, many assets in a row",
+          "d": "Split work into characters, props and set pieces, generate each and organise the results — no one-by-one submitting and downloading."
+        },
+        "track": {
+          "label": "Tracking & file organisation",
+          "t": "Let the agent follow progress and results",
+          "d": "Poll task status, download and organise model files, deliver sources and offline previews — less hopping between task pages and folders."
+        },
+        "scene": {
+          "label": "Scene building",
+          "t": "Independent models, editable scenes",
+          "d": "Combine generated assets in Blender, adjust objects, lights and cameras independently and keep the scene editable for new shots."
+        }
+      },
+      "casesTitle": "Case studies",
+      "cases": {
+        "props": {
+          "label": "Game props",
+          "t": "One level list, a set of game props",
+          "d": "Make several models from level requirements, packaged as project assets to build and validate a prototype."
+        },
+        "print": {
+          "label": "Photo to print",
+          "t": "One pet photo, a custom figurine",
+          "d": "From photo to generated model, print prep and the finished piece — see how a model becomes a figurine on your desk."
+        },
+        "film": {
+          "label": "Grey-box previs",
+          "t": "One shot description, a grey-box reference video",
+          "d": "Lay out the scene, block characters and move the camera in Blender to turn words into a previewable video."
+        }
+      }
+    },
+    "why": {
+      "title": "Why Aholo 3D?",
+      "items": {
+        "cost": {
+          "label": "Cost",
+          "t": "Lower cost per model",
+          "d": "The same deliverable model for less spend and fewer revisions."
+        },
+        "easy": {
+          "label": "Ease",
+          "t": "Create directly, or hand it to your AI agent",
+          "d": "Start from an image or text, or let your AI agent run generation, processing and file organisation for you."
+        },
+        "quality": {
+          "label": "Quality",
+          "t": "Detailed form and convincing materials",
+          "d": "Faithful outlines, textures and surface features so models stay close to your design."
+        }
+      }
+    },
+    "voices": {
+      "title": "What users say"
+    },
+    "community": {
+      "title": "From one image or one sentence to these 3D works",
+      "lead": "Compare each model's shape, materials and detail with its original image or text and see if it fits your needs."
+    },
+    "final": {
+      "title": "Start generating 3D models",
+      "lead": "Upload an image or describe it to make models and scenes."
     }
   }
 }

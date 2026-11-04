@@ -1,6 +1,7 @@
 import { setRequestLocale } from 'next-intl/server';
 import { ViewportHero } from '@/components/home/viewport/ViewportHero';
-import { CoreCapabilities } from '@/components/site/CoreCapabilities';
+import { CoreCapabilities, UseCases } from '@/components/site/CoreCapabilities';
+import { Community, FinalCta, ForAgents, Testimonials, WhyUs } from '@/components/site/Sections';
 
 /** Sections are added one at a time as each is specified. */
 export default async function HomePage({ params }: { params: Promise<{ locale: string }> }) {
@@ -10,6 +11,12 @@ export default async function HomePage({ params }: { params: Promise<{ locale: s
     <>
       <ViewportHero locale={locale} />
       <CoreCapabilities />
+      <UseCases />
+      <ForAgents />
+      <WhyUs />
+      <Testimonials />
+      <Community />
+      <FinalCta />
     </>
   );
 }
