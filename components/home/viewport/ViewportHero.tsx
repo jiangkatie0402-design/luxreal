@@ -56,10 +56,18 @@ const SCENES = [
 
 const STAGE: Record<HeroLayout, string> = {
   stage: 'top-[calc(var(--header-h)+150px)] md:top-[calc(var(--header-h)+170px)] md:bottom-[27%]',
-  split:
-    'top-[calc(var(--header-h)+40px)] md:left-[36%] md:right-0 md:top-[calc(var(--header-h)+30px)] md:bottom-[10%]',
-  mono: 'top-[calc(var(--header-h)+120px)] md:top-[calc(var(--header-h)+90px)] md:bottom-[27%]',
+  aura: 'top-[calc(var(--header-h)+150px)] md:top-[calc(var(--header-h)+150px)] md:bottom-[29%]',
+  source: 'top-[calc(var(--header-h)+150px)] md:top-[calc(var(--header-h)+170px)] md:bottom-[27%]',
+  callout: 'top-[calc(var(--header-h)+150px)] md:top-[calc(var(--header-h)+160px)] md:bottom-[28%]',
 };
+
+/** Annotation pins on the qilin (percent of the model box). */
+const CALLOUTS = [
+  { id: 'horn', x: 79, y: 9, side: 'r', len: 90 },
+  { id: 'tail', x: 13, y: 26, side: 'l', len: 70 },
+  { id: 'scale', x: 45, y: 52, side: 'l', len: 300 },
+  { id: 'claw', x: 54, y: 92, side: 'r', len: 330 },
+] as const;
 
 function Grad({
   children,
@@ -80,7 +88,7 @@ function Grad({
 const gridMask =
   '[mask-image:var(--m)] [mask-position:bottom] [mask-repeat:no-repeat] [mask-size:contain] [background:radial-gradient(circle,rgba(225,240,255,1)_1.2px,transparent_1.9px)_0_0/12px_12px,repeating-linear-gradient(0deg,rgba(120,180,255,0.8)_0_1px,transparent_1px_12px),repeating-linear-gradient(90deg,rgba(120,180,255,0.8)_0_1px,transparent_1px_12px)]';
 
-export type HeroLayout = 'stage' | 'split' | 'mono';
+export type HeroLayout = 'stage' | 'aura' | 'source' | 'callout';
 
 /** Status chip shown next to the model while it is being generated. */
 function GenChip({ gen, label, faces }: { gen: number; label: string; faces: string }) {
@@ -199,10 +207,8 @@ export function ViewportHero({
         <div
           className={`relative h-full max-w-[92vw] ${m.wide ? 'aspect-[8/5]' : 'aspect-square'}`}
         >
-          {scene === 0 && (
-            <div
-              className={`absolute z-10 ${layout === 'split' ? 'left-[6%] top-[2%]' : layout === 'stage' ? 'left-1/2 top-[-7%] -translate-x-1/2' : 'right-[2%] top-[4%]'} hidden md:block`}
-            >
+          {scene === 0 && layout === 'stage' && (
+            <div className={`absolute z-10 left-1/2 top-[-7%] -translate-x-1/2 hidden md:block`}>
               <GenChip
                 gen={gen}
                 label={gen < 1 ? `${t('generating')} ${Math.round(gen * 100)}%` : t('ready')}
@@ -298,9 +304,61 @@ export function ViewportHero({
               <span
                 className="absolute inset-x-[-10%] h-[2px] bg-[#9cc8ff] shadow-[0_0_20px_5px_rgba(94,168,255,0.85)]"
                 style={{ top: lineY }}
-              />
+              >
+                {layout !== 'stage' && (
+                  <span className="absolute bottom-2 right-0 hidden whitespace-nowrap font-mono text-[11px] tracking-wider text-[#cfe3ff] [text-shadow:0_0_10px_rgba(94,168,255,0.9)] md:block">
+                    {t('generating')} {Math.round(gen * 100)}% · {faces.toLocaleString()}{' '}
+                    {t('faces')}
+                  </span>
+                )}
+              </span>
             )}
           </div>
+          {/* aura: mirrored floor reflection */}
+          {layout === 'aura' && (
+            <div
+              aria-hidden
+              className={`pointer-events-none absolute inset-x-[4%] top-[95%] h-full transition-opacity duration-1000 [mask-image:linear-gradient(180deg,rgba(0,0,0,0.45),transparent_32%)] ${gen >= 1 ? 'opacity-100' : 'opacity-0'}`}
+            >
+              <div className="absolute inset-0 [transform:scaleY(-1)]">
+                <Image
+                  src={m.src}
+                  alt=""
+                  fill
+                  sizes="900px"
+                  className="object-contain object-bottom blur-[1px]"
+                />
+              </div>
+            </div>
+          )}
+          {/* callout: annotation pins that land once the model is done */}
+          {layout === 'callout' &&
+            scene === 0 &&
+            CALLOUTS.map((c, i) => (
+              <span
+                key={c.id}
+                aria-hidden
+                className={`pointer-events-none absolute z-10 hidden transition-all duration-700 lg:block ${gen >= 1 ? 'opacity-100' : 'translate-y-1 opacity-0'}`}
+                style={{ left: `${c.x}%`, top: `${c.y}%`, transitionDelay: `${i * 140}ms` }}
+              >
+                <span className="absolute -left-[5px] -top-[5px] size-[10px] rounded-full border border-[#cfe3ff] bg-[#2F6BFF]/60 shadow-[0_0_12px_rgba(111,168,255,0.9)]" />
+                <span
+                  className={`absolute top-0 h-px bg-gradient-to-r ${c.side === 'r' ? 'left-[6px] from-[#9cc8ff] to-[#9cc8ff]/30' : 'right-[6px] from-[#9cc8ff]/30 to-[#9cc8ff]'}`}
+                  style={{ width: c.len }}
+                />
+                <span
+                  className={`absolute -top-[22px] whitespace-nowrap rounded-md border border-white/10 bg-[rgba(5,8,15,0.72)] px-2.5 py-1.5 backdrop-blur ${c.side === 'r' ? '' : 'text-right'}`}
+                  style={c.side === 'r' ? { left: c.len + 10 } : { right: c.len + 10 }}
+                >
+                  <span className="block text-[13px] font-medium text-white">
+                    {t(`callouts.${c.id}.t`)}
+                  </span>
+                  <span className="block font-mono text-[10px] tracking-wide text-[#9cc8ff]/80">
+                    {t(`callouts.${c.id}.d`)}
+                  </span>
+                </span>
+              </span>
+            ))}
         </div>
       </div>
 
@@ -339,82 +397,144 @@ export function ViewportHero({
         </span>
       )}
 
-      {/* ---------- copy + upload, per layout ---------- */}
-      {layout === 'mono' && (
-        <p
+      {/* ---------- atmosphere / frames per variant ---------- */}
+      {layout === 'aura' && scene === 0 && (
+        <div aria-hidden className="pointer-events-none absolute inset-0">
+          <span className="absolute left-1/2 top-0 h-[78%] w-[70vw] max-w-[1100px] -translate-x-1/2 bg-[radial-gradient(50%_90%_at_50%_0%,rgba(140,190,255,0.20),transparent_70%)] [clip-path:polygon(38%_0,62%_0,100%_100%,0_100%)]" />
+          <span className="absolute left-1/2 top-[56%] h-[26%] w-[56vw] -translate-x-1/2 rounded-[50%] bg-[radial-gradient(closest-side,rgba(47,107,255,0.32),transparent)] blur-2xl" />
+          {Array.from({ length: 18 }, (_, i) => (
+            <span
+              key={i}
+              className="vp-mote absolute size-[3px] rounded-full bg-[#cfe3ff]"
+              style={{
+                left: `${18 + ((i * 37) % 64)}%`,
+                top: `${22 + ((i * 53) % 44)}%`,
+                animationDelay: `${(i % 6) * -1}s`,
+                opacity: 0.25 + (i % 4) * 0.12,
+              }}
+            />
+          ))}
+        </div>
+      )}
+      {layout === 'callout' && scene === 0 && (
+        <div
           aria-hidden
-          className={`${titleEn.className} pointer-events-none absolute inset-x-0 top-[calc(var(--header-h)+150px)] select-none md:top-[calc(var(--header-h)+2svh)] text-center text-[clamp(5rem,22vw,22rem)] font-black leading-none tracking-[-0.02em] text-transparent transition-opacity duration-500 [-webkit-text-stroke:1px_rgba(156,200,255,0.28)] ${scene === 0 ? 'opacity-100' : 'opacity-0'}`}
+          className="pointer-events-none absolute inset-x-[7%] bottom-[27%] top-[calc(var(--header-h)+140px)] hidden lg:block"
         >
-          <span className="bg-[linear-gradient(180deg,rgba(111,168,255,0.22),rgba(111,168,255,0)_75%)] bg-clip-text">
-            LUX3D
+          {[
+            'left-0 top-0 border-l border-t',
+            'right-0 top-0 border-r border-t',
+            'left-0 bottom-0 border-l border-b',
+            'right-0 bottom-0 border-r border-b',
+          ].map((c) => (
+            <span key={c} className={`absolute size-5 border-[#9cc8ff]/45 ${c}`} />
+          ))}
+          <span className="absolute left-3 top-3 font-mono text-[10px] tracking-[0.2em] text-white/35">
+            QILIN.GLB · {m.faces.toLocaleString()} {t('faces')}
           </span>
-        </p>
-      )}
-
-      {layout === 'stage' && (
-        <div className="pointer-events-none absolute inset-x-0 top-[calc(var(--header-h)+18px)] z-[2] px-5 text-center md:top-[calc(var(--header-h)+28px)]">
-          <h1
-            id="hero-title"
-            className={`${brush.className} text-[clamp(2.2rem,4.4vw,4.2rem)] leading-[1.1] [text-shadow:0_4px_30px_rgba(0,0,0,0.6)] ${locale === 'zh' ? 'tracking-[0.04em]' : 'font-black uppercase'}`}
-          >
-            {t('titleA')}
-            <Grad className="md:inline">{t('titleB')}</Grad>
-          </h1>
-          <p className="mx-auto mt-3 hidden max-w-[680px] text-[15px] leading-relaxed text-white/65 sm:block">
-            {t('subtitle')}
-          </p>
+          <span className="absolute bottom-3 left-3 font-mono text-[10px] tracking-[0.2em] text-white/35">
+            4K PBR · GLB / FBX / USDZ / STL
+          </span>
         </div>
       )}
-
-      {layout === 'split' && (
-        <div className="absolute left-5 right-5 top-[calc(var(--header-h)+40px)] z-[2] md:left-10 md:right-auto md:top-1/2 md:w-[min(540px,40vw)] md:-translate-y-1/2 xl:left-16">
-          <h1
-            id="hero-title"
-            className={`${brush.className} text-[clamp(2.4rem,4.8vw,4.8rem)] leading-[1.06] [text-shadow:0_4px_30px_rgba(0,0,0,0.6)] ${locale === 'zh' ? 'tracking-[0.04em]' : 'font-black uppercase'}`}
-          >
-            {t('titleA')}
-            <Grad>{t('titleB')}</Grad>
-          </h1>
-          <p className="mt-4 hidden max-w-[440px] text-[15px] leading-relaxed text-white/65 sm:block">
-            {t('subtitle')}
-          </p>
-          <div className="mt-8 hidden md:block">
-            <CoverUpload />
+      {layout === 'source' && scene === 0 && (
+        <div
+          aria-hidden
+          className="pointer-events-none absolute inset-x-0 top-[calc(var(--header-h)+190px)] hidden xl:block"
+        >
+          {/* input photo card */}
+          <div className="absolute left-[6%] top-[6%] w-[220px] -rotate-[5deg] rounded-xl border border-white/12 bg-[rgba(10,16,30,0.7)] p-2 shadow-[0_20px_60px_rgba(0,0,0,0.5)] backdrop-blur">
+            <div className="relative aspect-[16/10] overflow-hidden rounded-lg">
+              <Image
+                src="/community/qilin-src.webp"
+                alt=""
+                fill
+                sizes="220px"
+                className="object-cover"
+              />
+            </div>
+            <p className="mt-2 flex items-center justify-between px-1 font-mono text-[10px] text-white/55">
+              <span>{t('io.input')}</span>
+              <span className="text-white/80">qilin.jpg</span>
+            </p>
           </div>
-          <dl className="mt-8 hidden grid-cols-3 gap-6 border-t border-white/10 pt-6 md:grid">
-            {(['s1', 's2', 's3'] as const).map((k) => (
-              <div key={k}>
-                <dt className="sr-only">{t(`stats.${k}.l`)}</dt>
-                <dd className="text-2xl font-semibold tabular-nums text-white">
-                  {t(`stats.${k}.v`)}
-                </dd>
-                <dd className="mt-1 text-xs text-white/50">{t(`stats.${k}.l`)}</dd>
-              </div>
-            ))}
-          </dl>
-        </div>
-      )}
-
-      {layout === 'mono' && (
-        <div className="pointer-events-none absolute left-5 top-[calc(var(--header-h)+40px)] z-[2] md:bottom-10 md:left-10 md:top-auto md:w-[min(420px,30vw)] xl:left-16">
-          <h1
-            id="hero-title"
-            className={`${brush.className} text-[clamp(2.2rem,3.6vw,3.6rem)] leading-[1.08] [text-shadow:0_4px_30px_rgba(0,0,0,0.6)] ${locale === 'zh' ? 'tracking-[0.04em]' : 'font-black uppercase'}`}
+          {/* flow arrow */}
+          <svg
+            className="absolute left-[calc(6%+200px)] top-[2%] h-[140px] w-[16vw]"
+            viewBox="0 0 200 140"
+            preserveAspectRatio="none"
+            fill="none"
           >
-            {t('titleA')}
-            <Grad>{t('titleB')}</Grad>
-          </h1>
-          <p className="mt-3 hidden text-sm leading-relaxed text-white/60 sm:block">
-            {t('subtitle')}
-          </p>
+            <path
+              id="flow"
+              d="M4 70 C 70 0, 130 0, 196 60"
+              stroke="rgba(156,200,255,0.55)"
+              strokeWidth="1.4"
+              strokeDasharray="4 6"
+              vectorEffect="non-scaling-stroke"
+            />
+            <circle r="3.5" fill="#cfe3ff">
+              <animateMotion
+                dur="2.4s"
+                repeatCount="indefinite"
+                path="M4 70 C 70 0, 130 0, 196 60"
+              />
+            </circle>
+          </svg>
+          {/* output card */}
+          <div className="absolute right-[6%] top-[30%] w-[230px] rounded-xl border border-white/12 bg-[rgba(10,16,30,0.7)] p-4 font-mono text-[11px] text-white/60 shadow-[0_20px_60px_rgba(0,0,0,0.5)] backdrop-blur">
+            <p className="flex items-center justify-between">
+              <span>{t('io.output')}</span>
+              <span
+                className={`flex items-center gap-1.5 ${gen < 1 ? 'text-[#9cc8ff]' : 'text-[#86efac]'}`}
+              >
+                <span
+                  className={`size-1.5 rounded-full ${gen < 1 ? 'animate-pulse bg-[#6FA8FF]' : 'bg-[#4ade80]'}`}
+                />
+                {gen < 1 ? `${Math.round(gen * 100)}%` : t('ready')}
+              </span>
+            </p>
+            <p className="mt-2 text-sm text-white">qilin.glb</p>
+            <p className="mt-1 tabular-nums">
+              {faces.toLocaleString()} {t('faces')}
+            </p>
+            <div className="mt-3 flex flex-wrap gap-1.5">
+              {['GLB', 'FBX', 'USDZ', 'STL'].map((f) => (
+                <span
+                  key={f}
+                  className="rounded border border-white/12 px-1.5 py-0.5 text-[10px] text-white/70"
+                >
+                  {f}
+                </span>
+              ))}
+            </div>
+          </div>
         </div>
       )}
 
-      {/* upload: bottom-centre (stage), bottom-right (mono), mobile-only for split */}
-      <div
-        className={`absolute inset-x-0 bottom-24 z-10 flex px-4 md:bottom-8 ${layout === 'mono' ? 'justify-center md:justify-end md:px-10 xl:px-16' : 'justify-center'} ${layout === 'split' ? 'md:hidden' : ''}`}
-      >
-        <div className={`w-full ${layout === 'mono' ? 'max-w-[640px]' : 'max-w-[860px]'}`}>
+      {/* ---------- title ---------- */}
+      <div className="pointer-events-none absolute inset-x-0 top-[calc(var(--header-h)+18px)] z-[2] px-5 text-center md:top-[calc(var(--header-h)+28px)]">
+        <h1
+          id="hero-title"
+          className={`${brush.className} text-[clamp(2.2rem,4.4vw,4.2rem)] leading-[1.1] [text-shadow:0_4px_30px_rgba(0,0,0,0.6)] ${locale === 'zh' ? 'tracking-[0.04em]' : 'font-black uppercase'}`}
+        >
+          {t('titleA')}
+          <Grad className="md:inline">{t('titleB')}</Grad>
+        </h1>
+        <p className="mx-auto mt-3 hidden max-w-[680px] text-[15px] leading-relaxed text-white/65 sm:block">
+          {t('subtitle')}
+        </p>
+      </div>
+
+      {/* ---------- upload ---------- */}
+      <div className="absolute inset-x-0 bottom-24 z-10 flex justify-center px-4 md:bottom-8">
+        <div className="relative w-full max-w-[860px]">
+          {layout === 'aura' && (
+            <span
+              aria-hidden
+              className="pointer-events-none absolute -inset-x-10 -inset-y-6 -z-10 rounded-[40px] bg-[radial-gradient(60%_70%_at_50%_50%,rgba(47,107,255,0.28),transparent_75%)] blur-2xl"
+            />
+          )}
           <CoverUpload />
         </div>
       </div>

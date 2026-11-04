@@ -917,19 +917,27 @@
         "crit": "CRIT",
         "player": "Nameless Blade Lv.42"
       },
-      "stats": {
-        "s1": {
-          "v": "~30s",
-          "l": "Per image"
+      "callouts": {
+        "horn": {
+          "t": "Antlers",
+          "d": "Hard-surface · crisp edges"
         },
-        "s2": {
-          "v": "4K PBR",
-          "l": "Real material maps"
+        "tail": {
+          "t": "Fur",
+          "d": "Strand-level detail"
         },
-        "s3": {
-          "v": "5",
-          "l": "Formats incl. GLB · FBX · USDZ"
+        "scale": {
+          "t": "Scales",
+          "d": "4K normal · roughness"
+        },
+        "claw": {
+          "t": "Claws & base",
+          "d": "Watertight · print-ready"
         }
+      },
+      "io": {
+        "input": "INPUT",
+        "output": "OUTPUT"
       }
     }
   },

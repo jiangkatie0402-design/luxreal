@@ -29,7 +29,9 @@ export default async function HomePage({
       ) : (
         <ViewportHero
           locale={locale}
-          layout={layout === 'split' || layout === 'mono' ? layout : 'stage'}
+          layout={
+            layout === 'aura' || layout === 'source' || layout === 'callout' ? layout : 'stage'
+          }
         />
       )}
       <ImageTo3DExplainer />

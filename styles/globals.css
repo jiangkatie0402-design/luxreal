@@ -518,3 +518,27 @@
 .hud-dmg {
   animation: hud-dmg 0.8s ease-out both;
 }
+
+/* Hero aura: slow drifting motes */
+@keyframes vp-mote {
+  0% {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  30%,
+  70% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+    transform: translateY(-60px);
+  }
+}
+.vp-mote {
+  animation: vp-mote 6s ease-in-out infinite;
+}
+@media (prefers-reduced-motion: reduce) {
+  .vp-mote {
+    animation: none;
+  }
+}
