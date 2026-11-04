@@ -197,6 +197,8 @@
   --flow: rgba(156, 200, 255, 0.55);
   --upload-bg: rgba(12, 19, 34, 0.82);
   --wire-filter: drop-shadow(0 0 6px rgba(94, 168, 255, 0.55));
+  --hero-cta-bg: var(--primary);
+  --hero-cta-ink: var(--primary-foreground);
   --card-bg:
     radial-gradient(70% 80% at 0% 100%, rgba(47, 107, 255, 0.28), transparent 60%),
     radial-gradient(50% 60% at 100% 0%, rgba(77, 141, 255, 0.1), transparent 70%),
@@ -317,4 +319,46 @@
   --card-bg:
     radial-gradient(70% 80% at 0% 100%, rgba(31, 184, 255, 0.45), transparent 60%),
     linear-gradient(160deg, #1d33c9, #0e1760);
+}
+
+/* D · 品牌紫 Ghost violet: from the logo direction (#7a50f2 + white sphere), sunny-yellow accent */
+:root[data-palette='ghost'] {
+  color-scheme: dark;
+  --color-bg: #f6f2ff;
+  --color-surface: #ffffff;
+  --color-surface-2: #ece4ff;
+  --color-text: #1c1240;
+  --color-text-secondary: #4b3f7a;
+  --color-text-tertiary: #7a6fa6;
+  --color-accent: #7a50f2;
+  --color-accent-contrast: #ffffff;
+  --color-accent-soft: rgba(122, 80, 242, 0.12);
+  --color-border: rgba(28, 18, 64, 0.12);
+  --color-border-strong: rgba(28, 18, 64, 0.22);
+  --shadow-card: 0 12px 34px rgba(80, 40, 180, 0.16);
+  --hero-bg:
+    radial-gradient(circle, rgba(255, 255, 255, 0.14) 1px, transparent 1.5px) 0 0 / 18px 18px,
+    radial-gradient(60% 55% at 50% 55%, rgba(255, 255, 255, 0.22), transparent 70%),
+    linear-gradient(160deg, #6a3cf0 0%, #8a63ff 48%, #c3a8ff 100%);
+  --hero-ink: #ffffff;
+  --hero-ink-muted: rgba(255, 255, 255, 0.82);
+  --title-accent: linear-gradient(100deg, #ffe14d, #fff6b8);
+  --title-shadow: 0 4px 24px rgba(60, 20, 160, 0.35);
+  --hero-glow: rgba(255, 255, 255, 0.28);
+  --grid-line: rgba(255, 255, 255, 0.22);
+  --ring-line: rgba(255, 255, 255, 0.45);
+  --scan: #ffe14d;
+  --scan-glow: rgba(255, 225, 77, 0.6);
+  --scan-text: #ffffff;
+  --scrim-rgb: 110 70 235;
+  --chip-bg: rgba(255, 255, 255, 0.2);
+  --chip-border: rgba(255, 255, 255, 0.35);
+  --flow: rgba(255, 255, 255, 0.65);
+  --upload-bg: rgba(255, 255, 255, 0.86);
+  --hero-cta-bg: #ffffff;
+  --hero-cta-ink: #5a2fe6;
+  --wire-filter: drop-shadow(0 0 6px rgba(255, 255, 255, 0.5));
+  --card-bg:
+    radial-gradient(70% 80% at 0% 100%, rgba(122, 80, 242, 0.22), transparent 60%),
+    linear-gradient(160deg, #ffffff, #f1ebff);
 }

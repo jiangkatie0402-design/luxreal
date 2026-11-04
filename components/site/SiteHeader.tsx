@@ -38,12 +38,17 @@ export function SiteHeader() {
       )}
     >
       <div className="flex h-full items-center gap-6 px-5 md:px-8 lg:grid lg:grid-cols-[1fr_auto_1fr] xl:px-10">
-        <Logo className="justify-self-start" />
+        <Logo className={cn('justify-self-start', !scrolled && 'text-[var(--hero-ink)]')} />
         <nav aria-label={t('main')} className="hidden lg:block">
           <ul className="flex items-center lg:gap-0 xl:gap-1">
             {NAV.map((n) => (
               <li key={n.id}>
-                <span className="inline-flex items-center gap-1 whitespace-nowrap rounded-full px-2.5 py-2 text-sm text-muted-foreground xl:px-3">
+                <span
+                  className={cn(
+                    'inline-flex items-center gap-1 whitespace-nowrap rounded-full px-2.5 py-2 text-sm xl:px-3',
+                    scrolled ? 'text-muted-foreground' : 'text-[var(--hero-ink-muted)]',
+                  )}
+                >
                   {t(n.id)}
                   {n.menu && <ChevronDown className="size-3.5 opacity-70" aria-hidden />}
                 </span>
@@ -54,7 +59,12 @@ export function SiteHeader() {
         <div className="ml-auto flex items-center gap-2 lg:ml-0 lg:justify-self-end">
           <a
             href={site.links.login}
-            className="hidden whitespace-nowrap px-3 text-sm text-muted-foreground transition-colors hover:text-foreground lg:inline-flex"
+            className={cn(
+              'hidden whitespace-nowrap px-3 text-sm transition-colors lg:inline-flex',
+              scrolled
+                ? 'text-muted-foreground hover:text-foreground'
+                : 'text-[var(--hero-ink-muted)] hover:text-[var(--hero-ink)]',
+            )}
           >
             {c('login')}
           </a>
@@ -62,16 +72,33 @@ export function SiteHeader() {
             href={site.links.console}
             variant="outline"
             size="sm"
-            className="hidden lg:inline-flex"
+            className={cn(
+              'hidden lg:inline-flex',
+              !scrolled &&
+                'border-[var(--chip-border)] text-[var(--hero-ink)] hover:bg-[var(--chip-bg)] hover:text-[var(--hero-ink)]',
+            )}
           >
             {c('getApi')}
           </ButtonLink>
-          <ButtonLink href={site.links.app} size="sm" className="hidden lg:inline-flex">
+          <ButtonLink
+            href={site.links.app}
+            size="sm"
+            className={cn(
+              'hidden lg:inline-flex',
+              !scrolled &&
+                'bg-[var(--hero-cta-bg)] text-[var(--hero-cta-ink)] hover:bg-[var(--hero-cta-bg)] hover:brightness-95',
+            )}
+          >
             {c('startCreating')}
           </ButtonLink>
           <Sheet>
             <SheetTrigger asChild>
-              <Button variant="ghost" size="icon" aria-label={t('menu')} className="lg:hidden">
+              <Button
+                variant="ghost"
+                size="icon"
+                aria-label={t('menu')}
+                className={cn('lg:hidden', !scrolled && 'text-[var(--hero-ink)]')}
+              >
                 <Menu className="size-5" aria-hidden />
               </Button>
             </SheetTrigger>
