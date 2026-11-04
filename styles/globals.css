@@ -633,7 +633,7 @@
   }
 }
 .hero-slide {
-  animation: hero-slide 0.7s cubic-bezier(0.76, 0, 0.24, 1) both;
+  animation: hero-slide 0.45s cubic-bezier(0.76, 0, 0.24, 1) both;
 }
 @media (prefers-reduced-motion: reduce) {
   .hero-slide {

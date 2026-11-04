@@ -82,8 +82,8 @@ const THEMES = [
   },
 ] as const;
 /** Page change: bands then the new page slide in right → left, each 60ms after the last. */
-const SLIDE_MS = 700;
-const SLIDE_GAP = 60;
+const SLIDE_MS = 450;
+const SLIDE_GAP = 40;
 const TRANS_MS = SLIDE_MS + SLIDE_GAP * 4 + 60;
 
 /** Vertical band the model and scene subjects occupy, between the title and the upload card. */
