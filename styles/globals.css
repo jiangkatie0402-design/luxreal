@@ -606,3 +606,19 @@
     animation: none !important;
   }
 }
+
+/* Core capabilities: tab panel fade-in */
+@keyframes core-panel-in {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+}
+.core-panel[data-state='active'] {
+  animation: core-panel-in 0.35s var(--ease-out);
+}
+@media (prefers-reduced-motion: reduce) {
+  .core-panel[data-state='active'] {
+    animation: none;
+  }
+}
