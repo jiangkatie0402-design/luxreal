@@ -38,10 +38,10 @@ export function GameHUD({ progress, reduced }: { progress: number; reduced: bool
   return (
     <div aria-hidden className="pointer-events-none absolute inset-0 z-[1]">
       {/* boss bar */}
-      <div className="absolute left-1/2 top-3 w-[80%] -translate-x-1/2 md:top-5 md:w-[70%]">
+      <div className="absolute bottom-[calc(6rem+236px)] left-1/2 w-[min(640px,86vw)] -translate-x-1/2 md:bottom-[calc(2rem+222px)]">
         <div className="flex items-end justify-between px-1">
           <p className="flex items-baseline gap-3 [text-shadow:0_1px_10px_rgba(0,0,0,0.9)]">
-            <span className="font-serif text-xs tracking-[0.35em] text-[#f1e6cf] md:text-base">
+            <span className="font-serif text-sm tracking-[0.35em] text-[#f1e6cf] md:text-base">
               {t('boss')}
             </span>
             <span className="hidden font-mono text-[10px] uppercase tracking-[0.25em] text-[#e0473f]/90 sm:inline">
@@ -113,7 +113,7 @@ export function GameHUD({ progress, reduced }: { progress: number; reduced: bool
         )}
 
       {/* player HUD */}
-      <div className="absolute bottom-4 left-4 hidden w-[240px] lg:block">
+      <div className="absolute bottom-8 left-8 hidden w-[220px] min-[1440px]:block">
         <p className="flex items-baseline gap-2 [text-shadow:0_1px_6px_#000]">
           <span className="text-[13px] font-medium tracking-wide text-white/90">{t('player')}</span>
         </p>

@@ -3,20 +3,18 @@ import { useTranslations } from 'next-intl';
 
 /** Pins in % of the 3:2 print photo; side = which way the label extends. */
 const PINS = [
-  { id: 'layer', x: 60, y: 12, side: 'r', len: 56, at: 0.15 },
-  { id: 'mesh', x: 63, y: 47, side: 'r', len: 110, at: 0.3 },
-  { id: 'base', x: 60, y: 79, side: 'l', len: 150, at: 0.45 },
+  { id: 'layer', x: 56, y: 30, side: 'l', len: 120, at: 0.2 },
+  { id: 'mesh', x: 64, y: 48, side: 'r', len: 120, at: 0.35 },
+  { id: 'base', x: 83, y: 32, side: 'r', len: 40, at: 0.5 },
 ] as const;
 const LAYERS = 650;
 
-/** Overlay for the 3D-print scene: annotation pins and a printer status bar. */
-export function PrintHUD({ progress, reduced }: { progress: number; reduced: boolean }) {
+/** Annotation pins, rendered inside the image-sized box. */
+export function PrintPins({ progress, reduced }: { progress: number; reduced: boolean }) {
   const t = useTranslations('home.viewport.printHud');
   const k = reduced ? 1 : progress;
-  const p = Math.min(k / 0.7, 1);
-  const done = p >= 1;
   return (
-    <div aria-hidden className="pointer-events-none absolute inset-0 z-[1]">
+    <div aria-hidden className="pointer-events-none absolute inset-0">
       {PINS.map((c) => (
         <span
           key={c.id}
@@ -39,26 +37,37 @@ export function PrintHUD({ progress, reduced }: { progress: number; reduced: boo
           </span>
         </span>
       ))}
+    </div>
+  );
+}
 
-      {/* printer status */}
-      <div className="absolute bottom-3 left-3 flex items-center gap-2.5 rounded-full border border-white/10 bg-[rgba(5,8,15,0.6)] py-1.5 pl-2.5 pr-3.5 font-mono text-[10px] text-white/75 backdrop-blur-md md:bottom-4 md:left-4 md:text-[11px]">
+/** Printer status bar, centred just above the upload card (mirrors the boss bar). */
+export function PrintStatus({ progress, reduced }: { progress: number; reduced: boolean }) {
+  const t = useTranslations('home.viewport.printHud');
+  const k = reduced ? 1 : progress;
+  const p = Math.min(k / 0.7, 1);
+  const done = p >= 1;
+  return (
+    <div
+      aria-hidden
+      className="pointer-events-none absolute bottom-[calc(6rem+236px)] left-1/2 flex -translate-x-1/2 items-center gap-2.5 whitespace-nowrap rounded-full border border-white/10 bg-[rgba(5,8,15,0.6)] py-1.5 pl-2.5 pr-3.5 font-mono text-[10px] text-white/75 backdrop-blur-md md:bottom-[calc(2rem+222px)] md:text-[11px]"
+    >
+      <span
+        className={`size-1.5 rounded-full ${done ? 'bg-[#4ade80]' : 'animate-pulse bg-[#6FA8FF]'}`}
+      />
+      <span className="text-white/90">qilin.stl</span>
+      <span className="relative h-[3px] w-14 overflow-hidden rounded-full bg-white/15 md:w-24">
         <span
-          className={`size-1.5 rounded-full ${done ? 'bg-[#4ade80]' : 'animate-pulse bg-[#6FA8FF]'}`}
+          className={`absolute inset-y-0 left-0 rounded-full ${done ? 'bg-[#4ade80]' : 'bg-[#6FA8FF]'}`}
+          style={{ width: `${p * 100}%` }}
         />
-        <span className="text-white/90">qilin.stl</span>
-        <span className="relative h-[3px] w-12 overflow-hidden rounded-full bg-white/15 md:w-16">
-          <span
-            className={`absolute inset-y-0 left-0 rounded-full ${done ? 'bg-[#4ade80]' : 'bg-[#6FA8FF]'}`}
-            style={{ width: `${p * 100}%` }}
-          />
-        </span>
-        <span className="tabular-nums">
-          {done ? t('done') : `${t('printing')} ${Math.round(p * 100)}%`}
-        </span>
-        <span className="hidden tabular-nums text-white/45 sm:inline">
-          {t('layer')} {Math.round(p * LAYERS)}/{LAYERS}
-        </span>
-      </div>
+      </span>
+      <span className="tabular-nums">
+        {done ? t('done') : `${t('printing')} ${Math.round(p * 100)}%`}
+      </span>
+      <span className="hidden tabular-nums text-white/45 sm:inline">
+        {t('layer')} {Math.round(p * LAYERS)}/{LAYERS} · 0.08mm
+      </span>
     </div>
   );
 }

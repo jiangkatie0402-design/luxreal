@@ -6,7 +6,7 @@ import { usePerfStore } from '@/lib/perf';
 import { CoverUpload } from '../cover/CoverUpload';
 import { titleEn, titleZh } from '../world/fonts';
 import { GameHUD } from './GameHUD';
-import { PrintHUD } from './PrintHUD';
+import { PrintPins, PrintStatus } from './PrintHUD';
 
 /**
  * Homepage hero as a 3D software viewport: perspective grid floor, axis gizmo,
@@ -50,9 +50,9 @@ const GEN_MS = 3600;
 const HOLD_MS = 4200;
 const SCENE_MS = [GEN_MS + HOLD_MS, 5000, 5000];
 const SCENES = [
-  { id: 'model', img: null, pos: '' },
-  { id: 'print', img: '/community/qilin-print-v2.webp', pos: '58% 50%' },
-  { id: 'game', img: '/community/qilin-game-v2.webp', pos: '55% 35%' },
+  { id: 'model', img: null, px: 0, py: 0 },
+  { id: 'print', img: '/community/qilin-print-v2.webp', px: 0.7, py: 0 },
+  { id: 'game', img: '/community/qilin-game-v2.webp', px: 0.55, py: 0 },
 ] as const;
 
 const STAGE: Record<HeroLayout, string> = {
@@ -364,52 +364,50 @@ export function ViewportHero({
       </div>
 
       {/* ---------- scenes 2 & 3: the same model, printed and in a game ----------
-          Shown as a framed card on the same centred stage as the model, over a
-          blurred copy of the shot for ambience. Pins are in % of the 3:2 image. */}
+          Full-bleed. The 3:2 shot is laid out in an object-cover box sized with
+          container units, so pins can be placed in % of the image itself. */}
       {SCENES.map(
         (sc, n) =>
           sc.img && (
             <div
               key={`${sc.id}-${scene === n}`}
               aria-hidden={scene !== n}
-              className={`absolute inset-0 transition-opacity duration-500 ${scene === n ? 'opacity-100' : 'pointer-events-none opacity-0'}`}
+              className={`absolute inset-0 overflow-hidden transition-opacity duration-500 [container-type:size] ${scene === n ? 'opacity-100' : 'pointer-events-none opacity-0'}`}
             >
               {scene === n && (
                 <>
-                  <div className="absolute inset-0 overflow-hidden" aria-hidden>
-                    <Image
-                      src={sc.img}
-                      alt=""
-                      fill
-                      sizes="50vw"
-                      className="scale-110 object-cover opacity-55 blur-2xl"
-                    />
-                    <div className="absolute inset-0 bg-[radial-gradient(70%_60%_at_50%_50%,rgba(5,8,15,0.35),rgba(5,8,15,0.9))]" />
-                  </div>
-                  <div
-                    className={`absolute inset-x-0 bottom-[40%] flex items-center justify-center px-4 pb-3 md:pb-6 [container-type:size] ${STAGE[layout]}`}
-                  >
-                    <figure className="vp-reveal relative aspect-[3/2] w-[min(100cqw,150cqh)] overflow-hidden rounded-2xl border border-white/12 shadow-[0_30px_90px_rgba(0,0,0,0.6),0_0_0_1px_rgba(111,168,255,0.08)] md:rounded-3xl">
+                  <div className="vp-reveal absolute inset-0">
+                    <div
+                      className="absolute aspect-[3/2]"
+                      style={{
+                        width: 'max(100cqw, 150cqh)',
+                        left: `calc((100cqw - max(100cqw, 150cqh)) * ${sc.px})`,
+                        top: `calc((100cqh - max(100cqw, 150cqh) / 1.5) * ${sc.py})`,
+                      }}
+                    >
                       <Image
                         src={sc.img}
                         alt={t(`scenes.${sc.id}.alt`)}
                         fill
-                        sizes="(min-width:1024px) 900px, 92vw"
+                        sizes="100vw"
                         className={`object-cover ${reduced ? '' : 'cover-kenburns'}`}
                       />
-                      <div className="absolute inset-0 bg-[linear-gradient(0deg,rgba(5,8,15,0.55),transparent_30%)]" />
-                      {sc.id === 'print' && <PrintHUD progress={sceneK} reduced={reduced} />}
-                      {sc.id === 'game' && <GameHUD progress={sceneK} reduced={reduced} />}
-                      <figcaption className="absolute bottom-3 right-3 rounded-md bg-black/55 px-2 py-1 font-mono text-[10px] text-white/80 backdrop-blur md:bottom-4 md:right-4 md:text-[11px]">
-                        {t(`scenes.${sc.id}.tag`)}
-                      </figcaption>
-                      <span className="vp-reveal-line absolute inset-x-0 h-[2px] bg-[#9cc8ff] shadow-[0_0_24px_6px_rgba(94,168,255,0.85)]" />
-                    </figure>
+                      {sc.id === 'print' && <PrintPins progress={sceneK} reduced={reduced} />}
+                    </div>
                   </div>
+                  <span className="vp-reveal-line absolute inset-x-0 h-[2px] bg-[#9cc8ff] shadow-[0_0_24px_6px_rgba(94,168,255,0.85)]" />
+                  <div className="pointer-events-none absolute inset-0 bg-[linear-gradient(180deg,rgba(5,8,15,0.92)_0%,rgba(5,8,15,0.72)_20%,rgba(5,8,15,0.25)_32%,transparent_42%),linear-gradient(0deg,rgba(5,8,15,0.92)_0%,rgba(5,8,15,0.45)_26%,transparent_45%),radial-gradient(120%_80%_at_50%_50%,transparent_60%,rgba(5,8,15,0.5))]" />
+                  {sc.id === 'print' && <PrintStatus progress={sceneK} reduced={reduced} />}
+                  {sc.id === 'game' && <GameHUD progress={sceneK} reduced={reduced} />}
                 </>
               )}
             </div>
           ),
+      )}
+      {scene !== 0 && (
+        <span className="absolute left-5 top-[calc(var(--header-h)+14px)] z-[3] hidden rounded bg-black/50 px-2 py-1 font-mono text-[11px] text-white/80 backdrop-blur md:left-8 md:inline-block">
+          {t(`scenes.${SCENES[scene].id}.tag`)}
+        </span>
       )}
 
       {/* ---------- atmosphere / frames per variant ---------- */}

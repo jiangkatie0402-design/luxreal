@@ -953,8 +953,8 @@
             "d": "No holes · no repair"
           },
           "base": {
-            "t": "One-piece base",
-            "d": "Export STL / 3MF"
+            "t": "Batch prints",
+            "d": "Same model · many copies"
           }
         }
       }
