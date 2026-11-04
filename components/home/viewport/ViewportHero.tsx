@@ -2,6 +2,7 @@
 import { useTranslations } from 'next-intl';
 import { useEffect, useRef, useState, type CSSProperties, type ReactNode } from 'react';
 import { titleEn, titleZh } from '@/components/site/fonts';
+import { HERO_SETS, pageTheme, useHeroSet } from '@/lib/heroPalettes';
 import { usePerfStore } from '@/lib/perf';
 import { CoverUpload } from '../cover/CoverUpload';
 
@@ -10,29 +11,6 @@ import { CoverUpload } from '../cover/CoverUpload';
  * green). Page imagery is intentionally empty until the new assets are decided.
  * Page change: tint bands, then the next page, slide in right → left from mid-screen.
  */
-const THEMES = [
-  {
-    bg: 'radial-gradient(circle, rgba(255,255,255,0.14) 1px, transparent 1.5px) 0 0 / 18px 18px, radial-gradient(60% 55% at 50% 55%, rgba(255,255,255,0.2), transparent 70%), linear-gradient(160deg, #2a56f5 0%, #4f86ff 50%, #9cc8ff 100%)',
-    scrim: '45 95 240',
-    tint: '#3b6dff',
-    accent: 'linear-gradient(100deg, #ffe14d, #fff6b8)',
-    bands: ['#1f46e0', '#3b6dff', '#6f9bff', '#a9c8ff'],
-  },
-  {
-    bg: 'radial-gradient(circle, rgba(255,255,255,0.14) 1px, transparent 1.5px) 0 0 / 18px 18px, linear-gradient(160deg, #6a3cf0 0%, #8a63ff 48%, #c3a8ff 100%)',
-    scrim: '110 70 235',
-    tint: '#7a50f2',
-    accent: 'linear-gradient(100deg, #ffe14d, #fff6b8)',
-    bands: ['#5a2fe6', '#7a50f2', '#9b7bff', '#c3a8ff'],
-  },
-  {
-    bg: 'radial-gradient(circle, rgba(255,255,255,0.14) 1px, transparent 1.5px) 0 0 / 18px 18px, linear-gradient(160deg, #0fa47a 0%, #20c997 50%, #8ff0c8 100%)',
-    scrim: '16 160 118',
-    tint: '#14b886',
-    accent: 'linear-gradient(100deg, #ffe14d, #fff6b8)',
-    bands: ['#0b8f69', '#14b886', '#4fd6a6', '#9ff0cf'],
-  },
-] as const;
 
 const PAGE_MS = 5000;
 const SLIDE_MS = 450;
@@ -53,6 +31,23 @@ export function ViewportHero({ locale }: { locale: string }) {
   const t = useTranslations('home.viewport');
   const reduced = usePerfStore((s) => s.reducedMotion);
   const brush = locale === 'zh' ? titleZh : titleEn;
+  const hs = HERO_SETS[useHeroSet((st) => st.i)];
+  const THEMES = hs.pages.map(pageTheme);
+  // header sits outside the hero, so its ink/CTA follow the set via root variables
+  useEffect(() => {
+    const r = document.documentElement.style;
+    r.setProperty('--hero-ink', hs.ink);
+    r.setProperty(
+      '--hero-ink-muted',
+      hs.ink === '#ffffff' ? 'rgba(255,255,255,0.82)' : 'rgba(26,16,51,0.72)',
+    );
+    r.setProperty('--hero-cta-bg', hs.ink === '#ffffff' ? '#ffffff' : hs.cta);
+    r.setProperty('--hero-cta-ink', hs.ink === '#ffffff' ? hs.cta : hs.ctaInk);
+    r.setProperty(
+      '--chip-border',
+      hs.ink === '#ffffff' ? 'rgba(255,255,255,0.35)' : 'rgba(26,16,51,0.25)',
+    );
+  }, [hs]);
 
   const [page, setPage] = useState(0);
   // while a page slides in, the previous one stays mounted underneath
@@ -63,7 +58,7 @@ export function ViewportHero({ locale }: { locale: string }) {
     if (reduced) return;
     const id = window.setTimeout(() => {
       setTrans({ from: page, k: performance.now() });
-      setPage((page + 1) % THEMES.length);
+      setPage((page + 1) % 3);
       clearTimeout(transTimer.current);
       transTimer.current = window.setTimeout(() => setTrans(null), TRANS_MS);
     }, PAGE_MS);
@@ -82,7 +77,13 @@ export function ViewportHero({ locale }: { locale: string }) {
       aria-labelledby="hero-title"
       className="relative h-[100svh] min-h-[700px] overflow-hidden text-[var(--hero-ink)]"
       style={
-        { background: THEMES[page].bg, '--title-accent': THEMES[page].accent } as CSSProperties
+        {
+          background: THEMES[page].bg,
+          '--title-accent': `linear-gradient(100deg, ${hs.accent[0]}, ${hs.accent[1]})`,
+          '--title-shadow': hs.ink === '#ffffff' ? '0 4px 24px rgba(0,0,0,0.18)' : 'none',
+          '--primary': hs.cta,
+          '--primary-foreground': hs.ctaInk,
+        } as CSSProperties
       }
     >
       <div aria-hidden className="absolute inset-0 isolate">
