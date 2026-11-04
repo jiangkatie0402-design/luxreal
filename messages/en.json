@@ -126,6 +126,39 @@
       "menu": "Menu",
       "close": "Close menu",
       "main": "Main"
+    },
+    "core": {
+      "title": "Core capabilities",
+      "image": {
+        "tab": "Image to 3D",
+        "title": "Generate 3D models from reference images",
+        "intro": "Upload a photo or concept art and get a matching 3D model — no modelling from scratch.",
+        "points": [
+          "Start from a single image, or add more to cover other angles.",
+          "Set face count and size for the intended use.",
+          "Keep refining materials and convert formats for downstream work."
+        ]
+      },
+      "text": {
+        "tab": "Text to 3D",
+        "title": "Generate 3D models from a text description",
+        "intro": "No reference image? Describe the shape, style and material and get the model you need.",
+        "points": [
+          "Just describe the object — no images or model files needed first.",
+          "Choose realistic, cartoon or other styles to match your project.",
+          "Set face count and size, then refine materials and file formats."
+        ]
+      },
+      "agent": {
+        "tab": "Agent",
+        "title": "Let an AI agent make 3D for you",
+        "intro": "Tell the agent what model you need and it calls the generation and processing tools; pair it with Blender to build out the scene.",
+        "points": [
+          "Give requirements or a reference image in chat and let the agent generate the model.",
+          "Have the agent check progress, download results and organise files.",
+          "For full scenes, use Blender to place objects and set up lights and cameras."
+        ]
+      }
     }
   }
 }
