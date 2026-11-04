@@ -21,7 +21,7 @@ type Model = {
   faces: number;
   verts: number;
   maps: number;
-  /** untextured sculpt shown during the clay pass */
+  /** untextured sculpt shown during the clay pass; omit to go wire -> final directly */
   clay?: string;
   /** triangulated wireframe render aligned to src */
   wire?: string;
@@ -30,9 +30,8 @@ type Model = {
 const MODELS: readonly Model[] = [
   {
     id: 'qilin',
-    src: '/community/qilin-pbr.webp',
-    clay: '/community/qilin-clay.webp',
-    wire: '/community/qilin-wire.webp',
+    src: '/community/qilin-pbr-v2.webp',
+    wire: '/community/qilin-wire-v2.webp',
     wide: true,
     faces: 128400,
     verts: 64215,
@@ -51,7 +50,7 @@ const HOLD_MS = 4200;
 const SCENE_MS = [GEN_MS + HOLD_MS, 5000, 5000];
 const SCENES = [
   { id: 'model', img: null, px: 0, py: 0, ar: 1 },
-  { id: 'print', img: '/community/qilin-print-v3.webp', px: 0.5, py: 0.5, ar: 16 / 9 },
+  { id: 'print', img: '/community/qilin-print-v4.webp', px: 0.5, py: 0.5, ar: 16 / 9 },
   { id: 'game', img: '/community/qilin-game-v2.webp', px: 0.55, py: 0, ar: 1.5 },
 ] as const;
 
@@ -64,10 +63,10 @@ const STAGE: Record<HeroLayout, string> = {
 
 /** Annotation pins on the qilin (percent of the model box). */
 const CALLOUTS = [
-  { id: 'horn', x: 79, y: 9, side: 'r', len: 90 },
-  { id: 'tail', x: 13, y: 26, side: 'l', len: 70 },
-  { id: 'scale', x: 45, y: 52, side: 'l', len: 300 },
-  { id: 'claw', x: 54, y: 92, side: 'r', len: 330 },
+  { id: 'horn', x: 71, y: 15, side: 'r', len: 150 },
+  { id: 'tail', x: 15, y: 25, side: 'l', len: 70 },
+  { id: 'scale', x: 42, y: 48, side: 'l', len: 260 },
+  { id: 'claw', x: 73, y: 95, side: 'r', len: 200 },
 ] as const;
 
 function Grad({
@@ -160,9 +159,9 @@ export function ViewportHero({
 
   const eased = 1 - Math.pow(1 - gen, 2.4);
   const clayCut = Math.min(eased / 0.6, 1); // clay rises first
-  const pbrCut = Math.max((eased - 0.45) / 0.55, 0); // then PBR sweeps up
+  const pbrCut = m.wire && !m.clay ? eased : Math.max((eased - 0.45) / 0.55, 0); // then PBR sweeps up
   const showPbr = mode === 'pbr';
-  const showClay = mode !== 'wire';
+  const showClay = mode !== 'wire' && !(m.wire && !m.clay);
   const faces = Math.round(m.faces * clayCut);
 
   const onMove = (e: React.PointerEvent) => {
@@ -298,7 +297,7 @@ export function ViewportHero({
                 alt=""
                 fill
                 sizes="(min-width:1024px) 900px, 90vw"
-                className={`pointer-events-none object-contain object-bottom mix-blend-screen transition-opacity duration-1000 ${gen < 1 ? 'opacity-60' : 'opacity-[0.12]'}`}
+                className={`pointer-events-none object-contain object-bottom mix-blend-screen transition-opacity duration-1000 ${gen < 1 ? 'opacity-60' : 'opacity-0'}`}
               />
             )}
             {gen < 1 && (
@@ -460,7 +459,7 @@ export function ViewportHero({
           <div className="absolute left-[6%] top-[6%] w-[220px] -rotate-[5deg] rounded-xl border border-white/12 bg-[rgba(10,16,30,0.7)] p-2 shadow-[0_20px_60px_rgba(0,0,0,0.5)] backdrop-blur">
             <div className="relative aspect-[16/10] overflow-hidden rounded-lg">
               <Image
-                src="/community/qilin-src.webp"
+                src="/community/qilin-src-v2.webp"
                 alt=""
                 fill
                 sizes="220px"
