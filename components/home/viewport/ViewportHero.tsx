@@ -67,7 +67,7 @@ function Grad({
 }) {
   return (
     <span
-      className={`block bg-[linear-gradient(100deg,#9cc8ff,#6FA8FF_50%,#c7d7ff)] bg-clip-text text-transparent ${className}`}
+      className={`block [background-image:var(--title-accent)] bg-clip-text text-transparent ${className}`}
     >
       {children}
     </span>
@@ -147,18 +147,18 @@ export function ViewportHero({ locale }: { locale: string }) {
       onPointerMove={onMove}
       onPointerLeave={() => setTilt({ x: 0, y: 0 })}
       aria-labelledby="hero-title"
-      className="relative h-[100svh] min-h-[700px] overflow-hidden bg-[#05080F] text-white"
+      className="relative h-[100svh] min-h-[700px] overflow-hidden text-[var(--hero-ink)] [background:var(--hero-bg)]"
     >
       {/* ---------- viewport background ---------- */}
       <div
         aria-hidden
-        className="absolute inset-0 [background:radial-gradient(60%_50%_at_50%_58%,rgba(47,107,255,0.22),transparent_70%)]"
+        className="absolute inset-0 [background:radial-gradient(60%_50%_at_50%_58%,var(--hero-glow),transparent_70%)]"
       />
       <div
         aria-hidden
         className="absolute inset-x-[-40%] bottom-[-10%] h-[62%] origin-bottom [perspective:700px]"
       >
-        <div className="vp-floor absolute inset-0 [transform:rotateX(68deg)] [background:linear-gradient(rgba(111,168,255,0.22)_1px,transparent_1px)_0_0/64px_64px,linear-gradient(90deg,rgba(111,168,255,0.22)_1px,transparent_1px)_0_0/64px_64px] [mask-image:radial-gradient(55%_75%_at_50%_100%,#000,transparent)]" />
+        <div className="vp-floor absolute inset-0 [transform:rotateX(68deg)] [background:linear-gradient(var(--grid-line)_1px,transparent_1px)_0_0/64px_64px,linear-gradient(90deg,var(--grid-line)_1px,transparent_1px)_0_0/64px_64px] [mask-image:radial-gradient(55%_75%_at_50%_100%,#000,transparent)]" />
       </div>
 
       {/* ---------- the model on its turntable ---------- */}
@@ -173,8 +173,8 @@ export function ViewportHero({ locale }: { locale: string }) {
             aria-hidden
             className="absolute bottom-[1%] left-1/2 h-[14%] w-[72%] -translate-x-1/2"
           >
-            <span className="absolute inset-0 rounded-[50%] border border-[#6FA8FF]/40 bg-[radial-gradient(closest-side,rgba(47,107,255,0.25),transparent)]" />
-            <span className="vp-ring absolute inset-[-6%] rounded-[50%] border-2 border-dashed border-[#6FA8FF]/35" />
+            <span className="absolute inset-0 rounded-[50%] border border-[var(--ring-line)] bg-[radial-gradient(closest-side,var(--hero-glow),transparent)]" />
+            <span className="vp-ring absolute inset-[-6%] rounded-[50%] border-2 border-dashed border-[var(--ring-line)]" />
             <span className="absolute inset-x-[18%] top-[30%] h-[40%] rounded-[50%] bg-black/60 blur-md" />
           </div>
           <div
@@ -198,7 +198,7 @@ export function ViewportHero({ locale }: { locale: string }) {
                   alt=""
                   fill
                   sizes="(min-width:1024px) 900px, 90vw"
-                  className="object-contain object-bottom [filter:drop-shadow(0_0_6px_rgba(94,168,255,0.55))]"
+                  className="object-contain object-bottom [filter:var(--wire-filter)]"
                 />
               </div>
             ) : (
@@ -254,11 +254,11 @@ export function ViewportHero({ locale }: { locale: string }) {
             )}
             {gen < 1 && (
               <span
-                className="absolute inset-x-[-10%] h-[2px] bg-[#9cc8ff] shadow-[0_0_20px_5px_rgba(94,168,255,0.85)]"
+                className="absolute inset-x-[-10%] h-[2px] bg-[var(--scan)] shadow-[0_0_20px_5px_var(--scan-glow)]"
                 style={{ top: lineY }}
               >
                 {
-                  <span className="absolute bottom-2 right-0 hidden whitespace-nowrap font-mono text-[11px] tracking-wider text-[#cfe3ff] [text-shadow:0_0_10px_rgba(94,168,255,0.9)] md:block">
+                  <span className="absolute bottom-2 right-0 hidden whitespace-nowrap font-mono text-[11px] tracking-wider text-[var(--scan-text)] md:block">
                     {t('generating')} {Math.round(gen * 100)}% · {faces.toLocaleString()}{' '}
                     {t('faces')}
                   </span>
@@ -302,8 +302,8 @@ export function ViewportHero({ locale }: { locale: string }) {
                       {sc.id === 'print' && <PrintPins progress={sceneK} reduced={reduced} />}
                     </div>
                   </div>
-                  <span className="vp-reveal-line absolute inset-x-0 h-[2px] bg-[#9cc8ff] shadow-[0_0_24px_6px_rgba(94,168,255,0.85)]" />
-                  <div className="pointer-events-none absolute inset-0 bg-[linear-gradient(180deg,rgba(5,8,15,0.92)_0%,rgba(5,8,15,0.72)_20%,rgba(5,8,15,0.25)_32%,transparent_42%),linear-gradient(0deg,rgba(5,8,15,0.92)_0%,rgba(5,8,15,0.45)_26%,transparent_45%),radial-gradient(120%_80%_at_50%_50%,transparent_60%,rgba(5,8,15,0.5))]" />
+                  <span className="vp-reveal-line absolute inset-x-0 h-[2px] bg-[var(--scan)] shadow-[0_0_24px_6px_var(--scan-glow)]" />
+                  <div className="pointer-events-none absolute inset-0 bg-[linear-gradient(180deg,rgb(var(--scrim-rgb)_/_0.92)_0%,rgb(var(--scrim-rgb)_/_0.72)_20%,rgb(var(--scrim-rgb)_/_0.25)_32%,transparent_42%),linear-gradient(0deg,rgb(var(--scrim-rgb)_/_0.92)_0%,rgb(var(--scrim-rgb)_/_0.45)_26%,transparent_45%),radial-gradient(120%_80%_at_50%_50%,transparent_60%,rgb(var(--scrim-rgb)_/_0.5))]" />
                   {sc.id === 'print' && <PrintStatus progress={sceneK} reduced={reduced} />}
                   {sc.id === 'game' && <GameHUD progress={sceneK} reduced={reduced} />}
                 </>
@@ -324,7 +324,7 @@ export function ViewportHero({ locale }: { locale: string }) {
           className="pointer-events-none absolute inset-x-0 top-[calc(var(--header-h)+190px)] hidden xl:block"
         >
           {/* input photo card */}
-          <div className="absolute left-[6%] top-[6%] w-[220px] -rotate-[5deg] rounded-xl border border-white/12 bg-[rgba(10,16,30,0.7)] p-2 shadow-[0_20px_60px_rgba(0,0,0,0.5)] backdrop-blur">
+          <div className="absolute left-[6%] top-[6%] w-[220px] -rotate-[5deg] rounded-xl border border-[var(--chip-border)] bg-[var(--chip-bg)] p-2 shadow-[0_20px_60px_rgba(0,0,0,0.25)] backdrop-blur">
             <div className="relative aspect-[16/10] overflow-hidden rounded-lg">
               <Image
                 src="/community/qilin-src-v2.webp"
@@ -334,9 +334,9 @@ export function ViewportHero({ locale }: { locale: string }) {
                 className="object-cover"
               />
             </div>
-            <p className="mt-2 flex items-center justify-between px-1 font-mono text-[10px] text-white/55">
+            <p className="mt-2 flex items-center justify-between px-1 font-mono text-[10px] text-[var(--hero-ink-muted)]">
               <span>{t('io.input')}</span>
-              <span className="text-white/80">qilin.jpg</span>
+              <span className="text-[var(--hero-ink)]">qilin.jpg</span>
             </p>
           </div>
           {/* flow arrow */}
@@ -349,12 +349,12 @@ export function ViewportHero({ locale }: { locale: string }) {
             <path
               id="flow"
               d="M4 70 C 70 0, 130 0, 196 60"
-              stroke="rgba(156,200,255,0.55)"
+              stroke="var(--flow)"
               strokeWidth="1.4"
               strokeDasharray="4 6"
               vectorEffect="non-scaling-stroke"
             />
-            <circle r="3.5" fill="#cfe3ff">
+            <circle r="3.5" fill="var(--scan)">
               <animateMotion
                 dur="2.4s"
                 repeatCount="indefinite"
@@ -369,12 +369,12 @@ export function ViewportHero({ locale }: { locale: string }) {
       <div className="pointer-events-none absolute inset-x-0 top-[calc(var(--header-h)+18px)] z-[2] px-5 text-center md:top-[calc(var(--header-h)+28px)]">
         <h1
           id="hero-title"
-          className={`${brush.className} text-[clamp(2.2rem,4.4vw,4.2rem)] leading-[1.1] [text-shadow:0_4px_30px_rgba(0,0,0,0.6)] ${locale === 'zh' ? 'tracking-[0.04em]' : 'font-black uppercase'}`}
+          className={`${brush.className} text-[clamp(2.2rem,4.4vw,4.2rem)] leading-[1.1] [text-shadow:var(--title-shadow)] ${locale === 'zh' ? 'tracking-[0.04em]' : 'font-black uppercase'}`}
         >
           {t('titleA')}
           <Grad className="md:inline">{t('titleB')}</Grad>
         </h1>
-        <p className="mx-auto mt-3 hidden max-w-[680px] text-[15px] leading-relaxed text-white/65 sm:block">
+        <p className="mx-auto mt-3 hidden max-w-[680px] text-[15px] leading-relaxed text-[var(--hero-ink-muted)] sm:block">
           {t('subtitle')}
         </p>
       </div>

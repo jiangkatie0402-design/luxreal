@@ -51,7 +51,7 @@ export function CoreCapabilities() {
               value={id}
               className="core-panel mt-8 w-full outline-none md:mt-10"
             >
-              <div className="relative isolate overflow-hidden rounded-[28px] border border-border-strong before:pointer-events-none before:absolute before:inset-x-[10%] before:top-0 before:h-px before:bg-[linear-gradient(90deg,transparent,rgba(156,200,255,0.55),transparent)] [background:radial-gradient(70%_80%_at_0%_100%,rgba(47,107,255,0.28),transparent_60%),radial-gradient(50%_60%_at_100%_0%,rgba(77,141,255,0.10),transparent_70%),linear-gradient(180deg,#0a1222,#060a13)]">
+              <div className="relative isolate overflow-hidden rounded-[28px] border border-border-strong before:pointer-events-none before:absolute before:inset-x-[10%] before:top-0 before:h-px before:bg-[linear-gradient(90deg,transparent,rgba(156,200,255,0.55),transparent)] [background:var(--card-bg)]">
                 <div className="grid lg:min-h-[520px] lg:grid-cols-[minmax(0,5fr)_minmax(0,7fr)]">
                   {/* copy + action */}
                   <div className="flex flex-col justify-center p-7 md:p-10 lg:p-12">

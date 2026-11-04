@@ -49,11 +49,11 @@ export function CoverUpload() {
         setDragging(false);
         accept(e.dataTransfer.files[0]);
       }}
-      className={`rounded-[22px] border bg-[rgba(12,19,34,0.82)] p-3 shadow-[0_20px_60px_-20px_rgba(0,0,0,0.8)] backdrop-blur-xl transition-colors md:p-4 ${
+      className={`rounded-[22px] border bg-[var(--upload-bg)] p-3 shadow-[0_20px_60px_-20px_rgba(0,0,0,0.45)] backdrop-blur-xl transition-colors md:p-4 ${
         dragging ? 'border-primary' : 'border-border-strong'
       }`}
     >
-      <label className="flex min-h-24 cursor-pointer items-center gap-4 rounded-2xl px-3 py-3 hover:bg-white/[0.03] md:min-h-28">
+      <label className="flex min-h-24 cursor-pointer items-center gap-4 rounded-2xl px-3 py-3 hover:bg-foreground/[0.03] md:min-h-28">
         <input
           ref={input}
           type="file"

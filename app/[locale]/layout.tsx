@@ -45,7 +45,7 @@ export default async function LocaleLayout({
   const t = await getTranslations({ locale, namespace: 'common' });
 
   return (
-    <html lang={locale === 'zh' ? 'zh-CN' : 'en'} className="dark">
+    <html lang={locale === 'zh' ? 'zh-CN' : 'en'} data-palette="lime">
       <body>
         <JsonLd
           data={{
