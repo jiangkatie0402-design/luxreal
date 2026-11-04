@@ -622,3 +622,26 @@
     animation: none;
   }
 }
+
+/* Hero page change: colour stripes sweep left → right, covering then revealing */
+@keyframes hero-wipe {
+  0% {
+    transform: translateX(-101%);
+  }
+  40%,
+  62% {
+    transform: translateX(0);
+  }
+  100% {
+    transform: translateX(101%);
+  }
+}
+.hero-wipe {
+  transform: translateX(-101%);
+  animation: hero-wipe 1.1s cubic-bezier(0.77, 0, 0.18, 1) both;
+}
+@media (prefers-reduced-motion: reduce) {
+  .hero-wipe {
+    display: none;
+  }
+}

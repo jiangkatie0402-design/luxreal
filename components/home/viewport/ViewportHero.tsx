@@ -54,6 +54,35 @@ const SCENES = [
   { id: 'game', img: '/community/qilin-game-v2.webp', px: 0.55, py: 0, ar: 1.5 },
 ] as const;
 
+/**
+ * One colour per hero page (violet → blue → orange). Each overrides the hero
+ * tokens; `bands` are the stripe tints that sweep across on the page change.
+ */
+const THEMES = [
+  {
+    bg: 'radial-gradient(circle, rgba(255,255,255,0.14) 1px, transparent 1.5px) 0 0 / 18px 18px, radial-gradient(60% 55% at 50% 55%, rgba(255,255,255,0.22), transparent 70%), linear-gradient(160deg, #6a3cf0 0%, #8a63ff 48%, #c3a8ff 100%)',
+    scrim: '110 70 235',
+    tint: '#7a50f2',
+    accent: 'linear-gradient(100deg, #ffe14d, #fff6b8)',
+    bands: ['#c3a8ff', '#9b7bff', '#7a50f2', '#5a2fe6'],
+  },
+  {
+    bg: 'radial-gradient(circle, rgba(255,255,255,0.14) 1px, transparent 1.5px) 0 0 / 18px 18px, linear-gradient(160deg, #2a56f5 0%, #4f86ff 50%, #9cc8ff 100%)',
+    scrim: '45 95 240',
+    tint: '#3b6dff',
+    accent: 'linear-gradient(100deg, #ffe14d, #fff6b8)',
+    bands: ['#a9c8ff', '#6f9bff', '#3b6dff', '#1f46e0'],
+  },
+  {
+    bg: 'radial-gradient(circle, rgba(255,255,255,0.14) 1px, transparent 1.5px) 0 0 / 18px 18px, linear-gradient(160deg, #ff5f2e 0%, #ff8a4c 50%, #ffc48f 100%)',
+    scrim: '240 100 50',
+    tint: '#ff7a3c',
+    accent: 'linear-gradient(100deg, #3b1a9a, #5a2fe6)',
+    bands: ['#ffc896', '#ff9f6b', '#ff7a3c', '#f2541f'],
+  },
+] as const;
+const WIPE_MS = 1300;
+
 /** Vertical band the model and scene subjects occupy, between the title and the upload card. */
 const STAGE =
   'top-[calc(var(--header-h)+150px)] md:top-[calc(var(--header-h)+170px)] md:bottom-[27%]';
@@ -94,6 +123,9 @@ export function ViewportHero({ locale }: { locale: string }) {
   const [scene, setScene] = useState(0);
   const [sceneK, setSceneK] = useState(0);
   const sceneStart = useRef(0);
+  const [wipe, setWipe] = useState<{ to: number; k: number } | null>(null);
+  const wipeTimers = useRef<number[]>([]);
+  const theme = THEMES[scene];
   useEffect(() => {
     if (reduced) {
       // eslint-disable-next-line react-hooks/set-state-in-effect -- static finished frame
@@ -109,7 +141,13 @@ export function ViewportHero({ locale }: { locale: string }) {
       const dur = SCENE_MS[scene];
       setSceneK(Math.min(el / dur, 1));
       if (auto && el >= dur) {
-        setScene((n) => (n + 1) % SCENE_MS.length);
+        const next = (scene + 1) % SCENE_MS.length;
+        setWipe({ to: next, k: now });
+        // switch underneath while the stripes fully cover the hero
+        wipeTimers.current.push(
+          window.setTimeout(() => setScene(next), WIPE_MS * 0.53),
+          window.setTimeout(() => setWipe(null), WIPE_MS + 80),
+        );
         return;
       }
       raf = requestAnimationFrame(tick);
@@ -117,6 +155,7 @@ export function ViewportHero({ locale }: { locale: string }) {
     raf = requestAnimationFrame(tick);
     return () => cancelAnimationFrame(raf);
   }, [scene, idx, auto, reduced]);
+  useEffect(() => () => wipeTimers.current.forEach(clearTimeout), []);
 
   const eased = 1 - Math.pow(1 - gen, 2.4);
   const clayCut = Math.min(eased / 0.6, 1); // clay rises first
@@ -148,6 +187,13 @@ export function ViewportHero({ locale }: { locale: string }) {
       onPointerLeave={() => setTilt({ x: 0, y: 0 })}
       aria-labelledby="hero-title"
       className="relative h-[100svh] min-h-[700px] overflow-hidden text-[var(--hero-ink)] [background:var(--hero-bg)]"
+      style={
+        {
+          '--hero-bg': theme.bg,
+          '--scrim-rgb': theme.scrim,
+          '--title-accent': theme.accent,
+        } as CSSProperties
+      }
     >
       {/* ---------- viewport background ---------- */}
       <div
@@ -282,7 +328,7 @@ export function ViewportHero({ locale }: { locale: string }) {
             >
               {scene === n && (
                 <>
-                  <div className="vp-reveal absolute inset-0">
+                  <div className="absolute inset-0">
                     <div
                       className="absolute"
                       style={{
@@ -302,7 +348,11 @@ export function ViewportHero({ locale }: { locale: string }) {
                       {sc.id === 'print' && <PrintPins progress={sceneK} reduced={reduced} />}
                     </div>
                   </div>
-                  <span className="vp-reveal-line absolute inset-x-0 h-[2px] bg-[var(--scan)] shadow-[0_0_24px_6px_var(--scan-glow)]" />
+                  {/* tie the photo to this page's colour */}
+                  <div
+                    className="pointer-events-none absolute inset-0 opacity-30 mix-blend-color"
+                    style={{ background: theme.tint }}
+                  />
                   <div className="pointer-events-none absolute inset-0 bg-[linear-gradient(180deg,rgb(var(--scrim-rgb)_/_0.92)_0%,rgb(var(--scrim-rgb)_/_0.72)_20%,rgb(var(--scrim-rgb)_/_0.25)_32%,transparent_42%),linear-gradient(0deg,rgb(var(--scrim-rgb)_/_0.92)_0%,rgb(var(--scrim-rgb)_/_0.45)_26%,transparent_45%),radial-gradient(120%_80%_at_50%_50%,transparent_60%,rgb(var(--scrim-rgb)_/_0.5))]" />
                   {sc.id === 'print' && <PrintStatus progress={sceneK} reduced={reduced} />}
                   {sc.id === 'game' && <GameHUD progress={sceneK} reduced={reduced} />}
@@ -385,6 +435,18 @@ export function ViewportHero({ locale }: { locale: string }) {
           <CoverUpload />
         </div>
       </div>
+      {/* ---------- page change: stripes of the next colour sweep across ---------- */}
+      {wipe && (
+        <div key={wipe.k} aria-hidden className="pointer-events-none absolute inset-0 z-30">
+          {THEMES[wipe.to].bands.map((c, i) => (
+            <span
+              key={c}
+              className="hero-wipe absolute inset-0"
+              style={{ background: c, animationDelay: `${i * 70}ms` } as CSSProperties}
+            />
+          ))}
+        </div>
+      )}
     </section>
   );
 }
