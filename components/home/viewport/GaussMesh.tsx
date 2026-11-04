@@ -65,7 +65,8 @@ export function GaussMesh({ from, to }: { from: string; to: string }) {
       const s = Math.max(w / VB_W, h / VB_H);
       const ox = (w - VB_W * s) / 2;
       const oy = (h - VB_H * s) / 2;
-      const t = reduced ? 0 : (now - t0) / 1000;
+      // very slow: a quarter of real time
+      const t = reduced ? 0 : ((now - t0) / 1000) * 0.25;
 
       for (let i = 0; i <= N; i++)
         for (let j = 0; j <= N; j++) {
