@@ -121,8 +121,7 @@ export function ViewportHero({ locale }: { locale: string }) {
           id="hero-title"
           className={`${brush.className} text-[clamp(2.2rem,4.4vw,4.2rem)] leading-[1.1] [text-shadow:var(--title-shadow)] ${locale === 'zh' ? 'tracking-[0.04em]' : 'font-black uppercase'}`}
         >
-          {t('titleA')}
-          <Grad className="md:inline">{t('titleB')}</Grad>
+          {t('titleA')} <Grad className="md:inline">{t('titleB')}</Grad>
         </h1>
         <p className="mx-auto mt-3 hidden max-w-[680px] text-[15px] leading-relaxed text-[var(--hero-ink-muted)] sm:block">
           {t('subtitle')}

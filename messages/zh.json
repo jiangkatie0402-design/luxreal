@@ -30,9 +30,9 @@
       }
     },
     "viewport": {
-      "titleA": "从这里，",
-      "titleB": "创造你的世界",
-      "subtitle": "上传一张照片或写一句话，几十秒生成带真实材质、可编辑、可打印、可绑骨的 3D 模型。"
+      "titleA": "你和 AI Agent 的",
+      "titleB": "3D 创作工具",
+      "subtitle": "输入文字、图片，或直接交给 AI Agent，高效生成 3D 模型。"
     }
   },
   "notFound": {
