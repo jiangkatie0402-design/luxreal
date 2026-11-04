@@ -5,7 +5,7 @@ import { mainNav, type NavMenu } from '@/config/nav';
 import { href as pageHref } from '@/config/pages';
 import { site } from '@/config/site';
 import { Link, usePathname } from '@/i18n/navigation';
-import { ButtonLink } from '@/components/ui/Button';
+import { ButtonLink } from '@/components/ui/button';
 import { Logo } from './Logo';
 import { MobileNav } from './MobileNav';
 
@@ -49,7 +49,7 @@ export function Header() {
     <header
       className={`fixed inset-x-0 top-0 z-50 transition-[transform,background-color,border-color] duration-[var(--dur-base)] ease-[var(--ease-out)] ${
         hidden && !open ? '-translate-y-full' : ''
-      } ${solid ? 'border-b border-line bg-bg/85 backdrop-blur-md' : 'border-b border-transparent'}`}
+      } ${solid ? 'border-b border-border bg-background/85 backdrop-blur-md' : 'border-b border-transparent'}`}
       onKeyDown={(e) => e.key === 'Escape' && setOpen(null)}
     >
       <div className="container-x flex h-[var(--header-h)] items-center gap-6">
@@ -61,8 +61,8 @@ export function Header() {
                 <li key={entry.key}>
                   <Link
                     href={entry.href}
-                    className={`rounded-full px-3 py-2 text-sm hover:text-text ${
-                      pathname.startsWith(entry.href) ? 'text-text' : 'text-muted'
+                    className={`rounded-full px-3 py-2 text-sm hover:text-foreground ${
+                      pathname.startsWith(entry.href) ? 'text-foreground' : 'text-muted-foreground'
                     }`}
                   >
                     {t(`nav.${entry.key}`)}
@@ -75,8 +75,8 @@ export function Header() {
                     aria-expanded={open === entry.key}
                     aria-controls={`mega-${entry.key}`}
                     onClick={() => setOpen(open === entry.key ? null : entry.key)}
-                    className={`flex items-center gap-1 rounded-full px-3 py-2 text-sm hover:text-text ${
-                      open === entry.key ? 'text-text' : 'text-muted'
+                    className={`flex items-center gap-1 rounded-full px-3 py-2 text-sm hover:text-foreground ${
+                      open === entry.key ? 'text-foreground' : 'text-muted-foreground'
                     }`}
                   >
                     {t(`nav.${entry.key}`)}
@@ -104,10 +104,13 @@ export function Header() {
           </ul>
         </nav>
         <div className="ml-auto hidden items-center gap-2 lg:flex">
-          <a href={site.links.login} className="px-3 py-2 text-sm text-muted hover:text-text">
+          <a
+            href={site.links.login}
+            className="px-3 py-2 text-sm text-muted-foreground hover:text-foreground"
+          >
             {t('common.login')}
           </a>
-          <ButtonLink href={pageHref('developers')} variant="secondary" size="sm">
+          <ButtonLink href={pageHref('developers')} variant="outline" size="sm">
             {t('common.getApi')}
           </ButtonLink>
           <ButtonLink href={site.links.app} size="sm">
@@ -135,19 +138,21 @@ function MegaMenu({
       id={`mega-${menu.key}`}
       onMouseEnter={onEnter}
       onMouseLeave={onLeave}
-      className="absolute inset-x-0 top-full border-b border-line bg-bg shadow-card"
+      className="absolute inset-x-0 top-full border-b border-border bg-background shadow-card"
     >
       <div className="container-x grid gap-8 py-8 lg:grid-cols-[240px_1fr]">
         <div>
           <p className="font-display text-xl font-semibold">{t(`nav.${menu.key}`)}</p>
-          <p className="mt-2 text-sm text-muted">{t(`nav.menuTitle.${menu.key}`)}</p>
+          <p className="mt-2 text-sm text-muted-foreground">{t(`nav.menuTitle.${menu.key}`)}</p>
         </div>
         <ul className="grid gap-1 sm:grid-cols-2 xl:grid-cols-3">
           {menu.items.map((id) => (
             <li key={id}>
-              <Link href={pageHref(id)} className="block rounded-md p-3 hover:bg-surface-2">
+              <Link href={pageHref(id)} className="block rounded-md p-3 hover:bg-secondary">
                 <span className="block text-sm font-medium">{t(`pages.${id}.title`)}</span>
-                <span className="mt-1 block text-sm text-muted">{t(`pages.${id}.desc`)}</span>
+                <span className="mt-1 block text-sm text-muted-foreground">
+                  {t(`pages.${id}.desc`)}
+                </span>
               </Link>
             </li>
           ))}

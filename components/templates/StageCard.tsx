@@ -15,7 +15,7 @@ export function StageCard({
 }) {
   return (
     <div
-      className={`relative overflow-hidden rounded-lg border border-line bg-surface-2 ${className}`}
+      className={`relative overflow-hidden rounded-lg border border-border bg-secondary ${className}`}
     >
       <ModelStage
         className="absolute inset-0"

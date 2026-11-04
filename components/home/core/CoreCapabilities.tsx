@@ -2,7 +2,7 @@
 import { useTranslations } from 'next-intl';
 import { useCallback, useId, useState } from 'react';
 import { site } from '@/config/site';
-import { ButtonLink } from '@/components/ui/Button';
+import { ButtonLink } from '@/components/ui/button';
 import { CoreDemo, useDemoClock, type CoreMode } from './CoreDemo';
 
 const MODES: CoreMode[] = ['image', 'text'];
@@ -23,7 +23,7 @@ export function CoreCapabilities() {
     <section aria-labelledby="core-title" className="relative bg-[#03060d] py-20 md:py-28">
       <div className="mx-auto w-full max-w-[1480px] px-4 md:px-8">
         <div className="text-center">
-          <p className="mb-3 text-sm font-medium tracking-wide text-accent">{t('eyebrow')}</p>
+          <p className="mb-3 text-sm font-medium tracking-wide text-primary">{t('eyebrow')}</p>
           <h2
             id="core-title"
             className="text-balance font-display text-3xl font-semibold tracking-tight text-white md:text-[2.75rem]"
@@ -77,7 +77,7 @@ export function CoreCapabilities() {
             <ul className="space-y-2.5 text-sm text-white/70">
               {(t.raw(`tabs.${mode}.points`) as string[]).map((p) => (
                 <li key={p} className="flex gap-2.5">
-                  <span aria-hidden className="text-accent">
+                  <span aria-hidden className="text-primary">
                     ✓
                   </span>
                   {p}

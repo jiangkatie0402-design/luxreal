@@ -75,7 +75,7 @@ export function CoverStage({ title }: { title: ReactNode }) {
         role="region"
         aria-roledescription={t('carousel')}
         aria-label={t('carouselLabel')}
-        className="relative overflow-hidden rounded-[28px] border border-line-strong bg-[#03060d] shadow-[0_30px_120px_-30px_rgba(56,116,255,0.45)] lg:h-[min(70svh,720px)] lg:min-h-[540px]"
+        className="relative overflow-hidden rounded-[28px] border border-border-strong bg-[#03060d] shadow-[0_30px_120px_-30px_rgba(56,116,255,0.45)] lg:h-[min(70svh,720px)] lg:min-h-[540px]"
       >
         {/* slides: full-bleed under the title on desktop, on top on mobile */}
         <div className="relative aspect-[3/2] lg:absolute lg:inset-y-0 lg:right-0 lg:aspect-auto lg:w-[66%] lg:[mask-image:linear-gradient(90deg,transparent_0%,#000_38%)]">

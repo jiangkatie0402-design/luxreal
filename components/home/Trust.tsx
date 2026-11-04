@@ -22,10 +22,10 @@ export function Trust() {
           subtitle={t('subtitle')}
         />
         <div className="mt-12 grid gap-6 lg:grid-cols-[minmax(0,3fr)_minmax(0,2fr)]">
-          <figure className="rounded-lg border border-line bg-surface p-6 md:p-8">
+          <figure className="rounded-lg border border-border bg-card p-6 md:p-8">
             <figcaption className="flex flex-wrap items-baseline justify-between gap-3">
               <span className="font-medium">{t('chartTitle')}</span>
-              <span className="flex gap-4 text-xs text-muted" aria-hidden>
+              <span className="flex gap-4 text-xs text-muted-foreground" aria-hidden>
                 {series.map((s) => (
                   <span key={s.key} className="flex items-center gap-1.5">
                     <span className="h-2.5 w-2.5 rounded-sm" style={{ background: s.color }} />
@@ -37,7 +37,7 @@ export function Trust() {
             <div className="mt-6 flex flex-col gap-6" aria-hidden>
               {benchmark.metrics.map((m) => (
                 <div key={m.id}>
-                  <p className="mb-2 text-sm text-muted">{t(`metrics.${m.id}`)}</p>
+                  <p className="mb-2 text-sm text-muted-foreground">{t(`metrics.${m.id}`)}</p>
                   <div className="flex flex-col gap-0.5">
                     {series.map((s) => {
                       const v = m[s.key];
@@ -54,7 +54,7 @@ export function Trust() {
                             />
                           </div>
                           <span
-                            className={`w-12 text-right font-mono text-sm tabular-nums ${s.key === 'lux' ? 'text-text' : 'text-muted'}`}
+                            className={`w-12 text-right font-mono text-sm tabular-nums ${s.key === 'lux' ? 'text-foreground' : 'text-muted-foreground'}`}
                           >
                             {fmt(v, m.format)}
                           </span>
@@ -89,13 +89,13 @@ export function Trust() {
             </table>
             <p className="mt-6 text-xs text-subtle">{t('chartNote')}</p>
           </figure>
-          <div className="flex flex-col rounded-lg border border-line bg-surface p-6 md:p-8">
+          <div className="flex flex-col rounded-lg border border-border bg-card p-6 md:p-8">
             <p className="font-medium">{t('partnersTitle')}</p>
             <ul className="mt-6 grid flex-1 grid-cols-2 gap-3 sm:grid-cols-4 lg:grid-cols-2">
               {partners.map((p, i) => (
                 <li
                   key={p.id}
-                  className="relative grid min-h-16 place-items-center rounded-md border border-dashed border-line-strong text-xs text-subtle"
+                  className="relative grid min-h-16 place-items-center rounded-md border border-dashed border-border-strong text-xs text-subtle"
                 >
                   {p.logo ? (
                     <Image

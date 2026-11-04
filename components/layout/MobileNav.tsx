@@ -5,7 +5,7 @@ import { mainNav } from '@/config/nav';
 import { href as pageHref } from '@/config/pages';
 import { site } from '@/config/site';
 import { Link, usePathname } from '@/i18n/navigation';
-import { ButtonLink } from '@/components/ui/Button';
+import { ButtonLink } from '@/components/ui/button';
 import { LocaleSwitcher } from './LocaleSwitcher';
 
 export function MobileNav() {
@@ -29,7 +29,7 @@ export function MobileNav() {
         aria-controls="mobile-nav"
         aria-label={open ? t('common.close') : t('common.menu')}
         onClick={() => setOpen(!open)}
-        className="grid size-10 place-items-center rounded-full hover:bg-surface-2"
+        className="grid size-10 place-items-center rounded-full hover:bg-secondary"
       >
         <svg width="20" height="20" viewBox="0 0 20 20" aria-hidden>
           {open ? (
@@ -42,10 +42,10 @@ export function MobileNav() {
       {open && (
         <div
           id="mobile-nav"
-          className="fixed inset-x-0 bottom-0 top-[var(--header-h)] overflow-y-auto bg-bg"
+          className="fixed inset-x-0 bottom-0 top-[var(--header-h)] overflow-y-auto bg-background"
         >
           <nav aria-label="Mobile" className="container-x py-4">
-            <ul className="divide-y divide-line">
+            <ul className="divide-y divide-border">
               {mainNav.map((entry) =>
                 entry.type === 'link' ? (
                   <li key={entry.key}>
@@ -60,7 +60,7 @@ export function MobileNav() {
                         {t(`nav.${entry.key}`)}
                         <span
                           aria-hidden
-                          className="text-muted transition-transform group-open:rotate-45"
+                          className="text-muted-foreground transition-transform group-open:rotate-45"
                         >
                           +
                         </span>
@@ -68,7 +68,7 @@ export function MobileNav() {
                       <ul className="pb-4">
                         {entry.items.map((id) => (
                           <li key={id}>
-                            <Link href={pageHref(id)} className="block py-2 text-muted">
+                            <Link href={pageHref(id)} className="block py-2 text-muted-foreground">
                               {t(`pages.${id}.title`)}
                             </Link>
                           </li>
@@ -80,10 +80,10 @@ export function MobileNav() {
               )}
             </ul>
             <div className="mt-6 flex flex-col gap-3">
-              <ButtonLink href={pageHref('developers')} variant="secondary">
+              <ButtonLink href={pageHref('developers')} variant="outline">
                 {t('common.getApi')}
               </ButtonLink>
-              <a href={site.links.login} className="py-2 text-center text-muted">
+              <a href={site.links.login} className="py-2 text-center text-muted-foreground">
                 {t('common.login')}
               </a>
               <LocaleSwitcher className="self-center" />
@@ -99,7 +99,7 @@ export function MobileNav() {
 export function MobileCTA() {
   const t = useTranslations('common');
   return (
-    <div className="fixed inset-x-0 bottom-0 z-40 border-t border-line bg-bg/90 p-3 backdrop-blur-md lg:hidden">
+    <div className="fixed inset-x-0 bottom-0 z-40 border-t border-border bg-background/90 p-3 backdrop-blur-md lg:hidden">
       <ButtonLink href={site.links.app} className="w-full">
         {t('startCreating')}
       </ButtonLink>

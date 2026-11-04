@@ -3,7 +3,7 @@ import { getTranslations, setRequestLocale } from 'next-intl/server';
 import { notFound } from 'next/navigation';
 import { buildMetadata } from '@/components/seo/meta';
 import { StageCard } from '@/components/templates/StageCard';
-import { ButtonLink } from '@/components/ui/Button';
+import { ButtonLink } from '@/components/ui/button';
 import { galleryItems } from '@/config/gallery';
 import { appUrl } from '@/config/site';
 import { Link } from '@/i18n/navigation';
@@ -46,15 +46,15 @@ export default async function GalleryDetail({ params }: { params: Params }) {
       <div className="container-x grid gap-10 py-10 lg:grid-cols-[1.5fr_1fr]">
         <StageCard asset={item.asset} label={title} className="aspect-square lg:aspect-[4/3]" />
         <div>
-          <Link href="/gallery" className="text-sm text-muted hover:text-text">
+          <Link href="/gallery" className="text-sm text-muted-foreground hover:text-foreground">
             ← {t('gallery.detail.back')}
           </Link>
           <h1 className="mt-4 font-display text-3xl font-semibold tracking-tight">{title}</h1>
-          <p className="mt-2 text-muted">♥ {item.likes.toLocaleString()}</p>
-          <dl className="mt-8 divide-y divide-line border-y border-line text-sm">
+          <p className="mt-2 text-muted-foreground">♥ {item.likes.toLocaleString()}</p>
+          <dl className="mt-8 divide-y divide-border border-y border-border text-sm">
             {rows.map(([k, v]) => (
               <div key={k} className="grid grid-cols-[8rem_1fr] gap-4 py-3">
-                <dt className="text-muted">{k}</dt>
+                <dt className="text-muted-foreground">{k}</dt>
                 <dd>{v}</dd>
               </div>
             ))}

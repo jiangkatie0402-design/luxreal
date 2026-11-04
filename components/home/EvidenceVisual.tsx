@@ -54,7 +54,7 @@ function useCycle<T>(values: T[], ms: number) {
 }
 
 const chip =
-  'z-30 rounded-full border border-line bg-surface/85 px-2.5 py-1 text-[11px] backdrop-blur-sm';
+  'z-30 rounded-full border border-border bg-card/85 px-2.5 py-1 text-[11px] backdrop-blur-sm';
 
 export function EvidenceVisual({ visual }: { visual: Visual }) {
   const t = useTranslations('home.scenarios.labels');
@@ -65,8 +65,8 @@ export function EvidenceVisual({ visual }: { visual: Visual }) {
           <Stage asset={visual.asset}>
             <ShowcaseModel asset={visual.asset} fit={1.15} />
           </Stage>
-          <dl className="absolute right-3 top-3 z-30 w-48 rounded-md border border-line bg-bg/85 p-3 text-xs backdrop-blur-sm">
-            <div className="mb-2 flex items-center justify-between border-b border-line pb-2 font-medium">
+          <dl className="absolute right-3 top-3 z-30 w-48 rounded-md border border-border bg-background/85 p-3 text-xs backdrop-blur-sm">
+            <div className="mb-2 flex items-center justify-between border-b border-border pb-2 font-medium">
               <dt>{t('printability')}</dt>
               <dd className="text-[var(--scene)]" aria-label={t('yes')}>
                 ✓
@@ -98,7 +98,7 @@ export function EvidenceVisual({ visual }: { visual: Visual }) {
           <Stage asset="dog">
             <RigPreview fit={1.2} />
           </Stage>
-          <span className={`absolute bottom-3 right-3 font-mono text-muted ${chip}`}>
+          <span className={`absolute bottom-3 right-3 font-mono text-muted-foreground ${chip}`}>
             walk_cycle · 24 bones
           </span>
         </>
@@ -113,7 +113,7 @@ export function EvidenceVisual({ visual }: { visual: Visual }) {
           </Stage>
           <div className="absolute bottom-3 left-3 z-30 flex gap-1.5">
             {visual.chips.map((c) => (
-              <span key={c} className={`font-mono text-muted ${chip}`}>
+              <span key={c} className={`font-mono text-muted-foreground ${chip}`}>
                 {c}
               </span>
             ))}
@@ -124,15 +124,15 @@ export function EvidenceVisual({ visual }: { visual: Visual }) {
       return (
         <div className="absolute inset-0 flex flex-col gap-3 p-4">
           <div className="flex items-center justify-between text-xs">
-            <span className="font-mono text-muted">{t('batchJob')}</span>
+            <span className="font-mono text-muted-foreground">{t('batchJob')}</span>
             <span className="font-mono text-[var(--scene)] tabular-nums">1,200 / 1,200 ✓</span>
           </div>
-          <div className="h-1 overflow-hidden rounded-full bg-surface-2">
+          <div className="h-1 overflow-hidden rounded-full bg-secondary">
             <div className="h-full w-full rounded-full bg-[var(--scene)]" />
           </div>
           <ul className="grid flex-1 grid-cols-4 gap-2">
             {visual.thumbs.map((k) => (
-              <li key={k} className="relative rounded border border-line bg-surface-2">
+              <li key={k} className="relative rounded border border-border bg-secondary">
                 <Image src={thumbSrc(k)} alt="" fill sizes="80px" className="object-contain p-1" />
               </li>
             ))}
@@ -157,14 +157,14 @@ function SplitVisual({ asset }: { asset: AssetId }) {
         role="switch"
         aria-checked={exploded}
         onClick={() => pick(exploded ? 0 : 1)}
-        className={`absolute right-3 top-3 flex items-center gap-2 text-muted ${chip}`}
+        className={`absolute right-3 top-3 flex items-center gap-2 text-muted-foreground ${chip}`}
       >
         {t('autoSplit')}
         <span
-          className={`relative h-3.5 w-6 rounded-full transition-colors ${exploded ? 'bg-[var(--scene)]' : 'bg-line-strong'}`}
+          className={`relative h-3.5 w-6 rounded-full transition-colors ${exploded ? 'bg-[var(--scene)]' : 'bg-border-strong'}`}
         >
           <span
-            className={`absolute top-0.5 size-2.5 rounded-full bg-bg transition-[left] ${exploded ? 'left-3' : 'left-0.5'}`}
+            className={`absolute top-0.5 size-2.5 rounded-full bg-background transition-[left] ${exploded ? 'left-3' : 'left-0.5'}`}
           />
         </span>
       </button>
@@ -193,7 +193,7 @@ function ChannelsVisual({ asset }: { asset: AssetId }) {
             type="button"
             aria-pressed={mode === c}
             onClick={() => pick(i)}
-            className={`${chip} ${mode === c ? '!border-[var(--scene)] text-text' : 'text-subtle'}`}
+            className={`${chip} ${mode === c ? '!border-[var(--scene)] text-foreground' : 'text-subtle'}`}
           >
             {t(`channel.${c}`)}
           </button>
@@ -223,8 +223,12 @@ function CompareVisual({ asset }: { asset: AssetId }) {
       <Stage asset={asset}>
         <CompareModel asset={asset} progress={p} />
       </Stage>
-      <span className={`absolute left-3 top-3 text-muted ${chip}`}>{t('compareLeft')}</span>
-      <span className={`absolute right-3 top-3 text-muted ${chip}`}>{t('compareRight')}</span>
+      <span className={`absolute left-3 top-3 text-muted-foreground ${chip}`}>
+        {t('compareLeft')}
+      </span>
+      <span className={`absolute right-3 top-3 text-muted-foreground ${chip}`}>
+        {t('compareRight')}
+      </span>
       <label className="absolute inset-x-6 bottom-3 z-30 flex items-center gap-2 text-[11px] text-subtle">
         <span className="sr-only">{t('compareDrag')}</span>
         <input
@@ -266,7 +270,7 @@ function GaussianVisual({ asset }: { asset: AssetId }) {
       <Stage asset={asset}>
         <GaussianModel asset={asset} />
       </Stage>
-      <span className={`absolute bottom-3 left-3 font-mono text-muted ${chip}`}>
+      <span className={`absolute bottom-3 left-3 font-mono text-muted-foreground ${chip}`}>
         {t('gaussian')}
       </span>
     </>

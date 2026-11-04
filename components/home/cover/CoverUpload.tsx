@@ -50,7 +50,7 @@ export function CoverUpload() {
         accept(e.dataTransfer.files[0]);
       }}
       className={`rounded-[22px] border bg-[rgba(12,19,34,0.82)] p-3 shadow-[0_20px_60px_-20px_rgba(0,0,0,0.8)] backdrop-blur-xl transition-colors md:p-4 ${
-        dragging ? 'border-accent' : 'border-line-strong'
+        dragging ? 'border-primary' : 'border-border-strong'
       }`}
     >
       <label className="flex min-h-24 cursor-pointer items-center gap-4 rounded-2xl px-3 py-3 hover:bg-white/[0.03] md:min-h-28">
@@ -71,13 +71,13 @@ export function CoverUpload() {
         ) : (
           <span
             aria-hidden
-            className="grid size-14 shrink-0 place-items-center rounded-xl border border-dashed border-line-strong text-2xl text-muted md:size-16"
+            className="grid size-14 shrink-0 place-items-center rounded-xl border border-dashed border-border-strong text-2xl text-muted-foreground md:size-16"
           >
             +
           </span>
         )}
         <span className="min-w-0">
-          <span className="line-clamp-2 block text-base text-text md:truncate md:text-lg">
+          <span className="line-clamp-2 block text-base text-foreground md:truncate md:text-lg">
             {file ? file.name : t('placeholder')}
           </span>
           <span className="mt-1 block text-sm text-subtle">
@@ -85,20 +85,20 @@ export function CoverUpload() {
           </span>
         </span>
       </label>
-      <div className="flex flex-wrap items-center gap-2 border-t border-line px-1 pt-3">
-        <span className="rounded-full border border-line px-3 py-1.5 text-xs text-muted">
+      <div className="flex flex-wrap items-center gap-2 border-t border-border px-1 pt-3">
+        <span className="rounded-full border border-border px-3 py-1.5 text-xs text-muted-foreground">
           {t('model')}
         </span>
-        <span className="rounded-full border border-line px-3 py-1.5 text-xs text-muted">
+        <span className="rounded-full border border-border px-3 py-1.5 text-xs text-muted-foreground">
           {t('output')}
         </span>
-        <p role="alert" className="min-w-0 flex-1 truncate px-2 text-sm text-accent">
+        <p role="alert" className="min-w-0 flex-1 truncate px-2 text-sm text-primary">
           {error}
         </p>
         <button
           type="button"
           onClick={submit}
-          className="ml-auto inline-flex h-11 items-center gap-2 rounded-full bg-accent px-6 text-sm font-medium text-on-accent hover:brightness-110"
+          className="ml-auto inline-flex h-11 items-center gap-2 rounded-full bg-primary px-6 text-sm font-medium text-primary-foreground hover:brightness-110"
         >
           {t('generate')} <span aria-hidden>→</span>
         </button>

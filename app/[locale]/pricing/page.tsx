@@ -3,7 +3,7 @@ import { getTranslations, setRequestLocale } from 'next-intl/server';
 import { FAQ } from '@/components/home/FAQ';
 import { buildMetadata } from '@/components/seo/meta';
 import { PageHero } from '@/components/templates/PageHero';
-import { ButtonLink } from '@/components/ui/Button';
+import { ButtonLink } from '@/components/ui/button';
 import { PricingTabs } from '@/components/ui/PricingTabs';
 
 type Params = Promise<{ locale: string }>;
@@ -25,8 +25,8 @@ export default async function PricingPage({ params }: { params: Params }) {
         <div className="container-x">
           <PricingTabs />
           <div className="mt-12 flex flex-col items-center gap-4 text-center">
-            <p className="text-muted">{t('pricing.enterprise')}</p>
-            <ButtonLink href="/contact" variant="secondary">
+            <p className="text-muted-foreground">{t('pricing.enterprise')}</p>
+            <ButtonLink href="/contact" variant="outline">
               {t('common.contactSales')}
             </ButtonLink>
           </div>

@@ -9,7 +9,7 @@ export function Voices() {
     <section aria-labelledby="voices-title" className="bg-[#03060d] py-20 md:py-28">
       <div className="mx-auto w-full max-w-[1320px] px-4 md:px-8">
         <div className="text-center">
-          <p className="mb-3 text-sm font-medium tracking-wide text-accent">{t('eyebrow')}</p>
+          <p className="mb-3 text-sm font-medium tracking-wide text-primary">{t('eyebrow')}</p>
           <h2
             id="voices-title"
             className="text-balance font-display text-3xl font-semibold tracking-tight text-white md:text-[2.75rem]"
@@ -47,7 +47,7 @@ export function Voices() {
                     ) : (
                       <span
                         aria-hidden
-                        className="grid size-11 shrink-0 place-items-center rounded-full bg-accent/20 font-semibold text-accent"
+                        className="grid size-11 shrink-0 place-items-center rounded-full bg-primary/20 font-semibold text-primary"
                       >
                         {t(`items.${v.id}.name`).slice(0, 1)}
                       </span>

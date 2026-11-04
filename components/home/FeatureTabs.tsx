@@ -5,7 +5,7 @@ import { featureTabs } from '@/config/features';
 import { href } from '@/config/pages';
 import { site } from '@/config/site';
 import { Link } from '@/i18n/navigation';
-import { ButtonLink } from '@/components/ui/Button';
+import { ButtonLink } from '@/components/ui/button';
 import { WorkspaceMock } from './WorkspaceMock';
 
 export function FeatureTabs() {
@@ -24,7 +24,7 @@ export function FeatureTabs() {
     <section aria-labelledby="ft-title" className="section-y">
       <div className="container-x">
         <div className="text-center">
-          <p className="mb-3 text-sm font-medium tracking-wide text-accent">{t('eyebrow')}</p>
+          <p className="mb-3 text-sm font-medium tracking-wide text-primary">{t('eyebrow')}</p>
           <h2
             id="ft-title"
             className="text-balance font-display text-2xl font-semibold tracking-tight md:text-3xl"
@@ -36,7 +36,7 @@ export function FeatureTabs() {
           role="tablist"
           aria-label={t('title')}
           onKeyDown={onKey}
-          className="mx-auto mt-8 flex w-fit max-w-full overflow-x-auto rounded-full border border-line bg-surface p-1"
+          className="mx-auto mt-8 flex w-fit max-w-full overflow-x-auto rounded-full border border-border bg-card p-1"
         >
           {featureTabs.map((f, i) => (
             <button
@@ -49,7 +49,9 @@ export function FeatureTabs() {
               tabIndex={i === active ? 0 : -1}
               onClick={() => setActive(i)}
               className={`whitespace-nowrap rounded-full px-4 py-2 text-sm transition-colors md:px-5 ${
-                i === active ? 'bg-surface-2 font-medium text-text' : 'text-muted hover:text-text'
+                i === active
+                  ? 'bg-secondary font-medium text-foreground'
+                  : 'text-muted-foreground hover:text-foreground'
               }`}
             >
               {t(`tabs.${f.id}.tab`)}
@@ -60,17 +62,19 @@ export function FeatureTabs() {
           id={`${id}-panel`}
           role="tabpanel"
           aria-labelledby={`${id}-tab-${active}`}
-          className="mt-8 grid overflow-hidden rounded-lg border border-line bg-surface lg:grid-cols-[minmax(0,5fr)_minmax(0,8fr)]"
+          className="mt-8 grid overflow-hidden rounded-lg border border-border bg-card lg:grid-cols-[minmax(0,5fr)_minmax(0,8fr)]"
         >
           <div className="flex flex-col gap-5 p-7 md:p-10 [background:radial-gradient(120%_70%_at_0%_100%,color-mix(in_srgb,var(--color-accent)_14%,transparent),transparent)]">
             <h3 className="text-balance font-display text-2xl font-semibold tracking-tight md:text-[2.25rem] md:leading-tight">
               {t(`tabs.${tab.id}.title`)}
             </h3>
-            <p className="text-lg leading-relaxed text-muted">{t(`tabs.${tab.id}.desc`)}</p>
-            <ul className="space-y-2 text-sm text-muted">
+            <p className="text-lg leading-relaxed text-muted-foreground">
+              {t(`tabs.${tab.id}.desc`)}
+            </p>
+            <ul className="space-y-2 text-sm text-muted-foreground">
               {(t.raw(`tabs.${tab.id}.points`) as string[]).map((p) => (
                 <li key={p} className="flex gap-2">
-                  <span aria-hidden className="text-accent">
+                  <span aria-hidden className="text-primary">
                     ✓
                   </span>
                   {p}
@@ -79,7 +83,7 @@ export function FeatureTabs() {
             </ul>
             <Link
               href={href(tab.id)}
-              className="w-fit text-sm text-muted underline-offset-4 hover:text-text hover:underline"
+              className="w-fit text-sm text-muted-foreground underline-offset-4 hover:text-foreground hover:underline"
             >
               {t('learnMore')} →
             </Link>

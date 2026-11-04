@@ -16,7 +16,7 @@ export function LocaleSwitcher({ className = '' }: { className?: string }) {
     <div
       role="group"
       aria-label={t('language')}
-      className={`inline-flex rounded-full border border-line p-0.5 text-xs ${className}`}
+      className={`inline-flex rounded-full border border-border p-0.5 text-xs ${className}`}
     >
       {routing.locales.map((l) => (
         <button
@@ -27,7 +27,7 @@ export function LocaleSwitcher({ className = '' }: { className?: string }) {
             // @ts-expect-error -- params match the current pathname
             router.replace({ pathname, params }, { locale: l, scroll: false })
           }
-          className={`rounded-full px-2.5 py-1 ${l === locale ? 'bg-surface-2 text-text' : 'text-subtle hover:text-text'}`}
+          className={`rounded-full px-2.5 py-1 ${l === locale ? 'bg-secondary text-foreground' : 'text-subtle hover:text-foreground'}`}
         >
           {labels[l]}
         </button>

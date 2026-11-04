@@ -5,7 +5,7 @@ import { href } from '@/config/pages';
 import { scenarios } from '@/config/scenarios';
 import { site } from '@/config/site';
 import { Link } from '@/i18n/navigation';
-import { ButtonLink } from '@/components/ui/Button';
+import { ButtonLink } from '@/components/ui/button';
 import { EvidenceVisual } from './EvidenceVisual';
 
 const OTHER = ['embodied', 'heritage'];
@@ -27,7 +27,7 @@ export function Scenarios() {
     <section
       aria-labelledby="sc-title"
       style={{ '--scene': sc.color } as CSSProperties}
-      className="section-y border-y border-line transition-[background] duration-[var(--dur-slow)] [background:radial-gradient(90%_55%_at_50%_0%,color-mix(in_srgb,var(--scene)_14%,transparent),transparent_75%),var(--color-bg)]"
+      className="section-y border-y border-border transition-[background] duration-[var(--dur-slow)] [background:radial-gradient(90%_55%_at_50%_0%,color-mix(in_srgb,var(--scene)_14%,transparent),transparent_75%),var(--color-bg)]"
     >
       <div className="container-x">
         <div className="text-center">
@@ -45,7 +45,7 @@ export function Scenarios() {
           role="tablist"
           aria-label={t('title')}
           onKeyDown={onKey}
-          className="mx-auto mt-8 flex w-fit max-w-full overflow-x-auto rounded-full border border-line bg-surface p-1"
+          className="mx-auto mt-8 flex w-fit max-w-full overflow-x-auto rounded-full border border-border bg-card p-1"
         >
           {scenarios.map((s, i) => (
             <button
@@ -60,8 +60,8 @@ export function Scenarios() {
               style={{ '--scene': s.color } as CSSProperties}
               className={`whitespace-nowrap rounded-full px-4 py-2 text-sm transition-colors md:px-5 ${
                 i === active
-                  ? 'bg-[var(--scene)] font-medium text-bg'
-                  : 'text-muted hover:text-text'
+                  ? 'bg-[var(--scene)] font-medium text-background'
+                  : 'text-muted-foreground hover:text-foreground'
               }`}
             >
               {t(`${s.id}.tab`)}
@@ -76,10 +76,12 @@ export function Scenarios() {
           className="mt-8"
         >
           <div className="flex flex-col items-center gap-5 text-center">
-            <p className="max-w-2xl text-balance text-lg text-muted">{t(`${sc.id}.tagline`)}</p>
+            <p className="max-w-2xl text-balance text-lg text-muted-foreground">
+              {t(`${sc.id}.tagline`)}
+            </p>
             <div className="flex flex-wrap justify-center gap-3">
               <ButtonLink href={site.links.app}>{t('cta')} →</ButtonLink>
-              <ButtonLink href={href(sc.page)} variant="secondary">
+              <ButtonLink href={href(sc.page)} variant="outline">
                 {t('learnMore')}
               </ButtonLink>
             </div>
@@ -91,14 +93,14 @@ export function Scenarios() {
             {sc.cards.map((card) => (
               <li
                 key={`${sc.id}-${card.id}`}
-                className="overflow-hidden rounded-lg border border-[color-mix(in_srgb,var(--scene)_28%,var(--color-border))] bg-surface"
+                className="overflow-hidden rounded-lg border border-[color-mix(in_srgb,var(--scene)_28%,var(--color-border))] bg-card"
               >
                 <div className="relative aspect-[16/10] [background:radial-gradient(80%_70%_at_50%_45%,color-mix(in_srgb,var(--scene)_18%,var(--color-surface-2)),var(--color-surface))]">
                   <EvidenceVisual visual={card.visual} />
                 </div>
                 <div className="p-5 md:p-6">
                   <h3 className="text-lg font-semibold">{t(`${sc.id}.cards.${card.id}.title`)}</h3>
-                  <p className="mt-2 leading-relaxed text-muted">
+                  <p className="mt-2 leading-relaxed text-muted-foreground">
                     {t(`${sc.id}.cards.${card.id}.desc`)}
                   </p>
                 </div>
@@ -106,14 +108,14 @@ export function Scenarios() {
             ))}
           </ul>
 
-          <div className="mt-4 grid gap-6 rounded-lg border border-line bg-surface p-5 md:grid-cols-[1fr_auto] md:items-center md:p-6">
+          <div className="mt-4 grid gap-6 rounded-lg border border-border bg-card p-5 md:grid-cols-[1fr_auto] md:items-center md:p-6">
             <div className="min-w-0">
-              <p className="mb-3 text-sm text-muted">{t('tools')}</p>
+              <p className="mb-3 text-sm text-muted-foreground">{t('tools')}</p>
               <ul className="flex flex-wrap gap-2">
                 {sc.tools.map((tool) => (
                   <li
                     key={tool}
-                    className="flex items-center gap-2 rounded-md border border-line bg-surface-2 py-1.5 pl-1.5 pr-3 text-sm"
+                    className="flex items-center gap-2 rounded-md border border-border bg-secondary py-1.5 pl-1.5 pr-3 text-sm"
                   >
                     <span
                       aria-hidden
@@ -127,12 +129,12 @@ export function Scenarios() {
               </ul>
             </div>
             <div>
-              <p className="mb-3 text-sm text-muted">{t('formats')}</p>
+              <p className="mb-3 text-sm text-muted-foreground">{t('formats')}</p>
               <ul className="flex flex-wrap gap-2">
                 {sc.formats.map((f) => (
                   <li
                     key={f}
-                    className="rounded-md border border-line px-2.5 py-1.5 font-mono text-xs"
+                    className="rounded-md border border-border px-2.5 py-1.5 font-mono text-xs"
                   >
                     {f}
                   </li>
@@ -143,19 +145,19 @@ export function Scenarios() {
         </div>
 
         <div className="mt-10 flex flex-wrap items-center gap-3">
-          <span className="text-sm text-muted">{t('other')}</span>
+          <span className="text-sm text-muted-foreground">{t('other')}</span>
           {OTHER.map((p) => (
             <Link
               key={p}
               href={href(p)}
-              className="rounded-full border border-line px-4 py-2 text-sm text-muted hover:text-text"
+              className="rounded-full border border-border px-4 py-2 text-sm text-muted-foreground hover:text-foreground"
             >
               {tp(`${p}.title`)}
             </Link>
           ))}
           <Link
             href="/use-cases"
-            className="text-sm text-muted underline-offset-4 hover:text-text hover:underline"
+            className="text-sm text-muted-foreground underline-offset-4 hover:text-foreground hover:underline"
           >
             {t('allCases')} →
           </Link>

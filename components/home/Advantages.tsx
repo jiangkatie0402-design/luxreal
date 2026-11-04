@@ -51,7 +51,7 @@ const ICONS: Record<(typeof ITEMS)[number], React.ReactNode> = {
 export function Advantages() {
   const t = useTranslations('home.advantages');
   return (
-    <section aria-labelledby="adv-title" className="section-y bg-surface">
+    <section aria-labelledby="adv-title" className="section-y bg-card">
       <div className="container-x">
         <SectionHeading
           id="adv-title"
@@ -59,9 +59,9 @@ export function Advantages() {
           title={t('title')}
           subtitle={t('subtitle')}
         />
-        <ul className="mt-12 grid gap-px overflow-hidden rounded-lg border border-line bg-line sm:grid-cols-2 lg:grid-cols-3">
+        <ul className="mt-12 grid gap-px overflow-hidden rounded-lg border border-border bg-border sm:grid-cols-2 lg:grid-cols-3">
           {ITEMS.map((k) => (
-            <li key={k} className="bg-surface p-7">
+            <li key={k} className="bg-card p-7">
               <svg
                 width="28"
                 height="28"
@@ -76,14 +76,14 @@ export function Advantages() {
                 {ICONS[k]}
               </svg>
               <h3 className="mt-5 text-lg font-semibold">{t(`items.${k}.title`)}</h3>
-              <p className="mt-2 leading-relaxed text-muted">{t(`items.${k}.desc`)}</p>
+              <p className="mt-2 leading-relaxed text-muted-foreground">{t(`items.${k}.desc`)}</p>
             </li>
           ))}
         </ul>
         <dl className="mt-12 grid grid-cols-2 gap-8 lg:grid-cols-4">
           {STATS.map((k) => (
-            <div key={k} className="border-l-2 border-accent pl-5">
-              <dt className="text-sm text-muted">{t(`stats.${k}.label`)}</dt>
+            <div key={k} className="border-l-2 border-primary pl-5">
+              <dt className="text-sm text-muted-foreground">{t(`stats.${k}.label`)}</dt>
               <dd className="order-first font-display text-3xl font-semibold tracking-tight">
                 {t(`stats.${k}.value`)}
               </dd>

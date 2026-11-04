@@ -10,11 +10,11 @@ import { ThemeToggle } from './ThemeToggle';
 export function Footer() {
   const t = useTranslations();
   return (
-    <footer className="border-t border-line bg-surface pb-24 lg:pb-0">
+    <footer className="border-t border-border bg-card pb-24 lg:pb-0">
       <div className="container-x grid gap-10 py-14 lg:grid-cols-[1.2fr_repeat(6,1fr)]">
         <div className="lg:pr-6">
           <Logo />
-          <p className="mt-4 max-w-xs text-sm text-muted">{t('footer.tagline')}</p>
+          <p className="mt-4 max-w-xs text-sm text-muted-foreground">{t('footer.tagline')}</p>
         </div>
         <div className="grid grid-cols-2 gap-8 sm:grid-cols-3 lg:col-span-6 lg:grid-cols-6">
           {footerColumns.map((col) => (
@@ -25,7 +25,7 @@ export function Footer() {
                   <li key={it.id ?? it.href}>
                     <Link
                       href={it.id ? pageHref(it.id) : it.href!}
-                      className="text-sm text-muted hover:text-text"
+                      className="text-sm text-muted-foreground hover:text-foreground"
                     >
                       {it.id ? t(`pages.${it.id}.title`) : t(`footer.links.${it.label}`)}
                     </Link>
@@ -36,7 +36,7 @@ export function Footer() {
           ))}
         </div>
       </div>
-      <div className="container-x flex flex-col gap-4 border-t border-line py-6 text-sm text-subtle md:flex-row md:items-center md:justify-between">
+      <div className="container-x flex flex-col gap-4 border-t border-border py-6 text-sm text-subtle md:flex-row md:items-center md:justify-between">
         <p>
           {t('footer.rights', { year: new Date().getFullYear() })}
           {site.icp && <span className="ml-3">{site.icp}</span>}
@@ -47,7 +47,7 @@ export function Footer() {
               <li key={s.id}>
                 <a
                   href={s.href}
-                  className="hover:text-text"
+                  className="hover:text-foreground"
                   rel="noopener noreferrer"
                   target="_blank"
                 >

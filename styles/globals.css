@@ -3,17 +3,28 @@
 
 /* Tailwind theme values all point at tokens */
 @theme inline {
-  --color-bg: var(--color-bg);
-  --color-surface: var(--color-surface);
-  --color-surface-2: var(--color-surface-2);
-  --color-text: var(--color-text);
-  --color-muted: var(--color-text-secondary);
-  --color-subtle: var(--color-text-tertiary);
-  --color-accent: var(--color-accent);
-  --color-on-accent: var(--color-accent-contrast);
-  --color-accent-soft: var(--color-accent-soft);
-  --color-line: var(--color-border);
-  --color-line-strong: var(--color-border-strong);
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-primary-soft: var(--primary-soft);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-subtle: var(--subtle-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-destructive: var(--destructive);
+  --color-destructive-foreground: var(--destructive-foreground);
+  --color-border: var(--border);
+  --color-border-strong: var(--border-strong);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
   --color-hero: var(--color-hero-bg);
 
   --font-display: var(--font-display);
@@ -51,8 +62,27 @@
     overflow-x: hidden;
     -webkit-font-smoothing: antialiased;
   }
+  * {
+    border-color: var(--border);
+  }
+  /* UI/UX: touch targets ≥ 44px on touch devices (visual size can stay smaller on desktop) */
+  @media (pointer: coarse) {
+    :where(button, [role='tab'], [role='button'], summary, a[class*='inline-flex'], a[class*='flex']) {
+      min-height: 44px;
+    }
+    :where(button, [role='tab'], [role='button']) {
+      min-width: 44px;
+    }
+    /* standalone text links (nav lists, "→" links); links inside running text are left alone */
+    :where(a:not(p a)) {
+      display: inline-flex;
+      align-items: center;
+      min-height: 44px;
+      min-width: 44px;
+    }
+  }
   :focus-visible {
-    outline: 2px solid var(--color-accent);
+    outline: 2px solid var(--ring);
     outline-offset: 2px;
   }
 }

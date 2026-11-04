@@ -80,6 +80,36 @@
   --container: 1240px;
 }
 
+/*
+ * shadcn/ui semantic tokens. They alias the palette above, so both colour
+ * schemes follow automatically. Components use only these names.
+ */
+:root {
+  --background: var(--color-bg);
+  --foreground: var(--color-text);
+  --card: var(--color-surface);
+  --card-foreground: var(--color-text);
+  --popover: var(--color-surface);
+  --popover-foreground: var(--color-text);
+  --primary: var(--color-accent);
+  --primary-foreground: var(--color-accent-contrast);
+  --primary-soft: var(--color-accent-soft);
+  --secondary: var(--color-surface-2);
+  --secondary-foreground: var(--color-text);
+  --muted: var(--color-surface-2);
+  --muted-foreground: var(--color-text-secondary);
+  --subtle-foreground: var(--color-text-tertiary);
+  --accent: var(--color-surface-2);
+  --accent-foreground: var(--color-text);
+  --destructive: #ef4444;
+  --destructive-foreground: #ffffff;
+  --border: var(--color-border);
+  --border-strong: var(--color-border-strong);
+  --input: var(--color-border-strong);
+  --ring: var(--color-accent);
+  --radius: 0.875rem;
+}
+
 /* Default is blue-black. Light is opt-in, or follows the OS when data-theme="system". */
 :root[data-theme='light'] {
   color-scheme: light;

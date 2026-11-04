@@ -48,7 +48,7 @@ export function SliceLab() {
   const [wire, setWire] = useState(true);
   return (
     <div className="container-x grid gap-6 pb-10 pt-[calc(var(--header-h)+1.5rem)] lg:grid-cols-[1fr_300px]">
-      <div className="relative aspect-[4/3] overflow-hidden rounded-lg border border-line bg-surface-2">
+      <div className="relative aspect-[4/3] overflow-hidden rounded-lg border border-border bg-secondary">
         <ModelStage className="absolute inset-0" label="GenerationSlice test">
           <Subject
             id={id}
@@ -79,7 +79,7 @@ export function SliceLab() {
           <select
             value={id}
             onChange={(e) => setId(e.target.value as AssetId)}
-            className="mt-2 w-full rounded-md border border-line bg-surface p-2"
+            className="mt-2 w-full rounded-md border border-border bg-card p-2"
           >
             {Object.keys(assets).map((k) => (
               <option key={k}>{k}</option>
@@ -91,7 +91,7 @@ export function SliceLab() {
           <select
             value={axis}
             onChange={(e) => setAxis(e.target.value as 'x' | 'y' | 'z')}
-            className="mt-2 w-full rounded-md border border-line bg-surface p-2"
+            className="mt-2 w-full rounded-md border border-border bg-card p-2"
           >
             <option>y</option>
             <option>x</option>

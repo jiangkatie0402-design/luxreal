@@ -38,7 +38,7 @@ export function GalleryCard({
       onMouseLeave={() => setActive(false)}
       onFocus={() => setActive(true)}
       onBlur={() => setActive(false)}
-      className={`group block overflow-hidden rounded-lg border border-line bg-surface transition-colors hover:border-line-strong ${className}`}
+      className={`group block overflow-hidden rounded-lg border border-border bg-card transition-colors hover:border-border-strong ${className}`}
     >
       <div
         className={`relative ${tall ? 'aspect-[4/5]' : 'aspect-square'}`}
@@ -64,7 +64,7 @@ export function GalleryCard({
       <div className="flex items-center gap-2.5 px-4 py-3 text-sm">
         <span
           aria-hidden
-          className="grid size-6 shrink-0 place-items-center rounded-full bg-surface-2 text-xs font-semibold text-muted"
+          className="grid size-6 shrink-0 place-items-center rounded-full bg-secondary text-xs font-semibold text-muted-foreground"
         >
           {item.author.slice(0, 1).toUpperCase()}
         </span>

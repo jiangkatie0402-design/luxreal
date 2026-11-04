@@ -12,7 +12,7 @@ export function CommunityWall() {
     <section aria-labelledby="wall-title" className="overflow-hidden bg-[#03060d] py-20 md:py-28">
       <div className="mx-auto flex w-full max-w-[1320px] flex-col gap-6 px-4 md:flex-row md:items-end md:justify-between md:px-8">
         <div>
-          <p className="mb-3 text-sm font-medium tracking-wide text-accent">{t('eyebrow')}</p>
+          <p className="mb-3 text-sm font-medium tracking-wide text-primary">{t('eyebrow')}</p>
           <h2
             id="wall-title"
             className="text-balance font-display text-3xl font-semibold tracking-tight text-white md:text-[2.75rem]"

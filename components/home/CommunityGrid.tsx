@@ -24,8 +24,8 @@ export function CommunityGrid({ limit }: { limit?: number }) {
             onClick={() => setFilter(f)}
             className={`rounded-full border px-4 py-1.5 text-sm transition-colors ${
               filter === f
-                ? 'border-accent bg-accent text-on-accent'
-                : 'border-line text-muted hover:text-text'
+                ? 'border-primary bg-primary text-primary-foreground'
+                : 'border-border text-muted-foreground hover:text-foreground'
             }`}
           >
             {t(`filters.${f}`)}

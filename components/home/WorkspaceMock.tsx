@@ -15,7 +15,7 @@ export function WorkspaceMock({ tab }: { tab: FeatureTab }) {
 
   if (tab.screenshot) {
     return (
-      <div className="relative aspect-[16/11] overflow-hidden rounded-md border border-line">
+      <div className="relative aspect-[16/11] overflow-hidden rounded-md border border-border">
         <Image src={tab.screenshot} alt={t(`tabs.${tab.id}.title`)} fill className="object-cover" />
       </div>
     );
@@ -23,25 +23,25 @@ export function WorkspaceMock({ tab }: { tab: FeatureTab }) {
 
   return (
     <div
-      className="overflow-hidden rounded-md border border-line-strong bg-bg shadow-card"
+      className="overflow-hidden rounded-md border border-border-strong bg-background shadow-card"
       role="img"
       aria-label={t('mockLabel', { feature: t(`tabs.${tab.id}.title`) })}
     >
       {/* window chrome */}
-      <div className="flex items-center gap-3 border-b border-line bg-surface px-3 py-2">
+      <div className="flex items-center gap-3 border-b border-border bg-card px-3 py-2">
         <span className="flex gap-1.5" aria-hidden>
-          <span className="size-2.5 rounded-full bg-line-strong" />
-          <span className="size-2.5 rounded-full bg-line-strong" />
-          <span className="size-2.5 rounded-full bg-line-strong" />
+          <span className="size-2.5 rounded-full bg-border-strong" />
+          <span className="size-2.5 rounded-full bg-border-strong" />
+          <span className="size-2.5 rounded-full bg-border-strong" />
         </span>
-        <span className="truncate rounded bg-surface-2 px-3 py-1 font-mono text-xs text-subtle">
+        <span className="truncate rounded bg-secondary px-3 py-1 font-mono text-xs text-subtle">
           app.lux3d / workspace
         </span>
       </div>
       <div className="grid md:grid-cols-[190px_1fr]">
         {/* settings panel */}
-        <div className="flex flex-col gap-3 border-b border-line bg-surface p-3 text-xs md:border-b-0 md:border-r">
-          <p className="font-medium text-muted">{t(`input.${tab.input.kind}`)}</p>
+        <div className="flex flex-col gap-3 border-b border-border bg-card p-3 text-xs md:border-b-0 md:border-r">
+          <p className="font-medium text-muted-foreground">{t(`input.${tab.input.kind}`)}</p>
           <InputSlot tab={tab} />
           <Setting
             label={t('settings.version')}
@@ -55,7 +55,7 @@ export function WorkspaceMock({ tab }: { tab: FeatureTab }) {
           ) : (
             <Setting label={t('settings.output')} options={['Mesh', 'PBR', '3DGS']} active={1} />
           )}
-          <span className="mt-1 rounded-full bg-accent py-1.5 text-center font-medium text-on-accent">
+          <span className="mt-1 rounded-full bg-primary py-1.5 text-center font-medium text-primary-foreground">
             {t('settings.generate')}
           </span>
         </div>
@@ -80,7 +80,7 @@ export function WorkspaceMock({ tab }: { tab: FeatureTab }) {
               className="object-contain p-6"
             />
           )}
-          <span className="absolute bottom-3 left-3 z-30 rounded-full border border-line bg-surface/85 px-2.5 py-1 font-mono text-[11px] text-muted">
+          <span className="absolute bottom-3 left-3 z-30 rounded-full border border-border bg-card/85 px-2.5 py-1 font-mono text-[11px] text-muted-foreground">
             {tab.stats}
           </span>
         </div>
@@ -94,7 +94,7 @@ function InputSlot({ tab }: { tab: FeatureTab }) {
   const input = tab.input;
   if (input.kind === 'image')
     return (
-      <div className="relative aspect-square overflow-hidden rounded border border-dashed border-accent/60 bg-surface-2">
+      <div className="relative aspect-square overflow-hidden rounded border border-dashed border-primary/60 bg-secondary">
         <Image
           src={thumbSrc(input.thumb)}
           alt=""
@@ -110,7 +110,7 @@ function InputSlot({ tab }: { tab: FeatureTab }) {
         {input.thumbs.map((k) => (
           <div
             key={k}
-            className="relative aspect-square overflow-hidden rounded border border-line bg-surface-2"
+            className="relative aspect-square overflow-hidden rounded border border-border bg-secondary"
           >
             <Image src={thumbSrc(k)} alt="" fill sizes="90px" className="object-contain p-1" />
           </div>
@@ -118,7 +118,7 @@ function InputSlot({ tab }: { tab: FeatureTab }) {
       </div>
     );
   return (
-    <div className="flex items-center gap-2 rounded border border-line bg-surface-2 p-2">
+    <div className="flex items-center gap-2 rounded border border-border bg-secondary p-2">
       <div className="relative size-12 shrink-0">
         <Image
           src={thumbSrc('gallery-corgi')}
@@ -128,7 +128,7 @@ function InputSlot({ tab }: { tab: FeatureTab }) {
           className="object-contain"
         />
       </div>
-      <span className="text-muted">{t('rigSource')}</span>
+      <span className="text-muted-foreground">{t('rigSource')}</span>
     </div>
   );
 }
@@ -145,11 +145,11 @@ function Setting({
   return (
     <div>
       <p className="mb-1.5 text-subtle">{label}</p>
-      <div className="flex rounded-full bg-surface-2 p-0.5">
+      <div className="flex rounded-full bg-secondary p-0.5">
         {options.map((o, i) => (
           <span
             key={o}
-            className={`flex-1 rounded-full py-1 text-center ${i === active ? 'bg-bg text-text' : 'text-subtle'}`}
+            className={`flex-1 rounded-full py-1 text-center ${i === active ? 'bg-background text-foreground' : 'text-subtle'}`}
           >
             {o}
           </span>

@@ -1,7 +1,7 @@
 import { useTranslations } from 'next-intl';
 import { href } from '@/config/pages';
 import { site } from '@/config/site';
-import { ButtonLink } from '@/components/ui/Button';
+import { ButtonLink } from '@/components/ui/button';
 
 export function FinalCTA() {
   const t = useTranslations();
@@ -35,7 +35,7 @@ export function FinalCTA() {
               </ButtonLink>
               <ButtonLink
                 href={href('developers')}
-                variant="secondary"
+                variant="outline"
                 size="lg"
                 className="!border-[color-mix(in_srgb,var(--color-on-cta)_35%,transparent)] !text-[var(--color-on-cta)] hover:!bg-[color-mix(in_srgb,var(--color-on-cta)_10%,transparent)]"
               >

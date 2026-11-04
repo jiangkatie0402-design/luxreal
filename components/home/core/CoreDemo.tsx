@@ -110,7 +110,7 @@ export function CoreDemo({ mode, t }: { mode: CoreMode; t: number }) {
 
   return (
     <div
-      className="overflow-hidden rounded-xl border border-line-strong bg-[#050913] shadow-[0_30px_100px_-40px_rgba(56,116,255,0.5)]"
+      className="overflow-hidden rounded-xl border border-border-strong bg-[#050913] shadow-[0_30px_100px_-40px_rgba(56,116,255,0.5)]"
       aria-hidden
     >
       <div className="flex items-center gap-3 border-b border-white/10 bg-[#0b1220] px-4 py-2.5">

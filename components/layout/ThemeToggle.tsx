@@ -40,7 +40,7 @@ export function ThemeToggle() {
     <div
       role="group"
       aria-label={t('themeLabel')}
-      className="inline-flex rounded-full border border-line p-0.5 text-xs"
+      className="inline-flex rounded-full border border-border p-0.5 text-xs"
     >
       {(['dark', 'light', 'system'] as Theme[]).map((v) => (
         <button
@@ -48,7 +48,7 @@ export function ThemeToggle() {
           type="button"
           aria-pressed={theme === v}
           onClick={() => apply(v)}
-          className={`rounded-full px-2.5 py-1 ${theme === v ? 'bg-surface-2 text-text' : 'text-subtle hover:text-text'}`}
+          className={`rounded-full px-2.5 py-1 ${theme === v ? 'bg-secondary text-foreground' : 'text-subtle hover:text-foreground'}`}
         >
           {t(`theme.${v}`)}
         </button>

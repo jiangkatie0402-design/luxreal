@@ -3,7 +3,7 @@ import { childrenOf, href, pages, type PageDef } from '@/config/pages';
 import { site } from '@/config/site';
 import type { AssetId } from '@/config/assets';
 import { Link } from '@/i18n/navigation';
-import { ButtonLink } from '@/components/ui/Button';
+import { ButtonLink } from '@/components/ui/button';
 import { CodeBlock } from '@/components/ui/CodeBlock';
 import { quickstartSamples } from '@/components/ui/codeSamples';
 import { Badge, Card, SectionHeading } from '@/components/ui/Section';
@@ -39,7 +39,7 @@ export async function InnerPage({ page, locale }: { page: PageDef; locale: strin
   const cta = (
     <>
       <ButtonLink href={site.links.app}>{t('common.tryNow')}</ButtonLink>
-      <ButtonLink href={href('developers')} variant="secondary">
+      <ButtonLink href={href('developers')} variant="outline">
         {t('common.getApi')}
       </ButtonLink>
     </>
@@ -59,11 +59,11 @@ export async function InnerPage({ page, locale }: { page: PageDef; locale: strin
                 <li key={k.id}>
                   <Link
                     href={href(k.id)}
-                    className="block h-full rounded-lg border border-line bg-surface p-6 transition-colors hover:border-line-strong"
+                    className="block h-full rounded-lg border border-border bg-card p-6 transition-colors hover:border-border-strong"
                   >
                     <p className="text-lg font-semibold">{t(`pages.${k.id}.title`)}</p>
-                    <p className="mt-2 text-muted">{t(`pages.${k.id}.desc`)}</p>
-                    <p className="mt-6 text-sm text-accent">{t('templates.overview.explore')} →</p>
+                    <p className="mt-2 text-muted-foreground">{t(`pages.${k.id}.desc`)}</p>
+                    <p className="mt-6 text-sm text-primary">{t('templates.overview.explore')} →</p>
                   </Link>
                 </li>
               ))}
@@ -95,7 +95,7 @@ export async function InnerPage({ page, locale }: { page: PageDef; locale: strin
                 {steps.map((s, i) => (
                   <li key={s}>
                     <Card>
-                      <span className="font-display text-2xl font-semibold text-accent">
+                      <span className="font-display text-2xl font-semibold text-primary">
                         0{i + 1}
                       </span>
                       <p className="mt-3 font-medium">{s}</p>
@@ -105,13 +105,13 @@ export async function InnerPage({ page, locale }: { page: PageDef; locale: strin
               </ol>
             </div>
           </section>
-          <section className="section-y bg-surface">
+          <section className="section-y bg-card">
             <div className="container-x grid gap-10 lg:grid-cols-2">
               <SectionHeading title={t('templates.feature.specsTitle')} />
-              <dl className="divide-y divide-line border-y border-line">
+              <dl className="divide-y divide-border border-y border-border">
                 {specs.map((k) => (
                   <div key={k} className="grid grid-cols-[8rem_1fr] gap-4 py-4 text-sm">
-                    <dt className="text-muted">{t(`templates.feature.specs.${k}`)}</dt>
+                    <dt className="text-muted-foreground">{t(`templates.feature.specs.${k}`)}</dt>
                     <dd>{t(`templates.feature.specs.${k}Value`)}</dd>
                   </div>
                 ))}
@@ -140,8 +140,8 @@ export async function InnerPage({ page, locale }: { page: PageDef; locale: strin
                 <SectionHeading title={t('templates.usecase.personalTitle')} />
                 <ol className="mt-6 space-y-3">
                   {steps.map((s, i) => (
-                    <li key={s} className="flex gap-4 rounded-md border border-line bg-surface p-4">
-                      <span className="font-semibold text-accent">0{i + 1}</span>
+                    <li key={s} className="flex gap-4 rounded-md border border-border bg-card p-4">
+                      <span className="font-semibold text-primary">0{i + 1}</span>
                       {s}
                     </li>
                   ))}
@@ -159,7 +159,7 @@ export async function InnerPage({ page, locale }: { page: PageDef; locale: strin
                     copiedLabel={t('common.copied')}
                   />
                 </div>
-                <ButtonLink href="/contact" variant="secondary" className="mt-6">
+                <ButtonLink href="/contact" variant="outline" className="mt-6">
                   {t('common.contactSales')}
                 </ButtonLink>
               </div>
@@ -179,7 +179,7 @@ export async function InnerPage({ page, locale }: { page: PageDef; locale: strin
         <>
           <PageHero eyebrow={eyebrow} title={title} desc={desc}>
             <ButtonLink href={site.links.console}>{t('common.getApi')}</ButtonLink>
-            <ButtonLink href={site.links.docs} variant="secondary">
+            <ButtonLink href={site.links.docs} variant="outline">
               {t('common.viewDocs')}
             </ButtonLink>
           </PageHero>
@@ -192,7 +192,7 @@ export async function InnerPage({ page, locale }: { page: PageDef; locale: strin
                       <Link
                         href={href(p.id)}
                         aria-current={p.id === page.id ? 'page' : undefined}
-                        className={`block whitespace-nowrap rounded-md px-3 py-2 text-sm ${p.id === page.id ? 'bg-surface-2 font-medium' : 'text-muted hover:text-text'}`}
+                        className={`block whitespace-nowrap rounded-md px-3 py-2 text-sm ${p.id === page.id ? 'bg-secondary font-medium' : 'text-muted-foreground hover:text-foreground'}`}
                       >
                         {t(`pages.${p.id}.title`)}
                       </Link>
@@ -209,7 +209,9 @@ export async function InnerPage({ page, locale }: { page: PageDef; locale: strin
                     copiedLabel={t('common.copied')}
                   />
                 </div>
-                <p className="mt-4 text-sm text-muted">{t('templates.developer.docsNote')}</p>
+                <p className="mt-4 text-sm text-muted-foreground">
+                  {t('templates.developer.docsNote')}
+                </p>
               </div>
             </div>
           </section>
@@ -220,7 +222,7 @@ export async function InnerPage({ page, locale }: { page: PageDef; locale: strin
       return (
         <PageHero eyebrow={eyebrow} title={title} desc={desc}>
           <Badge>{t('common.comingSoon')}</Badge>
-          <p className="w-full text-sm text-muted">{t('templates.tool.desc')}</p>
+          <p className="w-full text-sm text-muted-foreground">{t('templates.tool.desc')}</p>
         </PageHero>
       );
     default:
@@ -232,7 +234,9 @@ export async function InnerPage({ page, locale }: { page: PageDef; locale: strin
               {page.id === 'technology' ? (
                 <TechnologySections t={t} />
               ) : (
-                <p className="leading-relaxed text-muted">{t('templates.simple.body')}</p>
+                <p className="leading-relaxed text-muted-foreground">
+                  {t('templates.simple.body')}
+                </p>
               )}
             </div>
           </section>
@@ -253,10 +257,10 @@ function RelatedList({ title, items, t }: { title: string; items: PageDef[]; t: 
             <li key={p.id}>
               <Link
                 href={href(p.id)}
-                className="block rounded-lg border border-line bg-surface p-6 hover:border-line-strong"
+                className="block rounded-lg border border-border bg-card p-6 hover:border-border-strong"
               >
                 <p className="font-semibold">{t(`pages.${p.id}.title`)}</p>
-                <p className="mt-2 text-sm text-muted">{t(`pages.${p.id}.desc`)}</p>
+                <p className="mt-2 text-sm text-muted-foreground">{t(`pages.${p.id}.desc`)}</p>
               </Link>
             </li>
           ))}
@@ -275,16 +279,16 @@ function TechnologySections({ t }: { t: T }) {
           <a
             key={id}
             href={`#${id}`}
-            className="rounded-full border border-line px-3 py-1.5 text-sm text-muted hover:text-text"
+            className="rounded-full border border-border px-3 py-1.5 text-sm text-muted-foreground hover:text-foreground"
           >
             {t(`technologySections.${id}`)}
           </a>
         ))}
       </nav>
       {ids.map((id) => (
-        <section key={id} id={id} className="scroll-mt-24 border-t border-line py-10">
+        <section key={id} id={id} className="scroll-mt-24 border-t border-border py-10">
           <h2 className="font-display text-2xl font-semibold">{t(`technologySections.${id}`)}</h2>
-          <p className="mt-3 text-muted">{t('templates.simple.body')}</p>
+          <p className="mt-3 text-muted-foreground">{t('templates.simple.body')}</p>
         </section>
       ))}
     </>

@@ -66,7 +66,7 @@ export default async function LocaleLayout({
         <NextIntlClientProvider>
           <a
             href="#main"
-            className="fixed left-4 top-2 z-[60] -translate-y-20 rounded-full bg-accent px-4 py-2 text-sm text-on-accent focus:translate-y-0"
+            className="fixed left-4 top-2 z-[60] -translate-y-20 rounded-full bg-primary px-4 py-2 text-sm text-primary-foreground focus:translate-y-0"
           >
             {t('skipToContent')}
           </a>

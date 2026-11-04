@@ -54,20 +54,9 @@ const SCENES = [
   { id: 'game', img: '/community/qilin-game-v2.webp', px: 0.55, py: 0, ar: 1.5 },
 ] as const;
 
-const STAGE: Record<HeroLayout, string> = {
-  stage: 'top-[calc(var(--header-h)+150px)] md:top-[calc(var(--header-h)+170px)] md:bottom-[27%]',
-  aura: 'top-[calc(var(--header-h)+150px)] md:top-[calc(var(--header-h)+150px)] md:bottom-[29%]',
-  source: 'top-[calc(var(--header-h)+150px)] md:top-[calc(var(--header-h)+170px)] md:bottom-[27%]',
-  callout: 'top-[calc(var(--header-h)+150px)] md:top-[calc(var(--header-h)+160px)] md:bottom-[28%]',
-};
-
-/** Annotation pins on the qilin (percent of the model box). */
-const CALLOUTS = [
-  { id: 'horn', x: 71, y: 15, side: 'r', len: 150 },
-  { id: 'tail', x: 15, y: 25, side: 'l', len: 70 },
-  { id: 'scale', x: 42, y: 48, side: 'l', len: 260 },
-  { id: 'claw', x: 73, y: 95, side: 'r', len: 200 },
-] as const;
+/** Vertical band the model and scene subjects occupy, between the title and the upload card. */
+const STAGE =
+  'top-[calc(var(--header-h)+150px)] md:top-[calc(var(--header-h)+170px)] md:bottom-[27%]';
 
 function Grad({
   children,
@@ -88,35 +77,7 @@ function Grad({
 const gridMask =
   '[mask-image:var(--m)] [mask-position:bottom] [mask-repeat:no-repeat] [mask-size:contain] [background:radial-gradient(circle,rgba(225,240,255,1)_1.2px,transparent_1.9px)_0_0/12px_12px,repeating-linear-gradient(0deg,rgba(120,180,255,0.8)_0_1px,transparent_1px_12px),repeating-linear-gradient(90deg,rgba(120,180,255,0.8)_0_1px,transparent_1px_12px)]';
 
-export type HeroLayout = 'stage' | 'aura' | 'source' | 'callout';
-
-/** Status chip shown next to the model while it is being generated. */
-function GenChip({ gen, label, faces }: { gen: number; label: string; faces: string }) {
-  return (
-    <span className="inline-flex items-center gap-2.5 rounded-full border border-white/10 bg-[rgba(8,12,22,0.55)] py-1.5 pl-2.5 pr-3.5 font-mono text-[11px] text-white/70 backdrop-blur-md">
-      <span
-        className={`size-1.5 rounded-full ${gen < 1 ? 'animate-pulse bg-[#6FA8FF]' : 'bg-[#4ade80]'}`}
-      />
-      <span className="text-white/90">qilin.glb</span>
-      <span className="relative h-[3px] w-14 overflow-hidden rounded-full bg-white/10">
-        <span
-          className="absolute inset-y-0 left-0 rounded-full bg-[#6FA8FF]"
-          style={{ width: `${gen * 100}%` }}
-        />
-      </span>
-      <span className="tabular-nums">{label}</span>
-      <span className="hidden text-white/40 sm:inline">{faces}</span>
-    </span>
-  );
-}
-
-export function ViewportHero({
-  locale,
-  layout = 'stage',
-}: {
-  locale: string;
-  layout?: HeroLayout;
-}) {
+export function ViewportHero({ locale }: { locale: string }) {
   const t = useTranslations('home.viewport');
   const reduced = usePerfStore((s) => s.reducedMotion);
   const [idx] = useState(0);
@@ -202,20 +163,11 @@ export function ViewportHero({
 
       {/* ---------- the model on its turntable ---------- */}
       <div
-        className={`absolute inset-x-0 bottom-[40%] flex items-end justify-center transition-opacity duration-500 [perspective:1200px] ${STAGE[layout]} ${scene === 0 ? '' : 'opacity-0'}`}
+        className={`absolute inset-x-0 bottom-[40%] flex items-end justify-center transition-opacity duration-500 [perspective:1200px] ${STAGE} ${scene === 0 ? '' : 'opacity-0'}`}
       >
         <div
           className={`relative h-full max-w-[92vw] ${m.wide ? 'aspect-[8/5]' : 'aspect-square'}`}
         >
-          {scene === 0 && layout === 'stage' && (
-            <div className={`absolute z-10 left-1/2 top-[-7%] -translate-x-1/2 hidden md:block`}>
-              <GenChip
-                gen={gen}
-                label={gen < 1 ? `${t('generating')} ${Math.round(gen * 100)}%` : t('ready')}
-                faces={`${faces.toLocaleString()} ${t('faces')}`}
-              />
-            </div>
-          )}
           {/* turntable */}
           <div
             aria-hidden
@@ -305,60 +257,15 @@ export function ViewportHero({
                 className="absolute inset-x-[-10%] h-[2px] bg-[#9cc8ff] shadow-[0_0_20px_5px_rgba(94,168,255,0.85)]"
                 style={{ top: lineY }}
               >
-                {layout !== 'stage' && (
+                {
                   <span className="absolute bottom-2 right-0 hidden whitespace-nowrap font-mono text-[11px] tracking-wider text-[#cfe3ff] [text-shadow:0_0_10px_rgba(94,168,255,0.9)] md:block">
                     {t('generating')} {Math.round(gen * 100)}% · {faces.toLocaleString()}{' '}
                     {t('faces')}
                   </span>
-                )}
+                }
               </span>
             )}
           </div>
-          {/* aura: mirrored floor reflection */}
-          {layout === 'aura' && (
-            <div
-              aria-hidden
-              className={`pointer-events-none absolute inset-x-[4%] top-[95%] h-full transition-opacity duration-1000 [mask-image:linear-gradient(180deg,rgba(0,0,0,0.45),transparent_32%)] ${gen >= 1 ? 'opacity-100' : 'opacity-0'}`}
-            >
-              <div className="absolute inset-0 [transform:scaleY(-1)]">
-                <Image
-                  src={m.src}
-                  alt=""
-                  fill
-                  sizes="900px"
-                  className="object-contain object-bottom blur-[1px]"
-                />
-              </div>
-            </div>
-          )}
-          {/* callout: annotation pins that land once the model is done */}
-          {layout === 'callout' &&
-            scene === 0 &&
-            CALLOUTS.map((c, i) => (
-              <span
-                key={c.id}
-                aria-hidden
-                className={`pointer-events-none absolute z-10 hidden transition-all duration-700 lg:block ${gen >= 1 ? 'opacity-100' : 'translate-y-1 opacity-0'}`}
-                style={{ left: `${c.x}%`, top: `${c.y}%`, transitionDelay: `${i * 140}ms` }}
-              >
-                <span className="absolute -left-[5px] -top-[5px] size-[10px] rounded-full border border-[#cfe3ff] bg-[#2F6BFF]/60 shadow-[0_0_12px_rgba(111,168,255,0.9)]" />
-                <span
-                  className={`absolute top-0 h-px bg-gradient-to-r ${c.side === 'r' ? 'left-[6px] from-[#9cc8ff] to-[#9cc8ff]/30' : 'right-[6px] from-[#9cc8ff]/30 to-[#9cc8ff]'}`}
-                  style={{ width: c.len }}
-                />
-                <span
-                  className={`absolute -top-[22px] whitespace-nowrap rounded-md border border-white/10 bg-[rgba(5,8,15,0.72)] px-2.5 py-1.5 backdrop-blur ${c.side === 'r' ? '' : 'text-right'}`}
-                  style={c.side === 'r' ? { left: c.len + 10 } : { right: c.len + 10 }}
-                >
-                  <span className="block text-[13px] font-medium text-white">
-                    {t(`callouts.${c.id}.t`)}
-                  </span>
-                  <span className="block font-mono text-[10px] tracking-wide text-[#9cc8ff]/80">
-                    {t(`callouts.${c.id}.d`)}
-                  </span>
-                </span>
-              </span>
-            ))}
         </div>
       </div>
 
@@ -410,47 +317,8 @@ export function ViewportHero({
         </span>
       )}
 
-      {/* ---------- atmosphere / frames per variant ---------- */}
-      {layout === 'aura' && scene === 0 && (
-        <div aria-hidden className="pointer-events-none absolute inset-0">
-          <span className="absolute left-1/2 top-0 h-[78%] w-[70vw] max-w-[1100px] -translate-x-1/2 bg-[radial-gradient(50%_90%_at_50%_0%,rgba(140,190,255,0.20),transparent_70%)] [clip-path:polygon(38%_0,62%_0,100%_100%,0_100%)]" />
-          <span className="absolute left-1/2 top-[56%] h-[26%] w-[56vw] -translate-x-1/2 rounded-[50%] bg-[radial-gradient(closest-side,rgba(47,107,255,0.32),transparent)] blur-2xl" />
-          {Array.from({ length: 18 }, (_, i) => (
-            <span
-              key={i}
-              className="vp-mote absolute size-[3px] rounded-full bg-[#cfe3ff]"
-              style={{
-                left: `${18 + ((i * 37) % 64)}%`,
-                top: `${22 + ((i * 53) % 44)}%`,
-                animationDelay: `${(i % 6) * -1}s`,
-                opacity: 0.25 + (i % 4) * 0.12,
-              }}
-            />
-          ))}
-        </div>
-      )}
-      {layout === 'callout' && scene === 0 && (
-        <div
-          aria-hidden
-          className="pointer-events-none absolute inset-x-[7%] bottom-[27%] top-[calc(var(--header-h)+140px)] hidden lg:block"
-        >
-          {[
-            'left-0 top-0 border-l border-t',
-            'right-0 top-0 border-r border-t',
-            'left-0 bottom-0 border-l border-b',
-            'right-0 bottom-0 border-r border-b',
-          ].map((c) => (
-            <span key={c} className={`absolute size-5 border-[#9cc8ff]/45 ${c}`} />
-          ))}
-          <span className="absolute left-3 top-3 font-mono text-[10px] tracking-[0.2em] text-white/35">
-            QILIN.GLB · {m.faces.toLocaleString()} {t('faces')}
-          </span>
-          <span className="absolute bottom-3 left-3 font-mono text-[10px] tracking-[0.2em] text-white/35">
-            4K PBR · GLB / FBX / USDZ / STL
-          </span>
-        </div>
-      )}
-      {layout === 'source' && scene === 0 && (
+      {/* ---------- input photo -> model flow ---------- */}
+      {scene === 0 && (
         <div
           aria-hidden
           className="pointer-events-none absolute inset-x-0 top-[calc(var(--header-h)+190px)] hidden xl:block"
@@ -514,12 +382,6 @@ export function ViewportHero({
       {/* ---------- upload ---------- */}
       <div className="absolute inset-x-0 bottom-24 z-10 flex justify-center px-4 md:bottom-8">
         <div className="relative w-full max-w-[860px]">
-          {layout === 'aura' && (
-            <span
-              aria-hidden
-              className="pointer-events-none absolute -inset-x-10 -inset-y-6 -z-10 rounded-[40px] bg-[radial-gradient(60%_70%_at_50%_50%,rgba(47,107,255,0.28),transparent_75%)] blur-2xl"
-            />
-          )}
           <CoverUpload />
         </div>
       </div>
