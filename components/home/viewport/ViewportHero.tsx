@@ -60,28 +60,31 @@ const SCENES = [
  */
 const THEMES = [
   {
-    bg: 'radial-gradient(circle, rgba(255,255,255,0.14) 1px, transparent 1.5px) 0 0 / 18px 18px, radial-gradient(60% 55% at 50% 55%, rgba(255,255,255,0.22), transparent 70%), linear-gradient(160deg, #6a3cf0 0%, #8a63ff 48%, #c3a8ff 100%)',
-    scrim: '110 70 235',
-    tint: '#7a50f2',
-    accent: 'linear-gradient(100deg, #ffe14d, #fff6b8)',
-    bands: ['#c3a8ff', '#9b7bff', '#7a50f2', '#5a2fe6'],
-  },
-  {
-    bg: 'radial-gradient(circle, rgba(255,255,255,0.14) 1px, transparent 1.5px) 0 0 / 18px 18px, linear-gradient(160deg, #2a56f5 0%, #4f86ff 50%, #9cc8ff 100%)',
+    bg: 'radial-gradient(circle, rgba(255,255,255,0.14) 1px, transparent 1.5px) 0 0 / 18px 18px, radial-gradient(60% 55% at 50% 55%, rgba(255,255,255,0.2), transparent 70%), linear-gradient(160deg, #2a56f5 0%, #4f86ff 50%, #9cc8ff 100%)',
     scrim: '45 95 240',
     tint: '#3b6dff',
     accent: 'linear-gradient(100deg, #ffe14d, #fff6b8)',
-    bands: ['#a9c8ff', '#6f9bff', '#3b6dff', '#1f46e0'],
+    bands: ['#1f46e0', '#3b6dff', '#6f9bff', '#a9c8ff'],
   },
   {
-    bg: 'radial-gradient(circle, rgba(255,255,255,0.14) 1px, transparent 1.5px) 0 0 / 18px 18px, linear-gradient(160deg, #ff5f2e 0%, #ff8a4c 50%, #ffc48f 100%)',
-    scrim: '240 100 50',
-    tint: '#ff7a3c',
-    accent: 'linear-gradient(100deg, #3b1a9a, #5a2fe6)',
-    bands: ['#ffc896', '#ff9f6b', '#ff7a3c', '#f2541f'],
+    bg: 'radial-gradient(circle, rgba(255,255,255,0.14) 1px, transparent 1.5px) 0 0 / 18px 18px, linear-gradient(160deg, #6a3cf0 0%, #8a63ff 48%, #c3a8ff 100%)',
+    scrim: '110 70 235',
+    tint: '#7a50f2',
+    accent: 'linear-gradient(100deg, #ffe14d, #fff6b8)',
+    bands: ['#5a2fe6', '#7a50f2', '#9b7bff', '#c3a8ff'],
+  },
+  {
+    bg: 'radial-gradient(circle, rgba(255,255,255,0.14) 1px, transparent 1.5px) 0 0 / 18px 18px, linear-gradient(160deg, #0fa47a 0%, #20c997 50%, #8ff0c8 100%)',
+    scrim: '16 160 118',
+    tint: '#14b886',
+    accent: 'linear-gradient(100deg, #ffe14d, #fff6b8)',
+    bands: ['#0b8f69', '#14b886', '#4fd6a6', '#9ff0cf'],
   },
 ] as const;
-const WIPE_MS = 1300;
+/** Page change: bands then the new page slide in right → left, each 60ms after the last. */
+const SLIDE_MS = 700;
+const SLIDE_GAP = 60;
+const TRANS_MS = SLIDE_MS + SLIDE_GAP * 4 + 60;
 
 /** Vertical band the model and scene subjects occupy, between the title and the upload card. */
 const STAGE =
@@ -123,8 +126,9 @@ export function ViewportHero({ locale }: { locale: string }) {
   const [scene, setScene] = useState(0);
   const [sceneK, setSceneK] = useState(0);
   const sceneStart = useRef(0);
-  const [wipe, setWipe] = useState<{ to: number; k: number } | null>(null);
-  const wipeTimers = useRef<number[]>([]);
+  // while a page slides in, the previous page stays mounted underneath
+  const [trans, setTrans] = useState<{ from: number; k: number } | null>(null);
+  const transTimer = useRef(0);
   const theme = THEMES[scene];
   useEffect(() => {
     if (reduced) {
@@ -142,12 +146,10 @@ export function ViewportHero({ locale }: { locale: string }) {
       setSceneK(Math.min(el / dur, 1));
       if (auto && el >= dur) {
         const next = (scene + 1) % SCENE_MS.length;
-        setWipe({ to: next, k: now });
-        // switch underneath while the stripes fully cover the hero
-        wipeTimers.current.push(
-          window.setTimeout(() => setScene(next), WIPE_MS * 0.53),
-          window.setTimeout(() => setWipe(null), WIPE_MS + 80),
-        );
+        setTrans({ from: scene, k: now });
+        setScene(next);
+        clearTimeout(transTimer.current);
+        transTimer.current = window.setTimeout(() => setTrans(null), TRANS_MS);
         return;
       }
       raf = requestAnimationFrame(tick);
@@ -155,7 +157,16 @@ export function ViewportHero({ locale }: { locale: string }) {
     raf = requestAnimationFrame(tick);
     return () => cancelAnimationFrame(raf);
   }, [scene, idx, auto, reduced]);
-  useEffect(() => () => wipeTimers.current.forEach(clearTimeout), []);
+  useEffect(() => () => clearTimeout(transTimer.current), []);
+  const shown = (n: number) => n === scene || n === trans?.from;
+  /** z-order + slide-in for a page layer */
+  const layer = (n: number) =>
+    n === scene
+      ? {
+          className: trans ? 'hero-slide' : '',
+          style: { zIndex: 10, animationDelay: `${SLIDE_GAP * 4}ms` } as CSSProperties,
+        }
+      : { className: '', style: { zIndex: 0 } as CSSProperties };
 
   const eased = 1 - Math.pow(1 - gen, 2.4);
   const clayCut = Math.min(eased / 0.6, 1); // clay rises first
@@ -190,229 +201,256 @@ export function ViewportHero({ locale }: { locale: string }) {
       style={
         {
           '--hero-bg': theme.bg,
-          '--scrim-rgb': theme.scrim,
           '--title-accent': theme.accent,
         } as CSSProperties
       }
     >
-      {/* ---------- viewport background ---------- */}
-      <div
-        aria-hidden
-        className="absolute inset-0 [background:radial-gradient(60%_50%_at_50%_58%,var(--hero-glow),transparent_70%)]"
-      />
-      <div
-        aria-hidden
-        className="absolute inset-x-[-40%] bottom-[-10%] h-[62%] origin-bottom [perspective:700px]"
-      >
-        <div className="vp-floor absolute inset-0 [transform:rotateX(68deg)] [background:linear-gradient(var(--grid-line)_1px,transparent_1px)_0_0/64px_64px,linear-gradient(90deg,var(--grid-line)_1px,transparent_1px)_0_0/64px_64px] [mask-image:radial-gradient(55%_75%_at_50%_100%,#000,transparent)]" />
-      </div>
-
-      {/* ---------- the model on its turntable ---------- */}
-      <div
-        className={`absolute inset-x-0 bottom-[40%] flex items-end justify-center transition-opacity duration-500 [perspective:1200px] ${STAGE} ${scene === 0 ? '' : 'opacity-0'}`}
-      >
-        <div
-          className={`relative h-full max-w-[92vw] ${m.wide ? 'aspect-[8/5]' : 'aspect-square'}`}
-        >
-          {/* turntable */}
+      <div className="absolute inset-0 isolate">
+        {/* ---------- page 0: the model being generated ---------- */}
+        {shown(0) && (
           <div
-            aria-hidden
-            className="absolute bottom-[1%] left-1/2 h-[14%] w-[72%] -translate-x-1/2"
+            key="p0"
+            className={`absolute inset-0 ${layer(0).className}`}
+            style={{ ...layer(0).style, background: THEMES[0].bg }}
           >
-            <span className="absolute inset-0 rounded-[50%] border border-[var(--ring-line)] bg-[radial-gradient(closest-side,var(--hero-glow),transparent)]" />
-            <span className="vp-ring absolute inset-[-6%] rounded-[50%] border-2 border-dashed border-[var(--ring-line)]" />
-            <span className="absolute inset-x-[18%] top-[30%] h-[40%] rounded-[50%] bg-black/60 blur-md" />
-          </div>
-          <div
-            className="absolute inset-x-[4%] bottom-[5%] top-0 transition-transform duration-300 ease-out [transform-style:preserve-3d]"
-            style={modelStyle}
-          >
-            {/* wireframe / point grid (always under) */}
-            {m.wire ? (
-              <div className="absolute inset-0">
-                <Image
-                  key={`wb-${m.id}`}
-                  src={m.src}
-                  alt=""
-                  fill
-                  sizes="(min-width:1024px) 900px, 90vw"
-                  className="object-contain object-bottom opacity-40 [filter:grayscale(1)_brightness(0.5)_sepia(1)_hue-rotate(180deg)_saturate(2.2)]"
-                />
-                <Image
-                  key={`w-${m.id}`}
-                  src={m.wire}
-                  alt=""
-                  fill
-                  sizes="(min-width:1024px) 900px, 90vw"
-                  className="object-contain object-bottom [filter:var(--wire-filter)]"
-                />
-              </div>
-            ) : (
-              <div
-                className={`absolute inset-0 ${gridMask} transition-opacity duration-500 ${mode === 'wire' ? 'opacity-100' : 'opacity-70'}`}
-              />
-            )}
-            {/* clay */}
-            {showClay && (
-              <div
-                className="absolute inset-0"
-                style={{ clipPath: `inset(${(1 - clayCut) * 100}% 0 0 0)` }}
-              >
-                <Image
-                  key={`c-${m.id}`}
-                  src={m.clay ?? m.src}
-                  alt=""
-                  fill
-                  priority
-                  sizes="(min-width:1024px) 900px, 90vw"
-                  className={`object-contain object-bottom ${m.clay ? '' : '[filter:grayscale(1)_brightness(1.55)_contrast(0.78)]'}`}
-                />
-                {!m.clay && <div className={`absolute inset-0 ${gridMask} opacity-20`} />}
-              </div>
-            )}
-            {/* PBR */}
-            {showPbr && (
-              <div
-                className="absolute inset-0"
-                style={{ clipPath: `inset(${(1 - pbrCut) * 100}% 0 0 0)` }}
-              >
-                <Image
-                  key={`p-${m.id}`}
-                  src={m.src}
-                  alt={t(`models.${m.id}`)}
-                  fill
-                  priority
-                  sizes="(min-width:1024px) 900px, 90vw"
-                  className="object-contain object-bottom"
-                />
-              </div>
-            )}
-            {/* mesh mask: triangulated wireframe over the surface while generating */}
-            {m.wire && mode !== 'wire' && (
-              <Image
-                key={`wm-${m.id}`}
-                src={m.wire}
-                alt=""
-                fill
-                sizes="(min-width:1024px) 900px, 90vw"
-                className={`pointer-events-none object-contain object-bottom mix-blend-screen transition-opacity duration-1000 ${gen < 1 ? 'opacity-60' : 'opacity-0'}`}
-              />
-            )}
-            {gen < 1 && (
-              <span
-                className="absolute inset-x-[-10%] h-[2px] bg-[var(--scan)] shadow-[0_0_20px_5px_var(--scan-glow)]"
-                style={{ top: lineY }}
-              >
-                {
-                  <span className="absolute bottom-2 right-0 hidden whitespace-nowrap font-mono text-[11px] tracking-wider text-[var(--scan-text)] md:block">
-                    {t('generating')} {Math.round(gen * 100)}% · {faces.toLocaleString()}{' '}
-                    {t('faces')}
-                  </span>
-                }
-              </span>
-            )}
-          </div>
-        </div>
-      </div>
-
-      {/* ---------- scenes 2 & 3: the same model, printed and in a game ----------
-          Full-bleed. Each shot is laid out in an object-cover box sized with
-          container units, so pins can be placed in % of the image itself. */}
-      {SCENES.map(
-        (sc, n) =>
-          sc.img && (
             <div
-              key={`${sc.id}-${scene === n}`}
-              aria-hidden={scene !== n}
-              className={`absolute inset-0 overflow-hidden transition-opacity duration-500 [container-type:size] ${scene === n ? 'opacity-100' : 'pointer-events-none opacity-0'}`}
+              aria-hidden
+              className="absolute inset-0 [background:radial-gradient(60%_50%_at_50%_58%,var(--hero-glow),transparent_70%)]"
+            />
+            <div
+              aria-hidden
+              className="absolute inset-x-[-40%] bottom-[-10%] h-[62%] origin-bottom [perspective:700px]"
             >
-              {scene === n && (
-                <>
-                  <div className="absolute inset-0">
+              <div className="vp-floor absolute inset-0 [transform:rotateX(68deg)] [background:linear-gradient(var(--grid-line)_1px,transparent_1px)_0_0/64px_64px,linear-gradient(90deg,var(--grid-line)_1px,transparent_1px)_0_0/64px_64px] [mask-image:radial-gradient(55%_75%_at_50%_100%,#000,transparent)]" />
+            </div>
+
+            {/* ---------- the model on its turntable ---------- */}
+            <div
+              className={`absolute inset-x-0 bottom-[40%] flex items-end justify-center [perspective:1200px] ${STAGE}`}
+            >
+              <div
+                className={`relative h-full max-w-[92vw] ${m.wide ? 'aspect-[8/5]' : 'aspect-square'}`}
+              >
+                {/* turntable */}
+                <div
+                  aria-hidden
+                  className="absolute bottom-[1%] left-1/2 h-[14%] w-[72%] -translate-x-1/2"
+                >
+                  <span className="absolute inset-0 rounded-[50%] border border-[var(--ring-line)] bg-[radial-gradient(closest-side,var(--hero-glow),transparent)]" />
+                  <span className="vp-ring absolute inset-[-6%] rounded-[50%] border-2 border-dashed border-[var(--ring-line)]" />
+                  <span className="absolute inset-x-[18%] top-[30%] h-[40%] rounded-[50%] bg-black/60 blur-md" />
+                </div>
+                <div
+                  className="absolute inset-x-[4%] bottom-[5%] top-0 transition-transform duration-300 ease-out [transform-style:preserve-3d]"
+                  style={modelStyle}
+                >
+                  {/* wireframe / point grid (always under) */}
+                  {m.wire ? (
+                    <div className="absolute inset-0">
+                      <Image
+                        key={`wb-${m.id}`}
+                        src={m.src}
+                        alt=""
+                        fill
+                        sizes="(min-width:1024px) 900px, 90vw"
+                        className="object-contain object-bottom opacity-40 [filter:grayscale(1)_brightness(0.5)_sepia(1)_hue-rotate(180deg)_saturate(2.2)]"
+                      />
+                      <Image
+                        key={`w-${m.id}`}
+                        src={m.wire}
+                        alt=""
+                        fill
+                        sizes="(min-width:1024px) 900px, 90vw"
+                        className="object-contain object-bottom [filter:var(--wire-filter)]"
+                      />
+                    </div>
+                  ) : (
                     <div
-                      className="absolute"
-                      style={{
-                        aspectRatio: sc.ar,
-                        width: `max(100cqw, ${sc.ar * 100}cqh)`,
-                        left: `calc((100cqw - max(100cqw, ${sc.ar * 100}cqh)) * ${sc.px})`,
-                        top: `calc((100cqh - max(100cqw, ${sc.ar * 100}cqh) / ${sc.ar}) * ${sc.py})`,
-                      }}
+                      className={`absolute inset-0 ${gridMask} transition-opacity duration-500 ${mode === 'wire' ? 'opacity-100' : 'opacity-70'}`}
+                    />
+                  )}
+                  {/* clay */}
+                  {showClay && (
+                    <div
+                      className="absolute inset-0"
+                      style={{ clipPath: `inset(${(1 - clayCut) * 100}% 0 0 0)` }}
                     >
                       <Image
-                        src={sc.img}
-                        alt={t(`scenes.${sc.id}.alt`)}
+                        key={`c-${m.id}`}
+                        src={m.clay ?? m.src}
+                        alt=""
                         fill
-                        sizes="100vw"
-                        className={`object-cover ${reduced ? '' : 'cover-kenburns'}`}
+                        priority
+                        sizes="(min-width:1024px) 900px, 90vw"
+                        className={`object-contain object-bottom ${m.clay ? '' : '[filter:grayscale(1)_brightness(1.55)_contrast(0.78)]'}`}
                       />
-                      {sc.id === 'print' && <PrintPins progress={sceneK} reduced={reduced} />}
+                      {!m.clay && <div className={`absolute inset-0 ${gridMask} opacity-20`} />}
                     </div>
-                  </div>
-                  {/* tie the photo to this page's colour */}
-                  <div
-                    className="pointer-events-none absolute inset-0 opacity-30 mix-blend-color"
-                    style={{ background: theme.tint }}
-                  />
-                  <div className="pointer-events-none absolute inset-0 bg-[linear-gradient(180deg,rgb(var(--scrim-rgb)_/_0.92)_0%,rgb(var(--scrim-rgb)_/_0.72)_20%,rgb(var(--scrim-rgb)_/_0.25)_32%,transparent_42%),linear-gradient(0deg,rgb(var(--scrim-rgb)_/_0.92)_0%,rgb(var(--scrim-rgb)_/_0.45)_26%,transparent_45%),radial-gradient(120%_80%_at_50%_50%,transparent_60%,rgb(var(--scrim-rgb)_/_0.5))]" />
-                  {sc.id === 'print' && <PrintStatus progress={sceneK} reduced={reduced} />}
-                  {sc.id === 'game' && <GameHUD progress={sceneK} reduced={reduced} />}
-                </>
-              )}
+                  )}
+                  {/* PBR */}
+                  {showPbr && (
+                    <div
+                      className="absolute inset-0"
+                      style={{ clipPath: `inset(${(1 - pbrCut) * 100}% 0 0 0)` }}
+                    >
+                      <Image
+                        key={`p-${m.id}`}
+                        src={m.src}
+                        alt={t(`models.${m.id}`)}
+                        fill
+                        priority
+                        sizes="(min-width:1024px) 900px, 90vw"
+                        className="object-contain object-bottom"
+                      />
+                    </div>
+                  )}
+                  {/* mesh mask: triangulated wireframe over the surface while generating */}
+                  {m.wire && mode !== 'wire' && (
+                    <Image
+                      key={`wm-${m.id}`}
+                      src={m.wire}
+                      alt=""
+                      fill
+                      sizes="(min-width:1024px) 900px, 90vw"
+                      className={`pointer-events-none object-contain object-bottom mix-blend-screen transition-opacity duration-1000 ${gen < 1 ? 'opacity-60' : 'opacity-0'}`}
+                    />
+                  )}
+                  {gen < 1 && (
+                    <span
+                      className="absolute inset-x-[-10%] h-[2px] bg-[var(--scan)] shadow-[0_0_20px_5px_var(--scan-glow)]"
+                      style={{ top: lineY }}
+                    >
+                      {
+                        <span className="absolute bottom-2 right-0 hidden whitespace-nowrap font-mono text-[11px] tracking-wider text-[var(--scan-text)] md:block">
+                          {t('generating')} {Math.round(gen * 100)}% · {faces.toLocaleString()}{' '}
+                          {t('faces')}
+                        </span>
+                      }
+                    </span>
+                  )}
+                </div>
+              </div>
             </div>
-          ),
-      )}
+
+            {/* ---------- input photo -> model flow ---------- */}
+            {
+              <div
+                aria-hidden
+                className="pointer-events-none absolute inset-x-0 top-[calc(var(--header-h)+190px)] hidden xl:block"
+              >
+                {/* input photo card */}
+                <div className="absolute left-[6%] top-[6%] w-[220px] -rotate-[5deg] rounded-xl border border-[var(--chip-border)] bg-[var(--chip-bg)] p-2 shadow-[0_20px_60px_rgba(0,0,0,0.25)] backdrop-blur">
+                  <div className="relative aspect-[16/10] overflow-hidden rounded-lg">
+                    <Image
+                      src="/community/qilin-src-v2.webp"
+                      alt=""
+                      fill
+                      sizes="220px"
+                      className="object-cover"
+                    />
+                  </div>
+                  <p className="mt-2 flex items-center justify-between px-1 font-mono text-[10px] text-[var(--hero-ink-muted)]">
+                    <span>{t('io.input')}</span>
+                    <span className="text-[var(--hero-ink)]">qilin.jpg</span>
+                  </p>
+                </div>
+                {/* flow arrow */}
+                <svg
+                  className="absolute left-[calc(6%+200px)] top-[2%] h-[140px] w-[16vw]"
+                  viewBox="0 0 200 140"
+                  preserveAspectRatio="none"
+                  fill="none"
+                >
+                  <path
+                    id="flow"
+                    d="M4 70 C 70 0, 130 0, 196 60"
+                    stroke="var(--flow)"
+                    strokeWidth="1.4"
+                    strokeDasharray="4 6"
+                    vectorEffect="non-scaling-stroke"
+                  />
+                  <circle r="3.5" fill="var(--scan)">
+                    <animateMotion
+                      dur="2.4s"
+                      repeatCount="indefinite"
+                      path="M4 70 C 70 0, 130 0, 196 60"
+                    />
+                  </circle>
+                </svg>
+              </div>
+            }
+          </div>
+        )}
+
+        {/* ---------- scenes 2 & 3: the same model, printed and in a game ----------
+          Full-bleed. Each shot is laid out in an object-cover box sized with
+          container units, so pins can be placed in % of the image itself. */}
+        {SCENES.map(
+          (sc, n) =>
+            sc.img &&
+            shown(n) && (
+              <div
+                key={sc.id}
+                aria-hidden={scene !== n}
+                className={`absolute inset-0 overflow-hidden [container-type:size] ${layer(n).className}`}
+                style={
+                  {
+                    ...layer(n).style,
+                    background: THEMES[n].bg,
+                    '--scrim-rgb': THEMES[n].scrim,
+                  } as CSSProperties
+                }
+              >
+                {
+                  <>
+                    <div className="absolute inset-0">
+                      <div
+                        className="absolute"
+                        style={{
+                          aspectRatio: sc.ar,
+                          width: `max(100cqw, ${sc.ar * 100}cqh)`,
+                          left: `calc((100cqw - max(100cqw, ${sc.ar * 100}cqh)) * ${sc.px})`,
+                          top: `calc((100cqh - max(100cqw, ${sc.ar * 100}cqh) / ${sc.ar}) * ${sc.py})`,
+                        }}
+                      >
+                        <Image
+                          src={sc.img}
+                          alt={t(`scenes.${sc.id}.alt`)}
+                          fill
+                          sizes="100vw"
+                          className={`object-cover ${reduced ? '' : 'cover-kenburns'}`}
+                        />
+                        {sc.id === 'print' && <PrintPins progress={sceneK} reduced={reduced} />}
+                      </div>
+                    </div>
+                    {/* tie the photo to this page's colour */}
+                    <div
+                      className="pointer-events-none absolute inset-0 opacity-30 mix-blend-color"
+                      style={{ background: THEMES[n].tint }}
+                    />
+                    <div className="pointer-events-none absolute inset-0 bg-[linear-gradient(180deg,rgb(var(--scrim-rgb)_/_0.92)_0%,rgb(var(--scrim-rgb)_/_0.72)_20%,rgb(var(--scrim-rgb)_/_0.25)_32%,transparent_42%),linear-gradient(0deg,rgb(var(--scrim-rgb)_/_0.92)_0%,rgb(var(--scrim-rgb)_/_0.45)_26%,transparent_45%),radial-gradient(120%_80%_at_50%_50%,transparent_60%,rgb(var(--scrim-rgb)_/_0.5))]" />
+                    {sc.id === 'print' && <PrintStatus progress={sceneK} reduced={reduced} />}
+                    {sc.id === 'game' && <GameHUD progress={sceneK} reduced={reduced} />}
+                  </>
+                }
+              </div>
+            ),
+        )}
+        {trans &&
+          THEMES[scene].bands.map((c, i) => (
+            <span
+              key={`${trans.k}-${c}`}
+              aria-hidden
+              className="hero-slide pointer-events-none absolute inset-0"
+              style={{ background: c, zIndex: 1 + i, animationDelay: `${i * SLIDE_GAP}ms` }}
+            />
+          ))}
+      </div>
+
       {scene !== 0 && (
         <span className="absolute left-5 top-[calc(var(--header-h)+14px)] z-[3] hidden rounded bg-black/50 px-2 py-1 font-mono text-[11px] text-white/80 backdrop-blur md:left-8 md:inline-block">
           {t(`scenes.${SCENES[scene].id}.tag`)}
         </span>
-      )}
-
-      {/* ---------- input photo -> model flow ---------- */}
-      {scene === 0 && (
-        <div
-          aria-hidden
-          className="pointer-events-none absolute inset-x-0 top-[calc(var(--header-h)+190px)] hidden xl:block"
-        >
-          {/* input photo card */}
-          <div className="absolute left-[6%] top-[6%] w-[220px] -rotate-[5deg] rounded-xl border border-[var(--chip-border)] bg-[var(--chip-bg)] p-2 shadow-[0_20px_60px_rgba(0,0,0,0.25)] backdrop-blur">
-            <div className="relative aspect-[16/10] overflow-hidden rounded-lg">
-              <Image
-                src="/community/qilin-src-v2.webp"
-                alt=""
-                fill
-                sizes="220px"
-                className="object-cover"
-              />
-            </div>
-            <p className="mt-2 flex items-center justify-between px-1 font-mono text-[10px] text-[var(--hero-ink-muted)]">
-              <span>{t('io.input')}</span>
-              <span className="text-[var(--hero-ink)]">qilin.jpg</span>
-            </p>
-          </div>
-          {/* flow arrow */}
-          <svg
-            className="absolute left-[calc(6%+200px)] top-[2%] h-[140px] w-[16vw]"
-            viewBox="0 0 200 140"
-            preserveAspectRatio="none"
-            fill="none"
-          >
-            <path
-              id="flow"
-              d="M4 70 C 70 0, 130 0, 196 60"
-              stroke="var(--flow)"
-              strokeWidth="1.4"
-              strokeDasharray="4 6"
-              vectorEffect="non-scaling-stroke"
-            />
-            <circle r="3.5" fill="var(--scan)">
-              <animateMotion
-                dur="2.4s"
-                repeatCount="indefinite"
-                path="M4 70 C 70 0, 130 0, 196 60"
-              />
-            </circle>
-          </svg>
-        </div>
       )}
 
       {/* ---------- title ---------- */}
@@ -435,18 +473,6 @@ export function ViewportHero({ locale }: { locale: string }) {
           <CoverUpload />
         </div>
       </div>
-      {/* ---------- page change: stripes of the next colour sweep across ---------- */}
-      {wipe && (
-        <div key={wipe.k} aria-hidden className="pointer-events-none absolute inset-0 z-30">
-          {THEMES[wipe.to].bands.map((c, i) => (
-            <span
-              key={c}
-              className="hero-wipe absolute inset-0"
-              style={{ background: c, animationDelay: `${i * 70}ms` } as CSSProperties}
-            />
-          ))}
-        </div>
-      )}
     </section>
   );
 }

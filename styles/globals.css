@@ -623,25 +623,20 @@
   }
 }
 
-/* Hero page change: colour stripes sweep left → right, covering then revealing */
-@keyframes hero-wipe {
-  0% {
-    transform: translateX(-101%);
+/* Hero page change: tint bands, then the new page, slide in right → left */
+@keyframes hero-slide {
+  from {
+    clip-path: inset(0 0 0 100%);
   }
-  40%,
-  62% {
-    transform: translateX(0);
-  }
-  100% {
-    transform: translateX(101%);
+  to {
+    clip-path: inset(0 0 0 0);
   }
 }
-.hero-wipe {
-  transform: translateX(-101%);
-  animation: hero-wipe 1.1s cubic-bezier(0.77, 0, 0.18, 1) both;
+.hero-slide {
+  animation: hero-slide 0.7s cubic-bezier(0.76, 0, 0.24, 1) both;
 }
 @media (prefers-reduced-motion: reduce) {
-  .hero-wipe {
-    display: none;
+  .hero-slide {
+    animation: none;
   }
 }
