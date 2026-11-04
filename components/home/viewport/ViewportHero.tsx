@@ -5,6 +5,7 @@ import { titleEn, titleZh } from '@/components/site/fonts';
 import { HERO_SETS, pageTheme, useHeroSet } from '@/lib/heroPalettes';
 import { usePerfStore } from '@/lib/perf';
 import { CoverUpload } from '../cover/CoverUpload';
+import { GaussMesh } from './GaussMesh';
 
 /**
  * Homepage hero: title + upload card over three colour pages (blue → violet →
@@ -37,16 +38,11 @@ export function ViewportHero({ locale }: { locale: string }) {
   useEffect(() => {
     const r = document.documentElement.style;
     r.setProperty('--hero-ink', hs.ink);
-    r.setProperty(
-      '--hero-ink-muted',
-      hs.ink === '#ffffff' ? 'rgba(255,255,255,0.82)' : 'rgba(26,16,51,0.72)',
-    );
-    r.setProperty('--hero-cta-bg', hs.ink === '#ffffff' ? '#ffffff' : hs.cta);
-    r.setProperty('--hero-cta-ink', hs.ink === '#ffffff' ? hs.cta : hs.ctaInk);
-    r.setProperty(
-      '--chip-border',
-      hs.ink === '#ffffff' ? 'rgba(255,255,255,0.35)' : 'rgba(26,16,51,0.25)',
-    );
+    r.setProperty('--hero-ink-muted', hs.inkMuted);
+    r.setProperty('--hero-cta-bg', hs.ctaBg);
+    r.setProperty('--hero-cta-ink', hs.ctaInk);
+    r.setProperty('--chip-border', 'rgba(23,11,51,0.22)');
+    r.setProperty('--chip-bg', 'rgba(255,255,255,0.6)');
   }, [hs]);
 
   const [page, setPage] = useState(0);
@@ -80,9 +76,10 @@ export function ViewportHero({ locale }: { locale: string }) {
         {
           background: THEMES[page].bg,
           '--title-accent': `linear-gradient(100deg, ${hs.accent[0]}, ${hs.accent[1]})`,
-          '--title-shadow': hs.ink === '#ffffff' ? '0 4px 24px rgba(0,0,0,0.18)' : 'none',
-          '--primary': hs.cta,
+          '--title-shadow': 'none',
+          '--primary': hs.ctaBg,
           '--primary-foreground': hs.ctaInk,
+          '--upload-bg': 'rgba(255,255,255,0.78)',
         } as CSSProperties
       }
     >
@@ -114,6 +111,8 @@ export function ViewportHero({ locale }: { locale: string }) {
             />
           ))}
       </div>
+
+      <GaussMesh from={hs.mesh[0]} to={hs.mesh[1]} />
 
       {/* ---------- title ---------- */}
       <div className="pointer-events-none absolute inset-x-0 top-[calc(var(--header-h)+18px)] z-[2] px-5 text-center md:top-[calc(var(--header-h)+28px)]">

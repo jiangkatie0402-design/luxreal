@@ -1,14 +1,69 @@
 import { create } from 'zustand';
 
-/** One hero colour set: three page colours + title accent, CTA and ink. */
+/**
+ * One hero colour set. Light two-hue backgrounds with near-black ink; brand violet
+ * only as the title accent; a black CTA carries the "pop" colour.
+ */
 export interface HeroSet {
   name: string;
-  pages: [string, string, string];
+  /** three pages, each a two-hue gradient [from, to] */
+  pages: [[string, string], [string, string], [string, string]];
   accent: [string, string];
-  cta: string;
-  ctaInk: string;
   ink: string;
+  inkMuted: string;
+  ctaBg: string;
+  ctaInk: string;
+  /** mesh line gradient */
+  mesh: [string, string];
 }
+
+const INK = '#170b33';
+const INK_MUTED = 'rgba(23,11,51,0.68)';
+
+export const HERO_SETS: HeroSet[] = [
+  {
+    name: '薰衣草 × 薄荷',
+    pages: [
+      ['#d9c8ff', '#b8f5e4'],
+      ['#cbb6ff', '#bfeaff'],
+      ['#e2d4ff', '#c4ffd8'],
+    ],
+    accent: ['#6a3cf0', '#a855f7'],
+    ink: INK,
+    inkMuted: INK_MUTED,
+    ctaBg: '#120a24',
+    ctaInk: '#9ff5d8',
+    mesh: ['#6a3cf0', '#14b8a6'],
+  },
+  {
+    name: '丁香 × 蜜桃',
+    pages: [
+      ['#dcc6ff', '#ffd3c2'],
+      ['#cdb2ff', '#ffc4da'],
+      ['#e6d6ff', '#ffe0c2'],
+    ],
+    accent: ['#6a3cf0', '#ff4f8b'],
+    ink: INK,
+    inkMuted: INK_MUTED,
+    ctaBg: '#120a24',
+    ctaInk: '#ffc9b5',
+    mesh: ['#6a3cf0', '#ff5c8a'],
+  },
+  {
+    name: '浅紫 × 荧光',
+    pages: [
+      ['#e1d3ff', '#ecffb0'],
+      ['#d2bdff', '#e0ff8c'],
+      ['#ebe1ff', '#f5ffcc'],
+    ],
+    accent: ['#5a2fe6', '#9b5cff'],
+    ink: INK,
+    inkMuted: INK_MUTED,
+    ctaBg: '#120a24',
+    ctaInk: '#d8ff3c',
+    mesh: ['#6a3cf0', '#84cc16'],
+  },
+];
 
 const hex = (h: string) => [1, 3, 5].map((i) => parseInt(h.slice(i, i + 2), 16));
 const toHex = (c: number[]) =>
@@ -16,41 +71,17 @@ const toHex = (c: number[]) =>
 /** Mix a colour toward white (t > 0) or black (t < 0). */
 export const shade = (h: string, t: number) =>
   toHex(hex(h).map((v) => (t >= 0 ? v + (255 - v) * t : v * (1 + t))));
+const mix = (a: string, b: string, t: number) => {
+  const x = hex(a);
+  const y = hex(b);
+  return toHex(x.map((v, i) => v + (y[i] - v) * t));
+};
 
-/** Ten purples; each set's three pages are the base, a deeper and a lighter step of it. */
-const purple = (
-  name: string,
-  c: string,
-  accent: [string, string],
-  cta: string,
-  ctaInk = '#ffffff',
-): HeroSet => ({
-  name,
-  pages: [c, shade(c, -0.2), shade(c, 0.18)],
-  accent,
-  cta,
-  ctaInk,
-  ink: '#ffffff',
-});
-
-export const HERO_SETS: HeroSet[] = [
-  purple('品牌紫', '#7a50f2', ['#ffe14d', '#fff6b8'], '#5a2fe6'),
-  purple('电光紫', '#8b5cf6', ['#ffffff', '#e9ddff'], '#5b21b6'),
-  purple('靛紫', '#5b4be8', ['#a5f3fc', '#e0fbff'], '#3730a3'),
-  purple('葡萄紫', '#7e22ce', ['#fde68a', '#fffbeb'], '#581c87'),
-  purple('兰花紫', '#a855f7', ['#fef08a', '#ffffff'], '#6b21a8'),
-  purple('紫红莓果', '#a21caf', ['#fbcfe8', '#ffffff'], '#701a75'),
-  purple('薰衣草', '#9a86f0', ['#ffffff', '#f5f0ff'], '#5b46d8'),
-  purple('丁香紫', '#b48cf0', ['#3b0764', '#5b21b6'], '#5b21b6'),
-  purple('烟灰紫', '#7d6b9e', ['#f3e8ff', '#ffffff'], '#463a66'),
-  purple('午夜紫', '#3b1c8c', ['#c4b5fd', '#ede9fe'], '#c4b5fd', '#1e0b4b'),
-];
-
-/** Background + stripe tints derived from one page colour. */
-export function pageTheme(c: string) {
+/** Background + stripe tints for one page's two-hue gradient. */
+export function pageTheme([a, b]: [string, string]) {
   return {
-    bg: `radial-gradient(circle, rgba(255,255,255,0.14) 1px, transparent 1.5px) 0 0 / 18px 18px, radial-gradient(60% 55% at 50% 55%, rgba(255,255,255,0.18), transparent 70%), linear-gradient(160deg, ${shade(c, -0.12)} 0%, ${c} 50%, ${shade(c, 0.45)} 100%)`,
-    bands: [shade(c, -0.18), c, shade(c, 0.3), shade(c, 0.55)],
+    bg: `radial-gradient(circle, rgba(23,11,51,0.07) 1px, transparent 1.5px) 0 0 / 18px 18px, radial-gradient(55% 50% at 50% 48%, rgba(255,255,255,0.55), transparent 70%), linear-gradient(150deg, ${a} 0%, ${mix(a, b, 0.5)} 55%, ${b} 100%)`,
+    bands: [shade(a, -0.12), a, mix(a, b, 0.5), b],
   };
 }
 
