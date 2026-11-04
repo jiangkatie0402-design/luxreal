@@ -494,34 +494,6 @@ export function ViewportHero({
               />
             </circle>
           </svg>
-          {/* output card */}
-          <div className="absolute right-[6%] top-[30%] w-[230px] rounded-xl border border-white/12 bg-[rgba(10,16,30,0.7)] p-4 font-mono text-[11px] text-white/60 shadow-[0_20px_60px_rgba(0,0,0,0.5)] backdrop-blur">
-            <p className="flex items-center justify-between">
-              <span>{t('io.output')}</span>
-              <span
-                className={`flex items-center gap-1.5 ${gen < 1 ? 'text-[#9cc8ff]' : 'text-[#86efac]'}`}
-              >
-                <span
-                  className={`size-1.5 rounded-full ${gen < 1 ? 'animate-pulse bg-[#6FA8FF]' : 'bg-[#4ade80]'}`}
-                />
-                {gen < 1 ? `${Math.round(gen * 100)}%` : t('ready')}
-              </span>
-            </p>
-            <p className="mt-2 text-sm text-white">qilin.glb</p>
-            <p className="mt-1 tabular-nums">
-              {faces.toLocaleString()} {t('faces')}
-            </p>
-            <div className="mt-3 flex flex-wrap gap-1.5">
-              {['GLB', 'FBX', 'USDZ', 'STL'].map((f) => (
-                <span
-                  key={f}
-                  className="rounded border border-white/12 px-1.5 py-0.5 text-[10px] text-white/70"
-                >
-                  {f}
-                </span>
-              ))}
-            </div>
-          </div>
         </div>
       )}
 
