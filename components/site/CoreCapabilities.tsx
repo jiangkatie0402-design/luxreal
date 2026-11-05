@@ -70,7 +70,7 @@ export function Showcase({
         aria-hidden
         className="pointer-events-none absolute inset-x-0 top-0 -z-10 h-[80%] [background:radial-gradient(45%_55%_at_50%_35%,rgba(110,98,163,0.16),transparent_70%)]"
       />
-      <div className="mx-auto w-full max-w-[1600px] px-4 md:px-8 xl:px-12">
+      <div className="mx-auto w-full max-w-[1720px] px-4 md:px-8 xl:px-10">
         <h2 id={`${id}-title`} className={hideTitle ? 'sr-only' : 't-h2 text-center'}>
           {t('title')}
         </h2>
@@ -131,7 +131,7 @@ export function Showcase({
                   <div className="relative min-h-[300px] pl-6 pt-2 md:pl-8 lg:pl-0 lg:pt-12">
                     <div
                       aria-hidden
-                      className="absolute bottom-6 left-6 right-6 top-2 overflow-hidden rounded-2xl border border-white/10 bg-[#0a0a0c] shadow-[0_30px_80px_rgba(0,0,0,0.6)] md:bottom-8 md:left-8 md:right-8 lg:bottom-12 lg:left-0 lg:right-12 lg:top-12"
+                      className="absolute inset-y-0 left-6 right-0 top-2 overflow-hidden rounded-tl-2xl border-l border-t border-white/10 bg-[#0a0a0c] shadow-[0_30px_80px_rgba(0,0,0,0.6)] md:left-8 lg:left-0 lg:top-12"
                     >
                       <div className="flex h-10 items-center gap-2 border-b px-4">
                         <span className="size-2.5 rounded-full bg-white/15" />
