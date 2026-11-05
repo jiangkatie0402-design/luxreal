@@ -121,52 +121,12 @@ const RING = [
   { x: 26, y: 26, align: 'right' },
 ] as const;
 
-/**
- * Three arrangements of the same parts (turning form + six capabilities):
- * 0 · all open: every capability shows its title + text around the form
- * 1 · ring: labels on a ring; only the active one opens beneath its label
- * 2 · columns: three per side, aligned toward the form; active one opens
- */
-function Orbit({ t, variant }: { t: T; variant: number }) {
+/** Turning form ringed by six capabilities; only the active one opens beneath its label. */
+function Orbit({ t }: { t: T }) {
   const [hover, setHover] = useState(false);
   const [active, setActive] = useCycle(AGENT_ITEMS.length, 3200, hover);
   const hoverProps = { onMouseEnter: () => setHover(true), onMouseLeave: () => setHover(false) };
 
-  if (variant === 2) {
-    const left = [5, 4, 3];
-    const right = [0, 1, 2];
-    const col = (ids: number[], align: 'left' | 'right') => (
-      <ul className="flex flex-col justify-center gap-6">
-        {ids.map((i) => (
-          <li key={i}>
-            <Item
-              t={t}
-              k={AGENT_ITEMS[i]}
-              i={i}
-              on={active === i}
-              open={active === i}
-              align={align}
-              onPick={setActive}
-            />
-          </li>
-        ))}
-      </ul>
-    );
-    return (
-      <div
-        {...hoverProps}
-        className="grid items-center gap-8 lg:min-h-[560px] lg:grid-cols-[1fr_minmax(240px,0.7fr)_1fr]"
-      >
-        {col(left, 'right')}
-        <div className="mx-auto aspect-square w-[min(60vw,280px)]">
-          <Form />
-        </div>
-        {col(right, 'left')}
-      </div>
-    );
-  }
-
-  const allOpen = variant === 0;
   return (
     <div {...hoverProps}>
       {/* desktop ring */}
@@ -221,7 +181,7 @@ function Orbit({ t, variant }: { t: T; variant: number }) {
   );
 }
 
-export function AgentCapabilities({ variant }: { variant: number }) {
+export function AgentCapabilities() {
   const t = useTranslations('site.agents');
-  return <Orbit t={t} variant={variant} />;
+  return <Orbit t={t} />;
 }
