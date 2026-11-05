@@ -37,7 +37,7 @@ export const useHeroSet = create<{ i: number; set: (i: number) => void }>((setSt
 }));
 
 /** Use-case panel texture options, chosen in the preview. */
-export const PANEL_TEXTURES = ['A 塑料薄膜', 'B 高斯网格'] as const;
+export const PANEL_TEXTURES = ['A 点阵', 'B 领域界面', 'C 柔光'] as const;
 export const usePanelTexture = create<{ i: number; set: (i: number) => void }>((setState) => ({
   i: 0,
   set: (i) => setState({ i }),

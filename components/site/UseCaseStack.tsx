@@ -13,10 +13,10 @@ function splitPoint(text: string): [string | null, string] {
 const IDS = ['print', 'game', 'film'] as const;
 
 /** violet → black → violet; the two violets differ in value so the rhythm reads. */
-const MESH: Record<number, [string, string]> = {
-  0: ['#3b2a7a', '#6e62a3'],
-  1: ['#cdbcff', '#8576c4'],
-  2: ['#e4dcff', '#cdbcff'],
+const TINT: Record<number, [string, string]> = {
+  0: ['#efe8ff', '#a08ce6'],
+  1: ['#3a2f66', '#1d1838'],
+  2: ['#8a7dd0', '#3b2f7a'],
 };
 
 const PANELS = [
@@ -52,7 +52,7 @@ const PANELS = [
  */
 export function UseCaseStack() {
   const t = useTranslations('site.scenes');
-  const texture = usePanelTexture((st) => st.i) === 0 ? 'film' : 'mesh';
+  const texture = (['dots', 'theme', 'glow'] as const)[usePanelTexture((st) => st.i)];
   return (
     <section aria-labelledby="scenes-title" id="scenes" className="scroll-mt-20">
       {/* section name lives in each panel's label; h2 kept for the outline */}
@@ -77,7 +77,7 @@ export function UseCaseStack() {
               } as CSSProperties
             }
           >
-            <PanelTexture kind={texture} dark={i > 0} seed={i * 7 + 3} mesh={MESH[i]} />
+            <PanelTexture kind={texture} field={id} ink={p.ink} tint={TINT[i]} />
             <div className="container-x relative flex-1 py-12 md:py-16">
               {/* label + field name as the panel headline */}
               <p className="flex items-center gap-3 font-mono text-sm text-[var(--muted)]">
