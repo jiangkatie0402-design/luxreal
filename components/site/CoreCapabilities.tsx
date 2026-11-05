@@ -4,7 +4,6 @@ import { ArrowRight, Check } from 'lucide-react';
 import { useTranslations } from 'next-intl';
 import { ButtonLink } from '@/components/ui/button';
 import { site } from '@/config/site';
-import { TAB_STYLES, useTabStyle } from '@/lib/heroPalettes';
 import { cn } from '@/lib/utils';
 
 /** "Lead：rest" points render the lead in bold (zh full-width colon or en ": "). */
@@ -41,7 +40,6 @@ export function Showcase({
   const t = useTranslations(ns);
   const c = useTranslations('common');
   const ITEMS = items;
-  const tabActive = TAB_STYLES[useTabStyle((st) => st.i)].item;
   return (
     <section aria-labelledby={`${id}-title`} id={id} className="section-y scroll-mt-20">
       <div className="container-x">
@@ -64,7 +62,7 @@ export function Showcase({
                 className={cn(
                   'whitespace-nowrap font-medium outline-none transition-[color,background-color] duration-[var(--dur-fast)] focus-visible:ring-1 focus-visible:ring-ring/60',
                   'h-11 rounded-btn px-6 text-base text-muted-foreground hover:text-foreground',
-                  tabActive,
+                  'data-[state=active]:bg-[linear-gradient(135deg,#6e62a3,#4b4277)] data-[state=active]:text-white',
                 )}
               >
                 {t(`${id}.tab`)}
