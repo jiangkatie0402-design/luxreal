@@ -1,18 +1,18 @@
 'use client';
 import { useTranslations } from 'next-intl';
 import { useEffect, useRef, useState, type ReactNode } from 'react';
-import { ArrowRight, ImagePlus, Sparkles } from 'lucide-react';
+import { ArrowRight, Box, ChevronDown, ImagePlus, Layers } from 'lucide-react';
 import { create } from 'zustand';
 import { cn } from '@/lib/utils';
 import { appUrl, site } from '@/config/site';
 
 /** Preview-only switch between the upload box designs. */
 export const UPLOAD_VARIANTS = [
-  'A 雾紫按钮',
-  'B 发光边框',
-  'C 极简圆按钮',
-  'D 两层+描边按钮',
-  'E 分体发光按钮',
+  'D1 下拉设置',
+  'D2 光边按钮',
+  'D3 虚线拖放区',
+  'D4 顶部高光',
+  'D5 大缩略图',
 ] as const;
 export const useUploadVariant = create<{ v: number; set: (v: number) => void }>((setState) => ({
   v: 0,
@@ -138,136 +138,166 @@ export function CoverUpload() {
     </span>
   );
   const arrow = <ArrowRight className="size-4" aria-hidden />;
-  const row = (thumbSize: string, extra?: ReactNode) => (
-    <label className="flex min-w-0 flex-1 cursor-pointer items-center gap-3 rounded-[14px] p-1.5 hover:bg-white/[0.04]">
+  // "模型：标准" → ["模型", "标准"]
+  const kv = (text: string) => {
+    const m = text.match(/^(.+?)(?:\uFF1A|: )(.+)$/);
+    return m ? [m[1], m[2]] : [null, text];
+  };
+  const settings = [
+    { icon: Box, text: t('model') },
+    { icon: Layers, text: t('output') },
+  ];
+  /** Outlined button: violet gradient hairline, dark fill, soft glow. */
+  const outlined = (size: string, round = 'rounded-[12px]', glow = false) => (
+    <span
+      className={cn(
+        'inline-flex shrink-0 p-px shadow-[0_0_26px_-6px_rgba(167,150,255,0.7)] transition-shadow hover:shadow-[0_0_34px_-4px_rgba(167,150,255,0.9)]',
+        round,
+        glow ? 'mcp-glow' : 'bg-[linear-gradient(135deg,#e2daff,#7d6fc0_55%,#3b2f7a)]',
+      )}
+    >
+      <button
+        type="button"
+        onClick={submit}
+        className={cn(
+          'inline-flex items-center gap-2 bg-[#15102c] text-sm font-medium text-white transition-colors hover:bg-[#1e1840]',
+          size,
+          round,
+        )}
+      >
+        {t('generate')}
+        {arrow}
+      </button>
+    </span>
+  );
+  const topRow = (pad = 'px-5 pb-4 pt-5') => (
+    <label
+      className={cn(
+        'flex cursor-pointer items-center gap-4 rounded-t-[22px] hover:bg-white/[0.03]',
+        pad,
+      )}
+    >
       {fileInput}
-      {thumb(thumbSize)}
+      {thumb('size-11')}
       {label}
-      {extra}
     </label>
   );
 
-  // A — single row; mist-violet gradient button (same family as the core CTA).
+  // D1 — settings read as dropdowns (icon, label, chevron).
   if (v === 0)
     return (
-      <Glass {...drop} dragging={dragging} className="rounded-[20px] p-2">
-        <div className="flex items-center gap-3">
-          {row('size-12')}
-          <span className="hidden md:flex">{chips}</span>
-          <button
-            type="button"
-            onClick={submit}
-            className="inline-flex h-12 shrink-0 items-center gap-2 rounded-[14px] bg-[linear-gradient(135deg,#8f80d0,#5a4f94)] px-5 text-sm font-medium text-white shadow-[inset_0_1px_0_rgba(255,255,255,0.25),0_8px_24px_-8px_rgba(110,98,163,0.8)] transition hover:brightness-110"
-          >
-            {t('generate')}
-            {arrow}
-          </button>
+      <Glass {...drop} dragging={dragging} className="rounded-[22px]">
+        {topRow()}
+        <div className="flex items-center gap-2 border-t border-white/[0.08] px-3 py-2.5">
+          {settings.map(({ icon: Icon, text }) => (
+            <span
+              key={text}
+              className="inline-flex h-8 items-center gap-1.5 rounded-[9px] px-2.5 text-xs text-white/70 ring-1 ring-inset ring-white/10 transition-colors hover:bg-white/[0.05] hover:text-white"
+            >
+              <Icon className="size-3.5 text-[#b8a6ff]" aria-hidden />
+              {text}
+              <ChevronDown className="size-3.5 text-white/40" aria-hidden />
+            </span>
+          ))}
+          <span className="ml-auto">{outlined('h-10 px-5')}</span>
         </div>
       </Glass>
     );
 
-  // B — single row inside a light-traced border; white button with a violet arrow disc.
+  // D2 — settings as quiet label/value pairs; light travels round the button's outline.
   if (v === 1)
     return (
-      <div className="mcp-glow rounded-[21px] p-px shadow-[0_24px_60px_-24px_rgba(0,0,0,0.6)]">
-        <div
-          {...drop}
-          className={cn(
-            'rounded-[20px] bg-[rgba(14,10,30,0.72)] p-2 backdrop-blur-2xl',
-            dragging && 'ring-1 ring-white/60',
-          )}
-        >
-          <div className="flex items-center gap-3">
-            {row('size-12')}
-            <span className="hidden md:flex">{chips}</span>
-            <button
-              type="button"
-              onClick={submit}
-              className="group inline-flex h-12 shrink-0 items-center gap-3 rounded-full bg-white py-1.5 pl-5 pr-1.5 text-sm font-medium text-[#170b33] transition hover:bg-white/90"
-            >
-              {t('generate')}
-              <span className="grid size-9 place-items-center rounded-full bg-[#6e62a3] text-white transition-transform group-hover:translate-x-0.5">
-                {arrow}
+      <Glass {...drop} dragging={dragging} className="rounded-[22px]">
+        {topRow()}
+        <div className="flex items-center gap-4 border-t border-white/[0.08] py-2.5 pl-5 pr-3">
+          {settings.map(({ text }, i) => {
+            const [k, val] = kv(text);
+            return (
+              <span key={text} className="flex items-center gap-4 text-xs">
+                {i > 0 && <span aria-hidden className="h-3 w-px bg-white/15" />}
+                <span>
+                  <span className="text-white/45">{k}</span>
+                  <span className="ml-1.5 text-white/85">{val}</span>
+                </span>
               </span>
-            </button>
-          </div>
-        </div>
-      </div>
-    );
-
-  // C — a pill like a prompt box; the action is a round white send button.
-  if (v === 2)
-    return (
-      <Glass {...drop} dragging={dragging} className="rounded-full p-1.5 pl-2">
-        <div className="flex items-center gap-3">
-          <label className="flex min-w-0 flex-1 cursor-pointer items-center gap-3 rounded-full p-1 hover:bg-white/[0.04]">
-            {fileInput}
-            {preview ? (
-              // eslint-disable-next-line @next/next/no-img-element -- local blob preview
-              <img src={preview} alt="" className="size-11 shrink-0 rounded-full object-cover" />
-            ) : (
-              <span
-                aria-hidden
-                className="grid size-11 shrink-0 place-items-center rounded-full bg-white/[0.08] text-white/80 ring-1 ring-inset ring-white/15"
-              >
-                <ImagePlus className="size-5" strokeWidth={1.6} />
-              </span>
-            )}
-            {label}
-          </label>
-          <span className="hidden md:flex">{chips}</span>
-          <button
-            type="button"
-            onClick={submit}
-            aria-label={t('generate')}
-            title={t('generate')}
-            className="grid size-12 shrink-0 place-items-center rounded-full bg-white text-[#170b33] shadow-[0_6px_20px_-6px_rgba(255,255,255,0.5)] transition hover:scale-105"
-          >
-            <ArrowRight className="size-5" aria-hidden />
-          </button>
+            );
+          })}
+          <span className="ml-auto">{outlined('h-10 px-5', 'rounded-[12px]', true)}</span>
         </div>
       </Glass>
     );
 
-  // D — two layers; outlined button with a violet gradient hairline and soft glow.
-  if (v === 3)
+  // D3 — the top layer is a real dashed drop zone that lights up on drag.
+  if (v === 2)
     return (
-      <Glass {...drop} dragging={dragging} className="rounded-[22px]">
-        <label className="flex cursor-pointer items-center gap-4 rounded-t-[22px] px-5 pb-4 pt-5 hover:bg-white/[0.03]">
+      <Glass {...drop} dragging={dragging} className="rounded-[22px] p-2">
+        <label
+          className={cn(
+            'flex cursor-pointer items-center gap-4 rounded-[16px] border border-dashed px-4 py-3.5 transition-colors',
+            dragging
+              ? 'border-[#c4b5fd] bg-[#6e62a3]/15'
+              : 'border-white/15 hover:border-white/30 hover:bg-white/[0.03]',
+          )}
+        >
           {fileInput}
           {thumb('size-11')}
           {label}
         </label>
-        <div className="flex items-center gap-2 border-t border-white/[0.08] px-3 py-2.5">
+        <div className="flex items-center gap-2 px-1.5 pb-0.5 pt-2.5">
           {chips}
-          <span className="ml-auto rounded-[11px] bg-[linear-gradient(135deg,#d6ccff,#6e62a3_60%,#3b2f7a)] p-px shadow-[0_0_24px_-6px_rgba(167,150,255,0.7)]">
-            <button
-              type="button"
-              onClick={submit}
-              className="inline-flex h-9 items-center gap-1.5 rounded-[10px] bg-[#14102a] px-4 text-sm font-medium text-white transition hover:bg-[#1d1838]"
-            >
-              {t('generate')}
-              {arrow}
-            </button>
-          </span>
+          <span className="ml-auto">{outlined('h-10 px-5')}</span>
         </div>
       </Glass>
     );
 
-  // E — split: frosted input bar, and a separate violet button with a glow beneath.
-  return (
-    <div className="flex items-stretch gap-3">
-      <Glass {...drop} dragging={dragging} className="min-w-0 flex-1 rounded-[18px] p-1.5">
-        {row('size-12', <span className="ml-auto hidden lg:flex">{chips}</span>)}
+  // D4 — violet highlight along the top edge; the toolbar sits in a darker tray.
+  if (v === 3)
+    return (
+      <Glass {...drop} dragging={dragging} className="overflow-hidden rounded-[22px]">
+        <span
+          aria-hidden
+          className="pointer-events-none absolute inset-x-[8%] top-0 h-px bg-[linear-gradient(90deg,transparent,rgba(214,204,255,0.85),transparent)]"
+        />
+        <span
+          aria-hidden
+          className="pointer-events-none absolute -left-10 -top-16 size-56 rounded-full bg-[#8b5cf6]/20 blur-3xl"
+        />
+        {topRow()}
+        <div className="flex items-center gap-2 bg-black/25 px-3 py-2.5">
+          {chips}
+          <span className="ml-auto">{outlined('h-10 px-5')}</span>
+        </div>
       </Glass>
-      <button
-        type="button"
-        onClick={submit}
-        className="relative inline-flex shrink-0 items-center gap-2 rounded-[18px] bg-[linear-gradient(160deg,#a596e6,#6e62a3_55%,#4b4277)] px-7 text-[15px] font-semibold text-white shadow-[inset_0_1px_0_rgba(255,255,255,0.3),0_18px_44px_-12px_rgba(130,110,220,0.75)] transition hover:brightness-110"
-      >
-        <Sparkles className="size-4" aria-hidden />
-        {t('generate')}
-      </button>
-    </div>
+    );
+
+  // D5 — a large dashed upload tile; copy and settings stacked beside it; tall button.
+  return (
+    <Glass {...drop} dragging={dragging} className="rounded-[22px] p-3">
+      <div className="flex items-center gap-4">
+        <label className="flex min-w-0 flex-1 cursor-pointer items-center gap-4 rounded-[16px] p-1 hover:bg-white/[0.03]">
+          {fileInput}
+          {preview ? (
+            // eslint-disable-next-line @next/next/no-img-element -- local blob preview
+            <img
+              src={preview}
+              alt=""
+              className="size-[72px] shrink-0 rounded-[14px] object-cover"
+            />
+          ) : (
+            <span
+              aria-hidden
+              className="grid size-[72px] shrink-0 place-items-center rounded-[14px] border border-dashed border-white/20 bg-white/[0.04] text-white/80"
+            >
+              <ImagePlus className="size-6" strokeWidth={1.5} />
+            </span>
+          )}
+          <span className="min-w-0">
+            {label}
+            <span className="mt-2.5 hidden md:flex">{chips}</span>
+          </span>
+        </label>
+        {outlined('h-12 px-6', 'rounded-[14px]')}
+      </div>
+    </Glass>
   );
 }
