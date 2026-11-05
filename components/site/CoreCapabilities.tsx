@@ -4,6 +4,8 @@ import { ArrowRight, Check } from 'lucide-react';
 import { useTranslations } from 'next-intl';
 import { ButtonLink } from '@/components/ui/button';
 import { site } from '@/config/site';
+import { TAB_STYLES, useTabStyle } from '@/lib/heroPalettes';
+import { cn } from '@/lib/utils';
 
 /** "Lead：rest" points render the lead in bold (zh full-width colon or en ": "). */
 function Point({ text }: { text: string }) {
@@ -39,6 +41,7 @@ export function Showcase({
   const t = useTranslations(ns);
   const c = useTranslations('common');
   const ITEMS = items;
+  const tabs = TAB_STYLES[useTabStyle((st) => st.i)];
   return (
     <section aria-labelledby={`${id}-title`} id={id} className="section-y scroll-mt-20">
       <div className="container-x">
@@ -52,13 +55,16 @@ export function Showcase({
         >
           <TabsPrimitive.List
             aria-label={t('title')}
-            className="grid w-full max-w-[420px] grid-cols-3 gap-2"
+            className={cn('inline-flex max-w-full', tabs.list)}
           >
             {ITEMS.map((id) => (
               <TabsPrimitive.Trigger
                 key={id}
                 value={id}
-                className="h-10 whitespace-nowrap rounded-full px-3 text-sm font-medium text-muted-foreground outline-none transition-[color,background-color] duration-[var(--dur-fast)] hover:text-foreground focus-visible:ring-1 focus-visible:ring-ring/60 data-[state=active]:bg-foreground data-[state=active]:text-background"
+                className={cn(
+                  'whitespace-nowrap font-medium outline-none transition-[color,background-color] duration-[var(--dur-fast)] focus-visible:ring-1 focus-visible:ring-ring/60',
+                  tabs.item,
+                )}
               >
                 {t(`${id}.tab`)}
               </TabsPrimitive.Trigger>

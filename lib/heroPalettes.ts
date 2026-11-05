@@ -35,3 +35,27 @@ export const useHeroSet = create<{ i: number; set: (i: number) => void }>((setSt
   i: 0,
   set: (i) => setState({ i }),
 }));
+
+/** Tab style options (Meshy-like radius and size), chosen in the preview. */
+export const TAB_STYLES = [
+  {
+    name: '1 Meshy 灰',
+    list: 'rounded-2xl bg-[#18181b] p-1',
+    item: 'h-11 rounded-xl px-6 text-base text-muted-foreground hover:text-foreground data-[state=active]:bg-[#3f3f46] data-[state=active]:text-foreground',
+  },
+  {
+    name: '2 无底座',
+    list: 'gap-2',
+    item: 'h-11 rounded-xl px-6 text-base text-muted-foreground hover:bg-[#18181b] hover:text-foreground data-[state=active]:bg-[#27272a] data-[state=active]:text-foreground',
+  },
+  {
+    name: '3 白色选中',
+    list: 'rounded-2xl bg-[#18181b] p-1',
+    item: 'h-11 rounded-xl px-6 text-base text-muted-foreground hover:text-foreground data-[state=active]:bg-foreground data-[state=active]:text-background',
+  },
+] as const;
+
+export const useTabStyle = create<{ i: number; set: (i: number) => void }>((setState) => ({
+  i: 0,
+  set: (i) => setState({ i }),
+}));
