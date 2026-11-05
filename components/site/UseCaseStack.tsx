@@ -1,6 +1,7 @@
 'use client';
 import { useTranslations } from 'next-intl';
 import { Fragment, useEffect, useRef, type CSSProperties } from 'react';
+import { create } from 'zustand';
 import { cn } from '@/lib/utils';
 import { PanelGlow } from './PanelGlow';
 
@@ -119,39 +120,84 @@ function PanelBody({
   );
 }
 
-/** violet → black → violet; the two violets differ in value so the rhythm reads. */
-const TINT: Record<number, [string, string]> = {
-  0: ['#efe8ff', '#a08ce6'],
-  1: ['#3a2f66', '#1d1838'],
-  2: ['#8a7dd0', '#3b2f7a'],
+type Panel = {
+  bg: string;
+  ink: string;
+  muted: string;
+  line: string;
+  slot: string;
+  edge: string;
+  tint: [string, string];
 };
 
-const PANELS = [
+/** Light panel: dark ink. */
+const light = (bg: string, tint: [string, string]): Panel => ({
+  bg,
+  ink: '#16121f',
+  muted: 'rgba(22,18,31,0.68)',
+  line: 'rgba(22,18,31,0.16)',
+  slot: 'rgba(22,18,31,0.07)',
+  edge: 'transparent',
+  tint,
+});
+/** Dark panel: white ink; optional coloured top edge. */
+const dark = (bg: string, tint: [string, string], edge = 'transparent'): Panel => ({
+  bg,
+  ink: '#ffffff',
+  muted: 'rgba(255,255,255,0.72)',
+  line: 'rgba(255,255,255,0.16)',
+  slot: 'rgba(255,255,255,0.06)',
+  edge,
+  tint,
+});
+
+/** Preview-only: colour schemes for the three field panels (3D 打印, 游戏, 影视). */
+export const SCENE_SETS: { name: string; panels: [Panel, Panel, Panel] }[] = [
   {
-    bg: '#cdbcff',
-    ink: '#16121f',
-    muted: 'rgba(22,18,31,0.68)',
-    line: 'rgba(22,18,31,0.16)',
-    slot: 'rgba(22,18,31,0.07)',
-    edge: 'transparent',
+    name: 'A 紫黑紫（当前）',
+    panels: [
+      light('#cdbcff', ['#efe8ff', '#a08ce6']),
+      dark('#0d0c12', ['#3a2f66', '#1d1838'], 'rgba(205,188,255,0.28)'),
+      dark('#5b4e9a', ['#8a7dd0', '#3b2f7a']),
+    ],
   },
   {
-    bg: '#0d0c12',
-    ink: '#ffffff',
-    muted: 'rgba(255,255,255,0.68)',
-    line: 'rgba(255,255,255,0.12)',
-    slot: 'rgba(255,255,255,0.04)',
-    edge: 'rgba(205,188,255,0.28)',
+    name: 'B 渐深紫',
+    panels: [
+      light('#d9cdff', ['#f3eeff', '#b3a2ef']),
+      dark('#7f6fc4', ['#a597e6', '#5a4c9e']),
+      dark('#2a2350', ['#4a3f86', '#17132e'], 'rgba(205,188,255,0.22)'),
+    ],
   },
   {
-    bg: '#5b4e9a',
-    ink: '#ffffff',
-    muted: 'rgba(255,255,255,0.74)',
-    line: 'rgba(255,255,255,0.2)',
-    slot: 'rgba(255,255,255,0.08)',
-    edge: 'transparent',
+    name: 'C 黑底三色光',
+    panels: [
+      dark('#0c0b11', ['#5b46b8', '#2a2160'], 'rgba(196,181,253,0.3)'),
+      dark('#0b0c12', ['#2f4fb8', '#14204f'], 'rgba(147,170,255,0.3)'),
+      dark('#0d0b10', ['#9a3f8e', '#3a1638'], 'rgba(240,170,220,0.3)'),
+    ],
   },
-] as const;
+  {
+    name: 'D 雾色三色',
+    panels: [
+      light('#d3c8f5', ['#efeaff', '#a99be0']),
+      light('#c6d3f2', ['#eaf0ff', '#94a9dd']),
+      light('#ecd0e3', ['#fff0f8', '#cf9fbf']),
+    ],
+  },
+  {
+    name: 'E 深色三色',
+    panels: [
+      dark('#3b2f6e', ['#5d4ea3', '#241c48']),
+      dark('#1f2c5c', ['#35498f', '#121a3a']),
+      dark('#4a2347', ['#7a3c72', '#2a1228']),
+    ],
+  },
+];
+export const useSceneSet = create<{ i: number; set: (i: number) => void }>((setState) => ({
+  i: 0,
+  set: (i) => setState({ i }),
+}));
 
 /**
  * 应用场景: full-height colour panels that stack on scroll — each panel is
@@ -161,6 +207,7 @@ const PANELS = [
  */
 export function UseCaseStack() {
   const t = useTranslations('site.scenes');
+  const PANELS = SCENE_SETS[useSceneSet((st) => st.i)].panels;
   const panels = useRef<(HTMLElement | null)[]>([]);
 
   useEffect(() => {
@@ -213,7 +260,7 @@ export function UseCaseStack() {
                 } as CSSProperties
               }
             >
-              <PanelGlow tint={TINT[i]} />
+              <PanelGlow tint={p.tint} />
               <PanelBody index={i} id={id} label={t('title')} t={t} slot={p.slot} />
             </article>
             {/* hold: the panel stays fully in view for a stretch before the next one slides over */}
