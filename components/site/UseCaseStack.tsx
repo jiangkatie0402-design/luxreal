@@ -83,7 +83,7 @@ function PanelBody({
   );
 
   const WIDE =
-    'relative mx-auto flex w-full max-w-[1760px] flex-1 flex-col px-4 py-10 md:px-8 md:py-12 xl:px-10';
+    'relative mx-auto flex w-full max-w-[1440px] flex-1 flex-col justify-center px-4 py-10 md:px-12 md:py-12 xl:px-20';
   const caption = (lead: string | null, rest: string, k: number) => (
     <>
       <p className="t-title flex items-baseline gap-2">
@@ -107,12 +107,12 @@ function PanelBody({
           {t(`${id}.intro`)}
         </p>
       </div>
-      <ul className="mt-8 grid flex-1 gap-6 md:mt-10 md:grid-cols-3 md:gap-8">
+      <ul className="mt-8 grid gap-6 md:mt-10 md:grid-cols-3 md:gap-8">
         {points.map(([lead, rest], k) => (
           <li key={k} className="flex flex-col">
             <Slot
               bg={slot}
-              className="aspect-[4/3] w-full md:aspect-auto md:min-h-[240px] md:flex-1"
+              className="aspect-[4/3] w-full"
             />
             <div className="mt-5">{caption(lead, rest, k)}</div>
           </li>
