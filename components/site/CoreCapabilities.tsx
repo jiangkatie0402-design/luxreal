@@ -122,7 +122,11 @@ export function Showcase({
             </TabsPrimitive.Content>
           ))}
         </TabsPrimitive.Root>
-        {footer && <p className="t-small mx-auto mt-8 max-w-2xl text-center text-muted-foreground">{footer}</p>}
+        {footer && (
+          <p className="t-small mx-auto mt-8 max-w-2xl text-center text-muted-foreground">
+            {footer}
+          </p>
+        )}
       </div>
     </section>
   );

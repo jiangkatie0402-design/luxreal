@@ -75,9 +75,17 @@ export function ForAgents() {
           </li>
         ))}
       </ul>
+    </Section>
+  );
+}
 
+/** 应用案例 — its own section so it shares the standard section rhythm. */
+export function AgentCases() {
+  const t = useTranslations('site.agents');
+  return (
+    <Section id="cases" title={t('casesTitle')}>
       <h3 className="t-h3 mt-16 text-center md:mt-24">{t('casesTitle')}</h3>
-      <ul className="mt-8 grid gap-6 md:mt-12 md:grid-cols-3">
+      <ul className="grid gap-6 md:grid-cols-3">
         {CASES.map((k) => (
           <li
             key={k}
