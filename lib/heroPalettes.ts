@@ -35,3 +35,10 @@ export const useHeroSet = create<{ i: number; set: (i: number) => void }>((setSt
   i: 0,
   set: (i) => setState({ i }),
 }));
+
+/** Agent orbit arrangements, chosen in the preview. */
+export const AGENT_LAYOUTS = ['A 全部展开', 'B 环形单开', 'C 两侧分列'] as const;
+export const useAgentLayout = create<{ i: number; set: (i: number) => void }>((setState) => ({
+  i: 0,
+  set: (i) => setState({ i }),
+}));

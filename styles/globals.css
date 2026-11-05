@@ -708,20 +708,30 @@
   }
 }
 
-/* Agents orbit: slow turn of the centre form */
-@keyframes agent-orbit {
+/* Agents orbit: the form spins on Z and sways on Y (never edge-on) */
+@keyframes agent-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+@keyframes agent-tilt {
   from {
-    transform: rotateY(0deg) rotateZ(0deg);
+    transform: rotateY(-38deg) rotateX(12deg);
   }
   to {
-    transform: rotateY(360deg) rotateZ(45deg);
+    transform: rotateY(38deg) rotateX(-8deg);
   }
 }
-.agent-orbit {
-  animation: agent-orbit 18s linear infinite;
+.agent-spin {
+  animation: agent-spin 24s linear infinite;
+}
+.agent-tilt {
+  animation: agent-tilt 6s ease-in-out infinite alternate;
+  transform-style: preserve-3d;
 }
 @media (prefers-reduced-motion: reduce) {
-  .agent-orbit {
+  .agent-spin,
+  .agent-tilt {
     animation: none;
   }
 }

@@ -4,6 +4,7 @@ import { useTranslations } from 'next-intl';
 import type { ReactNode } from 'react';
 import { ButtonLink } from '@/components/ui/button';
 import { site } from '@/config/site';
+import { useAgentLayout } from '@/lib/heroPalettes';
 import { cn } from '@/lib/utils';
 import { AgentCapabilities } from './AgentCapabilities';
 
@@ -55,6 +56,7 @@ const CASES = ['props', 'print', 'film'] as const;
  */
 export function ForAgents() {
   const t = useTranslations('site.agents');
+  const variant = useAgentLayout((st) => st.i);
   return (
     <section aria-labelledby="agents-title" id="agents" className="section-y scroll-mt-20">
       <div className="container-x">
@@ -65,7 +67,7 @@ export function ForAgents() {
           <p className="t-lead mt-4 max-w-2xl text-muted-foreground">{t('lead')}</p>
         </div>
         <div className="mt-10 md:mt-14">
-          <AgentCapabilities />
+          <AgentCapabilities variant={variant} />
         </div>
 
         {/* 应用案例 (sub-block) */}
