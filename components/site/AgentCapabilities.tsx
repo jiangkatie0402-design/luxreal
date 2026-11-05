@@ -113,7 +113,7 @@ const RING = [
 /**
  * Desktop: the form ringed by six capabilities. The ring rocks gently back and
  * forth in place (a few degrees) while each capability opens in turn on its own.
- * Hover pauses the turn; click opens an item. Pauses off-screen.
+ * Hovering a label pauses the turn; click opens an item. Pauses off-screen.
  */
 function Ring({ t }: { t: T }) {
   const stage = useRef<HTMLDivElement>(null);
@@ -174,8 +174,6 @@ function Ring({ t }: { t: T }) {
   return (
     <div
       ref={stage}
-      onMouseEnter={() => (hover.current = true)}
-      onMouseLeave={() => (hover.current = false)}
       className="relative mx-auto mb-28 hidden h-[600px] w-full max-w-[1200px] lg:block"
     >
       <div className="absolute left-1/2 top-[47%] aspect-square h-[40%] -translate-x-1/2 -translate-y-1/2">
@@ -187,6 +185,8 @@ function Ring({ t }: { t: T }) {
           ref={(d) => {
             slots.current[i] = d;
           }}
+          onMouseEnter={() => (hover.current = true)}
+          onMouseLeave={() => (hover.current = false)}
           className="absolute will-change-[translate]"
           style={{ left: `${r.x}%`, top: `${r.y}%` }}
         >
