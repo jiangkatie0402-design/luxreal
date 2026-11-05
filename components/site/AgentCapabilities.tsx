@@ -1,23 +1,10 @@
 'use client';
 import { useTranslations } from 'next-intl';
-import { useEffect, useState } from 'react';
-import { usePerfStore } from '@/lib/perf';
+import { useEffect, useRef, useState } from 'react';
 import { cn } from '@/lib/utils';
 
 export const AGENT_ITEMS = ['gen', 'material', 'format', 'batch', 'track', 'scene'] as const;
 type T = ReturnType<typeof useTranslations>;
-
-/** Cycles 0..n-1 every `ms` unless paused / reduced motion. */
-function useCycle(n: number, ms: number, paused: boolean) {
-  const reduced = usePerfStore((s) => s.reducedMotion);
-  const [i, setI] = useState(0);
-  useEffect(() => {
-    if (paused || reduced) return;
-    const id = window.setInterval(() => setI((x) => (x + 1) % n), ms);
-    return () => clearInterval(id);
-  }, [n, ms, paused, reduced]);
-  return [i, setI] as const;
-}
 
 /** The centre form: turns on Z and gently tilts on Y so it never goes edge-on. */
 function Form() {
@@ -76,8 +63,6 @@ function Item({
     <button
       type="button"
       aria-pressed={on}
-      onMouseEnter={() => onPick(i)}
-      onFocus={() => onPick(i)}
       onClick={() => onPick(i)}
       className={cn(
         'block w-full rounded-btn p-2 text-left outline-none transition-opacity duration-[var(--dur-base)] focus-visible:ring-1 focus-visible:ring-primary',
@@ -111,34 +96,40 @@ function Item({
   );
 }
 
-/** Ring positions (% of the stage) for six items, starting at the top, clockwise. */
+/** Ring positions (% of the stage) of each label; open content hangs below it. */
 const RING = [
-  { x: 50, y: 6, align: 'center' },
+  { x: 50, y: 3, align: 'center' },
   { x: 74, y: 26, align: 'left' },
   { x: 74, y: 70, align: 'left' },
-  { x: 50, y: 86, align: 'center' },
+  { x: 50, y: 72, align: 'center' },
   { x: 26, y: 70, align: 'right' },
   { x: 26, y: 26, align: 'right' },
 ] as const;
 
 /** Turning form ringed by six capabilities; only the active one opens beneath its label. */
-function Orbit({ t }: { t: T }) {
-  const [hover, setHover] = useState(false);
-  const [active, setActive] = useCycle(AGENT_ITEMS.length, 3200, hover);
-  const hoverProps = { onMouseEnter: () => setHover(true), onMouseLeave: () => setHover(false) };
-
+function Orbit({
+  t,
+  active,
+  onPick,
+  mobileAllOpen,
+}: {
+  t: T;
+  active: number;
+  onPick: (i: number) => void;
+  mobileAllOpen: boolean;
+}) {
   return (
-    <div {...hoverProps}>
-      {/* desktop ring */}
-      <div className="relative mx-auto hidden aspect-[16/10] w-full max-w-[1200px] lg:block">
-        <div className="absolute left-1/2 top-1/2 size-[26%] -translate-x-1/2 -translate-y-1/2">
+    <>
+      {/* desktop ring, sized to the pinned screen */}
+      <div className="relative mx-auto hidden h-full max-h-[720px] w-full max-w-[1200px] lg:block">
+        <div className="absolute left-1/2 top-1/2 aspect-square h-[34%] -translate-x-1/2 -translate-y-1/2">
           <Form />
         </div>
         {RING.map((r, i) => (
           <div
             key={i}
             className={cn(
-              'absolute w-[min(300px,22vw)] -translate-y-1/2',
+              'absolute w-[min(300px,22vw)] -translate-y-5',
               r.align === 'center' && '-translate-x-1/2',
               r.align === 'right' && '-translate-x-full',
             )}
@@ -151,12 +142,12 @@ function Orbit({ t }: { t: T }) {
               on={active === i}
               open={active === i}
               align={r.align}
-              onPick={setActive}
+              onPick={onPick}
             />
           </div>
         ))}
       </div>
-      {/* mobile: form then list */}
+      {/* mobile: form then the full list */}
       <div className="lg:hidden">
         <div className="mx-auto aspect-square w-[60vw] max-w-[280px]">
           <Form />
@@ -168,20 +159,88 @@ function Orbit({ t }: { t: T }) {
                 t={t}
                 k={k}
                 i={i}
-                on={active === i}
-                open={active === i}
+                on={mobileAllOpen || active === i}
+                open={mobileAllOpen || active === i}
                 align="left"
-                onPick={setActive}
+                onPick={onPick}
               />
             </li>
           ))}
         </ul>
       </div>
-    </div>
+    </>
   );
 }
 
-export function AgentCapabilities() {
+/**
+ * Scroll-driven: on large screens the section pins and each stretch of scroll
+ * opens the next capability, so all six are seen before the page moves on.
+ */
+export function AgentCapabilities({ heading }: { heading: React.ReactNode }) {
   const t = useTranslations('site.agents');
-  return <Orbit t={t} />;
+  const track = useRef<HTMLDivElement>(null);
+  const [active, setActive] = useState(0);
+  const N = AGENT_ITEMS.length;
+
+  useEffect(() => {
+    const el = track.current;
+    if (!el) return;
+    let raf = 0;
+    const update = () => {
+      raf = 0;
+      const r = el.getBoundingClientRect();
+      const span = r.height - window.innerHeight;
+      if (span <= 0) return;
+      const p = Math.min(Math.max(-r.top / span, 0), 0.9999);
+      setActive(Math.floor(p * N));
+    };
+    const on = () => {
+      if (!raf) raf = requestAnimationFrame(update);
+    };
+    update();
+    window.addEventListener('scroll', on, { passive: true });
+    window.addEventListener('resize', on);
+    return () => {
+      cancelAnimationFrame(raf);
+      window.removeEventListener('scroll', on);
+      window.removeEventListener('resize', on);
+    };
+  }, [N]);
+
+  /** jump to the scroll position that opens item i */
+  const pick = (i: number) => {
+    const el = track.current;
+    if (!el || window.innerWidth < 1024) return setActive(i);
+    const top = el.getBoundingClientRect().top + window.scrollY;
+    const span = el.offsetHeight - window.innerHeight;
+    window.scrollTo({ top: top + ((i + 0.5) / N) * span, behavior: 'smooth' });
+  };
+
+  return (
+    <div ref={track} className="relative lg:h-[calc(100svh+6*70svh)]">
+      <div className="lg:sticky lg:top-[var(--header-h)] lg:flex lg:h-[calc(100svh-var(--header-h))] lg:flex-col lg:py-8">
+        {heading}
+        <div className="mt-10 lg:mt-6 lg:min-h-0 lg:flex-1">
+          <Orbit t={t} active={active} onPick={pick} mobileAllOpen />
+        </div>
+        {/* progress */}
+        <div aria-hidden className="mt-4 hidden items-center justify-center gap-3 lg:flex">
+          <span className="font-mono text-xs text-muted-foreground">
+            0{active + 1} / 0{N}
+          </span>
+          <span className="flex gap-1.5">
+            {AGENT_ITEMS.map((k, i) => (
+              <span
+                key={k}
+                className={cn(
+                  'h-1 rounded-full transition-all duration-300',
+                  i === active ? 'w-6 bg-primary' : 'w-2 bg-white/20',
+                )}
+              />
+            ))}
+          </span>
+        </div>
+      </div>
+    </div>
+  );
 }

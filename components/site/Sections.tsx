@@ -56,17 +56,22 @@ const CASES = ['props', 'print', 'film'] as const;
 export function ForAgents() {
   const t = useTranslations('site.agents');
   return (
-    <section aria-labelledby="agents-title" id="agents" className="section-y scroll-mt-20">
+    <section
+      aria-labelledby="agents-title"
+      id="agents"
+      className="scroll-mt-20 pb-16 pt-16 md:pb-24 lg:pt-0"
+    >
       <div className="container-x">
-        <div className="flex flex-col items-center text-center">
-          <h2 id="agents-title" className="t-h2">
-            {t('title')}
-          </h2>
-          <p className="t-lead mt-4 max-w-2xl text-muted-foreground">{t('lead')}</p>
-        </div>
-        <div className="mt-10 md:mt-14">
-          <AgentCapabilities />
-        </div>
+        <AgentCapabilities
+          heading={
+            <div className="flex flex-col items-center text-center">
+              <h2 id="agents-title" className="t-h2">
+                {t('title')}
+              </h2>
+              <p className="t-lead mt-4 max-w-2xl text-muted-foreground">{t('lead')}</p>
+            </div>
+          }
+        />
 
         {/* 应用案例 (sub-block) */}
         <div className="mt-12 border-t pt-12 md:mt-16 md:pt-16">
