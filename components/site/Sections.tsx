@@ -4,7 +4,9 @@ import { useTranslations } from 'next-intl';
 import type { ReactNode } from 'react';
 import { ButtonLink } from '@/components/ui/button';
 import { site } from '@/config/site';
+import { useAgentLayout } from '@/lib/heroPalettes';
 import { cn } from '@/lib/utils';
+import { AgentCapabilities } from './AgentCapabilities';
 
 /** Shared section shell: centred h2 (+ optional lead) and content. */
 function Section({
@@ -46,7 +48,6 @@ function Slot({ className }: { className?: string }) {
   );
 }
 
-const AGENT_ITEMS = ['gen', 'material', 'format', 'batch', 'track', 'scene'] as const;
 const CASES = ['props', 'print', 'film'] as const;
 
 /**
@@ -55,28 +56,18 @@ const CASES = ['props', 'print', 'film'] as const;
  */
 export function ForAgents() {
   const t = useTranslations('site.agents');
+  const variant = useAgentLayout((st) => st.i);
   return (
     <section aria-labelledby="agents-title" id="agents" className="section-y scroll-mt-20">
       <div className="container-x">
-        <div className="grid gap-8 lg:grid-cols-[minmax(0,4fr)_minmax(0,8fr)] lg:gap-16">
-          <div>
-            <h2 id="agents-title" className="t-h2">
-              {t('title')}
-            </h2>
-            <p className="t-lead mt-4 max-w-md text-muted-foreground">{t('lead')}</p>
-          </div>
-          <ul className="grid gap-x-8 sm:grid-cols-2">
-            {AGENT_ITEMS.map((k) => (
-              <li
-                key={k}
-                className="border-t py-6 first:border-t-0 first:pt-0 sm:[&:nth-child(2)]:border-t-0 sm:[&:nth-child(2)]:pt-0"
-              >
-                <p className="t-label text-primary">{t(`items.${k}.label`)}</p>
-                <h3 className="mt-2 text-base font-semibold leading-snug">{t(`items.${k}.t`)}</h3>
-                <p className="t-desc mt-2 text-muted-foreground">{t(`items.${k}.d`)}</p>
-              </li>
-            ))}
-          </ul>
+        <div className="flex flex-col items-center text-center">
+          <h2 id="agents-title" className="t-h2">
+            {t('title')}
+          </h2>
+          <p className="t-lead mt-4 max-w-2xl text-muted-foreground">{t('lead')}</p>
+        </div>
+        <div className="mt-10 md:mt-14">
+          <AgentCapabilities variant={variant} />
         </div>
 
         {/* 应用案例 (sub-block) */}

@@ -707,3 +707,21 @@
     animation: none;
   }
 }
+
+/* Agents orbit: slow turn of the centre form */
+@keyframes agent-orbit {
+  from {
+    transform: rotateY(0deg) rotateZ(0deg);
+  }
+  to {
+    transform: rotateY(360deg) rotateZ(45deg);
+  }
+}
+.agent-orbit {
+  animation: agent-orbit 18s linear infinite;
+}
+@media (prefers-reduced-motion: reduce) {
+  .agent-orbit {
+    animation: none;
+  }
+}

@@ -110,10 +110,7 @@ function PanelBody({
       <ul className="mt-8 grid gap-6 md:mt-10 md:grid-cols-3 md:gap-8">
         {points.map(([lead, rest], k) => (
           <li key={k} className="flex flex-col">
-            <Slot
-              bg={slot}
-              className="aspect-[4/3] w-full"
-            />
+            <Slot bg={slot} className="aspect-[4/3] w-full" />
             <div className="mt-5">{caption(lead, rest, k)}</div>
           </li>
         ))}
