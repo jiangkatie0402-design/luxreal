@@ -1,17 +1,42 @@
 'use client';
 import { useTranslations } from 'next-intl';
 import { useEffect, useRef, useState, type ReactNode } from 'react';
-import { ArrowRight, ChevronDown, CloudUpload, ImagePlus, Sparkles } from 'lucide-react';
+import { ArrowRight, ChevronDown, CloudUpload, ImagePlus } from 'lucide-react';
 import { create } from 'zustand';
 import { cn } from '@/lib/utils';
 import { appUrl, site } from '@/config/site';
 
 /** Preview-only comparison: the locked D4 box vs a bezel-framed alternative. */
-export const UPLOAD_VARIANTS = ['当前 D4', '对比 图二风格'] as const;
+export const UPLOAD_VARIANTS = ['当前 D4', 'D4 + 圆形按钮', '图二风格'] as const;
 export const useUploadVariant = create<{ v: number; set: (v: number) => void }>((setState) => ({
   v: 0,
   set: (v) => setState({ v }),
 }));
+
+/** Round "generate" orb: white rim, deep violet body lit white from the lower right, sparkle mark. */
+function Orb({ onClick, label }: { onClick: () => void; label: string }) {
+  return (
+    <button
+      type="button"
+      onClick={onClick}
+      aria-label={label}
+      title={label}
+      className="relative grid size-12 shrink-0 place-items-center rounded-full bg-[radial-gradient(circle_at_84%_88%,#ffffff_0%,#efeaff_14%,#b6a3ff_30%,#6a4cf0_47%,#2a2160_68%,#12102a_100%)] shadow-[0_0_0_1.5px_rgba(255,255,255,0.85),0_0_22px_rgba(124,92,255,0.55)] transition hover:scale-105"
+    >
+      <svg viewBox="0 0 24 24" className="size-6" aria-hidden>
+        <path
+          d="M10 3.5c.5 3.6 2.4 5.6 6 6.1-3.6.6-5.5 2.5-6 6.1-.5-3.6-2.4-5.5-6-6.1 3.6-.5 5.5-2.5 6-6.1Z"
+          fill="#fff"
+          transform="translate(-1.6 0.2) scale(1.3)"
+        />
+        <path
+          d="M18.5 2.5c.2 1.3.8 1.9 2 2.1-1.2.2-1.8.8-2 2.1-.2-1.3-.8-1.9-2-2.1 1.2-.2 1.8-.8 2-2.1Z"
+          fill="#fff"
+        />
+      </svg>
+    </button>
+  );
+}
 
 /** Glass shell shared by the designs: dark frosted fill, hairline border, top highlight. */
 function Glass({
@@ -170,7 +195,7 @@ export function CoverUpload() {
 
   // Comparison — device-like bezel: near-black well inside a lighter frame, violet
   // hairline on top, centred drop prompt, "label | value" pills, round orb button.
-  if (v === 1) {
+  if (v === 2) {
     const pill = (text: string) => {
       const m = text.match(/^(.+?)(?:\uFF1A|: )(.+)$/);
       return (
@@ -229,15 +254,9 @@ export function CoverUpload() {
                 {pill(t('model'))}
                 {pill(t('output'))}
               </span>
-              <button
-                type="button"
-                onClick={submit}
-                aria-label={t('generate')}
-                title={t('generate')}
-                className="ml-auto grid size-12 place-items-center rounded-full bg-[radial-gradient(circle_at_70%_75%,#f5f0ff_0%,#b9a6ff_28%,#6d4dff_62%,#2b1d6e_100%)] text-white shadow-[0_0_0_1px_rgba(255,255,255,0.25),0_0_28px_rgba(124,92,255,0.6)] transition hover:scale-105"
-              >
-                <Sparkles className="size-5" fill="currentColor" aria-hidden />
-              </button>
+              <span className="ml-auto">
+                <Orb onClick={submit} label={t('generate')} />
+              </span>
             </div>
           </div>
         </div>
@@ -259,7 +278,9 @@ export function CoverUpload() {
       {topRow()}
       <div className="flex items-center gap-2 bg-black/25 px-3 py-2.5">
         {chips}
-        <span className="ml-auto">{outlined('h-10 px-5')}</span>
+        <span className="ml-auto">
+          {v === 1 ? <Orb onClick={submit} label={t('generate')} /> : outlined('h-10 px-5')}
+        </span>
       </div>
     </Glass>
   );

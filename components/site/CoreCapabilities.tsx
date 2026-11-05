@@ -69,7 +69,7 @@ export function Showcase({
     <section
       aria-labelledby={`${id}-title`}
       id={id}
-      className="relative isolate flex min-h-[100svh] scroll-mt-0 flex-col justify-center pb-6 pt-[calc(var(--header-h)+24px)] md:pb-8"
+      className="relative isolate flex min-h-[100svh] scroll-mt-0 flex-col justify-center pb-16 pt-[calc(var(--header-h)+24px)] md:pb-24"
     >
       {/* ambient glow behind the tabs and card */}
       <span
