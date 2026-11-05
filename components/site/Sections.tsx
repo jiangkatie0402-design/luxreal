@@ -56,11 +56,7 @@ const CASES = ['props', 'print', 'film'] as const;
 export function ForAgents() {
   const t = useTranslations('site.agents');
   return (
-    <section
-      aria-labelledby="agents-title"
-      id="agents"
-      className="scroll-mt-20 pb-16 pt-16 md:pb-24 lg:pt-0"
-    >
+    <section aria-labelledby="agents-title" id="agents" className="section-y scroll-mt-20">
       <div className="container-x">
         <AgentCapabilities
           heading={

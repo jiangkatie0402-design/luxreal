@@ -1,6 +1,7 @@
 'use client';
 import { useTranslations } from 'next-intl';
 import { useEffect, useRef, useState } from 'react';
+import { usePerfStore } from '@/lib/perf';
 import { cn } from '@/lib/utils';
 
 export const AGENT_ITEMS = ['gen', 'material', 'format', 'batch', 'track', 'scene'] as const;
@@ -96,44 +97,105 @@ function Item({
   );
 }
 
+const N = AGENT_ITEMS.length;
+const STEP_MS = 3600;
+
 /** Ring positions (% of the stage) of each label; open content hangs below it. */
 const RING = [
-  { x: 50, y: 3, align: 'center' },
-  { x: 74, y: 26, align: 'left' },
-  { x: 74, y: 70, align: 'left' },
-  { x: 50, y: 72, align: 'center' },
-  { x: 26, y: 70, align: 'right' },
-  { x: 26, y: 26, align: 'right' },
+  { x: 50, y: 4, align: 'center' },
+  { x: 74, y: 27, align: 'left' },
+  { x: 74, y: 66, align: 'left' },
+  { x: 50, y: 82, align: 'center' },
+  { x: 26, y: 66, align: 'right' },
+  { x: 26, y: 27, align: 'right' },
 ] as const;
 
-/** Turning form ringed by six capabilities; only the active one opens beneath its label. */
-function Orbit({
-  t,
-  active,
-  onPick,
-  mobileAllOpen,
-}: {
-  t: T;
-  active: number;
-  onPick: (i: number) => void;
-  mobileAllOpen: boolean;
-}) {
+/**
+ * Desktop: the form ringed by six capabilities. The ring rocks gently back and
+ * forth in place (a few degrees) while each capability opens in turn on its own.
+ * Hover pauses the turn; click opens an item. Pauses off-screen.
+ */
+function Ring({ t }: { t: T }) {
+  const stage = useRef<HTMLDivElement>(null);
+  const slots = useRef<(HTMLDivElement | null)[]>([]);
+  const hover = useRef(false);
+  const [active, setActive] = useState(0);
+  const reduced = usePerfStore((s) => s.reducedMotion);
+
+  // rock the ring: each label moves along a small arc around the centre, staying upright
+  useEffect(() => {
+    const el = stage.current;
+    if (!el || reduced) return;
+    let raf = 0;
+    let visible = false;
+    const t0 = performance.now();
+    const frame = (now: number) => {
+      const w = el.clientWidth;
+      const h = el.clientHeight;
+      const phi = 0.07 * Math.sin(((now - t0) / 1000) * ((2 * Math.PI) / 9)); // ±4°, 9s
+      const c = Math.cos(phi) - 1;
+      const sn = Math.sin(phi);
+      RING.forEach((r, i) => {
+        const s = slots.current[i];
+        if (!s) return;
+        const x = ((r.x - 50) / 100) * w;
+        const y = ((r.y - 47) / 100) * h;
+        s.style.translate = `${x * c - y * sn}px ${x * sn + y * c}px`;
+      });
+      if (visible && !document.hidden) raf = requestAnimationFrame(frame);
+    };
+    const resume = () => {
+      cancelAnimationFrame(raf);
+      raf = requestAnimationFrame(frame);
+    };
+    const io = new IntersectionObserver(([e]) => {
+      visible = e.isIntersecting;
+      if (visible) resume();
+    });
+    io.observe(el);
+    const onVis = () => !document.hidden && visible && resume();
+    document.addEventListener('visibilitychange', onVis);
+    return () => {
+      cancelAnimationFrame(raf);
+      io.disconnect();
+      document.removeEventListener('visibilitychange', onVis);
+    };
+  }, [reduced]);
+
+  // open the next capability every few seconds
+  useEffect(() => {
+    if (reduced) return;
+    const id = window.setInterval(() => {
+      if (!hover.current && !document.hidden) setActive((a) => (a + 1) % N);
+    }, STEP_MS);
+    return () => window.clearInterval(id);
+  }, [reduced, active]);
+
   return (
-    <>
-      {/* desktop ring, sized to the pinned screen */}
-      <div className="relative mx-auto hidden h-full max-h-[720px] w-full max-w-[1200px] lg:block">
-        <div className="absolute left-1/2 top-1/2 aspect-square h-[34%] -translate-x-1/2 -translate-y-1/2">
-          <Form />
-        </div>
-        {RING.map((r, i) => (
+    <div
+      ref={stage}
+      onMouseEnter={() => (hover.current = true)}
+      onMouseLeave={() => (hover.current = false)}
+      className="relative mx-auto mb-28 hidden h-[600px] w-full max-w-[1200px] lg:block"
+    >
+      <div className="absolute left-1/2 top-[47%] aspect-square h-[40%] -translate-x-1/2 -translate-y-1/2">
+        <Form />
+      </div>
+      {RING.map((r, i) => (
+        <div
+          key={i}
+          ref={(d) => {
+            slots.current[i] = d;
+          }}
+          className="absolute will-change-[translate]"
+          style={{ left: `${r.x}%`, top: `${r.y}%` }}
+        >
           <div
-            key={i}
             className={cn(
-              'absolute w-[min(300px,22vw)] -translate-y-5',
+              'w-[min(300px,22vw)] -translate-y-5',
               r.align === 'center' && '-translate-x-1/2',
               r.align === 'right' && '-translate-x-full',
             )}
-            style={{ left: `${r.x}%`, top: `${r.y}%` }}
           >
             <Item
               t={t}
@@ -142,104 +204,41 @@ function Orbit({
               on={active === i}
               open={active === i}
               align={r.align}
-              onPick={onPick}
+              onPick={setActive}
             />
           </div>
-        ))}
-      </div>
-      {/* mobile: form then the full list */}
-      <div className="lg:hidden">
-        <div className="mx-auto aspect-square w-[60vw] max-w-[280px]">
-          <Form />
         </div>
-        <ul className="mt-8 grid gap-4">
-          {AGENT_ITEMS.map((k, i) => (
-            <li key={k}>
-              <Item
-                t={t}
-                k={k}
-                i={i}
-                on={mobileAllOpen || active === i}
-                open={mobileAllOpen || active === i}
-                align="left"
-                onPick={onPick}
-              />
-            </li>
-          ))}
-        </ul>
-      </div>
-    </>
+      ))}
+    </div>
   );
 }
 
-/**
- * Scroll-driven: on large screens the section pins and each stretch of scroll
- * opens the next capability, so all six are seen before the page moves on.
- */
+/** Mobile: the form, then all six capabilities open in a list. */
+function MobileList({ t }: { t: T }) {
+  return (
+    <div className="lg:hidden">
+      <div className="mx-auto aspect-square w-[60vw] max-w-[280px]">
+        <Form />
+      </div>
+      <ul className="mt-8 grid gap-4">
+        {AGENT_ITEMS.map((k, i) => (
+          <li key={k}>
+            <Item t={t} k={k} i={i} on open align="left" onPick={() => {}} />
+          </li>
+        ))}
+      </ul>
+    </div>
+  );
+}
+
 export function AgentCapabilities({ heading }: { heading: React.ReactNode }) {
   const t = useTranslations('site.agents');
-  const track = useRef<HTMLDivElement>(null);
-  const [active, setActive] = useState(0);
-  const N = AGENT_ITEMS.length;
-
-  useEffect(() => {
-    const el = track.current;
-    if (!el) return;
-    let raf = 0;
-    const update = () => {
-      raf = 0;
-      const r = el.getBoundingClientRect();
-      const span = r.height - window.innerHeight;
-      if (span <= 0) return;
-      const p = Math.min(Math.max(-r.top / span, 0), 0.9999);
-      setActive(Math.floor(p * N));
-    };
-    const on = () => {
-      if (!raf) raf = requestAnimationFrame(update);
-    };
-    update();
-    window.addEventListener('scroll', on, { passive: true });
-    window.addEventListener('resize', on);
-    return () => {
-      cancelAnimationFrame(raf);
-      window.removeEventListener('scroll', on);
-      window.removeEventListener('resize', on);
-    };
-  }, [N]);
-
-  /** jump to the scroll position that opens item i */
-  const pick = (i: number) => {
-    const el = track.current;
-    if (!el || window.innerWidth < 1024) return setActive(i);
-    const top = el.getBoundingClientRect().top + window.scrollY;
-    const span = el.offsetHeight - window.innerHeight;
-    window.scrollTo({ top: top + ((i + 0.5) / N) * span, behavior: 'smooth' });
-  };
-
   return (
-    <div ref={track} className="relative lg:h-[calc(100svh+6*70svh)]">
-      <div className="lg:sticky lg:top-[var(--header-h)] lg:flex lg:h-[calc(100svh-var(--header-h))] lg:flex-col lg:py-8">
-        {heading}
-        <div className="mt-10 lg:mt-6 lg:min-h-0 lg:flex-1">
-          <Orbit t={t} active={active} onPick={pick} mobileAllOpen />
-        </div>
-        {/* progress */}
-        <div aria-hidden className="mt-4 hidden items-center justify-center gap-3 lg:flex">
-          <span className="font-mono text-xs text-muted-foreground">
-            0{active + 1} / 0{N}
-          </span>
-          <span className="flex gap-1.5">
-            {AGENT_ITEMS.map((k, i) => (
-              <span
-                key={k}
-                className={cn(
-                  'h-1 rounded-full transition-all duration-300',
-                  i === active ? 'w-6 bg-primary' : 'w-2 bg-white/20',
-                )}
-              />
-            ))}
-          </span>
-        </div>
+    <div>
+      {heading}
+      <div className="mt-10 lg:mt-8">
+        <Ring t={t} />
+        <MobileList t={t} />
       </div>
     </div>
   );
