@@ -6,6 +6,9 @@ import { ButtonLink } from '@/components/ui/button';
 import { site } from '@/config/site';
 import { cn } from '@/lib/utils';
 
+/** Public asset base: "/" in the app, overridable for static previews. */
+const BASE = process.env.NEXT_PUBLIC_ASSET_BASE ?? '/';
+
 /** Split "Lead：rest" points (zh full-width colon or en ": "). */
 function splitPoint(text: string): [string | null, string] {
   const m = text.match(/^(.+?)(?:\uFF1A|: )(.+)$/);
@@ -47,6 +50,7 @@ export function Showcase({
   cta = false,
   footer,
   hideTitle = false,
+  media,
 }: {
   ns: string;
   id: string;
@@ -55,6 +59,8 @@ export function Showcase({
   footer?: string;
   /** keep the h2 for screen readers / outline but don't show it */
   hideTitle?: boolean;
+  /** per-item looping clip in the window: path without extension (".mp4", "-poster.jpg") */
+  media?: Partial<Record<string, string>>;
 }) {
   const t = useTranslations(ns);
   const c = useTranslations('common');
@@ -141,7 +147,31 @@ export function Showcase({
                       </div>
                       <div className="absolute inset-x-0 bottom-0 top-10 overflow-hidden [background:radial-gradient(60%_60%_at_55%_50%,rgba(110,98,163,0.14),transparent_70%)]">
                         <span className="absolute inset-x-[-30%] bottom-0 h-[50%] [background:linear-gradient(rgba(255,255,255,0.06)_1px,transparent_1px)_0_0/44px_44px,linear-gradient(90deg,rgba(255,255,255,0.06)_1px,transparent_1px)_0_0/44px_44px] [mask-image:radial-gradient(60%_90%_at_50%_100%,#000,transparent)] [transform:perspective(600px)_rotateX(62deg)] [transform-origin:bottom]" />
-                        <span className="absolute bottom-[12%] left-1/2 h-[10%] w-[52%] -translate-x-[40%] rounded-[50%] border border-white/10 [background:radial-gradient(closest-side,rgba(110,98,163,0.22),transparent)]" />
+                        {media?.[id] && (
+                          <>
+                            {/* spotlight from above onto the stage */}
+                            <span className="absolute inset-x-0 top-0 h-[88%] blur-xl [background:conic-gradient(from_180deg_at_50%_-8%,transparent_162deg,rgba(214,204,255,0.22)_172deg,rgba(240,236,255,0.38)_180deg,rgba(214,204,255,0.22)_188deg,transparent_198deg)] [mask-image:linear-gradient(to_bottom,#000_55%,transparent)]" />
+                            <span className="absolute bottom-[9%] left-1/2 h-[18%] w-[46%] -translate-x-1/2 rounded-[50%] [background:radial-gradient(closest-side,rgba(214,204,255,0.3),transparent)]" />
+                          </>
+                        )}
+                        <span
+                          className={cn(
+                            'absolute bottom-[12%] left-1/2 h-[10%] w-[52%] rounded-[50%] border border-white/10 [background:radial-gradient(closest-side,rgba(110,98,163,0.22),transparent)]',
+                            media?.[id] ? '-translate-x-1/2' : '-translate-x-[40%]',
+                          )}
+                        />
+                        {media?.[id] && (
+                          <video
+                            aria-hidden
+                            autoPlay
+                            muted
+                            loop
+                            playsInline
+                            poster={`${BASE}${media[id]}-poster.jpg`}
+                            src={`${BASE}${media[id]}.mp4`}
+                            className="absolute bottom-[8%] left-1/2 h-[88%] w-auto -translate-x-1/2 mix-blend-screen [mask-image:radial-gradient(farthest-side,#000_72%,transparent)]"
+                          />
+                        )}
                       </div>
                     </div>
                   </div>
@@ -162,5 +192,14 @@ export function Showcase({
 
 /** 核心能力 */
 export function CoreCapabilities() {
-  return <Showcase ns="site.core" id="core" items={['image', 'text', 'agent']} cta hideTitle />;
+  return (
+    <Showcase
+      ns="site.core"
+      id="core"
+      items={['image', 'text', 'agent']}
+      media={{ image: 'videos/core-image' }}
+      cta
+      hideTitle
+    />
+  );
 }
