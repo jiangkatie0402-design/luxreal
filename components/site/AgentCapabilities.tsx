@@ -8,7 +8,7 @@ export const AGENT_ITEMS = ['gen', 'material', 'format', 'batch', 'track', 'scen
 type T = ReturnType<typeof useTranslations>;
 
 /** The centre form: turns on Z and gently tilts on Y so it never goes edge-on. */
-export function Form() {
+function Form() {
   return (
     <div className="relative size-full [perspective:900px]">
       <span className="absolute inset-[-25%] rounded-full bg-[radial-gradient(closest-side,rgba(139,92,246,0.32),transparent)] blur-2xl" />
@@ -174,10 +174,7 @@ function Ring({ t }: { t: T }) {
   }, [reduced, active]);
 
   return (
-    <div
-      ref={stage}
-      className="relative mx-auto mb-28 hidden h-[600px] w-full max-w-[1200px] lg:block"
-    >
+    <div ref={stage} className="relative mx-auto hidden h-[600px] w-full max-w-[1200px] lg:block">
       <div className="absolute left-1/2 top-[47%] aspect-square h-[40%] -translate-x-1/2 -translate-y-1/2">
         <Form />
       </div>

@@ -179,9 +179,7 @@
         "command": "npx add-mcp @aholo/mcp-server --env AHOLO_API_KEY=YOUR_API_KEY",
         "copy": "Copy",
         "copied": "Copied",
-        "anyClient": "Any MCP client",
-        "added": "Aholo 3D MCP server added",
-        "available": "Available"
+        "anyClient": "Any MCP client"
       }
     },
     "why": {
