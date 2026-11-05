@@ -1,6 +1,6 @@
 'use client';
 import { useTranslations } from 'next-intl';
-import { Fragment, type CSSProperties } from 'react';
+import { Fragment, useEffect, useRef, type CSSProperties } from 'react';
 import { cn } from '@/lib/utils';
 import { PanelGlow } from './PanelGlow';
 
@@ -156,9 +156,32 @@ const PANELS = [
 /**
  * 应用场景: full-height colour panels that stack on scroll — each panel is
  * sticky, so the next field slides up over the previous one. Media slots empty.
+ * A panel taller than the screen gets a negative sticky top, so it first scrolls
+ * through to its bottom and only then holds while the next one slides over.
  */
 export function UseCaseStack() {
   const t = useTranslations('site.scenes');
+  const panels = useRef<(HTMLElement | null)[]>([]);
+
+  useEffect(() => {
+    const fit = () => {
+      const header =
+        parseFloat(getComputedStyle(document.documentElement).getPropertyValue('--header-h')) || 64;
+      // the last panel isn't sticky (top would just shift it)
+      panels.current.slice(0, -1).forEach((el) => {
+        if (el) el.style.top = `${Math.min(header, window.innerHeight - el.offsetHeight)}px`;
+      });
+    };
+    fit();
+    const ro = new ResizeObserver(fit);
+    panels.current.forEach((el) => el && ro.observe(el));
+    window.addEventListener('resize', fit);
+    return () => {
+      ro.disconnect();
+      window.removeEventListener('resize', fit);
+    };
+  }, []);
+
   return (
     <section aria-labelledby="scenes-title" id="scenes" className="scroll-mt-20">
       {/* section name lives in each panel's label; h2 kept for the outline */}
@@ -171,12 +194,14 @@ export function UseCaseStack() {
         return (
           <Fragment key={id}>
             <article
+              ref={(el) => {
+                panels.current[i] = el;
+              }}
               aria-labelledby={`scene-${id}`}
               className={cn(
                 'relative isolate flex min-h-[calc(100svh-var(--header-h))] flex-col overflow-hidden rounded-t-[32px] text-[var(--ink)]',
                 // the last panel scrolls away normally so what follows never covers it
-                i < IDS.length - 1 &&
-                  '[@media(min-width:1024px)_and_(min-height:820px)]:sticky [@media(min-width:1024px)_and_(min-height:820px)]:top-[var(--header-h)]',
+                i < IDS.length - 1 && 'sticky top-[var(--header-h)]',
               )}
               style={
                 {
@@ -192,12 +217,7 @@ export function UseCaseStack() {
               <PanelBody index={i} id={id} label={t('title')} t={t} slot={p.slot} />
             </article>
             {/* hold: the panel stays fully in view for a stretch before the next one slides over */}
-            {i < IDS.length - 1 && (
-              <div
-                aria-hidden
-                className="hidden h-[45svh] [@media(min-width:1024px)_and_(min-height:820px)]:block"
-              />
-            )}
+            {i < IDS.length - 1 && <div aria-hidden className="h-[45svh]" />}
           </Fragment>
         );
       })}
