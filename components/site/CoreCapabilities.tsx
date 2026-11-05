@@ -70,7 +70,7 @@ export function Showcase({
         aria-hidden
         className="pointer-events-none absolute inset-x-0 top-0 -z-10 h-[80%] [background:radial-gradient(45%_55%_at_50%_35%,rgba(110,98,163,0.16),transparent_70%)]"
       />
-      <div className="mx-auto w-full max-w-[1600px] px-4 md:px-8 xl:px-12">
+      <div className="mx-auto w-full max-w-[1400px] px-4 md:px-8 lg:px-[7vw]">
         <h2 id={`${id}-title`} className={hideTitle ? 'sr-only' : 't-h2 text-center'}>
           {t('title')}
         </h2>
