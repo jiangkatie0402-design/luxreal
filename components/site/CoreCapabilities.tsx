@@ -164,11 +164,3 @@ export function Showcase({
 export function CoreCapabilities() {
   return <Showcase ns="site.core" id="core" items={['image', 'text', 'agent']} cta hideTitle />;
 }
-
-/** 应用场景 */
-export function UseCases() {
-  const t = useTranslations('site.scenes');
-  return (
-    <Showcase ns="site.scenes" id="scenes" items={['print', 'game', 'film']} footer={t('more')} />
-  );
-}
