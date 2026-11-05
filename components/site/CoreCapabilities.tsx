@@ -70,7 +70,7 @@ export function Showcase({
         aria-hidden
         className="pointer-events-none absolute inset-x-0 top-0 -z-10 h-[80%] [background:radial-gradient(45%_55%_at_50%_35%,rgba(110,98,163,0.16),transparent_70%)]"
       />
-      <div className="mx-auto w-full max-w-[1440px] px-4 md:px-12 xl:px-20">
+      <div className="mx-auto w-full max-w-[1600px] px-4 md:px-8 xl:px-12">
         <h2 id={`${id}-title`} className={hideTitle ? 'sr-only' : 't-h2 text-center'}>
           {t('title')}
         </h2>
@@ -105,7 +105,7 @@ export function Showcase({
               className="core-panel mt-6 w-full outline-none"
             >
               <div className="relative isolate overflow-hidden rounded-[28px] border border-white/10 before:pointer-events-none before:absolute before:inset-x-[12%] before:top-0 before:h-px before:bg-[linear-gradient(90deg,transparent,rgba(196,186,255,0.35),transparent)] [background:radial-gradient(70%_65%_at_0%_100%,rgba(110,98,163,0.32),transparent_62%),linear-gradient(180deg,#0b0b0d,#060607)]">
-                <div className="grid lg:h-[max(520px,calc(100svh-var(--header-h)-24px-44px-24px-32px-12px-120px))] lg:grid-cols-[minmax(0,4fr)_minmax(0,8fr)]">
+                <div className="grid lg:h-[max(520px,calc(100svh-var(--header-h)-24px-44px-24px-32px-12px-120px))] lg:grid-cols-[minmax(440px,5fr)_minmax(0,7fr)]">
                   {/* copy + action */}
                   <div className="flex flex-col p-6 md:p-8 lg:p-12">
                     <div>
