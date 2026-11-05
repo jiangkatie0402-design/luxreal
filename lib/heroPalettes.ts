@@ -35,29 +35,3 @@ export const useHeroSet = create<{ i: number; set: (i: number) => void }>((setSt
   i: 0,
   set: (i) => setState({ i }),
 }));
-
-/**
- * Font schemes from chinese-font-selector (scene: web/UI, commercial).
- * Latin first (Inter), Chinese after; body text never italic, headings +0.02em.
- */
-export const FONT_SETS = [
-  {
-    name: '1 MiSans',
-    display: "var(--f-inter), 'Inter', MiSans, sans-serif",
-    body: "var(--f-inter), 'Inter', MiSans, sans-serif",
-  },
-  {
-    name: '2 得意黑+思源黑体',
-    display: "'Smiley Sans Oblique', var(--f-sans), 'Noto Sans SC', sans-serif",
-    body: "var(--f-inter), 'Inter', var(--f-sans), 'Noto Sans SC', sans-serif",
-  },
-  {
-    name: '3 思源黑体',
-    display: "var(--f-inter), 'Inter', var(--f-sans), 'Noto Sans SC', sans-serif",
-    body: "var(--f-inter), 'Inter', var(--f-sans), 'Noto Sans SC', sans-serif",
-  },
-] as const;
-export const useFontSet = create<{ i: number; set: (i: number) => void }>((setState) => ({
-  i: 0,
-  set: (i) => setState({ i }),
-}));

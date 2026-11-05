@@ -2,7 +2,7 @@ import { Inter, Noto_Sans_SC, Orbitron, ZCOOL_QingKe_HuangYou } from 'next/font/
 
 /**
  * Fonts per chinese-font-selector (web/UI, commercial): T0/T1 licences only,
- * Chinese faces subset/split for the web. MiSans and Smiley Sans are self-hosted
+ * Chinese faces subset/split for the web. MiSans is self-hosted
  * split CSS under /public/fonts (linked in the root layout); these come from next/font.
  */
 export const titleZh = ZCOOL_QingKe_HuangYou({
@@ -29,5 +29,4 @@ export const fontVariables = [titleZh.variable, sans.variable, inter.variable].j
 export const fontStylesheets = [
   '/fonts/misans/MiSans-Regular.min.css',
   '/fonts/misans/MiSans-Semibold.min.css',
-  '/fonts/smiley/smiley.css',
 ];
