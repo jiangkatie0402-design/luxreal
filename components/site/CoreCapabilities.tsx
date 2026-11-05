@@ -46,12 +46,15 @@ export function Showcase({
   items,
   cta = false,
   footer,
+  hideTitle = false,
 }: {
   ns: string;
   id: string;
   items: readonly string[];
   cta?: boolean;
   footer?: string;
+  /** keep the h2 for screen readers / outline but don't show it */
+  hideTitle?: boolean;
 }) {
   const t = useTranslations(ns);
   const c = useTranslations('common');
@@ -68,13 +71,13 @@ export function Showcase({
         className="pointer-events-none absolute inset-x-0 top-0 -z-10 h-[80%] [background:radial-gradient(45%_55%_at_50%_35%,rgba(110,98,163,0.16),transparent_70%)]"
       />
       <div className="container-x">
-        <h2 id={`${id}-title`} className="t-h2 text-center">
+        <h2 id={`${id}-title`} className={hideTitle ? 'sr-only' : 't-h2 text-center'}>
           {t('title')}
         </h2>
 
         <TabsPrimitive.Root
           defaultValue={items[0]}
-          className="mt-8 flex flex-col items-center md:mt-12"
+          className={cn('flex flex-col items-center', !hideTitle && 'mt-8 md:mt-12')}
         >
           <TabsPrimitive.List
             aria-label={t('title')}
@@ -159,7 +162,7 @@ export function Showcase({
 
 /** 核心能力 */
 export function CoreCapabilities() {
-  return <Showcase ns="site.core" id="core" items={['image', 'text', 'agent']} cta />;
+  return <Showcase ns="site.core" id="core" items={['image', 'text', 'agent']} cta hideTitle />;
 }
 
 /** 应用场景 */
