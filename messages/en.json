@@ -178,8 +178,7 @@
         "guide": "MCP setup guide",
         "command": "npx add-mcp @aholo/mcp-server --env AHOLO_API_KEY=YOUR_API_KEY",
         "copy": "Copy",
-        "copied": "Copied",
-        "anyClient": "Any MCP client"
+        "copied": "Copied"
       }
     },
     "why": {

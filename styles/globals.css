@@ -747,49 +747,8 @@
   );
   animation: strip-spin 6s linear infinite;
 }
-/* MCP: data flowing along the connection lines */
-@keyframes mcp-flow {
-  to {
-    stroke-dashoffset: -40;
-  }
-}
-.mcp-flow {
-  stroke-dasharray: 2 18;
-  animation: mcp-flow 1.6s linear infinite;
-}
-@keyframes mcp-caret {
-  50% {
-    opacity: 0;
-  }
-}
-.mcp-caret {
-  animation: mcp-caret 1s steps(1) infinite;
-}
-/* MCP: light sweeping along a hairline */
-@keyframes mcp-sweep {
-  from {
-    background-position:
-      150% 0,
-      0 0;
-  }
-  to {
-    background-position:
-      -50% 0,
-      0 0;
-  }
-}
-.mcp-sweep {
-  background:
-    linear-gradient(90deg, transparent, rgba(214, 204, 255, 0.95), transparent) 150% 0 / 30% 100%
-      no-repeat,
-    rgba(255, 255, 255, 0.1);
-  animation: mcp-sweep 4s linear infinite;
-}
 @media (prefers-reduced-motion: reduce) {
-  .mcp-sweep,
-  .mcp-glow,
-  .mcp-flow,
-  .mcp-caret {
+  .mcp-glow {
     animation: none;
   }
 }
