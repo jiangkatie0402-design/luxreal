@@ -130,8 +130,12 @@ type Panel = {
   tint: [string, string];
   /** glow strength (default 0.55) */
   glow?: number;
-  /** extra decoration */
-  deco?: 'beam' | 'number';
+  /** colour of a soft light beam from the top centre */
+  beam?: string;
+  /** colour of a white-ish bloom in the top-left corner */
+  bloom?: string;
+  /** large outlined panel number in the background */
+  number?: boolean;
 };
 
 /** Light panel: dark ink. */
@@ -156,25 +160,71 @@ const dark = (bg: string, tint: [string, string], edge = 'transparent'): Panel =
 });
 
 /** Preview-only: colour schemes for the three field panels (3D 打印, 游戏, 影视). */
+const LIT = 'rgba(255,255,255,0.95)';
+const BEAM_W = 'rgba(255,255,255,0.55)';
+const BEAM_V = 'rgba(196,181,253,0.3)';
+
 export const SCENE_SETS: { name: string; panels: [Panel, Panel, Panel] }[] = [
   {
-    name: 'F 极光渐变',
+    name: 'K1 浅紫三段+顶光',
     panels: [
-      { ...dark('#0e0b16', ['#b07cff', '#ff9ec7']), glow: 0.42 },
-      { ...dark('#0a0d16', ['#7a5cff', '#3fd0e0']), glow: 0.38 },
-      { ...dark('#0c0a16', ['#4d5bff', '#d14ad6']), glow: 0.4 },
+      { ...light('#e6dcff', ['#f6f1ff', '#bfaff3']), edge: LIT, beam: BEAM_W },
+      { ...light('#cdbcff', ['#ece5ff', '#a693ea']), edge: LIT, beam: BEAM_W },
+      { ...light('#b5a2f5', ['#ddd2ff', '#8b78d8']), edge: LIT, beam: BEAM_W },
     ],
   },
   {
-    name: 'G 中性高级',
+    name: 'K2 渐变+发光边',
     panels: [
-      light('#e7e6ec', ['#ffffff', '#cfcdd8']),
-      dark('#24232a', ['#3a3942', '#18171c'], 'rgba(255,255,255,0.12)'),
-      dark('#0b0b0d', ['#1e1d24', '#0b0b0d'], 'rgba(255,255,255,0.1)'),
+      {
+        ...light('linear-gradient(180deg,#e4dbff,#bfaef5)', ['#f3eeff', '#b3a2ef']),
+        edge: LIT,
+        beam: BEAM_W,
+      },
+      {
+        ...dark(
+          'linear-gradient(180deg,#8a79d6,#4f4396)',
+          ['#a597e6', '#4a3f86'],
+          'rgba(236,230,255,0.9)',
+        ),
+        beam: 'rgba(255,255,255,0.28)',
+      },
+      {
+        ...dark(
+          'linear-gradient(180deg,#3c3278,#141127)',
+          ['#4a3f86', '#100d20'],
+          'rgba(220,208,255,0.9)',
+        ),
+        beam: BEAM_V,
+      },
     ],
   },
   {
-    name: 'H 一条渐变',
+    name: 'K3 珠光浅色',
+    panels: [
+      { ...light('#eeeaf8', ['#ffd9ef', '#c9b8ff']), edge: LIT, glow: 0.7 },
+      { ...light('#e9ecf8', ['#cfe4ff', '#c4b5fd']), edge: LIT, glow: 0.7 },
+      { ...light('#efe9f7', ['#e6d4ff', '#ffd6e8']), edge: LIT, glow: 0.7 },
+    ],
+  },
+  {
+    name: 'K4 浅深交替发光',
+    panels: [
+      { ...light('#ddd1ff', ['#f3eeff', '#b3a2ef']), edge: LIT, beam: BEAM_W },
+      { ...dark('#0e0c16', ['#3a2f66', '#14111f'], 'rgba(220,208,255,0.9)'), beam: BEAM_V },
+      { ...light('#c9b8ff', ['#ece5ff', '#9c88e6']), edge: LIT, beam: BEAM_W },
+    ],
+  },
+  {
+    name: 'K5 柔光浅紫',
+    panels: [
+      { ...light('#ddd3fb', ['#f4efff', '#b9a8f0']), edge: LIT, bloom: 'rgba(255,255,255,0.85)' },
+      { ...light('#d3d8fb', ['#eef1ff', '#a6b0ef']), edge: LIT, bloom: 'rgba(255,255,255,0.85)' },
+      { ...light('#e3d3f7', ['#f8efff', '#c4a3e8']), edge: LIT, bloom: 'rgba(255,255,255,0.85)' },
+    ],
+  },
+  {
+    name: '参考 H 一条渐变',
     panels: [
       light('linear-gradient(180deg,#e4dbff,#bfaef5)', ['#f3eeff', '#b3a2ef']),
       dark('linear-gradient(180deg,#8a79d6,#4f4396)', ['#a597e6', '#4a3f86']),
@@ -182,19 +232,11 @@ export const SCENE_SETS: { name: string; panels: [Panel, Panel, Panel] }[] = [
     ],
   },
   {
-    name: 'I 发光边框',
+    name: '参考 I 发光边框',
     panels: [
-      { ...dark('#0c0b11', ['#3a2f66', '#14111f'], 'rgba(220,208,255,0.9)'), deco: 'beam' },
-      { ...dark('#0c0b11', ['#2c2a5c', '#14111f'], 'rgba(220,208,255,0.9)'), deco: 'beam' },
-      { ...dark('#0c0b11', ['#3f2b5e', '#14111f'], 'rgba(220,208,255,0.9)'), deco: 'beam' },
-    ],
-  },
-  {
-    name: 'J 大编号',
-    panels: [
-      { ...dark('#2b2452', ['#4a3f86', '#1b1636']), deco: 'number' },
-      { ...dark('#1c1838', ['#3a3170', '#120f24']), deco: 'number' },
-      { ...dark('#352a5e', ['#5a4c9e', '#1f1940']), deco: 'number' },
+      { ...dark('#0c0b11', ['#3a2f66', '#14111f'], 'rgba(220,208,255,0.9)'), beam: BEAM_V },
+      { ...dark('#0c0b11', ['#2c2a5c', '#14111f'], 'rgba(220,208,255,0.9)'), beam: BEAM_V },
+      { ...dark('#0c0b11', ['#3f2b5e', '#14111f'], 'rgba(220,208,255,0.9)'), beam: BEAM_V },
     ],
   },
 ];
@@ -265,13 +307,23 @@ export function UseCaseStack() {
               }
             >
               <PanelGlow tint={p.tint} strength={p.glow} />
-              {p.deco === 'beam' && (
+              {p.beam && (
                 <span
                   aria-hidden
-                  className="pointer-events-none absolute inset-x-0 top-0 h-[70%] [background:radial-gradient(40%_75%_at_50%_0%,rgba(196,181,253,0.3),transparent_72%)]"
+                  className="pointer-events-none absolute inset-x-0 top-0 h-[70%]"
+                  style={{
+                    background: `radial-gradient(40% 75% at 50% 0%, ${p.beam}, transparent 72%)`,
+                  }}
                 />
               )}
-              {p.deco === 'number' && (
+              {p.bloom && (
+                <span
+                  aria-hidden
+                  className="pointer-events-none absolute -left-[10%] -top-[30%] size-[60vw] max-w-[900px] rounded-full blur-[100px]"
+                  style={{ background: p.bloom, opacity: 0.7 }}
+                />
+              )}
+              {p.number && (
                 <span
                   aria-hidden
                   className="pointer-events-none absolute -right-[2%] top-[4%] select-none font-display text-[clamp(200px,32vw,520px)] font-semibold leading-none text-transparent [-webkit-text-stroke:1.5px_rgba(255,255,255,0.12)]"
