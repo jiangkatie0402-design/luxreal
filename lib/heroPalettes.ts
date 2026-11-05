@@ -36,9 +36,16 @@ export const useHeroSet = create<{ i: number; set: (i: number) => void }>((setSt
   set: (i) => setState({ i }),
 }));
 
-/** Showcase card copy layouts, chosen in the preview. */
-export const CARD_LAYOUTS = ['1 极简', '2 编号', '3 分隔行'] as const;
-export const useCardLayout = create<{ i: number; set: (i: number) => void }>((setState) => ({
+/** Heading-font options, chosen in the preview. Body text stays the sans. */
+export const FONT_SETS = [
+  { name: '1 宋体', display: "var(--f-serif), 'Noto Serif SC', serif" },
+  { name: '2 封面同款', display: "var(--f-zcool), 'ZCOOL QingKe HuangYou', sans-serif" },
+  {
+    name: '3 几何黑体',
+    display: "var(--f-sora), 'Sora', var(--f-sans), 'Noto Sans SC', sans-serif",
+  },
+] as const;
+export const useFontSet = create<{ i: number; set: (i: number) => void }>((setState) => ({
   i: 0,
   set: (i) => setState({ i }),
 }));

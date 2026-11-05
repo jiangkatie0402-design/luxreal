@@ -4,7 +4,6 @@ import { ArrowRight } from 'lucide-react';
 import { useTranslations } from 'next-intl';
 import { ButtonLink } from '@/components/ui/button';
 import { site } from '@/config/site';
-import { useCardLayout } from '@/lib/heroPalettes';
 import { cn } from '@/lib/utils';
 
 /** Split "Lead：rest" points (zh full-width colon or en ": "). */
@@ -13,91 +12,21 @@ function splitPoint(text: string): [string | null, string] {
   return m ? [m[1], m[2]] : [null, text];
 }
 
-/** Copy column, in one of three layouts. Content is identical across layouts. */
-function Copy({
-  layout,
-  title,
-  intro,
-  points,
-}: {
-  layout: number;
-  title: string;
-  intro: string;
-  points: string[];
-}) {
-  const head = (
+/** Copy column: large airy title, intro, points as small muted lines (no checkmarks). */
+function Copy({ title, intro, points }: { title: string; intro: string; points: string[] }) {
+  return (
     <>
-      <h3
-        className={cn(
-          'text-balance font-display tracking-tight',
-          layout === 1
-            ? 'text-3xl font-semibold leading-[1.2] md:text-[2rem]'
-            : 'text-3xl font-medium leading-[1.15] md:text-4xl',
-        )}
-      >
+      <h3 className="text-balance font-display text-3xl font-medium leading-[1.15] tracking-tight md:text-4xl">
         {title}
       </h3>
       <p className="t-lead mt-4 max-w-[30rem] text-muted-foreground">{intro}</p>
-    </>
-  );
-
-  if (layout === 0)
-    // 极简: big airy title; points step back as small muted lines
-    return (
-      <>
-        {head}
-        <ul className="mt-8 grid max-w-[30rem] gap-2">
-          {points.map((p) => {
-            const [lead, rest] = splitPoint(p);
-            return (
-              <li key={p} className="t-small text-muted-foreground">
-                {lead && <span className="text-foreground/90">{lead}：</span>}
-                {rest}
-              </li>
-            );
-          })}
-        </ul>
-      </>
-    );
-
-  if (layout === 1)
-    // 编号: 01/02/03 markers
-    return (
-      <>
-        {head}
-        <ol className="mt-8 grid max-w-[30rem] gap-4">
-          {points.map((p, i) => {
-            const [lead, rest] = splitPoint(p);
-            return (
-              <li key={p} className="grid grid-cols-[2rem_1fr] gap-2">
-                <span className="t-label pt-1 font-mono text-[#a99ce0]">0{i + 1}</span>
-                <span className="t-desc text-foreground/80">
-                  {lead && <span className="font-semibold text-foreground">{lead}</span>}
-                  {lead && <br />}
-                  {rest}
-                </span>
-              </li>
-            );
-          })}
-        </ol>
-      </>
-    );
-
-  // 分隔行: hairline rows, lead on its own line
-  return (
-    <>
-      {head}
-      <ul className="mt-8 max-w-[30rem] border-t border-white/10">
+      <ul className="mt-8 grid max-w-[30rem] gap-2">
         {points.map((p) => {
           const [lead, rest] = splitPoint(p);
           return (
-            <li key={p} className="border-b border-white/10 py-4">
-              {lead && <p className="text-base font-medium text-foreground">{lead}</p>}
-              <p
-                className={cn('t-desc', lead ? 'mt-1 text-muted-foreground' : 'text-foreground/80')}
-              >
-                {rest}
-              </p>
+            <li key={p} className="t-small text-muted-foreground">
+              {lead && <span className="text-foreground/90">{lead}：</span>}
+              {rest}
             </li>
           );
         })}
@@ -127,7 +56,6 @@ export function Showcase({
   const t = useTranslations(ns);
   const c = useTranslations('common');
   const ITEMS = items;
-  const layout = useCardLayout((st) => st.i);
   return (
     <section
       aria-labelledby={`${id}-title`}
@@ -179,7 +107,6 @@ export function Showcase({
                   <div className="flex flex-col p-6 md:p-8 lg:p-12">
                     <div>
                       <Copy
-                        layout={layout}
                         title={t(`${id}.title`)}
                         intro={t(`${id}.intro`)}
                         points={t.raw(`${id}.points`) as string[]}

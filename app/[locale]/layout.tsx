@@ -3,6 +3,7 @@ import { hasLocale, NextIntlClientProvider } from 'next-intl';
 import { getTranslations, setRequestLocale } from 'next-intl/server';
 import { notFound } from 'next/navigation';
 import type { ReactNode } from 'react';
+import { fontVariables } from '@/components/site/fonts';
 import { SiteHeader } from '@/components/site/SiteHeader';
 import { JsonLd } from '@/components/seo/JsonLd';
 import { buildMetadata } from '@/components/seo/meta';
@@ -45,7 +46,7 @@ export default async function LocaleLayout({
   const t = await getTranslations({ locale, namespace: 'common' });
 
   return (
-    <html lang={locale === 'zh' ? 'zh-CN' : 'en'} data-palette="noir">
+    <html lang={locale === 'zh' ? 'zh-CN' : 'en'} data-palette="noir" className={fontVariables}>
       <body>
         <JsonLd
           data={{
