@@ -110,14 +110,8 @@ function Strip({ cmd }: { cmd: string }) {
   );
 }
 
-/** MCP install block, then the 应用案例 sub-block. */
-export function AgentMcp({ cases }: { cases: ReactNode }) {
+/** MCP install block. */
+export function AgentMcp() {
   const t = useTranslations('site.agents.mcp');
-  const cmd = t('command');
-  return (
-    <>
-      <Strip cmd={cmd} />
-      <div className="mt-14 border-t pt-12 md:mt-16 md:pt-14">{cases}</div>
-    </>
-  );
+  return <Strip cmd={t('command')} />;
 }

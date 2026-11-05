@@ -154,24 +154,6 @@
           "d": "Combine generated assets in Blender, adjust objects, lights and cameras independently and keep the scene editable for new shots."
         }
       },
-      "casesTitle": "Case studies",
-      "cases": {
-        "props": {
-          "label": "Game props",
-          "t": "One level list, a set of game props",
-          "d": "Make several models from level requirements, packaged as project assets to build and validate a prototype."
-        },
-        "print": {
-          "label": "Photo to print",
-          "t": "One pet photo, a custom figurine",
-          "d": "From photo to generated model, print prep and the finished piece — see how a model becomes a figurine on your desk."
-        },
-        "film": {
-          "label": "Grey-box previs",
-          "t": "One shot description, a grey-box reference video",
-          "d": "Lay out the scene, block characters and move the camera in Blender to turn words into a previewable video."
-        }
-      },
       "mcp": {
         "title": "Use Aholo 3D in your AI agent",
         "desc": "Add the Aholo 3D MCP server to Claude Code, Cursor, Codex or any other MCP client with one command.",

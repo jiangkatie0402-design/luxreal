@@ -48,11 +48,8 @@ function Slot({ className }: { className?: string }) {
   );
 }
 
-const CASES = ['props', 'print', 'film'] as const;
-
 /**
- * 四、专为 Agent 设计 — compact: header beside a two-column capability list,
- * then the 应用案例 sub-block as three short horizontal cards.
+ * 四、专为 Agent 设计 — the capability orbit, then the MCP install strip.
  */
 export function ForAgents() {
   const t = useTranslations('site.agents');
@@ -70,29 +67,9 @@ export function ForAgents() {
           }
         />
 
-        {/* MCP install, then the 应用案例 sub-block */}
+        {/* MCP install */}
         <div id="agents-mcp" className="mt-12 md:mt-16">
-          <AgentMcp
-            cases={
-              <>
-                <h3 className="t-title">{t('casesTitle')}</h3>
-                <ul className="mt-6 grid gap-6 md:grid-cols-3">
-                  {CASES.map((k) => (
-                    <li key={k} className="flex gap-4">
-                      <Slot className="size-24 shrink-0 rounded-xl border-0 bg-secondary md:size-28" />
-                      <div className="min-w-0">
-                        <p className="t-label text-primary">{t(`cases.${k}.label`)}</p>
-                        <h4 className="mt-1 text-base font-semibold leading-snug">
-                          {t(`cases.${k}.t`)}
-                        </h4>
-                        <p className="t-desc mt-1 text-muted-foreground">{t(`cases.${k}.d`)}</p>
-                      </div>
-                    </li>
-                  ))}
-                </ul>
-              </>
-            }
-          />
+          <AgentMcp />
         </div>
       </div>
     </section>

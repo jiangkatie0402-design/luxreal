@@ -1,9 +1,17 @@
 'use client';
 import { useTranslations } from 'next-intl';
 import { useEffect, useRef, useState, type ReactNode } from 'react';
-import { ArrowRight, ImagePlus } from 'lucide-react';
+import { ArrowRight, ChevronDown, CloudUpload, ImagePlus, Sparkles } from 'lucide-react';
+import { create } from 'zustand';
 import { cn } from '@/lib/utils';
 import { appUrl, site } from '@/config/site';
+
+/** Preview-only comparison: the locked D4 box vs a bezel-framed alternative. */
+export const UPLOAD_VARIANTS = ['当前 D4', '对比 图二风格'] as const;
+export const useUploadVariant = create<{ v: number; set: (v: number) => void }>((setState) => ({
+  v: 0,
+  set: (v) => setState({ v }),
+}));
 
 /** Glass shell shared by the designs: dark frosted fill, hairline border, top highlight. */
 function Glass({
@@ -32,6 +40,7 @@ function Glass({
 
 /** The upload box on the cover. Validates locally, then hands off to the app. */
 export function CoverUpload() {
+  const v = useUploadVariant((st) => st.v);
   const t = useTranslations('home.cover.upload');
   const [file, setFile] = useState<File | null>(null);
   const [preview, setPreview] = useState<string | null>(null);
@@ -158,6 +167,83 @@ export function CoverUpload() {
       {label}
     </label>
   );
+
+  // Comparison — device-like bezel: near-black well inside a lighter frame, violet
+  // hairline on top, centred drop prompt, "label | value" pills, round orb button.
+  if (v === 1) {
+    const pill = (text: string) => {
+      const m = text.match(/^(.+?)(?:\uFF1A|: )(.+)$/);
+      return (
+        <span className="inline-flex h-10 items-center gap-2 rounded-full border border-white/[0.12] bg-[#121214] px-4 text-[13px]">
+          <span className="text-white/45">{m ? m[1] : ''}</span>
+          {m && <span aria-hidden className="h-3 w-px bg-white/20" />}
+          <span className="text-white/90">{m ? m[2] : text}</span>
+          <ChevronDown className="size-3.5 text-white/45" aria-hidden />
+        </span>
+      );
+    };
+    return (
+      <div className="relative">
+        {/* violet bloom under the frame */}
+        <span
+          aria-hidden
+          className="pointer-events-none absolute inset-x-[6%] -bottom-6 h-16 rounded-full bg-[#7c5cff]/35 blur-3xl"
+        />
+        <div
+          {...drop}
+          className="relative rounded-[30px] bg-[linear-gradient(180deg,#2a2a30,#1a1a1e)] p-2.5 shadow-[0_30px_80px_-20px_rgba(0,0,0,0.8),inset_0_1px_0_rgba(255,255,255,0.08)]"
+        >
+          <div
+            className={cn(
+              'relative overflow-hidden rounded-[22px] border-2 bg-[#0a0a0c] shadow-[inset_0_2px_12px_rgba(0,0,0,0.8)] transition-colors',
+              dragging ? 'border-[#8b7bff]' : 'border-black',
+            )}
+          >
+            <span
+              aria-hidden
+              className="pointer-events-none absolute inset-x-[10%] top-0 h-px bg-[linear-gradient(90deg,transparent,rgba(150,130,255,0.9),transparent)]"
+            />
+            <label className="flex cursor-pointer flex-col items-center px-6 pb-3 pt-6 text-center">
+              {fileInput}
+              {preview ? (
+                // eslint-disable-next-line @next/next/no-img-element -- local blob preview
+                <img src={preview} alt="" className="size-10 rounded-lg object-cover" />
+              ) : (
+                <CloudUpload className="size-8 text-white/90" strokeWidth={1.4} aria-hidden />
+              )}
+              <span className="mt-2 text-lg font-medium text-white">
+                {file ? file.name : t('placeholder')}
+              </span>
+              <span className="mt-1 text-xs text-white/45">
+                {error ? (
+                  <span className="text-[#ffb4c8]">{error}</span>
+                ) : file ? (
+                  t('replace')
+                ) : (
+                  t('formats')
+                )}
+              </span>
+            </label>
+            <div className="flex items-center gap-2 px-3 pb-3">
+              <span className="hidden gap-2 md:flex">
+                {pill(t('model'))}
+                {pill(t('output'))}
+              </span>
+              <button
+                type="button"
+                onClick={submit}
+                aria-label={t('generate')}
+                title={t('generate')}
+                className="ml-auto grid size-12 place-items-center rounded-full bg-[radial-gradient(circle_at_70%_75%,#f5f0ff_0%,#b9a6ff_28%,#6d4dff_62%,#2b1d6e_100%)] text-white shadow-[0_0_0_1px_rgba(255,255,255,0.25),0_0_28px_rgba(124,92,255,0.6)] transition hover:scale-105"
+              >
+                <Sparkles className="size-5" fill="currentColor" aria-hidden />
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    );
+  }
 
   // Violet highlight along the top edge; the toolbar sits in a darker tray.
   return (
