@@ -90,7 +90,7 @@ function PanelBody({
         <span className="font-mono text-xs text-[var(--muted)]">0{k + 1}</span>
         {lead}
       </p>
-      <p className="t-body mt-2 max-w-[30rem] text-[var(--muted)]">{rest}</p>
+      <p className="t-body mt-3 leading-[1.9] max-w-[30rem] text-[var(--muted)]">{rest}</p>
     </>
   );
 
@@ -103,7 +103,7 @@ function PanelBody({
           <FieldName id={id}>{t(`${id}.tab`)}</FieldName>
           <div className="mt-5">{subtitle}</div>
         </div>
-        <p className="t-lead max-w-[36rem] text-[var(--muted)] lg:justify-self-end">
+        <p className="t-lead leading-[1.9] max-w-[36rem] text-[var(--muted)] lg:justify-self-end">
           {t(`${id}.intro`)}
         </p>
       </div>
