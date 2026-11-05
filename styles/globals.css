@@ -735,3 +735,40 @@
     animation: none;
   }
 }
+
+/* MCP: slow light travelling round the command bar's border */
+.mcp-glow {
+  background: conic-gradient(
+    from var(--strip-angle),
+    rgba(196, 186, 255, 0.08) 0deg,
+    rgba(196, 186, 255, 0.08) 220deg,
+    rgba(196, 186, 255, 0.9) 300deg,
+    rgba(196, 186, 255, 0.08) 340deg
+  );
+  animation: strip-spin 6s linear infinite;
+}
+/* MCP: data flowing along the connection lines */
+@keyframes mcp-flow {
+  to {
+    stroke-dashoffset: -40;
+  }
+}
+.mcp-flow {
+  stroke-dasharray: 2 18;
+  animation: mcp-flow 1.6s linear infinite;
+}
+@keyframes mcp-caret {
+  50% {
+    opacity: 0;
+  }
+}
+.mcp-caret {
+  animation: mcp-caret 1s steps(1) infinite;
+}
+@media (prefers-reduced-motion: reduce) {
+  .mcp-glow,
+  .mcp-flow,
+  .mcp-caret {
+    animation: none;
+  }
+}

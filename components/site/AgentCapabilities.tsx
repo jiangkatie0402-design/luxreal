@@ -8,7 +8,7 @@ export const AGENT_ITEMS = ['gen', 'material', 'format', 'batch', 'track', 'scen
 type T = ReturnType<typeof useTranslations>;
 
 /** The centre form: turns on Z and gently tilts on Y so it never goes edge-on. */
-function Form() {
+export function Form() {
   return (
     <div className="relative size-full [perspective:900px]">
       <span className="absolute inset-[-25%] rounded-full bg-[radial-gradient(closest-side,rgba(139,92,246,0.32),transparent)] blur-2xl" />
