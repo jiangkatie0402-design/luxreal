@@ -1,8 +1,7 @@
 'use client';
 import { useTranslations } from 'next-intl';
 import type { CSSProperties } from 'react';
-import { usePanelTexture } from '@/lib/heroPalettes';
-import { PanelTexture } from './PanelTexture';
+import { PanelGlow } from './PanelGlow';
 
 /** Split "Lead：rest" points (full-width colon or ": "). */
 function splitPoint(text: string): [string | null, string] {
@@ -52,7 +51,6 @@ const PANELS = [
  */
 export function UseCaseStack() {
   const t = useTranslations('site.scenes');
-  const texture = (['dots', 'theme', 'glow'] as const)[usePanelTexture((st) => st.i)];
   return (
     <section aria-labelledby="scenes-title" id="scenes" className="scroll-mt-20">
       {/* section name lives in each panel's label; h2 kept for the outline */}
@@ -66,7 +64,7 @@ export function UseCaseStack() {
           <article
             key={id}
             aria-labelledby={`scene-${id}`}
-            className="sticky top-[var(--header-h)] isolate flex min-h-[calc(100svh-var(--header-h))] flex-col overflow-hidden rounded-t-[32px] text-[var(--ink)]"
+            className="relative isolate [@media(min-width:1024px)_and_(min-height:820px)]:sticky [@media(min-width:1024px)_and_(min-height:820px)]:top-[var(--header-h)] flex min-h-[calc(100svh-var(--header-h))] flex-col overflow-hidden rounded-t-[32px] text-[var(--ink)]"
             style={
               {
                 background: p.bg,
@@ -77,7 +75,7 @@ export function UseCaseStack() {
               } as CSSProperties
             }
           >
-            <PanelTexture kind={texture} field={id} ink={p.ink} tint={TINT[i]} />
+            <PanelGlow tint={TINT[i]} />
             <div className="container-x relative flex-1 py-12 md:py-16">
               {/* label + field name as the panel headline */}
               <p className="flex items-center gap-3 font-mono text-sm text-[var(--muted)]">
@@ -91,40 +89,33 @@ export function UseCaseStack() {
                 {t(`${id}.tab`)}
               </h3>
 
-              <div className="mt-8 grid gap-8 md:mt-12 lg:grid-cols-[minmax(0,7fr)_minmax(0,5fr)] lg:gap-16">
-                <div>
-                  <p className="text-balance font-display text-2xl font-semibold leading-[1.3] tracking-[0.02em] md:text-3xl">
-                    {t(`${id}.title`)}
-                  </p>
-                  <p className="t-lead mt-4 max-w-[36rem] text-[var(--muted)]">
-                    {t(`${id}.intro`)}
-                  </p>
-                </div>
-
-                <ul className="grid content-start gap-6">
-                  {(t.raw(`${id}.points`) as string[]).map((pt) => {
-                    const [lead, rest] = splitPoint(pt);
-                    return (
-                      <li key={pt} className="grid grid-cols-[0.75rem_1fr] gap-3">
-                        <span aria-hidden className="mt-1.5 size-3 rounded-[3px] bg-[var(--ink)]" />
-                        <div>
-                          {lead && <p className="text-base font-semibold">{lead}</p>}
-                          <p className="t-desc mt-1 text-[var(--muted)]">{rest}</p>
-                        </div>
-                      </li>
-                    );
-                  })}
-                </ul>
+              <div className="mt-6 grid gap-4 md:mt-8 lg:grid-cols-[minmax(0,7fr)_minmax(0,5fr)] lg:items-end lg:gap-16">
+                <p className="text-balance font-display text-2xl font-semibold leading-[1.3] tracking-[0.02em] md:text-3xl">
+                  {t(`${id}.title`)}
+                </p>
+                <p className="t-lead text-[var(--muted)]">{t(`${id}.intro`)}</p>
               </div>
-            </div>
 
-            {/* media slot: asset not decided yet */}
-            <div className="container-x relative pb-8 md:pb-12">
-              <div
-                aria-hidden
-                className="aspect-[16/9] w-full rounded-[20px] border border-[var(--line)] md:aspect-[21/8]"
-                style={{ background: p.slot }}
-              />
+              {/* one media slot per point (assets not decided yet) */}
+              <ul className="mt-10 grid gap-6 md:mt-12 md:grid-cols-3">
+                {(t.raw(`${id}.points`) as string[]).map((pt, k) => {
+                  const [lead, rest] = splitPoint(pt);
+                  return (
+                    <li key={pt}>
+                      <div
+                        aria-hidden
+                        className="aspect-[4/3] w-full rounded-[20px] border border-[var(--line)]"
+                        style={{ background: p.slot }}
+                      />
+                      <p className="mt-4 flex items-baseline gap-2 text-base font-semibold">
+                        <span className="font-mono text-xs text-[var(--muted)]">0{k + 1}</span>
+                        {lead}
+                      </p>
+                      <p className="t-desc mt-1 text-[var(--muted)]">{rest}</p>
+                    </li>
+                  );
+                })}
+              </ul>
             </div>
           </article>
         );
