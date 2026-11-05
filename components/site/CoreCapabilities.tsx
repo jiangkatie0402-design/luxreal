@@ -16,7 +16,7 @@ function splitPoint(text: string): [string | null, string] {
 function Copy({ title, intro, points }: { title: string; intro: string; points: string[] }) {
   return (
     <>
-      <h3 className="text-balance font-display text-2xl font-medium leading-[1.25] tracking-tight md:text-3xl">
+      <h3 className="text-balance font-display text-2xl font-semibold leading-[1.25] tracking-[0.02em] md:text-3xl">
         {title}
       </h3>
       <p className="t-lead mt-4 max-w-[30rem] text-muted-foreground">{intro}</p>

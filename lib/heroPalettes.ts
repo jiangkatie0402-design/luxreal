@@ -36,13 +36,25 @@ export const useHeroSet = create<{ i: number; set: (i: number) => void }>((setSt
   set: (i) => setState({ i }),
 }));
 
-/** Heading-font options, chosen in the preview. Body text stays the sans. */
+/**
+ * Font schemes from chinese-font-selector (scene: web/UI, commercial).
+ * Latin first (Inter), Chinese after; body text never italic, headings +0.02em.
+ */
 export const FONT_SETS = [
-  { name: '1 宋体', display: "var(--f-serif), 'Noto Serif SC', serif" },
-  { name: '2 封面同款', display: "var(--f-zcool), 'ZCOOL QingKe HuangYou', sans-serif" },
   {
-    name: '3 几何黑体',
-    display: "var(--f-sora), 'Sora', var(--f-sans), 'Noto Sans SC', sans-serif",
+    name: '1 MiSans',
+    display: "var(--f-inter), 'Inter', MiSans, sans-serif",
+    body: "var(--f-inter), 'Inter', MiSans, sans-serif",
+  },
+  {
+    name: '2 得意黑+思源黑体',
+    display: "'Smiley Sans Oblique', var(--f-sans), 'Noto Sans SC', sans-serif",
+    body: "var(--f-inter), 'Inter', var(--f-sans), 'Noto Sans SC', sans-serif",
+  },
+  {
+    name: '3 思源黑体',
+    display: "var(--f-inter), 'Inter', var(--f-sans), 'Noto Sans SC', sans-serif",
+    body: "var(--f-inter), 'Inter', var(--f-sans), 'Noto Sans SC', sans-serif",
   },
 ] as const;
 export const useFontSet = create<{ i: number; set: (i: number) => void }>((setState) => ({

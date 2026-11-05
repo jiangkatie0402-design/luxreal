@@ -3,7 +3,7 @@ import { hasLocale, NextIntlClientProvider } from 'next-intl';
 import { getTranslations, setRequestLocale } from 'next-intl/server';
 import { notFound } from 'next/navigation';
 import type { ReactNode } from 'react';
-import { fontVariables } from '@/components/site/fonts';
+import { fontStylesheets, fontVariables } from '@/components/site/fonts';
 import { SiteHeader } from '@/components/site/SiteHeader';
 import { JsonLd } from '@/components/seo/JsonLd';
 import { buildMetadata } from '@/components/seo/meta';
@@ -47,6 +47,11 @@ export default async function LocaleLayout({
 
   return (
     <html lang={locale === 'zh' ? 'zh-CN' : 'en'} data-palette="noir" className={fontVariables}>
+      <head>
+        {fontStylesheets.map((href) => (
+          <link key={href} rel="stylesheet" href={href} precedence="fonts" />
+        ))}
+      </head>
       <body>
         <JsonLd
           data={{
