@@ -171,6 +171,14 @@
           "t": "One shot description, a grey-box reference video",
           "d": "Lay out the scene, block characters and move the camera in Blender to turn words into a previewable video."
         }
+      },
+      "mcp": {
+        "title": "Use Aholo 3D in your AI agent",
+        "desc": "Add the Aholo 3D MCP server to Claude Code, Cursor, Codex or any other MCP client with one command.",
+        "guide": "MCP setup guide",
+        "command": "npx add-mcp @aholo/mcp-server --env AHOLO_API_KEY=YOUR_API_KEY",
+        "copy": "Copy",
+        "copied": "Copied"
       }
     },
     "why": {

@@ -171,6 +171,14 @@
           "t": "一段镜头描述，生成白模参考视频",
           "d": "结合 Blender 完成场景布局、角色调度与镜头运动，将文字中的画面变成可预览的视频。"
         }
+      },
+      "mcp": {
+        "title": "在你的 AI Agent 中使用 Aholo 3D",
+        "desc": "一条命令，将 Aholo 3D MCP 服务接入 Claude Code、Cursor、Codex 或其他 MCP 客户端。",
+        "guide": "MCP 接入指南",
+        "command": "npx add-mcp @aholo/mcp-server --env AHOLO_API_KEY=YOUR_API_KEY",
+        "copy": "复制",
+        "copied": "已复制"
       }
     },
     "why": {

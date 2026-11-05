@@ -6,6 +6,7 @@ import { ButtonLink } from '@/components/ui/button';
 import { site } from '@/config/site';
 import { cn } from '@/lib/utils';
 import { AgentCapabilities } from './AgentCapabilities';
+import { AgentMcp } from './AgentMcp';
 
 /** Shared section shell: centred h2 (+ optional lead) and content. */
 function Section({
@@ -69,21 +70,29 @@ export function ForAgents() {
           }
         />
 
-        {/* 应用案例 (sub-block) */}
-        <div className="mt-12 border-t pt-12 md:mt-16 md:pt-16">
-          <h3 className="t-title">{t('casesTitle')}</h3>
-          <ul className="mt-6 grid gap-6 md:grid-cols-3">
-            {CASES.map((k) => (
-              <li key={k} className="flex gap-4">
-                <Slot className="size-24 shrink-0 rounded-xl border-0 bg-secondary md:size-28" />
-                <div className="min-w-0">
-                  <p className="t-label text-primary">{t(`cases.${k}.label`)}</p>
-                  <h4 className="mt-1 text-base font-semibold leading-snug">{t(`cases.${k}.t`)}</h4>
-                  <p className="t-desc mt-1 text-muted-foreground">{t(`cases.${k}.d`)}</p>
-                </div>
-              </li>
-            ))}
-          </ul>
+        {/* MCP install, then the 应用案例 sub-block */}
+        <div id="agents-mcp" className="mt-12 md:mt-16">
+          <AgentMcp
+            cases={
+              <>
+                <h3 className="t-title">{t('casesTitle')}</h3>
+                <ul className="mt-6 grid gap-6 md:grid-cols-3">
+                  {CASES.map((k) => (
+                    <li key={k} className="flex gap-4">
+                      <Slot className="size-24 shrink-0 rounded-xl border-0 bg-secondary md:size-28" />
+                      <div className="min-w-0">
+                        <p className="t-label text-primary">{t(`cases.${k}.label`)}</p>
+                        <h4 className="mt-1 text-base font-semibold leading-snug">
+                          {t(`cases.${k}.t`)}
+                        </h4>
+                        <p className="t-desc mt-1 text-muted-foreground">{t(`cases.${k}.d`)}</p>
+                      </div>
+                    </li>
+                  ))}
+                </ul>
+              </>
+            }
+          />
         </div>
       </div>
     </section>
