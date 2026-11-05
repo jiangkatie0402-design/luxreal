@@ -40,18 +40,15 @@ export function Showcase({
   const c = useTranslations('common');
   const ITEMS = items;
   return (
-    <section aria-labelledby={`${id}-title`} id={id} className="scroll-mt-20 py-24 md:py-32">
+    <section aria-labelledby={`${id}-title`} id={id} className="section-y scroll-mt-20">
       <div className="container-x">
-        <h2
-          id={`${id}-title`}
-          className="text-center font-display text-3xl font-semibold tracking-tight md:text-[2.5rem]"
-        >
+        <h2 id={`${id}-title`} className="t-h2 text-center">
           {t('title')}
         </h2>
 
         <TabsPrimitive.Root
           defaultValue={items[0]}
-          className="mt-8 flex flex-col items-center md:mt-10"
+          className="mt-8 flex flex-col items-center md:mt-12"
         >
           <TabsPrimitive.List
             aria-label={t('title')}
@@ -72,25 +69,20 @@ export function Showcase({
             <TabsPrimitive.Content
               key={id}
               value={id}
-              className="core-panel mt-8 w-full outline-none md:mt-10"
+              className="core-panel mt-8 w-full outline-none"
             >
               <div className="relative isolate overflow-hidden rounded-[28px] border border-border-strong before:pointer-events-none before:absolute before:inset-x-[10%] before:top-0 before:h-px before:bg-[linear-gradient(90deg,transparent,rgba(156,200,255,0.55),transparent)] [background:var(--card-bg)]">
                 <div className="grid lg:min-h-[520px] lg:grid-cols-[minmax(0,5fr)_minmax(0,7fr)]">
                   {/* copy + action */}
-                  <div className="flex flex-col justify-center p-7 md:p-10 lg:p-12">
-                    <h3 className="text-balance font-display text-[1.75rem] font-semibold leading-[1.15] tracking-tight md:text-4xl">
-                      {t(`${id}.title`)}
-                    </h3>
-                    <p className="mt-5 max-w-[30rem] text-[15px] leading-relaxed text-muted-foreground md:text-base">
+                  <div className="flex flex-col justify-center p-6 md:p-8 lg:p-12">
+                    <h3 className="t-h3">{t(`${id}.title`)}</h3>
+                    <p className="t-body mt-4 max-w-[32rem] text-muted-foreground">
                       {t(`${id}.intro`)}
                     </p>
-                    <ul className="mt-6 grid max-w-[30rem] gap-3">
+                    <ul className="mt-6 grid max-w-[32rem] gap-3">
                       {(t.raw(`${id}.points`) as string[]).map((p) => (
-                        <li
-                          key={p}
-                          className="flex gap-2.5 text-sm leading-relaxed text-foreground/85"
-                        >
-                          <Check className="mt-1 size-3.5 shrink-0 text-primary" aria-hidden />
+                        <li key={p} className="t-body flex gap-2 text-foreground/85">
+                          <Check className="mt-1 size-4 shrink-0 text-primary" aria-hidden />
                           <Point text={p} />
                         </li>
                       ))}
@@ -99,7 +91,7 @@ export function Showcase({
                       <ButtonLink
                         href={site.links.app}
                         size="lg"
-                        className="mt-10 w-full max-w-[18rem]"
+                        className="mt-8 w-full max-w-[18rem]"
                       >
                         {c('startCreating')}
                         <ArrowRight aria-hidden />
@@ -108,10 +100,10 @@ export function Showcase({
                   </div>
 
                   {/* app-window media frame, bleeding off the right/bottom edge */}
-                  <div className="relative min-h-[300px] pl-7 pt-2 md:pl-10 lg:pl-0 lg:pt-12">
+                  <div className="relative min-h-[300px] pl-6 pt-2 md:pl-8 lg:pl-0 lg:pt-12">
                     <div
                       aria-hidden
-                      className="absolute inset-y-0 left-7 right-0 top-2 overflow-hidden rounded-tl-2xl border-l border-t border-border-strong bg-[#070b14] shadow-[0_30px_80px_rgba(0,0,0,0.55)] md:left-10 lg:left-0 lg:top-12"
+                      className="absolute inset-y-0 left-6 right-0 top-2 overflow-hidden rounded-tl-2xl border-l border-t border-border-strong bg-[#070b14] shadow-[0_30px_80px_rgba(0,0,0,0.55)] md:left-8 lg:left-0 lg:top-12"
                     >
                       <div className="flex h-10 items-center gap-2 border-b px-4">
                         <span className="size-2.5 rounded-full bg-white/15" />
@@ -130,7 +122,7 @@ export function Showcase({
             </TabsPrimitive.Content>
           ))}
         </TabsPrimitive.Root>
-        {footer && <p className="mt-8 text-center text-sm text-muted-foreground">{footer}</p>}
+        {footer && <p className="t-small mx-auto mt-8 max-w-2xl text-center text-muted-foreground">{footer}</p>}
       </div>
     </section>
   );

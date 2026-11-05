@@ -115,14 +115,14 @@ export function ViewportHero({ locale }: { locale: string }) {
       <GaussMesh from={hs.mesh[0]} to={hs.mesh[1]} />
 
       {/* ---------- title ---------- */}
-      <div className="pointer-events-none absolute inset-x-0 top-[calc(var(--header-h)+18px)] z-[2] px-5 text-center md:top-[calc(var(--header-h)+28px)]">
+      <div className="pointer-events-none absolute inset-x-0 top-[calc(var(--header-h)+24px)] z-[2] px-4 text-center md:top-[calc(var(--header-h)+32px)]">
         <h1
           id="hero-title"
-          className={`${brush.className} text-[clamp(2.2rem,4.4vw,4.2rem)] leading-[1.1] [text-shadow:var(--title-shadow)] ${locale === 'zh' ? 'tracking-[0.04em]' : 'font-black uppercase'}`}
+          className={`${brush.className} t-display [text-shadow:var(--title-shadow)] ${locale === 'zh' ? 'tracking-[0.04em]' : 'font-black uppercase'}`}
         >
           {t('titleA')} <Grad className="md:inline">{t('titleB')}</Grad>
         </h1>
-        <p className="mx-auto mt-3 hidden max-w-[680px] text-[15px] leading-relaxed text-[var(--hero-ink-muted)] sm:block">
+        <p className="t-lead mx-auto mt-4 hidden max-w-[680px] text-[var(--hero-ink-muted)] sm:block">
           {t('subtitle')}
         </p>
       </div>
