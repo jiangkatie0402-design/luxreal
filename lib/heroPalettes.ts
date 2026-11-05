@@ -35,3 +35,10 @@ export const useHeroSet = create<{ i: number; set: (i: number) => void }>((setSt
   i: 0,
   set: (i) => setState({ i }),
 }));
+
+/** Use-case panel layouts, chosen in the preview. */
+export const PANEL_LAYOUTS = ['1 左文右图', '2 居中三列', '3 一大两小'] as const;
+export const usePanelLayout = create<{ i: number; set: (i: number) => void }>((setState) => ({
+  i: 0,
+  set: (i) => setState({ i }),
+}));

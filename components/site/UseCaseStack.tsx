@@ -1,6 +1,8 @@
 'use client';
 import { useTranslations } from 'next-intl';
-import type { CSSProperties } from 'react';
+import { useState, type CSSProperties } from 'react';
+import { usePanelLayout } from '@/lib/heroPalettes';
+import { cn } from '@/lib/utils';
 import { PanelGlow } from './PanelGlow';
 
 /** Split "Lead：rest" points (full-width colon or ": "). */
@@ -10,6 +12,214 @@ function splitPoint(text: string): [string | null, string] {
 }
 
 const IDS = ['print', 'game', 'film'] as const;
+type T = ReturnType<typeof useTranslations>;
+
+/** Empty media slot (image / video per point, not decided yet). */
+function Slot({ bg, className, n }: { bg: string; className?: string; n?: number }) {
+  return (
+    <div
+      aria-hidden
+      className={cn('relative rounded-[20px] border border-[var(--line)]', className)}
+      style={{ background: bg }}
+    >
+      {n !== undefined && (
+        <span className="absolute left-4 top-4 font-mono text-xs text-[var(--muted)]">
+          0{n + 1}
+        </span>
+      )}
+    </div>
+  );
+}
+
+function Label({ index, label }: { index: number; label: string }) {
+  return (
+    <p className="flex items-center gap-3 font-mono text-sm text-[var(--muted)]">
+      <span>[ 0{index + 1} ]</span>
+      <span className="font-sans">{label}</span>
+    </p>
+  );
+}
+
+function FieldName({
+  id,
+  children,
+  className,
+}: {
+  id: string;
+  children: string;
+  className?: string;
+}) {
+  return (
+    <h3
+      id={`scene-${id}`}
+      className={cn(
+        'font-display text-[2.5rem] font-semibold leading-[1.1] tracking-[0.02em] md:text-7xl',
+        className,
+      )}
+    >
+      {children}
+    </h3>
+  );
+}
+
+function PointText({ lead, rest, n }: { lead: string | null; rest: string; n?: number }) {
+  return (
+    <>
+      <p className="t-title flex items-baseline gap-2">
+        {n !== undefined && <span className="font-mono text-xs text-[var(--muted)]">0{n + 1}</span>}
+        {lead}
+      </p>
+      <p className="t-body mt-2 text-[var(--muted)]">{rest}</p>
+    </>
+  );
+}
+
+/** Copy + media for one panel, in one of three layouts. */
+function PanelBody({
+  layout,
+  index,
+  id,
+  label,
+  t,
+  slot,
+}: {
+  layout: number;
+  index: number;
+  id: string;
+  label: string;
+  t: T;
+  slot: string;
+}) {
+  const [active, setActive] = useState(0);
+  const points = (t.raw(`${id}.points`) as string[]).map(splitPoint);
+  const subtitle = (
+    <p className="text-balance font-display text-2xl font-semibold leading-[1.35] tracking-[0.02em]">
+      {t(`${id}.title`)}
+    </p>
+  );
+  const intro = <p className="t-lead mt-3 max-w-[34rem] text-[var(--muted)]">{t(`${id}.intro`)}</p>;
+
+  if (layout === 0)
+    // left copy + point list, right one large media that follows the chosen point
+    return (
+      <div className="container-x relative grid flex-1 content-center gap-10 py-12 md:py-16 lg:grid-cols-[minmax(0,5fr)_minmax(0,7fr)] lg:gap-16">
+        <div>
+          <Label index={index} label={label} />
+          <FieldName id={id} className="mt-4">
+            {t(`${id}.tab`)}
+          </FieldName>
+          <div className="mt-6">
+            {subtitle}
+            {intro}
+          </div>
+          <ul className="mt-8 border-t border-[var(--line)]">
+            {points.map(([lead, rest], k) => (
+              <li key={k} className="border-b border-[var(--line)]">
+                <button
+                  type="button"
+                  aria-pressed={active === k}
+                  onClick={() => setActive(k)}
+                  onMouseEnter={() => setActive(k)}
+                  onFocus={() => setActive(k)}
+                  className="group grid w-full grid-cols-[2rem_1fr] gap-2 py-4 text-left outline-none focus-visible:ring-1 focus-visible:ring-[var(--ink)]"
+                >
+                  <span
+                    className={cn(
+                      'pt-1 font-mono text-xs transition-colors',
+                      active === k ? 'text-[var(--ink)]' : 'text-[var(--muted)]',
+                    )}
+                  >
+                    0{k + 1}
+                  </span>
+                  <span>
+                    <span
+                      className={cn(
+                        'block text-lg font-semibold transition-opacity',
+                        active === k ? 'opacity-100' : 'opacity-60 group-hover:opacity-90',
+                      )}
+                    >
+                      {lead}
+                    </span>
+                    <span
+                      className={cn(
+                        'grid transition-[grid-template-rows] duration-[var(--dur-base)]',
+                        active === k ? 'grid-rows-[1fr]' : 'grid-rows-[0fr]',
+                      )}
+                    >
+                      <span className="t-body mt-1 overflow-hidden text-[var(--muted)]">
+                        {rest}
+                      </span>
+                    </span>
+                  </span>
+                </button>
+              </li>
+            ))}
+          </ul>
+        </div>
+        <Slot
+          bg={slot}
+          n={active}
+          className="aspect-[4/3] w-full lg:aspect-auto lg:h-full lg:min-h-[420px]"
+        />
+      </div>
+    );
+
+  if (layout === 1)
+    // centred heading group, then three columns: text first, shorter media below
+    return (
+      <div className="container-x relative flex-1 py-12 md:py-16">
+        <div className="mx-auto flex max-w-3xl flex-col items-center text-center">
+          <Label index={index} label={label} />
+          <FieldName id={id} className="mt-4">
+            {t(`${id}.tab`)}
+          </FieldName>
+          <div className="mt-6 flex flex-col items-center">
+            {subtitle}
+            {intro}
+          </div>
+        </div>
+        <ul className="mt-10 grid gap-8 md:mt-12 md:grid-cols-3 md:gap-6">
+          {points.map(([lead, rest], k) => (
+            <li key={k} className="flex flex-col">
+              <PointText lead={lead} rest={rest} n={k} />
+              <Slot bg={slot} className="mt-5 aspect-[16/10] w-full" />
+            </li>
+          ))}
+        </ul>
+      </div>
+    );
+
+  // one large + two small
+  return (
+    <div className="container-x relative flex-1 py-12 md:py-16">
+      <div className="grid gap-6 lg:grid-cols-[minmax(0,5fr)_minmax(0,7fr)] lg:items-end lg:gap-16">
+        <div>
+          <Label index={index} label={label} />
+          <FieldName id={id} className="mt-4">
+            {t(`${id}.tab`)}
+          </FieldName>
+        </div>
+        <div>
+          {subtitle}
+          {intro}
+        </div>
+      </div>
+      <ul className="mt-10 grid gap-6 md:mt-12 md:h-[min(52vh,440px)] md:grid-cols-[minmax(0,7fr)_minmax(0,5fr)] md:grid-rows-2">
+        {points.map(([lead, rest], k) => (
+          <li key={k} className={cn('flex min-h-0 flex-col', k === 0 && 'md:row-span-2')}>
+            <Slot
+              bg={slot}
+              className={cn('w-full', 'aspect-[16/9] md:aspect-auto md:min-h-0 md:flex-1')}
+            />
+            <div className="mt-4">
+              <PointText lead={lead} rest={rest} n={k} />
+            </div>
+          </li>
+        ))}
+      </ul>
+    </div>
+  );
+}
 
 /** violet → black → violet; the two violets differ in value so the rhythm reads. */
 const TINT: Record<number, [string, string]> = {
@@ -51,6 +261,7 @@ const PANELS = [
  */
 export function UseCaseStack() {
   const t = useTranslations('site.scenes');
+  const layout = usePanelLayout((st) => st.i);
   return (
     <section aria-labelledby="scenes-title" id="scenes" className="scroll-mt-20">
       {/* section name lives in each panel's label; h2 kept for the outline */}
@@ -76,47 +287,7 @@ export function UseCaseStack() {
             }
           >
             <PanelGlow tint={TINT[i]} />
-            <div className="container-x relative flex-1 py-12 md:py-16">
-              {/* label + field name as the panel headline */}
-              <p className="flex items-center gap-3 font-mono text-sm text-[var(--muted)]">
-                <span>[ 0{i + 1} ]</span>
-                <span className="font-sans">{t('title')}</span>
-              </p>
-              <h3
-                id={`scene-${id}`}
-                className="mt-4 font-display text-[2.5rem] font-semibold leading-[1.1] tracking-[0.02em] md:text-7xl"
-              >
-                {t(`${id}.tab`)}
-              </h3>
-
-              <div className="mt-6 grid gap-4 md:mt-8 lg:grid-cols-[minmax(0,7fr)_minmax(0,5fr)] lg:items-end lg:gap-16">
-                <p className="text-balance font-display text-2xl font-semibold leading-[1.3] tracking-[0.02em] md:text-3xl">
-                  {t(`${id}.title`)}
-                </p>
-                <p className="t-lead text-[var(--muted)]">{t(`${id}.intro`)}</p>
-              </div>
-
-              {/* one media slot per point (assets not decided yet) */}
-              <ul className="mt-10 grid gap-6 md:mt-12 md:grid-cols-3">
-                {(t.raw(`${id}.points`) as string[]).map((pt, k) => {
-                  const [lead, rest] = splitPoint(pt);
-                  return (
-                    <li key={pt}>
-                      <div
-                        aria-hidden
-                        className="aspect-[4/3] w-full rounded-[20px] border border-[var(--line)]"
-                        style={{ background: p.slot }}
-                      />
-                      <p className="mt-4 flex items-baseline gap-2 text-base font-semibold">
-                        <span className="font-mono text-xs text-[var(--muted)]">0{k + 1}</span>
-                        {lead}
-                      </p>
-                      <p className="t-desc mt-1 text-[var(--muted)]">{rest}</p>
-                    </li>
-                  );
-                })}
-              </ul>
-            </div>
+            <PanelBody layout={layout} index={i} id={id} label={t('title')} t={t} slot={p.slot} />
           </article>
         );
       })}
