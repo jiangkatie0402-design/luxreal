@@ -740,10 +740,13 @@
 .mcp-glow {
   background: conic-gradient(
     from var(--strip-angle),
-    rgba(196, 186, 255, 0.08) 0deg,
-    rgba(196, 186, 255, 0.08) 220deg,
-    rgba(196, 186, 255, 0.9) 300deg,
-    rgba(196, 186, 255, 0.08) 340deg
+    rgba(196, 186, 255, 0.3) 0deg,
+    rgba(196, 186, 255, 0.3) 60deg,
+    rgba(196, 186, 255, 0.65) 140deg,
+    rgba(226, 218, 255, 0.95) 220deg,
+    rgba(226, 218, 255, 0.95) 280deg,
+    rgba(196, 186, 255, 0.65) 330deg,
+    rgba(196, 186, 255, 0.3) 360deg
   );
   animation: strip-spin 6s linear infinite;
 }
