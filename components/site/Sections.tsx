@@ -71,7 +71,7 @@ export function ForAgents() {
         />
 
         {/* MCP install, then the 应用案例 sub-block */}
-        <div id="agents-mcp" className="mt-2">
+        <div id="agents-mcp" className="mt-12 md:mt-16">
           <AgentMcp
             cases={
               <>
