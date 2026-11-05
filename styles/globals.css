@@ -704,21 +704,3 @@
     animation: none;
   }
 }
-
-/* Hero page change: tint bands, then the new page, slide in right → left */
-@keyframes hero-slide {
-  from {
-    clip-path: inset(0 0 0 var(--from, 50%));
-  }
-  to {
-    clip-path: inset(0 0 0 0);
-  }
-}
-.hero-slide {
-  animation: hero-slide 0.45s cubic-bezier(0.76, 0, 0.24, 1) both;
-}
-@media (prefers-reduced-motion: reduce) {
-  .hero-slide {
-    animation: none;
-  }
-}

@@ -80,7 +80,7 @@ export function CoverUpload() {
           <span className="line-clamp-2 block text-base text-foreground md:truncate md:text-lg">
             {file ? file.name : t('placeholder')}
           </span>
-          <span className="t-small mt-1 block text-subtle">
+          <span className="t-small mt-1 block text-muted-foreground">
             {file ? t('replace') : t('formats')}
           </span>
         </span>

@@ -29,7 +29,7 @@ export async function generateMetadata({
 }
 
 export const viewport: Viewport = {
-  themeColor: '#060a13',
+  themeColor: '#050506',
 };
 
 export default async function LocaleLayout({
@@ -45,7 +45,7 @@ export default async function LocaleLayout({
   const t = await getTranslations({ locale, namespace: 'common' });
 
   return (
-    <html lang={locale === 'zh' ? 'zh-CN' : 'en'} data-palette="ghost">
+    <html lang={locale === 'zh' ? 'zh-CN' : 'en'} data-palette="noir">
       <body>
         <JsonLd
           data={{

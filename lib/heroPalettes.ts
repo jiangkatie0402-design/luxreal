@@ -1,89 +1,35 @@
 import { create } from 'zustand';
 
-/**
- * One hero colour set. Light two-hue backgrounds with near-black ink; brand violet
- * only as the title accent; a black CTA carries the "pop" colour.
- */
+/** One cover colour treatment. The cover is a single still page (no carousel). */
 export interface HeroSet {
   name: string;
-  /** three pages, each a two-hue gradient [from, to] */
-  pages: [[string, string], [string, string], [string, string]];
+  bg: string;
+  /** small swatch for the preview switcher */
+  swatch: string;
   accent: [string, string];
-  ink: string;
-  inkMuted: string;
-  ctaBg: string;
-  ctaInk: string;
-  /** mesh line gradient */
+  /** wireframe line gradient */
   mesh: [string, string];
 }
 
-const INK = '#170b33';
-const INK_MUTED = 'rgba(23,11,51,0.68)';
+const DOTS =
+  'radial-gradient(circle, rgba(255,255,255,0.10) 1px, transparent 1.5px) 0 0 / 18px 18px';
 
 export const HERO_SETS: HeroSet[] = [
   {
-    name: '薰衣草 × 薄荷',
-    pages: [
-      ['#d9c8ff', '#b8f5e4'],
-      ['#cbb6ff', '#bfeaff'],
-      ['#e2d4ff', '#c4ffd8'],
-    ],
-    accent: ['#6a3cf0', '#a855f7'],
-    ink: INK,
-    inkMuted: INK_MUTED,
-    ctaBg: '#120a24',
-    ctaInk: '#9ff5d8',
-    mesh: ['#6a3cf0', '#14b8a6'],
+    name: 'A 紫粉',
+    bg: `${DOTS}, radial-gradient(60% 55% at 50% 38%, rgba(255,255,255,0.14), transparent 70%), linear-gradient(160deg, #d66bd9 0%, #9b50e2 45%, #5a2bbd 100%)`,
+    swatch: 'linear-gradient(160deg,#d66bd9,#5a2bbd)',
+    accent: ['#ffd1f3', '#ffffff'],
+    mesh: ['#ffffff', '#ffc4f0'],
   },
   {
-    name: '丁香 × 蜜桃',
-    pages: [
-      ['#dcc6ff', '#ffd3c2'],
-      ['#cdb2ff', '#ffc4da'],
-      ['#e6d6ff', '#ffe0c2'],
-    ],
-    accent: ['#6a3cf0', '#ff4f8b'],
-    ink: INK,
-    inkMuted: INK_MUTED,
-    ctaBg: '#120a24',
-    ctaInk: '#ffc9b5',
-    mesh: ['#6a3cf0', '#ff5c8a'],
-  },
-  {
-    name: '浅紫 × 荧光',
-    pages: [
-      ['#e1d3ff', '#ecffb0'],
-      ['#d2bdff', '#e0ff8c'],
-      ['#ebe1ff', '#f5ffcc'],
-    ],
-    accent: ['#5a2fe6', '#9b5cff'],
-    ink: INK,
-    inkMuted: INK_MUTED,
-    ctaBg: '#120a24',
-    ctaInk: '#d8ff3c',
-    mesh: ['#6a3cf0', '#84cc16'],
+    name: 'B 粉蓝',
+    bg: `${DOTS}, radial-gradient(55% 60% at 10% 25%, rgba(255,70,205,0.8), transparent 70%), radial-gradient(60% 70% at 88% 75%, rgba(45,95,255,0.6), transparent 70%), linear-gradient(160deg, #3a1ea0 0%, #1a2c9a 50%, #0b1452 100%)`,
+    swatch: 'linear-gradient(135deg,#ff46cd,#1a2c9a 60%,#0b1452)',
+    accent: ['#8ae9ff', '#c9b8ff'],
+    mesh: ['#ffffff', '#8ae9ff'],
   },
 ];
-
-const hex = (h: string) => [1, 3, 5].map((i) => parseInt(h.slice(i, i + 2), 16));
-const toHex = (c: number[]) =>
-  '#' + c.map((v) => Math.round(v).toString(16).padStart(2, '0')).join('');
-/** Mix a colour toward white (t > 0) or black (t < 0). */
-export const shade = (h: string, t: number) =>
-  toHex(hex(h).map((v) => (t >= 0 ? v + (255 - v) * t : v * (1 + t))));
-const mix = (a: string, b: string, t: number) => {
-  const x = hex(a);
-  const y = hex(b);
-  return toHex(x.map((v, i) => v + (y[i] - v) * t));
-};
-
-/** Background + stripe tints for one page's two-hue gradient. */
-export function pageTheme([a, b]: [string, string]) {
-  return {
-    bg: `radial-gradient(circle, rgba(23,11,51,0.07) 1px, transparent 1.5px) 0 0 / 18px 18px, radial-gradient(55% 50% at 50% 48%, rgba(255,255,255,0.55), transparent 70%), linear-gradient(150deg, ${a} 0%, ${mix(a, b, 0.5)} 55%, ${b} 100%)`,
-    bands: [shade(a, -0.12), a, mix(a, b, 0.5), b],
-  };
-}
 
 export const useHeroSet = create<{ i: number; set: (i: number) => void }>((setState) => ({
   i: 0,
