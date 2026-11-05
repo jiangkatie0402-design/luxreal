@@ -46,61 +46,57 @@ function Slot({ className }: { className?: string }) {
   );
 }
 
-function TextCard({ title, intro, label }: { title: string; intro: string; label?: string }) {
-  return (
-    <div className="flex h-full flex-col rounded-[22px] border bg-card p-6 shadow-card md:p-8">
-      {label && <p className="t-label text-primary">{label}</p>}
-      <h3 className={cn('t-title', label && 'mt-2')}>{title}</h3>
-      <p className="t-body mt-2 text-muted-foreground">{intro}</p>
-    </div>
-  );
-}
-
 const AGENT_ITEMS = ['gen', 'material', 'format', 'batch', 'track', 'scene'] as const;
 const CASES = ['props', 'print', 'film'] as const;
 
-/** 四、专为 Agent 设计 */
+/**
+ * 四、专为 Agent 设计 — compact: header beside a two-column capability list,
+ * then the 应用案例 sub-block as three short horizontal cards.
+ */
 export function ForAgents() {
   const t = useTranslations('site.agents');
   return (
-    <Section id="agents" title={t('title')} lead={t('lead')}>
-      <ul className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-        {AGENT_ITEMS.map((k) => (
-          <li key={k}>
-            <TextCard
-              label={t(`items.${k}.label`)}
-              title={t(`items.${k}.t`)}
-              intro={t(`items.${k}.d`)}
-            />
-          </li>
-        ))}
-      </ul>
-    </Section>
-  );
-}
+    <section aria-labelledby="agents-title" id="agents" className="section-y scroll-mt-20">
+      <div className="container-x">
+        <div className="grid gap-8 lg:grid-cols-[minmax(0,4fr)_minmax(0,8fr)] lg:gap-16">
+          <div>
+            <h2 id="agents-title" className="t-h2">
+              {t('title')}
+            </h2>
+            <p className="t-lead mt-4 max-w-md text-muted-foreground">{t('lead')}</p>
+          </div>
+          <ul className="grid gap-x-8 sm:grid-cols-2">
+            {AGENT_ITEMS.map((k) => (
+              <li
+                key={k}
+                className="border-t py-6 first:border-t-0 first:pt-0 sm:[&:nth-child(2)]:border-t-0 sm:[&:nth-child(2)]:pt-0"
+              >
+                <p className="t-label text-primary">{t(`items.${k}.label`)}</p>
+                <h3 className="mt-2 text-base font-semibold leading-snug">{t(`items.${k}.t`)}</h3>
+                <p className="t-desc mt-2 text-muted-foreground">{t(`items.${k}.d`)}</p>
+              </li>
+            ))}
+          </ul>
+        </div>
 
-/** 应用案例 — its own section so it shares the standard section rhythm. */
-export function AgentCases() {
-  const t = useTranslations('site.agents');
-  return (
-    <Section id="cases" title={t('casesTitle')}>
-      <h3 className="t-h3 mt-16 text-center md:mt-24">{t('casesTitle')}</h3>
-      <ul className="grid gap-6 md:grid-cols-3">
-        {CASES.map((k) => (
-          <li
-            key={k}
-            className="flex flex-col overflow-hidden rounded-[22px] border bg-card shadow-card"
-          >
-            <Slot className="aspect-[4/3] rounded-none border-0 border-b" />
-            <div className="p-6 md:p-8">
-              <p className="t-label text-primary">{t(`cases.${k}.label`)}</p>
-              <h4 className="t-title mt-2">{t(`cases.${k}.t`)}</h4>
-              <p className="t-body mt-2 text-muted-foreground">{t(`cases.${k}.d`)}</p>
-            </div>
-          </li>
-        ))}
-      </ul>
-    </Section>
+        {/* 应用案例 (sub-block) */}
+        <div className="mt-12 border-t pt-12 md:mt-16 md:pt-16">
+          <h3 className="t-title">{t('casesTitle')}</h3>
+          <ul className="mt-6 grid gap-6 md:grid-cols-3">
+            {CASES.map((k) => (
+              <li key={k} className="flex gap-4 rounded-[20px] border bg-card p-4 shadow-card">
+                <Slot className="size-24 shrink-0 rounded-xl md:size-28" />
+                <div className="min-w-0">
+                  <p className="t-label text-primary">{t(`cases.${k}.label`)}</p>
+                  <h4 className="mt-1 text-base font-semibold leading-snug">{t(`cases.${k}.t`)}</h4>
+                  <p className="t-desc mt-1 text-muted-foreground">{t(`cases.${k}.d`)}</p>
+                </div>
+              </li>
+            ))}
+          </ul>
+        </div>
+      </div>
+    </section>
   );
 }
 

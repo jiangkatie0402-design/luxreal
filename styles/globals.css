@@ -156,6 +156,11 @@
     font-size: var(--text-base);
     line-height: 1.7;
   }
+  /* compact description: 16 on mobile (readable-font-size), 14 from md up */
+  .t-desc {
+    font-size: var(--text-base);
+    line-height: 1.6;
+  }
   .t-small {
     font-size: var(--text-sm);
     line-height: 1.6;
@@ -181,6 +186,9 @@
     }
     .t-lead {
       font-size: var(--text-lg);
+    }
+    .t-desc {
+      font-size: var(--text-sm);
     }
   }
   @media (min-width: 1280px) {
