@@ -4,6 +4,7 @@ import { ArrowRight, Check } from 'lucide-react';
 import { useTranslations } from 'next-intl';
 import { ButtonLink } from '@/components/ui/button';
 import { site } from '@/config/site';
+import { TAB_STYLES, useTabStyle } from '@/lib/heroPalettes';
 import { cn } from '@/lib/utils';
 
 /** "Lead：rest" points render the lead in bold (zh full-width colon or en ": "). */
@@ -40,6 +41,7 @@ export function Showcase({
   const t = useTranslations(ns);
   const c = useTranslations('common');
   const ITEMS = items;
+  const tabActive = TAB_STYLES[useTabStyle((st) => st.i)].item;
   return (
     <section aria-labelledby={`${id}-title`} id={id} className="section-y scroll-mt-20">
       <div className="container-x">
@@ -53,7 +55,7 @@ export function Showcase({
         >
           <TabsPrimitive.List
             aria-label={t('title')}
-            className="inline-flex max-w-full rounded-[14px] bg-[#141417] p-1 shadow-[inset_0_0_0_1px_rgba(255,255,255,0.04)]"
+            className="inline-flex max-w-full rounded-btn-outer bg-[#141417] p-1"
           >
             {ITEMS.map((id) => (
               <TabsPrimitive.Trigger
@@ -61,7 +63,8 @@ export function Showcase({
                 value={id}
                 className={cn(
                   'whitespace-nowrap font-medium outline-none transition-[color,background-color] duration-[var(--dur-fast)] focus-visible:ring-1 focus-visible:ring-ring/60',
-                  'h-11 rounded-[10px] px-6 text-base text-muted-foreground hover:text-foreground data-[state=active]:bg-[linear-gradient(180deg,#3b2f63,#251d40)] data-[state=active]:text-foreground data-[state=active]:shadow-[inset_0_1px_0_rgba(255,255,255,0.14),0_6px_18px_rgba(139,92,246,0.25)]',
+                  'h-11 rounded-btn px-6 text-base text-muted-foreground hover:text-foreground',
+                  tabActive,
                 )}
               >
                 {t(`${id}.tab`)}

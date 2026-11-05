@@ -69,6 +69,9 @@
   --radius-md: 14px;
   --radius-lg: 24px;
   --radius-full: 999px;
+  /* every button, tab and chip uses this radius; a container wrapping them adds its padding (10 + 4 = 14) */
+  --radius-btn: 10px;
+  --radius-btn-outer: 14px;
 
   /* Motion */
   --ease-out: cubic-bezier(0.22, 1, 0.36, 1);

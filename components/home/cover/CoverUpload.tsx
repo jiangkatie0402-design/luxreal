@@ -86,10 +86,10 @@ export function CoverUpload() {
         </span>
       </label>
       <div className="flex flex-wrap items-center gap-2 border-t border-border px-1 pt-3">
-        <span className="inline-flex h-8 items-center rounded-full border border-border px-3 text-xs text-muted-foreground">
+        <span className="inline-flex h-8 items-center rounded-btn border border-border px-3 text-xs text-muted-foreground">
           {t('model')}
         </span>
-        <span className="inline-flex h-8 items-center rounded-full border border-border px-3 text-xs text-muted-foreground">
+        <span className="inline-flex h-8 items-center rounded-btn border border-border px-3 text-xs text-muted-foreground">
           {t('output')}
         </span>
         <p role="alert" className="min-w-0 flex-1 truncate px-2 text-sm text-primary">
@@ -98,7 +98,7 @@ export function CoverUpload() {
         <button
           type="button"
           onClick={submit}
-          className="ml-auto inline-flex h-11 items-center gap-2 rounded-full bg-primary px-6 text-sm font-medium text-primary-foreground hover:brightness-110"
+          className="ml-auto inline-flex h-11 items-center gap-2 rounded-btn bg-primary px-6 text-sm font-medium text-primary-foreground hover:brightness-110"
         >
           {t('generate')} <span aria-hidden>→</span>
         </button>

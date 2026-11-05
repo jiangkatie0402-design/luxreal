@@ -46,6 +46,8 @@
   --radius-sm: var(--radius-sm);
   --radius-md: var(--radius-md);
   --radius-lg: var(--radius-lg);
+  --radius-btn: var(--radius-btn);
+  --radius-btn-outer: var(--radius-btn-outer);
 
   --shadow-card: var(--shadow-card);
 

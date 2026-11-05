@@ -34,7 +34,7 @@ export function SheetContent({
         {children}
         <SheetPrimitive.Close
           aria-label={closeLabel}
-          className="absolute right-4 top-4 grid size-11 place-items-center rounded-full text-muted-foreground outline-none hover:bg-accent hover:text-foreground focus-visible:ring-[3px] focus-visible:ring-ring/50"
+          className="absolute right-4 top-4 grid size-11 place-items-center rounded-btn text-muted-foreground outline-none hover:bg-accent hover:text-foreground focus-visible:ring-[3px] focus-visible:ring-ring/50"
         >
           <X className="size-5" aria-hidden />
         </SheetPrimitive.Close>

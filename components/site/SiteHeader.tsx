@@ -45,7 +45,7 @@ export function SiteHeader() {
               <li key={n.id}>
                 <span
                   className={cn(
-                    'inline-flex items-center gap-1 whitespace-nowrap rounded-full px-2.5 py-2 text-sm xl:px-3',
+                    'inline-flex items-center gap-1 whitespace-nowrap rounded-btn px-2.5 py-2 text-sm xl:px-3',
                     scrolled ? 'text-muted-foreground' : 'text-[var(--hero-ink-muted)]',
                   )}
                 >
@@ -60,7 +60,7 @@ export function SiteHeader() {
           <a
             href={site.links.login}
             className={cn(
-              'hidden whitespace-nowrap px-3 text-sm transition-colors lg:inline-flex',
+              'hidden whitespace-nowrap rounded-btn px-3 text-sm transition-colors lg:inline-flex',
               scrolled
                 ? 'text-muted-foreground hover:text-foreground'
                 : 'text-[var(--hero-ink-muted)] hover:text-[var(--hero-ink)]',

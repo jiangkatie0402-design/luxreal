@@ -35,3 +35,24 @@ export const useHeroSet = create<{ i: number; set: (i: number) => void }>((setSt
   i: 0,
   set: (i) => setState({ i }),
 }));
+
+/** Active-tab options, all borderless; radius from the shared button token. */
+export const TAB_STYLES = [
+  {
+    name: '1 实心紫',
+    item: 'data-[state=active]:bg-primary data-[state=active]:text-primary-foreground',
+  },
+  {
+    name: '2 淡紫底',
+    item: 'data-[state=active]:bg-primary/20 data-[state=active]:text-[#e4dbff]',
+  },
+  {
+    name: '3 紫渐变',
+    item: 'data-[state=active]:bg-[linear-gradient(180deg,#5b44b8,#3a2b78)] data-[state=active]:text-foreground',
+  },
+] as const;
+
+export const useTabStyle = create<{ i: number; set: (i: number) => void }>((setState) => ({
+  i: 0,
+  set: (i) => setState({ i }),
+}));
