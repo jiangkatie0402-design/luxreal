@@ -39,16 +39,16 @@ export const useHeroSet = create<{ i: number; set: (i: number) => void }>((setSt
 /** Active-tab options, all borderless; radius from the shared button token. */
 export const TAB_STYLES = [
   {
-    name: '1 实心紫',
-    item: 'data-[state=active]:bg-primary data-[state=active]:text-primary-foreground',
+    name: '1 紫→靛蓝',
+    item: 'data-[state=active]:bg-[linear-gradient(120deg,#a855f7,#6366f1)] data-[state=active]:text-white',
   },
   {
-    name: '2 淡紫底',
-    item: 'data-[state=active]:bg-primary/20 data-[state=active]:text-[#e4dbff]',
+    name: '2 亮紫→深紫',
+    item: 'data-[state=active]:bg-[linear-gradient(135deg,#9b6bff,#6d28d9)] data-[state=active]:text-white',
   },
   {
-    name: '3 紫渐变',
-    item: 'data-[state=active]:bg-[linear-gradient(180deg,#5b44b8,#3a2b78)] data-[state=active]:text-foreground',
+    name: '3 粉紫→紫',
+    item: 'data-[state=active]:bg-[linear-gradient(120deg,#d66bd9,#7c4ce6)] data-[state=active]:text-white',
   },
 ] as const;
 
