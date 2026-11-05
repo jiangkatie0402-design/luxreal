@@ -172,7 +172,12 @@ export function UseCaseStack() {
           <Fragment key={id}>
             <article
               aria-labelledby={`scene-${id}`}
-              className="relative isolate [@media(min-width:1024px)_and_(min-height:820px)]:sticky [@media(min-width:1024px)_and_(min-height:820px)]:top-[var(--header-h)] flex min-h-[calc(100svh-var(--header-h))] flex-col overflow-hidden rounded-t-[32px] text-[var(--ink)]"
+              className={cn(
+                'relative isolate flex min-h-[calc(100svh-var(--header-h))] flex-col overflow-hidden rounded-t-[32px] text-[var(--ink)]',
+                // the last panel scrolls away normally so what follows never covers it
+                i < IDS.length - 1 &&
+                  '[@media(min-width:1024px)_and_(min-height:820px)]:sticky [@media(min-width:1024px)_and_(min-height:820px)]:top-[var(--header-h)]',
+              )}
               style={
                 {
                   background: p.bg,
