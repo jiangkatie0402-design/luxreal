@@ -35,3 +35,10 @@ export const useHeroSet = create<{ i: number; set: (i: number) => void }>((setSt
   i: 0,
   set: (i) => setState({ i }),
 }));
+
+/** Showcase card copy layouts, chosen in the preview. */
+export const CARD_LAYOUTS = ['1 极简', '2 编号', '3 分隔行'] as const;
+export const useCardLayout = create<{ i: number; set: (i: number) => void }>((setState) => ({
+  i: 0,
+  set: (i) => setState({ i }),
+}));

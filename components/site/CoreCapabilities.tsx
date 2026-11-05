@@ -1,21 +1,108 @@
 'use client';
 import * as TabsPrimitive from '@radix-ui/react-tabs';
-import { ArrowRight, Check } from 'lucide-react';
+import { ArrowRight } from 'lucide-react';
 import { useTranslations } from 'next-intl';
 import { ButtonLink } from '@/components/ui/button';
 import { site } from '@/config/site';
+import { useCardLayout } from '@/lib/heroPalettes';
 import { cn } from '@/lib/utils';
 
-/** "Lead：rest" points render the lead in bold (zh full-width colon or en ": "). */
-function Point({ text }: { text: string }) {
-  const m = text.match(/^(.+?)(：|: )(.+)$/);
-  if (!m) return <>{text}</>;
+/** Split "Lead：rest" points (zh full-width colon or en ": "). */
+function splitPoint(text: string): [string | null, string] {
+  const m = text.match(/^(.+?)(?:\uFF1A|: )(.+)$/);
+  return m ? [m[1], m[2]] : [null, text];
+}
+
+/** Copy column, in one of three layouts. Content is identical across layouts. */
+function Copy({
+  layout,
+  title,
+  intro,
+  points,
+}: {
+  layout: number;
+  title: string;
+  intro: string;
+  points: string[];
+}) {
+  const head = (
+    <>
+      <h3
+        className={cn(
+          'text-balance font-display tracking-tight',
+          layout === 1
+            ? 'text-3xl font-semibold leading-[1.2] md:text-[2rem]'
+            : 'text-3xl font-medium leading-[1.15] md:text-4xl',
+        )}
+      >
+        {title}
+      </h3>
+      <p className="t-lead mt-4 max-w-[30rem] text-muted-foreground">{intro}</p>
+    </>
+  );
+
+  if (layout === 0)
+    // 极简: big airy title; points step back as small muted lines
+    return (
+      <>
+        {head}
+        <ul className="mt-8 grid max-w-[30rem] gap-2">
+          {points.map((p) => {
+            const [lead, rest] = splitPoint(p);
+            return (
+              <li key={p} className="t-small text-muted-foreground">
+                {lead && <span className="text-foreground/90">{lead}：</span>}
+                {rest}
+              </li>
+            );
+          })}
+        </ul>
+      </>
+    );
+
+  if (layout === 1)
+    // 编号: 01/02/03 markers
+    return (
+      <>
+        {head}
+        <ol className="mt-8 grid max-w-[30rem] gap-4">
+          {points.map((p, i) => {
+            const [lead, rest] = splitPoint(p);
+            return (
+              <li key={p} className="grid grid-cols-[2rem_1fr] gap-2">
+                <span className="t-label pt-1 font-mono text-[#a99ce0]">0{i + 1}</span>
+                <span className="t-desc text-foreground/80">
+                  {lead && <span className="font-semibold text-foreground">{lead}</span>}
+                  {lead && <br />}
+                  {rest}
+                </span>
+              </li>
+            );
+          })}
+        </ol>
+      </>
+    );
+
+  // 分隔行: hairline rows, lead on its own line
   return (
-    <span>
-      <strong className="font-semibold text-foreground">{m[1]}</strong>
-      {m[2]}
-      {m[3]}
-    </span>
+    <>
+      {head}
+      <ul className="mt-8 max-w-[30rem] border-t border-white/10">
+        {points.map((p) => {
+          const [lead, rest] = splitPoint(p);
+          return (
+            <li key={p} className="border-b border-white/10 py-4">
+              {lead && <p className="text-base font-medium text-foreground">{lead}</p>}
+              <p
+                className={cn('t-desc', lead ? 'mt-1 text-muted-foreground' : 'text-foreground/80')}
+              >
+                {rest}
+              </p>
+            </li>
+          );
+        })}
+      </ul>
+    </>
   );
 }
 
@@ -40,8 +127,18 @@ export function Showcase({
   const t = useTranslations(ns);
   const c = useTranslations('common');
   const ITEMS = items;
+  const layout = useCardLayout((st) => st.i);
   return (
-    <section aria-labelledby={`${id}-title`} id={id} className="section-y scroll-mt-20">
+    <section
+      aria-labelledby={`${id}-title`}
+      id={id}
+      className="section-y relative isolate scroll-mt-20"
+    >
+      {/* ambient glow behind the tabs and card */}
+      <span
+        aria-hidden
+        className="pointer-events-none absolute inset-x-0 top-0 -z-10 h-[80%] [background:radial-gradient(45%_55%_at_50%_35%,rgba(110,98,163,0.16),transparent_70%)]"
+      />
       <div className="container-x">
         <h2 id={`${id}-title`} className="t-h2 text-center">
           {t('title')}
@@ -76,27 +173,23 @@ export function Showcase({
               value={id}
               className="core-panel mt-8 w-full outline-none"
             >
-              <div className="relative isolate overflow-hidden rounded-[28px] border border-border-strong before:pointer-events-none before:absolute before:inset-x-[10%] before:top-0 before:h-px before:bg-[linear-gradient(90deg,transparent,rgba(156,200,255,0.55),transparent)] [background:var(--card-bg)]">
+              <div className="relative isolate overflow-hidden rounded-[28px] border border-white/10 before:pointer-events-none before:absolute before:inset-x-[12%] before:top-0 before:h-px before:bg-[linear-gradient(90deg,transparent,rgba(196,186,255,0.35),transparent)] [background:radial-gradient(70%_65%_at_0%_100%,rgba(110,98,163,0.32),transparent_62%),linear-gradient(180deg,#0b0b0d,#060607)]">
                 <div className="grid lg:min-h-[520px] lg:grid-cols-[minmax(0,5fr)_minmax(0,7fr)]">
                   {/* copy + action */}
-                  <div className="flex flex-col justify-center p-6 md:p-8 lg:p-12">
-                    <h3 className="t-h3">{t(`${id}.title`)}</h3>
-                    <p className="t-body mt-4 max-w-[32rem] text-muted-foreground">
-                      {t(`${id}.intro`)}
-                    </p>
-                    <ul className="mt-6 grid max-w-[32rem] gap-3">
-                      {(t.raw(`${id}.points`) as string[]).map((p) => (
-                        <li key={p} className="t-body flex gap-2 text-foreground/85">
-                          <Check className="mt-1 size-4 shrink-0 text-primary" aria-hidden />
-                          <Point text={p} />
-                        </li>
-                      ))}
-                    </ul>
+                  <div className="flex flex-col p-6 md:p-8 lg:p-12">
+                    <div>
+                      <Copy
+                        layout={layout}
+                        title={t(`${id}.title`)}
+                        intro={t(`${id}.intro`)}
+                        points={t.raw(`${id}.points`) as string[]}
+                      />
+                    </div>
                     {cta && (
                       <ButtonLink
                         href={site.links.app}
                         size="lg"
-                        className="mt-8 w-full max-w-[18rem]"
+                        className="mt-10 w-full max-w-[20rem] bg-[linear-gradient(135deg,#8576c4,#564b8c)] text-white hover:brightness-110 lg:mt-auto"
                       >
                         {c('startCreating')}
                         <ArrowRight aria-hidden />
@@ -108,7 +201,7 @@ export function Showcase({
                   <div className="relative min-h-[300px] pl-6 pt-2 md:pl-8 lg:pl-0 lg:pt-12">
                     <div
                       aria-hidden
-                      className="absolute inset-y-0 left-6 right-0 top-2 overflow-hidden rounded-tl-2xl border-l border-t border-border-strong bg-[#070b14] shadow-[0_30px_80px_rgba(0,0,0,0.55)] md:left-8 lg:left-0 lg:top-12"
+                      className="absolute inset-y-0 left-6 right-0 top-2 overflow-hidden rounded-tl-2xl border-l border-t border-white/10 bg-[#0a0a0c] shadow-[0_30px_80px_rgba(0,0,0,0.6)] md:left-8 lg:left-0 lg:top-12"
                     >
                       <div className="flex h-10 items-center gap-2 border-b px-4">
                         <span className="size-2.5 rounded-full bg-white/15" />
@@ -116,9 +209,9 @@ export function Showcase({
                         <span className="size-2.5 rounded-full bg-white/15" />
                         <span className="ml-3 h-5 w-48 max-w-[40%] rounded-md bg-white/[0.06]" />
                       </div>
-                      <div className="absolute inset-x-0 bottom-0 top-10 overflow-hidden [background:radial-gradient(60%_60%_at_55%_50%,rgba(47,107,255,0.2),transparent_70%)]">
-                        <span className="absolute inset-x-[-30%] bottom-0 h-[50%] [background:linear-gradient(rgba(111,168,255,0.14)_1px,transparent_1px)_0_0/44px_44px,linear-gradient(90deg,rgba(111,168,255,0.14)_1px,transparent_1px)_0_0/44px_44px] [mask-image:radial-gradient(60%_90%_at_50%_100%,#000,transparent)] [transform:perspective(600px)_rotateX(62deg)] [transform-origin:bottom]" />
-                        <span className="absolute bottom-[12%] left-1/2 h-[10%] w-[52%] -translate-x-[40%] rounded-[50%] border border-[#6FA8FF]/30 [background:radial-gradient(closest-side,rgba(47,107,255,0.25),transparent)]" />
+                      <div className="absolute inset-x-0 bottom-0 top-10 overflow-hidden [background:radial-gradient(60%_60%_at_55%_50%,rgba(110,98,163,0.14),transparent_70%)]">
+                        <span className="absolute inset-x-[-30%] bottom-0 h-[50%] [background:linear-gradient(rgba(255,255,255,0.06)_1px,transparent_1px)_0_0/44px_44px,linear-gradient(90deg,rgba(255,255,255,0.06)_1px,transparent_1px)_0_0/44px_44px] [mask-image:radial-gradient(60%_90%_at_50%_100%,#000,transparent)] [transform:perspective(600px)_rotateX(62deg)] [transform-origin:bottom]" />
+                        <span className="absolute bottom-[12%] left-1/2 h-[10%] w-[52%] -translate-x-[40%] rounded-[50%] border border-white/10 [background:radial-gradient(closest-side,rgba(110,98,163,0.22),transparent)]" />
                       </div>
                     </div>
                   </div>
