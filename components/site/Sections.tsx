@@ -84,8 +84,8 @@ export function ForAgents() {
           <h3 className="t-title">{t('casesTitle')}</h3>
           <ul className="mt-6 grid gap-6 md:grid-cols-3">
             {CASES.map((k) => (
-              <li key={k} className="flex gap-4 rounded-[20px] border bg-card p-4 shadow-card">
-                <Slot className="size-24 shrink-0 rounded-xl md:size-28" />
+              <li key={k} className="flex gap-4">
+                <Slot className="size-24 shrink-0 rounded-xl border-0 bg-secondary md:size-28" />
                 <div className="min-w-0">
                   <p className="t-label text-primary">{t(`cases.${k}.label`)}</p>
                   <h4 className="mt-1 text-base font-semibold leading-snug">{t(`cases.${k}.t`)}</h4>

@@ -52,13 +52,13 @@ export function Showcase({
         >
           <TabsPrimitive.List
             aria-label={t('title')}
-            className="grid w-full max-w-[420px] grid-cols-3 gap-1 rounded-full border bg-card/70 p-1 backdrop-blur"
+            className="grid w-full max-w-[420px] grid-cols-3 gap-2"
           >
             {ITEMS.map((id) => (
               <TabsPrimitive.Trigger
                 key={id}
                 value={id}
-                className="h-10 whitespace-nowrap rounded-full px-3 text-sm font-medium text-muted-foreground outline-none transition-[color,background-color] duration-[var(--dur-fast)] hover:text-foreground focus-visible:ring-1 focus-visible:ring-ring/60 data-[state=active]:bg-secondary data-[state=active]:text-foreground data-[state=active]:shadow-[inset_0_0_0_1px_var(--border-strong)]"
+                className="h-10 whitespace-nowrap rounded-full px-3 text-sm font-medium text-muted-foreground outline-none transition-[color,background-color] duration-[var(--dur-fast)] hover:text-foreground focus-visible:ring-1 focus-visible:ring-ring/60 data-[state=active]:bg-foreground data-[state=active]:text-background"
               >
                 {t(`${id}.tab`)}
               </TabsPrimitive.Trigger>
