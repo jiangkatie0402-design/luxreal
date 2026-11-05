@@ -45,12 +45,11 @@ const PANELS = [
 export function UseCaseStack() {
   const t = useTranslations('site.scenes');
   return (
-    <section aria-labelledby="scenes-title" id="scenes" className="scroll-mt-20 pt-16 md:pt-24">
-      <div className="container-x pb-12 md:pb-16">
-        <h2 id="scenes-title" className="t-h2 text-center">
-          {t('title')}
-        </h2>
-      </div>
+    <section aria-labelledby="scenes-title" id="scenes" className="scroll-mt-20">
+      {/* section name lives in each panel's label; h2 kept for the outline */}
+      <h2 id="scenes-title" className="sr-only">
+        {t('title')}
+      </h2>
 
       {IDS.map((id, i) => {
         const p = PANELS[i];
@@ -69,34 +68,44 @@ export function UseCaseStack() {
               } as CSSProperties
             }
           >
-            <div className="container-x grid flex-1 content-start gap-8 py-12 md:py-16 lg:grid-cols-[6rem_minmax(0,7fr)_minmax(0,5fr)] lg:gap-12">
-              <p className="font-mono text-sm text-[var(--muted)]">[ 0{i + 1} ]</p>
+            <div className="container-x flex-1 py-12 md:py-16">
+              {/* label + field name as the panel headline */}
+              <p className="flex items-center gap-3 font-mono text-sm text-[var(--muted)]">
+                <span>[ 0{i + 1} ]</span>
+                <span className="font-sans">{t('title')}</span>
+              </p>
+              <h3
+                id={`scene-${id}`}
+                className="mt-4 font-display text-[2.5rem] font-semibold leading-[1.1] tracking-[0.02em] md:text-7xl"
+              >
+                {t(`${id}.tab`)}
+              </h3>
 
-              <div>
-                <p className="text-sm font-medium text-[var(--muted)]">{t(`${id}.tab`)}</p>
-                <h3
-                  id={`scene-${id}`}
-                  className="mt-3 text-balance font-display text-3xl font-semibold leading-[1.2] tracking-[0.02em] md:text-[2.5rem]"
-                >
-                  {t(`${id}.title`)}
-                </h3>
-                <p className="t-lead mt-4 max-w-[36rem] text-[var(--muted)]">{t(`${id}.intro`)}</p>
+              <div className="mt-8 grid gap-8 md:mt-12 lg:grid-cols-[minmax(0,7fr)_minmax(0,5fr)] lg:gap-16">
+                <div>
+                  <p className="text-balance font-display text-2xl font-semibold leading-[1.3] tracking-[0.02em] md:text-3xl">
+                    {t(`${id}.title`)}
+                  </p>
+                  <p className="t-lead mt-4 max-w-[36rem] text-[var(--muted)]">
+                    {t(`${id}.intro`)}
+                  </p>
+                </div>
+
+                <ul className="grid content-start gap-6">
+                  {(t.raw(`${id}.points`) as string[]).map((pt) => {
+                    const [lead, rest] = splitPoint(pt);
+                    return (
+                      <li key={pt} className="grid grid-cols-[0.75rem_1fr] gap-3">
+                        <span aria-hidden className="mt-1.5 size-3 rounded-[3px] bg-[var(--ink)]" />
+                        <div>
+                          {lead && <p className="text-base font-semibold">{lead}</p>}
+                          <p className="t-desc mt-1 text-[var(--muted)]">{rest}</p>
+                        </div>
+                      </li>
+                    );
+                  })}
+                </ul>
               </div>
-
-              <ul className="grid content-start gap-6">
-                {(t.raw(`${id}.points`) as string[]).map((pt) => {
-                  const [lead, rest] = splitPoint(pt);
-                  return (
-                    <li key={pt} className="grid grid-cols-[0.75rem_1fr] gap-3">
-                      <span aria-hidden className="mt-1.5 size-3 rounded-[3px] bg-[var(--ink)]" />
-                      <div>
-                        {lead && <p className="text-base font-semibold">{lead}</p>}
-                        <p className="t-desc mt-1 text-[var(--muted)]">{rest}</p>
-                      </div>
-                    </li>
-                  );
-                })}
-              </ul>
             </div>
 
             {/* media slot: asset not decided yet */}
