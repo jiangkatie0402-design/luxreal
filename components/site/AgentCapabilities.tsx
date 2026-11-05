@@ -90,7 +90,9 @@ function Item({
       >
         <span className="overflow-hidden">
           <span className="t-title mt-3 block !text-lg">{t(`items.${k}.t`)}</span>
-          <span className="t-desc mt-2 block text-muted-foreground">{t(`items.${k}.d`)}</span>
+          <span className="t-desc mt-2 block text-balance text-muted-foreground">
+            {t(`items.${k}.d`)}
+          </span>
         </span>
       </span>
     </button>
@@ -98,7 +100,7 @@ function Item({
 }
 
 const N = AGENT_ITEMS.length;
-const STEP_MS = 3600;
+const STEP_MS = 2000;
 
 /** Ring positions (% of the stage) of each label; open content hangs below it. */
 const RING = [
@@ -192,7 +194,7 @@ function Ring({ t }: { t: T }) {
         >
           <div
             className={cn(
-              'w-[min(300px,22vw)] -translate-y-5',
+              'w-[min(340px,24vw)] -translate-y-5',
               r.align === 'center' && '-translate-x-1/2',
               r.align === 'right' && '-translate-x-full',
             )}
