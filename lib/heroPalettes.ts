@@ -35,10 +35,3 @@ export const useHeroSet = create<{ i: number; set: (i: number) => void }>((setSt
   i: 0,
   set: (i) => setState({ i }),
 }));
-
-/** Agent capability layouts, chosen in the preview. */
-export const AGENT_LAYOUTS = ['1 长条滑动', '2 环绕转动', '3 格子'] as const;
-export const useAgentLayout = create<{ i: number; set: (i: number) => void }>((setState) => ({
-  i: 0,
-  set: (i) => setState({ i }),
-}));
