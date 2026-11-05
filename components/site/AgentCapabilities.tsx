@@ -148,8 +148,8 @@ function Orbit({ t }: { t: T }) {
               t={t}
               k={AGENT_ITEMS[i]}
               i={i}
-              on={allOpen || active === i}
-              open={allOpen || active === i}
+              on={active === i}
+              open={active === i}
               align={r.align}
               onPick={setActive}
             />
@@ -168,8 +168,8 @@ function Orbit({ t }: { t: T }) {
                 t={t}
                 k={k}
                 i={i}
-                on={allOpen || active === i}
-                open={allOpen || active === i}
+                on={active === i}
+                open={active === i}
                 align="left"
                 onPick={setActive}
               />
