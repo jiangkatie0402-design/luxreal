@@ -35,29 +35,3 @@ export const useHeroSet = create<{ i: number; set: (i: number) => void }>((setSt
   i: 0,
   set: (i) => setState({ i }),
 }));
-
-/** Use-case panel colour sets (one colour per field), chosen in the preview. */
-type Panel = { bg: string; ink: string; muted: string; line: string; slot: string };
-const dark = (bg: string): Panel => ({
-  bg,
-  ink: '#ffffff',
-  muted: 'rgba(255,255,255,0.74)',
-  line: 'rgba(255,255,255,0.2)',
-  slot: 'rgba(255,255,255,0.08)',
-});
-const light = (bg: string): Panel => ({
-  bg,
-  ink: '#16121f',
-  muted: 'rgba(22,18,31,0.68)',
-  line: 'rgba(22,18,31,0.16)',
-  slot: 'rgba(22,18,31,0.07)',
-});
-export const PANEL_SETS: { name: string; panels: [Panel, Panel, Panel] }[] = [
-  { name: 'A 粉彩', panels: [light('#cdbcff'), light('#a8e6d4'), light('#ffcdb2')] },
-  { name: 'B 冷暖对比', panels: [dark('#5b4e9a'), dark('#2f4fd1'), light('#f3d9bf')] },
-  { name: 'C 莫兰迪', panels: [light('#bcaedb'), light('#b3c9b8'), light('#e3d3b9')] },
-];
-export const usePanelSet = create<{ i: number; set: (i: number) => void }>((setState) => ({
-  i: 0,
-  set: (i) => setState({ i }),
-}));

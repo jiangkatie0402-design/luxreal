@@ -1,7 +1,6 @@
 'use client';
 import { useTranslations } from 'next-intl';
 import type { CSSProperties } from 'react';
-import { PANEL_SETS, usePanelSet } from '@/lib/heroPalettes';
 
 /** Split "Lead：rest" points (full-width colon or ": "). */
 function splitPoint(text: string): [string | null, string] {
@@ -11,13 +10,40 @@ function splitPoint(text: string): [string | null, string] {
 
 const IDS = ['print', 'game', 'film'] as const;
 
+/** violet → black → violet; the two violets differ in value so the rhythm reads. */
+const PANELS = [
+  {
+    bg: '#cdbcff',
+    ink: '#16121f',
+    muted: 'rgba(22,18,31,0.68)',
+    line: 'rgba(22,18,31,0.16)',
+    slot: 'rgba(22,18,31,0.07)',
+    edge: 'transparent',
+  },
+  {
+    bg: '#0d0c12',
+    ink: '#ffffff',
+    muted: 'rgba(255,255,255,0.68)',
+    line: 'rgba(255,255,255,0.12)',
+    slot: 'rgba(255,255,255,0.04)',
+    edge: 'rgba(205,188,255,0.28)',
+  },
+  {
+    bg: '#5b4e9a',
+    ink: '#ffffff',
+    muted: 'rgba(255,255,255,0.74)',
+    line: 'rgba(255,255,255,0.2)',
+    slot: 'rgba(255,255,255,0.08)',
+    edge: 'transparent',
+  },
+] as const;
+
 /**
  * 应用场景: full-height colour panels that stack on scroll — each panel is
  * sticky, so the next field slides up over the previous one. Media slots empty.
  */
 export function UseCaseStack() {
   const t = useTranslations('site.scenes');
-  const panels = PANEL_SETS[usePanelSet((st) => st.i)].panels;
   return (
     <section aria-labelledby="scenes-title" id="scenes" className="scroll-mt-20 pt-16 md:pt-24">
       <div className="container-x pb-12 md:pb-16">
@@ -27,15 +53,16 @@ export function UseCaseStack() {
       </div>
 
       {IDS.map((id, i) => {
-        const p = panels[i];
+        const p = PANELS[i];
         return (
           <article
             key={id}
             aria-labelledby={`scene-${id}`}
-            className="sticky top-[var(--header-h)] flex min-h-[calc(100svh-var(--header-h))] flex-col rounded-t-[32px] text-[var(--ink)] shadow-[0_-24px_60px_rgba(0,0,0,0.35)]"
+            className="sticky top-[var(--header-h)] flex min-h-[calc(100svh-var(--header-h))] flex-col rounded-t-[32px] text-[var(--ink)]"
             style={
               {
                 background: p.bg,
+                boxShadow: `inset 0 1px 0 ${p.edge}, 0 -24px 60px rgba(0,0,0,0.35)`,
                 '--ink': p.ink,
                 '--muted': p.muted,
                 '--line': p.line,
