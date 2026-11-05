@@ -1,42 +1,9 @@
 'use client';
 import { useTranslations } from 'next-intl';
 import { useEffect, useRef, useState, type ReactNode } from 'react';
-import { ArrowRight, ChevronDown, CloudUpload, ImagePlus } from 'lucide-react';
-import { create } from 'zustand';
+import { ArrowRight, ImagePlus } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { appUrl, site } from '@/config/site';
-
-/** Preview-only comparison: the locked D4 box vs a bezel-framed alternative. */
-export const UPLOAD_VARIANTS = ['当前 D4', 'D4 + 圆形按钮', '图二风格'] as const;
-export const useUploadVariant = create<{ v: number; set: (v: number) => void }>((setState) => ({
-  v: 0,
-  set: (v) => setState({ v }),
-}));
-
-/** Round "generate" orb: white rim, deep violet body lit white from the lower right, sparkle mark. */
-function Orb({ onClick, label }: { onClick: () => void; label: string }) {
-  return (
-    <button
-      type="button"
-      onClick={onClick}
-      aria-label={label}
-      title={label}
-      className="relative grid size-12 shrink-0 place-items-center rounded-full bg-[radial-gradient(circle_at_84%_88%,#ffffff_0%,#efeaff_14%,#b6a3ff_30%,#6a4cf0_47%,#2a2160_68%,#12102a_100%)] shadow-[0_0_0_1.5px_rgba(255,255,255,0.85),0_0_22px_rgba(124,92,255,0.55)] transition hover:scale-105"
-    >
-      <svg viewBox="0 0 24 24" className="size-6" aria-hidden>
-        <path
-          d="M10 3.5c.5 3.6 2.4 5.6 6 6.1-3.6.6-5.5 2.5-6 6.1-.5-3.6-2.4-5.5-6-6.1 3.6-.5 5.5-2.5 6-6.1Z"
-          fill="#fff"
-          transform="translate(-1.6 0.2) scale(1.3)"
-        />
-        <path
-          d="M18.5 2.5c.2 1.3.8 1.9 2 2.1-1.2.2-1.8.8-2 2.1-.2-1.3-.8-1.9-2-2.1 1.2-.2 1.8-.8 2-2.1Z"
-          fill="#fff"
-        />
-      </svg>
-    </button>
-  );
-}
 
 /** Glass shell shared by the designs: dark frosted fill, hairline border, top highlight. */
 function Glass({
@@ -65,7 +32,6 @@ function Glass({
 
 /** The upload box on the cover. Validates locally, then hands off to the app. */
 export function CoverUpload() {
-  const v = useUploadVariant((st) => st.v);
   const t = useTranslations('home.cover.upload');
   const [file, setFile] = useState<File | null>(null);
   const [preview, setPreview] = useState<string | null>(null);
@@ -193,77 +159,6 @@ export function CoverUpload() {
     </label>
   );
 
-  // Comparison — device-like bezel: near-black well inside a lighter frame, violet
-  // hairline on top, centred drop prompt, "label | value" pills, round orb button.
-  if (v === 2) {
-    const pill = (text: string) => {
-      const m = text.match(/^(.+?)(?:\uFF1A|: )(.+)$/);
-      return (
-        <span className="inline-flex h-10 items-center gap-2 rounded-full border border-white/[0.12] bg-[#121214] px-4 text-[13px]">
-          <span className="text-white/45">{m ? m[1] : ''}</span>
-          {m && <span aria-hidden className="h-3 w-px bg-white/20" />}
-          <span className="text-white/90">{m ? m[2] : text}</span>
-          <ChevronDown className="size-3.5 text-white/45" aria-hidden />
-        </span>
-      );
-    };
-    return (
-      <div className="relative">
-        {/* violet bloom under the frame */}
-        <span
-          aria-hidden
-          className="pointer-events-none absolute inset-x-[6%] -bottom-6 h-16 rounded-full bg-[#7c5cff]/35 blur-3xl"
-        />
-        <div
-          {...drop}
-          className="relative rounded-[30px] bg-[linear-gradient(180deg,#2a2a30,#1a1a1e)] p-2.5 shadow-[0_30px_80px_-20px_rgba(0,0,0,0.8),inset_0_1px_0_rgba(255,255,255,0.08)]"
-        >
-          <div
-            className={cn(
-              'relative overflow-hidden rounded-[22px] border-2 bg-[#0a0a0c] shadow-[inset_0_2px_12px_rgba(0,0,0,0.8)] transition-colors',
-              dragging ? 'border-[#8b7bff]' : 'border-black',
-            )}
-          >
-            <span
-              aria-hidden
-              className="pointer-events-none absolute inset-x-[10%] top-0 h-px bg-[linear-gradient(90deg,transparent,rgba(150,130,255,0.9),transparent)]"
-            />
-            <label className="flex cursor-pointer flex-col items-center px-6 pb-3 pt-6 text-center">
-              {fileInput}
-              {preview ? (
-                // eslint-disable-next-line @next/next/no-img-element -- local blob preview
-                <img src={preview} alt="" className="size-10 rounded-lg object-cover" />
-              ) : (
-                <CloudUpload className="size-8 text-white/90" strokeWidth={1.4} aria-hidden />
-              )}
-              <span className="mt-2 text-lg font-medium text-white">
-                {file ? file.name : t('placeholder')}
-              </span>
-              <span className="mt-1 text-xs text-white/45">
-                {error ? (
-                  <span className="text-[#ffb4c8]">{error}</span>
-                ) : file ? (
-                  t('replace')
-                ) : (
-                  t('formats')
-                )}
-              </span>
-            </label>
-            <div className="flex items-center gap-2 px-3 pb-3">
-              <span className="hidden gap-2 md:flex">
-                {pill(t('model'))}
-                {pill(t('output'))}
-              </span>
-              <span className="ml-auto">
-                <Orb onClick={submit} label={t('generate')} />
-              </span>
-            </div>
-          </div>
-        </div>
-      </div>
-    );
-  }
-
   // Violet highlight along the top edge; the toolbar sits in a darker tray.
   return (
     <Glass {...drop} dragging={dragging} className="overflow-hidden rounded-[22px]">
@@ -278,9 +173,7 @@ export function CoverUpload() {
       {topRow()}
       <div className="flex items-center gap-2 bg-black/25 px-3 py-2.5">
         {chips}
-        <span className="ml-auto">
-          {v === 1 ? <Orb onClick={submit} label={t('generate')} /> : outlined('h-10 px-5')}
-        </span>
+        <span className="ml-auto">{outlined('h-10 px-5')}</span>
       </div>
     </Glass>
   );
