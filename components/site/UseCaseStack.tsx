@@ -1,6 +1,6 @@
 'use client';
 import { useTranslations } from 'next-intl';
-import type { CSSProperties } from 'react';
+import { Fragment, type CSSProperties } from 'react';
 import { cn } from '@/lib/utils';
 import { PanelGlow } from './PanelGlow';
 
@@ -169,23 +169,31 @@ export function UseCaseStack() {
       {IDS.map((id, i) => {
         const p = PANELS[i];
         return (
-          <article
-            key={id}
-            aria-labelledby={`scene-${id}`}
-            className="relative isolate [@media(min-width:1024px)_and_(min-height:820px)]:sticky [@media(min-width:1024px)_and_(min-height:820px)]:top-[var(--header-h)] flex min-h-[calc(100svh-var(--header-h))] flex-col overflow-hidden rounded-t-[32px] text-[var(--ink)]"
-            style={
-              {
-                background: p.bg,
-                boxShadow: `inset 0 1px 0 ${p.edge}, 0 -24px 60px rgba(0,0,0,0.35)`,
-                '--ink': p.ink,
-                '--muted': p.muted,
-                '--line': p.line,
-              } as CSSProperties
-            }
-          >
-            <PanelGlow tint={TINT[i]} />
-            <PanelBody index={i} id={id} label={t('title')} t={t} slot={p.slot} />
-          </article>
+          <Fragment key={id}>
+            <article
+              aria-labelledby={`scene-${id}`}
+              className="relative isolate [@media(min-width:1024px)_and_(min-height:820px)]:sticky [@media(min-width:1024px)_and_(min-height:820px)]:top-[var(--header-h)] flex min-h-[calc(100svh-var(--header-h))] flex-col overflow-hidden rounded-t-[32px] text-[var(--ink)]"
+              style={
+                {
+                  background: p.bg,
+                  boxShadow: `inset 0 1px 0 ${p.edge}, 0 -24px 60px rgba(0,0,0,0.35)`,
+                  '--ink': p.ink,
+                  '--muted': p.muted,
+                  '--line': p.line,
+                } as CSSProperties
+              }
+            >
+              <PanelGlow tint={TINT[i]} />
+              <PanelBody index={i} id={id} label={t('title')} t={t} slot={p.slot} />
+            </article>
+            {/* hold: the panel stays fully in view for a stretch before the next one slides over */}
+            {i < IDS.length - 1 && (
+              <div
+                aria-hidden
+                className="hidden h-[45svh] [@media(min-width:1024px)_and_(min-height:820px)]:block"
+              />
+            )}
+          </Fragment>
         );
       })}
 
