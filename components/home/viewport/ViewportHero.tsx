@@ -103,9 +103,12 @@ export function ViewportHero({ locale }: { locale: string }) {
         </p>
       </div>
 
-      {/* ---------- upload ---------- */}
-      <div className="absolute inset-x-0 bottom-24 z-10 flex justify-center px-4 md:bottom-8">
-        <div className="relative w-full max-w-[860px]">
+      {/* ---------- upload ----------
+          From md up, its top sits on the white railing in the clip's last shot
+          (81% down the frame); the frame is object-cover, so its height is
+          max(section height, 56.25vw) and it is centred vertically. */}
+      <div className="absolute inset-x-0 bottom-24 z-10 flex justify-center px-4 md:bottom-auto md:top-[calc(50%+0.31*max(100%,56.25vw))]">
+        <div className="relative w-full max-w-[920px]">
           <CoverUpload />
         </div>
       </div>
