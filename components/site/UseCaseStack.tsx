@@ -1,6 +1,8 @@
 'use client';
 import { useTranslations } from 'next-intl';
 import type { CSSProperties } from 'react';
+import { usePanelTexture } from '@/lib/heroPalettes';
+import { PanelTexture } from './PanelTexture';
 
 /** Split "Lead：rest" points (full-width colon or ": "). */
 function splitPoint(text: string): [string | null, string] {
@@ -11,6 +13,12 @@ function splitPoint(text: string): [string | null, string] {
 const IDS = ['print', 'game', 'film'] as const;
 
 /** violet → black → violet; the two violets differ in value so the rhythm reads. */
+const MESH: Record<number, [string, string]> = {
+  0: ['#3b2a7a', '#6e62a3'],
+  1: ['#cdbcff', '#8576c4'],
+  2: ['#e4dcff', '#cdbcff'],
+};
+
 const PANELS = [
   {
     bg: '#cdbcff',
@@ -44,6 +52,7 @@ const PANELS = [
  */
 export function UseCaseStack() {
   const t = useTranslations('site.scenes');
+  const texture = usePanelTexture((st) => st.i) === 0 ? 'film' : 'mesh';
   return (
     <section aria-labelledby="scenes-title" id="scenes" className="scroll-mt-20">
       {/* section name lives in each panel's label; h2 kept for the outline */}
@@ -57,7 +66,7 @@ export function UseCaseStack() {
           <article
             key={id}
             aria-labelledby={`scene-${id}`}
-            className="sticky top-[var(--header-h)] flex min-h-[calc(100svh-var(--header-h))] flex-col rounded-t-[32px] text-[var(--ink)]"
+            className="sticky top-[var(--header-h)] isolate flex min-h-[calc(100svh-var(--header-h))] flex-col overflow-hidden rounded-t-[32px] text-[var(--ink)]"
             style={
               {
                 background: p.bg,
@@ -68,7 +77,8 @@ export function UseCaseStack() {
               } as CSSProperties
             }
           >
-            <div className="container-x flex-1 py-12 md:py-16">
+            <PanelTexture kind={texture} dark={i > 0} seed={i * 7 + 3} mesh={MESH[i]} />
+            <div className="container-x relative flex-1 py-12 md:py-16">
               {/* label + field name as the panel headline */}
               <p className="flex items-center gap-3 font-mono text-sm text-[var(--muted)]">
                 <span>[ 0{i + 1} ]</span>
@@ -109,7 +119,7 @@ export function UseCaseStack() {
             </div>
 
             {/* media slot: asset not decided yet */}
-            <div className="container-x pb-8 md:pb-12">
+            <div className="container-x relative pb-8 md:pb-12">
               <div
                 aria-hidden
                 className="aspect-[16/9] w-full rounded-[20px] border border-[var(--line)] md:aspect-[21/8]"
