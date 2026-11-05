@@ -37,7 +37,7 @@ export const useHeroSet = create<{ i: number; set: (i: number) => void }>((setSt
 }));
 
 /** Use-case panel layouts, chosen in the preview. */
-export const PANEL_LAYOUTS = ['1 横向胶片', '2 大字编辑', '3 展开卡片'] as const;
+export const PANEL_LAYOUTS = ['A 对齐标题', 'B 紧凑标题', 'C 分隔线'] as const;
 export const usePanelLayout = create<{ i: number; set: (i: number) => void }>((setState) => ({
   i: 0,
   set: (i) => setState({ i }),

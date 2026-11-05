@@ -1,6 +1,6 @@
 'use client';
 import { useTranslations } from 'next-intl';
-import { useState, type CSSProperties } from 'react';
+import type { CSSProperties } from 'react';
 import { usePanelLayout } from '@/lib/heroPalettes';
 import { cn } from '@/lib/utils';
 import { PanelGlow } from './PanelGlow';
@@ -78,7 +78,6 @@ function PanelBody({
   t: T;
   slot: string;
 }) {
-  const [active, setActive] = useState(0);
   const points = (t.raw(`${id}.points`) as string[]).map(splitPoint);
   const subtitle = (
     <p className="text-balance font-display text-2xl font-semibold leading-[1.35] tracking-[0.02em]">
@@ -87,31 +86,40 @@ function PanelBody({
   );
   const intro = <p className="t-lead mt-3 max-w-[34rem] text-[var(--muted)]">{t(`${id}.intro`)}</p>;
 
+  const WIDE =
+    'relative mx-auto flex w-full max-w-[1760px] flex-1 flex-col px-4 py-10 md:px-8 md:py-12 xl:px-10';
+  const caption = (lead: string | null, rest: string, k: number) => (
+    <>
+      <p className="t-title flex items-baseline gap-2">
+        <span className="font-mono text-xs text-[var(--muted)]">0{k + 1}</span>
+        {lead}
+      </p>
+      <p className="t-body mt-2 max-w-[30rem] text-[var(--muted)]">{rest}</p>
+    </>
+  );
+
   if (layout === 0)
-    // filmstrip: fixed copy left, portrait media cards scroll sideways on the right
+    // A · aligned header: name + subtitle left, intro right on the subtitle's baseline; large 4:3 media
     return (
-      <div className="container-x relative grid flex-1 content-center gap-10 py-12 md:py-16 lg:grid-cols-[minmax(0,4fr)_minmax(0,8fr)] lg:gap-12">
-        <div className="lg:pb-20">
-          <Label index={index} label={label} />
-          <FieldName id={id} className="mt-4">
-            {t(`${id}.tab`)}
-          </FieldName>
-          <div className="mt-6">
-            {subtitle}
-            {intro}
+      <div className={WIDE}>
+        <Label index={index} label={label} />
+        <div className="mt-4 grid gap-4 lg:grid-cols-2 lg:items-end lg:gap-16">
+          <div>
+            <FieldName id={id}>{t(`${id}.tab`)}</FieldName>
+            <div className="mt-5">{subtitle}</div>
           </div>
+          <p className="t-lead max-w-[36rem] text-[var(--muted)] lg:justify-self-end">
+            {t(`${id}.intro`)}
+          </p>
         </div>
-        <ul className="-mr-4 flex snap-x snap-mandatory gap-5 overflow-x-auto pb-2 [mask-image:linear-gradient(90deg,#000_80%,transparent)] [scrollbar-width:none] md:-mr-8 lg:-mr-[max(2rem,calc((100vw-80rem)/2+2rem))]">
+        <ul className="mt-8 grid flex-1 gap-6 md:mt-10 md:grid-cols-3 md:gap-8">
           {points.map(([lead, rest], k) => (
-            <li
-              key={k}
-              className="w-[78%] shrink-0 snap-start sm:w-[46%] lg:w-[clamp(260px,24vw,340px)]"
-            >
-              <Slot bg={slot} n={k} className="aspect-[3/4] w-full" />
-              <div className="mt-4 pr-4">
-                <p className="t-title">{lead}</p>
-                <p className="t-body mt-2 text-[var(--muted)]">{rest}</p>
-              </div>
+            <li key={k} className="flex flex-col">
+              <Slot
+                bg={slot}
+                className="aspect-[4/3] w-full md:aspect-auto md:min-h-[240px] md:flex-1"
+              />
+              <div className="mt-5">{caption(lead, rest, k)}</div>
             </li>
           ))}
         </ul>
@@ -119,42 +127,35 @@ function PanelBody({
     );
 
   if (layout === 1)
-    // editorial: oversized field name, copy left, staggered portrait cards right
+    // B · stacked header: one compact text block, media takes the rest of the screen
     return (
-      <div className="container-x relative flex-1 py-10 md:py-14">
+      <div className={WIDE}>
         <Label index={index} label={label} />
-        <h3
-          id={`scene-${id}`}
-          className="mt-2 font-display text-[clamp(3rem,9.5vw,8.75rem)] font-semibold leading-none tracking-[0.01em]"
-        >
+        <FieldName id={id} className="mt-4">
           {t(`${id}.tab`)}
-        </h3>
-        <div className="mt-8 grid gap-8 md:mt-10 lg:grid-cols-[minmax(0,3fr)_minmax(0,9fr)] lg:gap-10">
-          <div>
-            {subtitle}
-            {intro}
-          </div>
-          <ul className="grid gap-6 sm:grid-cols-3">
-            {points.map(([lead, rest], k) => (
-              <li key={k} className={cn(k === 1 && 'sm:mt-10')}>
-                <Slot
-                  bg={slot}
-                  n={k}
-                  className="aspect-[4/3] w-full sm:aspect-[3/4] lg:aspect-[4/5]"
-                />
-                <p className="t-title mt-4">{lead}</p>
-                <p className="t-body mt-2 text-[var(--muted)]">{rest}</p>
-              </li>
-            ))}
-          </ul>
+        </FieldName>
+        <div className="mt-5 max-w-[44rem]">
+          {subtitle}
+          {intro}
         </div>
+        <ul className="mt-8 grid flex-1 gap-6 md:mt-10 md:grid-cols-3 md:gap-6">
+          {points.map(([lead, rest], k) => (
+            <li key={k} className="flex flex-col">
+              <Slot
+                bg={slot}
+                className="aspect-[4/3] w-full md:aspect-auto md:min-h-[240px] md:flex-1"
+              />
+              <div className="mt-4">{caption(lead, rest, k)}</div>
+            </li>
+          ))}
+        </ul>
       </div>
     );
 
-  // expanding cards: the hovered / focused card widens and reveals its text
+  // C · ruled: header split by a hairline; each column opens with a numbered rule
   return (
-    <div className="container-x relative flex flex-1 flex-col py-10 md:py-14">
-      <div className="grid gap-6 lg:grid-cols-[minmax(0,5fr)_minmax(0,7fr)] lg:items-end lg:gap-16">
+    <div className={WIDE}>
+      <div className="grid gap-4 border-b border-[var(--line)] pb-8 lg:grid-cols-[minmax(0,5fr)_minmax(0,7fr)] lg:items-end lg:gap-16">
         <div>
           <Label index={index} label={label} />
           <FieldName id={id} className="mt-4">
@@ -166,46 +167,18 @@ function PanelBody({
           {intro}
         </div>
       </div>
-      <ul className="mt-8 flex flex-col gap-4 md:mt-10 md:h-[min(50vh,440px)] md:flex-row">
-        {points.map(([lead, rest], k) => {
-          const on = active === k;
-          return (
-            <li
-              key={k}
-              className={cn(
-                'relative min-h-64 overflow-hidden rounded-[20px] border border-[var(--line)] transition-[flex-grow] duration-[var(--dur-slow)] ease-[var(--ease-out)] md:min-h-0',
-                on ? 'md:flex-[2.2]' : 'md:flex-1',
-              )}
-              style={{ background: slot }}
-            >
-              <button
-                type="button"
-                aria-pressed={on}
-                onMouseEnter={() => setActive(k)}
-                onFocus={() => setActive(k)}
-                onClick={() => setActive(k)}
-                className="absolute inset-0 flex flex-col justify-end p-6 text-left outline-none focus-visible:ring-1 focus-visible:ring-[var(--ink)]"
-              >
-                <span className="absolute left-5 top-5 font-mono text-xs text-[var(--muted)]">
-                  0{k + 1}
-                </span>
-                <span className="t-title">{lead}</span>
-                <span
-                  className={cn(
-                    'grid transition-[grid-template-rows,opacity] duration-[var(--dur-base)]',
-                    on
-                      ? 'grid-rows-[1fr] opacity-100'
-                      : 'grid-rows-[0fr] opacity-0 md:grid-rows-[0fr]',
-                  )}
-                >
-                  <span className="t-body mt-2 max-w-md overflow-hidden text-[var(--muted)]">
-                    {rest}
-                  </span>
-                </span>
-              </button>
-            </li>
-          );
-        })}
+      <ul className="mt-8 grid flex-1 gap-8 md:grid-cols-3 md:gap-8">
+        {points.map(([lead, rest], k) => (
+          <li key={k} className="flex flex-col">
+            <p className="font-mono text-xs text-[var(--muted)]">0{k + 1} / 03</p>
+            <Slot
+              bg={slot}
+              className="mt-3 aspect-[4/3] w-full md:aspect-auto md:min-h-[220px] md:flex-1"
+            />
+            <p className="t-title mt-5">{lead}</p>
+            <p className="t-body mt-2 max-w-[30rem] text-[var(--muted)]">{rest}</p>
+          </li>
+        ))}
       </ul>
     </div>
   );
