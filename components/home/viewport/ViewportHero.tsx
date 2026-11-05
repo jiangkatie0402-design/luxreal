@@ -3,13 +3,17 @@ import { useTranslations } from 'next-intl';
 import { useEffect, type CSSProperties, type ReactNode } from 'react';
 import { titleEn, titleZh } from '@/components/site/fonts';
 import { HERO_SETS, useHeroSet } from '@/lib/heroPalettes';
+import { usePerfStore } from '@/lib/perf';
 import { CoverUpload } from '../cover/CoverUpload';
-import { GaussMesh } from './GaussMesh';
 
 /**
- * Homepage cover: one still page — gradient backdrop, live Gaussian wireframe,
- * title and upload card. Imagery is intentionally empty until assets are decided.
+ * Homepage cover: a full-bleed looping showreel (white model → finished character)
+ * behind the title and upload card. Muted, inline, poster first; under reduced
+ * motion only the poster shows.
  */
+
+/** Public asset base: "/" in the app, overridable for static previews. */
+const BASE = process.env.NEXT_PUBLIC_ASSET_BASE ?? '/';
 
 function Grad({ children, className = 'block' }: { children: ReactNode; className?: string }) {
   return (
@@ -25,6 +29,7 @@ export function ViewportHero({ locale }: { locale: string }) {
   const t = useTranslations('home.viewport');
   const brush = locale === 'zh' ? titleZh : titleEn;
   const hs = HERO_SETS[useHeroSet((st) => st.i)];
+  const reduced = usePerfStore((s) => s.reducedMotion);
   // the header sits outside the hero; its ink/CTA follow the cover via root variables
   useEffect(() => {
     const r = document.documentElement.style;
@@ -42,7 +47,7 @@ export function ViewportHero({ locale }: { locale: string }) {
       className="relative h-[100svh] min-h-[700px] overflow-hidden text-[var(--hero-ink)]"
       style={
         {
-          background: hs.bg,
+          background: '#0b0820',
           '--title-accent': `linear-gradient(100deg, ${hs.accent[0]}, ${hs.accent[1]})`,
           '--title-shadow': '0 4px 28px rgba(20,0,60,0.25)',
           '--primary': '#ffffff',
@@ -51,7 +56,34 @@ export function ViewportHero({ locale }: { locale: string }) {
         } as CSSProperties
       }
     >
-      <GaussMesh from={hs.mesh[0]} to={hs.mesh[1]} />
+      {reduced ? (
+        // eslint-disable-next-line @next/next/no-img-element
+        <img
+          src={`${BASE}videos/hero-poster.jpg`}
+          alt=""
+          aria-hidden
+          className="absolute inset-0 size-full object-cover"
+        />
+      ) : (
+        <video
+          aria-hidden
+          autoPlay
+          muted
+          loop
+          playsInline
+          preload="auto"
+          poster={`${BASE}videos/hero-poster.jpg`}
+          className="absolute inset-0 size-full object-cover"
+        >
+          <source src={`${BASE}videos/hero-720.mp4`} type="video/mp4" media="(max-width: 768px)" />
+          <source src={`${BASE}videos/hero.mp4`} type="video/mp4" />
+        </video>
+      )}
+      {/* keep the title and upload card readable over any frame */}
+      <div
+        aria-hidden
+        className="pointer-events-none absolute inset-x-0 top-0 h-[55%] bg-[linear-gradient(to_bottom,rgba(8,6,20,0.72),rgba(8,6,20,0.35)_55%,transparent)]"
+      />
 
       <div
         aria-hidden
