@@ -135,15 +135,14 @@ const dark = (bg: string, tint: [string, string], edge = 'transparent'): Panel =
 });
 
 /** Preview-only: colour schemes for the three field panels (3D 打印, 游戏, 影视). */
-const LIT = 'rgba(255,255,255,0.95)';
 const BEAM_W = 'rgba(255,255,255,0.55)';
 const BEAM_V = 'rgba(196,181,253,0.3)';
 
 /** M1: mist violet (lit edge, white beam) / black (violet beam) / mid violet. */
 const m1 = (bgs: [string, string, string], extra: Partial<Panel> = {}): [Panel, Panel, Panel] => [
-  { ...light(bgs[0], ['#f3eeff', '#b3a2ef']), edge: LIT, beam: BEAM_W, ...extra },
-  { ...dark(bgs[1], ['#3a2f66', '#14111f'], 'rgba(220,208,255,0.9)'), beam: BEAM_V, ...extra },
-  { ...light(bgs[2], ['#ece5ff', '#9c88e6']), edge: LIT, beam: BEAM_W, ...extra },
+  { ...light(bgs[0], ['#f3eeff', '#b3a2ef']), beam: BEAM_W, ...extra },
+  { ...dark(bgs[1], ['#3a2f66', '#14111f']), beam: BEAM_V, ...extra },
+  { ...light(bgs[2], ['#ece5ff', '#9c88e6']), beam: BEAM_W, ...extra },
 ];
 /** light → dark → light, each with a top-to-bottom gradient base. */
 const PANELS = m1([
