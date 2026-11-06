@@ -1,4 +1,4 @@
-import { Inter, Noto_Sans_SC, Orbitron, ZCOOL_QingKe_HuangYou } from 'next/font/google';
+import { Inter, Noto_Sans_SC, Oxanium, ZCOOL_QingKe_HuangYou } from 'next/font/google';
 
 /**
  * Fonts per chinese-font-selector (web/UI, commercial): T0/T1 licences only,
@@ -11,7 +11,13 @@ export const titleZh = ZCOOL_QingKe_HuangYou({
   display: 'swap',
   variable: '--f-zcool',
 });
-export const titleEn = Orbitron({ weight: ['700', '900'], subsets: ['latin'], display: 'swap' });
+/** English display face (cover title and headings), OFL. */
+export const titleEn = Oxanium({
+  weight: ['600', '700'],
+  subsets: ['latin'],
+  display: 'swap',
+  variable: '--f-oxanium',
+});
 
 /** 思源黑体 (Source Han Sans = Noto Sans SC, OFL) */
 export const sans = Noto_Sans_SC({
@@ -23,7 +29,12 @@ export const sans = Noto_Sans_SC({
 /** Latin partner for the Chinese faces (declared first so Latin renders in Inter). */
 export const inter = Inter({ subsets: ['latin'], display: 'swap', variable: '--f-inter' });
 
-export const fontVariables = [titleZh.variable, sans.variable, inter.variable].join(' ');
+export const fontVariables = [
+  titleZh.variable,
+  titleEn.variable,
+  sans.variable,
+  inter.variable,
+].join(' ');
 
 /** Self-hosted split web fonts. */
 export const fontStylesheets = [

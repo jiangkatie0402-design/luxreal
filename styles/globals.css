@@ -765,3 +765,8 @@
     animation: none;
   }
 }
+
+/* English pages: headings use Oxanium (Latin only, so Chinese pages keep MiSans) */
+:root:lang(en) {
+  --font-display: var(--f-oxanium, 'Oxanium'), var(--f-inter, 'Inter'), sans-serif;
+}

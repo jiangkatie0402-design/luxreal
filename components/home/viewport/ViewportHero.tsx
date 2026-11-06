@@ -94,7 +94,7 @@ export function ViewportHero({ locale }: { locale: string }) {
       <div className="pointer-events-none absolute inset-x-0 top-[calc(var(--header-h)+24px)] z-[2] px-4 text-center md:top-[calc(var(--header-h)+32px)]">
         <h1
           id="hero-title"
-          className={`${brush.className} t-display [text-shadow:var(--title-shadow)] ${locale === 'zh' ? 'tracking-[0.04em]' : 'font-black uppercase max-md:text-[1.75rem] max-md:leading-[1.15]'}`}
+          className={`${brush.className} t-display [text-shadow:var(--title-shadow)] ${locale === 'zh' ? 'tracking-[0.04em]' : 'font-bold tracking-[-0.01em] text-balance max-md:text-[2rem] max-md:leading-[1.15]'}`}
         >
           {t('titleA')}{' '}
           <Grad className={locale === 'zh' ? 'md:inline' : 'block'}>{t('titleB')}</Grad>
