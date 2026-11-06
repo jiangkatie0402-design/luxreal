@@ -166,49 +166,7 @@ const BEAM_V = 'rgba(196,181,253,0.3)';
 
 export const SCENE_SETS: { name: string; panels: [Panel, Panel, Panel] }[] = [
   {
-    name: 'K1 浅紫三段+顶光',
-    panels: [
-      { ...light('#e6dcff', ['#f6f1ff', '#bfaff3']), edge: LIT, beam: BEAM_W },
-      { ...light('#cdbcff', ['#ece5ff', '#a693ea']), edge: LIT, beam: BEAM_W },
-      { ...light('#b5a2f5', ['#ddd2ff', '#8b78d8']), edge: LIT, beam: BEAM_W },
-    ],
-  },
-  {
-    name: 'K2 渐变+发光边',
-    panels: [
-      {
-        ...light('linear-gradient(180deg,#e4dbff,#bfaef5)', ['#f3eeff', '#b3a2ef']),
-        edge: LIT,
-        beam: BEAM_W,
-      },
-      {
-        ...dark(
-          'linear-gradient(180deg,#8a79d6,#4f4396)',
-          ['#a597e6', '#4a3f86'],
-          'rgba(236,230,255,0.9)',
-        ),
-        beam: 'rgba(255,255,255,0.28)',
-      },
-      {
-        ...dark(
-          'linear-gradient(180deg,#3c3278,#141127)',
-          ['#4a3f86', '#100d20'],
-          'rgba(220,208,255,0.9)',
-        ),
-        beam: BEAM_V,
-      },
-    ],
-  },
-  {
-    name: 'K3 珠光浅色',
-    panels: [
-      { ...light('#eeeaf8', ['#ffd9ef', '#c9b8ff']), edge: LIT, glow: 0.7 },
-      { ...light('#e9ecf8', ['#cfe4ff', '#c4b5fd']), edge: LIT, glow: 0.7 },
-      { ...light('#efe9f7', ['#e6d4ff', '#ffd6e8']), edge: LIT, glow: 0.7 },
-    ],
-  },
-  {
-    name: 'K4 浅深交替发光',
+    name: 'M1 雾紫·黑光束·中紫',
     panels: [
       { ...light('#ddd1ff', ['#f3eeff', '#b3a2ef']), edge: LIT, beam: BEAM_W },
       { ...dark('#0e0c16', ['#3a2f66', '#14111f'], 'rgba(220,208,255,0.9)'), beam: BEAM_V },
@@ -216,27 +174,50 @@ export const SCENE_SETS: { name: string; panels: [Panel, Panel, Panel] }[] = [
     ],
   },
   {
-    name: 'K5 柔光浅紫',
+    name: 'M2 白紫·深靛·白紫',
     panels: [
-      { ...light('#ddd3fb', ['#f4efff', '#b9a8f0']), edge: LIT, bloom: 'rgba(255,255,255,0.85)' },
-      { ...light('#d3d8fb', ['#eef1ff', '#a6b0ef']), edge: LIT, bloom: 'rgba(255,255,255,0.85)' },
-      { ...light('#e3d3f7', ['#f8efff', '#c4a3e8']), edge: LIT, bloom: 'rgba(255,255,255,0.85)' },
+      { ...light('#f0ebff', ['#ffffff', '#cdbfff']), edge: LIT, bloom: 'rgba(255,255,255,0.9)' },
+      {
+        ...dark('#1c1840', ['#4b3f9e', '#0f0c24'], 'rgba(220,208,255,0.9)'),
+        beam: BEAM_V,
+        glow: 0.6,
+      },
+      { ...light('#e6ddff', ['#fbf9ff', '#bfaef5']), edge: LIT, bloom: 'rgba(255,255,255,0.9)' },
     ],
   },
   {
-    name: '参考 H 一条渐变',
+    name: 'M3 浅紫·深紫渐变·浅蓝紫',
     panels: [
-      light('linear-gradient(180deg,#e4dbff,#bfaef5)', ['#f3eeff', '#b3a2ef']),
-      dark('linear-gradient(180deg,#8a79d6,#4f4396)', ['#a597e6', '#4a3f86']),
-      dark('linear-gradient(180deg,#3c3278,#141127)', ['#4a3f86', '#100d20']),
+      { ...light('#dcd0ff', ['#f4efff', '#b6a5f0']), edge: LIT, beam: BEAM_W },
+      {
+        ...dark(
+          'linear-gradient(180deg,#3c3278,#141127)',
+          ['#5a4c9e', '#100d20'],
+          'rgba(220,208,255,0.9)',
+        ),
+        beam: BEAM_V,
+      },
+      { ...light('#cfd5ff', ['#eef0ff', '#9faaf0']), edge: LIT, beam: BEAM_W },
     ],
   },
   {
-    name: '参考 I 发光边框',
+    name: 'M4 珠光·极光黑·珠光',
     panels: [
-      { ...dark('#0c0b11', ['#3a2f66', '#14111f'], 'rgba(220,208,255,0.9)'), beam: BEAM_V },
-      { ...dark('#0c0b11', ['#2c2a5c', '#14111f'], 'rgba(220,208,255,0.9)'), beam: BEAM_V },
-      { ...dark('#0c0b11', ['#3f2b5e', '#14111f'], 'rgba(220,208,255,0.9)'), beam: BEAM_V },
+      { ...light('#eeeaf8', ['#ffd9ef', '#c9b8ff']), edge: LIT, glow: 0.7 },
+      { ...dark('#0b0a12', ['#7a5cff', '#3f6fe0'], 'rgba(220,208,255,0.6)'), glow: 0.35 },
+      { ...light('#e9ecf8', ['#cfe4ff', '#c4b5fd']), edge: LIT, glow: 0.7 },
+    ],
+  },
+  {
+    name: 'M5 浅渐变·黑底大编号·浅渐变',
+    panels: [
+      { ...light('linear-gradient(180deg,#ece5ff,#cbbcff)', ['#f6f2ff', '#b3a2ef']), edge: LIT },
+      {
+        ...dark('#0c0b11', ['#3a2f66', '#14111f'], 'rgba(220,208,255,0.9)'),
+        beam: BEAM_V,
+        number: true,
+      },
+      { ...light('linear-gradient(180deg,#cbbcff,#ece5ff)', ['#f6f2ff', '#a693ea']), edge: LIT },
     ],
   },
 ];
