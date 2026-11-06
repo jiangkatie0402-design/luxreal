@@ -798,7 +798,7 @@
   font-size: clamp(1.35rem, 1.8vw, 1.9rem);
 }
 :lang(zh) main h3.font-display[id^='scene-'] {
-  font-size: clamp(2.75rem, 5vw, 4.5rem);
+  font-size: clamp(2.7rem, 4.86vw, 4.375rem);
   line-height: 1.05;
 }
 .hero-title-zh {
