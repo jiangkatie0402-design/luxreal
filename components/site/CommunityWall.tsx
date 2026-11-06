@@ -1,16 +1,26 @@
 'use client';
-import { Heart, Star } from 'lucide-react';
 import { useTranslations } from 'next-intl';
 import { useState } from 'react';
 import { cn } from '@/lib/utils';
 
 /** Placeholder work (assets not decided). `render` / `clay` take image URLs once available. */
 type Work = { render?: string; clay?: string };
-const ROWS: Work[][] = [Array(10).fill({}), Array(10).fill({}), Array(10).fill({})];
+/** Public asset base: "/" in the app, overridable for static previews. */
+const BASE = process.env.NEXT_PUBLIC_ASSET_BASE ?? '/';
+const SHIELD: Work = {
+  render: `${BASE}works/shield-render.webp`,
+  clay: `${BASE}works/shield-clay.webp`,
+};
+const EMPTY: Work = {};
+const ROWS: Work[][] = [
+  [EMPTY, SHIELD, ...Array(8).fill(EMPTY)],
+  Array(10).fill(EMPTY),
+  Array(10).fill(EMPTY),
+];
 
 /**
  * One work card. Press and hold shows the white model (clay); release returns to
- * the rendered result. Author and counts are skeletons until real works exist.
+ * the rendered result. Empty cards are placeholders until works are chosen.
  */
 function WorkCard({ work, label }: { work: Work; label: string }) {
   const [clay, setClay] = useState(false);
@@ -40,7 +50,9 @@ function WorkCard({ work, label }: { work: Work; label: string }) {
               'bg-[radial-gradient(60%_55%_at_50%_45%,rgba(139,92,246,0.28),transparent_70%),radial-gradient(100%_80%_at_50%_0%,#26262c,#18181b)]',
           )}
           style={
-            work.render ? { background: `center/contain no-repeat url(${work.render})` } : undefined
+            work.render
+              ? { background: `center/auto 74% no-repeat url(${work.render})` }
+              : undefined
           }
         />
         {/* white model */}
@@ -52,18 +64,10 @@ function WorkCard({ work, label }: { work: Work; label: string }) {
               'bg-[radial-gradient(45%_40%_at_50%_45%,rgba(230,230,235,0.55),transparent_70%),radial-gradient(100%_80%_at_50%_0%,#3a3a40,#202024)]',
           )}
           style={
-            work.clay ? { background: `center/contain no-repeat url(${work.clay})` } : undefined
+            work.clay ? { background: `center/auto 74% no-repeat url(${work.clay})` } : undefined
           }
         />
       </button>
-      <figcaption aria-hidden className="flex items-center gap-2 px-3 py-2.5 text-xs text-white/60">
-        <span className="size-5 shrink-0 rounded-full bg-white/10" />
-        <span className="h-2 w-16 rounded-full bg-white/10" />
-        <span className="ml-auto flex items-center gap-2.5">
-          <Heart className="size-3.5" />
-          <Star className="size-3.5" />
-        </span>
-      </figcaption>
     </figure>
   );
 }
