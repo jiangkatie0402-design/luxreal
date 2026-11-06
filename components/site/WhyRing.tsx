@@ -12,7 +12,7 @@ type T = ReturnType<typeof useTranslations>;
 type RingProps = { t: T; p: number; active: number; k: string };
 
 /** Preview-only: ring styles for review. */
-export const WHY_VARIANTS = ['C1 玻璃星球', 'C2 缩略图星球', 'C3 光点星轨'] as const;
+export const WHY_VARIANTS = ['D1 光点星轨', 'D2 星环', 'D3 线框星球', 'D4 光晕涟漪'] as const;
 export const useWhyVariant = create<{ v: number; set: (v: number) => void }>((setState) => ({
   v: 0,
   set: (v) => setState({ v }),
@@ -63,9 +63,11 @@ function Orbit({
 }
 
 type Style = 'glass' | 'thumb' | 'spark';
+/** Purely decorative centrepieces: no text in the middle. */
+type Visual = 'spark' | 'saturn' | 'wire' | 'halo';
 
 /** The three reasons riding the orbit; the active one swings to the front. */
-function Worlds({ t, p, active, style }: Omit<RingProps, 'k'> & { style: Style }) {
+function Worlds({ p, active, style }: Omit<RingProps, 'k' | 't'> & { style: Style }) {
   return (
     <>
       {WHY.map((key, i) => {
@@ -126,14 +128,6 @@ function Worlds({ t, p, active, style }: Omit<RingProps, 'k'> & { style: Style }
                   <span className="relative size-2 rounded-full bg-white shadow-[0_0_8px_2px_rgba(255,255,255,0.8)]" />
                 </span>
               )}
-              <span
-                className={cn(
-                  'mt-2.5 whitespace-nowrap text-[13px] tracking-wide transition-colors duration-500',
-                  on ? 'text-white' : 'text-white/50',
-                )}
-              >
-                {t(`items.${key}.label`)}
-              </span>
             </span>
           </span>
         );
@@ -143,7 +137,7 @@ function Worlds({ t, p, active, style }: Omit<RingProps, 'k'> & { style: Style }
 }
 
 /** Orrery: back orbit, media disc, front orbit, then the worlds. */
-function Orrery({ style, ...props }: RingProps & { style: Style }) {
+function Orrery({ style, p, active }: { style: Style; p: number; active: number }) {
   const lines =
     style === 'spark'
       ? [
@@ -181,13 +175,196 @@ function Orrery({ style, ...props }: RingProps & { style: Style }) {
     <>
       {svg('back', 'z-0')}
       <Media
-        k={props.k}
+        k=""
         className="inset-[17%] z-10 border border-white/10 shadow-[0_0_120px_rgba(110,98,163,0.45),inset_0_0_40px_rgba(139,92,246,0.25)]"
       />
       {svg('front', 'z-[15]')}
-      <Worlds {...props} style={style} />
+      <Worlds p={p} active={active} style={style} />
     </>
   );
+}
+
+/** D2 — the disc wears a wide, soft ring band, like a small planet. */
+function Saturn({ p, active }: { p: number; active: number }) {
+  const band = (half: 'back' | 'front') => (
+    <svg
+      aria-hidden
+      viewBox="0 0 100 100"
+      preserveAspectRatio="none"
+      className={cn(
+        'pointer-events-none absolute inset-0 size-full overflow-visible',
+        half === 'back' ? 'z-0 opacity-50' : 'z-[15]',
+      )}
+    >
+      <defs>
+        <linearGradient id={`band-${half}`} x1="0" x2="1">
+          <stop offset="0" stopColor="rgba(196,181,253,0)" />
+          <stop offset="0.5" stopColor="rgba(226,218,255,0.75)" />
+          <stop offset="1" stopColor="rgba(196,181,253,0)" />
+        </linearGradient>
+      </defs>
+      {[0, 4, 8].map((d, n) => (
+        <g key={n} transform="rotate(-14 50 50)">
+          <path
+            d={
+              half === 'back'
+                ? `M ${50 - RX + d} 50 A ${RX - d} ${RY - d / 4} 0 0 1 ${50 + RX - d} 50`
+                : `M ${50 - RX + d} 50 A ${RX - d} ${RY - d / 4} 0 0 0 ${50 + RX - d} 50`
+            }
+            fill="none"
+            stroke={`url(#band-${half})`}
+            strokeWidth={[6, 1.2, 3][n]}
+            strokeOpacity={[0.35, 0.9, 0.5][n]}
+            vectorEffect="non-scaling-stroke"
+          />
+        </g>
+      ))}
+    </svg>
+  );
+  return (
+    <>
+      {band('back')}
+      <span className="absolute inset-[17%] z-10 rounded-full bg-[radial-gradient(circle_at_35%_28%,#6a5bc0,#2a2160_45%,#0f0c1e_80%)] shadow-[0_0_120px_rgba(110,98,163,0.45)]" />
+      {band('front')}
+      <span className="absolute inset-0 rotate-[-14deg]">
+        <Worlds p={p} active={active} style="spark" />
+      </span>
+    </>
+  );
+}
+
+/** D3 — a wireframe globe that turns with the scroll, with one spark orbiting it. */
+function Wire({ p }: { p: number }) {
+  const rot = p * Math.PI * 1.5;
+  const R = 34;
+  return (
+    <>
+      <span className="absolute inset-[16%] rounded-full bg-[radial-gradient(circle_at_40%_35%,rgba(110,98,163,0.35),transparent_70%)] shadow-[0_0_120px_rgba(110,98,163,0.35)]" />
+      <svg
+        aria-hidden
+        viewBox="0 0 100 100"
+        className="absolute inset-0 size-full overflow-visible"
+      >
+        <g transform="rotate(-18 50 50)">
+          <circle
+            cx="50"
+            cy="50"
+            r={R}
+            fill="none"
+            stroke="rgba(226,218,255,0.7)"
+            strokeWidth="0.35"
+          />
+          {/* meridians */}
+          {Array.from({ length: 6 }, (_, i) => {
+            const a = rot + (i * Math.PI) / 6;
+            const rx = Math.abs(Math.cos(a)) * R;
+            return (
+              <ellipse
+                key={`m${i}`}
+                cx="50"
+                cy="50"
+                rx={rx}
+                ry={R}
+                fill="none"
+                stroke="rgba(214,204,255,0.45)"
+                strokeWidth="0.25"
+                strokeOpacity={0.3 + 0.7 * Math.abs(Math.sin(a))}
+              />
+            );
+          })}
+          {/* parallels */}
+          {[-0.66, -0.33, 0, 0.33, 0.66].map((y) => {
+            const r = Math.sqrt(1 - y * y) * R;
+            return (
+              <ellipse
+                key={`p${y}`}
+                cx="50"
+                cy={50 + y * R}
+                rx={r}
+                ry={r * 0.22}
+                fill="none"
+                stroke="rgba(214,204,255,0.35)"
+                strokeWidth="0.25"
+              />
+            );
+          })}
+          <ellipse
+            cx="50"
+            cy="50"
+            rx="47"
+            ry="12"
+            fill="none"
+            stroke="rgba(214,204,255,0.25)"
+            strokeWidth="0.3"
+          />
+        </g>
+      </svg>
+      <span className="absolute inset-0 rotate-[-18deg]">
+        <span
+          className="absolute size-2 -translate-x-1/2 -translate-y-1/2 rounded-full bg-white shadow-[0_0_12px_4px_rgba(196,181,253,0.8)]"
+          style={{
+            left: `${50 + Math.cos(rot * 2) * 47}%`,
+            top: `${50 + Math.sin(rot * 2) * 12}%`,
+          }}
+        />
+      </span>
+    </>
+  );
+}
+
+/** D4 — concentric rings like ripples of light; arcs on each ring turn at their own pace. */
+function Halo({ p }: { p: number }) {
+  const rings = [
+    { r: 48, w: 0.2, o: 0.18, arc: 0.18, speed: 1 },
+    { r: 41, w: 0.25, o: 0.28, arc: 0.3, speed: -1.6 },
+    { r: 34, w: 0.3, o: 0.4, arc: 0.22, speed: 2.2 },
+  ];
+  return (
+    <>
+      <span className="absolute inset-[24%] rounded-full bg-[radial-gradient(circle_at_50%_40%,#5a4bb0,#231b52_55%,#0e0b1c_85%)] shadow-[0_0_100px_30px_rgba(110,98,163,0.35)]" />
+      <svg
+        aria-hidden
+        viewBox="0 0 100 100"
+        className="absolute inset-0 size-full overflow-visible"
+      >
+        {rings.map((g, n) => {
+          const C = 2 * Math.PI * g.r;
+          return (
+            <g key={n}>
+              <circle
+                cx="50"
+                cy="50"
+                r={g.r}
+                fill="none"
+                stroke={`rgba(214,204,255,${g.o})`}
+                strokeWidth={g.w}
+              />
+              <circle
+                cx="50"
+                cy="50"
+                r={g.r}
+                fill="none"
+                stroke="rgba(236,230,255,0.95)"
+                strokeWidth={g.w * 2.4}
+                strokeLinecap="round"
+                strokeDasharray={`${C * g.arc} ${C}`}
+                transform={`rotate(${-90 + p * 240 * g.speed} 50 50)`}
+                style={{ filter: 'drop-shadow(0 0 1px rgba(196,181,253,0.9))' }}
+              />
+            </g>
+          );
+        })}
+      </svg>
+    </>
+  );
+}
+
+/** The decorative centrepiece for each variant. */
+function Centre({ visual, p, active }: { visual: Visual; p: number; active: number }) {
+  if (visual === 'saturn') return <Saturn p={p} active={active} />;
+  if (visual === 'wire') return <Wire p={p} />;
+  if (visual === 'halo') return <Halo p={p} />;
+  return <Orrery p={p} active={active} style="spark" />;
 }
 
 /**
@@ -226,7 +403,6 @@ export function WhyUs() {
 
   const active = Math.round(p * (N - 1));
   const k = WHY[active];
-  const props = { t, p, active, k };
 
   return (
     <section aria-labelledby="why-title" id="why" className="scroll-mt-20">
@@ -247,7 +423,11 @@ export function WhyUs() {
               'w-[min(56vw,34svh)]',
             )}
           >
-            <Orrery {...props} style={(['glass', 'thumb', 'spark'] as const)[v]} />
+            <Centre
+              visual={(['spark', 'saturn', 'wire', 'halo'] as const)[v]}
+              p={p}
+              active={active}
+            />
           </div>
           <p className="mt-12 font-mono text-xs tracking-[0.2em] text-white/50">
             0{active + 1} <span className="text-white/25">/ 0{N}</span>
