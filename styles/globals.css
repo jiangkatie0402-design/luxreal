@@ -778,11 +778,12 @@
   font-weight: 400;
   font-synthesis: none;
   letter-spacing: 0.01em;
-  font-size: var(--hero-zh-size, clamp(2.6rem, 5.6vw, 5.25rem));
-  -webkit-text-stroke: 1px currentColor;
+  font-size: clamp(2.4rem, 5vw, 4.5rem);
+  -webkit-text-stroke: 1.8px currentColor;
+  paint-order: stroke fill;
 }
 .hero-title-zh span {
-  -webkit-text-stroke: 1px transparent;
+  -webkit-text-stroke: 1.8px #f6e3f7;
 }
 
 /* testimonials: two slow drifting rows (cards duplicated so the loop is seamless) */
