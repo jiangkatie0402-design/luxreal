@@ -2,6 +2,7 @@
 import { useTranslations } from 'next-intl';
 import { useEffect, useRef, useState, type ReactNode } from 'react';
 import { ArrowRight, ImagePlus } from 'lucide-react';
+import { create } from 'zustand';
 import { cn } from '@/lib/utils';
 import { appUrl, site } from '@/config/site';
 
@@ -31,7 +32,15 @@ function Glass({
 }
 
 /** The upload box on the cover. Validates locally, then hands off to the app. */
+/** Preview-only: button styles for review. */
+export const GO_VARIANTS = ['当前 描边', 'B1 雾紫流光', 'B2 流光边框', 'B3 玻璃胶囊'] as const;
+export const useGoVariant = create<{ v: number; set: (v: number) => void }>((setState) => ({
+  v: 0,
+  set: (v) => setState({ v }),
+}));
+
 export function CoverUpload() {
+  const gv = useGoVariant((st) => st.v);
   const t = useTranslations('home.cover.upload');
   const [file, setFile] = useState<File | null>(null);
   const [preview, setPreview] = useState<string | null>(null);
@@ -173,7 +182,43 @@ export function CoverUpload() {
       {topRow()}
       <div className="flex items-center gap-2 bg-black/25 px-3 py-2.5">
         {chips}
-        <span className="ml-auto">{outlined('h-10 px-5')}</span>
+        <span className="ml-auto">
+          {gv === 0 && outlined('h-10 px-5')}
+          {gv === 1 && (
+            <button
+              type="button"
+              onClick={submit}
+              className="go-sheen relative inline-flex h-10 items-center gap-2 overflow-hidden rounded-[12px] bg-[linear-gradient(135deg,#9a8ad8,#6e62a3_55%,#4b4277)] px-5 text-sm font-medium text-white shadow-[inset_0_1px_0_rgba(255,255,255,0.35),0_10px_28px_-10px_rgba(130,110,220,0.9)] transition hover:brightness-110"
+            >
+              {t('generate')}
+              {arrow}
+            </button>
+          )}
+          {gv === 2 && (
+            <span className="mcp-glow inline-flex rounded-[12px] p-px shadow-[0_0_24px_-6px_rgba(167,150,255,0.6)]">
+              <button
+                type="button"
+                onClick={submit}
+                className="inline-flex h-10 items-center gap-2 rounded-[11px] bg-[#120e24] px-5 text-sm font-medium text-white transition-colors hover:bg-[#1c1638]"
+              >
+                {t('generate')}
+                {arrow}
+              </button>
+            </span>
+          )}
+          {gv === 3 && (
+            <button
+              type="button"
+              onClick={submit}
+              className="group inline-flex h-10 items-center gap-2.5 rounded-full border border-white/25 bg-white/[0.12] py-1 pl-4 pr-1 text-sm font-medium text-white shadow-[inset_0_1px_0_rgba(255,255,255,0.3),0_8px_24px_-10px_rgba(0,0,0,0.6)] backdrop-blur-md transition hover:bg-white/[0.18]"
+            >
+              {t('generate')}
+              <span className="grid size-8 place-items-center rounded-full bg-white text-[#2a1f5c] transition-transform group-hover:translate-x-0.5">
+                <ArrowRight className="size-4" aria-hidden />
+              </span>
+            </button>
+          )}
+        </span>
       </div>
     </Glass>
   );

@@ -765,3 +765,33 @@
     animation: none;
   }
 }
+
+/* cover button: a soft sheen crossing the fill every few seconds */
+.go-sheen::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    105deg,
+    transparent 35%,
+    rgba(255, 255, 255, 0.45) 50%,
+    transparent 65%
+  );
+  transform: translateX(-120%);
+  animation: go-sheen 3.2s ease-in-out infinite;
+}
+@keyframes go-sheen {
+  0%,
+  45% {
+    transform: translateX(-120%);
+  }
+  80%,
+  100% {
+    transform: translateX(120%);
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .go-sheen::after {
+    animation: none;
+  }
+}
