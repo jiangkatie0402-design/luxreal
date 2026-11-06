@@ -2,6 +2,7 @@
 import { useTranslations } from 'next-intl';
 import { useEffect, useRef, useState } from 'react';
 import { create } from 'zustand';
+import { usePerfStore } from '@/lib/perf';
 import { cn } from '@/lib/utils';
 import { StarRing } from './StarRing';
 
@@ -15,7 +16,9 @@ type RingProps = { t: T; p: number; active: number; k: string };
 /** Preview-only: ring styles for review. */
 export const WHY_VARIANTS = [
   'D1 光点星轨',
-  'D2 星环',
+  'D2a 光带流动',
+  'D2b 细星尘环',
+  'D2c 呼吸光环',
   'D3 线框星球',
   'D4 光晕涟漪',
   'D5 星尘星环',
@@ -71,7 +74,7 @@ function Orbit({
 
 type Style = 'glass' | 'thumb' | 'spark';
 /** Purely decorative centrepieces: no text in the middle. */
-type Visual = 'spark' | 'saturn' | 'wire' | 'halo' | 'dust';
+type Visual = 'spark' | 'flow' | 'fine' | 'breathe' | 'wire' | 'halo' | 'dust';
 
 /** The three reasons riding the orbit; the active one swings to the front. */
 function Worlds({ p, active, style }: Omit<RingProps, 'k' | 't'> & { style: Style }) {
@@ -192,9 +195,9 @@ function Orrery({ style, p, active }: { style: Style; p: number; active: number 
 }
 
 /** D2 — the disc wears a wide, soft ring band, like a small planet. */
-function Saturn({ p }: { p: number }) {
-  // the ring tips a little as you scroll
-  const tilt = -14 + p * 10;
+function Saturn({ p, mode }: { p: number; mode: 'flow' | 'breathe' }) {
+  const reduced = usePerfStore((st) => st.reducedMotion);
+  const tilt = -14 + p * 8;
   const arc = (half: 'back' | 'front', d: number) =>
     half === 'back'
       ? `M ${50 - RX + d} 50 A ${RX - d} ${RY - d / 4} 0 0 1 ${50 + RX - d} 50`
@@ -206,7 +209,8 @@ function Saturn({ p }: { p: number }) {
       preserveAspectRatio="none"
       className={cn(
         'pointer-events-none absolute inset-0 size-full overflow-visible',
-        half === 'back' ? 'z-0 opacity-50' : 'z-[15]',
+        half === 'back' ? 'z-0 opacity-45' : 'z-[15]',
+        mode === 'breathe' && 'ring-breathe',
       )}
     >
       <defs>
@@ -214,6 +218,21 @@ function Saturn({ p }: { p: number }) {
           <stop offset="0" stopColor="rgba(196,181,253,0)" />
           <stop offset="0.5" stopColor="rgba(226,218,255,0.75)" />
           <stop offset="1" stopColor="rgba(196,181,253,0)" />
+        </linearGradient>
+        {/* a soft, wide sweep of light that travels along the band */}
+        <linearGradient id={`sweep-${half}`} x1="0" x2="1">
+          <stop offset="0.3" stopColor="rgba(255,255,255,0)" />
+          <stop offset="0.5" stopColor="rgba(255,255,255,0.85)" />
+          <stop offset="0.7" stopColor="rgba(255,255,255,0)" />
+          {!reduced && (
+            <animateTransform
+              attributeName="gradientTransform"
+              type="translate"
+              values={half === 'front' ? '-0.7 0; 0.7 0' : '0.7 0; -0.7 0'}
+              dur="7s"
+              repeatCount="indefinite"
+            />
+          )}
         </linearGradient>
       </defs>
       <g transform={`rotate(${tilt} 50 50)`}>
@@ -224,21 +243,21 @@ function Saturn({ p }: { p: number }) {
             fill="none"
             stroke={`url(#band-${half})`}
             strokeWidth={[6, 1.2, 3][n]}
-            strokeOpacity={[0.35, 0.9, 0.5][n]}
+            strokeOpacity={[0.3, 0.85, 0.45][n]}
             vectorEffect="non-scaling-stroke"
           />
         ))}
-        {/* a glint of light running round the ring */}
-        <path
-          d={arc(half, 4)}
-          pathLength={100}
-          fill="none"
-          stroke="rgba(255,255,255,0.95)"
-          strokeWidth={0.45}
-          strokeLinecap="round"
-          className={cn('band-run', half === 'back' && '[animation-direction:reverse]')}
-          style={{ filter: 'drop-shadow(0 0 1px rgba(214,204,255,0.9))' }}
-        />
+        {mode === 'flow' &&
+          [2, 6].map((d) => (
+            <path
+              key={d}
+              d={arc(half, d)}
+              fill="none"
+              stroke={`url(#sweep-${half})`}
+              strokeWidth={d === 2 ? 2.5 : 1.2}
+              vectorEffect="non-scaling-stroke"
+            />
+          ))}
       </g>
     </svg>
   );
@@ -246,23 +265,18 @@ function Saturn({ p }: { p: number }) {
     <>
       {band('back')}
       <span
-        className="absolute inset-[17%] z-10 overflow-hidden rounded-full shadow-[0_0_120px_rgba(110,98,163,0.45)]"
+        className="absolute inset-[17%] z-10 overflow-hidden rounded-full shadow-[0_0_120px_rgba(110,98,163,0.45),inset_8px_6px_24px_rgba(214,204,255,0.18)]"
         style={{
           background: `radial-gradient(circle at ${30 + p * 14}% ${26 + p * 6}%, #6a5bc0, #2a2160 45%, #0f0c1e 80%)`,
         }}
       >
-        {/* slow drifting cloud bands give the sphere a sense of spin */}
-        <span className="planet-clouds absolute inset-y-0 left-0 flex w-[200%] blur-[6px]">
-          {[0, 1].map((n) => (
-            <span
-              key={n}
-              className="h-full w-1/2 [background:radial-gradient(40%_7%_at_30%_30%,rgba(214,204,255,0.22),transparent),radial-gradient(35%_6%_at_70%_48%,rgba(150,125,240,0.25),transparent),radial-gradient(45%_8%_at_40%_64%,rgba(214,204,255,0.16),transparent),radial-gradient(30%_5%_at_80%_78%,rgba(150,125,240,0.2),transparent),radial-gradient(30%_5%_at_15%_52%,rgba(214,204,255,0.18),transparent)]"
-            />
-          ))}
-        </span>
-        {/* limb shading keeps it round */}
-        <span className="absolute inset-0 rounded-full [background:radial-gradient(circle_at_40%_35%,transparent_50%,rgba(8,6,20,0.6)_100%)]" />
+        {mode === 'breathe' && (
+          // the night side slowly creeps across, as if the planet turns
+          <span className="planet-turn absolute inset-0 rounded-full" />
+        )}
       </span>
+      {/* thin atmosphere rim */}
+      <span className="absolute inset-[16.4%] z-10 rounded-full border border-[#c4b5fd]/20 [mask-image:linear-gradient(135deg,#000,transparent_60%)]" />
       {band('front')}
     </>
   );
@@ -396,7 +410,9 @@ function Halo({ p }: { p: number }) {
 
 /** The decorative centrepiece for each variant. */
 function Centre({ visual, p, active }: { visual: Visual; p: number; active: number }) {
-  if (visual === 'saturn') return <Saturn p={p} />;
+  if (visual === 'flow') return <Saturn p={p} mode="flow" />;
+  if (visual === 'breathe') return <Saturn p={p} mode="breathe" />;
+  if (visual === 'fine') return <StarRing p={p} narrow />;
   if (visual === 'wire') return <Wire p={p} />;
   if (visual === 'halo') return <Halo p={p} />;
   if (visual === 'dust') return <StarRing p={p} />;
@@ -460,7 +476,7 @@ export function WhyUs() {
             )}
           >
             <Centre
-              visual={(['spark', 'saturn', 'wire', 'halo', 'dust'] as const)[v]}
+              visual={(['spark', 'flow', 'fine', 'breathe', 'wire', 'halo', 'dust'] as const)[v]}
               p={p}
               active={active}
             />
