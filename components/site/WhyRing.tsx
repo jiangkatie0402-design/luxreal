@@ -1,24 +1,228 @@
 'use client';
 import { useTranslations } from 'next-intl';
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useRef, useState, type CSSProperties, type ReactNode } from 'react';
+import { create } from 'zustand';
 import { cn } from '@/lib/utils';
 
 const WHY = ['cost', 'easy', 'quality'] as const;
 const N = WHY.length;
 /** degrees between the three stations on the ring */
 const STEP = 360 / N;
+type T = ReturnType<typeof useTranslations>;
+type RingProps = { t: T; p: number; active: number; k: string };
+
+/** Preview-only: ring styles for review. */
+export const WHY_VARIANTS = ['A 极简细环', 'B 发光传送门', 'C 星轨'] as const;
+export const useWhyVariant = create<{ v: number; set: (v: number) => void }>((setState) => ({
+  v: 0,
+  set: (v) => setState({ v }),
+}));
+
+/** Empty media for the active reason (assets not decided yet). */
+function Media({ k, className }: { k: string; className?: string }) {
+  return (
+    <div
+      className={cn(
+        'absolute overflow-hidden rounded-full bg-[radial-gradient(circle_at_50%_32%,#2c2456,#100d1d_72%)]',
+        className,
+      )}
+    >
+      <div key={k} className="why-in absolute inset-0" />
+    </div>
+  );
+}
+
+/** Places children on the ring for station i (kept upright while the ring turns). */
+function Station({
+  i,
+  turn,
+  radius,
+  children,
+}: {
+  i: number;
+  turn: number;
+  /** distance from centre as % of the ring's half-size */
+  radius: number;
+  children: ReactNode;
+}) {
+  const a = ((i * STEP + turn - 90) * Math.PI) / 180;
+  return (
+    <span
+      className="absolute -translate-x-1/2 -translate-y-1/2"
+      style={{
+        left: `${50 + (Math.cos(a) * radius) / 2}%`,
+        top: `${50 + (Math.sin(a) * radius) / 2}%`,
+      }}
+    >
+      {children}
+    </span>
+  );
+}
+
+/** A — one hairline ring, dots on the line, labels outside, a large inner media disc. */
+function RingA({ t, p, active, k }: RingProps) {
+  const turn = -p * (N - 1) * STEP;
+  const C = 2 * Math.PI * 49.5;
+  return (
+    <>
+      <svg
+        aria-hidden
+        viewBox="0 0 100 100"
+        className="absolute inset-0 size-full overflow-visible"
+      >
+        <circle
+          cx="50"
+          cy="50"
+          r="49.5"
+          fill="none"
+          stroke="rgba(255,255,255,0.16)"
+          strokeWidth="0.2"
+        />
+        <circle
+          cx="50"
+          cy="50"
+          r="49.5"
+          fill="none"
+          stroke="#c4b5fd"
+          strokeWidth="0.35"
+          strokeLinecap="round"
+          transform="rotate(-90 50 50)"
+          strokeDasharray={C}
+          strokeDashoffset={C * (1 - p)}
+          style={{ filter: 'drop-shadow(0 0 1.2px rgba(196,181,253,0.9))' }}
+        />
+      </svg>
+      <Media k={k} className="inset-[9%] shadow-[0_0_120px_rgba(110,98,163,0.35)]" />
+      {WHY.map((key, i) => (
+        <Station key={key} i={i} turn={turn} radius={99}>
+          <span
+            className={cn(
+              'block size-2.5 rounded-full border transition-all duration-500',
+              active === i
+                ? 'border-[#e2daff] bg-[#c4b5fd] shadow-[0_0_14px_4px_rgba(196,181,253,0.55)]'
+                : 'border-white/40 bg-[#0b0b0d]',
+            )}
+          />
+        </Station>
+      ))}
+      {WHY.map((key, i) => (
+        <Station key={`l-${key}`} i={i} turn={turn} radius={118}>
+          <span
+            className={cn(
+              'block whitespace-nowrap text-sm transition-colors duration-500',
+              active === i ? 'text-white' : 'text-white/35',
+            )}
+          >
+            <span className="font-mono">0{i + 1}</span> {t(`items.${key}.label`)}
+          </span>
+        </Station>
+      ))}
+    </>
+  );
+}
+
+/** B — a glowing portal ring whose light turns with the scroll; pill labels outside. */
+function RingB({ t, p, active, k }: RingProps) {
+  const turn = -p * (N - 1) * STEP;
+  const mask =
+    'radial-gradient(farthest-side, transparent calc(100% - 3px), #000 calc(100% - 2.5px))';
+  const ring: CSSProperties = {
+    background: `conic-gradient(from ${-turn}deg, #f1ecff, #8b7bd8 25%, rgba(110,98,163,0.15) 50%, #8b7bd8 75%, #f1ecff)`,
+    mask,
+    WebkitMask: mask,
+  };
+  return (
+    <>
+      <span aria-hidden className="absolute inset-0 rounded-full opacity-70 blur-xl" style={ring} />
+      <span aria-hidden className="absolute inset-0 rounded-full" style={ring} />
+      <Media k={k} className="inset-[5%] shadow-[inset_0_0_60px_rgba(139,92,246,0.35)]" />
+      <span aria-hidden className="agent-spin absolute inset-[5%]">
+        <span className="absolute left-1/2 top-0 size-1.5 -translate-x-1/2 -translate-y-1/2 rounded-full bg-white shadow-[0_0_14px_5px_rgba(196,181,253,0.7)]" />
+      </span>
+      {WHY.map((key, i) => (
+        <Station key={key} i={i} turn={turn} radius={120}>
+          <span
+            className={cn(
+              'flex items-center gap-1.5 whitespace-nowrap rounded-full border px-3 py-1.5 text-[13px] transition-all duration-500',
+              active === i
+                ? 'border-[#c4b5fd]/60 bg-[#6e62a3]/40 text-white shadow-[0_0_20px_rgba(139,92,246,0.4)]'
+                : 'border-white/10 bg-white/[0.03] text-white/40',
+            )}
+          >
+            <span className="font-mono">0{i + 1}</span>
+            {t(`items.${key}.label`)}
+          </span>
+        </Station>
+      ))}
+    </>
+  );
+}
+
+/**
+ * C — an orrery: the media disc in the middle, a tilted orbit around it, and three
+ * small worlds riding the orbit. The active one swings to the front, larger and lit;
+ * the others pass behind the disc.
+ */
+function RingC({ t, p, active, k }: RingProps) {
+  return (
+    <>
+      <Media
+        k={k}
+        className="inset-[18%] z-10 border border-white/10 shadow-[0_0_100px_rgba(110,98,163,0.4)]"
+      />
+      <span
+        aria-hidden
+        className="absolute left-1/2 top-1/2 h-[34%] w-[128%] -translate-x-1/2 -translate-y-1/2 rounded-[50%] border border-[#c4b5fd]/30"
+      />
+      {WHY.map((key, i) => {
+        // the front of the orbit is the bottom of the ellipse
+        const a = ((90 + (i - p * (N - 1)) * STEP) * Math.PI) / 180;
+        const depth = Math.sin(a); // 1 front, -1 back
+        const f = (depth + 1) / 2;
+        return (
+          <span
+            key={key}
+            className="absolute -translate-x-1/2 -translate-y-1/2"
+            style={{
+              left: `${50 + Math.cos(a) * 64}%`,
+              top: `${50 + depth * 17}%`,
+              zIndex: depth > 0 ? 20 : 0,
+              opacity: 0.35 + 0.65 * f,
+            }}
+          >
+            <span
+              className="flex flex-col items-center gap-2"
+              style={{ transform: `scale(${0.65 + 0.35 * f})` }}
+            >
+              <span
+                className={cn(
+                  'grid size-14 place-items-center rounded-full bg-[radial-gradient(circle_at_35%_30%,#f1ecff,#8b7bd8_45%,#2a2160_100%)] font-mono text-sm text-white',
+                  active === i && 'shadow-[0_0_30px_6px_rgba(139,92,246,0.55)]',
+                )}
+              >
+                0{i + 1}
+              </span>
+              <span className="whitespace-nowrap text-sm text-white">
+                {t(`items.${key}.label`)}
+              </span>
+            </span>
+          </span>
+        );
+      })}
+    </>
+  );
+}
 
 /**
  * 五、为什么选择 Aholo 3D? — one pinned screen built around a ring (the "3D magic
- * house"). Scrolling turns the ring; each of the three stations comes to the top
- * in turn, its media fills the inner circle and its copy shows either side.
- * Media slots stay empty until assets are decided.
+ * house"). Scrolling turns the ring; each reason comes forward in turn, its media
+ * fills the centre and its copy shows either side. Media stays empty for now.
  */
 export function WhyUs() {
   const t = useTranslations('site.why');
+  const v = useWhyVariant((s) => s.v);
   const track = useRef<HTMLDivElement>(null);
-  const ring = useRef<HTMLDivElement>(null);
-  const [active, setActive] = useState(0);
+  const [p, setP] = useState(0);
 
   useEffect(() => {
     const el = track.current;
@@ -28,11 +232,7 @@ export function WhyUs() {
       raf = 0;
       const r = el.getBoundingClientRect();
       const span = r.height - window.innerHeight;
-      const p = span > 0 ? Math.min(Math.max(-r.top / span, 0), 1) : 0;
-      // turn the ring so station i sits at the top at p = i / (N - 1)
-      ring.current?.style.setProperty('--turn', `${-p * (N - 1) * STEP}deg`);
-      ring.current?.style.setProperty('--progress', String(p));
-      setActive(Math.round(p * (N - 1)));
+      setP(span > 0 ? Math.min(Math.max(-r.top / span, 0), 1) : 0);
     };
     const on = () => {
       if (!raf) raf = requestAnimationFrame(update);
@@ -47,143 +247,40 @@ export function WhyUs() {
     };
   }, []);
 
+  const active = Math.round(p * (N - 1));
   const k = WHY[active];
-  const C = 2 * Math.PI * 49; // progress arc circumference (r = 49 in a 100 box)
+  const props = { t, p, active, k };
 
   return (
     <section aria-labelledby="why-title" id="why" className="scroll-mt-20">
       <div ref={track} className="relative h-[calc(100svh+2*70svh)]">
         <div className="sticky top-[var(--header-h)] flex h-[calc(100svh-var(--header-h))] flex-col items-center justify-center overflow-hidden px-4 md:px-8">
-          {/* ambient violet light */}
           <span
             aria-hidden
-            className="pointer-events-none absolute inset-0 -z-10 [background:radial-gradient(40%_50%_at_50%_50%,rgba(110,98,163,0.28),transparent_70%),radial-gradient(30%_30%_at_15%_80%,rgba(139,92,246,0.12),transparent_70%)]"
+            className="pointer-events-none absolute inset-0 -z-10 [background:radial-gradient(38%_48%_at_50%_54%,rgba(110,98,163,0.22),transparent_70%)]"
           />
 
-          {/* ---------- ring ---------- */}
-          <div
-            ref={ring}
-            className="relative aspect-square w-[min(84vw,44svh)] shrink-0 lg:w-[min(64svh,620px)]"
-            style={{ '--turn': '0deg', '--progress': '0' } as React.CSSProperties}
-          >
-            {/* outline, progress arc and ticks */}
-            <svg aria-hidden viewBox="0 0 100 100" className="absolute inset-0 size-full">
-              <circle
-                cx="50"
-                cy="50"
-                r="49"
-                fill="none"
-                stroke="rgba(255,255,255,0.35)"
-                strokeWidth="0.25"
-              />
-              <circle
-                cx="50"
-                cy="50"
-                r="49"
-                fill="none"
-                stroke="url(#why-arc)"
-                strokeWidth="0.6"
-                strokeLinecap="round"
-                transform="rotate(-90 50 50)"
-                strokeDasharray={C}
-                style={{ strokeDashoffset: `calc(${C} * (1 - var(--progress)))` }}
-              />
-              <circle
-                cx="50"
-                cy="50"
-                r="40"
-                fill="none"
-                stroke="rgba(196,181,253,0.18)"
-                strokeWidth="0.2"
-                strokeDasharray="0.6 1.4"
-              />
-              <defs>
-                <linearGradient id="why-arc" x1="0" y1="0" x2="1" y2="1">
-                  <stop offset="0" stopColor="#e2daff" />
-                  <stop offset="1" stopColor="#8b7bd8" />
-                </linearGradient>
-              </defs>
-            </svg>
-
-            {/* turning layer: ticks + the three stations */}
-            <div
-              className="absolute inset-0 transition-transform duration-300 ease-out"
-              style={{ transform: 'rotate(var(--turn))' }}
-            >
-              {Array.from({ length: 24 }, (_, i) => (
-                <span
-                  key={i}
-                  aria-hidden
-                  className="absolute left-1/2 top-0 h-1/2 w-px origin-bottom"
-                  style={{ transform: `translateX(-50%) rotate(${i * 15}deg)` }}
-                >
-                  <span
-                    className={cn(
-                      'absolute left-0 top-[3%] w-px',
-                      i % 8 === 0 ? 'h-3 bg-white/60' : 'h-1.5 bg-white/20',
-                    )}
-                  />
-                </span>
-              ))}
-              {/* a spark orbiting slowly on the dashed track */}
-              <span aria-hidden className="agent-spin absolute inset-[10%]">
-                <span className="absolute left-1/2 top-0 size-1.5 -translate-x-1/2 -translate-y-1/2 rounded-full bg-[#e2daff] shadow-[0_0_12px_4px_rgba(196,181,253,0.6)]" />
-              </span>
-              {WHY.map((key, i) => (
-                <span
-                  key={key}
-                  className="absolute left-1/2 top-0 h-1/2 w-0 origin-bottom"
-                  style={{ transform: `rotate(${i * STEP}deg)` }}
-                >
-                  <span
-                    className="absolute left-0 top-[34%]"
-                    style={{
-                      transform: `translate(-50%, -50%) rotate(calc(${-i * STEP}deg - var(--turn)))`,
-                    }}
-                  >
-                    <span
-                      className={cn(
-                        'flex items-center gap-2 whitespace-nowrap text-sm transition-colors duration-500',
-                        active === i ? 'text-white' : 'text-white/40',
-                      )}
-                    >
-                      <span
-                        className={cn(
-                          'size-1.5 rounded-full transition-colors duration-500',
-                          active === i ? 'bg-[#c4b5fd]' : 'bg-white/30',
-                        )}
-                      />
-                      <span className="font-mono">0{i + 1}</span>
-                      {t(`items.${key}.label`)}
-                    </span>
-                  </span>
-                </span>
-              ))}
-            </div>
-
-            {/* inner circle: media for the active station (empty until assets are decided) */}
-            <div className="absolute inset-[24%] overflow-hidden rounded-full border border-white/15 bg-[radial-gradient(circle_at_50%_35%,#2a2350,#0f0d1a_75%)] shadow-[0_0_80px_rgba(110,98,163,0.35)]">
-              <div key={k} className="why-in absolute inset-0" />
-            </div>
-
-            {/* counters either side, as in the reference */}
-            <span className="absolute left-[10%] top-1/2 hidden -translate-y-1/2 font-mono text-sm text-white/70 md:block">
-              0{active + 1}
-            </span>
-            <span className="absolute right-[10%] top-1/2 hidden -translate-y-1/2 font-mono text-sm text-white/70 md:block">
-              / 0{N}
-            </span>
-          </div>
-
-          {/* ---------- copy ---------- */}
-          {/* section title: top of the screen on large, above the ring's copy on small */}
           <h2 id="why-title" className="t-h2 absolute inset-x-0 top-6 text-center md:top-8">
             {t('title')}
           </h2>
 
           <div
+            className={cn(
+              'relative mt-16 aspect-square shrink-0 lg:mt-14 lg:w-[min(50svh,500px)]',
+              v === 1 ? 'w-[min(52vw,36svh)]' : 'w-[min(62vw,36svh)]',
+            )}
+          >
+            {v === 0 && <RingA {...props} />}
+            {v === 1 && <RingB {...props} />}
+            {v === 2 && <RingC {...props} />}
+          </div>
+          <p className="mt-12 font-mono text-xs tracking-[0.2em] text-white/50">
+            0{active + 1} <span className="text-white/25">/ 0{N}</span>
+          </p>
+
+          <div
             key={`copy-${k}`}
-            className="why-in mt-8 max-w-md text-center lg:absolute lg:left-[max(2rem,6vw)] lg:top-1/2 lg:mt-0 lg:max-w-[min(26rem,24vw)] lg:-translate-y-1/2 lg:text-left"
+            className="why-in mt-5 max-w-md text-center lg:absolute lg:left-[max(2rem,6vw)] lg:top-1/2 lg:mt-0 lg:max-w-[min(26rem,24vw)] lg:-translate-y-1/2 lg:text-left"
           >
             <p className="t-label font-mono text-primary">
               0{active + 1} · {t(`items.${k}.label`)}
