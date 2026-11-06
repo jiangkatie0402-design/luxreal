@@ -1,6 +1,6 @@
 'use client';
 import { useTranslations } from 'next-intl';
-import { useEffect, useRef, useState, type CSSProperties, type ReactNode } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { create } from 'zustand';
 import { cn } from '@/lib/utils';
 
@@ -12,7 +12,7 @@ type T = ReturnType<typeof useTranslations>;
 type RingProps = { t: T; p: number; active: number; k: string };
 
 /** Preview-only: ring styles for review. */
-export const WHY_VARIANTS = ['A 极简细环', 'B 发光传送门', 'C 星轨'] as const;
+export const WHY_VARIANTS = ['C1 玻璃星球', 'C2 缩略图星球', 'C3 光点星轨'] as const;
 export const useWhyVariant = create<{ v: number; set: (v: number) => void }>((setState) => ({
   v: 0,
   set: (v) => setState({ v }),
@@ -32,183 +32,160 @@ function Media({ k, className }: { k: string; className?: string }) {
   );
 }
 
-/** Places children on the ring for station i (kept upright while the ring turns). */
-function Station({
-  i,
-  turn,
-  radius,
-  children,
+/* Orbit geometry, in % of the square stage: a wide, flat ellipse round the disc. */
+const RX = 64;
+const RY = 15;
+const BACK = `M ${50 - RX} 50 A ${RX} ${RY} 0 0 1 ${50 + RX} 50`;
+const FRONT = `M ${50 - RX} 50 A ${RX} ${RY} 0 0 0 ${50 + RX} 50`;
+
+/** One orbit drawn in two halves so the front half passes over the disc. */
+function Orbit({
+  half,
+  stroke,
+  width = 1,
+  tilt = 0,
 }: {
-  i: number;
-  turn: number;
-  /** distance from centre as % of the ring's half-size */
-  radius: number;
-  children: ReactNode;
+  half: 'back' | 'front';
+  stroke: string;
+  width?: number;
+  tilt?: number;
 }) {
-  const a = ((i * STEP + turn - 90) * Math.PI) / 180;
   return (
-    <span
-      className="absolute -translate-x-1/2 -translate-y-1/2"
-      style={{
-        left: `${50 + (Math.cos(a) * radius) / 2}%`,
-        top: `${50 + (Math.sin(a) * radius) / 2}%`,
-      }}
-    >
-      {children}
-    </span>
+    <path
+      d={half === 'back' ? BACK : FRONT}
+      fill="none"
+      stroke={stroke}
+      strokeWidth={width}
+      vectorEffect="non-scaling-stroke"
+      transform={tilt ? `rotate(${tilt} 50 50)` : undefined}
+    />
   );
 }
 
-/** A — one hairline ring, dots on the line, labels outside, a large inner media disc. */
-function RingA({ t, p, active, k }: RingProps) {
-  const turn = -p * (N - 1) * STEP;
-  const C = 2 * Math.PI * 49.5;
-  return (
-    <>
-      <svg
-        aria-hidden
-        viewBox="0 0 100 100"
-        className="absolute inset-0 size-full overflow-visible"
-      >
-        <circle
-          cx="50"
-          cy="50"
-          r="49.5"
-          fill="none"
-          stroke="rgba(255,255,255,0.16)"
-          strokeWidth="0.2"
-        />
-        <circle
-          cx="50"
-          cy="50"
-          r="49.5"
-          fill="none"
-          stroke="#c4b5fd"
-          strokeWidth="0.35"
-          strokeLinecap="round"
-          transform="rotate(-90 50 50)"
-          strokeDasharray={C}
-          strokeDashoffset={C * (1 - p)}
-          style={{ filter: 'drop-shadow(0 0 1.2px rgba(196,181,253,0.9))' }}
-        />
-      </svg>
-      <Media k={k} className="inset-[9%] shadow-[0_0_120px_rgba(110,98,163,0.35)]" />
-      {WHY.map((key, i) => (
-        <Station key={key} i={i} turn={turn} radius={99}>
-          <span
-            className={cn(
-              'block size-2.5 rounded-full border transition-all duration-500',
-              active === i
-                ? 'border-[#e2daff] bg-[#c4b5fd] shadow-[0_0_14px_4px_rgba(196,181,253,0.55)]'
-                : 'border-white/40 bg-[#0b0b0d]',
-            )}
-          />
-        </Station>
-      ))}
-      {WHY.map((key, i) => (
-        <Station key={`l-${key}`} i={i} turn={turn} radius={118}>
-          <span
-            className={cn(
-              'block whitespace-nowrap text-sm transition-colors duration-500',
-              active === i ? 'text-white' : 'text-white/35',
-            )}
-          >
-            <span className="font-mono">0{i + 1}</span> {t(`items.${key}.label`)}
-          </span>
-        </Station>
-      ))}
-    </>
-  );
-}
+type Style = 'glass' | 'thumb' | 'spark';
 
-/** B — a glowing portal ring whose light turns with the scroll; pill labels outside. */
-function RingB({ t, p, active, k }: RingProps) {
-  const turn = -p * (N - 1) * STEP;
-  const mask =
-    'radial-gradient(farthest-side, transparent calc(100% - 3px), #000 calc(100% - 2.5px))';
-  const ring: CSSProperties = {
-    background: `conic-gradient(from ${-turn}deg, #f1ecff, #8b7bd8 25%, rgba(110,98,163,0.15) 50%, #8b7bd8 75%, #f1ecff)`,
-    mask,
-    WebkitMask: mask,
-  };
+/** The three reasons riding the orbit; the active one swings to the front. */
+function Worlds({ t, p, active, style }: Omit<RingProps, 'k'> & { style: Style }) {
   return (
     <>
-      <span aria-hidden className="absolute inset-0 rounded-full opacity-70 blur-xl" style={ring} />
-      <span aria-hidden className="absolute inset-0 rounded-full" style={ring} />
-      <Media k={k} className="inset-[5%] shadow-[inset_0_0_60px_rgba(139,92,246,0.35)]" />
-      <span aria-hidden className="agent-spin absolute inset-[5%]">
-        <span className="absolute left-1/2 top-0 size-1.5 -translate-x-1/2 -translate-y-1/2 rounded-full bg-white shadow-[0_0_14px_5px_rgba(196,181,253,0.7)]" />
-      </span>
-      {WHY.map((key, i) => (
-        <Station key={key} i={i} turn={turn} radius={120}>
-          <span
-            className={cn(
-              'flex items-center gap-1.5 whitespace-nowrap rounded-full border px-3 py-1.5 text-[13px] transition-all duration-500',
-              active === i
-                ? 'border-[#c4b5fd]/60 bg-[#6e62a3]/40 text-white shadow-[0_0_20px_rgba(139,92,246,0.4)]'
-                : 'border-white/10 bg-white/[0.03] text-white/40',
-            )}
-          >
-            <span className="font-mono">0{i + 1}</span>
-            {t(`items.${key}.label`)}
-          </span>
-        </Station>
-      ))}
-    </>
-  );
-}
-
-/**
- * C — an orrery: the media disc in the middle, a tilted orbit around it, and three
- * small worlds riding the orbit. The active one swings to the front, larger and lit;
- * the others pass behind the disc.
- */
-function RingC({ t, p, active, k }: RingProps) {
-  return (
-    <>
-      <Media
-        k={k}
-        className="inset-[18%] z-10 border border-white/10 shadow-[0_0_100px_rgba(110,98,163,0.4)]"
-      />
-      <span
-        aria-hidden
-        className="absolute left-1/2 top-1/2 h-[34%] w-[128%] -translate-x-1/2 -translate-y-1/2 rounded-[50%] border border-[#c4b5fd]/30"
-      />
       {WHY.map((key, i) => {
-        // the front of the orbit is the bottom of the ellipse
+        // front of the orbit is the bottom of the ellipse
         const a = ((90 + (i - p * (N - 1)) * STEP) * Math.PI) / 180;
         const depth = Math.sin(a); // 1 front, -1 back
         const f = (depth + 1) / 2;
+        const on = active === i;
         return (
           <span
             key={key}
             className="absolute -translate-x-1/2 -translate-y-1/2"
             style={{
-              left: `${50 + Math.cos(a) * 64}%`,
-              top: `${50 + depth * 17}%`,
+              left: `${50 + Math.cos(a) * RX}%`,
+              top: `${50 + depth * RY}%`,
               zIndex: depth > 0 ? 20 : 0,
-              opacity: 0.35 + 0.65 * f,
+              opacity: 0.25 + 0.75 * f,
             }}
           >
             <span
-              className="flex flex-col items-center gap-2"
-              style={{ transform: `scale(${0.65 + 0.35 * f})` }}
+              className="relative flex flex-col items-center"
+              style={{ transform: `scale(${0.6 + 0.4 * f})` }}
             >
+              {style === 'glass' && (
+                <span
+                  className={cn(
+                    'relative size-10 rounded-full bg-[radial-gradient(circle_at_32%_28%,#ffffff_0%,#e6dcff_14%,#9a86e8_42%,#3a2c86_78%,#1a1440_100%)] transition-shadow duration-500',
+                    on
+                      ? 'shadow-[0_0_0_1px_rgba(255,255,255,0.35),0_0_36px_8px_rgba(150,120,255,0.5)]'
+                      : 'shadow-[0_0_0_1px_rgba(255,255,255,0.15)]',
+                  )}
+                >
+                  {/* rim light */}
+                  <span className="absolute inset-0 rounded-full bg-[radial-gradient(circle_at_75%_80%,rgba(255,200,240,0.55),transparent_45%)]" />
+                </span>
+              )}
+              {style === 'thumb' && (
+                <span
+                  className={cn(
+                    'relative size-16 overflow-hidden rounded-full border bg-[radial-gradient(circle_at_50%_30%,#2c2456,#120f22)] transition-all duration-500',
+                    on
+                      ? 'border-[#d6ccff]/70 shadow-[0_0_0_4px_rgba(196,181,253,0.12),0_0_30px_rgba(139,92,246,0.5)]'
+                      : 'border-white/15',
+                  )}
+                >
+                  {/* glass sheen; media goes here once assets are decided */}
+                  <span className="absolute inset-0 bg-[linear-gradient(135deg,rgba(255,255,255,0.18),transparent_45%)]" />
+                </span>
+              )}
+              {style === 'spark' && (
+                <span className="relative grid size-6 place-items-center">
+                  <span
+                    className={cn(
+                      'absolute inset-0 rounded-full blur-md transition-opacity duration-500',
+                      on ? 'bg-[#b9a6ff]/80' : 'bg-[#b9a6ff]/30',
+                    )}
+                  />
+                  <span className="relative size-2 rounded-full bg-white shadow-[0_0_8px_2px_rgba(255,255,255,0.8)]" />
+                </span>
+              )}
               <span
                 className={cn(
-                  'grid size-14 place-items-center rounded-full bg-[radial-gradient(circle_at_35%_30%,#f1ecff,#8b7bd8_45%,#2a2160_100%)] font-mono text-sm text-white',
-                  active === i && 'shadow-[0_0_30px_6px_rgba(139,92,246,0.55)]',
+                  'mt-2.5 whitespace-nowrap text-[13px] tracking-wide transition-colors duration-500',
+                  on ? 'text-white' : 'text-white/50',
                 )}
               >
-                0{i + 1}
-              </span>
-              <span className="whitespace-nowrap text-sm text-white">
                 {t(`items.${key}.label`)}
               </span>
             </span>
           </span>
         );
       })}
+    </>
+  );
+}
+
+/** Orrery: back orbit, media disc, front orbit, then the worlds. */
+function Orrery({ style, ...props }: RingProps & { style: Style }) {
+  const lines =
+    style === 'spark'
+      ? [
+          { tilt: 0, stroke: 'rgba(214,204,255,0.55)', width: 1 },
+          { tilt: 18, stroke: 'rgba(214,204,255,0.16)', width: 1 },
+          { tilt: -18, stroke: 'rgba(214,204,255,0.16)', width: 1 },
+        ]
+      : style === 'thumb'
+        ? [
+            { tilt: 0, stroke: 'rgba(214,204,255,0.4)', width: 1 },
+            { tilt: 0, stroke: 'rgba(214,204,255,0.08)', width: 7 },
+          ]
+        : [{ tilt: 0, stroke: 'url(#orbit-front)', width: 1.25 }];
+  const svg = (half: 'back' | 'front', z: string) => (
+    <svg
+      aria-hidden
+      viewBox="0 0 100 100"
+      preserveAspectRatio="none"
+      className={cn('pointer-events-none absolute inset-0 size-full overflow-visible', z)}
+      style={half === 'back' ? { opacity: 0.45 } : undefined}
+    >
+      <defs>
+        <linearGradient id="orbit-front" x1="0" x2="1" y1="0" y2="0">
+          <stop offset="0" stopColor="rgba(214,204,255,0)" />
+          <stop offset="0.5" stopColor="rgba(236,230,255,0.95)" />
+          <stop offset="1" stopColor="rgba(214,204,255,0)" />
+        </linearGradient>
+      </defs>
+      {lines.map((l, n) => (
+        <Orbit key={n} half={half} {...l} />
+      ))}
+    </svg>
+  );
+  return (
+    <>
+      {svg('back', 'z-0')}
+      <Media
+        k={props.k}
+        className="inset-[17%] z-10 border border-white/10 shadow-[0_0_120px_rgba(110,98,163,0.45),inset_0_0_40px_rgba(139,92,246,0.25)]"
+      />
+      {svg('front', 'z-[15]')}
+      <Worlds {...props} style={style} />
     </>
   );
 }
@@ -267,12 +244,10 @@ export function WhyUs() {
           <div
             className={cn(
               'relative mt-16 aspect-square shrink-0 lg:mt-14 lg:w-[min(50svh,500px)]',
-              v === 1 ? 'w-[min(52vw,36svh)]' : 'w-[min(62vw,36svh)]',
+              'w-[min(56vw,34svh)]',
             )}
           >
-            {v === 0 && <RingA {...props} />}
-            {v === 1 && <RingB {...props} />}
-            {v === 2 && <RingC {...props} />}
+            <Orrery {...props} style={(['glass', 'thumb', 'spark'] as const)[v]} />
           </div>
           <p className="mt-12 font-mono text-xs tracking-[0.2em] text-white/50">
             0{active + 1} <span className="text-white/25">/ 0{N}</span>
