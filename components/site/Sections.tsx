@@ -62,7 +62,9 @@ export function ForAgents() {
               <h2 id="agents-title" className="t-h2">
                 {t('title')}
               </h2>
-              <p className="t-lead mt-4 max-w-2xl text-muted-foreground">{t('lead')}</p>
+              <p className="t-lead mt-4 max-w-[60rem] text-balance text-muted-foreground">
+                {t('lead')}
+              </p>
             </div>
           }
         />
