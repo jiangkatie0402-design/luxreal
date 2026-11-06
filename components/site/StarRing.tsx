@@ -8,7 +8,7 @@ import { usePerfStore } from '@/lib/perf';
  * band wraps round the sphere. The disc drifts slowly and turns a little further
  * with the scroll (`p`). Pauses off-screen; still under reduced motion.
  */
-const COUNT = 1400;
+const COUNT = 2400;
 const TILT = (-14 * Math.PI) / 180;
 
 type Star = { r: number; a: number; w: number; s: number; b: number; hue: number; y: number };
@@ -18,7 +18,7 @@ function makeStars(): Star[] {
   for (let i = 0; i < COUNT; i++) {
     // denser towards the inner edge of the band, thinning outwards
     const u = Math.random();
-    const r = 0.6 + Math.pow(u, 1.4) * 0.8;
+    const r = 0.58 + Math.pow(u, 1.15) * 1.5;
     out.push({
       r,
       a: Math.random() * Math.PI * 2,
@@ -27,7 +27,7 @@ function makeStars(): Star[] {
       b: 0.35 + Math.random() * 0.65,
       hue: Math.random(),
       // thickness of the disc: most stars near the plane, some drifting off it
-      y: (Math.random() + Math.random() + Math.random() - 1.5) * 0.12,
+      y: (Math.random() + Math.random() + Math.random() - 1.5) * 0.2 * r,
     });
   }
   return out;
@@ -79,8 +79,8 @@ export function StarRing({ p }: { p: number }) {
       }
       const cx = w / 2;
       const cy = h / 2;
-      const RX = w * 0.26;
-      const RY = RX * 0.24;
+      const RX = w * 0.22;
+      const RY = RX * 0.3;
       const turn = t * 0.08 + pRef.current * 1.6;
       const cos = Math.cos(TILT);
       const sin = Math.sin(TILT);
@@ -94,7 +94,7 @@ export function StarRing({ p }: { p: number }) {
         const depth = Math.sin(a);
         const ctx = depth > 0 ? xf : xb;
         // fade towards the outer edge so the disc melts into the dark
-        const alpha = st.b * (depth > 0 ? 1 : 0.55) * Math.min(1, (1.4 - st.r) / 0.4 + 0.1);
+        const alpha = st.b * (depth > 0 ? 1 : 0.55) * Math.min(1, (2.1 - st.r) / 0.9 + 0.12);
         const tint = st.hue < 0.5 ? '226,218,255' : st.hue < 0.85 ? '196,181,253' : '255,215,240';
         // soft bloom of every star on a blurred layer, so the band reads as a glow
         xh.fillStyle = `rgba(${tint},${alpha * 0.22})`;
@@ -151,10 +151,10 @@ export function StarRing({ p }: { p: number }) {
   }, [p, reduced]);
 
   const canvas =
-    'pointer-events-none absolute left-1/2 top-1/2 h-[120%] w-[200%] -translate-x-1/2 -translate-y-1/2';
+    'pointer-events-none absolute left-1/2 top-1/2 h-[160%] w-[280%] -translate-x-1/2 -translate-y-1/2';
   return (
     <>
-      <canvas ref={haze} aria-hidden className={`${canvas} z-0 opacity-90 blur-[14px]`} />
+      <canvas ref={haze} aria-hidden className={`${canvas} z-0 opacity-50 blur-[10px]`} />
       <canvas ref={back} aria-hidden className={`${canvas} z-0`} />
       {/* core glow behind the planet, as in a galaxy's bright centre */}
       <span className="absolute inset-[8%] z-[1] rounded-full bg-[radial-gradient(closest-side,rgba(196,181,253,0.35),transparent)] blur-2xl" />
