@@ -1,39 +1,11 @@
 'use client';
 import { ArrowRight } from 'lucide-react';
 import { useTranslations } from 'next-intl';
-import type { ReactNode } from 'react';
 import { ButtonLink } from '@/components/ui/button';
 import { site } from '@/config/site';
 import { cn } from '@/lib/utils';
 import { AgentCapabilities } from './AgentCapabilities';
 import { AgentMcp } from './AgentMcp';
-
-/** Shared section shell: centred h2 (+ optional lead) and content. */
-function Section({
-  id,
-  title,
-  lead,
-  children,
-}: {
-  id: string;
-  title: string;
-  lead?: string;
-  children: ReactNode;
-}) {
-  return (
-    <section aria-labelledby={`${id}-title`} id={id} className="section-y scroll-mt-20">
-      <div className="container-x">
-        <h2 id={`${id}-title`} className="t-h2 text-center">
-          {title}
-        </h2>
-        {lead && (
-          <p className="t-lead mx-auto mt-4 max-w-2xl text-center text-muted-foreground">{lead}</p>
-        )}
-        <div className="mt-8 md:mt-12">{children}</div>
-      </div>
-    </section>
-  );
-}
 
 /** Empty media slot, kept until assets are decided. */
 function Slot({ className }: { className?: string }) {
@@ -152,22 +124,7 @@ export function Testimonials() {
   );
 }
 
-/** 七、社区作品 — gallery tiles empty until real works are chosen. */
-export function Community() {
-  const t = useTranslations('site.community');
-  return (
-    <Section id="community" title={t('title')} lead={t('lead')}>
-      <div className="grid grid-cols-2 gap-4 md:grid-cols-4 md:gap-6">
-        {Array.from({ length: 8 }, (_, i) => (
-          <Slot
-            key={i}
-            className={cn('aspect-square', i === 0 && 'md:col-span-2 md:row-span-2 md:aspect-auto')}
-          />
-        ))}
-      </div>
-    </Section>
-  );
-}
+export { Community } from './CommunityWall';
 
 /** 八、收尾引导 — create entry + (empty) agent install slot. */
 export function FinalCta() {

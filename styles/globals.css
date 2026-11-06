@@ -859,3 +859,16 @@
     animation: none;
   }
 }
+
+/* community: rows of work cards drifting sideways (cards duplicated for a seamless loop) */
+.community-row {
+  animation: voices-drift 70s linear infinite;
+}
+.community-row:hover {
+  animation-play-state: paused;
+}
+@media (prefers-reduced-motion: reduce) {
+  .community-row {
+    animation: none;
+  }
+}
