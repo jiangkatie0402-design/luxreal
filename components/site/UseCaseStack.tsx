@@ -30,15 +30,6 @@ function Slot({ bg, className, n }: { bg: string; className?: string; n?: number
   );
 }
 
-function Label({ index, label }: { index: number; label: string }) {
-  return (
-    <p className="flex items-center gap-3 font-mono text-sm text-[var(--muted)]">
-      <span>[ 0{index + 1} ]</span>
-      <span className="font-sans">{label}</span>
-    </p>
-  );
-}
-
 function FieldName({
   id,
   children,
@@ -62,19 +53,7 @@ function FieldName({
 }
 
 /** Copy + three media columns for one panel. */
-function PanelBody({
-  index,
-  id,
-  label,
-  t,
-  slot,
-}: {
-  index: number;
-  id: string;
-  label: string;
-  t: T;
-  slot: string;
-}) {
+function PanelBody({ id, t, slot }: { id: string; t: T; slot: string }) {
   const points = (t.raw(`${id}.points`) as string[]).map(splitPoint);
   const subtitle = (
     <p className="text-balance font-display text-2xl font-semibold leading-[1.35] tracking-[0.02em]">
@@ -99,11 +78,10 @@ function PanelBody({
   // aligned header: name + subtitle left, intro right on the subtitle's baseline
   return (
     <div className={WIDE}>
-      <Label index={index} label={label} />
-      <div className="mt-4 grid gap-4 lg:grid-cols-2 lg:items-end lg:gap-16">
+      <div className="grid gap-4 lg:grid-cols-2 lg:items-end lg:gap-16">
         <div>
           <FieldName id={id}>{t(`${id}.tab`)}</FieldName>
-          <div className="mt-5">{subtitle}</div>
+          <div className="mt-4">{subtitle}</div>
         </div>
         <p className="t-lead leading-[1.9] max-w-[36rem] text-[var(--muted)] lg:justify-self-end">
           {t(`${id}.intro`)}
@@ -244,7 +222,7 @@ export function UseCaseStack() {
                   }}
                 />
               )}
-              <PanelBody index={i} id={id} label={t('title')} t={t} slot={p.slot} />
+              <PanelBody id={id} t={t} slot={p.slot} />
             </article>
             {/* hold: the panel stays fully in view for a stretch before the next one slides over */}
             {i < IDS.length - 1 && <div aria-hidden className="h-[45svh]" />}
