@@ -186,20 +186,9 @@
     "voices": {
       "title": "What users say",
       "a": {
-        "title": "Creators using Aholo 3D",
-        "eyebrow": "Testimonials"
-      },
-      "b": {
-        "title": "Voices from every field",
-        "eyebrow": "Testimonials"
-      },
-      "c": {
-        "title": "What people are saying",
-        "eyebrow": "Testimonials",
-        "more": "See more"
+        "title": "Creators using Aholo 3D"
       },
       "quote": "A real user quote goes here: what Aholo 3D solved for them and how much time it saved.",
-      "quoteShort": "A short real user quote goes here.",
       "name": "Name",
       "role": "Role · Field"
     },

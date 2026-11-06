@@ -1,7 +1,7 @@
 'use client';
 import { useTranslations } from 'next-intl';
 import { useEffect, type CSSProperties, type ReactNode } from 'react';
-import { titleEn, titleZh } from '@/components/site/fonts';
+import { titleEn } from '@/components/site/fonts';
 import { HERO_SETS, useHeroSet } from '@/lib/heroPalettes';
 import { usePerfStore } from '@/lib/perf';
 import { CoverUpload } from '../cover/CoverUpload';
@@ -27,7 +27,7 @@ function Grad({ children, className = 'block' }: { children: ReactNode; classNam
 
 export function ViewportHero({ locale }: { locale: string }) {
   const t = useTranslations('home.viewport');
-  const brush = locale === 'zh' ? titleZh : titleEn;
+  const brush = locale === 'zh' ? 'hero-title-zh' : titleEn.className;
   const hs = HERO_SETS[useHeroSet((st) => st.i)];
   const reduced = usePerfStore((s) => s.reducedMotion);
   // the header sits outside the hero; its ink/CTA follow the cover via root variables
@@ -94,7 +94,7 @@ export function ViewportHero({ locale }: { locale: string }) {
       <div className="pointer-events-none absolute inset-x-0 top-[calc(var(--header-h)+24px)] z-[2] px-4 text-center md:top-[calc(var(--header-h)+32px)]">
         <h1
           id="hero-title"
-          className={`${brush.className} t-display [text-shadow:var(--title-shadow)] ${locale === 'zh' ? 'tracking-[0.04em]' : 'font-bold tracking-[-0.01em] text-balance max-md:text-[2rem] max-md:leading-[1.15]'}`}
+          className={`${brush} t-display [text-shadow:var(--title-shadow)] ${locale === 'zh' ? '' : 'font-bold tracking-[-0.01em] text-balance max-md:text-[2rem] max-md:leading-[1.15]'}`}
         >
           {t('titleA')}{' '}
           <Grad className={locale === 'zh' ? 'md:inline' : 'block'}>{t('titleB')}</Grad>

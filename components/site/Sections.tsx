@@ -1,11 +1,10 @@
 'use client';
-import { ArrowRight, Quote } from 'lucide-react';
+import { ArrowRight } from 'lucide-react';
 import { useTranslations } from 'next-intl';
 import type { ReactNode } from 'react';
 import { ButtonLink } from '@/components/ui/button';
 import { site } from '@/config/site';
 import { cn } from '@/lib/utils';
-import { create } from 'zustand';
 import { AgentCapabilities } from './AgentCapabilities';
 import { AgentMcp } from './AgentMcp';
 
@@ -81,169 +80,73 @@ export function ForAgents() {
 
 export { WhyUs } from './WhyRing';
 
-/** Preview-only: testimonial layouts for review. */
-export const VOICE_VARIANTS = ['A 作品+评价卡', 'B 分领域大引用', 'C 社交动态墙'] as const;
-export const useVoiceVariant = create<{ v: number; set: (v: number) => void }>((setState) => ({
-  v: 0,
-  set: (v) => setState({ v }),
-}));
-
-const FIELDS = ['print', 'game', 'film'] as const;
-
-function Person({ t, size = 'size-9' }: { t: ReturnType<typeof useTranslations>; size?: string }) {
+/** One testimonial: who said it on top, their words below. Placeholder until real quotes exist. */
+function VoiceCard({ t }: { t: ReturnType<typeof useTranslations> }) {
   return (
-    <span className="flex items-center gap-3">
-      <span
-        className={cn(
-          size,
-          'shrink-0 rounded-full bg-[linear-gradient(135deg,#3a3060,#1b1830)] ring-1 ring-white/10',
-        )}
-      />
-      <span className="text-left leading-tight">
-        <span className="block text-sm font-medium">{t('name')}</span>
-        <span className="t-small block text-muted-foreground">{t('role')}</span>
-      </span>
-    </span>
-  );
-}
-
-/** Section header shared by the variants: small eyebrow, then the title. */
-function VoicesHead({ eyebrow, title }: { eyebrow: string; title: string }) {
-  return (
-    <div className="text-center">
-      <p className="t-label font-mono text-primary">{eyebrow}</p>
-      <h2 id="voices-title" className="t-h2 mt-3">
-        {title}
-      </h2>
-    </div>
+    <figure className="flex w-[340px] shrink-0 flex-col gap-4 rounded-[20px] border border-white/[0.07] bg-[linear-gradient(160deg,rgba(40,34,72,0.55),rgba(18,17,26,0.7))] p-6 backdrop-blur-sm">
+      <figcaption className="flex items-center gap-3">
+        <span className="size-10 shrink-0 rounded-full bg-[linear-gradient(135deg,#4a3f86,#1b1830)] ring-1 ring-white/15" />
+        <span className="min-w-0 truncate text-[15px] font-semibold">
+          {t('name')} <span className="px-1 text-white/40">|</span> {t('role')}
+        </span>
+      </figcaption>
+      <blockquote className="t-small line-clamp-3 text-pretty leading-relaxed text-foreground/80">
+        {t('quote')}
+      </blockquote>
+    </figure>
   );
 }
 
 /**
- * 六、用户证言 — three layouts for review. Quotes, names and media stay as
- * explicit placeholders until real ones are collected.
+ * 六、用户证言 — dotted backdrop with a soft violet glow, a centred title with
+ * the brand highlighted, and two rows of testimonial cards drifting in
+ * opposite directions, fading at both edges. Quotes are placeholders.
  */
 export function Testimonials() {
   const t = useTranslations('site.voices');
-  const s = useTranslations('site.scenes');
-  const v = useVoiceVariant((st) => st.v);
-
+  const title = t('a.title');
+  const [before, after] = title.split('Aholo 3D');
+  const row = (reverse: boolean) => (
+    <div
+      className="voices-row flex w-max gap-5"
+      style={reverse ? { animationDirection: 'reverse' } : undefined}
+    >
+      {Array.from({ length: 10 }, (_, i) => (
+        <VoiceCard key={i} t={t} />
+      ))}
+    </div>
+  );
   return (
-    <section aria-labelledby="voices-title" id="voices" className="section-y scroll-mt-20">
-      <div className="container-x">
-        {/* A — the work first: a media slot, the quote, who said it and their field */}
-        {v === 0 && (
+    <section
+      aria-labelledby="voices-title"
+      id="voices"
+      className="relative isolate scroll-mt-20 overflow-hidden py-20 md:py-28"
+    >
+      {/* dotted grid + soft glows */}
+      <span
+        aria-hidden
+        className="pointer-events-none absolute inset-0 -z-10 [background:radial-gradient(circle,rgba(255,255,255,0.09)_1px,transparent_1.5px)_0_0/22px_22px] [mask-image:radial-gradient(70%_80%_at_50%_45%,#000_30%,transparent_85%)]"
+      />
+      <span
+        aria-hidden
+        className="pointer-events-none absolute inset-0 -z-10 [background:radial-gradient(35%_45%_at_15%_35%,rgba(110,98,163,0.28),transparent_70%),radial-gradient(30%_40%_at_85%_30%,rgba(139,92,246,0.14),transparent_70%)]"
+      />
+      <h2 id="voices-title" className="t-h2 container-x text-center">
+        {after !== undefined ? (
           <>
-            <VoicesHead eyebrow={t('a.eyebrow')} title={t('a.title')} />
-            <ul className="mt-10 grid gap-6 md:mt-14 md:grid-cols-3">
-              {FIELDS.map((f, i) => (
-                <li
-                  key={f}
-                  className={cn(
-                    'flex flex-col rounded-[22px] border border-white/[0.08] bg-[#111114] p-3',
-                    i === 1 && 'md:translate-y-8',
-                  )}
-                >
-                  <Slot className="aspect-[16/10] rounded-2xl" />
-                  <div className="flex flex-1 flex-col p-3 pt-5">
-                    <p className="t-body text-pretty text-foreground/90">“{t('quote')}”</p>
-                    <div className="mt-6 flex items-end justify-between gap-3 border-t border-white/[0.06] pt-4">
-                      <Person t={t} />
-                      <span className="rounded-full bg-[#6e62a3]/20 px-2.5 py-1 text-xs text-[#d6ccff]">
-                        {s(`${f}.tab`)}
-                      </span>
-                    </div>
-                  </div>
-                </li>
-              ))}
-            </ul>
+            {before}
+            <span className="bg-[linear-gradient(100deg,#e2daff,#a996ff)] bg-clip-text text-transparent [-webkit-text-stroke:0]">
+              Aholo 3D
+            </span>
+            {after}
           </>
+        ) : (
+          title
         )}
-
-        {/* B — one large quote at a time, switched by field, matching the use cases above */}
-        {v === 1 && (
-          <div className="grid items-center gap-10 lg:grid-cols-[minmax(0,5fr)_minmax(0,7fr)] lg:gap-16">
-            <div className="text-center lg:text-left">
-              <p className="t-label font-mono text-primary">{t('b.eyebrow')}</p>
-              <h2 id="voices-title" className="t-h2 mt-3 text-balance">
-                {t('b.title')}
-              </h2>
-              <div className="mt-8 flex flex-wrap justify-center gap-2 lg:justify-start">
-                {FIELDS.map((f, i) => (
-                  <span
-                    key={f}
-                    className={cn(
-                      'rounded-full border px-4 py-2 text-sm',
-                      i === 0
-                        ? 'border-[#c4b5fd]/50 bg-[#6e62a3]/30 text-white'
-                        : 'border-white/10 text-muted-foreground',
-                    )}
-                  >
-                    {s(`${f}.tab`)}
-                  </span>
-                ))}
-              </div>
-            </div>
-            <figure className="relative rounded-[28px] border border-white/[0.08] bg-[radial-gradient(80%_120%_at_0%_0%,rgba(110,98,163,0.22),transparent_60%),#0f0e13] p-8 md:p-12">
-              <Quote
-                aria-hidden
-                className="absolute -top-5 left-8 size-10 fill-[#b8a6ff] text-[#b8a6ff] md:left-12"
-              />
-              <blockquote className="text-balance font-display text-2xl font-medium leading-[1.5] md:text-3xl">
-                {t('quote')}
-              </blockquote>
-              <figcaption className="mt-10 flex items-center justify-between gap-4">
-                <Person t={t} size="size-11" />
-                <span className="flex gap-1.5">
-                  {[0, 1, 2].map((d) => (
-                    <span
-                      key={d}
-                      className={cn(
-                        'h-1 rounded-full',
-                        d === 0 ? 'w-6 bg-[#c4b5fd]' : 'w-2 bg-white/20',
-                      )}
-                    />
-                  ))}
-                </span>
-              </figcaption>
-            </figure>
-          </div>
-        )}
-
-        {/* C — a wall of short posts of varying length, fading out with a "see more" */}
-        {v === 2 && (
-          <>
-            <VoicesHead eyebrow={t('c.eyebrow')} title={t('c.title')} />
-            <div className="relative mt-10 md:mt-14">
-              <div className="columns-1 gap-4 sm:columns-2 lg:columns-3 [&>*]:mb-4">
-                {['X', 'Discord', '小红书', 'Reddit', 'X', 'Discord'].map((src, i) => (
-                  <figure
-                    key={i}
-                    className="break-inside-avoid rounded-2xl border border-white/[0.08] bg-[#111114] p-5"
-                  >
-                    <figcaption className="flex items-center justify-between gap-3">
-                      <Person t={t} size="size-8" />
-                      <span className="rounded-md bg-white/[0.05] px-2 py-0.5 font-mono text-[11px] text-muted-foreground">
-                        {src}
-                      </span>
-                    </figcaption>
-                    <blockquote className="t-body mt-4 text-pretty text-foreground/85">
-                      {i % 3 === 1 ? t('quoteShort') : t('quote')}
-                      {i % 3 === 2 && <> {t('quote')}</>}
-                    </blockquote>
-                    {i % 2 === 0 && <Slot className="mt-4 aspect-[16/9] rounded-xl" />}
-                  </figure>
-                ))}
-              </div>
-              <div className="pointer-events-none absolute inset-x-0 bottom-0 h-40 bg-gradient-to-b from-transparent to-background" />
-            </div>
-            <div className="relative -mt-6 text-center">
-              <span className="inline-flex h-10 items-center rounded-btn border border-white/15 px-5 text-sm text-muted-foreground">
-                {t('c.more')}
-              </span>
-            </div>
-          </>
-        )}
+      </h2>
+      <div className="mt-12 grid gap-5 [mask-image:linear-gradient(90deg,transparent,#000_8%,#000_92%,transparent)] md:mt-16">
+        {row(false)}
+        <div className="pl-[170px]">{row(true)}</div>
       </div>
     </section>
   );

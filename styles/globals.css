@@ -770,3 +770,63 @@
 :root:lang(en) {
   --font-display: var(--f-oxanium, 'Oxanium'), var(--f-inter, 'Inter'), sans-serif;
 }
+
+/* Chinese pages: headings in Aholo Display (得意黑 subset). It has a single
+   weight and runs narrow, so headings are set larger and thickened with a
+   hairline stroke instead of synthetic bold. The header keeps the UI face. */
+:root:lang(zh) {
+  --font-display: 'Aholo Display', var(--f-inter, 'Inter'), MiSans, sans-serif;
+}
+:root:lang(zh) header {
+  --font-display: var(--f-inter, 'Inter'), MiSans, sans-serif;
+}
+:lang(zh) main :is(.t-h2, .t-h3, .t-title, .font-display) {
+  font-synthesis: none;
+  font-weight: 400;
+  letter-spacing: 0.01em;
+  -webkit-text-stroke: 0.6px currentColor;
+}
+:lang(zh) main h2.t-h2 {
+  font-size: clamp(2.25rem, 4.2vw, 3.75rem);
+  line-height: 1.15;
+}
+:lang(zh) main :is(h3.font-display, h3.t-title) {
+  font-size: clamp(1.6rem, 2.5vw, 2.6rem);
+  line-height: 1.2;
+}
+:lang(zh) main p.font-display {
+  font-size: clamp(1.35rem, 1.8vw, 1.9rem);
+}
+:lang(zh) main h3.font-display[id^='scene-'] {
+  font-size: clamp(3rem, 6.4vw, 5.5rem);
+  line-height: 1.05;
+}
+.hero-title-zh {
+  font-family: 'Aholo Display', var(--f-inter, 'Inter'), MiSans, sans-serif;
+  font-weight: 400;
+  font-synthesis: none;
+  letter-spacing: 0.01em;
+  font-size: clamp(2.6rem, 5.6vw, 5.25rem);
+  -webkit-text-stroke: 1px currentColor;
+}
+.hero-title-zh span {
+  -webkit-text-stroke: 1px transparent;
+}
+
+/* testimonials: two slow drifting rows (cards duplicated so the loop is seamless) */
+.voices-row {
+  animation: voices-drift 90s linear infinite;
+}
+.voices-row:hover {
+  animation-play-state: paused;
+}
+@keyframes voices-drift {
+  to {
+    transform: translateX(-50%);
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .voices-row {
+    animation: none;
+  }
+}
