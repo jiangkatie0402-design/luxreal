@@ -405,7 +405,7 @@ export function WhyUs() {
   const k = WHY[active];
 
   return (
-    <section aria-labelledby="why-title" id="why" className="scroll-mt-20">
+    <section aria-labelledby="why-title" id="why" className="scroll-mt-20 pt-16 md:pt-32">
       <div ref={track} className="relative h-[calc(100svh+2*70svh)]">
         <div className="sticky top-[var(--header-h)] flex h-[calc(100svh-var(--header-h))] flex-col items-center justify-center overflow-hidden px-4 md:px-8">
           <span
