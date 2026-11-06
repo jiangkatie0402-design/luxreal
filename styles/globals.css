@@ -708,34 +708,6 @@
   }
 }
 
-/* Agents orbit: the form spins on Z and sways on Y (never edge-on) */
-@keyframes agent-spin {
-  to {
-    transform: rotate(360deg);
-  }
-}
-@keyframes agent-tilt {
-  from {
-    transform: rotateY(-38deg) rotateX(12deg);
-  }
-  to {
-    transform: rotateY(38deg) rotateX(-8deg);
-  }
-}
-.agent-spin {
-  animation: agent-spin 24s linear infinite;
-}
-.agent-tilt {
-  animation: agent-tilt 6s ease-in-out infinite alternate;
-  transform-style: preserve-3d;
-}
-@media (prefers-reduced-motion: reduce) {
-  .agent-spin,
-  .agent-tilt {
-    animation: none;
-  }
-}
-
 /* MCP: slow light travelling round the command bar's border */
 .mcp-glow {
   background: conic-gradient(

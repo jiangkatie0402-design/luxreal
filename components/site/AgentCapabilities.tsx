@@ -3,41 +3,17 @@ import { useTranslations } from 'next-intl';
 import { useEffect, useRef, useState } from 'react';
 import { usePerfStore } from '@/lib/perf';
 import { cn } from '@/lib/utils';
+import { Mascot } from './Mascot';
 
 export const AGENT_ITEMS = ['gen', 'material', 'format', 'batch', 'track', 'scene'] as const;
 type T = ReturnType<typeof useTranslations>;
 
-/** The centre form: turns on Z and gently tilts on Y so it never goes edge-on. */
+/** The centre: the Aholo mascot turning slowly on a soft violet glow. */
 function Form() {
   return (
-    <div className="relative size-full [perspective:900px]">
-      <span className="absolute inset-[-25%] rounded-full bg-[radial-gradient(closest-side,rgba(139,92,246,0.32),transparent)] blur-2xl" />
-      <div className="agent-tilt size-full">
-        <svg viewBox="-100 -100 200 200" className="agent-spin size-full" fill="none">
-          <defs>
-            <linearGradient id="orbit-g" x1="0" y1="0" x2="1" y2="1">
-              <stop offset="0" stopColor="#c4b5fd" />
-              <stop offset="1" stopColor="#6e62a3" />
-            </linearGradient>
-          </defs>
-          <path
-            d="M0 -96 C 10 -20, 20 -10, 96 0 C 20 10, 10 20, 0 96 C -10 20, -20 10, -96 0 C -20 -10, -10 -20, 0 -96 Z"
-            fill="url(#orbit-g)"
-            opacity="0.92"
-          />
-          {Array.from({ length: 6 }, (_, i) => (
-            <ellipse
-              key={i}
-              cx="0"
-              cy="0"
-              rx={90 - i * 13}
-              ry={(90 - i * 13) * 0.32}
-              stroke="rgba(255,255,255,0.22)"
-              strokeWidth="0.6"
-            />
-          ))}
-        </svg>
-      </div>
+    <div className="relative size-full">
+      <span className="absolute inset-[-18%] rounded-full bg-[radial-gradient(closest-side,rgba(139,92,246,0.32),transparent)] blur-2xl" />
+      <Mascot className="absolute inset-0" />
     </div>
   );
 }
@@ -175,7 +151,7 @@ function Ring({ t }: { t: T }) {
 
   return (
     <div ref={stage} className="relative mx-auto hidden h-[600px] w-full max-w-[1200px] lg:block">
-      <div className="absolute left-1/2 top-[47%] aspect-square h-[40%] -translate-x-1/2 -translate-y-1/2">
+      <div className="absolute left-1/2 top-[45%] aspect-square h-[52%] -translate-x-1/2 -translate-y-1/2">
         <Form />
       </div>
       {RING.map((r, i) => (
