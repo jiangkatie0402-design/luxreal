@@ -842,13 +842,13 @@
 }
 :root[data-brand-btn='b'] .brand-fill,
 :root[data-brand-btn='d'] .brand-hero .brand-fill {
-  background: #0f0b1d;
+  background: var(--brand-dark-fill, #0f0b1d);
+  backdrop-filter: blur(8px);
   box-shadow: none;
 }
 :root[data-brand-btn='b'] .brand-fill:hover,
 :root[data-brand-btn='d'] .brand-hero .brand-fill:hover {
-  filter: none;
-  background: #1a1434;
+  filter: brightness(1.15);
 }
 :root[data-brand-btn='b'] .brand-label,
 :root[data-brand-btn='d'] .brand-hero .brand-label {
