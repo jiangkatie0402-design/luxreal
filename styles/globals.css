@@ -778,7 +778,7 @@
   font-weight: 400;
   font-synthesis: none;
   letter-spacing: 0.01em;
-  font-size: clamp(2.6rem, 5.6vw, 5.25rem);
+  font-size: var(--hero-zh-size, clamp(2.6rem, 5.6vw, 5.25rem));
   -webkit-text-stroke: 1px currentColor;
 }
 .hero-title-zh span {
