@@ -770,18 +770,3 @@
 :root:lang(en) {
   --font-display: var(--f-oxanium, 'Oxanium'), var(--f-inter, 'Inter'), sans-serif;
 }
-
-/* testimonials: two slow drifting rows (content duplicated so the loop is seamless) */
-.voices-row {
-  animation: voices-drift 80s linear infinite;
-}
-@keyframes voices-drift {
-  to {
-    transform: translateX(-50%);
-  }
-}
-@media (prefers-reduced-motion: reduce) {
-  .voices-row {
-    animation: none;
-  }
-}

@@ -184,7 +184,24 @@
       }
     },
     "voices": {
-      "title": "用户证言"
+      "title": "用户证言",
+      "a": {
+        "title": "创作者在用 Aholo 3D",
+        "eyebrow": "用户证言"
+      },
+      "b": {
+        "title": "来自不同领域的声音",
+        "eyebrow": "用户证言"
+      },
+      "c": {
+        "title": "大家在聊 Aholo 3D",
+        "eyebrow": "用户证言",
+        "more": "查看更多"
+      },
+      "quote": "这里放一句用户原话：用 Aholo 3D 解决了什么问题、省下了多少时间。",
+      "quoteShort": "这里放一句简短的用户原话。",
+      "name": "用户名",
+      "role": "职业 · 领域"
     },
     "community": {
       "title": "从一张图、一句话，到这些 3D 作品",
