@@ -2,7 +2,6 @@
 import { useTranslations } from 'next-intl';
 import { useEffect, useRef, useState, type ReactNode } from 'react';
 import { ArrowRight, ImagePlus } from 'lucide-react';
-import { create } from 'zustand';
 import { cn } from '@/lib/utils';
 import { appUrl, site } from '@/config/site';
 
@@ -32,21 +31,7 @@ function Glass({
 }
 
 /** The upload box on the cover. Validates locally, then hands off to the app. */
-/** Preview-only: button styles for review. */
-export const GO_VARIANTS = [
-  'B2 流光边框',
-  'L1 双色流光胶囊',
-  'L2 流光+光晕',
-  'L3 彗星光点',
-  'L4 流光+渐变字',
-] as const;
-export const useGoVariant = create<{ v: number; set: (v: number) => void }>((setState) => ({
-  v: 0,
-  set: (v) => setState({ v }),
-}));
-
 export function CoverUpload() {
-  const gv = useGoVariant((st) => st.v);
   const t = useTranslations('home.cover.upload');
   const [file, setFile] = useState<File | null>(null);
   const [preview, setPreview] = useState<string | null>(null);
@@ -137,7 +122,6 @@ export function CoverUpload() {
       <span className="rounded-full bg-white/[0.07] px-2.5 py-1">{t('output')}</span>
     </span>
   );
-  const arrow = <ArrowRight className="size-4" aria-hidden />;
   const topRow = (pad = 'px-5 pb-4 pt-5') => (
     <label
       className={cn(
@@ -166,67 +150,8 @@ export function CoverUpload() {
       <div className="flex items-center gap-2 bg-black/25 px-3 py-2.5">
         {chips}
         <span className="ml-auto">
-          {gv === 0 && (
-            <span className="mcp-glow inline-flex rounded-[12px] p-px shadow-[0_0_24px_-6px_rgba(167,150,255,0.6)]">
-              <button
-                type="button"
-                onClick={submit}
-                className="inline-flex h-10 items-center gap-2 rounded-[11px] bg-[#120e24] px-5 text-sm font-medium text-white transition-colors hover:bg-[#1c1638]"
-              >
-                {t('generate')}
-                {arrow}
-              </button>
-            </span>
-          )}
-          {/* L1 — pill, two light heads (violet and pink) chasing round the border */}
-          {gv === 1 && (
-            <span className="glow-dual inline-flex rounded-full p-px shadow-[0_0_26px_-6px_rgba(200,150,255,0.6)]">
-              <button
-                type="button"
-                onClick={submit}
-                className="inline-flex h-10 items-center gap-2 rounded-full bg-[#120e24] px-6 text-sm font-medium text-white transition-colors hover:bg-[#1c1638]"
-              >
-                {t('generate')}
-                {arrow}
-              </button>
-            </span>
-          )}
-          {/* L2 — the light also blooms outside the button, following the head */}
-          {gv === 2 && (
-            <span className="relative inline-flex">
-              <span
-                aria-hidden
-                className="mcp-glow absolute -inset-1 rounded-[14px] opacity-70 blur-md"
-              />
-              <span className="mcp-glow relative inline-flex rounded-[12px] p-px">
-                <button
-                  type="button"
-                  onClick={submit}
-                  className="inline-flex h-10 items-center gap-2 rounded-[11px] bg-[linear-gradient(180deg,#1d1740,#100c20)] px-5 text-sm font-medium text-white transition-colors hover:brightness-125"
-                >
-                  {t('generate')}
-                  {arrow}
-                </button>
-              </span>
-            </span>
-          )}
-          {/* L3 — a quiet border with a single bright comet running round it */}
-          {gv === 3 && (
-            <span className="glow-comet inline-flex rounded-[12px] p-px">
-              <button
-                type="button"
-                onClick={submit}
-                className="group inline-flex h-10 items-center gap-2.5 rounded-[11px] bg-[#100c1e] pl-5 pr-1.5 text-sm font-medium text-white"
-              >
-                {t('generate')}
-                <span className="grid size-7 place-items-center rounded-[8px] bg-[#6e62a3]/50 transition-transform group-hover:translate-x-0.5">
-                  <ArrowRight className="size-4" aria-hidden />
-                </span>
-              </button>
-            </span>
-          )}
-          {/* L4 — flowing border; label in a lavender gradient */}
-          {gv === 4 && (
+          {/* flowing light round the border; label in a lavender gradient */}
+          {
             <span className="mcp-glow inline-flex rounded-[12px] p-px shadow-[0_0_24px_-6px_rgba(167,150,255,0.6)]">
               <button
                 type="button"
@@ -239,7 +164,7 @@ export function CoverUpload() {
                 <ArrowRight className="size-4 text-[#c4b5fd]" aria-hidden />
               </button>
             </span>
-          )}
+          }
         </span>
       </div>
     </Glass>
