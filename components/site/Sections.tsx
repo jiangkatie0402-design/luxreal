@@ -80,17 +80,53 @@ export function ForAgents() {
 
 export { WhyUs } from './WhyRing';
 
-/** 六、用户证言 — content not decided; empty quote frames. */
+/** One quiet quote card; text stays as skeleton lines until real quotes exist. */
+function QuoteCard() {
+  return (
+    <figure className="flex w-[300px] shrink-0 flex-col gap-4 rounded-2xl border border-white/[0.06] bg-white/[0.02] p-5">
+      <blockquote aria-hidden className="grid gap-2">
+        <span className="h-2 w-full rounded-full bg-white/[0.07]" />
+        <span className="h-2 w-[86%] rounded-full bg-white/[0.07]" />
+        <span className="h-2 w-[62%] rounded-full bg-white/[0.07]" />
+      </blockquote>
+      <figcaption aria-hidden className="flex items-center gap-2.5">
+        <span className="size-6 rounded-full bg-white/[0.08]" />
+        <span className="h-2 w-20 rounded-full bg-white/[0.07]" />
+      </figcaption>
+    </figure>
+  );
+}
+
+/**
+ * 六、用户证言 — kept deliberately quiet: a small heading and two slow rows of
+ * compact quote cards drifting in opposite directions, faded at both edges.
+ * Quotes are empty until real ones are collected.
+ */
 export function Testimonials() {
   const t = useTranslations('site.voices');
+  const row = (reverse: boolean) => (
+    <div
+      className="flex w-max gap-4 voices-row"
+      style={reverse ? { animationDirection: 'reverse' } : undefined}
+    >
+      {Array.from({ length: 12 }, (_, i) => (
+        <QuoteCard key={i} />
+      ))}
+    </div>
+  );
   return (
-    <Section id="voices" title={t('title')}>
-      <div className="grid gap-6 md:grid-cols-3">
-        {[0, 1, 2].map((i) => (
-          <Slot key={i} className="min-h-56" />
-        ))}
+    <section aria-labelledby="voices-title" id="voices" className="scroll-mt-20 py-16 md:py-20">
+      <h2
+        id="voices-title"
+        className="text-center font-display text-xl font-semibold text-muted-foreground md:text-2xl"
+      >
+        {t('title')}
+      </h2>
+      <div className="mt-8 grid gap-4 overflow-hidden [mask-image:linear-gradient(90deg,transparent,#000_12%,#000_88%,transparent)] md:mt-10">
+        {row(false)}
+        {row(true)}
       </div>
-    </Section>
+    </section>
   );
 }
 
