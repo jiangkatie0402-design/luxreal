@@ -55,14 +55,14 @@ export { WhyUs } from './WhyRing';
 /** One testimonial: who said it on top, their words below. Placeholder until real quotes exist. */
 function VoiceCard({ t }: { t: ReturnType<typeof useTranslations> }) {
   return (
-    <figure className="flex w-[280px] shrink-0 flex-col gap-3 rounded-[20px] border border-white/[0.07] bg-[linear-gradient(160deg,rgba(40,34,72,0.55),rgba(18,17,26,0.7))] p-5 backdrop-blur-sm">
+    <figure className="flex min-h-[210px] w-[280px] shrink-0 flex-col gap-4 rounded-[20px] border border-white/[0.07] bg-[linear-gradient(160deg,rgba(40,34,72,0.55),rgba(18,17,26,0.7))] px-5 py-6 backdrop-blur-sm">
       <figcaption className="flex items-center gap-3">
         <span className="size-10 shrink-0 rounded-full bg-[linear-gradient(135deg,#4a3f86,#1b1830)] ring-1 ring-white/15" />
         <span className="min-w-0 truncate text-[15px] font-semibold">
           {t('name')} <span className="px-1 text-white/40">|</span> {t('role')}
         </span>
       </figcaption>
-      <blockquote className="t-small line-clamp-3 text-pretty leading-relaxed text-foreground/80">
+      <blockquote className="t-small line-clamp-5 text-pretty leading-[1.8] text-foreground/80">
         {t('quote')}
       </blockquote>
     </figure>
