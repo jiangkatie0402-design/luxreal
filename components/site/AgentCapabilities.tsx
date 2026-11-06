@@ -27,6 +27,7 @@ function Item({
   open,
   align,
   onPick,
+  up = false,
 }: {
   t: T;
   k: (typeof AGENT_ITEMS)[number];
@@ -35,6 +36,8 @@ function Item({
   open: boolean;
   align: 'left' | 'center' | 'right';
   onPick: (i: number) => void;
+  /** open the copy above the label (for the lower stations) */
+  up?: boolean;
 }) {
   return (
     <button
@@ -42,10 +45,11 @@ function Item({
       aria-pressed={on}
       onClick={() => onPick(i)}
       className={cn(
-        'block w-full rounded-btn p-2 text-left outline-none transition-opacity duration-[var(--dur-base)] focus-visible:ring-1 focus-visible:ring-primary',
+        'flex w-full flex-col rounded-btn p-2 text-left outline-none transition-opacity duration-[var(--dur-base)] focus-visible:ring-1 focus-visible:ring-primary',
         align === 'center' && 'text-center',
         align === 'right' && 'text-right',
         on ? 'opacity-100' : 'opacity-55 hover:opacity-90',
+        up && 'flex-col-reverse',
       )}
     >
       <span
@@ -65,8 +69,12 @@ function Item({
         )}
       >
         <span className="overflow-hidden">
-          <span className="t-title mt-3 block !text-lg">{t(`items.${k}.t`)}</span>
-          <span className="t-desc mt-2 block text-balance text-muted-foreground">
+          <span className={cn('t-title block !text-lg', up ? 'mt-0' : 'mt-3')}>
+            {t(`items.${k}.t`)}
+          </span>
+          <span
+            className={cn('t-desc mt-2 block text-balance text-muted-foreground', up && 'mb-3')}
+          >
             {t(`items.${k}.d`)}
           </span>
         </span>
@@ -80,11 +88,11 @@ const STEP_MS = 2000;
 
 /** Ring positions (% of the stage) of each label; open content hangs below it. */
 const RING = [
-  { x: 50, y: 4, align: 'center' },
-  { x: 76, y: 26, align: 'left' },
-  { x: 76, y: 60, align: 'left' },
-  { x: 24, y: 60, align: 'right' },
-  { x: 24, y: 26, align: 'right' },
+  { x: 50, y: 2, align: 'center' },
+  { x: 76, y: 24, align: 'left' },
+  { x: 76, y: 84, align: 'left' },
+  { x: 24, y: 84, align: 'right' },
+  { x: 24, y: 24, align: 'right' },
 ] as const;
 
 /**
@@ -149,7 +157,7 @@ function Ring({ t }: { t: T }) {
   }, [reduced, active]);
 
   return (
-    <div ref={stage} className="relative mx-auto hidden h-[460px] w-full max-w-[1200px] lg:block">
+    <div ref={stage} className="relative mx-auto hidden h-[400px] w-full max-w-[1200px] lg:block">
       <div className="absolute left-1/2 top-[45%] aspect-square h-[62%] -translate-x-1/2 -translate-y-1/2">
         <Form />
       </div>
@@ -166,7 +174,8 @@ function Ring({ t }: { t: T }) {
         >
           <div
             className={cn(
-              'w-[min(340px,24vw)] -translate-y-5',
+              'w-[min(340px,24vw)]',
+              r.y > 50 ? '-translate-y-[calc(100%-1.25rem)]' : '-translate-y-5',
               r.align === 'center' && '-translate-x-1/2',
               r.align === 'right' && '-translate-x-full',
             )}
@@ -179,6 +188,7 @@ function Ring({ t }: { t: T }) {
               open={active === i}
               align={r.align}
               onPick={setActive}
+              up={r.y > 50}
             />
           </div>
         </div>
@@ -210,7 +220,7 @@ export function AgentCapabilities({ heading }: { heading: React.ReactNode }) {
   return (
     <div>
       {heading}
-      <div className="mt-10 lg:mt-8">
+      <div className="mt-10 lg:mt-6">
         <Ring t={t} />
         <MobileList t={t} />
       </div>
