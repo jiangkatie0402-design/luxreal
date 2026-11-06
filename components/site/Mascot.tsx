@@ -6,8 +6,8 @@ import { usePerfStore } from '@/lib/perf';
 const BASE = process.env.NEXT_PUBLIC_ASSET_BASE ?? '/';
 
 /**
- * The Aholo mascot (from the logo .blend, decimated, WebP textures) on a slow
- * turntable with a gentle float. three.js is loaded on demand; rendering pauses
+ * The Aholo mascot (from the logo .blend, decimated, WebP textures), facing the
+ * viewer with a gentle sway and float. three.js is loaded on demand; rendering pauses
  * off-screen, and reduced motion shows a still three-quarter view.
  */
 export function Mascot({ className }: { className?: string }) {
@@ -23,25 +23,30 @@ export function Mascot({ className }: { className?: string }) {
     (async () => {
       const THREE = await import('three');
       const { GLTFLoader } = await import('three/examples/jsm/loaders/GLTFLoader.js');
+      const { RoomEnvironment } =
+        await import('three/examples/jsm/environments/RoomEnvironment.js');
       if (disposed) return;
 
       const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
       renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 2));
       renderer.outputColorSpace = THREE.SRGBColorSpace;
-      renderer.toneMapping = THREE.ACESFilmicToneMapping;
-      renderer.toneMappingExposure = 1.15;
+      renderer.toneMapping = THREE.NeutralToneMapping;
+      renderer.toneMappingExposure = 1;
       renderer.domElement.style.width = '100%';
       renderer.domElement.style.height = '100%';
       el.appendChild(renderer.domElement);
 
       const scene = new THREE.Scene();
       const camera = new THREE.PerspectiveCamera(30, 1, 0.01, 100);
-      scene.add(new THREE.HemisphereLight(0xe9e2ff, 0x1a1238, 1.6));
-      const key = new THREE.DirectionalLight(0xffffff, 2.2);
-      key.position.set(2, 3, 4);
+      // soft studio light: a room environment for reflections, plus a key and a violet rim
+      const pmrem = new THREE.PMREMGenerator(renderer);
+      scene.environment = pmrem.fromScene(new RoomEnvironment(), 0.04).texture;
+      scene.environmentIntensity = 0.9;
+      const key = new THREE.DirectionalLight(0xffffff, 1.6);
+      key.position.set(-2, 3, 4);
       scene.add(key);
-      const rim = new THREE.DirectionalLight(0xa78bfa, 3);
-      rim.position.set(-3, 1.5, -3);
+      const rim = new THREE.DirectionalLight(0xc4b5fd, 2.2);
+      rim.position.set(3, 2, -3);
       scene.add(rim);
 
       const pivot = new THREE.Group();
@@ -49,6 +54,16 @@ export function Mascot({ className }: { className?: string }) {
       const gltf = await new GLTFLoader().loadAsync(`${BASE}models/mascot.glb`);
       if (disposed) return;
       const model = gltf.scene;
+      // The export maps the colour texture to emission at full strength, which
+      // flattens the body into neon. Keep only a faint glow (eyes, orb, brush tip
+      // are the lightest texels, so they still read as lit) and a soft satin finish.
+      model.traverse((o) => {
+        const mesh = o as import('three').Mesh;
+        const m = mesh.material as import('three').MeshStandardMaterial | undefined;
+        if (!m || !('emissiveIntensity' in m)) return;
+        m.emissiveIntensity = 0.12;
+        m.envMapIntensity = 0.8;
+      });
       // centre the model and frame it
       const box = new THREE.Box3().setFromObject(model);
       const size = box.getSize(new THREE.Vector3());
@@ -79,7 +94,8 @@ export function Mascot({ className }: { className?: string }) {
       const t0 = performance.now();
       const draw = (now: number) => {
         const t = reduced ? 0 : (now - t0) / 1000;
-        pivot.rotation.y = -0.5 + t * 0.35;
+        // face the viewer and sway gently instead of turning its back
+        pivot.rotation.y = Math.sin(t * 0.45) * 0.5;
         pivot.position.y = Math.sin(t * 1.2) * radius * 0.03;
         renderer.render(scene, camera);
         if (!reduced && visible && !document.hidden) raf = requestAnimationFrame(draw);
@@ -102,6 +118,7 @@ export function Mascot({ className }: { className?: string }) {
         io.disconnect();
         ro.disconnect();
         document.removeEventListener('visibilitychange', onVis);
+        pmrem.dispose();
         renderer.dispose();
         renderer.domElement.remove();
       };

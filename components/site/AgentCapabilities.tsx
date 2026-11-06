@@ -151,7 +151,7 @@ function Ring({ t }: { t: T }) {
 
   return (
     <div ref={stage} className="relative mx-auto hidden h-[600px] w-full max-w-[1200px] lg:block">
-      <div className="absolute left-1/2 top-[45%] aspect-square h-[52%] -translate-x-1/2 -translate-y-1/2">
+      <div className="absolute left-1/2 top-[45%] aspect-square h-[62%] -translate-x-1/2 -translate-y-1/2">
         <Form />
       </div>
       {RING.map((r, i) => (
