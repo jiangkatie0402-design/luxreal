@@ -82,8 +82,8 @@ const STEP_MS = 2000;
 const RING = [
   { x: 50, y: 4, align: 'center' },
   { x: 76, y: 26, align: 'left' },
-  { x: 76, y: 62, align: 'left' },
-  { x: 24, y: 62, align: 'right' },
+  { x: 76, y: 60, align: 'left' },
+  { x: 24, y: 60, align: 'right' },
   { x: 24, y: 26, align: 'right' },
 ] as const;
 
@@ -149,7 +149,7 @@ function Ring({ t }: { t: T }) {
   }, [reduced, active]);
 
   return (
-    <div ref={stage} className="relative mx-auto hidden h-[520px] w-full max-w-[1200px] lg:block">
+    <div ref={stage} className="relative mx-auto hidden h-[460px] w-full max-w-[1200px] lg:block">
       <div className="absolute left-1/2 top-[45%] aspect-square h-[62%] -translate-x-1/2 -translate-y-1/2">
         <Form />
       </div>
