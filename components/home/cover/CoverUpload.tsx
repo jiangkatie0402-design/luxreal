@@ -150,18 +150,16 @@ export function CoverUpload() {
       <div className="flex items-center gap-2 bg-black/25 px-3 py-2.5">
         <span className="hidden sm:contents">{chips}</span>
         <span className="ml-auto">
-          {/* flowing light round the border; label in a lavender gradient */}
+          {/* shared brand button (styles in globals.css) */}
           {
-            <span className="mcp-glow inline-flex rounded-[12px] p-px shadow-[0_0_24px_-6px_rgba(167,150,255,0.6)]">
+            <span className="brand-ring brand-hero">
               <button
                 type="button"
                 onClick={submit}
-                className="inline-flex h-10 items-center gap-2 whitespace-nowrap rounded-[11px] bg-[#0f0b1d] px-5 text-sm font-semibold transition-colors hover:bg-[#1a1434]"
+                className="brand-fill inline-flex h-10 items-center gap-2 whitespace-nowrap px-5 text-sm font-semibold"
               >
-                <span className="bg-[linear-gradient(90deg,#ffffff,#d6ccff_55%,#a996ff)] bg-clip-text text-transparent">
-                  {t('generate')}
-                </span>
-                <ArrowRight className="size-4 text-[#c4b5fd]" aria-hidden />
+                <span className="brand-label">{t('generate')}</span>
+                <ArrowRight className="size-4" aria-hidden />
               </button>
             </span>
           }

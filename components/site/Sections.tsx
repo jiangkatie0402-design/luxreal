@@ -182,10 +182,12 @@ export function FinalCta() {
           </h2>
           <p className="t-lead mx-auto mt-4 max-w-xl text-muted-foreground">{t('lead')}</p>
           <div className="mt-8 flex justify-center">
-            <ButtonLink href={site.links.app} size="lg">
-              {c('startCreating')}
-              <ArrowRight aria-hidden />
-            </ButtonLink>
+            <span className="brand-ring">
+              <ButtonLink href={site.links.app} size="lg" className="brand-fill">
+                <span className="brand-label">{c('startCreating')}</span>
+                <ArrowRight aria-hidden />
+              </ButtonLink>
+            </span>
           </div>
           {/* Agent install guide: copy not decided yet */}
           <Slot className="mx-auto mt-8 h-24 max-w-2xl" />

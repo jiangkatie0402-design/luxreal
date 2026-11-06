@@ -122,14 +122,12 @@ export function Showcase({
                       />
                     </div>
                     {cta && (
-                      <ButtonLink
-                        href={site.links.app}
-                        size="lg"
-                        className="mt-10 w-full max-w-[20rem] bg-[linear-gradient(135deg,#8576c4,#564b8c)] text-white hover:brightness-110 lg:mt-auto"
-                      >
-                        {c('startCreating')}
-                        <ArrowRight aria-hidden />
-                      </ButtonLink>
+                      <span className="brand-ring mt-10 w-full max-w-[20rem] lg:mt-auto">
+                        <ButtonLink href={site.links.app} size="lg" className="brand-fill w-full">
+                          <span className="brand-label">{c('startCreating')}</span>
+                          <ArrowRight aria-hidden />
+                        </ButtonLink>
+                      </span>
                     )}
                   </div>
 

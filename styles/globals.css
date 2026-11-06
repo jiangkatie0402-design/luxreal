@@ -803,3 +803,69 @@
     animation: none;
   }
 }
+
+/* Brand buttons (cover, core card, final CTA): one treatment everywhere.
+   Default A: mist-violet fill. B: dark fill inside a flowing light border with a
+   lavender gradient label. C: mist-violet fill inside the flowing border.
+   D: hierarchy - the cover's submit uses B, every other CTA uses A. */
+.brand-ring {
+  display: inline-flex;
+  border-radius: 13px;
+}
+.brand-fill {
+  border-radius: 12px;
+  color: #fff;
+  background: linear-gradient(135deg, #8f80d0, #5a4f94);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.28),
+    0 10px 28px -12px rgba(130, 110, 220, 0.85);
+  transition: filter var(--dur-fast) var(--ease-out);
+}
+.brand-fill:hover {
+  filter: brightness(1.1);
+}
+:root:is([data-brand-btn='b'], [data-brand-btn='c']) .brand-ring,
+:root[data-brand-btn='d'] .brand-hero {
+  padding: 1px;
+  background: conic-gradient(
+    from var(--strip-angle),
+    rgba(196, 186, 255, 0.3) 0deg,
+    rgba(196, 186, 255, 0.3) 60deg,
+    rgba(196, 186, 255, 0.65) 140deg,
+    rgba(226, 218, 255, 0.95) 220deg,
+    rgba(226, 218, 255, 0.95) 280deg,
+    rgba(196, 186, 255, 0.65) 330deg,
+    rgba(196, 186, 255, 0.3) 360deg
+  );
+  box-shadow: 0 0 24px -6px rgba(167, 150, 255, 0.6);
+  animation: strip-spin 6s linear infinite;
+}
+:root[data-brand-btn='b'] .brand-fill,
+:root[data-brand-btn='d'] .brand-hero .brand-fill {
+  background: #0f0b1d;
+  box-shadow: none;
+}
+:root[data-brand-btn='b'] .brand-fill:hover,
+:root[data-brand-btn='d'] .brand-hero .brand-fill:hover {
+  filter: none;
+  background: #1a1434;
+}
+:root[data-brand-btn='b'] .brand-label,
+:root[data-brand-btn='d'] .brand-hero .brand-label {
+  background: linear-gradient(90deg, #ffffff, #d6ccff 55%, #a996ff);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+:root[data-brand-btn='b'] .brand-fill svg,
+:root[data-brand-btn='d'] .brand-hero .brand-fill svg {
+  color: #c4b5fd;
+}
+:root[data-brand-btn='c'] .brand-fill {
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.28);
+}
+@media (prefers-reduced-motion: reduce) {
+  .brand-ring {
+    animation: none !important;
+  }
+}
