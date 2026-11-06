@@ -80,8 +80,9 @@ export function Community() {
         <h2 id="community-title" className="t-h2">
           {t('title')}
         </h2>
-        <p className="t-lead mx-auto mt-4 max-w-2xl text-muted-foreground">{t('lead')}</p>
-        <p className="t-small mt-3 text-muted-foreground/70">{t('hint')}</p>
+        <p className="t-lead mx-auto mt-4 max-w-[60rem] text-balance text-muted-foreground">
+          {t('lead')}
+        </p>
       </div>
       <div className="mt-10 grid gap-3 overflow-hidden [mask-image:linear-gradient(90deg,transparent,#000_6%,#000_94%,transparent)] md:mt-14">
         {ROWS.map((row, r) => (
