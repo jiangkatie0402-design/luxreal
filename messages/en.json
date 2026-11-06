@@ -125,33 +125,28 @@
       "items": {
         "gen": {
           "label": "Model generation",
-          "t": "Many inputs for different needs",
-          "d": "Text, single-image and multi-image generation. Ideas without references, existing concept art and multi-angle photos can all be a starting point."
+          "t": "Many ways in",
+          "d": "Generate from text, a single image or several images. Any input can be called directly."
         },
         "material": {
           "label": "Materials",
-          "t": "Keep the shape, generate new material versions",
+          "t": "Change materials fast",
           "d": "Regenerate materials from a reference image — texture, colour and surface finish — without remodelling."
         },
         "format": {
           "label": "Format conversion",
-          "t": "One model for every tool",
-          "d": "Convert between model formats so assets keep working for web, games or printing without regenerating."
+          "t": "Fits every tool",
+          "d": "Convert between model formats so existing assets keep working for web, games or printing without regenerating."
         },
-        "batch": {
-          "label": "Multi-asset production",
-          "t": "One list, many assets in a row",
-          "d": "Split work into characters, props and set pieces, generate each and organise the results — no one-by-one submitting and downloading."
+        "delivery": {
+          "label": "Agent-ready delivery",
+          "t": "Agents follow through end to end",
+          "d": "Source files and offline previews are delivered directly, so agents can fetch, check and keep building on the results."
         },
-        "track": {
-          "label": "Tracking & file organisation",
-          "t": "Let the agent follow progress and results",
-          "d": "Poll task status, download and organise model files, deliver sources and offline previews — less hopping between task pages and folders."
-        },
-        "scene": {
-          "label": "Scene building",
-          "t": "Independent models, editable scenes",
-          "d": "Combine generated assets in Blender, adjust objects, lights and cameras independently and keep the scene editable for new shots."
+        "concurrency": {
+          "label": "High concurrency",
+          "t": "Massive concurrency for faster scenes",
+          "d": "Let agents run many model tasks at once, cutting asset prep time and speeding up scene building."
         }
       },
       "mcp": {

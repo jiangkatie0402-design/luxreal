@@ -42,7 +42,7 @@ export function ForAgents() {
         />
 
         {/* MCP install */}
-        <div id="agents-mcp" className="mt-12 md:mt-16">
+        <div id="agents-mcp" className="mt-10 lg:mt-2">
           <AgentMcp />
         </div>
       </div>

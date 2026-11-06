@@ -5,7 +5,7 @@ import { usePerfStore } from '@/lib/perf';
 import { cn } from '@/lib/utils';
 import { Mascot } from './Mascot';
 
-export const AGENT_ITEMS = ['gen', 'material', 'format', 'batch', 'track', 'scene'] as const;
+export const AGENT_ITEMS = ['gen', 'material', 'format', 'delivery', 'concurrency'] as const;
 type T = ReturnType<typeof useTranslations>;
 
 /** The centre: the Aholo mascot turning slowly on a soft violet glow. */
@@ -81,11 +81,10 @@ const STEP_MS = 2000;
 /** Ring positions (% of the stage) of each label; open content hangs below it. */
 const RING = [
   { x: 50, y: 4, align: 'center' },
-  { x: 74, y: 27, align: 'left' },
-  { x: 74, y: 66, align: 'left' },
-  { x: 50, y: 82, align: 'center' },
-  { x: 26, y: 66, align: 'right' },
-  { x: 26, y: 27, align: 'right' },
+  { x: 76, y: 26, align: 'left' },
+  { x: 76, y: 62, align: 'left' },
+  { x: 24, y: 62, align: 'right' },
+  { x: 24, y: 26, align: 'right' },
 ] as const;
 
 /**
@@ -150,7 +149,7 @@ function Ring({ t }: { t: T }) {
   }, [reduced, active]);
 
   return (
-    <div ref={stage} className="relative mx-auto hidden h-[600px] w-full max-w-[1200px] lg:block">
+    <div ref={stage} className="relative mx-auto hidden h-[520px] w-full max-w-[1200px] lg:block">
       <div className="absolute left-1/2 top-[45%] aspect-square h-[62%] -translate-x-1/2 -translate-y-1/2">
         <Form />
       </div>
