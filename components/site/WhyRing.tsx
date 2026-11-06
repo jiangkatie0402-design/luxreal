@@ -192,7 +192,7 @@ function Orrery({ style, p, active }: { style: Style; p: number; active: number 
 }
 
 /** D2 — the disc wears a wide, soft ring band, like a small planet. */
-function Saturn({ p, active }: { p: number; active: number }) {
+function Saturn() {
   const band = (half: 'back' | 'front') => (
     <svg
       aria-hidden
@@ -233,9 +233,6 @@ function Saturn({ p, active }: { p: number; active: number }) {
       {band('back')}
       <span className="absolute inset-[17%] z-10 rounded-full bg-[radial-gradient(circle_at_35%_28%,#6a5bc0,#2a2160_45%,#0f0c1e_80%)] shadow-[0_0_120px_rgba(110,98,163,0.45)]" />
       {band('front')}
-      <span className="absolute inset-0 rotate-[-14deg]">
-        <Worlds p={p} active={active} style="spark" />
-      </span>
     </>
   );
 }
@@ -368,7 +365,7 @@ function Halo({ p }: { p: number }) {
 
 /** The decorative centrepiece for each variant. */
 function Centre({ visual, p, active }: { visual: Visual; p: number; active: number }) {
-  if (visual === 'saturn') return <Saturn p={p} active={active} />;
+  if (visual === 'saturn') return <Saturn />;
   if (visual === 'wire') return <Wire p={p} />;
   if (visual === 'halo') return <Halo p={p} />;
   if (visual === 'dust') return <StarRing p={p} />;
