@@ -3,6 +3,7 @@ import { useTranslations } from 'next-intl';
 import { useEffect, useRef, useState } from 'react';
 import { create } from 'zustand';
 import { cn } from '@/lib/utils';
+import { StarRing } from './StarRing';
 
 const WHY = ['cost', 'easy', 'quality'] as const;
 const N = WHY.length;
@@ -12,7 +13,13 @@ type T = ReturnType<typeof useTranslations>;
 type RingProps = { t: T; p: number; active: number; k: string };
 
 /** Preview-only: ring styles for review. */
-export const WHY_VARIANTS = ['D1 光点星轨', 'D2 星环', 'D3 线框星球', 'D4 光晕涟漪'] as const;
+export const WHY_VARIANTS = [
+  'D1 光点星轨',
+  'D2 星环',
+  'D3 线框星球',
+  'D4 光晕涟漪',
+  'D5 星尘星环',
+] as const;
 export const useWhyVariant = create<{ v: number; set: (v: number) => void }>((setState) => ({
   v: 0,
   set: (v) => setState({ v }),
@@ -64,7 +71,7 @@ function Orbit({
 
 type Style = 'glass' | 'thumb' | 'spark';
 /** Purely decorative centrepieces: no text in the middle. */
-type Visual = 'spark' | 'saturn' | 'wire' | 'halo';
+type Visual = 'spark' | 'saturn' | 'wire' | 'halo' | 'dust';
 
 /** The three reasons riding the orbit; the active one swings to the front. */
 function Worlds({ p, active, style }: Omit<RingProps, 'k' | 't'> & { style: Style }) {
@@ -364,6 +371,7 @@ function Centre({ visual, p, active }: { visual: Visual; p: number; active: numb
   if (visual === 'saturn') return <Saturn p={p} active={active} />;
   if (visual === 'wire') return <Wire p={p} />;
   if (visual === 'halo') return <Halo p={p} />;
+  if (visual === 'dust') return <StarRing p={p} />;
   return <Orrery p={p} active={active} style="spark" />;
 }
 
@@ -424,7 +432,7 @@ export function WhyUs() {
             )}
           >
             <Centre
-              visual={(['spark', 'saturn', 'wire', 'halo'] as const)[v]}
+              visual={(['spark', 'saturn', 'wire', 'halo', 'dust'] as const)[v]}
               p={p}
               active={active}
             />
