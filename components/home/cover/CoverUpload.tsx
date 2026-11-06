@@ -33,7 +33,13 @@ function Glass({
 
 /** The upload box on the cover. Validates locally, then hands off to the app. */
 /** Preview-only: button styles for review. */
-export const GO_VARIANTS = ['当前 描边', 'B1 雾紫流光', 'B2 流光边框', 'B3 玻璃胶囊'] as const;
+export const GO_VARIANTS = [
+  'B2 流光边框',
+  'L1 双色流光胶囊',
+  'L2 流光+光晕',
+  'L3 彗星光点',
+  'L4 流光+渐变字',
+] as const;
 export const useGoVariant = create<{ v: number; set: (v: number) => void }>((setState) => ({
   v: 0,
   set: (v) => setState({ v }),
@@ -132,29 +138,6 @@ export function CoverUpload() {
     </span>
   );
   const arrow = <ArrowRight className="size-4" aria-hidden />;
-  /** Outlined button: violet gradient hairline, dark fill, soft glow. */
-  const outlined = (size: string, round = 'rounded-[12px]') => (
-    <span
-      className={cn(
-        'inline-flex shrink-0 p-px shadow-[0_0_26px_-6px_rgba(167,150,255,0.7)] transition-shadow hover:shadow-[0_0_34px_-4px_rgba(167,150,255,0.9)]',
-        'bg-[linear-gradient(135deg,#e2daff,#7d6fc0_55%,#3b2f7a)]',
-        round,
-      )}
-    >
-      <button
-        type="button"
-        onClick={submit}
-        className={cn(
-          'inline-flex items-center gap-2 bg-[#15102c] text-sm font-medium text-white transition-colors hover:bg-[#1e1840]',
-          size,
-          round,
-        )}
-      >
-        {t('generate')}
-        {arrow}
-      </button>
-    </span>
-  );
   const topRow = (pad = 'px-5 pb-4 pt-5') => (
     <label
       className={cn(
@@ -183,18 +166,7 @@ export function CoverUpload() {
       <div className="flex items-center gap-2 bg-black/25 px-3 py-2.5">
         {chips}
         <span className="ml-auto">
-          {gv === 0 && outlined('h-10 px-5')}
-          {gv === 1 && (
-            <button
-              type="button"
-              onClick={submit}
-              className="go-sheen relative inline-flex h-10 items-center gap-2 overflow-hidden rounded-[12px] bg-[linear-gradient(135deg,#9a8ad8,#6e62a3_55%,#4b4277)] px-5 text-sm font-medium text-white shadow-[inset_0_1px_0_rgba(255,255,255,0.35),0_10px_28px_-10px_rgba(130,110,220,0.9)] transition hover:brightness-110"
-            >
-              {t('generate')}
-              {arrow}
-            </button>
-          )}
-          {gv === 2 && (
+          {gv === 0 && (
             <span className="mcp-glow inline-flex rounded-[12px] p-px shadow-[0_0_24px_-6px_rgba(167,150,255,0.6)]">
               <button
                 type="button"
@@ -206,17 +178,67 @@ export function CoverUpload() {
               </button>
             </span>
           )}
-          {gv === 3 && (
-            <button
-              type="button"
-              onClick={submit}
-              className="group inline-flex h-10 items-center gap-2.5 rounded-full border border-white/25 bg-white/[0.12] py-1 pl-4 pr-1 text-sm font-medium text-white shadow-[inset_0_1px_0_rgba(255,255,255,0.3),0_8px_24px_-10px_rgba(0,0,0,0.6)] backdrop-blur-md transition hover:bg-white/[0.18]"
-            >
-              {t('generate')}
-              <span className="grid size-8 place-items-center rounded-full bg-white text-[#2a1f5c] transition-transform group-hover:translate-x-0.5">
-                <ArrowRight className="size-4" aria-hidden />
+          {/* L1 — pill, two light heads (violet and pink) chasing round the border */}
+          {gv === 1 && (
+            <span className="glow-dual inline-flex rounded-full p-px shadow-[0_0_26px_-6px_rgba(200,150,255,0.6)]">
+              <button
+                type="button"
+                onClick={submit}
+                className="inline-flex h-10 items-center gap-2 rounded-full bg-[#120e24] px-6 text-sm font-medium text-white transition-colors hover:bg-[#1c1638]"
+              >
+                {t('generate')}
+                {arrow}
+              </button>
+            </span>
+          )}
+          {/* L2 — the light also blooms outside the button, following the head */}
+          {gv === 2 && (
+            <span className="relative inline-flex">
+              <span
+                aria-hidden
+                className="mcp-glow absolute -inset-1 rounded-[14px] opacity-70 blur-md"
+              />
+              <span className="mcp-glow relative inline-flex rounded-[12px] p-px">
+                <button
+                  type="button"
+                  onClick={submit}
+                  className="inline-flex h-10 items-center gap-2 rounded-[11px] bg-[linear-gradient(180deg,#1d1740,#100c20)] px-5 text-sm font-medium text-white transition-colors hover:brightness-125"
+                >
+                  {t('generate')}
+                  {arrow}
+                </button>
               </span>
-            </button>
+            </span>
+          )}
+          {/* L3 — a quiet border with a single bright comet running round it */}
+          {gv === 3 && (
+            <span className="glow-comet inline-flex rounded-[12px] p-px">
+              <button
+                type="button"
+                onClick={submit}
+                className="group inline-flex h-10 items-center gap-2.5 rounded-[11px] bg-[#100c1e] pl-5 pr-1.5 text-sm font-medium text-white"
+              >
+                {t('generate')}
+                <span className="grid size-7 place-items-center rounded-[8px] bg-[#6e62a3]/50 transition-transform group-hover:translate-x-0.5">
+                  <ArrowRight className="size-4" aria-hidden />
+                </span>
+              </button>
+            </span>
+          )}
+          {/* L4 — flowing border; label in a lavender gradient */}
+          {gv === 4 && (
+            <span className="mcp-glow inline-flex rounded-[12px] p-px shadow-[0_0_24px_-6px_rgba(167,150,255,0.6)]">
+              <button
+                type="button"
+                onClick={submit}
+                className="inline-flex h-10 items-center gap-2 rounded-[11px] bg-[#0f0b1d] px-5 text-sm font-semibold transition-colors hover:bg-[#1a1434]"
+              >
+                <span className="bg-[linear-gradient(90deg,#ffffff,#d6ccff_55%,#a996ff)] bg-clip-text text-transparent">
+                  {t('generate')}
+                </span>
+                <ArrowRight className="size-4 text-[#c4b5fd]" aria-hidden />
+              </button>
+            </span>
           )}
         </span>
       </div>

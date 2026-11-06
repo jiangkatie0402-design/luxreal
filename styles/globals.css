@@ -766,32 +766,33 @@
   }
 }
 
-/* cover button: a soft sheen crossing the fill every few seconds */
-.go-sheen::after {
-  content: '';
-  position: absolute;
-  inset: 0;
-  background: linear-gradient(
-    105deg,
-    transparent 35%,
-    rgba(255, 255, 255, 0.45) 50%,
-    transparent 65%
+/* cover button: two light heads chasing round the border */
+.glow-dual {
+  background: conic-gradient(
+    from var(--strip-angle),
+    rgba(196, 186, 255, 0.25) 0deg,
+    rgba(226, 218, 255, 0.95) 60deg,
+    rgba(196, 186, 255, 0.25) 120deg,
+    rgba(196, 186, 255, 0.25) 180deg,
+    rgba(255, 190, 235, 0.9) 240deg,
+    rgba(196, 186, 255, 0.25) 300deg
   );
-  transform: translateX(-120%);
-  animation: go-sheen 3.2s ease-in-out infinite;
+  animation: strip-spin 5s linear infinite;
 }
-@keyframes go-sheen {
-  0%,
-  45% {
-    transform: translateX(-120%);
-  }
-  80%,
-  100% {
-    transform: translateX(120%);
-  }
+/* cover button: one short bright comet on a faint border */
+.glow-comet {
+  background: conic-gradient(
+    from var(--strip-angle),
+    rgba(196, 186, 255, 0.18) 0deg,
+    rgba(196, 186, 255, 0.18) 290deg,
+    rgba(255, 255, 255, 1) 345deg,
+    rgba(196, 186, 255, 0.18) 360deg
+  );
+  animation: strip-spin 3.5s linear infinite;
 }
 @media (prefers-reduced-motion: reduce) {
-  .go-sheen::after {
+  .glow-dual,
+  .glow-comet {
     animation: none;
   }
 }
