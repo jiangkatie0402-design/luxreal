@@ -148,7 +148,7 @@ export function CoverUpload() {
       />
       {topRow()}
       <div className="flex items-center gap-2 bg-black/25 px-3 py-2.5">
-        {chips}
+        <span className="hidden sm:contents">{chips}</span>
         <span className="ml-auto">
           {/* flowing light round the border; label in a lavender gradient */}
           {
@@ -156,7 +156,7 @@ export function CoverUpload() {
               <button
                 type="button"
                 onClick={submit}
-                className="inline-flex h-10 items-center gap-2 rounded-[11px] bg-[#0f0b1d] px-5 text-sm font-semibold transition-colors hover:bg-[#1a1434]"
+                className="inline-flex h-10 items-center gap-2 whitespace-nowrap rounded-[11px] bg-[#0f0b1d] px-5 text-sm font-semibold transition-colors hover:bg-[#1a1434]"
               >
                 <span className="bg-[linear-gradient(90deg,#ffffff,#d6ccff_55%,#a996ff)] bg-clip-text text-transparent">
                   {t('generate')}

@@ -765,36 +765,3 @@
     animation: none;
   }
 }
-
-/* planet ring: the band's glow slowly breathes */
-.ring-breathe {
-  animation: ring-breathe 4.5s ease-in-out infinite alternate;
-}
-@keyframes ring-breathe {
-  from {
-    filter: brightness(0.75);
-  }
-  to {
-    filter: brightness(1.35) drop-shadow(0 0 4px rgba(196, 181, 253, 0.6));
-  }
-}
-/* planet: the night side drifts across the sphere */
-.planet-turn {
-  background: radial-gradient(circle at 50% 50%, transparent 40%, rgba(6, 4, 16, 0.75) 72%);
-  background-size: 220% 120%;
-  animation: planet-turn 14s ease-in-out infinite alternate;
-}
-@keyframes planet-turn {
-  from {
-    background-position: 0% 50%;
-  }
-  to {
-    background-position: 100% 50%;
-  }
-}
-@media (prefers-reduced-motion: reduce) {
-  .ring-breathe,
-  .planet-turn {
-    animation: none;
-  }
-}

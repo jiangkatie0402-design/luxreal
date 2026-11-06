@@ -90,7 +90,9 @@ function PanelBody({
         <span className="font-mono text-xs text-[var(--muted)]">0{k + 1}</span>
         {lead}
       </p>
-      <p className="t-body mt-3 leading-[1.9] max-w-[30rem] text-[var(--muted)]">{rest}</p>
+      <p className="t-body mt-3 leading-[1.9] max-w-[30rem] text-[var(--muted)]">
+        {rest.charAt(0).toUpperCase() + rest.slice(1)}
+      </p>
     </>
   );
 
