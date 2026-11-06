@@ -192,7 +192,13 @@ function Orrery({ style, p, active }: { style: Style; p: number; active: number 
 }
 
 /** D2 — the disc wears a wide, soft ring band, like a small planet. */
-function Saturn() {
+function Saturn({ p }: { p: number }) {
+  // the ring tips a little as you scroll
+  const tilt = -14 + p * 10;
+  const arc = (half: 'back' | 'front', d: number) =>
+    half === 'back'
+      ? `M ${50 - RX + d} 50 A ${RX - d} ${RY - d / 4} 0 0 1 ${50 + RX - d} 50`
+      : `M ${50 - RX + d} 50 A ${RX - d} ${RY - d / 4} 0 0 0 ${50 + RX - d} 50`;
   const band = (half: 'back' | 'front') => (
     <svg
       aria-hidden
@@ -210,28 +216,53 @@ function Saturn() {
           <stop offset="1" stopColor="rgba(196,181,253,0)" />
         </linearGradient>
       </defs>
-      {[0, 4, 8].map((d, n) => (
-        <g key={n} transform="rotate(-14 50 50)">
+      <g transform={`rotate(${tilt} 50 50)`}>
+        {[0, 4, 8].map((d, n) => (
           <path
-            d={
-              half === 'back'
-                ? `M ${50 - RX + d} 50 A ${RX - d} ${RY - d / 4} 0 0 1 ${50 + RX - d} 50`
-                : `M ${50 - RX + d} 50 A ${RX - d} ${RY - d / 4} 0 0 0 ${50 + RX - d} 50`
-            }
+            key={n}
+            d={arc(half, d)}
             fill="none"
             stroke={`url(#band-${half})`}
             strokeWidth={[6, 1.2, 3][n]}
             strokeOpacity={[0.35, 0.9, 0.5][n]}
             vectorEffect="non-scaling-stroke"
           />
-        </g>
-      ))}
+        ))}
+        {/* a glint of light running round the ring */}
+        <path
+          d={arc(half, 4)}
+          pathLength={100}
+          fill="none"
+          stroke="rgba(255,255,255,0.95)"
+          strokeWidth={0.45}
+          strokeLinecap="round"
+          className={cn('band-run', half === 'back' && '[animation-direction:reverse]')}
+          style={{ filter: 'drop-shadow(0 0 1px rgba(214,204,255,0.9))' }}
+        />
+      </g>
     </svg>
   );
   return (
     <>
       {band('back')}
-      <span className="absolute inset-[17%] z-10 rounded-full bg-[radial-gradient(circle_at_35%_28%,#6a5bc0,#2a2160_45%,#0f0c1e_80%)] shadow-[0_0_120px_rgba(110,98,163,0.45)]" />
+      <span
+        className="absolute inset-[17%] z-10 overflow-hidden rounded-full shadow-[0_0_120px_rgba(110,98,163,0.45)]"
+        style={{
+          background: `radial-gradient(circle at ${30 + p * 14}% ${26 + p * 6}%, #6a5bc0, #2a2160 45%, #0f0c1e 80%)`,
+        }}
+      >
+        {/* slow drifting cloud bands give the sphere a sense of spin */}
+        <span className="planet-clouds absolute inset-y-0 left-0 flex w-[200%] blur-[6px]">
+          {[0, 1].map((n) => (
+            <span
+              key={n}
+              className="h-full w-1/2 [background:radial-gradient(40%_7%_at_30%_30%,rgba(214,204,255,0.22),transparent),radial-gradient(35%_6%_at_70%_48%,rgba(150,125,240,0.25),transparent),radial-gradient(45%_8%_at_40%_64%,rgba(214,204,255,0.16),transparent),radial-gradient(30%_5%_at_80%_78%,rgba(150,125,240,0.2),transparent),radial-gradient(30%_5%_at_15%_52%,rgba(214,204,255,0.18),transparent)]"
+            />
+          ))}
+        </span>
+        {/* limb shading keeps it round */}
+        <span className="absolute inset-0 rounded-full [background:radial-gradient(circle_at_40%_35%,transparent_50%,rgba(8,6,20,0.6)_100%)]" />
+      </span>
       {band('front')}
     </>
   );
@@ -365,7 +396,7 @@ function Halo({ p }: { p: number }) {
 
 /** The decorative centrepiece for each variant. */
 function Centre({ visual, p, active }: { visual: Visual; p: number; active: number }) {
-  if (visual === 'saturn') return <Saturn />;
+  if (visual === 'saturn') return <Saturn p={p} />;
   if (visual === 'wire') return <Wire p={p} />;
   if (visual === 'halo') return <Halo p={p} />;
   if (visual === 'dust') return <StarRing p={p} />;

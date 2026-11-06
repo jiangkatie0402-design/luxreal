@@ -765,3 +765,32 @@
     animation: none;
   }
 }
+
+/* planet ring: a glint running along the band */
+.band-run {
+  stroke-dasharray: 14 86;
+  animation: band-run 6s linear infinite;
+}
+@keyframes band-run {
+  from {
+    stroke-dashoffset: 100;
+  }
+  to {
+    stroke-dashoffset: 0;
+  }
+}
+/* planet surface: soft clouds drifting across, so the sphere reads as turning */
+.planet-clouds {
+  animation: planet-drift 28s linear infinite;
+}
+@keyframes planet-drift {
+  to {
+    transform: translateX(-50%);
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .band-run,
+  .planet-clouds {
+    animation: none;
+  }
+}
