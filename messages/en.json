@@ -195,7 +195,7 @@
     "community": {
       "title": "From one image or one sentence to these 3D works",
       "lead": "Compare each model's shape, materials and detail with its original image or text and see if it fits your needs.",
-      "hint": "Press and hold a card to see the white model; release for the render"
+      "hint": "Hover to see the white model; move away for the render"
     },
     "final": {
       "title": "Start generating 3D models",

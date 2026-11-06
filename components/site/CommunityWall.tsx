@@ -19,7 +19,8 @@ const ROWS: Work[][] = [
 ];
 
 /**
- * One work card. Press and hold shows the white model (clay); release returns to
+ * One work card. Hovering (or press-and-hold on touch, or keyboard focus) shows
+ * the white model (clay); leaving returns to
  * the rendered result. Empty cards are placeholders until works are chosen.
  */
 function WorkCard({ work, label }: { work: Work; label: string }) {
@@ -32,12 +33,13 @@ function WorkCard({ work, label }: { work: Work; label: string }) {
         type="button"
         aria-label={label}
         aria-pressed={clay}
-        onPointerDown={show}
-        onPointerUp={hide}
+        // mouse: hover shows the white model; touch: press and hold
+        onPointerEnter={(e) => e.pointerType === 'mouse' && show()}
         onPointerLeave={hide}
+        onPointerDown={(e) => e.pointerType !== 'mouse' && show()}
+        onPointerUp={(e) => e.pointerType !== 'mouse' && hide()}
         onPointerCancel={hide}
-        onKeyDown={(e) => (e.key === ' ' || e.key === 'Enter') && show()}
-        onKeyUp={hide}
+        onFocus={show}
         onBlur={hide}
         className="relative block aspect-[5/6] w-full cursor-pointer select-none outline-none focus-visible:ring-2 focus-visible:ring-primary/60"
       >
