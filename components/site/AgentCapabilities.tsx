@@ -88,11 +88,11 @@ const STEP_MS = 2000;
 
 /** Ring positions (% of the stage) of each label; open content hangs below it. */
 const RING = [
-  { x: 50, y: 2, align: 'center' },
-  { x: 76, y: 24, align: 'left' },
-  { x: 76, y: 84, align: 'left' },
-  { x: 24, y: 84, align: 'right' },
-  { x: 24, y: 24, align: 'right' },
+  { x: 50, y: 1, align: 'center' },
+  { x: 77, y: 18, align: 'left' },
+  { x: 77, y: 58, align: 'left' },
+  { x: 23, y: 58, align: 'right' },
+  { x: 23, y: 18, align: 'right' },
 ] as const;
 
 /**
@@ -157,7 +157,7 @@ function Ring({ t }: { t: T }) {
   }, [reduced, active]);
 
   return (
-    <div ref={stage} className="relative mx-auto hidden h-[400px] w-full max-w-[1200px] lg:block">
+    <div ref={stage} className="relative mx-auto hidden h-[450px] w-full max-w-[1200px] lg:block">
       <div className="absolute left-1/2 top-[45%] aspect-square h-[62%] -translate-x-1/2 -translate-y-1/2">
         <Form />
       </div>
@@ -175,7 +175,7 @@ function Ring({ t }: { t: T }) {
           <div
             className={cn(
               'w-[min(340px,24vw)]',
-              r.y > 50 ? '-translate-y-[calc(100%-1.25rem)]' : '-translate-y-5',
+              '-translate-y-5',
               r.align === 'center' && '-translate-x-1/2',
               r.align === 'right' && '-translate-x-full',
             )}
@@ -188,7 +188,6 @@ function Ring({ t }: { t: T }) {
               open={active === i}
               align={r.align}
               onPick={setActive}
-              up={r.y > 50}
             />
           </div>
         </div>
