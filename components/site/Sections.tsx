@@ -76,33 +76,7 @@ export function ForAgents() {
   );
 }
 
-const WHY = ['cost', 'easy', 'quality'] as const;
-
-/** 五、为什么选择 Aholo 3D? */
-export function WhyUs() {
-  const t = useTranslations('site.why');
-  return (
-    <Section id="why" title={t('title')}>
-      <ul className="grid gap-6 md:grid-cols-3">
-        {WHY.map((k, i) => (
-          <li
-            key={k}
-            className="flex flex-col overflow-hidden rounded-[22px] border bg-card shadow-card"
-          >
-            <Slot className="aspect-[16/10] rounded-none border-0 border-b" />
-            <div className="p-6 md:p-8">
-              <p className="t-label font-mono text-primary">
-                0{i + 1} · {t(`items.${k}.label`)}
-              </p>
-              <h3 className="t-title mt-2">{t(`items.${k}.t`)}</h3>
-              <p className="t-body mt-2 text-muted-foreground">{t(`items.${k}.d`)}</p>
-            </div>
-          </li>
-        ))}
-      </ul>
-    </Section>
-  );
-}
+export { WhyUs } from './WhyRing';
 
 /** 六、用户证言 — content not decided; empty quote frames. */
 export function Testimonials() {

@@ -755,3 +755,13 @@
     animation: none;
   }
 }
+
+/* why: copy and media swap in as the ring turns */
+.why-in {
+  animation: core-panel-in 0.5s var(--ease-out);
+}
+@media (prefers-reduced-motion: reduce) {
+  .why-in {
+    animation: none;
+  }
+}
