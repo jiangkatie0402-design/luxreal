@@ -1,7 +1,6 @@
 'use client';
 import { useTranslations } from 'next-intl';
 import { Fragment, useEffect, useRef, type CSSProperties } from 'react';
-import { create } from 'zustand';
 import { cn } from '@/lib/utils';
 import { PanelGlow } from './PanelGlow';
 
@@ -132,12 +131,6 @@ type Panel = {
   glow?: number;
   /** colour of a soft light beam from the top centre */
   beam?: string;
-  /** colour of a white-ish bloom in the top-left corner */
-  bloom?: string;
-  /** large outlined panel number in the background */
-  number?: boolean;
-  /** background texture over the base colour */
-  texture?: 'dots' | 'grid' | 'grain' | 'streak';
 };
 
 /** Light panel: dark ink. */
@@ -172,58 +165,12 @@ const m1 = (bgs: [string, string, string], extra: Partial<Panel> = {}): [Panel, 
   { ...dark(bgs[1], ['#3a2f66', '#14111f'], 'rgba(220,208,255,0.9)'), beam: BEAM_V, ...extra },
   { ...light(bgs[2], ['#ece5ff', '#9c88e6']), edge: LIT, beam: BEAM_W, ...extra },
 ];
-const SOLID: [string, string, string] = ['#ddd1ff', '#0e0c16', '#c9b8ff'];
-
-export const SCENE_SETS: { name: string; panels: [Panel, Panel, Panel] }[] = [
-  { name: 'N1 纯色（M1）', panels: m1(SOLID) },
-  {
-    name: 'N2 渐变底',
-    panels: m1([
-      'linear-gradient(180deg,#ece5ff 0%,#cdbdff 100%)',
-      'linear-gradient(180deg,#221c3e 0%,#0a0910 70%)',
-      'linear-gradient(180deg,#d9ccff 0%,#b29ef5 100%)',
-    ]),
-  },
-  { name: 'N3 点阵底', panels: m1(SOLID, { texture: 'dots' }) },
-  { name: 'N4 网格底', panels: m1(SOLID, { texture: 'grid' }) },
-  { name: 'N5 颗粒底', panels: m1(SOLID, { texture: 'grain' }) },
-  { name: 'N6 斜向光带', panels: m1(SOLID, { texture: 'streak' }) },
-];
-
-/** Texture layers; `ink` is the panel's text colour so marks read on light and dark. */
-const GRAIN =
-  "url(\"data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 0.5 0 0 0 0 0.5 0 0 0 0 0.5 0 0 0 0.55 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E\")";
-function Texture({ kind, darkPanel }: { kind: NonNullable<Panel['texture']>; darkPanel: boolean }) {
-  const mark = darkPanel ? 'rgba(255,255,255,0.09)' : 'rgba(40,24,90,0.10)';
-  const style: CSSProperties =
-    kind === 'dots'
-      ? {
-          backgroundImage: `radial-gradient(circle, ${mark} 1.2px, transparent 1.6px)`,
-          backgroundSize: '20px 20px',
-          maskImage: 'radial-gradient(80% 80% at 50% 40%, #000 40%, transparent 100%)',
-        }
-      : kind === 'grid'
-        ? {
-            backgroundImage: `linear-gradient(${mark} 1px, transparent 1px), linear-gradient(90deg, ${mark} 1px, transparent 1px)`,
-            backgroundSize: '56px 56px',
-            maskImage: 'radial-gradient(70% 75% at 50% 45%, #000 30%, transparent 100%)',
-          }
-        : kind === 'grain'
-          ? {
-              backgroundImage: GRAIN,
-              opacity: darkPanel ? 0.22 : 0.3,
-              mixBlendMode: darkPanel ? 'screen' : 'multiply',
-            }
-          : {
-              background: `linear-gradient(115deg, transparent 20%, ${darkPanel ? 'rgba(196,181,253,0.16)' : 'rgba(255,255,255,0.6)'} 32%, transparent 44%, transparent 56%, ${darkPanel ? 'rgba(196,181,253,0.11)' : 'rgba(255,255,255,0.42)'} 66%, transparent 78%)`,
-            };
-  return <span aria-hidden className="pointer-events-none absolute inset-0" style={style} />;
-}
-
-export const useSceneSet = create<{ i: number; set: (i: number) => void }>((setState) => ({
-  i: 0,
-  set: (i) => setState({ i }),
-}));
+/** light → dark → light, each with a top-to-bottom gradient base. */
+const PANELS = m1([
+  'linear-gradient(180deg,#ece5ff 0%,#cdbdff 100%)',
+  'linear-gradient(180deg,#221c3e 0%,#0a0910 70%)',
+  'linear-gradient(180deg,#d9ccff 0%,#b29ef5 100%)',
+]);
 
 /**
  * 应用场景: full-height colour panels that stack on scroll — each panel is
@@ -233,7 +180,6 @@ export const useSceneSet = create<{ i: number; set: (i: number) => void }>((setS
  */
 export function UseCaseStack() {
   const t = useTranslations('site.scenes');
-  const PANELS = SCENE_SETS[useSceneSet((st) => st.i)].panels;
   const panels = useRef<(HTMLElement | null)[]>([]);
 
   useEffect(() => {
@@ -287,7 +233,6 @@ export function UseCaseStack() {
               }
             >
               <PanelGlow tint={p.tint} strength={p.glow} />
-              {p.texture && <Texture kind={p.texture} darkPanel={p.ink === '#ffffff'} />}
               {p.beam && (
                 <span
                   aria-hidden
@@ -296,21 +241,6 @@ export function UseCaseStack() {
                     background: `radial-gradient(40% 75% at 50% 0%, ${p.beam}, transparent 72%)`,
                   }}
                 />
-              )}
-              {p.bloom && (
-                <span
-                  aria-hidden
-                  className="pointer-events-none absolute -left-[10%] -top-[30%] size-[60vw] max-w-[900px] rounded-full blur-[100px]"
-                  style={{ background: p.bloom, opacity: 0.7 }}
-                />
-              )}
-              {p.number && (
-                <span
-                  aria-hidden
-                  className="pointer-events-none absolute -right-[2%] top-[4%] select-none font-display text-[clamp(200px,32vw,520px)] font-semibold leading-none text-transparent [-webkit-text-stroke:1.5px_rgba(255,255,255,0.12)]"
-                >
-                  0{i + 1}
-                </span>
               )}
               <PanelBody index={i} id={id} label={t('title')} t={t} slot={p.slot} />
             </article>
