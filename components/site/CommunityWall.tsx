@@ -11,9 +11,13 @@ const SHIELD: Work = {
   render: `${BASE}works/shield-render.webp`,
   clay: `${BASE}works/shield-clay.webp`,
 };
+const SPEAR: Work = {
+  render: `${BASE}works/spear-render.webp`,
+  clay: `${BASE}works/spear-clay.webp`,
+};
 const EMPTY: Work = {};
 const ROWS: Work[][] = [
-  [EMPTY, SHIELD, ...Array(8).fill(EMPTY)],
+  [EMPTY, SHIELD, EMPTY, SPEAR, ...Array(6).fill(EMPTY)],
   Array(10).fill(EMPTY),
   Array(10).fill(EMPTY),
 ];
