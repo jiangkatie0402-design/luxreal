@@ -5,6 +5,13 @@ import { usePerfStore } from '@/lib/perf';
 import { cn } from '@/lib/utils';
 
 const WHY = ['cost', 'easy', 'quality'] as const;
+/** Public asset base: "/" in the app, overridable for static previews. */
+const BASE = process.env.NEXT_PUBLIC_ASSET_BASE ?? '/';
+/** Backdrop photo per reason (none yet for the third). */
+const BG: Partial<Record<(typeof WHY)[number], string>> = {
+  cost: 'works/why-cost.webp',
+  easy: 'works/why-easy.webp',
+};
 const N = WHY.length;
 
 const RX = 64;
@@ -130,7 +137,25 @@ export function WhyUs() {
   return (
     <section aria-labelledby="why-title" id="why" className="scroll-mt-20 pt-16 md:pt-32">
       <div ref={track} className="relative h-[calc(100svh+2*70svh)]">
-        <div className="sticky top-[var(--header-h)] flex h-[calc(100svh-var(--header-h))] flex-col items-center justify-center overflow-hidden px-4 md:px-8">
+        <div className="sticky top-[var(--header-h)] isolate flex h-[calc(100svh-var(--header-h))] flex-col items-center justify-center overflow-hidden px-4 md:px-8">
+          {/* one backdrop per reason, cross-fading; kept dark so the copy stays readable */}
+          {WHY.map((key) =>
+            BG[key] ? (
+              <span
+                key={key}
+                aria-hidden
+                className={cn(
+                  'pointer-events-none absolute inset-0 -z-20 bg-cover bg-center transition-opacity duration-700',
+                  k === key ? 'opacity-100' : 'opacity-0',
+                )}
+                style={{ backgroundImage: `url(${BASE}${BG[key]})` }}
+              />
+            ) : null,
+          )}
+          <span
+            aria-hidden
+            className="pointer-events-none absolute inset-0 -z-20 bg-[linear-gradient(to_bottom,#0b0b0d_0%,rgba(8,7,12,0.55)_18%,rgba(8,7,12,0.55)_82%,#0b0b0d_100%),radial-gradient(ellipse_at_center,rgba(8,7,12,0.2),rgba(8,7,12,0.75))]"
+          />
           <span
             aria-hidden
             className="pointer-events-none absolute inset-0 -z-10 [background:radial-gradient(38%_48%_at_50%_54%,rgba(110,98,163,0.22),transparent_70%)]"
