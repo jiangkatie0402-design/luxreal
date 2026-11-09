@@ -26,7 +26,9 @@
         "generate": "Upload & generate",
         "errorType": "Only PNG, JPG or WEBP images are supported",
         "errorSize": "Images must be 10MB or smaller",
-        "errorEmpty": "Pick a photo first"
+        "errorEmpty": "Pick a photo first",
+        "attach": "Add image",
+        "samples": "Or try an example"
       }
     },
     "viewport": {
