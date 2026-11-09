@@ -2,12 +2,50 @@
 import * as TabsPrimitive from '@radix-ui/react-tabs';
 import { ArrowRight } from 'lucide-react';
 import { useTranslations } from 'next-intl';
+import { useEffect, useRef } from 'react';
 import { ButtonLink } from '@/components/ui/button';
 import { site } from '@/config/site';
 import { cn } from '@/lib/utils';
 
 /** Public asset base: "/" in the app, overridable for static previews. */
 const BASE = process.env.NEXT_PUBLIC_ASSET_BASE ?? '/';
+
+/**
+ * Plays the clip once when it scrolls into view, then rests on its last frame
+ * (the finished model). Plays again from the start each time it comes back
+ * into view. Reduced motion shows the poster only.
+ */
+function PlayOnce({ src, poster, className }: { src: string; poster: string; className?: string }) {
+  const ref = useRef<HTMLVideoElement>(null);
+  useEffect(() => {
+    const v = ref.current;
+    if (!v) return;
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+    const io = new IntersectionObserver(
+      ([e]) => {
+        if (e.isIntersecting) {
+          v.currentTime = 0;
+          void v.play().catch(() => {});
+        }
+      },
+      { threshold: 0.5 },
+    );
+    io.observe(v);
+    return () => io.disconnect();
+  }, [src]);
+  return (
+    <video
+      ref={ref}
+      aria-hidden
+      muted
+      playsInline
+      preload="auto"
+      poster={poster}
+      src={src}
+      className={className}
+    />
+  );
+}
 
 /** Split "Lead：rest" points (zh full-width colon or en ": "). */
 function splitPoint(text: string): [string | null, string] {
@@ -159,12 +197,7 @@ export function Showcase({
                           )}
                         />
                         {media?.[id] && (
-                          <video
-                            aria-hidden
-                            autoPlay
-                            muted
-                            loop
-                            playsInline
+                          <PlayOnce
                             poster={`${BASE}${media[id]}-poster.jpg`}
                             src={`${BASE}${media[id]}.mp4`}
                             className="absolute bottom-[8%] left-1/2 h-[88%] w-auto -translate-x-1/2 mix-blend-screen [mask-image:radial-gradient(farthest-side,#000_72%,transparent)]"
