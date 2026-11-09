@@ -1,6 +1,9 @@
 'use client';
 import { useTranslations } from 'next-intl';
 import { Fragment, useEffect, useRef, type CSSProperties } from 'react';
+import { ArrowRight } from 'lucide-react';
+import { ButtonLink } from '@/components/ui/button';
+import { site } from '@/config/site';
 import { cn } from '@/lib/utils';
 import { PanelGlow } from './PanelGlow';
 
@@ -53,7 +56,31 @@ function FieldName({
 }
 
 /** Copy + three media columns for one panel. */
-function PanelBody({ id, t, slot }: { id: string; t: T; slot: string }) {
+/** Jump to a field's panel (anchors sit in normal flow, unlike the sticky panels). */
+function goTo(id: string) {
+  const a = document.getElementById(`scene-${id}-anchor`);
+  if (!a) return;
+  const header =
+    parseFloat(getComputedStyle(document.documentElement).getPropertyValue('--header-h')) || 64;
+  window.scrollTo({
+    top: a.getBoundingClientRect().top + window.scrollY - header,
+    behavior: 'smooth',
+  });
+}
+
+function PanelBody({
+  id,
+  t,
+  slot,
+  dark,
+  cta,
+}: {
+  id: string;
+  t: T;
+  slot: string;
+  dark: boolean;
+  cta: string;
+}) {
   const points = (t.raw(`${id}.points`) as string[]).map(splitPoint);
   const subtitle = (
     <p className="text-balance font-display text-2xl font-semibold leading-[1.35] tracking-[0.02em]">
@@ -62,7 +89,7 @@ function PanelBody({ id, t, slot }: { id: string; t: T; slot: string }) {
   );
 
   const WIDE =
-    'relative mx-auto flex w-full max-w-[1440px] flex-1 flex-col justify-center px-4 pb-16 pt-10 md:px-12 md:pb-28 md:pt-10 xl:px-20';
+    'relative mx-auto flex w-full max-w-[1440px] flex-1 flex-col justify-center px-4 pb-14 pt-6 md:px-12 md:pb-20 md:pt-6 xl:px-20';
   const caption = (lead: string | null, rest: string, k: number) => (
     <>
       <p className="t-title flex items-baseline gap-2">
@@ -78,14 +105,54 @@ function PanelBody({ id, t, slot }: { id: string; t: T; slot: string }) {
   // aligned header: name + subtitle left, intro right on the subtitle's baseline
   return (
     <div className={WIDE}>
+      {/* field switcher: the three use cases */}
+      <nav aria-label={t('title')} className="mb-8 flex justify-center md:mb-10">
+        <div
+          className={cn(
+            'inline-flex rounded-full p-1',
+            dark ? 'bg-white/[0.08]' : 'bg-[rgba(22,18,31,0.08)]',
+          )}
+        >
+          {IDS.map((f) => (
+            <button
+              key={f}
+              type="button"
+              aria-current={f === id ? 'true' : undefined}
+              onClick={() => goTo(f)}
+              className={cn(
+                'h-9 rounded-full px-5 text-sm font-medium transition-colors',
+                f === id
+                  ? dark
+                    ? 'bg-white text-[#16121f] shadow-sm'
+                    : 'bg-white text-[#16121f] shadow-[0_2px_8px_rgba(22,18,31,0.12)]'
+                  : 'text-[var(--muted)] hover:text-[var(--ink)]',
+              )}
+            >
+              {t(`${f}.tab`)}
+            </button>
+          ))}
+        </div>
+      </nav>
       <div className="grid gap-4 lg:grid-cols-2 lg:items-end lg:gap-16">
         <div>
           <FieldName id={id}>{t(`${id}.tab`)}</FieldName>
           <div className="mt-4">{subtitle}</div>
         </div>
-        <p className="t-lead leading-[1.9] max-w-[36rem] text-[var(--muted)] lg:justify-self-end">
-          {t(`${id}.intro`)}
-        </p>
+        <div className="max-w-[36rem] lg:justify-self-end">
+          <p className="t-lead leading-[1.9] text-[var(--muted)]">{t(`${id}.intro`)}</p>
+          <ButtonLink
+            href={site.links.app}
+            className={cn(
+              'mt-5 h-11 rounded-[12px] px-6',
+              dark
+                ? 'brand-fill'
+                : 'bg-[linear-gradient(135deg,#2a2346,#14111f)] text-[#d6ccff] hover:brightness-125',
+            )}
+          >
+            {cta}
+            <ArrowRight aria-hidden />
+          </ButtonLink>
+        </div>
       </div>
       <ul className="mt-8 grid gap-6 md:mt-10 md:grid-cols-3 md:gap-8">
         {points.map(([lead, rest], k) => (
@@ -159,6 +226,7 @@ const PANELS = m1([
  */
 export function UseCaseStack() {
   const t = useTranslations('site.scenes');
+  const c = useTranslations('common');
   const panels = useRef<(HTMLElement | null)[]>([]);
 
   useEffect(() => {
@@ -191,6 +259,7 @@ export function UseCaseStack() {
         const p = PANELS[i];
         return (
           <Fragment key={id}>
+            <div id={`scene-${id}-anchor`} aria-hidden />
             <article
               ref={(el) => {
                 panels.current[i] = el;
@@ -221,7 +290,13 @@ export function UseCaseStack() {
                   }}
                 />
               )}
-              <PanelBody id={id} t={t} slot={p.slot} />
+              <PanelBody
+                id={id}
+                t={t}
+                slot={p.slot}
+                dark={p.ink === '#ffffff'}
+                cta={c('startCreating')}
+              />
             </article>
             {/* hold: the panel stays fully in view for a stretch before the next one slides over */}
             {i < IDS.length - 1 && <div aria-hidden className="h-[45svh]" />}
