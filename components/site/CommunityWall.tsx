@@ -3,24 +3,39 @@ import { useTranslations } from 'next-intl';
 import { useState } from 'react';
 import { cn } from '@/lib/utils';
 
-/** Placeholder work (assets not decided). `render` / `clay` take image URLs once available. */
+/** A work card: rendered result, plus the white model when there is one. */
 type Work = { render?: string; clay?: string };
 /** Public asset base: "/" in the app, overridable for static previews. */
 const BASE = process.env.NEXT_PUBLIC_ASSET_BASE ?? '/';
-const SHIELD: Work = {
-  render: `${BASE}works/shield-render.webp`,
-  clay: `${BASE}works/shield-clay.webp`,
-};
-const SPEAR: Work = {
-  render: `${BASE}works/spear-render.webp`,
-  clay: `${BASE}works/spear-clay.webp`,
-};
-const EMPTY: Work = {};
-const ROWS: Work[][] = [
-  [EMPTY, SHIELD, EMPTY, SPEAR, ...Array(6).fill(EMPTY)],
-  Array(10).fill(EMPTY),
-  Array(10).fill(EMPTY),
-];
+
+/**
+ * The 30 works in their fixed order (three rows of ten), as laid out in the
+ * design board. Images live at works/<name>-render.webp (and -clay.webp).
+ */
+const ORDER = [
+  ['shield', 'chest', 'spear', 'mace', 'axe', 'mask', 'badger', 'helmet', 'frog', 'pot'],
+  [
+    'lamp',
+    'capstan',
+    'jellyfish',
+    'plane',
+    'rabbit',
+    'knight',
+    'fountain',
+    'lion',
+    'snail',
+    'crystal',
+  ],
+  ['crab', 'crest', 'tower', 'horn', 'house', 'deer', 'treant', 'plate', 'harp', 'vase'],
+] as const;
+/** Which works have images so far; the rest stay as empty placeholders. */
+const HAVE_RENDER = new Set(['shield', 'chest', 'spear', 'mace', 'axe', 'mask']);
+const HAVE_CLAY = new Set(['shield', 'spear']);
+const work = (name: string): Work => ({
+  render: HAVE_RENDER.has(name) ? `${BASE}works/${name}-render.webp` : undefined,
+  clay: HAVE_CLAY.has(name) ? `${BASE}works/${name}-clay.webp` : undefined,
+});
+const ROWS: Work[][] = ORDER.map((row) => row.map(work));
 
 /**
  * One work card. Hovering (or press-and-hold on touch, or keyboard focus) shows
@@ -29,7 +44,7 @@ const ROWS: Work[][] = [
  */
 function WorkCard({ work, label }: { work: Work; label: string }) {
   const [clay, setClay] = useState(false);
-  const show = () => setClay(true);
+  const show = () => work.clay && setClay(true);
   const hide = () => setClay(false);
   return (
     <figure className="w-[150px] shrink-0 overflow-hidden rounded-2xl bg-[#18181b] md:w-[176px]">
