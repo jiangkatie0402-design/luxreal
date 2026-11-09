@@ -872,3 +872,23 @@
     animation: none;
   }
 }
+
+/* core card: the picture glides into the upload area */
+@keyframes core-drop {
+  from {
+    transform: translate(24%, 14%) rotate(4deg);
+    opacity: 0;
+  }
+  to {
+    transform: none;
+    opacity: 1;
+  }
+}
+.core-panel[data-state='active'] .core-drop {
+  animation: core-drop 0.9s var(--ease-out) 0.2s both;
+}
+@media (prefers-reduced-motion: reduce) {
+  .core-panel[data-state='active'] .core-drop {
+    animation: none;
+  }
+}

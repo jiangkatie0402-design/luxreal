@@ -1,6 +1,6 @@
 'use client';
 import * as TabsPrimitive from '@radix-ui/react-tabs';
-import { ArrowRight } from 'lucide-react';
+import { ArrowRight, Plus } from 'lucide-react';
 import { useTranslations } from 'next-intl';
 import { useEffect, useRef } from 'react';
 import { ButtonLink } from '@/components/ui/button';
@@ -9,6 +9,47 @@ import { cn } from '@/lib/utils';
 
 /** Public asset base: "/" in the app, overridable for static previews. */
 const BASE = process.env.NEXT_PUBLIC_ASSET_BASE ?? '/';
+
+/**
+ * Left side of the app window for image-to-3D: the generation panel (design
+ * draft) with a 2D picture being dragged into its upload area, as in a real
+ * workspace. Positions are % of the panel's own 360x1140 artboard.
+ */
+function Workspace() {
+  return (
+    <div className="absolute inset-y-0 left-0 z-10 w-[min(34%,250px)] border-r border-white/[0.06] bg-[#141416] p-2.5">
+      <div className="relative aspect-[360/1140] w-full">
+        {/* eslint-disable-next-line @next/next/no-img-element */}
+        <img src={`${BASE}works/turbo-panel.webp`} alt="" className="absolute inset-0 size-full" />
+        {/* the picture being added */}
+        <span className="core-drop absolute left-[46%] top-[21%] w-[66%] overflow-hidden rounded-[14px] border border-white/25 bg-black shadow-[0_20px_50px_rgba(0,0,0,0.6)]">
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img
+            src={`${BASE}works/rabbit-input.webp`}
+            alt=""
+            className="block aspect-square w-full"
+          />
+          <span className="absolute left-[7%] top-[7%] grid size-[22%] place-items-center rounded-lg bg-[#1d2742] text-white ring-1 ring-white/20">
+            <Plus className="size-[70%]" strokeWidth={2.4} />
+          </span>
+        </span>
+        {/* pointer */}
+        <svg
+          viewBox="0 0 24 24"
+          className="absolute left-[40%] top-[19%] w-[10%] drop-shadow-[0_2px_4px_rgba(0,0,0,0.6)]"
+        >
+          <path
+            d="M4 2l15 11-6.5 1.2L16 21l-3 1.4-3.4-6.9L4 20z"
+            fill="#fff"
+            stroke="#111"
+            strokeWidth="1.2"
+            strokeLinejoin="round"
+          />
+        </svg>
+      </div>
+    </div>
+  );
+}
 
 /**
  * Plays the clip once when it scrolls into view, then rests on its last frame
@@ -181,28 +222,36 @@ export function Showcase({
                         <span className="size-2.5 rounded-full bg-white/15" />
                         <span className="ml-3 h-5 w-48 max-w-[40%] rounded-md bg-white/[0.06]" />
                       </div>
-                      <div className="absolute inset-x-0 bottom-0 top-10 overflow-hidden [background:radial-gradient(60%_60%_at_55%_50%,rgba(110,98,163,0.14),transparent_70%)]">
-                        <span className="absolute inset-x-[-30%] bottom-0 h-[50%] [background:linear-gradient(rgba(255,255,255,0.06)_1px,transparent_1px)_0_0/44px_44px,linear-gradient(90deg,rgba(255,255,255,0.06)_1px,transparent_1px)_0_0/44px_44px] [mask-image:radial-gradient(60%_90%_at_50%_100%,#000,transparent)] [transform:perspective(600px)_rotateX(62deg)] [transform-origin:bottom]" />
-                        {media?.[id] && (
-                          <>
-                            {/* spotlight from above onto the stage */}
-                            <span className="absolute inset-x-0 top-0 h-[88%] blur-xl [background:conic-gradient(from_180deg_at_50%_-8%,transparent_162deg,rgba(214,204,255,0.22)_172deg,rgba(240,236,255,0.38)_180deg,rgba(214,204,255,0.22)_188deg,transparent_198deg)] [mask-image:linear-gradient(to_bottom,#000_55%,transparent)]" />
-                            <span className="absolute bottom-[9%] left-1/2 h-[18%] w-[46%] -translate-x-1/2 rounded-[50%] [background:radial-gradient(closest-side,rgba(214,204,255,0.3),transparent)]" />
-                          </>
-                        )}
-                        <span
+                      <div className="absolute inset-x-0 bottom-0 top-10 overflow-hidden">
+                        {media?.[id] && <Workspace />}
+                        <div
                           className={cn(
-                            'absolute bottom-[12%] left-1/2 h-[10%] w-[52%] rounded-[50%] border border-white/10 [background:radial-gradient(closest-side,rgba(110,98,163,0.22),transparent)]',
-                            media?.[id] ? '-translate-x-1/2' : '-translate-x-[40%]',
+                            'absolute inset-y-0 right-0 [background:radial-gradient(60%_60%_at_55%_50%,rgba(110,98,163,0.14),transparent_70%)]',
+                            media?.[id] ? 'left-[min(34%,250px)]' : 'left-0',
                           )}
-                        />
-                        {media?.[id] && (
-                          <PlayOnce
-                            poster={`${BASE}${media[id]}-poster.jpg`}
-                            src={`${BASE}${media[id]}.mp4`}
-                            className="absolute bottom-[8%] left-1/2 h-[88%] w-auto -translate-x-1/2 mix-blend-screen [mask-image:radial-gradient(farthest-side,#000_72%,transparent)]"
+                        >
+                          <span className="absolute inset-x-[-30%] bottom-0 h-[50%] [background:linear-gradient(rgba(255,255,255,0.06)_1px,transparent_1px)_0_0/44px_44px,linear-gradient(90deg,rgba(255,255,255,0.06)_1px,transparent_1px)_0_0/44px_44px] [mask-image:radial-gradient(60%_90%_at_50%_100%,#000,transparent)] [transform:perspective(600px)_rotateX(62deg)] [transform-origin:bottom]" />
+                          {media?.[id] && (
+                            <>
+                              {/* spotlight from above onto the stage */}
+                              <span className="absolute inset-x-0 top-0 h-[88%] blur-xl [background:conic-gradient(from_180deg_at_50%_-8%,transparent_162deg,rgba(214,204,255,0.22)_172deg,rgba(240,236,255,0.38)_180deg,rgba(214,204,255,0.22)_188deg,transparent_198deg)] [mask-image:linear-gradient(to_bottom,#000_55%,transparent)]" />
+                              <span className="absolute bottom-[9%] left-1/2 h-[18%] w-[46%] -translate-x-1/2 rounded-[50%] [background:radial-gradient(closest-side,rgba(214,204,255,0.3),transparent)]" />
+                            </>
+                          )}
+                          <span
+                            className={cn(
+                              'absolute bottom-[12%] left-1/2 h-[10%] w-[52%] rounded-[50%] border border-white/10 [background:radial-gradient(closest-side,rgba(110,98,163,0.22),transparent)]',
+                              media?.[id] ? '-translate-x-1/2' : '-translate-x-[40%]',
+                            )}
                           />
-                        )}
+                          {media?.[id] && (
+                            <PlayOnce
+                              poster={`${BASE}${media[id]}-poster.jpg`}
+                              src={`${BASE}${media[id]}.mp4`}
+                              className="absolute bottom-[8%] left-1/2 h-[88%] w-auto -translate-x-1/2 mix-blend-screen [mask-image:radial-gradient(farthest-side,#000_72%,transparent)]"
+                            />
+                          )}
+                        </div>
                       </div>
                     </div>
                   </div>
