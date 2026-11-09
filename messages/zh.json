@@ -19,16 +19,12 @@
     "cover": {
       "upload": {
         "placeholder": "拖入一张照片，或点击上传，和 Lux3D 一起创造你的世界",
-        "formats": "PNG / JPG / WEBP，最大 10MB",
         "replace": "更换照片",
-        "model": "模型：标准",
-        "output": "输出：Mesh · PBR",
         "generate": "上传并生成",
         "errorType": "只支持 PNG、JPG 或 WEBP 格式的图片",
         "errorSize": "图片不能超过 10MB",
         "errorEmpty": "先选一张照片",
-        "attach": "添加图片",
-        "samples": "或试试示例"
+        "attach": "添加图片"
       }
     },
     "viewport": {

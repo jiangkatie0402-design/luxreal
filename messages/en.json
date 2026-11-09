@@ -19,16 +19,12 @@
     "cover": {
       "upload": {
         "placeholder": "Drop a photo or click to upload — create your world with Lux3D",
-        "formats": "PNG / JPG / WEBP, up to 10MB",
         "replace": "Replace photo",
-        "model": "Model: Standard",
-        "output": "Output: Mesh · PBR",
         "generate": "Upload & generate",
         "errorType": "Only PNG, JPG or WEBP images are supported",
         "errorSize": "Images must be 10MB or smaller",
         "errorEmpty": "Pick a photo first",
-        "attach": "Add image",
-        "samples": "Or try an example"
+        "attach": "Add image"
       }
     },
     "viewport": {
