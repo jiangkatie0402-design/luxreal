@@ -220,7 +220,14 @@ export function Showcase({
                         <span className="size-2.5 rounded-full bg-white/15" />
                         <span className="size-2.5 rounded-full bg-white/15" />
                         <span className="size-2.5 rounded-full bg-white/15" />
-                        <span className="ml-3 h-5 w-48 max-w-[40%] rounded-md bg-white/[0.06]" />
+                        {/* app header: brand + current tool, like a real workspace */}
+                        <span className="ml-3 flex items-center gap-2 text-[13px] font-semibold text-white/90">
+                          {/* eslint-disable-next-line @next/next/no-img-element */}
+                          <img src={`${BASE}aholo-mark.svg`} alt="" className="size-5" />
+                          Aholo 3D
+                          <span className="font-normal text-white/25">/</span>
+                          <span className="font-normal text-white/55">{t(`${id}.tab`)}</span>
+                        </span>
                       </div>
                       <div className="absolute inset-x-0 bottom-0 top-10 overflow-hidden">
                         {media?.[id] && <Workspace />}
