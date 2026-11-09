@@ -23,7 +23,14 @@ const MEDIA: Partial<Record<(typeof IDS)[number], string[]>> = {
 };
 
 /** Preview-only: panel layouts for review. */
-export const SCENE_LAYOUTS = ['原版', '原版·间距微调', 'B 左文右图'] as const;
+export const SCENE_LAYOUTS = [
+  '原版',
+  '原版·间距微调',
+  'B 左文右图',
+  'D 图上叠字',
+  'E 横向手风琴',
+  'F 拼贴',
+] as const;
 export const useSceneLayout = create<{ v: number; set: (v: number) => void }>((setState) => ({
   v: 1,
   set: (v) => setState({ v }),
@@ -125,7 +132,7 @@ function PanelBody({
   const [active, setActive] = useState(0);
   // B and C show one point at a time and step through them
   useEffect(() => {
-    if (v !== 2) return;
+    if (v !== 2 && v !== 4) return;
     const t = window.setInterval(() => setActive((a) => (a + 1) % points.length), 4000);
     return () => window.clearInterval(t);
   }, [v, points.length, active]);
@@ -287,6 +294,125 @@ function PanelBody({
             src={media?.[active]}
             className="core-panel aspect-[4/3] w-full"
           />
+        </div>
+      </div>
+    );
+
+  // shared header for D/E/F: name + subtitle left, short intro + button right
+  const header = (
+    <div className="grid gap-6 lg:grid-cols-[minmax(0,1fr)_minmax(0,28rem)] lg:items-end lg:gap-20">
+      <div>
+        <FieldName id={id}>{t(`${id}.tab`)}</FieldName>
+        <div className="mt-5">{subtitle}</div>
+      </div>
+      <div>
+        <p className="text-[15px] leading-[1.85] text-[var(--muted)]">{t(`${id}.intro`)}</p>
+        <div className="mt-6">{button}</div>
+      </div>
+    </div>
+  );
+  const glass = dark
+    ? 'bg-black/45 text-white backdrop-blur-md'
+    : 'bg-white/65 text-[#16121f] backdrop-blur-md';
+
+  // D — captions sit on the images in a frosted strip; the text reveals on hover.
+  if (v === 3)
+    return (
+      <div className={WIDE}>
+        <div className="mb-10 md:mb-12">{nav}</div>
+        {header}
+        <ul className="mt-12 grid gap-6 md:mt-14 md:grid-cols-3 md:gap-8">
+          {points.map(([lead, rest], k) => (
+            <li key={k} className="group relative">
+              <Slot bg={slot} src={media?.[k]} className="aspect-[4/3] w-full" />
+              <div
+                className={cn(
+                  'absolute inset-x-3 bottom-3 rounded-[14px] px-4 py-3 transition-all',
+                  glass,
+                )}
+              >
+                <p className="flex items-baseline gap-2 text-[15px] font-semibold">
+                  {num(k)}
+                  {lead}
+                </p>
+                <p className="grid grid-rows-[0fr] text-[13px] leading-[1.7] opacity-80 transition-[grid-template-rows] duration-300 group-hover:grid-rows-[1fr]">
+                  <span className="overflow-hidden">
+                    <span className="block pt-1.5">{desc(rest)}</span>
+                  </span>
+                </p>
+              </div>
+            </li>
+          ))}
+        </ul>
+      </div>
+    );
+
+  // E — the three images as an accordion: the active one widens and shows its text.
+  if (v === 4)
+    return (
+      <div className={WIDE}>
+        <div className="mb-10 md:mb-12">{nav}</div>
+        {header}
+        <ul className="mt-12 flex h-[clamp(260px,34vh,360px)] gap-4 md:mt-14">
+          {points.map(([lead, rest], k) => (
+            <li
+              key={k}
+              onMouseEnter={() => setActive(k)}
+              className={cn(
+                'relative min-w-0 overflow-hidden rounded-[20px] transition-[flex-grow] duration-500 ease-out',
+                active === k ? 'grow-[3]' : 'grow',
+              )}
+              style={{ flexBasis: 0 }}
+            >
+              <Slot
+                bg={slot}
+                src={media?.[k]}
+                fit="contain"
+                className="absolute inset-0 rounded-[20px]"
+              />
+              <div className={cn('absolute inset-x-3 bottom-3 rounded-[14px] px-4 py-3', glass)}>
+                <p className="flex items-baseline gap-2 truncate text-[15px] font-semibold">
+                  {num(k)}
+                  {lead}
+                </p>
+                {active === k && (
+                  <p
+                    className="core-panel mt-1.5 text-[13px] leading-[1.7] opacity-80"
+                    data-state="active"
+                  >
+                    {desc(rest)}
+                  </p>
+                )}
+              </div>
+            </li>
+          ))}
+        </ul>
+      </div>
+    );
+
+  // F — bento: the first point large on the left, the other two stacked on the right.
+  if (v === 5)
+    return (
+      <div className={WIDE}>
+        <div className="mb-10 md:mb-12">{nav}</div>
+        {header}
+        <div className="mt-12 grid h-[clamp(300px,38vh,400px)] grid-cols-[3fr_2fr] grid-rows-2 gap-4 md:mt-14">
+          {points.map(([lead, rest], k) => (
+            <div key={k} className={cn('relative', k === 0 && 'row-span-2')}>
+              <Slot bg={slot} src={media?.[k]} fit="contain" className="absolute inset-0" />
+              <div className={cn('absolute inset-x-3 bottom-3 rounded-[14px] px-4 py-3', glass)}>
+                <p className="flex items-baseline gap-2 text-[15px] font-semibold">
+                  {num(k)}
+                  {lead}
+                </p>
+                {k === 0 && (
+                  <p className="mt-1.5 max-w-[34rem] text-[13px] leading-[1.7] opacity-80">
+                    {desc(rest)}
+                  </p>
+                )}
+              </div>
+            </div>
+          ))}
         </div>
       </div>
     );
