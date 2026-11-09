@@ -89,7 +89,7 @@ function PanelBody({
   );
 
   const WIDE =
-    'relative mx-auto flex w-full max-w-[1440px] flex-1 flex-col justify-center px-4 pb-14 pt-6 md:px-12 md:pb-20 md:pt-6 xl:px-20';
+    'relative mx-auto flex w-full max-w-[1440px] flex-1 flex-col justify-center px-4 pb-12 pt-12 md:px-12 md:pb-14 md:pt-14 xl:px-20';
   const caption = (lead: string | null, rest: string, k: number) => (
     <>
       <p className="t-title flex items-baseline gap-2">
