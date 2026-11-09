@@ -38,18 +38,18 @@ export function ForAgents() {
 
 export { WhyUs } from './WhyRing';
 
-/** One testimonial: who said it on top, their words below. Placeholder until real quotes exist. */
-function VoiceCard({ t }: { t: ReturnType<typeof useTranslations> }) {
+type Voice = { name: string; role: string; quote: string };
+
+/** One testimonial: who said it on top, their words below. */
+function VoiceCard({ v }: { v: Voice }) {
   return (
     <figure className="flex w-[420px] shrink-0 flex-col gap-3 rounded-[18px] border border-white/[0.07] bg-[linear-gradient(160deg,rgba(40,34,72,0.55),rgba(18,17,26,0.7))] px-6 py-5 backdrop-blur-sm">
-      <figcaption className="flex items-center gap-3">
-        <span className="size-10 shrink-0 rounded-full bg-[linear-gradient(135deg,#4a3f86,#1b1830)] ring-1 ring-white/15" />
-        <span className="min-w-0 truncate text-[15px] font-semibold">
-          {t('name')} <span className="px-1 text-white/40">|</span> {t('role')}
-        </span>
+      <figcaption className="min-w-0 truncate text-[15px] font-semibold">
+        {v.name} <span className="px-1 text-white/40">|</span>{' '}
+        <span className="font-normal text-white/70">{v.role}</span>
       </figcaption>
-      <blockquote className="t-small line-clamp-2 text-pretty leading-[1.7] text-foreground/80">
-        {t('quote')}
+      <blockquote className="t-small line-clamp-3 text-pretty leading-[1.65] text-foreground/80">
+        {v.quote}
       </blockquote>
     </figure>
   );
@@ -58,10 +58,12 @@ function VoiceCard({ t }: { t: ReturnType<typeof useTranslations> }) {
 /**
  * 六、用户证言 — dotted backdrop with a soft violet glow, a centred title with
  * the brand highlighted, and two rows of testimonial cards drifting in
- * opposite directions, fading at both edges. Quotes are placeholders.
+ * opposite directions, fading at both edges. Quotes are drafts for now.
  */
 export function Testimonials() {
   const t = useTranslations('site.voices');
+  // DRAFT copy: illustrative quotes until real ones are collected — replace before launch
+  const voices = t.raw('items') as Voice[];
   const title = t('a.title');
   const [before, after] = title.split('Aholo 3D');
   const row = (reverse: boolean) => (
@@ -69,8 +71,9 @@ export function Testimonials() {
       className="voices-row flex w-max gap-5"
       style={reverse ? { animationDirection: 'reverse' } : undefined}
     >
-      {Array.from({ length: 10 }, (_, i) => (
-        <VoiceCard key={i} t={t} />
+      {/* each row shows all items twice so the loop is seamless; the second row starts halfway */}
+      {[...voices, ...voices].map((_, i) => (
+        <VoiceCard key={i} v={voices[(i + (reverse ? 5 : 0)) % voices.length]} />
       ))}
     </div>
   );

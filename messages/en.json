@@ -181,9 +181,58 @@
       "a": {
         "title": "Creators using Aholo 3D"
       },
-      "quote": "A real user quote goes here: what Aholo 3D solved for them and how much time it saved.",
-      "name": "Name",
-      "role": "Role · Field"
+      "items": [
+        {
+          "name": "Lin Yizhou",
+          "role": "Indie game developer",
+          "quote": "A prop used to take me an afternoon. Now I drop in concept art and get a textured model in minutes — prototyping is so much faster."
+        },
+        {
+          "name": "Chen Mo",
+          "role": "3D print studio owner",
+          "quote": "Models come out closed, so I export STL and slice straight away. Most of my hole-fixing time is gone."
+        },
+        {
+          "name": "Sora Kim",
+          "role": "Film concept designer",
+          "quote": "I block out the set and props first, then plan shots. Framing talks with the director are much clearer."
+        },
+        {
+          "name": "Zhou Xiaowen",
+          "role": "E-commerce visual designer",
+          "quote": "Once a product is in 3D I can render any angle. Asset prep for a product page takes half the time."
+        },
+        {
+          "name": "Wang Ziang",
+          "role": "Technical artist",
+          "quote": "Face count is tunable per use, so it drops into the engine with little cleanup, and the PBR maps are tidy."
+        },
+        {
+          "name": "Mia Torres",
+          "role": "Indie animation director",
+          "quote": "I let the agent run a dozen props overnight and the organised folder is waiting in the morning."
+        },
+        {
+          "name": "Li Anran",
+          "role": "Interior designer",
+          "quote": "Small décor pieces used to mean hunting for stock models. Now one photo of the real thing is enough."
+        },
+        {
+          "name": "Zhao Yiming",
+          "role": "Figure prototyper",
+          "quote": "It keeps more detail than I expected — a great base mesh for sculpting that saves the blocking stage."
+        },
+        {
+          "name": "Kenji Mori",
+          "role": "Game art outsourcing lead",
+          "quote": "One character needs several material sets; now I keep the shape and regenerate materials instead of rebuilding."
+        },
+        {
+          "name": "Xu Nuo",
+          "role": "Digital art lecturer",
+          "quote": "Students see a 3D result from a single sentence, which makes teaching form and materials far more concrete."
+        }
+      ]
     },
     "community": {
       "title": "From one image or one sentence to these 3D works",
