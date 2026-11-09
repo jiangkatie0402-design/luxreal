@@ -36,6 +36,9 @@ export const SCENE_LAYOUTS = [
   'J 列表·无框',
   'K 图出血',
   'L 无框三栏',
+  'M 胶片条',
+  'N 卡片叠放',
+  'O 热点标注',
 ] as const;
 export const useSceneLayout = create<{ v: number; set: (v: number) => void }>((setState) => ({
   v: 1,
@@ -138,7 +141,7 @@ function PanelBody({
   const [active, setActive] = useState(0);
   // B and C show one point at a time and step through them
   useEffect(() => {
-    if (![2, 4, 7, 8, 10].includes(v)) return;
+    if (![2, 4, 7, 8, 10, 13].includes(v)) return;
     const t = window.setInterval(() => setActive((a) => (a + 1) % points.length), 4000);
     return () => window.clearInterval(t);
   }, [v, points.length, active]);
@@ -694,6 +697,172 @@ function PanelBody({
         </ul>
       </div>
     );
+
+  const bgOf = (k: number, pos = 'center') =>
+    media?.[k] ? `url(${media[k]}) ${pos}/cover no-repeat` : slot;
+
+  // M — the three images joined edge to edge in one rounded strip; text set beneath each.
+  if (v === 12)
+    return (
+      <div className={WIDE}>
+        <div className="mb-10 md:mb-12">{nav}</div>
+        <div className="flex flex-col gap-6 lg:flex-row lg:items-end lg:justify-between">
+          <div>
+            <FieldName id={id}>{t(`${id}.tab`)}</FieldName>
+            <div className="mt-5">{subtitle}</div>
+          </div>
+          <div className="flex flex-col gap-5 lg:max-w-[26rem] lg:items-end lg:text-right">
+            <p className="text-[15px] leading-[1.85] text-[var(--muted)]">{t(`${id}.intro`)}</p>
+            {button}
+          </div>
+        </div>
+        <div
+          aria-hidden
+          className="mt-12 grid h-[clamp(200px,26vh,260px)] grid-cols-3 overflow-hidden rounded-[24px] md:mt-14"
+        >
+          {points.map((_, k) => (
+            <div key={k} style={{ background: bgOf(k) }} />
+          ))}
+        </div>
+        <ul className="mt-6 grid grid-cols-3 gap-10">
+          {points.map(([lead, rest], k) => (
+            <li key={k}>
+              <p className="flex items-baseline gap-3 text-[17px] font-semibold">
+                {num(k)}
+                {lead}
+              </p>
+              <p className="mt-2 text-sm leading-[1.8] text-[var(--muted)]">{desc(rest)}</p>
+            </li>
+          ))}
+        </ul>
+      </div>
+    );
+
+  // N — the images fanned like a hand of cards; the chosen one comes to the top, its text beside.
+  if (v === 13)
+    return (
+      <div className={WIDE}>
+        <div className="mb-10 md:mb-12">{nav}</div>
+        <div className="grid items-center gap-12 lg:grid-cols-[minmax(0,1fr)_minmax(0,1fr)] lg:gap-20">
+          <div>
+            <FieldName id={id}>{t(`${id}.tab`)}</FieldName>
+            <div className="mt-5">{subtitle}</div>
+            <div key={active} className="core-panel mt-8 min-h-[7.5rem]" data-state="active">
+              <p className="flex items-baseline gap-3 text-[18px] font-semibold">
+                {num(active)}
+                {points[active][0]}
+              </p>
+              <p className="mt-2 max-w-[30rem] text-sm leading-[1.8] text-[var(--muted)]">
+                {desc(points[active][1])}
+              </p>
+            </div>
+            <div className="mt-6 flex items-center gap-6">
+              {button}
+              <span className="flex gap-2">
+                {points.map((_, k) => (
+                  <button
+                    key={k}
+                    type="button"
+                    aria-label={`0${k + 1}`}
+                    onClick={() => setActive(k)}
+                    className={cn(
+                      'h-1.5 rounded-full transition-all',
+                      active === k ? 'w-6 bg-[var(--ink)]' : 'w-1.5 bg-[var(--line)]',
+                    )}
+                  />
+                ))}
+              </span>
+            </div>
+          </div>
+          <div className="relative mx-auto h-[clamp(280px,40vh,380px)] w-full max-w-[560px]">
+            {points.map((_, k) => {
+              const off = (k - active + points.length) % points.length; // 0 front, 1, 2 behind
+              return (
+                <button
+                  key={k}
+                  type="button"
+                  onClick={() => setActive(k)}
+                  aria-label={`0${k + 1}`}
+                  className="absolute inset-y-[6%] left-[8%] w-[72%] rounded-[20px] shadow-[0_24px_60px_-20px_rgba(40,20,90,0.45)] transition-all duration-500 ease-out"
+                  style={{
+                    background: bgOf(k),
+                    transform: `translateX(${off * 12}%) rotate(${off * 5}deg) scale(${1 - off * 0.06})`,
+                    zIndex: 3 - off,
+                    opacity: off === 2 ? 0.7 : 1,
+                  }}
+                />
+              );
+            })}
+          </div>
+        </div>
+      </div>
+    );
+
+  // O — one large image with three numbered hotspots; hovering a hotspot shows its note.
+  if (v === 14) {
+    const pins = [
+      { x: 30, y: 46 },
+      { x: 62, y: 30 },
+      { x: 70, y: 72 },
+    ];
+    return (
+      <div className={WIDE}>
+        <div className="mb-10 md:mb-12">{nav}</div>
+        <div className="grid items-center gap-12 lg:grid-cols-[minmax(0,4fr)_minmax(0,6fr)] lg:gap-16">
+          <div>
+            <FieldName id={id}>{t(`${id}.tab`)}</FieldName>
+            <div className="mt-5">{subtitle}</div>
+            <p className="mt-6 max-w-[26rem] text-[15px] leading-[1.85] text-[var(--muted)]">
+              {t(`${id}.intro`)}
+            </p>
+            <div className="mt-8">{button}</div>
+          </div>
+          <div
+            className="relative h-[clamp(300px,50vh,460px)] rounded-[24px]"
+            style={{ background: bgOf(0) }}
+          >
+            {points.map(([lead, rest], k) => (
+              <div
+                key={k}
+                className="absolute"
+                style={{ left: `${pins[k].x}%`, top: `${pins[k].y}%` }}
+                onMouseEnter={() => setActive(k)}
+              >
+                <button
+                  type="button"
+                  onClick={() => setActive(k)}
+                  className={cn(
+                    'relative grid size-8 -translate-x-1/2 -translate-y-1/2 place-items-center rounded-full font-mono text-xs font-semibold transition',
+                    active === k
+                      ? 'bg-[var(--ink)] text-white'
+                      : 'bg-white/80 text-[#16121f] ring-4 ring-white/40 hover:bg-white',
+                  )}
+                >
+                  {k + 1}
+                  {active !== k && (
+                    <span className="absolute inset-0 animate-ping rounded-full bg-white/40" />
+                  )}
+                </button>
+                {active === k && (
+                  <div
+                    className={cn(
+                      'core-panel absolute top-5 w-[min(300px,60vw)] rounded-[14px] px-4 py-3',
+                      pins[k].x > 50 ? 'right-0' : 'left-0',
+                      glass,
+                    )}
+                    data-state="active"
+                  >
+                    <p className="text-[15px] font-semibold">{lead}</p>
+                    <p className="mt-1 text-[13px] leading-[1.7] opacity-80">{desc(rest)}</p>
+                  </div>
+                )}
+              </div>
+            ))}
+          </div>
+        </div>
+      </div>
+    );
+  }
 
   return null;
 }
