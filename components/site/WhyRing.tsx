@@ -146,7 +146,7 @@ export function WhyUs() {
                 aria-hidden
                 className={cn(
                   'pointer-events-none absolute inset-0 -z-20 bg-cover bg-center transition-opacity duration-700',
-                  k === key ? (key === 'easy' ? 'opacity-[0.65]' : 'opacity-100') : 'opacity-0',
+                  k === key ? (key === 'easy' ? 'opacity-[0.85]' : 'opacity-100') : 'opacity-0',
                 )}
                 style={{ backgroundImage: `url(${BASE}${BG[key]})` }}
               />
