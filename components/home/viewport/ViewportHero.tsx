@@ -75,8 +75,8 @@ export function ViewportHero({ locale }: { locale: string }) {
           poster={`${BASE}videos/hero-final-poster.jpg`}
           className="absolute inset-0 size-full object-cover"
         >
-          <source src={`${BASE}videos/hero-final-720.mp4`} type="video/mp4" media="(max-width: 768px)" />
-          <source src={`${BASE}videos/hero-final.mp4`} type="video/mp4" />
+          <source src={`${BASE}videos/hero-final-hold-720.mp4`} type="video/mp4" media="(max-width: 768px)" />
+          <source src={`${BASE}videos/hero-final-hold.mp4`} type="video/mp4" />
         </video>
       )}
       {/* keep the title and upload card readable over any frame */}
