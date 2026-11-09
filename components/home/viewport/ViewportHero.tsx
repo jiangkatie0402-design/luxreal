@@ -59,7 +59,7 @@ export function ViewportHero({ locale }: { locale: string }) {
       {reduced ? (
         // eslint-disable-next-line @next/next/no-img-element
         <img
-          src={`${BASE}videos/hero-poster.jpg`}
+          src={`${BASE}videos/hero-final-poster.jpg`}
           alt=""
           aria-hidden
           className="absolute inset-0 size-full object-cover"
@@ -72,11 +72,11 @@ export function ViewportHero({ locale }: { locale: string }) {
           loop
           playsInline
           preload="auto"
-          poster={`${BASE}videos/hero-poster.jpg`}
+          poster={`${BASE}videos/hero-final-poster.jpg`}
           className="absolute inset-0 size-full object-cover"
         >
-          <source src={`${BASE}videos/hero-720.mp4`} type="video/mp4" media="(max-width: 768px)" />
-          <source src={`${BASE}videos/hero.mp4`} type="video/mp4" />
+          <source src={`${BASE}videos/hero-final-720.mp4`} type="video/mp4" media="(max-width: 768px)" />
+          <source src={`${BASE}videos/hero-final.mp4`} type="video/mp4" />
         </video>
       )}
       {/* keep the title and upload card readable over any frame */}
