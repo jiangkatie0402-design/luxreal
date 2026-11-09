@@ -23,9 +23,9 @@ const MEDIA: Partial<Record<(typeof IDS)[number], string[]>> = {
 };
 
 /** Preview-only: panel layouts for review. */
-export const SCENE_LAYOUTS = ['A 精简三图', 'B 左文右图', 'C 大图+标签'] as const;
+export const SCENE_LAYOUTS = ['原版', '原版·间距微调', 'B 左文右图'] as const;
 export const useSceneLayout = create<{ v: number; set: (v: number) => void }>((setState) => ({
-  v: 0,
+  v: 1,
   set: (v) => setState({ v }),
 }));
 type T = ReturnType<typeof useTranslations>;
@@ -125,7 +125,7 @@ function PanelBody({
   const [active, setActive] = useState(0);
   // B and C show one point at a time and step through them
   useEffect(() => {
-    if (v === 0) return;
+    if (v !== 2) return;
     const t = window.setInterval(() => setActive((a) => (a + 1) % points.length), 4000);
     return () => window.clearInterval(t);
   }, [v, points.length, active]);
@@ -177,25 +177,66 @@ function PanelBody({
     <span className="font-mono text-xs text-[var(--muted)]">0{k + 1}</span>
   );
 
-  // A — fewer words: title + subtitle with the button, then three images with titles only.
+  const desc = (rest: string) => rest.charAt(0).toUpperCase() + rest.slice(1);
+
+  // Original layout: header (name + subtitle | intro + button), three images with title and text.
   if (v === 0)
     return (
       <div className={WIDE}>
-        {nav}
-        <div className="mt-10 flex flex-col gap-6 md:mt-12 lg:flex-row lg:items-end lg:justify-between">
+        <div className="mb-8 md:mb-10">{nav}</div>
+        <div className="grid gap-4 lg:grid-cols-2 lg:items-end lg:gap-16">
           <div>
             <FieldName id={id}>{t(`${id}.tab`)}</FieldName>
             <div className="mt-4">{subtitle}</div>
           </div>
-          {button}
+          <div className="max-w-[36rem] lg:justify-self-end">
+            <p className="t-lead leading-[1.9] text-[var(--muted)]">{t(`${id}.intro`)}</p>
+            <div className="mt-5">{button}</div>
+          </div>
         </div>
-        <ul className="mt-10 grid gap-6 md:mt-12 md:grid-cols-3 md:gap-8">
-          {points.map(([lead], k) => (
-            <li key={k}>
+        <ul className="mt-8 grid gap-6 md:mt-10 md:grid-cols-3 md:gap-8">
+          {points.map(([lead, rest], k) => (
+            <li key={k} className="flex flex-col">
               <Slot bg={slot} src={media?.[k]} className="aspect-[4/3] w-full" />
               <p className="t-title mt-5 flex items-baseline gap-2">
                 {num(k)}
                 {lead}
+              </p>
+              <p className="t-body mt-3 max-w-[30rem] leading-[1.9] text-[var(--muted)]">
+                {desc(rest)}
+              </p>
+            </li>
+          ))}
+        </ul>
+      </div>
+    );
+
+  // Same layout, calmer rhythm: clearer groups, smaller quieter copy, a little more air
+  // between images and their text, and the intro kept narrow beside the title.
+  if (v === 1)
+    return (
+      <div className={WIDE}>
+        <div className="mb-10 md:mb-12">{nav}</div>
+        <div className="grid gap-6 lg:grid-cols-[minmax(0,1fr)_minmax(0,30rem)] lg:items-end lg:gap-20">
+          <div>
+            <FieldName id={id}>{t(`${id}.tab`)}</FieldName>
+            <div className="mt-5">{subtitle}</div>
+          </div>
+          <div>
+            <p className="text-[15px] leading-[1.85] text-[var(--muted)]">{t(`${id}.intro`)}</p>
+            <div className="mt-6">{button}</div>
+          </div>
+        </div>
+        <ul className="mt-12 grid gap-8 md:mt-14 md:grid-cols-3 md:gap-10">
+          {points.map(([lead, rest], k) => (
+            <li key={k} className="flex flex-col">
+              <Slot bg={slot} src={media?.[k]} className="aspect-[16/11] w-full" />
+              <p className="mt-6 flex items-baseline gap-2 text-[17px] font-semibold leading-snug">
+                {num(k)}
+                {lead}
+              </p>
+              <p className="mt-2.5 text-sm leading-[1.8] text-[var(--muted)] opacity-90">
+                {desc(rest)}
               </p>
             </li>
           ))}
@@ -204,7 +245,7 @@ function PanelBody({
     );
 
   // B — copy and a short list on the left, one large image on the right that follows the list.
-  if (v === 1)
+  if (v === 2)
     return (
       <div className={WIDE}>
         {nav}
@@ -250,47 +291,7 @@ function PanelBody({
       </div>
     );
 
-  // C — header in one line, one wide image, the three points as tabs beneath it.
-  return (
-    <div className={WIDE}>
-      {nav}
-      <div className="mt-10 flex flex-col gap-6 md:mt-12 lg:flex-row lg:items-end lg:justify-between">
-        <div className="flex flex-col gap-3 lg:flex-row lg:items-baseline lg:gap-6">
-          <FieldName id={id}>{t(`${id}.tab`)}</FieldName>
-          {subtitle}
-        </div>
-        {button}
-      </div>
-      <Slot
-        key={active}
-        bg={slot}
-        src={media?.[active]}
-        fit="contain"
-        className="mt-8 aspect-[21/7] w-full"
-      />
-      <ul className="mt-6 grid gap-4 md:grid-cols-3 md:gap-8">
-        {points.map(([lead], k) => (
-          <li key={k}>
-            <button
-              type="button"
-              onClick={() => setActive(k)}
-              className={cn(
-                'w-full border-t-2 pt-4 text-left transition-colors',
-                active === k
-                  ? 'border-[var(--ink)]'
-                  : 'border-[var(--line)] opacity-50 hover:opacity-80',
-              )}
-            >
-              <span className="t-title flex items-baseline gap-2">
-                {num(k)}
-                {lead}
-              </span>
-            </button>
-          </li>
-        ))}
-      </ul>
-    </div>
-  );
+  return null;
 }
 
 type Panel = {
