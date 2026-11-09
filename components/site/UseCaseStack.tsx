@@ -39,9 +39,15 @@ export const SCENE_LAYOUTS = [
   'M 胶片条',
   'N 卡片叠放',
   'O 热点标注',
+  'P 海报大字',
+  'Q 大图主导',
+  'R 横向画廊',
+  'S 单图·左文右图',
+  'T 单图·全幅',
+  'U 单图·海报',
 ] as const;
 export const useSceneLayout = create<{ v: number; set: (v: number) => void }>((setState) => ({
-  v: 1,
+  v: 18,
   set: (v) => setState({ v }),
 }));
 type T = ReturnType<typeof useTranslations>;
@@ -141,7 +147,7 @@ function PanelBody({
   const [active, setActive] = useState(0);
   // B and C show one point at a time and step through them
   useEffect(() => {
-    if (![2, 4, 7, 8, 10, 13].includes(v)) return;
+    if (![2, 4, 7, 8, 10, 13, 16].includes(v)) return;
     const t = window.setInterval(() => setActive((a) => (a + 1) % points.length), 4000);
     return () => window.clearInterval(t);
   }, [v, points.length, active]);
@@ -863,6 +869,203 @@ function PanelBody({
       </div>
     );
   }
+
+  // P — poster: huge field name as the hero, one-line subtitle, three big images with titles only.
+  if (v === 15)
+    return (
+      <div className={WIDE}>
+        <div className="mb-8 md:mb-10">{nav}</div>
+        <div className="flex items-end justify-between gap-8">
+          <div>
+            <h3
+              id={`scene-${id}`}
+              className="font-display text-[clamp(4rem,10vw,9rem)] font-semibold leading-[0.9] tracking-[0.01em]"
+            >
+              {t(`${id}.tab`)}
+            </h3>
+            <p className="mt-5 text-lg font-medium text-[var(--muted)]">{t(`${id}.title`)}</p>
+          </div>
+          <div className="shrink-0 pb-2">{button}</div>
+        </div>
+        <ul className="mt-10 grid grid-cols-3 gap-4 md:mt-12">
+          {points.map(([lead], k) => (
+            <li key={k}>
+              <div
+                aria-hidden
+                className="aspect-[4/3] rounded-[22px]"
+                style={{ background: bgOf(k) }}
+              />
+              <p className="mt-4 flex items-baseline gap-2 text-[15px] font-medium">
+                {num(k)}
+                {lead}
+              </p>
+            </li>
+          ))}
+        </ul>
+      </div>
+    );
+
+  // Q — one large image carries the panel; the name and three short titles sit over it.
+  if (v === 16)
+    return (
+      <div className={WIDE}>
+        <div className="mb-8 md:mb-10">{nav}</div>
+        <div className="relative h-[clamp(420px,62vh,620px)] overflow-hidden rounded-[28px]">
+          {points.map((_, k) => (
+            <div
+              key={k}
+              aria-hidden
+              className={cn(
+                'absolute inset-0 transition-opacity duration-700',
+                active === k ? 'opacity-100' : 'opacity-0',
+              )}
+              style={{ background: bgOf(k) }}
+            />
+          ))}
+          <div
+            className={cn(
+              'absolute inset-0',
+              dark
+                ? 'bg-[linear-gradient(90deg,rgba(10,8,18,0.85),rgba(10,8,18,0.2)_55%,transparent)]'
+                : 'bg-[linear-gradient(90deg,rgba(236,229,255,0.92),rgba(236,229,255,0.35)_50%,transparent)]',
+            )}
+          />
+          <div className="relative flex h-full flex-col justify-between p-8 md:p-12">
+            <div>
+              <h3
+                id={`scene-${id}`}
+                className="font-display text-[clamp(3rem,6vw,5rem)] font-semibold leading-[1] tracking-[0.01em]"
+              >
+                {t(`${id}.tab`)}
+              </h3>
+              <p className="mt-4 text-lg font-medium">{t(`${id}.title`)}</p>
+              <div className="mt-8">{button}</div>
+            </div>
+            <div className="flex flex-wrap gap-2">
+              {points.map(([lead], k) => (
+                <button
+                  key={k}
+                  type="button"
+                  onClick={() => setActive(k)}
+                  className={cn(
+                    'rounded-full px-4 py-2 text-sm font-medium backdrop-blur-md transition',
+                    active === k
+                      ? dark
+                        ? 'bg-white text-[#16121f]'
+                        : 'bg-[#16121f] text-white'
+                      : glass,
+                  )}
+                >
+                  {lead}
+                </button>
+              ))}
+            </div>
+          </div>
+        </div>
+      </div>
+    );
+
+  // R — a horizontal gallery: name on the left, tall images you can scroll sideways.
+  if (v === 17)
+    return (
+      <div className={cn(WIDE, '!max-w-none !pr-0 xl:!pr-0')}>
+        <div className="mb-8 md:mb-10 lg:pr-12">{nav}</div>
+        <div className="grid items-end gap-10 lg:grid-cols-[minmax(0,22rem)_minmax(0,1fr)] lg:gap-14">
+          <div className="lg:ml-[max(0px,calc((100vw-1440px)/2))]">
+            <FieldName id={id}>{t(`${id}.tab`)}</FieldName>
+            <p className="mt-5 text-lg font-medium text-[var(--muted)]">{t(`${id}.title`)}</p>
+            <div className="mt-8">{button}</div>
+          </div>
+          <ul className="flex snap-x gap-5 overflow-x-auto pb-4 pr-12 [scrollbar-width:none]">
+            {points.map(([lead], k) => (
+              <li key={k} className="shrink-0 snap-start">
+                <div
+                  aria-hidden
+                  className="aspect-[4/5] h-[clamp(320px,50vh,470px)] rounded-[24px]"
+                  style={{ background: bgOf(k) }}
+                />
+                <p className="mt-4 flex items-baseline gap-2 text-[15px] font-medium">
+                  {num(k)}
+                  {lead}
+                </p>
+              </li>
+            ))}
+          </ul>
+        </div>
+      </div>
+    );
+
+  // Single showcase per field (the switcher already splits the three fields):
+  // name, one line, a button and one image — no sub-points.
+  const hero = bgOf(0);
+
+  // S — text left, one large image right.
+  if (v === 18)
+    return (
+      <div className={WIDE}>
+        <div className="mb-10 md:mb-12">{nav}</div>
+        <div className="grid items-center gap-12 lg:grid-cols-[minmax(0,5fr)_minmax(0,7fr)] lg:gap-16">
+          <div>
+            <FieldName id={id}>{t(`${id}.tab`)}</FieldName>
+            <div className="mt-5">{subtitle}</div>
+            <p className="mt-6 max-w-[26rem] text-[15px] leading-[1.85] text-[var(--muted)]">
+              {t(`${id}.intro`)}
+            </p>
+            <div className="mt-8">{button}</div>
+          </div>
+          <div
+            aria-hidden
+            className="h-[clamp(320px,54vh,520px)] rounded-[28px]"
+            style={{ background: hero }}
+          />
+        </div>
+      </div>
+    );
+
+  // T — one full-width image; name, line and button laid over its left side.
+  if (v === 19)
+    return (
+      <div className={WIDE}>
+        <div className="mb-8 md:mb-10">{nav}</div>
+        <div className="relative h-[clamp(440px,64vh,640px)] overflow-hidden rounded-[28px]">
+          <div aria-hidden className="absolute inset-0" style={{ background: hero }} />
+          <div
+            className={cn(
+              'absolute inset-0',
+              dark
+                ? 'bg-[linear-gradient(90deg,rgba(10,8,18,0.85),rgba(10,8,18,0.2)_55%,transparent)]'
+                : 'bg-[linear-gradient(90deg,rgba(236,229,255,0.94),rgba(236,229,255,0.4)_48%,transparent)]',
+            )}
+          />
+          <div className="relative flex h-full max-w-[32rem] flex-col justify-center p-8 md:p-14">
+            <FieldName id={id}>{t(`${id}.tab`)}</FieldName>
+            <div className="mt-5">{subtitle}</div>
+            <p className="mt-5 text-[15px] leading-[1.85] text-[var(--muted)]">
+              {t(`${id}.intro`)}
+            </p>
+            <div className="mt-8">{button}</div>
+          </div>
+        </div>
+      </div>
+    );
+
+  // U — poster: large name and line centred, one wide image beneath.
+  if (v === 20)
+    return (
+      <div className={WIDE}>
+        <div className="mb-8 md:mb-10">{nav}</div>
+        <div className="flex flex-col items-center text-center">
+          <FieldName id={id}>{t(`${id}.tab`)}</FieldName>
+          <div className="mt-4">{subtitle}</div>
+          <div className="mt-7">{button}</div>
+        </div>
+        <div
+          aria-hidden
+          className="mt-10 h-[clamp(260px,38vh,420px)] rounded-[28px]"
+          style={{ background: hero }}
+        />
+      </div>
+    );
 
   return null;
 }
