@@ -29,7 +29,19 @@ const ORDER = [
   ['crab', 'crest', 'tower', 'horn', 'house', 'deer', 'treant', 'plate', 'harp', 'vase'],
 ] as const;
 /** Which works have images so far; the rest stay as empty placeholders. */
-const HAVE_RENDER = new Set(['shield', 'chest', 'spear', 'mace', 'axe', 'mask']);
+const HAVE_RENDER = new Set([
+  'shield',
+  'chest',
+  'spear',
+  'mace',
+  'axe',
+  'mask',
+  'badger',
+  'helmet',
+  'frog',
+  'pot',
+  'lamp',
+]);
 const HAVE_CLAY = new Set(['shield', 'spear']);
 const work = (name: string): Work => ({
   render: HAVE_RENDER.has(name) ? `${BASE}works/${name}-render.webp` : undefined,
@@ -72,7 +84,10 @@ function WorkCard({ work, label }: { work: Work; label: string }) {
           )}
           style={
             work.render
-              ? { background: `center/auto 74% no-repeat url(${work.render})` }
+              ? {
+                  background: `url(${work.render}) center/contain no-repeat content-box`,
+                  padding: '13%',
+                }
               : undefined
           }
         />
@@ -85,7 +100,12 @@ function WorkCard({ work, label }: { work: Work; label: string }) {
               'bg-[radial-gradient(45%_40%_at_50%_45%,rgba(230,230,235,0.55),transparent_70%),radial-gradient(100%_80%_at_50%_0%,#3a3a40,#202024)]',
           )}
           style={
-            work.clay ? { background: `center/auto 74% no-repeat url(${work.clay})` } : undefined
+            work.clay
+              ? {
+                  background: `url(${work.clay}) center/contain no-repeat content-box`,
+                  padding: '13%',
+                }
+              : undefined
           }
         />
       </button>
