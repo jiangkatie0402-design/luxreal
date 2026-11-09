@@ -33,6 +33,9 @@ export const SCENE_LAYOUTS = [
   'G 列表',
   'H 轮播',
   'I 时间线',
+  'J 列表·无框',
+  'K 图出血',
+  'L 无框三栏',
 ] as const;
 export const useSceneLayout = create<{ v: number; set: (v: number) => void }>((setState) => ({
   v: 1,
@@ -135,7 +138,7 @@ function PanelBody({
   const [active, setActive] = useState(0);
   // B and C show one point at a time and step through them
   useEffect(() => {
-    if (![2, 4, 7, 8].includes(v)) return;
+    if (![2, 4, 7, 8, 10].includes(v)) return;
     const t = window.setInterval(() => setActive((a) => (a + 1) % points.length), 4000);
     return () => window.clearInterval(t);
   }, [v, points.length, active]);
@@ -568,6 +571,127 @@ function PanelBody({
             ))}
           </ul>
         </div>
+      </div>
+    );
+
+  // J — G without boxes: an editorial list separated by hairlines, images frameless.
+  if (v === 9)
+    return (
+      <div className={WIDE}>
+        <div className="mb-10 md:mb-12">{nav}</div>
+        <div className="grid items-center gap-10 lg:grid-cols-[minmax(0,5fr)_minmax(0,7fr)] lg:gap-20">
+          <div>
+            <FieldName id={id}>{t(`${id}.tab`)}</FieldName>
+            <div className="mt-5">{subtitle}</div>
+            <p className="mt-6 max-w-[28rem] text-[15px] leading-[1.85] text-[var(--muted)]">
+              {t(`${id}.intro`)}
+            </p>
+            <div className="mt-8">{button}</div>
+          </div>
+          <ul className="divide-y divide-[var(--line)] border-y border-[var(--line)]">
+            {points.map(([lead, rest], k) => (
+              <li key={k} className="flex items-center gap-8 py-5">
+                <div
+                  aria-hidden
+                  className="aspect-[4/3] w-[30%] shrink-0 rounded-[12px]"
+                  style={{
+                    background: media?.[k] ? `url(${media[k]}) center/cover no-repeat` : slot,
+                  }}
+                />
+                <div className="min-w-0">
+                  <p className="flex items-baseline gap-3 text-[18px] font-semibold">
+                    {num(k)}
+                    {lead}
+                  </p>
+                  <p className="mt-2 text-sm leading-[1.8] text-[var(--muted)]">{desc(rest)}</p>
+                </div>
+              </li>
+            ))}
+          </ul>
+        </div>
+      </div>
+    );
+
+  // K — text and a numbered list on the left; the active point's image bleeds off the right edge.
+  if (v === 10)
+    return (
+      <div className={cn(WIDE, '!max-w-none !pr-0 xl:!pr-0')}>
+        <div className="mb-10 md:mb-12 lg:pr-12">{nav}</div>
+        <div className="grid items-center gap-10 lg:grid-cols-[minmax(0,5fr)_minmax(0,7fr)] lg:gap-16">
+          <div className="mx-auto w-full max-w-[34rem] lg:ml-[max(0px,calc((100vw-1440px)/2))]">
+            <FieldName id={id}>{t(`${id}.tab`)}</FieldName>
+            <div className="mt-5">{subtitle}</div>
+            <ol className="mt-8 grid gap-5">
+              {points.map(([lead, rest], k) => (
+                <li key={k}>
+                  <button
+                    type="button"
+                    onClick={() => setActive(k)}
+                    className={cn(
+                      'w-full text-left transition-opacity',
+                      active === k ? '' : 'opacity-45 hover:opacity-75',
+                    )}
+                  >
+                    <span className="flex items-baseline gap-3 text-[18px] font-semibold">
+                      {num(k)}
+                      {lead}
+                    </span>
+                    {active === k && (
+                      <span className="mt-2 block text-sm leading-[1.8] text-[var(--muted)]">
+                        {desc(rest)}
+                      </span>
+                    )}
+                  </button>
+                </li>
+              ))}
+            </ol>
+            <div className="mt-8">{button}</div>
+          </div>
+          <div
+            key={active}
+            aria-hidden
+            className="core-panel h-[clamp(300px,52vh,480px)] rounded-l-[28px] [mask-image:linear-gradient(90deg,transparent,#000_12%)]"
+            data-state="active"
+            style={{
+              background: media?.[active]
+                ? `url(${media[active]}) left center/cover no-repeat`
+                : slot,
+            }}
+          />
+        </div>
+      </div>
+    );
+
+  // L — three columns without frames, divided by thin vertical rules; a short intro under the title.
+  if (v === 11)
+    return (
+      <div className={WIDE}>
+        <div className="mb-10 md:mb-12">{nav}</div>
+        <div className="flex flex-col gap-6 lg:flex-row lg:items-end lg:justify-between">
+          <div>
+            <FieldName id={id}>{t(`${id}.tab`)}</FieldName>
+            <div className="mt-5">{subtitle}</div>
+          </div>
+          {button}
+        </div>
+        <ul className="mt-12 grid divide-[var(--line)] md:mt-14 md:grid-cols-3 md:divide-x">
+          {points.map(([lead, rest], k) => (
+            <li key={k} className="px-0 py-4 md:px-8 md:first:pl-0 md:last:pr-0">
+              <div
+                aria-hidden
+                className="aspect-[16/10] w-full rounded-[12px]"
+                style={{
+                  background: media?.[k] ? `url(${media[k]}) center/cover no-repeat` : slot,
+                }}
+              />
+              <p className="mt-6 flex items-baseline gap-3 text-[17px] font-semibold">
+                {num(k)}
+                {lead}
+              </p>
+              <p className="mt-2 text-sm leading-[1.8] text-[var(--muted)]">{desc(rest)}</p>
+            </li>
+          ))}
+        </ul>
       </div>
     );
 
