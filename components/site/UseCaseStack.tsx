@@ -30,6 +30,9 @@ export const SCENE_LAYOUTS = [
   'D 图上叠字',
   'E 横向手风琴',
   'F 拼贴',
+  'G 列表',
+  'H 轮播',
+  'I 时间线',
 ] as const;
 export const useSceneLayout = create<{ v: number; set: (v: number) => void }>((setState) => ({
   v: 1,
@@ -132,7 +135,7 @@ function PanelBody({
   const [active, setActive] = useState(0);
   // B and C show one point at a time and step through them
   useEffect(() => {
-    if (v !== 2 && v !== 4) return;
+    if (![2, 4, 7, 8].includes(v)) return;
     const t = window.setInterval(() => setActive((a) => (a + 1) % points.length), 4000);
     return () => window.clearInterval(t);
   }, [v, points.length, active]);
@@ -413,6 +416,157 @@ function PanelBody({
               </div>
             </div>
           ))}
+        </div>
+      </div>
+    );
+
+  // G — header left; the three points as a tidy list with thumbnails on the right.
+  if (v === 6)
+    return (
+      <div className={WIDE}>
+        <div className="mb-10 md:mb-12">{nav}</div>
+        <div className="grid items-center gap-10 lg:grid-cols-[minmax(0,5fr)_minmax(0,7fr)] lg:gap-20">
+          <div>
+            <FieldName id={id}>{t(`${id}.tab`)}</FieldName>
+            <div className="mt-5">{subtitle}</div>
+            <p className="mt-6 max-w-[28rem] text-[15px] leading-[1.85] text-[var(--muted)]">
+              {t(`${id}.intro`)}
+            </p>
+            <div className="mt-8">{button}</div>
+          </div>
+          <ul className="grid gap-3">
+            {points.map(([lead, rest], k) => (
+              <li
+                key={k}
+                className={cn(
+                  'flex items-center gap-5 rounded-[18px] p-3 pr-6',
+                  dark ? 'bg-white/[0.04]' : 'bg-white/40',
+                )}
+              >
+                <Slot
+                  bg={slot}
+                  src={media?.[k]}
+                  className="aspect-[4/3] w-[32%] shrink-0 rounded-[14px]"
+                />
+                <div className="min-w-0">
+                  <p className="flex items-baseline gap-2 text-[17px] font-semibold">
+                    {num(k)}
+                    {lead}
+                  </p>
+                  <p className="mt-2 text-sm leading-[1.75] text-[var(--muted)]">{desc(rest)}</p>
+                </div>
+              </li>
+            ))}
+          </ul>
+        </div>
+      </div>
+    );
+
+  // H — a carousel: one point large in the centre, its neighbours peeking either side.
+  if (v === 7)
+    return (
+      <div className={WIDE}>
+        <div className="mb-10 md:mb-12">{nav}</div>
+        {header}
+        <div className="relative mt-12 h-[clamp(280px,36vh,380px)] md:mt-14">
+          {points.map(([lead, rest], k) => {
+            const off = ((k - active + points.length + 1) % points.length) - 1; // -1, 0, 1
+            return (
+              <button
+                key={k}
+                type="button"
+                onClick={() => setActive(k)}
+                aria-current={off === 0}
+                className="absolute top-0 h-full w-[56%] text-left transition-all duration-500 ease-out"
+                style={{
+                  left: `${22 + off * 46}%`,
+                  transform: `scale(${off === 0 ? 1 : 0.86})`,
+                  opacity: off === 0 ? 1 : 0.45,
+                  zIndex: off === 0 ? 2 : 1,
+                }}
+              >
+                <Slot bg={slot} src={media?.[k]} fit="contain" className="absolute inset-0" />
+                <span
+                  className={cn('absolute inset-x-4 bottom-4 rounded-[14px] px-5 py-3.5', glass)}
+                >
+                  <span className="flex items-baseline gap-2 text-[16px] font-semibold">
+                    {num(k)}
+                    {lead}
+                  </span>
+                  {off === 0 && (
+                    <span className="mt-1.5 block text-[13px] leading-[1.7] opacity-80">
+                      {desc(rest)}
+                    </span>
+                  )}
+                </span>
+              </button>
+            );
+          })}
+        </div>
+      </div>
+    );
+
+  // I — a timeline: three images above a line with numbered stops; the active stop shows its text.
+  if (v === 8)
+    return (
+      <div className={WIDE}>
+        <div className="mb-10 md:mb-12">{nav}</div>
+        {header}
+        <ul className="mt-12 grid grid-cols-3 gap-8 md:mt-14">
+          {points.map((_, k) => (
+            <li key={k}>
+              <button type="button" onClick={() => setActive(k)} className="block w-full">
+                <Slot
+                  bg={slot}
+                  src={media?.[k]}
+                  className={cn(
+                    'aspect-[16/10] w-full transition-all duration-500',
+                    active === k ? 'opacity-100' : 'scale-[0.94] opacity-50',
+                  )}
+                />
+              </button>
+            </li>
+          ))}
+        </ul>
+        <div className="relative mt-6">
+          <span className="absolute inset-x-0 top-[7px] h-px bg-[var(--line)]" />
+          <span
+            className="absolute left-0 top-[7px] h-px bg-[var(--ink)] transition-all duration-500"
+            style={{ width: `${(active / points.length) * 100 + 4}%` }}
+          />
+          <ul className="relative grid grid-cols-3 gap-8">
+            {points.map(([lead, rest], k) => (
+              <li key={k}>
+                <button type="button" onClick={() => setActive(k)} className="w-full text-left">
+                  <span
+                    className={cn(
+                      'block size-[15px] rounded-full border-2 transition-colors',
+                      active >= k
+                        ? 'border-[var(--ink)] bg-[var(--ink)]'
+                        : 'border-[var(--line)] bg-transparent',
+                    )}
+                  />
+                  <span
+                    className={cn(
+                      'mt-4 flex items-baseline gap-2 text-[16px] font-semibold transition-opacity',
+                      active === k ? 'opacity-100' : 'opacity-50',
+                    )}
+                  >
+                    {num(k)}
+                    {lead}
+                  </span>
+                  <span
+                    className={cn(
+                      'mt-2 block text-[13px] leading-[1.75] text-[var(--muted)] transition-opacity',
+                      active === k ? 'opacity-100' : 'opacity-0',
+                    )}
+                  >
+                    {desc(rest)}
+                  </span>
+                </button>
+              </li>
+            ))}
+          </ul>
         </div>
       </div>
     );
