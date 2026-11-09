@@ -1,9 +1,10 @@
 'use client';
 import { useTranslations } from 'next-intl';
-import { Fragment, useEffect, useRef, type CSSProperties } from 'react';
+import { Fragment, useEffect, useRef, useState, type CSSProperties } from 'react';
 import { ArrowRight } from 'lucide-react';
 import { ButtonLink } from '@/components/ui/button';
 import { site } from '@/config/site';
+import { create } from 'zustand';
 import { cn } from '@/lib/utils';
 import { PanelGlow } from './PanelGlow';
 
@@ -14,15 +15,43 @@ function splitPoint(text: string): [string | null, string] {
 }
 
 const IDS = ['print', 'game', 'film'] as const;
+/** Public asset base: "/" in the app, overridable for static previews. */
+const BASE = process.env.NEXT_PUBLIC_ASSET_BASE ?? '/';
+/** Media per field and point (image paths); fields without media show empty slots. */
+const MEDIA: Partial<Record<(typeof IDS)[number], string[]>> = {
+  print: [1, 2, 3].map((k) => `${BASE}works/scene-print-${k}.webp`),
+};
+
+/** Preview-only: panel layouts for review. */
+export const SCENE_LAYOUTS = ['A 精简三图', 'B 左文右图', 'C 大图+标签'] as const;
+export const useSceneLayout = create<{ v: number; set: (v: number) => void }>((setState) => ({
+  v: 0,
+  set: (v) => setState({ v }),
+}));
 type T = ReturnType<typeof useTranslations>;
 
 /** Empty media slot (image / video per point, not decided yet). */
-function Slot({ bg, className, n }: { bg: string; className?: string; n?: number }) {
+function Slot({
+  bg,
+  className,
+  n,
+  src,
+  fit = 'cover',
+}: {
+  bg: string;
+  className?: string;
+  n?: number;
+  src?: string;
+  fit?: 'cover' | 'contain';
+}) {
   return (
     <div
       aria-hidden
-      className={cn('relative rounded-[20px] border border-[var(--line)]', className)}
-      style={{ background: bg }}
+      className={cn(
+        'relative overflow-hidden rounded-[20px] border border-[var(--line)]',
+        className,
+      )}
+      style={{ background: src ? `${bg} url(${src}) center/${fit} no-repeat` : bg }}
     >
       {n !== undefined && (
         <span className="absolute left-4 top-4 font-mono text-xs text-[var(--muted)]">
@@ -90,75 +119,173 @@ function PanelBody({
 
   const WIDE =
     'relative mx-auto flex w-full max-w-[1440px] flex-1 flex-col justify-center px-4 pb-12 pt-12 md:px-12 md:pb-14 md:pt-14 xl:px-20';
-  const caption = (lead: string | null, rest: string, k: number) => (
-    <>
-      <p className="t-title flex items-baseline gap-2">
-        <span className="font-mono text-xs text-[var(--muted)]">0{k + 1}</span>
-        {lead}
-      </p>
-      <p className="t-body mt-3 leading-[1.9] max-w-[30rem] text-[var(--muted)]">
-        {rest.charAt(0).toUpperCase() + rest.slice(1)}
-      </p>
-    </>
-  );
 
-  // aligned header: name + subtitle left, intro right on the subtitle's baseline
-  return (
-    <div className={WIDE}>
-      {/* field switcher: the three use cases */}
-      <nav aria-label={t('title')} className="mb-8 flex justify-center md:mb-10">
-        <div
-          className={cn(
-            'inline-flex rounded-full p-1',
-            dark ? 'bg-white/[0.08]' : 'bg-[rgba(22,18,31,0.08)]',
-          )}
-        >
-          {IDS.map((f) => (
-            <button
-              key={f}
-              type="button"
-              aria-current={f === id ? 'true' : undefined}
-              onClick={() => goTo(f)}
-              className={cn(
-                'h-9 rounded-full px-5 text-sm font-medium transition-colors',
-                f === id
-                  ? dark
-                    ? 'bg-white text-[#16121f] shadow-sm'
-                    : 'bg-white text-[#16121f] shadow-[0_2px_8px_rgba(22,18,31,0.12)]'
-                  : 'text-[var(--muted)] hover:text-[var(--ink)]',
-              )}
-            >
-              {t(`${f}.tab`)}
-            </button>
-          ))}
-        </div>
-      </nav>
-      <div className="grid gap-4 lg:grid-cols-2 lg:items-end lg:gap-16">
-        <div>
-          <FieldName id={id}>{t(`${id}.tab`)}</FieldName>
-          <div className="mt-4">{subtitle}</div>
-        </div>
-        <div className="max-w-[36rem] lg:justify-self-end">
-          <p className="t-lead leading-[1.9] text-[var(--muted)]">{t(`${id}.intro`)}</p>
-          <ButtonLink
-            href={site.links.app}
+  const v = useSceneLayout((st) => st.v);
+  const media = MEDIA[id as (typeof IDS)[number]];
+  const [active, setActive] = useState(0);
+  // B and C show one point at a time and step through them
+  useEffect(() => {
+    if (v === 0) return;
+    const t = window.setInterval(() => setActive((a) => (a + 1) % points.length), 4000);
+    return () => window.clearInterval(t);
+  }, [v, points.length, active]);
+
+  const nav = (
+    <nav aria-label={t('title')} className="flex justify-center">
+      <div
+        className={cn(
+          'inline-flex rounded-full p-1',
+          dark ? 'bg-white/[0.08]' : 'bg-[rgba(22,18,31,0.08)]',
+        )}
+      >
+        {IDS.map((f) => (
+          <button
+            key={f}
+            type="button"
+            aria-current={f === id ? 'true' : undefined}
+            onClick={() => goTo(f)}
             className={cn(
-              'mt-5 h-11 rounded-[12px] px-6',
-              dark
-                ? 'brand-fill'
-                : 'bg-[linear-gradient(135deg,#2a2346,#14111f)] text-[#d6ccff] hover:brightness-125',
+              'h-9 rounded-full px-5 text-sm font-medium transition-colors',
+              f === id
+                ? dark
+                  ? 'bg-white text-[#16121f] shadow-sm'
+                  : 'bg-white text-[#16121f] shadow-[0_2px_8px_rgba(22,18,31,0.12)]'
+                : 'text-[var(--muted)] hover:text-[var(--ink)]',
             )}
           >
-            {cta}
-            <ArrowRight aria-hidden />
-          </ButtonLink>
+            {t(`${f}.tab`)}
+          </button>
+        ))}
+      </div>
+    </nav>
+  );
+  const button = (
+    <ButtonLink
+      href={site.links.app}
+      className={cn(
+        'h-11 shrink-0 rounded-[12px] px-6',
+        dark
+          ? 'brand-fill'
+          : 'bg-[linear-gradient(135deg,#2a2346,#14111f)] text-[#d6ccff] hover:brightness-125',
+      )}
+    >
+      {cta}
+      <ArrowRight aria-hidden />
+    </ButtonLink>
+  );
+  const num = (k: number) => (
+    <span className="font-mono text-xs text-[var(--muted)]">0{k + 1}</span>
+  );
+
+  // A — fewer words: title + subtitle with the button, then three images with titles only.
+  if (v === 0)
+    return (
+      <div className={WIDE}>
+        {nav}
+        <div className="mt-10 flex flex-col gap-6 md:mt-12 lg:flex-row lg:items-end lg:justify-between">
+          <div>
+            <FieldName id={id}>{t(`${id}.tab`)}</FieldName>
+            <div className="mt-4">{subtitle}</div>
+          </div>
+          {button}
+        </div>
+        <ul className="mt-10 grid gap-6 md:mt-12 md:grid-cols-3 md:gap-8">
+          {points.map(([lead], k) => (
+            <li key={k}>
+              <Slot bg={slot} src={media?.[k]} className="aspect-[4/3] w-full" />
+              <p className="t-title mt-5 flex items-baseline gap-2">
+                {num(k)}
+                {lead}
+              </p>
+            </li>
+          ))}
+        </ul>
+      </div>
+    );
+
+  // B — copy and a short list on the left, one large image on the right that follows the list.
+  if (v === 1)
+    return (
+      <div className={WIDE}>
+        {nav}
+        <div className="mt-10 grid items-center gap-10 md:mt-12 lg:grid-cols-[minmax(0,5fr)_minmax(0,7fr)] lg:gap-16">
+          <div>
+            <FieldName id={id}>{t(`${id}.tab`)}</FieldName>
+            <div className="mt-4">{subtitle}</div>
+            <ul className="mt-8 grid gap-1 border-l border-[var(--line)]">
+              {points.map(([lead, rest], k) => (
+                <li key={k}>
+                  <button
+                    type="button"
+                    onClick={() => setActive(k)}
+                    className={cn(
+                      '-ml-px block w-full border-l-2 py-3 pl-5 text-left transition-colors',
+                      active === k
+                        ? 'border-[var(--ink)]'
+                        : 'border-transparent opacity-50 hover:opacity-80',
+                    )}
+                  >
+                    <span className="t-title flex items-baseline gap-2">
+                      {num(k)}
+                      {lead}
+                    </span>
+                    {active === k && (
+                      <span className="t-desc mt-2 block max-w-[30rem] text-[var(--muted)]">
+                        {rest.charAt(0).toUpperCase() + rest.slice(1)}
+                      </span>
+                    )}
+                  </button>
+                </li>
+              ))}
+            </ul>
+            <div className="mt-8">{button}</div>
+          </div>
+          <Slot
+            key={active}
+            bg={slot}
+            src={media?.[active]}
+            className="core-panel aspect-[4/3] w-full"
+          />
         </div>
       </div>
-      <ul className="mt-8 grid gap-6 md:mt-10 md:grid-cols-3 md:gap-8">
-        {points.map(([lead, rest], k) => (
-          <li key={k} className="flex flex-col">
-            <Slot bg={slot} className="aspect-[4/3] w-full" />
-            <div className="mt-5">{caption(lead, rest, k)}</div>
+    );
+
+  // C — header in one line, one wide image, the three points as tabs beneath it.
+  return (
+    <div className={WIDE}>
+      {nav}
+      <div className="mt-10 flex flex-col gap-6 md:mt-12 lg:flex-row lg:items-end lg:justify-between">
+        <div className="flex flex-col gap-3 lg:flex-row lg:items-baseline lg:gap-6">
+          <FieldName id={id}>{t(`${id}.tab`)}</FieldName>
+          {subtitle}
+        </div>
+        {button}
+      </div>
+      <Slot
+        key={active}
+        bg={slot}
+        src={media?.[active]}
+        fit="contain"
+        className="mt-8 aspect-[21/7] w-full"
+      />
+      <ul className="mt-6 grid gap-4 md:grid-cols-3 md:gap-8">
+        {points.map(([lead], k) => (
+          <li key={k}>
+            <button
+              type="button"
+              onClick={() => setActive(k)}
+              className={cn(
+                'w-full border-t-2 pt-4 text-left transition-colors',
+                active === k
+                  ? 'border-[var(--ink)]'
+                  : 'border-[var(--line)] opacity-50 hover:opacity-80',
+              )}
+            >
+              <span className="t-title flex items-baseline gap-2">
+                {num(k)}
+                {lead}
+              </span>
+            </button>
           </li>
         ))}
       </ul>
