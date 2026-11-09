@@ -3,22 +3,8 @@ import { ArrowRight } from 'lucide-react';
 import { useTranslations } from 'next-intl';
 import { ButtonLink } from '@/components/ui/button';
 import { site } from '@/config/site';
-import { cn } from '@/lib/utils';
 import { AgentCapabilities } from './AgentCapabilities';
 import { AgentMcp } from './AgentMcp';
-
-/** Empty media slot, kept until assets are decided. */
-function Slot({ className }: { className?: string }) {
-  return (
-    <div
-      aria-hidden
-      className={cn(
-        'rounded-2xl border border-dashed border-border-strong bg-secondary/40',
-        className,
-      )}
-    />
-  );
-}
 
 /**
  * 四、专为 Agent 设计 — the capability orbit, then the MCP install strip.
@@ -146,8 +132,6 @@ export function FinalCta() {
               </ButtonLink>
             </span>
           </div>
-          {/* Agent install guide: copy not decided yet */}
-          <Slot className="mx-auto mt-8 h-24 max-w-2xl" />
         </div>
       </div>
     </section>
