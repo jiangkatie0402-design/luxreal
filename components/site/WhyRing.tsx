@@ -7,9 +7,10 @@ import { cn } from '@/lib/utils';
 const WHY = ['cost', 'easy', 'quality'] as const;
 /** Public asset base: "/" in the app, overridable for static previews. */
 const BASE = process.env.NEXT_PUBLIC_ASSET_BASE ?? '/';
-/** Backdrop photo per reason (only the first has one so far). */
+/** Backdrop photo per reason (none yet for the third). */
 const BG: Partial<Record<(typeof WHY)[number], string>> = {
   cost: 'works/why-cost-v2.webp',
+  easy: 'works/why-easy-v2.webp',
 };
 const N = WHY.length;
 
@@ -145,7 +146,7 @@ export function WhyUs() {
                 aria-hidden
                 className={cn(
                   'pointer-events-none absolute inset-0 -z-20 bg-cover bg-center transition-opacity duration-700',
-                  k === key ? 'opacity-100' : 'opacity-0',
+                  k === key ? (key === 'easy' ? 'opacity-[0.65]' : 'opacity-100') : 'opacity-0',
                 )}
                 style={{ backgroundImage: `url(${BASE}${BG[key]})` }}
               />
