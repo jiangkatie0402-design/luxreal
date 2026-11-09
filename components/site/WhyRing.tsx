@@ -7,10 +7,9 @@ import { cn } from '@/lib/utils';
 const WHY = ['cost', 'easy', 'quality'] as const;
 /** Public asset base: "/" in the app, overridable for static previews. */
 const BASE = process.env.NEXT_PUBLIC_ASSET_BASE ?? '/';
-/** Backdrop photo per reason (none yet for the third). */
+/** Backdrop photo per reason (only the first has one so far). */
 const BG: Partial<Record<(typeof WHY)[number], string>> = {
-  cost: 'works/why-cost.webp',
-  easy: 'works/why-easy.webp',
+  cost: 'works/why-cost-v2.webp',
 };
 const N = WHY.length;
 
