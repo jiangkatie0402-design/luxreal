@@ -141,6 +141,27 @@ export function playCoverIntro(box: HTMLElement): () => void {
   document.body.appendChild(base);
   document.body.appendChild(svg);
 
+  // Keep the overlays glued to the dialog: if the cover layout settles or shifts while the
+  // intro runs (fonts, video, a resize), they follow it instead of staying where it was.
+  let raf = 0;
+  const follow = () => {
+    const now = box.getBoundingClientRect();
+    // the dialog was resized mid-intro: the drawn outlines no longer fit, so just show it
+    if (Math.abs(now.width - W) > 2 || Math.abs(now.height - H) > 2) {
+      alive = false;
+      finish();
+      return;
+    }
+    const left = `${now.left + scrollX}px`;
+    const top = `${now.top + scrollY}px`;
+    if (svg.style.left !== left || svg.style.top !== top) {
+      svg.style.left = base.style.left = left;
+      svg.style.top = base.style.top = top;
+    }
+    raf = requestAnimationFrame(follow);
+  };
+  raf = requestAnimationFrame(follow);
+
   const kids = [...box.children] as HTMLElement[];
   box.style.opacity = '0';
 
@@ -152,6 +173,7 @@ export function playCoverIntro(box: HTMLElement): () => void {
   };
   let alive = true;
   const finish = () => {
+    cancelAnimationFrame(raf);
     box.style.opacity = '';
     anims.forEach((a) => a.cancel());
     svg.remove();
