@@ -134,7 +134,6 @@ export function playCoverIntro(box: HTMLElement): () => void {
     borderRadius: `${R}px`,
     background: 'linear-gradient(180deg, rgba(14,10,30,.78), rgba(10,8,22,.86))',
     backdropFilter: 'blur(16px) saturate(1.2)',
-    boxShadow: '0 24px 60px -24px rgba(0,0,0,.6)',
   });
   document.body.appendChild(base);
   document.body.appendChild(svg);
@@ -171,15 +170,24 @@ export function playCoverIntro(box: HTMLElement): () => void {
   (async () => {
     try {
       run(svg, [{ opacity: 0 }, { opacity: 1 }], { duration: 400, delay: 300 });
-      // the dark base opens from the centre with the outline
-      run(
-        base,
-        [
-          { opacity: 0, clipPath: `inset(0 50% 0 50% round ${R}px)` },
-          { opacity: 1, clipPath: `inset(0 0 0 0 round ${R}px)` },
-        ],
-        { duration: 1700, delay: 300, easing: easeInOut },
-      );
+      // the base opens from the centre, starting faint and deepening once the outline is drawn;
+      // the outline is revealed with it, so nothing shows outside the base
+      const opening = (pad: number) => [
+        { clipPath: `inset(${-pad}px 50% ${-pad}px 50% round ${R}px)` },
+        { clipPath: `inset(${-pad}px ${-pad}px ${-pad}px ${-pad}px round ${R}px)` },
+      ];
+      run(base, opening(0), { duration: 1700, delay: 300, easing: easeInOut });
+      run(svg, opening(8), { duration: 1700, delay: 300, easing: easeInOut });
+      run(base, [{ opacity: 0 }, { opacity: 0.22, offset: 0.5 }, { opacity: 0.45 }], {
+        duration: 1700,
+        delay: 300,
+        easing: 'ease-out',
+      });
+      run(base, [{ opacity: 0.45 }, { opacity: 1 }], {
+        duration: 1300,
+        delay: 2000,
+        easing: 'ease-in-out',
+      });
       // 1) outline from the top centre to both sides
       shell.forEach((p) => draw(p, 1700, 300));
       // 2) contents traced inside it (text draws slower: its dash runs along every glyph)
