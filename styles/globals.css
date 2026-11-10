@@ -986,3 +986,47 @@
   padding-left: 14px;
   border-left: 1px solid rgba(255, 255, 255, 0.22);
 }
+
+/* CTAs on light sections: the cover CTA's look (black body, rising light wave, silver flowing
+   edge, white label) with 10px corners */
+.cta-dark {
+  position: relative;
+  border-radius: 10px;
+  color: #fafafa;
+  background: url('/brand/cta-dark.svg') center / 100% 100% no-repeat;
+  box-shadow:
+    0 -6px 18px rgba(180, 197, 255, 0.22),
+    0 10px 24px -12px rgba(20, 12, 40, 0.55);
+}
+.cta-dark:hover {
+  filter: brightness(1.15);
+}
+.cta-dark::before {
+  content: '';
+  position: absolute;
+  inset: -1.5px;
+  padding: 1.5px;
+  border-radius: 11.5px;
+  pointer-events: none;
+  background: conic-gradient(
+    from var(--strip-angle),
+    #8e97ff26 0deg,
+    #b9b2ff66 50deg,
+    #e8e4ffdd 120deg,
+    #ffffff 165deg,
+    #e8e4ffdd 210deg,
+    #b9b2ff66 280deg,
+    #8e97ff26 360deg
+  );
+  -webkit-mask:
+    linear-gradient(#000 0 0) content-box,
+    linear-gradient(#000 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+  animation: strip-spin 4s linear infinite;
+}
+@media (prefers-reduced-motion: reduce) {
+  .cta-dark::before {
+    animation: none;
+  }
+}

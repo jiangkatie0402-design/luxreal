@@ -184,12 +184,7 @@ function PanelBody({
   const button = (
     <ButtonLink
       href={site.links.app}
-      className={cn(
-        'h-11 shrink-0 rounded-[12px] px-6',
-        dark
-          ? 'brand-fill'
-          : 'bg-[linear-gradient(135deg,#2a2346,#14111f)] text-[#d6ccff] hover:brightness-125',
-      )}
+      className={cn('h-11 shrink-0 rounded-[12px] px-6', dark ? 'brand-fill' : 'cta-dark')}
     >
       {cta}
       <ArrowRight aria-hidden />
