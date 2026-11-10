@@ -28,20 +28,8 @@ const ORDER = [
   ],
   ['crab', 'crest', 'tower', 'horn', 'house', 'deer', 'treant', 'plate', 'harp', 'vase'],
 ] as const;
-/** Which works have images so far; the rest stay as empty placeholders. */
-const HAVE_RENDER = new Set([
-  'shield',
-  'chest',
-  'spear',
-  'mace',
-  'axe',
-  'mask',
-  'badger',
-  'helmet',
-  'frog',
-  'pot',
-  'lamp',
-]);
+/** Every work on the board has its render. */
+const HAVE_RENDER = new Set<string>(ORDER.flat());
 const HAVE_CLAY = new Set(['shield', 'spear']);
 const work = (name: string): Work => ({
   render: HAVE_RENDER.has(name) ? `${BASE}works/${name}-render.webp` : undefined,
