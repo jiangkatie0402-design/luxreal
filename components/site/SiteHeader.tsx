@@ -8,16 +8,40 @@ import { site } from '@/config/site';
 import { cn } from '@/lib/utils';
 import { Logo } from './Logo';
 
-/** Nav labels as on the signed-off cover. Destinations/menus are not decided yet, so items are inert. */
-const NAV = [
-  { id: 'create', menu: true },
-  { id: 'developers', menu: true },
-  { id: 'useCases', menu: true },
-  { id: 'gallery', menu: false },
-  { id: 'technology', menu: false },
-  { id: 'pricing', menu: false },
-  { id: 'resources', menu: true },
-] as const;
+/**
+ * Top navigation. Items without a decided destination stay inert (no href).
+ * In-page targets point at the homepage sections.
+ */
+type Leaf = { id: string; href?: string };
+const NAV: { id: string; href?: string; items?: Leaf[] }[] = [
+  {
+    id: 'products',
+    items: [
+      { id: 'editor', href: site.links.app },
+      { id: 'forAgents', href: '#agents' },
+    ],
+  },
+  { id: 'features', items: [{ id: 'imageTo3d', href: '#core' }, { id: 'retexture' }] },
+  {
+    id: 'solutions',
+    items: [
+      { id: 'game', href: '#scene-game-anchor' },
+      { id: 'film', href: '#scene-film-anchor' },
+    ],
+  },
+  { id: 'community', items: [{ id: 'gallery', href: '#community' }, { id: 'discord' }] },
+  { id: 'pricing' },
+];
+
+function NavLeaf({ item, className, label }: { item: Leaf; className: string; label: string }) {
+  return item.href ? (
+    <a href={item.href} className={className}>
+      {label}
+    </a>
+  ) : (
+    <span className={cn(className, 'cursor-default opacity-60')}>{label}</span>
+  );
+}
 
 export function SiteHeader() {
   const t = useTranslations('site.nav');
@@ -42,16 +66,49 @@ export function SiteHeader() {
         <nav aria-label={t('main')} className="hidden lg:block">
           <ul className="flex items-center lg:gap-0 xl:gap-1">
             {NAV.map((n) => (
-              <li key={n.id}>
-                <span
-                  className={cn(
-                    'inline-flex items-center gap-1 whitespace-nowrap rounded-btn px-2.5 py-2 text-sm xl:px-3',
-                    scrolled ? 'text-muted-foreground' : 'text-[var(--hero-ink-muted)]',
-                  )}
-                >
-                  {t(n.id)}
-                  {n.menu && <ChevronDown className="size-3.5 opacity-70" aria-hidden />}
-                </span>
+              <li key={n.id} className="group relative">
+                {n.items ? (
+                  <button
+                    type="button"
+                    aria-haspopup="true"
+                    className={cn(
+                      'inline-flex items-center gap-1 whitespace-nowrap rounded-btn px-2.5 py-2 text-sm transition-colors xl:px-3',
+                      scrolled
+                        ? 'text-muted-foreground group-hover:text-foreground'
+                        : 'text-[var(--hero-ink-muted)] group-hover:text-[var(--hero-ink)]',
+                    )}
+                  >
+                    {t(n.id)}
+                    <ChevronDown
+                      className="size-3.5 opacity-70 transition-transform group-focus-within:rotate-180 group-hover:rotate-180"
+                      aria-hidden
+                    />
+                  </button>
+                ) : (
+                  <NavLeaf
+                    item={n}
+                    label={t(n.id)}
+                    className={cn(
+                      'inline-flex items-center whitespace-nowrap rounded-btn px-2.5 py-2 text-sm xl:px-3',
+                      scrolled ? 'text-muted-foreground' : 'text-[var(--hero-ink-muted)]',
+                    )}
+                  />
+                )}
+                {n.items && (
+                  <div className="invisible absolute left-1/2 top-full z-50 -translate-x-1/2 pt-2 opacity-0 transition-[opacity,visibility] duration-150 group-focus-within:visible group-focus-within:opacity-100 group-hover:visible group-hover:opacity-100">
+                    <ul className="min-w-44 rounded-[14px] border border-white/10 bg-[rgba(16,14,24,0.92)] p-1.5 shadow-[0_18px_40px_-12px_rgba(0,0,0,0.6)] backdrop-blur-xl">
+                      {n.items.map((it) => (
+                        <li key={it.id}>
+                          <NavLeaf
+                            item={it}
+                            label={t(it.id)}
+                            className="flex h-9 items-center whitespace-nowrap rounded-[10px] px-3 text-sm text-white/80 transition-colors hover:bg-white/[0.07] hover:text-white"
+                          />
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                )}
               </li>
             ))}
           </ul>
@@ -113,8 +170,29 @@ export function SiteHeader() {
               </SheetTitle>
               <ul className="mt-4 grid">
                 {NAV.map((n) => (
-                  <li key={n.id} className="flex h-12 items-center border-b text-base">
-                    {t(n.id)}
+                  <li key={n.id} className="border-b py-3">
+                    {n.items ? (
+                      <>
+                        <p className="text-base">{t(n.id)}</p>
+                        <ul className="mt-1 grid">
+                          {n.items.map((it) => (
+                            <li key={it.id}>
+                              <NavLeaf
+                                item={it}
+                                label={t(it.id)}
+                                className="flex h-10 items-center text-sm text-muted-foreground"
+                              />
+                            </li>
+                          ))}
+                        </ul>
+                      </>
+                    ) : (
+                      <NavLeaf
+                        item={n}
+                        label={t(n.id)}
+                        className="flex h-6 items-center text-base"
+                      />
+                    )}
                   </li>
                 ))}
               </ul>

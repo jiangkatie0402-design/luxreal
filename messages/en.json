@@ -39,16 +39,22 @@
   },
   "site": {
     "nav": {
-      "create": "Create",
-      "developers": "Developers",
-      "useCases": "Use cases",
-      "gallery": "Gallery",
-      "technology": "Technology",
-      "pricing": "Pricing",
-      "resources": "Resources",
       "menu": "Menu",
       "close": "Close menu",
-      "main": "Main"
+      "main": "Main",
+      "products": "Products",
+      "editor": "Editor",
+      "forAgents": "For agents",
+      "features": "Features",
+      "imageTo3d": "Image to 3D",
+      "retexture": "Re-texture",
+      "solutions": "Solutions",
+      "game": "Game",
+      "film": "Film",
+      "community": "Community",
+      "gallery": "Gallery",
+      "discord": "Discord / Group",
+      "pricing": "Pricing"
     },
     "core": {
       "title": "Core capabilities",

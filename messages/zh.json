@@ -39,16 +39,22 @@
   },
   "site": {
     "nav": {
-      "create": "创作",
-      "developers": "开发",
-      "useCases": "场景",
-      "gallery": "作品",
-      "technology": "技术",
-      "pricing": "定价",
-      "resources": "资源",
       "menu": "菜单",
       "close": "关闭菜单",
-      "main": "主导航"
+      "main": "主导航",
+      "products": "产品",
+      "editor": "编辑器",
+      "forAgents": "面向 Agent",
+      "features": "功能",
+      "imageTo3d": "图生 3D",
+      "retexture": "重新贴图",
+      "solutions": "解决方案",
+      "game": "游戏",
+      "film": "影视",
+      "community": "社区",
+      "gallery": "作品库",
+      "discord": "Discord / 社群",
+      "pricing": "定价"
     },
     "core": {
       "title": "核心能力",
