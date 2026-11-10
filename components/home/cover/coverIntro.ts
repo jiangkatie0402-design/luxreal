@@ -29,7 +29,7 @@ export function playCoverIntro(box: HTMLElement): () => void {
     zIndex: '60',
     pointerEvents: 'none',
     overflow: 'visible',
-    filter: 'drop-shadow(0 0 3px rgba(140,128,255,.55))',
+    filter: 'drop-shadow(0 0 2px rgba(140,128,255,.3))',
   });
   const el = (tag: string, attrs: Record<string, string | number>, parent: Element = svg) => {
     const n = document.createElementNS(NS, tag);
@@ -53,7 +53,10 @@ export function playCoverIntro(box: HTMLElement): () => void {
     const sw = dir === 1 ? 1 : 0;
     return `M${x0},${h} H${xc} A${R},${R} 0 0 ${sw} ${xe},${h + R} V${H - h - R} A${R},${R} 0 0 ${sw} ${xc},${H - h} H${x0}`;
   };
-  const shell = [1, -1].map((d) => el('path', { ...stroke, d: half(d as 1 | -1), pathLength: 1 }));
+  // the outer outline is kept dimmer than the contents
+  const shell = [1, -1].map((d) =>
+    el('path', { ...stroke, stroke: 'rgba(140,130,215,.5)', d: half(d as 1 | -1), pathLength: 1 }),
+  );
 
   // 2) inner outlines: buttons, icons and text
   const inner: SVGGraphicsElement[] = [];
