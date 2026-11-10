@@ -8,7 +8,7 @@
  * and layout changes need no change here. Returns a cleanup.
  */
 const NS = 'http://www.w3.org/2000/svg';
-const LINE = 'rgba(160,150,255,0.95)';
+const LINE = 'rgba(180,170,255,1)';
 
 export function playCoverIntro(box: HTMLElement): () => void {
   if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return () => {};
@@ -121,6 +121,22 @@ export function playCoverIntro(box: HTMLElement): () => void {
     t.textContent = text;
     inner.push(t);
   }
+  // A dark glass base behind the outlines, so they read on a bright cover video.
+  const base = document.createElement('div');
+  Object.assign(base.style, {
+    position: 'absolute',
+    left: svg.style.left,
+    top: svg.style.top,
+    width: `${W}px`,
+    height: `${H}px`,
+    zIndex: '59',
+    pointerEvents: 'none',
+    borderRadius: `${R}px`,
+    background: 'linear-gradient(180deg, rgba(14,10,30,.78), rgba(10,8,22,.86))',
+    backdropFilter: 'blur(16px) saturate(1.2)',
+    boxShadow: '0 24px 60px -24px rgba(0,0,0,.6)',
+  });
+  document.body.appendChild(base);
   document.body.appendChild(svg);
 
   const kids = [...box.children] as HTMLElement[];
@@ -137,6 +153,7 @@ export function playCoverIntro(box: HTMLElement): () => void {
     box.style.opacity = '';
     anims.forEach((a) => a.cancel());
     svg.remove();
+    base.remove();
   };
 
   // Text has no pathLength, so its dash length is set from a generous estimate.
@@ -154,6 +171,15 @@ export function playCoverIntro(box: HTMLElement): () => void {
   (async () => {
     try {
       run(svg, [{ opacity: 0 }, { opacity: 1 }], { duration: 400, delay: 300 });
+      // the dark base opens from the centre with the outline
+      run(
+        base,
+        [
+          { opacity: 0, clipPath: `inset(0 50% 0 50% round ${R}px)` },
+          { opacity: 1, clipPath: `inset(0 0 0 0 round ${R}px)` },
+        ],
+        { duration: 1700, delay: 300, easing: easeInOut },
+      );
       // 1) outline from the top centre to both sides
       shell.forEach((p) => draw(p, 1700, 300));
       // 2) contents traced inside it (text draws slower: its dash runs along every glyph)
@@ -177,6 +203,11 @@ export function playCoverIntro(box: HTMLElement): () => void {
       run(box, [{ opacity: 0 }, { opacity: 1 }], {
         duration: 1000,
         easing: 'ease-out',
+      });
+      run(base, [{ opacity: 1 }, { opacity: 0 }], {
+        duration: 900,
+        delay: 700,
+        easing: 'ease-in-out',
       });
       await run(svg, [{ opacity: 1 }, { opacity: 0 }], {
         duration: 1200,
