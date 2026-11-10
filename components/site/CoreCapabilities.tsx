@@ -215,7 +215,10 @@ export function Showcase({
                   <div className="relative min-h-[300px] pl-6 pt-2 md:pl-8 lg:pl-0 lg:pt-8">
                     <div
                       aria-hidden={id !== 'agent'}
-                      className="absolute inset-y-0 left-6 right-0 top-2 overflow-hidden rounded-tl-2xl border-l border-t border-white/10 bg-[#0a0a0c] shadow-[0_30px_80px_rgba(0,0,0,0.6)] md:left-8 lg:left-0 lg:top-8"
+                      className={cn(
+                        'absolute inset-y-0 left-6 right-0 top-2 overflow-hidden rounded-tl-2xl border-l border-t border-white/10 bg-[#0a0a0c] shadow-[0_30px_80px_rgba(0,0,0,0.6)] md:left-8 lg:left-0 lg:top-8',
+                        id === 'agent' && 'agent-window',
+                      )}
                     >
                       <div className="flex h-10 items-center gap-2 border-b px-4">
                         {/* macOS window controls */}

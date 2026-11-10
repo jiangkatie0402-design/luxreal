@@ -1096,3 +1096,29 @@ main .t-h2 + .t-lead {
 .cta-light:hover {
   filter: brightness(1.05);
 }
+
+/* Agent tab: no app-window frame; the embedded demo fills the right column */
+.core-panel .agent-window {
+  border: 0;
+  background: transparent;
+  box-shadow: none;
+  border-radius: 0;
+  overflow: visible;
+}
+.core-panel .agent-window > div:first-child {
+  display: none;
+}
+.core-panel .agent-window > .top-10 {
+  top: 0;
+  overflow: visible;
+}
+.core-panel .agent-window iframe {
+  background: transparent;
+}
+@media (min-width: 1024px) {
+  .core-panel .agent-window {
+    top: 40px;
+    bottom: 40px;
+    right: 40px;
+  }
+}

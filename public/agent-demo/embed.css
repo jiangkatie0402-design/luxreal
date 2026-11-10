@@ -1,11 +1,11 @@
 /* Embedded in the homepage core-capabilities "Agent" window: no page chrome, fills the window. */
 @font-face{font-family:'Aholo Geist';font-style:normal;font-weight:400 800;font-display:swap;src:url(../fonts/geist/Geist-latin.woff2) format('woff2');unicode-range:U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD}
-:root{color-scheme:dark;--font-body:'Aholo Geist','PingFang SC',MiSans,sans-serif;--font-display:var(--font-body);background:#0a0a0c;color:#f5f5f7;font-family:var(--font-body);-webkit-font-smoothing:antialiased}
+:root{color-scheme:dark;--font-body:'Aholo Geist','PingFang SC',MiSans,sans-serif;--font-display:var(--font-body);background:transparent;color:#f5f5f7;font-family:var(--font-body);-webkit-font-smoothing:antialiased}
 :root:lang(en){--font-body:'Aholo Geist',MiSans,sans-serif}
 *{box-sizing:border-box}
-html,body{margin:0;height:100%;overflow:hidden;background:#0a0a0c}
+html,body{margin:0;height:100%;overflow:hidden;background:transparent}
 button{font:inherit}
-.embed{position:absolute;left:0;top:0;width:var(--lw,100%);height:var(--lh,100%);padding:18px;zoom:var(--z,1)}
+.embed{position:absolute;left:0;top:0;width:var(--lw,100%);height:var(--lh,100%);padding:0;zoom:var(--z,1)}
 #agent-root{height:100%}
 .ac-demo{position:relative;height:100%;--ac-left:44%}
 /* the homepage window already has its title bar and CTA: drop the duplicates */
