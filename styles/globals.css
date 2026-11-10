@@ -1053,3 +1053,35 @@
 :root :is(header, footer) a.font-display {
   font-family: var(--f-geist), 'PingFang SC', MiSans, sans-serif !important;
 }
+
+/* Section titles one step down (60 → 50, same as the use-case headlines); their intro line 16/28 */
+main .t-h2 {
+  font-size: 50px !important;
+  line-height: 56px !important;
+}
+main .t-h2 + .t-lead {
+  font-size: 16px !important;
+  line-height: 28px !important;
+}
+@media (max-width: 767px) {
+  main .t-h2 {
+    font-size: 32px !important;
+    line-height: 40px !important;
+  }
+}
+/* Why section: left headline and right copy as a matched pair */
+#why h3 {
+  font-size: 32px !important;
+  line-height: 40px !important;
+}
+#why p.t-lead {
+  font-size: 18px !important;
+  line-height: 32px !important;
+  color: rgba(255, 255, 255, 0.78) !important;
+}
+@media (max-width: 1023px) {
+  #why h3 {
+    font-size: 26px !important;
+    line-height: 34px !important;
+  }
+}
