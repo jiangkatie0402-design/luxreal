@@ -1085,3 +1085,14 @@ main .t-h2 + .t-lead {
     line-height: 34px !important;
   }
 }
+
+/* CTAs on light sections: purple → white fill, dark label */
+.cta-light {
+  border-radius: 10px;
+  color: #171717;
+  background: linear-gradient(90deg, #a684ff, #fff);
+  box-shadow: 0 8px 24px -10px rgba(110, 80, 200, 0.55);
+}
+.cta-light:hover {
+  filter: brightness(1.05);
+}

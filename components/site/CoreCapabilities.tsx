@@ -1,7 +1,7 @@
 'use client';
 import * as TabsPrimitive from '@radix-ui/react-tabs';
 import { ArrowRight, Plus } from 'lucide-react';
-import { useTranslations } from 'next-intl';
+import { useLocale, useTranslations } from 'next-intl';
 import { useEffect, useRef } from 'react';
 import { ButtonLink } from '@/components/ui/button';
 import { site } from '@/config/site';
@@ -98,15 +98,15 @@ function splitPoint(text: string): [string | null, string] {
 function Copy({ title, intro, points }: { title: string; intro: string; points: string[] }) {
   return (
     <>
-      <h3 className="text-balance font-display text-2xl font-semibold leading-[1.25] tracking-[0.02em] md:text-3xl">
+      <h3 className="text-balance font-display text-[26px] font-semibold leading-[34px] tracking-[0.02em] md:text-[30px] md:leading-[38px]">
         {title}
       </h3>
-      <p className="mt-4 max-w-[30rem] text-[16px] leading-[28px] text-muted-foreground">{intro}</p>
+      <p className="mt-4 max-w-[30rem] text-[14px] leading-[24px] text-muted-foreground">{intro}</p>
       <ul className="mt-4 grid max-w-[30rem] gap-1">
         {points.map((p) => {
           const [lead, rest] = splitPoint(p);
           return (
-            <li key={p} className="text-[16px] leading-[28px] text-muted-foreground">
+            <li key={p} className="text-[14px] leading-[24px] text-muted-foreground">
               {lead && <span className="text-foreground/90">{lead}：</span>}
               {rest}
             </li>
@@ -142,6 +142,7 @@ export function Showcase({
   media?: Partial<Record<string, string>>;
 }) {
   const t = useTranslations(ns);
+  const locale = useLocale();
   const c = useTranslations('common');
   const ITEMS = items;
   return (
@@ -190,7 +191,7 @@ export function Showcase({
               className="core-panel mt-6 w-full outline-none"
             >
               <div className="relative isolate overflow-hidden rounded-[28px] border border-white/10 before:pointer-events-none before:absolute before:inset-x-[12%] before:top-0 before:h-px before:bg-[linear-gradient(90deg,transparent,rgba(196,186,255,0.35),transparent)] [background:radial-gradient(70%_65%_at_0%_100%,rgba(110,98,163,0.32),transparent_62%),linear-gradient(180deg,#0b0b0d,#060607)]">
-                <div className="grid lg:h-[max(520px,calc(100svh-var(--header-h)-24px-44px-24px-32px-12px-8px))] lg:grid-cols-[minmax(440px,5fr)_minmax(0,7fr)]">
+                <div className="grid lg:h-[max(520px,calc(100svh-var(--header-h)-24px-44px-24px-32px-12px-8px))] lg:grid-cols-[minmax(360px,4fr)_minmax(0,8fr)]">
                   {/* copy + action */}
                   <div className="flex flex-col p-6 md:p-8 lg:p-12">
                     <div>
@@ -211,10 +212,10 @@ export function Showcase({
                   </div>
 
                   {/* app-window media frame, bleeding off the right/bottom edge */}
-                  <div className="relative min-h-[300px] pl-6 pt-2 md:pl-8 lg:pl-0 lg:pt-12">
+                  <div className="relative min-h-[300px] pl-6 pt-2 md:pl-8 lg:pl-0 lg:pt-8">
                     <div
-                      aria-hidden
-                      className="absolute inset-y-0 left-6 right-0 top-2 overflow-hidden rounded-tl-2xl border-l border-t border-white/10 bg-[#0a0a0c] shadow-[0_30px_80px_rgba(0,0,0,0.6)] md:left-8 lg:left-0 lg:top-12"
+                      aria-hidden={id !== 'agent'}
+                      className="absolute inset-y-0 left-6 right-0 top-2 overflow-hidden rounded-tl-2xl border-l border-t border-white/10 bg-[#0a0a0c] shadow-[0_30px_80px_rgba(0,0,0,0.6)] md:left-8 lg:left-0 lg:top-8"
                     >
                       <div className="flex h-10 items-center gap-2 border-b px-4">
                         {/* macOS window controls */}
@@ -231,6 +232,15 @@ export function Showcase({
                         </span>
                       </div>
                       <div className="absolute inset-x-0 bottom-0 top-10 overflow-hidden">
+                        {id === 'agent' && (
+                          <iframe
+                            title={t(`${id}.title`)}
+                            src={`${BASE}agent-demo/index.html?lang=${locale === 'en' ? 'en' : 'zh'}`}
+                            loading="lazy"
+                            allow="fullscreen"
+                            className="absolute inset-0 z-[2] size-full border-0 bg-[#0a0a0c]"
+                          />
+                        )}
                         {media?.[id] && <Workspace />}
                         <div
                           className={cn(

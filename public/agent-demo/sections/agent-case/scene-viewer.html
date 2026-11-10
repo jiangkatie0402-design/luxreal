@@ -1,0 +1,25 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="color-scheme" content="dark">
+  <title>运动公园 · 3D 预览</title>
+  <link rel="icon" href="data:,">
+  <link rel="stylesheet" href="scene-viewer.css">
+  <script type="importmap">
+    {"imports":{"three":"./vendor/three-0.170.0/three.module.js"}}
+  </script>
+</head>
+<body>
+  <div id="scene" aria-label="可拖动旋转的球场三维场景"></div>
+  <div class="poster" id="poster"><img src="assets/stadium-poster.webp" alt="运动公园场景预览"><span id="loading" role="status">正在载入 3D 场景…</span></div>
+  <div class="tools" aria-label="模型查看工具">
+    <button type="button" id="reset" aria-label="重置视角" title="重置视角"><svg viewBox="0 0 24 24"><path d="M3 10a9 9 0 1 1 2.3 8M3 4v6h6"/></svg></button>
+    <button type="button" id="fullscreen" aria-label="全屏查看" title="全屏查看"><svg viewBox="0 0 24 24"><path d="M8 3H3v5m13-5h5v5M3 16v5h5m13-5v5h-5"/></svg></button>
+  </div>
+  <div class="zoom-tools"><button type="button" id="zoom-in" aria-label="放大" title="放大">+</button><button type="button" id="zoom-out" aria-label="缩小" title="缩小">−</button></div>
+  <span class="hint" id="hint">拖动旋转 · 右上角重置视角</span>
+  <script type="module" src="scene-viewer.js"></script>
+</body>
+</html>
