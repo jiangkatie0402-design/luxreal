@@ -892,3 +892,12 @@
     animation: none;
   }
 }
+
+/* Body text: Chinese pages use PingFang (Apple system face; other systems fall back to MiSans),
+   English pages use Inter. */
+:root:lang(zh) {
+  --font-body: 'PingFang SC', 'PingFang TC', MiSans, var(--f-sans), sans-serif;
+}
+:root:lang(en) {
+  --font-body: var(--f-inter), 'Inter', MiSans, sans-serif;
+}
