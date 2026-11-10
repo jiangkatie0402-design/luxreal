@@ -4,20 +4,26 @@ import { useEffect, useRef, useState, type ReactNode } from 'react';
 import { ArrowRight, ImagePlus } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { appUrl, site } from '@/config/site';
+import { playCoverIntro } from './coverIntro';
+
+const BASE = process.env.NEXT_PUBLIC_ASSET_BASE ?? '/';
 
 /** Glass shell shared by the designs: dark frosted fill, hairline border, top highlight. */
 function Glass({
   className,
   dragging,
   children,
+  ref,
   ...drop
 }: {
   className?: string;
   dragging: boolean;
   children: ReactNode;
+  ref?: React.Ref<HTMLDivElement>;
 } & React.HTMLAttributes<HTMLDivElement>) {
   return (
     <div
+      ref={ref}
       {...drop}
       className={cn(
         'relative border bg-[rgba(14,10,30,0.55)] shadow-[0_24px_60px_-24px_rgba(0,0,0,0.6),inset_0_1px_0_rgba(255,255,255,0.12)] backdrop-blur-2xl backdrop-saturate-150 transition-colors',
@@ -38,6 +44,12 @@ export function CoverUpload() {
   const [error, setError] = useState<string | null>(null);
   const [dragging, setDragging] = useState(false);
   const input = useRef<HTMLInputElement>(null);
+  const box = useRef<HTMLDivElement>(null);
+
+  // The dialog unfolds from the submit icon on first view.
+  useEffect(() => {
+    if (box.current) return playCoverIntro(box.current, `${BASE}brand/submit-icon.svg`);
+  }, []);
 
   useEffect(() => {
     if (!file) return;
@@ -117,7 +129,7 @@ export function CoverUpload() {
   );
   // Like an AI prompt box: the prompt as the field, attach bottom-left, send bottom-right.
   return (
-    <Glass {...drop} dragging={dragging} className="overflow-hidden rounded-[24px]">
+    <Glass ref={box} {...drop} dragging={dragging} className="overflow-hidden rounded-[24px]">
       {glow}
       <label className="block cursor-pointer px-6 pb-2 pt-5">
         {fileInput}
