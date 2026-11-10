@@ -1030,3 +1030,26 @@
     animation: none;
   }
 }
+
+/* Font system (final):
+   zh — titles and body: Geist for Latin/digits, PingFang for Chinese (MiSans where PingFang is absent)
+   en — titles: Pontano Sans; body: Geist */
+:root:lang(zh) {
+  --font-body: var(--f-geist), 'PingFang SC', 'PingFang TC', MiSans, var(--f-sans), sans-serif;
+  --font-display: var(--f-geist), 'PingFang SC', 'PingFang TC', MiSans, var(--f-sans), sans-serif;
+}
+:root:lang(en) {
+  --font-body: var(--f-geist), MiSans, sans-serif;
+  --font-display: var(--f-pontano), var(--f-geist), MiSans, sans-serif;
+}
+:root:lang(zh) main :is(h1, h2, h3, h4, .t-h2, .t-h3, .t-title, .font-display),
+:root:lang(zh) .hero-title-font {
+  font-family: var(--font-display) !important;
+  -webkit-text-stroke: 0 !important;
+}
+:root:lang(en) main :is(h1, h2, h3, h4, .t-h2, .t-h3, .t-title, .font-display) {
+  font-family: var(--font-display) !important;
+}
+:root :is(header, footer) a.font-display {
+  font-family: var(--f-geist), 'PingFang SC', MiSans, sans-serif !important;
+}
