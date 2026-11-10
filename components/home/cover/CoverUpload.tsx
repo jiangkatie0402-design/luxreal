@@ -64,12 +64,12 @@ export function CoverUpload() {
     const io = new IntersectionObserver(
       (entries) => {
         const e = entries[entries.length - 1];
-        if (e.intersectionRatio >= 0.9 && armed) {
+        if (e.intersectionRatio >= 0.5 && armed) {
           if (document.visibilityState === 'visible') start();
           else pending = true;
         } else if (e.intersectionRatio === 0) armed = true;
       },
-      { threshold: [0, 0.9] },
+      { threshold: [0, 0.5] },
     );
     io.observe(el);
     document.addEventListener('visibilitychange', onVisible);

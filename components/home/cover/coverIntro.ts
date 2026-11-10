@@ -144,12 +144,19 @@ export function playCoverIntro(box: HTMLElement): () => void {
   // Keep the overlays glued to the dialog: if the cover layout settles or shifts while the
   // intro runs (fonts, video, a resize), they follow it instead of staying where it was.
   let raf = 0;
+  let restart = 0;
+  let next: (() => void) | null = null;
   const follow = () => {
     const now = box.getBoundingClientRect();
-    // the dialog was resized mid-intro: the drawn outlines no longer fit, so just show it
+    // the dialog was resized mid-intro (e.g. the page is still settling): redraw at the new size
     if (Math.abs(now.width - W) > 2 || Math.abs(now.height - H) > 2) {
       alive = false;
       finish();
+      box.style.opacity = '0';
+      restart = window.setTimeout(() => {
+        box.style.opacity = '';
+        if (box.isConnected) next = playCoverIntro(box);
+      }, 200);
       return;
     }
     const left = `${now.left + scrollX}px`;
@@ -256,6 +263,8 @@ export function playCoverIntro(box: HTMLElement): () => void {
 
   return () => {
     alive = false;
+    clearTimeout(restart);
+    next?.();
     finish();
   };
 }
