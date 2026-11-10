@@ -773,7 +773,7 @@
   font-size: clamp(2.7rem, 4.86vw, 4.375rem);
   line-height: 1.05;
 }
-.hero-title {
+.hero-title-font {
   font-family: var(--f-geist), 'Geist', MiSans, sans-serif;
   font-weight: 600;
   font-synthesis: none;

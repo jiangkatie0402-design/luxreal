@@ -27,7 +27,7 @@ function Grad({ children, className = 'block' }: { children: ReactNode; classNam
 
 export function ViewportHero({ locale }: { locale: string }) {
   const t = useTranslations('home.viewport');
-  const brush = `${heroTitle.className} hero-title${locale === 'zh' ? ' hero-title-zh' : ''}`;
+  const brush = `${heroTitle.className} hero-title-font${locale === 'zh' ? ' hero-title-zh' : ''}`;
   const hs = HERO_SETS[useHeroSet((st) => st.i)];
   const reduced = usePerfStore((s) => s.reducedMotion);
   // the header sits outside the hero; its ink/CTA follow the cover via root variables
