@@ -1,21 +1,20 @@
 /**
- * Cover dialog intro: the submit icon appears on the right, stretches left into a pill,
+ * Cover dialog intro: the submit icon appears in the middle, stretches out to both sides into a pill,
  * then opens to the full dialog while its contents fade in. Returns a cleanup.
  */
 export function playCoverIntro(box: HTMLElement, iconSrc: string): () => void {
   if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return () => {};
   const D = 52; // visible circle of the icon, px
-  const pad = 14; // icon inset from the right edge
   const R = 24; // dialog corner radius
   const ease = 'cubic-bezier(.22,1,.36,1)';
   const r = box.getBoundingClientRect();
   const { width: W, height: H } = r;
   const top = H / 2 - D / 2;
-  const leftCircle = W - pad - D;
+  const side = (W - D) / 2;
   const clip = (t: number, rt: number, b: number, l: number, rad: number) =>
     `inset(${t}px ${rt}px ${b}px ${l}px round ${rad}px)`;
 
-  // Icon overlay over the box's right side, outside the clip so its glow shows.
+  // Icon overlay over the box's centre, outside the clip so its glow shows.
   // The svg is 90×90 with its 51px circle centred at (44.9, 36.9).
   const s = D / 51;
   const icon = document.createElement('img');
@@ -28,14 +27,14 @@ export function playCoverIntro(box: HTMLElement, iconSrc: string): () => void {
     width: `${90 * s}px`,
     height: 'auto',
     transformOrigin: '49.9% 41%',
-    left: `${r.left + scrollX + W - pad - D / 2 - 44.9 * s}px`,
+    left: `${r.left + scrollX + W / 2 - 44.9 * s}px`,
     top: `${r.top + scrollY + H / 2 - 36.9 * s}px`,
   });
   document.body.appendChild(icon);
 
   const kids = [...box.children] as HTMLElement[];
   kids.forEach((k) => (k.style.opacity = '0'));
-  box.style.clipPath = clip(top, pad, top, leftCircle, D / 2);
+  box.style.clipPath = clip(top, side, top, side, D / 2);
 
   const anims: Animation[] = [];
   const run = (el: Element, kf: Keyframe[], opts: KeyframeAnimationOptions) => {
@@ -62,12 +61,11 @@ export function playCoverIntro(box: HTMLElement, iconSrc: string): () => void {
         ],
         { duration: 520, delay: 500, fill: 'both' },
       );
-      // 1) stretch left into a pill
-      run(icon, [{ transform: 'none' }, { transform: `translateX(${pad}px)` }], { duration: 620 });
+      // 1) stretch from the middle out to both sides
       await run(
         box,
         [
-          { clipPath: clip(top, pad, top, leftCircle, D / 2) },
+          { clipPath: clip(top, side, top, side, D / 2) },
           { clipPath: clip(top, 0, top, 0, D / 2) },
         ],
         { duration: 620 },
@@ -76,8 +74,8 @@ export function playCoverIntro(box: HTMLElement, iconSrc: string): () => void {
       run(
         icon,
         [
-          { opacity: 1, transform: `translateX(${pad}px) scale(1)` },
-          { opacity: 0, transform: `translateX(${pad}px) scale(.6)` },
+          { opacity: 1, transform: `scale(1)` },
+          { opacity: 0, transform: `scale(.6)` },
         ],
         { duration: 360, easing: 'ease-in' },
       );
