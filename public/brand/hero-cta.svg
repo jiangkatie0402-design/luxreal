@@ -5,16 +5,16 @@
 </mask>
 <g mask="url(#mask0_2456_21778)">
 <g filter="url(#filter1_f_2456_21778)">
-<path d="M242.592 88.4969C246.073 121.738 172.946 108.325 154.875 108.325C136.804 108.325 41.3997 103.634 41.3997 88.4969C186.203 91.9962 121.984 68.0227 173.443 65.9862C231.922 63.6719 242.592 73.3595 242.592 88.4969Z" fill="#7773FF"/>
+<path d="M242.592 88.4969C246.073 121.738 172.946 108.325 154.875 108.325C136.804 108.325 41.3997 103.634 41.3997 88.4969C186.203 91.9962 121.984 68.0227 173.443 65.9862C231.922 63.6719 242.592 73.3595 242.592 88.4969Z" fill="#7773FF"><animateTransform attributeName="transform" type="translate" values="0 0;-26 -3;0 0" dur="4.2s" begin="0s" repeatCount="indefinite" calcMode="spline" keyTimes="0;0.5;1" keySplines=".45 0 .55 1;.45 0 .55 1"/></path>
 </g>
 <g filter="url(#filter2_f_2456_21778)" style="mix-blend-mode:overlay">
-<rect x="23" y="81.2741" width="213.218" height="16.137" fill="white"/>
+<rect x="23" y="81.2741" width="213.218" height="16.137" fill="white"><animateTransform attributeName="transform" type="translate" values="0 0;0 -4;0 0" dur="3.1s" begin="0s" repeatCount="indefinite" calcMode="spline" keyTimes="0;0.5;1" keySplines=".45 0 .55 1;.45 0 .55 1"/></rect>
 </g>
 <g opacity="0.8" filter="url(#filter3_f_2456_21778)" style="mix-blend-mode:overlay">
-<path d="M56.552 94.9902C56.552 94.9902 113.112 88.4038 148.265 88.4038C183.418 88.4038 236.581 94.9902 236.581 94.9902V79.6219C236.581 79.6219 183.418 73.0354 148.265 73.0354C113.112 73.0354 56.552 79.6219 56.552 79.6219V94.9902Z" fill="white"/>
+<path d="M56.552 94.9902C56.552 94.9902 113.112 88.4038 148.265 88.4038C183.418 88.4038 236.581 94.9902 236.581 94.9902V79.6219C236.581 79.6219 183.418 73.0354 148.265 73.0354C113.112 73.0354 56.552 79.6219 56.552 79.6219V94.9902Z" fill="white"><animateTransform attributeName="transform" type="translate" values="0 0;-22 3;0 0" dur="3.6s" begin=".4s" repeatCount="indefinite" calcMode="spline" keyTimes="0;0.5;1" keySplines=".45 0 .55 1;.45 0 .55 1"/></path>
 </g>
 <g filter="url(#filter4_f_2456_21778)" style="mix-blend-mode:overlay">
-<path d="M33.8232 106.753C33.8232 106.753 95.7099 89.4274 134.173 89.4274C172.637 89.4274 230.807 106.753 230.807 106.753V66.326C230.807 66.326 172.637 49 134.173 49C95.7099 49 33.8232 66.326 33.8232 66.326V106.753Z" fill="url(#paint1_linear_2456_21778)"/>
+<path d="M33.8232 106.753C33.8232 106.753 95.7099 89.4274 134.173 89.4274C172.637 89.4274 230.807 106.753 230.807 106.753V66.326C230.807 66.326 172.637 49 134.173 49C95.7099 49 33.8232 66.326 33.8232 66.326V106.753Z" fill="url(#paint1_linear_2456_21778)"><animateTransform attributeName="transform" type="translate" values="0 0;20 -4;0 0" dur="4.8s" begin=".8s" repeatCount="indefinite" calcMode="spline" keyTimes="0;0.5;1" keySplines=".45 0 .55 1;.45 0 .55 1"/></path>
 </g>
 </g>
 <defs>
