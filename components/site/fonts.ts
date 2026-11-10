@@ -1,4 +1,4 @@
-import { Inter, Noto_Sans_SC, Oxanium } from 'next/font/google';
+import { Geist, Inter, Noto_Sans_SC, Oxanium } from 'next/font/google';
 
 /**
  * Fonts per chinese-font-selector (web/UI, commercial): T0/T1 licences only,
@@ -13,6 +13,14 @@ export const titleEn = Oxanium({
   variable: '--f-oxanium',
 });
 
+/** Cover main title in both languages (Latin; Chinese characters fall back to MiSans), OFL. */
+export const heroTitle = Geist({
+  weight: ['600'],
+  subsets: ['latin'],
+  display: 'swap',
+  variable: '--f-geist',
+});
+
 /** 思源黑体 (Source Han Sans = Noto Sans SC, OFL) */
 export const sans = Noto_Sans_SC({
   weight: ['400', '500', '600', '700'],
@@ -23,7 +31,12 @@ export const sans = Noto_Sans_SC({
 /** Latin partner for the Chinese faces (declared first so Latin renders in Inter). */
 export const inter = Inter({ subsets: ['latin'], display: 'swap', variable: '--f-inter' });
 
-export const fontVariables = [titleEn.variable, sans.variable, inter.variable].join(' ');
+export const fontVariables = [
+  titleEn.variable,
+  heroTitle.variable,
+  sans.variable,
+  inter.variable,
+].join(' ');
 
 /** Self-hosted split web fonts. */
 export const fontStylesheets = [

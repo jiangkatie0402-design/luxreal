@@ -1,7 +1,7 @@
 'use client';
 import { useTranslations } from 'next-intl';
 import { useEffect, type CSSProperties, type ReactNode } from 'react';
-import { titleEn } from '@/components/site/fonts';
+import { heroTitle } from '@/components/site/fonts';
 import { HERO_SETS, useHeroSet } from '@/lib/heroPalettes';
 import { usePerfStore } from '@/lib/perf';
 import { CoverUpload } from '../cover/CoverUpload';
@@ -27,7 +27,7 @@ function Grad({ children, className = 'block' }: { children: ReactNode; classNam
 
 export function ViewportHero({ locale }: { locale: string }) {
   const t = useTranslations('home.viewport');
-  const brush = locale === 'zh' ? 'hero-title-zh' : titleEn.className;
+  const brush = `${heroTitle.className} hero-title${locale === 'zh' ? ' hero-title-zh' : ''}`;
   const hs = HERO_SETS[useHeroSet((st) => st.i)];
   const reduced = usePerfStore((s) => s.reducedMotion);
   // the header sits outside the hero; its ink/CTA follow the cover via root variables
@@ -75,7 +75,11 @@ export function ViewportHero({ locale }: { locale: string }) {
           poster={`${BASE}videos/hero-final-poster.jpg`}
           className="absolute inset-0 size-full object-cover"
         >
-          <source src={`${BASE}videos/hero-final-hold-720.mp4`} type="video/mp4" media="(max-width: 768px)" />
+          <source
+            src={`${BASE}videos/hero-final-hold-720.mp4`}
+            type="video/mp4"
+            media="(max-width: 768px)"
+          />
           <source src={`${BASE}videos/hero-final-hold.mp4`} type="video/mp4" />
         </video>
       )}
