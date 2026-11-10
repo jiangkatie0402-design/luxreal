@@ -1,176 +1,156 @@
 /**
- * Cover dialog intro, "draw then fill":
- * 1. A hairline violet outline of the dialog is drawn, starting at the top centre and
- *    running out to both sides until it meets at the bottom.
- * 2. Inside it, the buttons, icons and every line of text are drawn as outlines too.
- * 3. The real dialog then fills in underneath while the outlines fade away.
- * Works on whatever the dialog contains (text nodes, buttons, svg icons), so copy
- * and layout changes need no change here. Returns a cleanup.
+ * Cover dialog intro, "pill → dialog":
+ * 1. The dialog first appears in its minimal state: a single-row pill in the middle of where
+ *    the dialog will be — a round "+" on the left, the prompt line, the sparkle icon on the
+ *    right. Colours, type and border follow the full dialog.
+ * 2. The sparkle twinkles once, then the pill grows out to the full dialog (both sides, then
+ *    up and down); the pill's contents fade as the dialog's own contents arrive.
+ * Returns a cleanup. Overlays follow the dialog if the layout shifts, and the intro restarts
+ * at the new size if the dialog is resized mid-way.
  */
-const NS = 'http://www.w3.org/2000/svg';
-const LINE = 'rgba(180,170,255,1)';
-
-export function playCoverIntro(box: HTMLElement): () => void {
+export function playCoverIntro(box: HTMLElement, iconSrc = '/brand/spark-icon.svg'): () => void {
   if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return () => {};
-  const easeInOut = 'cubic-bezier(.65,0,.35,1)';
   const ease = 'cubic-bezier(.22,1,.36,1)';
+  const easeInOut = 'cubic-bezier(.65,0,.35,1)';
   const b = box.getBoundingClientRect();
   const { width: W, height: H } = b;
   const R = parseFloat(getComputedStyle(box).borderTopLeftRadius) || 24;
+  // minimal state: one row, 64px tall, about 3/4 of the width (narrower screens use more)
+  const PH = 64;
+  const PW = Math.min(W, Math.max(W * 0.74, Math.min(W, 340)));
+  const pt = (H - PH) / 2;
+  const ps = (W - PW) / 2;
+  const clip = (t: number, s: number, r: number) => `inset(${t}px ${s}px round ${r}px)`;
 
-  const svg = document.createElementNS(NS, 'svg');
-  svg.setAttribute('width', String(W));
-  svg.setAttribute('height', String(H));
-  svg.setAttribute('viewBox', `0 0 ${W} ${H}`);
-  Object.assign(svg.style, {
+  // overlay layer in the dialog's own coordinates
+  const layer = document.createElement('div');
+  Object.assign(layer.style, {
     position: 'absolute',
     left: `${b.left + scrollX}px`,
     top: `${b.top + scrollY}px`,
-    zIndex: '60',
-    pointerEvents: 'none',
-    overflow: 'visible',
-    filter: 'drop-shadow(0 0 2px rgba(140,128,255,.3))',
-  });
-  const el = (tag: string, attrs: Record<string, string | number>, parent: Element = svg) => {
-    const n = document.createElementNS(NS, tag);
-    for (const k in attrs) n.setAttribute(k, String(attrs[k]));
-    parent.appendChild(n);
-    return n as SVGGraphicsElement;
-  };
-  const stroke = {
-    fill: 'none',
-    stroke: LINE,
-    'stroke-width': 1,
-    'vector-effect': 'non-scaling-stroke',
-  };
-
-  // 1) the dialog's outline as two halves from the top centre to the bottom centre
-  const h = 0.5; // keep the hairline on the pixel grid
-  const half = (dir: 1 | -1) => {
-    const x0 = W / 2;
-    const xe = dir === 1 ? W - h : h; // outer edge
-    const xc = dir === 1 ? W - h - R : h + R; // corner start
-    const sw = dir === 1 ? 1 : 0;
-    return `M${x0},${h} H${xc} A${R},${R} 0 0 ${sw} ${xe},${h + R} V${H - h - R} A${R},${R} 0 0 ${sw} ${xc},${H - h} H${x0}`;
-  };
-  // the outer outline is kept dimmer than the contents
-  const shell = [1, -1].map((d) =>
-    el('path', { ...stroke, stroke: 'rgba(140,130,215,.5)', d: half(d as 1 | -1), pathLength: 1 }),
-  );
-
-  // 2) inner outlines: buttons, icons and text
-  const inner: SVGGraphicsElement[] = [];
-  const at = (r: DOMRect) => ({ x: r.left - b.left, y: r.top - b.top });
-  box.querySelectorAll('button').forEach((btn) => {
-    const r = btn.getBoundingClientRect();
-    if (!r.width) return;
-    const { x, y } = at(r);
-    const rad = Math.min(parseFloat(getComputedStyle(btn).borderTopLeftRadius) || 0, r.height / 2);
-    // the hero CTA sits inside a 1px ring; outline the ring
-    const ring = btn.parentElement?.classList.contains('brand-hero') ? 1 : 0;
-    inner.push(
-      el('rect', {
-        ...stroke,
-        x: x - ring + h,
-        y: y - ring + h,
-        width: r.width + ring * 2 - 1,
-        height: r.height + ring * 2 - 1,
-        rx: rad + ring,
-        pathLength: 1,
-      }),
-    );
-  });
-  box.querySelectorAll('svg').forEach((icon) => {
-    const r = icon.getBoundingClientRect();
-    if (!r.width) return;
-    const { x, y } = at(r);
-    const g = el('g', { transform: `translate(${x},${y})` });
-    const copy = icon.cloneNode(true) as SVGSVGElement;
-    copy.setAttribute('x', '0');
-    copy.setAttribute('y', '0');
-    copy.setAttribute('width', String(r.width));
-    copy.setAttribute('height', String(r.height));
-    copy.style.color = LINE;
-    copy.removeAttribute('class');
-    g.appendChild(copy);
-    copy.querySelectorAll('path,line,circle,rect,polyline,polygon,ellipse').forEach((p) => {
-      p.setAttribute('pathLength', '1');
-      inner.push(p as SVGGraphicsElement);
-    });
-  });
-  const walker = document.createTreeWalker(box, NodeFilter.SHOW_TEXT);
-  for (let n = walker.nextNode(); n; n = walker.nextNode()) {
-    const text = n.textContent?.trim();
-    const host = n.parentElement;
-    if (!text || !host || host.closest('svg')) continue;
-    const range = document.createRange();
-    range.selectNodeContents(n);
-    const r = range.getBoundingClientRect();
-    if (!r.width) continue;
-    const cs = getComputedStyle(host);
-    const { x, y } = at(r);
-    const t = el('text', {
-      x,
-      y: y + r.height / 2,
-      'dominant-baseline': 'central',
-      fill: 'none',
-      stroke: LINE,
-      'stroke-width': 0.7,
-      'font-family': cs.fontFamily,
-      'font-size': cs.fontSize,
-      'font-weight': cs.fontWeight,
-      'letter-spacing': cs.letterSpacing === 'normal' ? '0' : cs.letterSpacing,
-    });
-    t.textContent = text;
-    inner.push(t);
-  }
-  // A dark glass base behind the outlines, so they read on a bright cover video.
-  const base = document.createElement('div');
-  Object.assign(base.style, {
-    position: 'absolute',
-    left: svg.style.left,
-    top: svg.style.top,
     width: `${W}px`,
     height: `${H}px`,
-    zIndex: '59',
+    zIndex: '60',
     pointerEvents: 'none',
-    borderRadius: `${R}px`,
-    background: 'linear-gradient(180deg, rgba(14,10,30,.78), rgba(10,8,22,.86))',
-    backdropFilter: 'blur(16px) saturate(1.2)',
   });
-  document.body.appendChild(base);
-  document.body.appendChild(svg);
+  const add = (css: Partial<CSSStyleDeclaration>, tag = 'div', parent: HTMLElement = layer) => {
+    const n = document.createElement(tag);
+    Object.assign(n.style, { position: 'absolute' }, css);
+    parent.appendChild(n);
+    return n;
+  };
+  // the pill's border (the dialog's own border is cut by the clip while it is small)
+  const frame = add({
+    left: `${ps}px`,
+    top: `${pt}px`,
+    width: `${PW}px`,
+    height: `${PH}px`,
+    borderRadius: `${PH / 2}px`,
+    border: '1px solid rgba(255,255,255,.16)',
+    boxShadow: 'inset 0 1px 0 rgba(255,255,255,.12)',
+    boxSizing: 'border-box',
+  });
+  const row = add({
+    left: `${ps}px`,
+    top: `${pt}px`,
+    width: `${PW}px`,
+    height: `${PH}px`,
+    display: 'flex',
+    alignItems: 'center',
+    gap: '16px',
+    padding: '0 10px',
+    boxSizing: 'border-box',
+  });
+  const plus = add(
+    {
+      position: 'relative',
+      flex: '0 0 auto',
+      width: '64px',
+      height: '44px',
+      borderRadius: '22px',
+      border: '1px solid rgba(255,255,255,.16)',
+      background: 'rgba(255,255,255,.06)',
+      display: 'grid',
+      placeItems: 'center',
+      color: 'rgba(255,255,255,.9)',
+    },
+    'div',
+    row,
+  );
+  plus.innerHTML =
+    '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg>';
+  const label = box.querySelector('label');
+  const text = add(
+    {
+      position: 'relative',
+      flex: '1 1 auto',
+      minWidth: '0',
+      overflow: 'hidden',
+      whiteSpace: 'nowrap',
+      textOverflow: 'ellipsis',
+      color: 'rgba(255,255,255,.9)',
+      fontSize: '16px',
+      lineHeight: '24px',
+    },
+    'div',
+    row,
+  );
+  text.textContent = (label?.textContent || '').trim();
+  const spark = add(
+    {
+      position: 'relative',
+      flex: '0 0 auto',
+      width: '44px',
+      height: '44px',
+      display: 'grid',
+      placeItems: 'center',
+      overflow: 'visible',
+    },
+    'div',
+    row,
+  );
+  const img = document.createElement('img');
+  img.src = iconSrc;
+  img.alt = '';
+  // the svg is 90×90 with its 51px circle centred at (44.9, 36.9): show that circle at 44px
+  const s = 44 / 51;
+  Object.assign(img.style, {
+    position: 'absolute',
+    width: `${90 * s}px`,
+    maxWidth: 'none',
+    height: 'auto',
+    left: `${22 - 44.9 * s}px`,
+    top: `${22 - 36.9 * s}px`,
+  });
+  spark.appendChild(img);
+  document.body.appendChild(layer);
 
-  // Keep the overlays glued to the dialog: if the cover layout settles or shifts while the
-  // intro runs (fonts, video, a resize), they follow it instead of staying where it was.
+  const kids = [...box.children] as HTMLElement[];
+  kids.forEach((k) => (k.style.opacity = '0'));
+  box.style.clipPath = clip(pt, ps, PH / 2);
+  box.style.opacity = '0';
+
+  // keep the overlay glued to the dialog; restart at the new size if it is resized
   let raf = 0;
   let restart = 0;
   let next: (() => void) | null = null;
   const follow = () => {
     const now = box.getBoundingClientRect();
-    // the dialog was resized mid-intro (e.g. the page is still settling): redraw at the new size
     if (Math.abs(now.width - W) > 2 || Math.abs(now.height - H) > 2) {
       alive = false;
       finish();
       box.style.opacity = '0';
       restart = window.setTimeout(() => {
         box.style.opacity = '';
-        if (box.isConnected) next = playCoverIntro(box);
+        if (box.isConnected) next = playCoverIntro(box, iconSrc);
       }, 200);
       return;
     }
-    const left = `${now.left + scrollX}px`;
-    const top = `${now.top + scrollY}px`;
-    if (svg.style.left !== left || svg.style.top !== top) {
-      svg.style.left = base.style.left = left;
-      svg.style.top = base.style.top = top;
-    }
+    layer.style.left = `${now.left + scrollX}px`;
+    layer.style.top = `${now.top + scrollY}px`;
     raf = requestAnimationFrame(follow);
   };
   raf = requestAnimationFrame(follow);
-
-  const kids = [...box.children] as HTMLElement[];
-  box.style.opacity = '0';
 
   const anims: Animation[] = [];
   const run = (n: Element, kf: Keyframe[], opts: KeyframeAnimationOptions) => {
@@ -181,79 +161,88 @@ export function playCoverIntro(box: HTMLElement): () => void {
   let alive = true;
   const finish = () => {
     cancelAnimationFrame(raf);
+    box.style.clipPath = '';
     box.style.opacity = '';
+    kids.forEach((k) => (k.style.opacity = ''));
     anims.forEach((a) => a.cancel());
-    svg.remove();
-    base.remove();
+    layer.remove();
   };
-
-  // Text has no pathLength, so its dash length is set from a generous estimate.
-  const dash = (n: SVGGraphicsElement) => (n.tagName === 'text' ? 2400 : 1);
-  [...shell, ...inner].forEach((n) => {
-    const d = dash(n);
-    n.style.strokeDasharray = `${d} ${d}`;
-    n.style.strokeDashoffset = String(d);
+  const at = (t: number, s2: number, w: number, h: number, r: number) => ({
+    left: `${s2}px`,
+    top: `${t}px`,
+    width: `${w}px`,
+    height: `${h}px`,
+    borderRadius: `${r}px`,
   });
-  const draw = (n: SVGGraphicsElement, duration: number, delay: number, easing = easeInOut) => {
-    const d = dash(n);
-    return run(n, [{ strokeDashoffset: d }, { strokeDashoffset: 0 }], { duration, delay, easing });
-  };
 
   (async () => {
     try {
-      run(svg, [{ opacity: 0 }, { opacity: 1 }], { duration: 400, delay: 300 });
-      // the base opens from the centre, starting faint and deepening once the outline is drawn;
-      // the outline is revealed with it, so nothing shows outside the base
-      const opening = (pad: number) => [
-        { clipPath: `inset(${-pad}px 50% ${-pad}px 50% round ${R}px)` },
-        { clipPath: `inset(${-pad}px ${-pad}px ${-pad}px ${-pad}px round ${R}px)` },
-      ];
-      run(base, opening(0), { duration: 1700, delay: 300, easing: easeInOut });
-      run(svg, opening(8), { duration: 1700, delay: 300, easing: easeInOut });
-      run(base, [{ opacity: 0 }, { opacity: 0.22, offset: 0.5 }, { opacity: 0.45 }], {
-        duration: 1700,
-        delay: 300,
-        easing: 'ease-out',
-      });
-      run(base, [{ opacity: 0.45 }, { opacity: 1 }], {
-        duration: 1300,
-        delay: 2000,
-        easing: 'ease-in-out',
-      });
-      // 1) outline from the top centre to both sides
-      shell.forEach((p) => draw(p, 1700, 300));
-      // 2) contents traced inside it (text draws slower: its dash runs along every glyph)
-      inner.forEach((n, i) =>
-        draw(
+      // 1) the pill appears
+      run(box, [{ opacity: 0 }, { opacity: 1 }], { duration: 500, delay: 250 });
+      run(frame, [{ opacity: 0 }, { opacity: 1 }], { duration: 500, delay: 250 });
+      [plus, text, spark].forEach((n, i) =>
+        run(
           n,
-          n.tagName === 'text' ? 2200 : 1300,
-          900 + i * 140,
-          n.tagName === 'text' ? 'cubic-bezier(.4,0,.2,1)' : easeInOut,
+          [
+            { opacity: 0, transform: 'translateY(6px)' },
+            { opacity: 1, transform: 'none' },
+          ],
+          {
+            duration: 520,
+            delay: 380 + i * 90,
+          },
         ),
       );
-      await new Promise((ok) => setTimeout(ok, 300 + 2600));
-      // 3) the real dialog fills in, the outlines fade
-      kids.forEach((k, i) =>
-        run(k, [{ opacity: 0 }, { opacity: 1 }], {
-          duration: 900,
-          delay: 150 + i * 60,
-          easing: 'ease-out',
-        }),
+      await run(
+        img,
+        [
+          { transform: 'scale(.6) rotate(-40deg)', opacity: 0 },
+          { transform: 'scale(1.12) rotate(8deg)', opacity: 1, offset: 0.6 },
+          { transform: 'none', opacity: 1 },
+        ],
+        { duration: 700, delay: 560 },
       );
-      run(box, [{ opacity: 0 }, { opacity: 1 }], {
-        duration: 1000,
-        easing: 'ease-out',
+      // a short twinkle, then hold
+      await run(
+        img,
+        [{ filter: 'brightness(1)' }, { filter: 'brightness(1.7)' }, { filter: 'brightness(1)' }],
+        {
+          duration: 600,
+          easing: 'ease-in-out',
+        },
+      );
+      await new Promise((ok) => setTimeout(ok, 250));
+
+      // 2) grow into the full dialog: sideways first, then up and down
+      [plus, text, spark].forEach((n) =>
+        run(n, [{ opacity: 1 }, { opacity: 0 }], { duration: 260, easing: 'ease-in' }),
+      );
+      run(frame, [at(pt, ps, PW, PH, PH / 2), at(pt, 0, W, PH, PH / 2)], {
+        duration: 520,
+        easing: easeInOut,
       });
-      run(base, [{ opacity: 1 }, { opacity: 0 }], {
-        duration: 900,
-        delay: 700,
-        easing: 'ease-in-out',
+      await run(box, [{ clipPath: clip(pt, ps, PH / 2) }, { clipPath: clip(pt, 0, PH / 2) }], {
+        duration: 520,
+        easing: easeInOut,
       });
-      await run(svg, [{ opacity: 1 }, { opacity: 0 }], {
-        duration: 1200,
-        delay: 250,
-        easing: 'ease-in-out',
+      kids.forEach((k, i) =>
+        run(
+          k,
+          [
+            { opacity: 0, transform: 'translateY(6px)' },
+            { opacity: 1, transform: 'none' },
+          ],
+          {
+            duration: 520,
+            delay: 200 + i * 80,
+          },
+        ),
+      );
+      run(frame, [at(pt, 0, W, PH, PH / 2), at(0, 0, W, H, R)], { duration: 560 });
+      await run(box, [{ clipPath: clip(pt, 0, PH / 2) }, { clipPath: clip(0, 0, R) }], {
+        duration: 560,
       });
+      await run(frame, [{ opacity: 1 }, { opacity: 0 }], { duration: 300 });
       await Promise.all(anims.map((a) => a.finished));
     } catch {
       // cancelled
