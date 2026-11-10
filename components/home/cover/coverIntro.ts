@@ -8,7 +8,7 @@
  * Returns a cleanup. Overlays follow the dialog if the layout shifts, and the intro restarts
  * at the new size if the dialog is resized mid-way.
  */
-export function playCoverIntro(box: HTMLElement, iconSrc = '/brand/spark-icon.svg'): () => void {
+export function playCoverIntro(box: HTMLElement): () => void {
   if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return () => {};
   const ease = 'cubic-bezier(.22,1,.36,1)';
   const easeInOut = 'cubic-bezier(.65,0,.35,1)';
@@ -109,19 +109,15 @@ export function playCoverIntro(box: HTMLElement, iconSrc = '/brand/spark-icon.sv
     'div',
     row,
   );
-  const img = document.createElement('img');
-  img.src = iconSrc;
-  img.alt = '';
-  // the svg is 90×90 with its 51px circle centred at (44.9, 36.9): show that circle at 44px
-  const s = 44 / 51;
+  // a light sparkle (the two stars from the brand icon, no disc), with a soft violet-pink glow
+  const img = document.createElement('div');
   Object.assign(img.style, {
-    position: 'absolute',
-    width: `${90 * s}px`,
-    maxWidth: 'none',
-    height: 'auto',
-    left: `${22 - 44.9 * s}px`,
-    top: `${22 - 36.9 * s}px`,
+    width: '30px',
+    height: '30px',
+    filter: 'drop-shadow(0 0 4px rgba(196,181,253,.9)) drop-shadow(0 0 12px rgba(250,110,255,.45))',
   });
+  img.innerHTML =
+    '<svg viewBox="31 23 28 28" width="30" height="30" fill="#fff"><path d="M57.7049 36.8926C57.7485 36.9087 57.7485 36.9702 57.7049 36.9864L56.9948 37.2492C51.5204 39.2749 47.2042 43.5911 45.1784 49.0655L44.9157 49.7757C44.8995 49.8192 44.838 49.8192 44.8219 49.7757L44.5591 49.0655C42.5334 43.5911 38.2172 39.2749 32.7428 37.2492L32.0326 36.9864C31.9891 36.9703 31.9891 36.9088 32.0326 36.8926L32.7428 36.6298C38.2172 34.6041 42.5334 30.2879 44.5591 24.8135L44.8219 24.1033C44.838 24.0598 44.8995 24.0598 44.9157 24.1033L45.1785 24.8135C47.2042 30.2879 51.5204 34.6041 56.9948 36.6298L57.7049 36.8926Z"/><path d="M57.7998 26.9795C57.8107 26.9835 57.8107 26.999 57.7998 27.0031C56.4233 27.5124 55.3381 28.5977 54.8287 29.9741C54.8247 29.9851 54.8092 29.9851 54.8052 29.9741C54.2958 28.5977 53.2106 27.5124 51.8341 27.0031C51.8232 26.999 51.8232 26.9836 51.8341 26.9795C53.2106 26.4702 54.2958 25.3849 54.8052 24.0084C54.8092 23.9975 54.8247 23.9975 54.8287 24.0084C55.3381 25.3849 56.4233 26.4702 57.7998 26.9795Z"/></svg>';
   spark.appendChild(img);
   document.body.appendChild(layer);
 
@@ -142,7 +138,7 @@ export function playCoverIntro(box: HTMLElement, iconSrc = '/brand/spark-icon.sv
       box.style.opacity = '0';
       restart = window.setTimeout(() => {
         box.style.opacity = '';
-        if (box.isConnected) next = playCoverIntro(box, iconSrc);
+        if (box.isConnected) next = playCoverIntro(box);
       }, 200);
       return;
     }
@@ -178,8 +174,8 @@ export function playCoverIntro(box: HTMLElement, iconSrc = '/brand/spark-icon.sv
   (async () => {
     try {
       // 1) the pill appears
-      run(box, [{ opacity: 0 }, { opacity: 1 }], { duration: 500, delay: 250 });
-      run(frame, [{ opacity: 0 }, { opacity: 1 }], { duration: 500, delay: 250 });
+      run(box, [{ opacity: 0 }, { opacity: 1 }], { duration: 700, delay: 400 });
+      run(frame, [{ opacity: 0 }, { opacity: 1 }], { duration: 700, delay: 400 });
       [plus, text, spark].forEach((n, i) =>
         run(
           n,
@@ -188,8 +184,8 @@ export function playCoverIntro(box: HTMLElement, iconSrc = '/brand/spark-icon.sv
             { opacity: 1, transform: 'none' },
           ],
           {
-            duration: 520,
-            delay: 380 + i * 90,
+            duration: 700,
+            delay: 600 + i * 120,
           },
         ),
       );
@@ -200,29 +196,29 @@ export function playCoverIntro(box: HTMLElement, iconSrc = '/brand/spark-icon.sv
           { transform: 'scale(1.12) rotate(8deg)', opacity: 1, offset: 0.6 },
           { transform: 'none', opacity: 1 },
         ],
-        { duration: 700, delay: 560 },
+        { duration: 900, delay: 800 },
       );
       // a short twinkle, then hold
       await run(
         img,
         [{ filter: 'brightness(1)' }, { filter: 'brightness(1.7)' }, { filter: 'brightness(1)' }],
         {
-          duration: 600,
+          duration: 900,
           easing: 'ease-in-out',
         },
       );
-      await new Promise((ok) => setTimeout(ok, 250));
+      await new Promise((ok) => setTimeout(ok, 600));
 
       // 2) grow into the full dialog: sideways first, then up and down
       [plus, text, spark].forEach((n) =>
-        run(n, [{ opacity: 1 }, { opacity: 0 }], { duration: 260, easing: 'ease-in' }),
+        run(n, [{ opacity: 1 }, { opacity: 0 }], { duration: 400, easing: 'ease-in' }),
       );
       run(frame, [at(pt, ps, PW, PH, PH / 2), at(pt, 0, W, PH, PH / 2)], {
-        duration: 520,
+        duration: 900,
         easing: easeInOut,
       });
       await run(box, [{ clipPath: clip(pt, ps, PH / 2) }, { clipPath: clip(pt, 0, PH / 2) }], {
-        duration: 520,
+        duration: 900,
         easing: easeInOut,
       });
       kids.forEach((k, i) =>
@@ -233,16 +229,16 @@ export function playCoverIntro(box: HTMLElement, iconSrc = '/brand/spark-icon.sv
             { opacity: 1, transform: 'none' },
           ],
           {
-            duration: 520,
-            delay: 200 + i * 80,
+            duration: 700,
+            delay: 300 + i * 120,
           },
         ),
       );
-      run(frame, [at(pt, 0, W, PH, PH / 2), at(0, 0, W, H, R)], { duration: 560 });
+      run(frame, [at(pt, 0, W, PH, PH / 2), at(0, 0, W, H, R)], { duration: 900 });
       await run(box, [{ clipPath: clip(pt, 0, PH / 2) }, { clipPath: clip(0, 0, R) }], {
-        duration: 560,
+        duration: 900,
       });
-      await run(frame, [{ opacity: 1 }, { opacity: 0 }], { duration: 300 });
+      await run(frame, [{ opacity: 1 }, { opacity: 0 }], { duration: 400 });
       await Promise.all(anims.map((a) => a.finished));
     } catch {
       // cancelled
