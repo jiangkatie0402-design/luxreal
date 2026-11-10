@@ -182,8 +182,9 @@ export function WhyUs() {
             key={`copy-${k}`}
             className="why-in mt-5 max-w-md text-center lg:absolute lg:left-[max(2rem,6vw)] lg:top-1/2 lg:mt-0 lg:max-w-[min(26rem,24vw)] lg:-translate-y-1/2 lg:text-left"
           >
-            <p className="t-label font-mono text-primary">
-              0{active + 1} · {t(`items.${k}.label`)}
+            <p className="why-eyebrow">
+              <span className="why-eyebrow-n">0{active + 1}</span>
+              <span className="why-eyebrow-t">{t(`items.${k}.label`)}</span>
             </p>
             <h3 className="mt-3 text-balance font-display text-2xl font-semibold leading-[1.3] md:text-3xl xl:text-4xl">
               {t(`items.${k}.t`)}

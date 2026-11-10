@@ -956,3 +956,33 @@
 :root:lang(en) #hero-title {
   font-size: clamp(2rem, 1.2rem + 3vw, 3.56rem);
 }
+
+/* Why section eyebrow: outlined large number | label */
+.why-eyebrow {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 14px;
+  color: #fff;
+}
+@media (min-width: 1024px) {
+  .why-eyebrow {
+    justify-content: flex-start;
+  }
+}
+.why-eyebrow-n {
+  font-family: var(--f-geist), sans-serif;
+  font-size: 44px;
+  font-weight: 300;
+  line-height: 1;
+  color: transparent;
+  -webkit-text-stroke: 1px rgba(255, 255, 255, 0.45);
+}
+.why-eyebrow-t {
+  font-size: 14px;
+  font-weight: 500;
+  line-height: 1.2;
+  color: rgba(255, 255, 255, 0.72);
+  padding-left: 14px;
+  border-left: 1px solid rgba(255, 255, 255, 0.22);
+}

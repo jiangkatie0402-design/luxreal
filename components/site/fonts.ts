@@ -15,7 +15,7 @@ export const titleEn = Oxanium({
 
 /** Cover main title in both languages (Latin; Chinese characters fall back to MiSans), OFL. */
 export const heroTitle = Geist({
-  weight: ['400', '500', '600'],
+  weight: ['300', '400', '500', '600'],
   subsets: ['latin'],
   display: 'swap',
   variable: '--f-geist',
