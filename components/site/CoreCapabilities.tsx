@@ -256,7 +256,7 @@ export function Showcase({
                             <PlayOnce
                               poster={`${BASE}${media[id]}-poster.jpg`}
                               src={`${BASE}${media[id]}.mp4`}
-                              className="absolute bottom-[8%] left-1/2 h-[88%] w-auto -translate-x-1/2 mix-blend-screen [mask-image:radial-gradient(farthest-side,#000_72%,transparent)]"
+                              className="absolute bottom-[8%] left-1/2 h-[88%] w-auto -translate-x-1/2 mix-blend-lighten"
                             />
                           )}
                         </div>
