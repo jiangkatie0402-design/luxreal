@@ -46,9 +46,40 @@ export function CoverUpload() {
   const input = useRef<HTMLInputElement>(null);
   const box = useRef<HTMLDivElement>(null);
 
-  // The dialog unfolds from the submit icon on first view.
+  // The dialog unfolds from the submit icon whenever it comes into view on a visible tab.
   useEffect(() => {
-    if (box.current) return playCoverIntro(box.current, `${BASE}brand/submit-icon.svg`);
+    const el = box.current;
+    if (!el) return;
+    let stop: (() => void) | null = null;
+    let armed = true;
+    const start = () => {
+      armed = false;
+      stop?.();
+      stop = playCoverIntro(el, `${BASE}brand/submit-icon.svg`);
+    };
+    let pending = false;
+    const onVisible = () => {
+      if (document.visibilityState !== 'visible' || !pending) return;
+      pending = false;
+      start();
+    };
+    const io = new IntersectionObserver(
+      (entries) => {
+        const e = entries[entries.length - 1];
+        if (e.intersectionRatio >= 0.9 && armed) {
+          if (document.visibilityState === 'visible') start();
+          else pending = true;
+        } else if (e.intersectionRatio === 0) armed = true;
+      },
+      { threshold: [0, 0.9] },
+    );
+    io.observe(el);
+    document.addEventListener('visibilitychange', onVisible);
+    return () => {
+      io.disconnect();
+      document.removeEventListener('visibilitychange', onVisible);
+      stop?.();
+    };
   }, []);
 
   useEffect(() => {
