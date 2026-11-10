@@ -6,8 +6,6 @@ import { cn } from '@/lib/utils';
 import { appUrl, site } from '@/config/site';
 import { playCoverIntro } from './coverIntro';
 
-const BASE = process.env.NEXT_PUBLIC_ASSET_BASE ?? '/';
-
 /** Glass shell shared by the designs: dark frosted fill, hairline border, top highlight. */
 function Glass({
   className,
@@ -55,7 +53,7 @@ export function CoverUpload() {
     const start = () => {
       armed = false;
       stop?.();
-      stop = playCoverIntro(el, `${BASE}brand/submit-icon.svg`);
+      stop = playCoverIntro(el);
     };
     let pending = false;
     const onVisible = () => {
