@@ -906,24 +906,24 @@
 }
 
 /* Cover dialog CTA: pill per the supplied button svg (black, violet hairline, glow at the bottom) */
-/* flowing gold edge around the pill (the wave inside is animated in the svg) */
+/* flowing light edge around the pill (the wave inside is animated in the svg) */
 .brand-ring.brand-hero {
   padding: 1.5px;
   border-radius: 999px;
   background: conic-gradient(
     from var(--strip-angle),
-    #6b4f1a33 0deg,
-    #c9a24a66 50deg,
-    #f6d98bdd 120deg,
-    #fff6d6 165deg,
-    #f6d98bdd 210deg,
-    #c9a24a66 280deg,
-    #6b4f1a33 360deg
+    #8e97ff26 0deg,
+    #b9b2ff66 50deg,
+    #e8e4ffdd 120deg,
+    #ffffff 165deg,
+    #e8e4ffdd 210deg,
+    #b9b2ff66 280deg,
+    #8e97ff26 360deg
   );
   animation: strip-spin 4s linear infinite;
   box-shadow:
     0 -8px 20px rgba(180, 197, 255, 0.25),
-    0 0 16px -4px rgba(246, 217, 139, 0.55);
+    0 0 16px -4px rgba(214, 206, 255, 0.55);
 }
 @media (prefers-reduced-motion: reduce) {
   .brand-ring.brand-hero {
