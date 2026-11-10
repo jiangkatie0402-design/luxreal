@@ -904,3 +904,33 @@
   font-family: var(--f-pontano), 'Pontano Sans', MiSans, sans-serif;
   letter-spacing: -0.005em;
 }
+
+/* Cover dialog CTA: pill per the supplied button svg (black, violet hairline, glow at the bottom) */
+.brand-ring.brand-hero {
+  background: none;
+  padding: 0;
+  animation: none;
+  border-radius: 999px;
+  box-shadow: 0 -8px 20px rgba(180, 197, 255, 0.25);
+}
+.brand-hero .brand-fill {
+  height: 40px;
+  padding: 0 26px;
+  border-radius: 999px;
+  background: url('/brand/hero-cta.svg') center / 100% 100% no-repeat;
+  box-shadow: none;
+  color: #fafafa;
+}
+.brand-hero .brand-fill:hover {
+  filter: brightness(1.15);
+}
+.brand-hero .brand-label {
+  color: #fafafa;
+  background: none;
+  -webkit-text-fill-color: #fafafa;
+  font-family: var(--f-geist), MiSans, sans-serif;
+  font-weight: 600;
+}
+.brand-hero .brand-fill svg {
+  display: none;
+}
