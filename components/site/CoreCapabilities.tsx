@@ -101,12 +101,12 @@ function Copy({ title, intro, points }: { title: string; intro: string; points: 
       <h3 className="text-balance font-display text-2xl font-semibold leading-[1.25] tracking-[0.02em] md:text-3xl">
         {title}
       </h3>
-      <p className="t-lead mt-4 max-w-[30rem] text-muted-foreground">{intro}</p>
-      <ul className="mt-8 grid max-w-[30rem] gap-2">
+      <p className="mt-4 max-w-[30rem] text-[16px] leading-[28px] text-muted-foreground">{intro}</p>
+      <ul className="mt-4 grid max-w-[30rem] gap-1">
         {points.map((p) => {
           const [lead, rest] = splitPoint(p);
           return (
-            <li key={p} className="t-small text-muted-foreground">
+            <li key={p} className="text-[16px] leading-[28px] text-muted-foreground">
               {lead && <span className="text-foreground/90">{lead}：</span>}
               {rest}
             </li>
