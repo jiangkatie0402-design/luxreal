@@ -896,5 +896,11 @@
   --font-body: 'PingFang SC', 'PingFang TC', MiSans, var(--f-sans), sans-serif;
 }
 :root:lang(en) {
-  --font-body: var(--f-inter), 'Inter', MiSans, sans-serif;
+  --font-body: var(--f-geist), var(--f-inter), MiSans, sans-serif;
+  --font-display: var(--f-pontano), 'Pontano Sans', MiSans, sans-serif;
+}
+/* English cover title follows the headings */
+:root:lang(en) .hero-title-font {
+  font-family: var(--f-pontano), 'Pontano Sans', MiSans, sans-serif;
+  letter-spacing: -0.005em;
 }

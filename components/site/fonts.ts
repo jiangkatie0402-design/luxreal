@@ -1,4 +1,4 @@
-import { Geist, Inter, Noto_Sans_SC, Oxanium } from 'next/font/google';
+import { Geist, Inter, Noto_Sans_SC, Oxanium, Pontano_Sans } from 'next/font/google';
 
 /**
  * Fonts per chinese-font-selector (web/UI, commercial): T0/T1 licences only,
@@ -15,10 +15,18 @@ export const titleEn = Oxanium({
 
 /** Cover main title in both languages (Latin; Chinese characters fall back to MiSans), OFL. */
 export const heroTitle = Geist({
-  weight: ['600'],
+  weight: ['400', '500', '600'],
   subsets: ['latin'],
   display: 'swap',
   variable: '--f-geist',
+});
+
+/** English headings (and the English cover title), OFL. */
+export const headingEn = Pontano_Sans({
+  weight: ['400', '600'],
+  subsets: ['latin'],
+  display: 'swap',
+  variable: '--f-pontano',
 });
 
 /** 思源黑体 (Source Han Sans = Noto Sans SC, OFL) */
