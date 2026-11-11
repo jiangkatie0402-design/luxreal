@@ -1275,12 +1275,6 @@ export function UseCaseStack() {
           </Fragment>
         );
       })}
-
-      <div className="relative bg-background">
-        <p className="t-small container-x py-8 text-center text-muted-foreground md:py-12">
-          {t('more')}
-        </p>
-      </div>
     </section>
   );
 }
