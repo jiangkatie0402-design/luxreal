@@ -1615,3 +1615,33 @@ main .t-h2 + .t-lead {
     height: 520px;
   }
 }
+/* bands: dark layered purples (lighter step by step), gradient numbers */
+.agx-band {
+  color: #f5f5f7 !important;
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+}
+.agx-band:nth-child(1) {
+  background: #17131f !important;
+}
+.agx-band:nth-child(2) {
+  background: #1b1626 !important;
+}
+.agx-band:nth-child(3) {
+  background: #20192e !important;
+}
+.agx-band:nth-child(4) {
+  background: #261d37 !important;
+}
+.agx-band:nth-child(5) {
+  background: #2c2141 !important;
+}
+.agx-big {
+  background: linear-gradient(180deg, #e9e3ff, #a684ff);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+.agx-band p {
+  color: rgba(255, 255, 255, 0.62);
+  opacity: 1 !important;
+}
