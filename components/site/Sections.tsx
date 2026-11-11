@@ -4,32 +4,20 @@ import { useTranslations } from 'next-intl';
 import { ButtonLink } from '@/components/ui/button';
 import { site } from '@/config/site';
 import { FinalReveal } from './FinalReveal';
-import { AgentCapabilities } from './AgentCapabilities';
+import { AgentsShowcase } from './AgentsShowcase';
 import { AgentMcp } from './AgentMcp';
 
 /**
  * 四、专为 Agent 设计 — the capability orbit, then the MCP install strip.
  */
 export function ForAgents() {
-  const t = useTranslations('site.agents');
   return (
     <section aria-labelledby="agents-title" id="agents" className="section-y scroll-mt-20">
       <div className="container-x">
-        <AgentCapabilities
-          heading={
-            <div className="flex flex-col items-center text-center">
-              <h2 id="agents-title" className="t-h2">
-                {t('title')}
-              </h2>
-              <p className="t-lead mt-4 max-w-[60rem] text-balance text-muted-foreground">
-                {t('lead')}
-              </p>
-            </div>
-          }
-        />
+        <AgentsShowcase />
 
         {/* MCP install */}
-        <div id="agents-mcp" className="mt-10 lg:mt-0">
+        <div id="agents-mcp" className="mt-10">
           <AgentMcp />
         </div>
       </div>

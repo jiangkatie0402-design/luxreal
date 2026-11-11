@@ -126,33 +126,28 @@
     "agents": {
       "title": "Built for Agents.",
       "lead": "Aholo3D pairs composable 3D capabilities with clear tool definitions and compact, structured outputs agents can pass between steps—supported by planning, validation, and task management.",
-      "items": {
-        "gen": {
-          "label": "Composable tools",
+      "items": [
+        {
           "t": "Individual Tools. Agent-Composed Workflows.",
           "d": "Generate, texture, repair, split, rig, animate, remesh, and render. Combine individual operations to process existing assets or build an entire workflow."
         },
-        "material": {
-          "label": "Plan & verify",
+        {
           "t": "Help Your Agent Plan and Verify.",
           "d": "Get a production plan, budget, and cost breakdown before execution. Inspect inputs and validate outputs so your agent can make informed decisions throughout."
         },
-        "format": {
-          "label": "Parallel tasks",
+        {
           "t": "Parallel Tasks. No Agent Polling.",
           "d": "High concurrency lets your agent generate and process multiple assets at once. Aholo3D returns results when ready, without repeated status checks or custom polling scripts."
         },
-        "delivery": {
-          "label": "Shared library",
+        {
           "t": "Switch Agents. Keep Your Assets.",
           "d": "Keep assets in a shared cloud library. Continue with another connected agent, or open them in the web app to create, edit, and share."
         },
-        "concurrency": {
-          "label": "Industry skills",
+        {
           "t": "Give Your Agent Industry-Specific Skills.",
           "d": "Built-in workflow skills guide your agent through 3D printing and game asset production, from selecting operations to checking final deliverables."
         }
-      },
+      ],
       "mcp": {
         "title": "Use Aholo 3D in your AI agent",
         "desc": "Add the Aholo 3D MCP server to Claude Code, Cursor, Codex or any other MCP client with one command.",
@@ -160,7 +155,10 @@
         "command": "npx add-mcp @aholo/mcp-server --env AHOLO_API_KEY=YOUR_API_KEY",
         "copy": "Copy",
         "copied": "Copied"
-      }
+      },
+      "eyebrow": "For agents",
+      "titleA": "Built for ",
+      "titleB": "Agents."
     },
     "why": {
       "title": "Why Aholo 3D?",
