@@ -142,13 +142,13 @@ export function WhyUs() {
                   <div className="overlay-copy">{copy(k)}</div>
                 </article>
               ))}
-              {KEYS.map((k, i) => (
+              {KEYS.map((k) => (
                 <div key={k} className="single-copy">
                   {copy(k)}
                 </div>
               ))}
               <div className="final-copy">
-                {KEYS.map((k, i) => (
+                {KEYS.map((k) => (
                   <div key={k}>{copy(k)}</div>
                 ))}
               </div>
