@@ -1364,3 +1364,47 @@ main .t-h2 + .t-lead {
   font-size: 18px !important;
   line-height: 26px !important;
 }
+
+/* category as a small tag on the image; copy below: the description never runs wider than its title */
+.aholo-why .tile-tag {
+  position: absolute;
+  top: 12px;
+  left: 12px;
+  z-index: 1;
+  padding: 6px 10px;
+  border-radius: 8px;
+  font-size: 12px;
+  line-height: 16px;
+  font-weight: 500;
+  color: #fff;
+  background: rgba(20, 17, 31, 0.78);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  backdrop-filter: blur(8px);
+}
+.aholo-why .copy-fit {
+  width: fit-content;
+  max-width: 100%;
+  margin: 0 auto;
+}
+.aholo-why .copy-fit .description {
+  width: 0;
+  min-width: 100%;
+  max-width: none !important;
+  margin-top: 8px;
+  text-wrap: pretty;
+}
+.aholo-why .final-copy {
+  gap: 32px;
+}
+@media (max-width: 559px) {
+  .aholo-why .copy-fit {
+    margin: 0;
+  }
+  .aholo-why .copy-fit .description {
+    width: auto;
+  }
+}
+.aholo-why .tile:nth-of-type(3) .tile-tag {
+  left: auto;
+  right: 12px;
+}

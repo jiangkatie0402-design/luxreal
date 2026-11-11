@@ -113,15 +113,12 @@ export function WhyUs() {
     };
   }, []);
 
-  const copy = (k: (typeof KEYS)[number], i: number) => (
-    <>
-      <p className="why-eyebrow">
-        <span className="why-eyebrow-n">0{i + 1}</span>
-        <span className="why-eyebrow-t">{t(`items.${k}.label`)}</span>
-      </p>
+  // the description is never wider than its title (copy-fit sizes to the title)
+  const copy = (k: (typeof KEYS)[number]) => (
+    <div className="copy-fit">
       <h3>{t(`items.${k}.t`)}</h3>
       <p className="description">{t(`items.${k}.d`)}</p>
-    </>
+    </div>
   );
 
   return (
@@ -139,19 +136,20 @@ export function WhyUs() {
                   <div className="image">
                     {/* eslint-disable-next-line @next/next/no-img-element */}
                     <img src={`${BASE}${IMG[i]}`} alt="" loading="lazy" />
+                    <span className="tile-tag">{t(`items.${k}.label`)}</span>
                     <div className="shade" />
                   </div>
-                  <div className="overlay-copy">{copy(k, i)}</div>
+                  <div className="overlay-copy">{copy(k)}</div>
                 </article>
               ))}
               {KEYS.map((k, i) => (
                 <div key={k} className="single-copy">
-                  {copy(k, i)}
+                  {copy(k)}
                 </div>
               ))}
               <div className="final-copy">
                 {KEYS.map((k, i) => (
-                  <div key={k}>{copy(k, i)}</div>
+                  <div key={k}>{copy(k)}</div>
                 ))}
               </div>
             </div>
