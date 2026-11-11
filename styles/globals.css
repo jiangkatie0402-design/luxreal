@@ -1123,13 +1123,14 @@ main .t-h2 + .t-lead {
   }
 }
 
-/* Final CTA: workshop illustration; the card opens from a narrow centre panel to full width */
+/* Final CTA: workshop illustration, edge to edge. It opens from a narrow centre panel to the full
+   window width; once open there is no border or rounded corner. */
 .final-reveal {
   background:
     url('/works/final-cta.webp') center / cover no-repeat,
     #0b0a10;
-  clip-path: inset(0 0 round 32px);
-  transition: clip-path 1.6s cubic-bezier(0.65, 0, 0.35, 1);
+  clip-path: inset(0 0 round 0);
+  transition: clip-path 1s cubic-bezier(0.65, 0, 0.35, 1);
 }
 .final-reveal::before {
   content: '';
@@ -1137,31 +1138,23 @@ main .t-h2 + .t-lead {
   inset: 0;
   z-index: -1;
   pointer-events: none;
-  background: radial-gradient(42% 70% at 50% 45%, rgba(10, 8, 18, 0.55), transparent 75%);
+  background: radial-gradient(34% 70% at 50% 45%, rgba(10, 8, 18, 0.55), transparent 75%);
 }
 .final-reveal > * {
   transition:
-    opacity 0.8s 0.2s,
-    transform 0.8s 0.2s;
+    opacity 0.6s 0.1s,
+    transform 0.6s 0.1s;
 }
-.final-reveal[data-state='closed'] {
-  clip-path: inset(0 33% round 32px);
-}
-.final-reveal[data-state='peek'] {
-  clip-path: inset(0 33% round 32px);
+.final-reveal:is([data-state='closed'], [data-state='peek']) {
+  clip-path: inset(0 max(16px, calc(50vw - 300px)) round 32px);
 }
 .final-reveal[data-state='closed'] > * {
   opacity: 0;
   transform: translateY(8px);
 }
-@media (max-width: 767px) {
-  .final-reveal:is([data-state='closed'], [data-state='peek']) {
-    clip-path: inset(0 12% round 32px);
-  }
-}
 @media (prefers-reduced-motion: reduce) {
   .final-reveal[data-state] {
-    clip-path: inset(0 0 round 32px);
+    clip-path: inset(0 0 round 0);
     transition: none;
   }
   .final-reveal[data-state] > * {

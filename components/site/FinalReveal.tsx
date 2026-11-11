@@ -15,7 +15,7 @@ export function FinalReveal({ className, children }: { className?: string; child
       ([e]) => {
         if (e.isIntersecting && e.intersectionRatio >= 0.5) {
           setState('peek');
-          timer = window.setTimeout(() => setState('open'), 900);
+          timer = window.setTimeout(() => setState('open'), 500);
         } else if (!e.isIntersecting) {
           clearTimeout(timer);
           setState('closed');
@@ -30,7 +30,7 @@ export function FinalReveal({ className, children }: { className?: string; child
     };
   }, []);
   return (
-    <div ref={wrap}>
+    <div ref={wrap} className="relative left-1/2 w-screen -translate-x-1/2">
       <div className={cn('final-reveal', className)} data-state={state}>
         {children}
       </div>

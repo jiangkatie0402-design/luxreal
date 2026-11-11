@@ -121,9 +121,13 @@ export function FinalCta() {
   const t = useTranslations('site.final');
   const c = useTranslations('common');
   return (
-    <section aria-labelledby="final-title" id="start" className="scroll-mt-20 pb-16 md:pb-24">
+    <section
+      aria-labelledby="final-title"
+      id="start"
+      className="scroll-mt-20 overflow-x-clip pb-16 md:pb-24"
+    >
       <div className="container-x">
-        <FinalReveal className="relative isolate flex min-h-[clamp(360px,30vw,460px)] flex-col items-center justify-center overflow-hidden rounded-[32px] border border-border-strong px-6 py-16 text-center">
+        <FinalReveal className="relative isolate flex min-h-[clamp(380px,32vw,620px)] flex-col items-center justify-center overflow-hidden px-6 py-16 text-center">
           <h2 id="final-title" className="t-h2">
             {t('title')}
           </h2>
