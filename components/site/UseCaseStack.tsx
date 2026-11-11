@@ -106,6 +106,69 @@ function FieldName({
   );
 }
 
+/** Field switcher: one white pill that slides to the clicked field, then the page scrolls there. */
+function FieldSwitch({ id, t, dark }: { id: string; t: T; dark: boolean }) {
+  const row = useRef<HTMLDivElement>(null);
+  const [target, setTarget] = useState(id);
+  const [pill, setPill] = useState<{ left: number; width: number } | null>(null);
+  useEffect(() => {
+    const measure = () => {
+      const b = row.current?.querySelector<HTMLElement>(`[data-field="${target}"]`);
+      if (b) setPill({ left: b.offsetLeft, width: b.offsetWidth });
+    };
+    measure();
+    window.addEventListener('resize', measure);
+    return () => window.removeEventListener('resize', measure);
+  }, [target]);
+  const pick = (f: string) => {
+    if (f === id) return;
+    setTarget(f);
+    const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    window.setTimeout(
+      () => {
+        goTo(f);
+        // put this switcher back on its own field once the page has moved away
+        window.setTimeout(() => setTarget(id), 1200);
+      },
+      reduce ? 0 : 340,
+    );
+  };
+  return (
+    <nav aria-label={t('title')} className="flex justify-center">
+      <div
+        ref={row}
+        className={cn(
+          'relative isolate inline-flex rounded-[14px] p-1',
+          dark ? 'bg-white/[0.08]' : 'bg-[rgba(22,18,31,0.08)]',
+        )}
+      >
+        {pill && (
+          <span
+            aria-hidden
+            className="absolute inset-y-1 -z-10 rounded-[10px] bg-white shadow-[0_2px_8px_rgba(22,18,31,0.14)] transition-[left,width] duration-300 ease-[cubic-bezier(.22,1,.36,1)] motion-reduce:transition-none"
+            style={{ left: pill.left, width: pill.width }}
+          />
+        )}
+        {IDS.map((f) => (
+          <button
+            key={f}
+            type="button"
+            data-field={f}
+            aria-current={f === id ? 'true' : undefined}
+            onClick={() => pick(f)}
+            className={cn(
+              'h-10 rounded-[10px] px-5 text-sm font-medium transition-colors duration-200',
+              f === target ? 'text-[#16121f]' : 'text-[var(--muted)] hover:text-[var(--ink)]',
+            )}
+          >
+            {t(`${f}.tab`)}
+          </button>
+        ))}
+      </div>
+    </nav>
+  );
+}
+
 /** Copy + three media columns for one panel. */
 /** Jump to a field's panel (anchors sit in normal flow, unlike the sticky panels). */
 function goTo(id: string) {
@@ -140,7 +203,7 @@ function PanelBody({
   );
 
   const WIDE =
-    'relative mx-auto flex w-full max-w-[1440px] flex-1 flex-col justify-center px-4 pb-12 pt-12 md:px-12 md:pb-14 md:pt-14 xl:px-20';
+    'relative mx-auto flex w-full max-w-[1440px] flex-1 flex-col justify-center px-4 pb-10 pt-8 md:px-12 xl:px-20';
 
   const v = useSceneLayout((st) => st.v);
   const media = MEDIA[id as (typeof IDS)[number]];
@@ -152,35 +215,7 @@ function PanelBody({
     return () => window.clearInterval(t);
   }, [v, points.length, active]);
 
-  const nav = (
-    <nav aria-label={t('title')} className="flex justify-center">
-      <div
-        className={cn(
-          'inline-flex rounded-full p-1',
-          dark ? 'bg-white/[0.08]' : 'bg-[rgba(22,18,31,0.08)]',
-        )}
-      >
-        {IDS.map((f) => (
-          <button
-            key={f}
-            type="button"
-            aria-current={f === id ? 'true' : undefined}
-            onClick={() => goTo(f)}
-            className={cn(
-              'h-9 rounded-full px-5 text-sm font-medium transition-colors',
-              f === id
-                ? dark
-                  ? 'bg-white text-[#16121f] shadow-sm'
-                  : 'bg-white text-[#16121f] shadow-[0_2px_8px_rgba(22,18,31,0.12)]'
-                : 'text-[var(--muted)] hover:text-[var(--ink)]',
-            )}
-          >
-            {t(`${f}.tab`)}
-          </button>
-        ))}
-      </div>
-    </nav>
-  );
+  const nav = <FieldSwitch id={id} t={t} dark={dark} />;
   const button = (
     <ButtonLink
       href={site.links.app}
@@ -1128,6 +1163,39 @@ export function UseCaseStack() {
   const c = useTranslations('common');
   const panels = useRef<(HTMLElement | null)[]>([]);
 
+  // the panel being covered recedes (scaled down, dimmed) while the next one slides over it
+  useEffect(() => {
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+    let raf = 0;
+    const depth = () => {
+      raf = 0;
+      const header =
+        parseFloat(getComputedStyle(document.documentElement).getPropertyValue('--header-h')) || 64;
+      const els = panels.current;
+      els.forEach((el, i) => {
+        const next = els[i + 1];
+        if (!el) return;
+        const shade = el.querySelector<HTMLElement>(':scope > [data-shade]');
+        if (!next) return;
+        const h = window.innerHeight;
+        const p = Math.min(1, Math.max(0, (h - next.getBoundingClientRect().top) / (h - header)));
+        el.style.transform = p > 0 ? `scale(${1 - 0.06 * p})` : '';
+        if (shade) shade.style.opacity = String(0.55 * p);
+      });
+    };
+    const onScroll = () => {
+      if (!raf) raf = requestAnimationFrame(depth);
+    };
+    depth();
+    window.addEventListener('scroll', onScroll, { passive: true });
+    window.addEventListener('resize', onScroll);
+    return () => {
+      cancelAnimationFrame(raf);
+      window.removeEventListener('scroll', onScroll);
+      window.removeEventListener('resize', onScroll);
+    };
+  }, []);
+
   useEffect(() => {
     const fit = () => {
       const header =
@@ -1165,7 +1233,7 @@ export function UseCaseStack() {
               }}
               aria-labelledby={`scene-${id}`}
               className={cn(
-                'relative isolate flex min-h-[calc(100svh-var(--header-h))] flex-col overflow-hidden rounded-t-[32px] text-[var(--ink)]',
+                'relative isolate flex min-h-[calc(100svh-var(--header-h))] origin-top flex-col overflow-hidden rounded-t-[32px] text-[var(--ink)]',
                 // the last panel scrolls away normally so what follows never covers it
                 i < IDS.length - 1 && 'sticky top-[var(--header-h)]',
               )}
@@ -1180,6 +1248,11 @@ export function UseCaseStack() {
               }
             >
               <PanelGlow tint={p.tint} strength={p.glow} />
+              <span
+                aria-hidden
+                data-shade
+                className="pointer-events-none absolute inset-0 z-30 bg-[#07060c] opacity-0"
+              />
               {p.beam && (
                 <span
                   aria-hidden
@@ -1198,7 +1271,7 @@ export function UseCaseStack() {
               />
             </article>
             {/* hold: the panel stays fully in view for a stretch before the next one slides over */}
-            {i < IDS.length - 1 && <div aria-hidden className="h-[45svh]" />}
+            {i < IDS.length - 1 && <div aria-hidden className="h-[24svh]" />}
           </Fragment>
         );
       })}
