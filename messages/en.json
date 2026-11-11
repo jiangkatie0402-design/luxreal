@@ -76,7 +76,9 @@
           "Just describe the object — no images or model files needed first.",
           "Choose realistic, cartoon or other styles to match your project.",
           "Set face count and size, then refine materials and file formats."
-        ]
+        ],
+        "prompt": "A fantasy cottage with a curved red-tile roof, blue timber frame and white plaster walls on a stone base, in a hand-painted cartoon style.",
+        "promptLabel": "Prompt"
       },
       "agent": {
         "tab": "Agent",

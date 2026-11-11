@@ -2,7 +2,7 @@
 import * as TabsPrimitive from '@radix-ui/react-tabs';
 import { ArrowRight, Plus } from 'lucide-react';
 import { useLocale, useTranslations } from 'next-intl';
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { ButtonLink } from '@/components/ui/button';
 import { site } from '@/config/site';
 import { cn } from '@/lib/utils';
@@ -46,6 +46,101 @@ function Workspace() {
             strokeLinejoin="round"
           />
         </svg>
+      </div>
+    </div>
+  );
+}
+
+/**
+ * Text-to-3D window: the prompt types itself into a white card, the send button presses,
+ * then the model video plays on the stage. Restarts each time it comes into view.
+ */
+function TextWorkspace({ prompt, label }: { prompt: string; label: string }) {
+  const root = useRef<HTMLDivElement>(null);
+  const video = useRef<HTMLVideoElement>(null);
+  const [n, setN] = useState(0);
+  const [on, setOn] = useState(false);
+  useEffect(() => {
+    const el = root.current;
+    const v = video.current;
+    if (!el || !v) return;
+    const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    let timer = 0;
+    let wait = 0;
+    const start = () => {
+      window.clearInterval(timer);
+      window.clearTimeout(wait);
+      v.pause();
+      setOn(false);
+      if (reduce) {
+        setN(prompt.length);
+        setOn(true);
+        return;
+      }
+      let i = 0;
+      setN(0);
+      const step = /[\u4e00-\u9fff]/.test(prompt) ? 55 : 28;
+      timer = window.setInterval(() => {
+        i += 1;
+        setN(i);
+        if (i >= prompt.length) {
+          window.clearInterval(timer);
+          wait = window.setTimeout(() => {
+            setOn(true);
+            v.currentTime = 0;
+            void v.play().catch(() => {});
+          }, 450);
+        }
+      }, step);
+    };
+    const io = new IntersectionObserver(([e]) => e.isIntersecting && start(), { threshold: 0.5 });
+    io.observe(el);
+    return () => {
+      io.disconnect();
+      window.clearInterval(timer);
+      window.clearTimeout(wait);
+    };
+  }, [prompt]);
+  const done = n >= prompt.length;
+  return (
+    <div ref={root} className="absolute inset-0 z-10 flex">
+      <div className="relative w-[min(34%,250px)] flex-none border-r border-white/[0.06] bg-[#141416] p-3">
+        <p className="mb-2 text-[11px] leading-4 text-white/50">{label}</p>
+        <div
+          className={cn(
+            'relative min-h-[150px] rounded-2xl border border-white/[0.14] bg-[linear-gradient(180deg,rgba(255,255,255,0.09),rgba(255,255,255,0.04))] px-3.5 pb-14 pt-3.5 text-left text-[13px] leading-5 text-white/90 shadow-[inset_0_1px_0_rgba(255,255,255,0.12),0_10px_30px_rgba(0,0,0,0.35)] backdrop-blur-xl',
+            done && 'tx-done',
+          )}
+        >
+          {prompt.slice(0, n)}
+          {!done && (
+            <span className="ml-px inline-block h-3.5 w-[1.5px] animate-pulse bg-[#c4b5fd] align-[-2px]" />
+          )}
+          <span
+            aria-hidden
+            className="tx-send absolute bottom-2.5 right-2.5 grid size-9 place-items-center rounded-full bg-[linear-gradient(135deg,#8c8a97_20%,#b8a6ff_70%,#e3d9ff)] shadow-[0_4px_12px_rgba(124,92,255,0.35)]"
+          >
+            <svg viewBox="31 23 28 28" fill="#fff" className="size-[18px]">
+              <path d="M57.7 36.9c.04.02.04.08 0 .09l-.7.27a20.2 20.2 0 0 0-11.8 11.8l-.27.7c-.02.04-.08.04-.09 0l-.27-.7a20.2 20.2 0 0 0-11.8-11.8l-.7-.27c-.04-.02-.04-.08 0-.09l.7-.27a20.2 20.2 0 0 0 11.8-11.8l.27-.7c.02-.04.08-.04.09 0l.27.7a20.2 20.2 0 0 0 11.8 11.8l.7.27Z" />
+              <path d="M57.8 27c.01 0 .01.02 0 .02a4.98 4.98 0 0 0-2.97 2.97c0 .01-.02.01-.02 0A4.98 4.98 0 0 0 51.83 27c-.01 0-.01-.02 0-.02a4.98 4.98 0 0 0 2.97-2.97c0-.01.02-.01.02 0A4.98 4.98 0 0 0 57.8 27Z" />
+            </svg>
+          </span>
+        </div>
+      </div>
+      <div className="relative isolate flex-1 [background:radial-gradient(60%_60%_at_50%_50%,rgba(110,98,163,0.14),transparent_70%),#0a0a0c]">
+        <video
+          ref={video}
+          aria-hidden
+          muted
+          playsInline
+          preload="auto"
+          poster={`${BASE}videos/core-text-poster.jpg`}
+          src={`${BASE}videos/core-text.mp4`}
+          className={cn(
+            'absolute bottom-[8%] left-1/2 h-[80%] w-auto -translate-x-1/2 mix-blend-lighten transition-opacity duration-500',
+            on ? 'opacity-100' : 'opacity-0',
+          )}
+        />
       </div>
     </div>
   );
@@ -235,6 +330,9 @@ export function Showcase({
                         </span>
                       </div>
                       <div className="absolute inset-x-0 bottom-0 top-10 overflow-hidden">
+                        {id === 'text' && (
+                          <TextWorkspace prompt={t('text.prompt')} label={t('text.promptLabel')} />
+                        )}
                         {id === 'agent' && (
                           <iframe
                             title={t(`${id}.title`)}
