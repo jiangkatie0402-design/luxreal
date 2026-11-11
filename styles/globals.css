@@ -1122,3 +1122,50 @@ main .t-h2 + .t-lead {
     right: 40px;
   }
 }
+
+/* Final CTA: workshop illustration; the card opens from a narrow centre panel to full width */
+.final-reveal {
+  background:
+    url('/works/final-cta.webp') center / cover no-repeat,
+    #0b0a10;
+  clip-path: inset(0 0 round 32px);
+  transition: clip-path 1.6s cubic-bezier(0.65, 0, 0.35, 1);
+}
+.final-reveal::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  background: radial-gradient(42% 70% at 50% 45%, rgba(10, 8, 18, 0.55), transparent 75%);
+}
+.final-reveal > * {
+  transition:
+    opacity 0.8s 0.2s,
+    transform 0.8s 0.2s;
+}
+.final-reveal[data-state='closed'] {
+  clip-path: inset(0 33% round 32px);
+}
+.final-reveal[data-state='peek'] {
+  clip-path: inset(0 33% round 32px);
+}
+.final-reveal[data-state='closed'] > * {
+  opacity: 0;
+  transform: translateY(8px);
+}
+@media (max-width: 767px) {
+  .final-reveal:is([data-state='closed'], [data-state='peek']) {
+    clip-path: inset(0 12% round 32px);
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .final-reveal[data-state] {
+    clip-path: inset(0 0 round 32px);
+    transition: none;
+  }
+  .final-reveal[data-state] > * {
+    opacity: 1;
+    transform: none;
+  }
+}

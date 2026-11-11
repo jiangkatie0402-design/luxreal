@@ -3,6 +3,7 @@ import { ArrowRight } from 'lucide-react';
 import { useTranslations } from 'next-intl';
 import { ButtonLink } from '@/components/ui/button';
 import { site } from '@/config/site';
+import { FinalReveal } from './FinalReveal';
 import { AgentCapabilities } from './AgentCapabilities';
 import { AgentMcp } from './AgentMcp';
 
@@ -122,7 +123,7 @@ export function FinalCta() {
   return (
     <section aria-labelledby="final-title" id="start" className="scroll-mt-20 pb-16 md:pb-24">
       <div className="container-x">
-        <div className="relative isolate overflow-hidden rounded-[32px] border border-border-strong px-6 py-16 text-center [background:var(--card-bg)] md:py-24">
+        <FinalReveal className="relative isolate flex min-h-[clamp(360px,30vw,460px)] flex-col items-center justify-center overflow-hidden rounded-[32px] border border-border-strong px-6 py-16 text-center">
           <h2 id="final-title" className="t-h2">
             {t('title')}
           </h2>
@@ -135,7 +136,7 @@ export function FinalCta() {
               </ButtonLink>
             </span>
           </div>
-        </div>
+        </FinalReveal>
       </div>
     </section>
   );
