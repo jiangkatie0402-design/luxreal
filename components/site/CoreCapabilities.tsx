@@ -110,21 +110,21 @@ function TextWorkspace({ prompt, label }: { prompt: string; label: string }) {
           <img src={`${BASE}works/ai3d-head.webp`} alt={label} className="block h-auto w-full" />
           <div
             className={cn(
-              'relative mx-2.5 mt-0.5 min-h-[150px] rounded-2xl border border-white/[0.14] bg-[linear-gradient(180deg,rgba(255,255,255,0.09),rgba(255,255,255,0.04))] px-3.5 pb-14 pt-3.5 text-left text-[13px] leading-5 text-white/90 shadow-[inset_0_1px_0_rgba(255,255,255,0.12),0_10px_30px_rgba(0,0,0,0.35)] backdrop-blur-xl',
+              'relative mx-2.5 mt-0.5 min-h-[112px] rounded-xl border border-white/[0.14] bg-[linear-gradient(180deg,rgba(255,255,255,0.09),rgba(255,255,255,0.04))] px-2.5 pb-10 pt-2.5 text-left text-[11px] leading-[17px] text-white/[0.88] shadow-[inset_0_1px_0_rgba(255,255,255,0.12),0_10px_30px_rgba(0,0,0,0.35)] backdrop-blur-xl',
               done && 'tx-done',
             )}
           >
             {prompt.slice(0, n)}
             {!done && (
-              <span className="ml-px inline-block h-3.5 w-[1.5px] animate-pulse bg-[#c4b5fd] align-[-2px]" />
+              <span className="ml-px inline-block h-3 w-[1.5px] animate-pulse bg-[#c4b5fd] align-[-2px]" />
             )}
-            <span aria-hidden className="tx-send absolute bottom-2 right-2 size-10">
-              {/* the icon svg is 90×90 with its 51px circle at (44.9, 36.9): show that circle at 40px */}
+            <span aria-hidden className="tx-send absolute bottom-[7px] right-[7px] size-7">
+              {/* the icon svg is 90×90 with its 51px circle at (44.9, 36.9): show that circle at 28px */}
               {/* eslint-disable-next-line @next/next/no-img-element */}
               <img
                 src={`${BASE}brand/spark-icon.svg`}
                 alt=""
-                className="absolute left-[-15.2px] top-[-8.9px] h-auto w-[70.6px] max-w-none"
+                className="absolute left-[-10.6px] top-[-6.2px] h-auto w-[49.4px] max-w-none"
               />
             </span>
           </div>
