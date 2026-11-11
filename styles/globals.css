@@ -1162,3 +1162,203 @@ main .t-h2 + .t-lead {
     transform: none;
   }
 }
+
+/* "Why Aholo 3D" scroll showcase (layout per the supplied aholo-why v2, type per the site system:
+   title 50/56 · card title 18/26 · text 16/28; category uses the outlined-number eyebrow) */
+.aholo-why {
+  --ink: #f5f5f7;
+  --muted: #a1a1aa;
+  color: var(--ink);
+}
+.aholo-why * {
+  box-sizing: border-box;
+}
+.aholo-why .scroll-track {
+  position: relative;
+  height: calc(100svh - var(--header-h, 64px) + 190svh);
+}
+.aholo-why .scene {
+  position: sticky;
+  top: var(--header-h, 64px);
+  height: calc(100svh - var(--header-h, 64px));
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 16px 32px 44px;
+  text-align: center;
+  background: radial-gradient(ellipse at 50% 40%, #2a1f3d, #141019 57%, #0b0b0d);
+}
+.aholo-why h2 {
+  margin: 0;
+}
+.aholo-why .intro {
+  margin: 16px 0 0;
+  color: var(--muted);
+  font-size: 16px;
+  line-height: 28px;
+}
+.aholo-why .stage {
+  --w: min(1100px, calc(100vw - 64px), calc((100svh - var(--header-h, 64px) - 440px) / 0.27));
+  --th: calc(var(--w) * 0.27);
+  position: relative;
+  width: var(--w);
+  height: calc(var(--th) + 250px);
+  margin: 32px auto 0;
+}
+.aholo-why .tile {
+  position: absolute;
+  left: 50%;
+  top: 16px;
+  width: 36%;
+  height: var(--th);
+  transform-origin: center;
+  will-change: transform, opacity;
+}
+.aholo-why .image {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  border-radius: 16px;
+  overflow: hidden;
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  background: #21172d;
+  box-shadow: 0 20px 44px rgba(0, 0, 0, 0.33);
+}
+.aholo-why img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+.aholo-why .shade {
+  position: absolute;
+  inset: 0;
+  background: #080610;
+  pointer-events: none;
+  opacity: 0;
+}
+.aholo-why .single-copy {
+  position: absolute;
+  top: calc(var(--th) + 48px);
+  left: 0;
+  width: 100%;
+  pointer-events: none;
+}
+.aholo-why .why-eyebrow {
+  justify-content: center !important;
+  margin: 0 0 12px;
+}
+.aholo-why h3 {
+  margin: 0;
+  font-size: 18px;
+  line-height: 26px;
+  font-weight: 600;
+}
+.aholo-why .description {
+  margin: 8px auto 0;
+  color: var(--muted);
+  font-size: 16px;
+  line-height: 28px;
+  max-width: 560px;
+}
+.aholo-why .final-copy {
+  position: absolute;
+  top: calc(var(--th) + 48px);
+  left: 0;
+  width: 100%;
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 24px;
+  pointer-events: none;
+  opacity: 0;
+}
+.aholo-why .final-copy .description {
+  max-width: 320px;
+}
+.aholo-why .final-copy .why-eyebrow {
+  margin-bottom: 8px;
+}
+.aholo-why .overlay-copy {
+  display: none;
+}
+.aholo-why .progress {
+  position: absolute;
+  bottom: 18px;
+  left: 0;
+  right: 0;
+  display: flex;
+  justify-content: center;
+  gap: 8px;
+}
+.aholo-why .progress i {
+  width: 6px;
+  height: 6px;
+  border-radius: 4px;
+  background: rgba(255, 255, 255, 0.2);
+  transition:
+    width 0.3s,
+    background 0.3s;
+}
+.aholo-why .progress i.active {
+  width: 24px;
+  background: #b493ed;
+}
+@media (max-width: 559px) {
+  .aholo-why .scroll-track {
+    height: auto;
+  }
+  .aholo-why .scene {
+    height: auto;
+    position: relative;
+    top: 0;
+    padding: 40px 20px;
+  }
+  .aholo-why .stage {
+    width: 100%;
+    height: auto;
+    margin-top: 32px;
+    display: grid;
+    gap: 32px;
+  }
+  .aholo-why .tile {
+    position: relative;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: auto;
+    transform: none !important;
+    opacity: 1 !important;
+  }
+  .aholo-why .image {
+    height: 230px;
+  }
+  .aholo-why .shade,
+  .aholo-why .single-copy,
+  .aholo-why .final-copy,
+  .aholo-why .progress {
+    display: none;
+  }
+  .aholo-why .overlay-copy {
+    display: block;
+    padding: 16px 0 0;
+    text-align: left;
+  }
+  .aholo-why .overlay-copy .why-eyebrow {
+    justify-content: flex-start !important;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .aholo-why .scroll-track {
+    height: auto;
+  }
+  .aholo-why .scene {
+    position: relative;
+    top: 0;
+  }
+}
+#why .aholo-why h3 {
+  font-size: 18px !important;
+  line-height: 26px !important;
+}

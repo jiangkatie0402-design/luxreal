@@ -37,7 +37,7 @@ export function ForAgents() {
   );
 }
 
-export { WhyUs } from './WhyRing';
+export { WhyUs } from './WhyStack';
 
 type Voice = { name: string; role: string; quote: string };
 
