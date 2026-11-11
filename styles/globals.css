@@ -1142,8 +1142,8 @@ main .t-h2 + .t-lead {
 }
 .final-reveal > * {
   transition:
-    opacity 0.6s 0.1s,
-    transform 0.6s 0.1s;
+    opacity 0.5s,
+    transform 0.5s;
 }
 .final-reveal:is([data-state='closed'], [data-state='peek']) {
   clip-path: inset(0 max(16px, calc(50vw - 300px)) round 32px);
