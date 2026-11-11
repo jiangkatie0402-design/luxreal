@@ -124,33 +124,33 @@
       }
     },
     "agents": {
-      "title": "Built for agents",
-      "lead": "Composable model generation, material processing and format conversion that an agent can run end to end — executing tasks, tracking progress and organising results with fewer manual steps.",
+      "title": "Built for Agents.",
+      "lead": "Aholo3D pairs composable 3D capabilities with clear tool definitions and compact, structured outputs agents can pass between steps—supported by planning, validation, and task management.",
       "items": {
         "gen": {
-          "label": "Model generation",
-          "t": "Many ways in",
-          "d": "Generate from text, a single image or several images. Any input can be called directly."
+          "label": "Composable tools",
+          "t": "Individual Tools. Agent-Composed Workflows.",
+          "d": "Generate, texture, repair, split, rig, animate, remesh, and render. Combine individual operations to process existing assets or build an entire workflow."
         },
         "material": {
-          "label": "Materials",
-          "t": "Change materials fast",
-          "d": "Regenerate materials from a reference image — texture, colour and surface finish — without remodelling."
+          "label": "Plan & verify",
+          "t": "Help Your Agent Plan and Verify.",
+          "d": "Get a production plan, budget, and cost breakdown before execution. Inspect inputs and validate outputs so your agent can make informed decisions throughout."
         },
         "format": {
-          "label": "Format conversion",
-          "t": "Fits every tool",
-          "d": "Convert between model formats so existing assets keep working for web, games or printing without regenerating."
+          "label": "Parallel tasks",
+          "t": "Parallel Tasks. No Agent Polling.",
+          "d": "High concurrency lets your agent generate and process multiple assets at once. Aholo3D returns results when ready, without repeated status checks or custom polling scripts."
         },
         "delivery": {
-          "label": "Agent-ready delivery",
-          "t": "Agents follow through end to end",
-          "d": "Source files and offline previews are delivered directly, so agents can fetch, check and keep building on the results."
+          "label": "Shared library",
+          "t": "Switch Agents. Keep Your Assets.",
+          "d": "Keep assets in a shared cloud library. Continue with another connected agent, or open them in the web app to create, edit, and share."
         },
         "concurrency": {
-          "label": "High concurrency",
-          "t": "Massive concurrency for faster scenes",
-          "d": "Let agents run many model tasks at once, cutting asset prep time and speeding up scene building."
+          "label": "Industry skills",
+          "t": "Give Your Agent Industry-Specific Skills.",
+          "d": "Built-in workflow skills guide your agent through 3D printing and game asset production, from selecting operations to checking final deliverables."
         }
       },
       "mcp": {
