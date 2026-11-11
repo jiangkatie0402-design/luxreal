@@ -1186,9 +1186,11 @@ main .t-h2 + .t-lead {
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  padding: 16px 32px 44px;
+  padding: 48px 32px 80px;
   text-align: center;
-  background: radial-gradient(ellipse at 50% 40%, #2a1f3d, #141019 57%, #0b0b0d);
+  background:
+    linear-gradient(#0b0b0d, rgba(11, 11, 13, 0) 16%, rgba(11, 11, 13, 0) 84%, #0b0b0d),
+    radial-gradient(ellipse at 50% 45%, #2a1f3d, #141019 57%, #0b0b0d);
 }
 .aholo-why h2 {
   margin: 0;
@@ -1200,7 +1202,7 @@ main .t-h2 + .t-lead {
   line-height: 28px;
 }
 .aholo-why .stage {
-  --w: min(1100px, calc(100vw - 64px), calc((100svh - var(--header-h, 64px) - 440px) / 0.27));
+  --w: min(1100px, calc(100vw - 64px), calc((100svh - var(--header-h, 64px) - 500px) / 0.27));
   --th: calc(var(--w) * 0.27);
   position: relative;
   width: var(--w);
@@ -1285,7 +1287,7 @@ main .t-h2 + .t-lead {
 }
 .aholo-why .progress {
   position: absolute;
-  bottom: 18px;
+  bottom: 36px;
   left: 0;
   right: 0;
   display: flex;
