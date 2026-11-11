@@ -12,8 +12,8 @@ export default async function HomePage({ params }: { params: Promise<{ locale: s
     <>
       <ViewportHero locale={locale} />
       <CoreCapabilities />
-      <UseCaseStack />
       <ForAgents />
+      <UseCaseStack />
       <WhyUs />
       <Testimonials />
       <Community />
