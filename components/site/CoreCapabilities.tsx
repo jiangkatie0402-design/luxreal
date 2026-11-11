@@ -297,7 +297,7 @@ export function CoreCapabilities() {
     <Showcase
       ns="site.core"
       id="core"
-      items={['image', 'text', 'agent']}
+      items={['agent', 'image', 'text']}
       media={{ image: 'videos/core-image' }}
       cta
       hideTitle
