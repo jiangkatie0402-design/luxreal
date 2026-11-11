@@ -1186,7 +1186,7 @@ main .t-h2 + .t-lead {
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  padding: 48px 32px 80px;
+  padding: 40px 32px 48px;
   text-align: center;
   background:
     linear-gradient(#0b0b0d, rgba(11, 11, 13, 0) 16%, rgba(11, 11, 13, 0) 84%, #0b0b0d),
@@ -1206,7 +1206,7 @@ main .t-h2 + .t-lead {
   --th: calc(var(--w) * 0.27);
   position: relative;
   width: var(--w);
-  height: calc(var(--th) + 250px);
+  height: calc(var(--th) + 230px);
   margin: 32px auto 0;
 }
 .aholo-why .tile {
@@ -1287,7 +1287,7 @@ main .t-h2 + .t-lead {
 }
 .aholo-why .progress {
   position: absolute;
-  bottom: 36px;
+  bottom: 20px;
   left: 0;
   right: 0;
   display: flex;
