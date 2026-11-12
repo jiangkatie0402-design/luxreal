@@ -154,7 +154,8 @@
         "guide": "MCP setup guide",
         "command": "npx add-mcp @aholo/mcp-server --env AHOLO_API_KEY=YOUR_API_KEY",
         "copy": "Copy",
-        "copied": "Copied"
+        "copied": "Copied",
+        "worksWith": "Works with these agents"
       },
       "eyebrow": "For agents",
       "titleA": "Built for ",
