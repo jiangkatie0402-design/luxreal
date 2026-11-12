@@ -148,7 +148,7 @@ export function SiteHeader() {
           >
             {c('login')}
           </a>
-          <span aria-hidden className="mx-1.5 hidden h-5 w-px bg-white/15 lg:block" />
+          <span aria-hidden className="mx-2 hidden h-4 w-px bg-white/[0.18] lg:block" />
           <LangMenu className="hidden lg:block" />
           <Sheet>
             <SheetTrigger asChild>
