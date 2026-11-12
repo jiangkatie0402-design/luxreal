@@ -1202,7 +1202,11 @@ main .t-h2 + .t-lead {
   line-height: 28px;
 }
 .aholo-why .stage {
-  --w: min(1100px, calc(100vw - 64px), calc((100svh - var(--header-h, 64px) - 500px) / 0.27));
+  --w: min(
+    1100px,
+    calc(100vw - 64px),
+    max(720px, calc((100svh - var(--header-h, 64px) - 400px) / 0.27))
+  );
   --th: calc(var(--w) * 0.27);
   position: relative;
   width: var(--w);
