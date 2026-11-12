@@ -136,11 +136,11 @@ export function SiteHeader() {
             {c('connectAgent')}
           </ButtonLink>
           <ButtonLink
-            href={site.links.app}
+            href={site.links.login}
             size="sm"
             className="btn-sheen hidden h-8 rounded-[9px] bg-[linear-gradient(90deg,#a684ff,#fff)] px-3.5 text-[13px] font-semibold text-[#171717] hover:brightness-105 lg:inline-flex"
           >
-            {c('startCreating')}
+            {c('signUpLogIn')}
           </ButtonLink>
           <span aria-hidden className="mx-2 hidden h-3.5 w-px bg-white/[0.18] lg:block" />
           <LangMenu className="hidden lg:block" />
@@ -196,8 +196,8 @@ export function SiteHeader() {
                 <ButtonLink href="/for-agent" variant="outline" className="w-full">
                   {c('connectAgent')}
                 </ButtonLink>
-                <ButtonLink href={site.links.app} className="w-full">
-                  {c('startCreating')}
+                <ButtonLink href={site.links.login} className="w-full">
+                  {c('signUpLogIn')}
                 </ButtonLink>
               </div>
             </SheetContent>

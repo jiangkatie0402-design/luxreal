@@ -14,7 +14,8 @@
     "menu": "菜单",
     "close": "关闭",
     "language": "语言",
-    "connectAgent": "接入 Agent"
+    "connectAgent": "接入 Agent",
+    "signUpLogIn": "注册 / 登录"
   },
   "home": {
     "cover": {

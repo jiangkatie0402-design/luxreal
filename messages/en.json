@@ -14,7 +14,8 @@
     "menu": "Menu",
     "close": "Close",
     "language": "Language",
-    "connectAgent": "Connect agent"
+    "connectAgent": "Connect agent",
+    "signUpLogIn": "Sign up / Log in"
   },
   "home": {
     "cover": {
