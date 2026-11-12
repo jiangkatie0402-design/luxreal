@@ -1,90 +1,62 @@
 'use client';
-import {
-  Bot,
-  ChevronDown,
-  Clapperboard,
-  Gamepad2,
-  Image as ImageIcon,
-  LayoutGrid,
-  Menu,
-  MessagesSquare,
-  Paintbrush,
-  PenLine,
-  type LucideIcon,
-} from 'lucide-react';
+import { ChevronDown, Menu } from 'lucide-react';
 import { useTranslations } from 'next-intl';
 import { useEffect, useState } from 'react';
 import { Button, ButtonLink } from '@/components/ui/button';
 import { Sheet, SheetContent, SheetTitle, SheetTrigger } from '@/components/ui/sheet';
 import { site } from '@/config/site';
 import { cn } from '@/lib/utils';
+import { LangMenu } from './LangMenu';
 import { Logo } from './Logo';
 
 /**
  * Top navigation. Items without a decided destination stay inert (no href).
  * In-page targets point at the homepage sections.
  */
-type Leaf = { id: string; href?: string; icon?: LucideIcon };
+type Leaf = { id: string; href?: string };
 const NAV: { id: string; href?: string; items?: Leaf[] }[] = [
   {
     id: 'products',
     items: [
-      { id: 'editor', href: site.links.app, icon: PenLine },
-      { id: 'forAgents', href: '#agents', icon: Bot },
+      { id: 'editor', href: '/editor' },
+      { id: 'forAgents', href: '/for-agent' },
     ],
   },
   {
     id: 'features',
     items: [
-      { id: 'imageTo3d', href: '#core', icon: ImageIcon },
-      { id: 'retexture', icon: Paintbrush },
+      { id: 'imageTo3d', href: '/features/image-to-3d' },
+      { id: 'retexture', href: '/features/retexture' },
+      { id: 'animate', href: '/features/animate' },
     ],
   },
   {
     id: 'solutions',
     items: [
-      { id: 'game', href: '#scene-game-anchor', icon: Gamepad2 },
-      { id: 'film', href: '#scene-film-anchor', icon: Clapperboard },
+      { id: 'game', href: '/solutions/game' },
+      { id: 'film', href: '/solutions/film' },
+      { id: 'printing', href: '/solutions/printing' },
+      { id: 'architecture', href: '/solutions/architecture' },
     ],
   },
   {
     id: 'community',
     items: [
-      { id: 'gallery', href: '#community', icon: LayoutGrid },
-      { id: 'discord', icon: MessagesSquare },
+      { id: 'gallery', href: '/workspace/gallery' },
+      // invite link or QR code pop-up (one or the other) — not decided yet
+      { id: 'discord' },
     ],
   },
-  { id: 'pricing' },
+  { id: 'pricing', href: '/pricing' },
 ];
 
-function NavLeaf({
-  item,
-  className,
-  label,
-  withIcon,
-}: {
-  item: Leaf;
-  className: string;
-  label: string;
-  withIcon?: boolean;
-}) {
-  const Icon = withIcon ? item.icon : undefined;
-  const body = (
-    <>
-      {Icon && (
-        <span className="grid size-8 flex-none place-items-center rounded-[9px] border border-white/[0.08] bg-white/[0.06] text-[#c4b5fd] transition-colors group-hover/item:border-transparent group-hover/item:bg-[linear-gradient(135deg,#a684ff,#6e62a3)] group-hover/item:text-white">
-          <Icon className="size-[17px]" strokeWidth={1.6} aria-hidden />
-        </span>
-      )}
-      <span>{label}</span>
-    </>
-  );
+function NavLeaf({ item, className, label }: { item: Leaf; className: string; label: string }) {
   return item.href ? (
-    <a href={item.href} className={cn('group/item', className)}>
-      {body}
+    <a href={item.href} className={className}>
+      {label}
     </a>
   ) : (
-    <span className={cn(className, 'cursor-default opacity-50')}>{body}</span>
+    <span className={cn(className, 'cursor-default opacity-50')}>{label}</span>
   );
 }
 
@@ -106,9 +78,9 @@ export function SiteHeader() {
         scrolled && 'border-border bg-background/75 backdrop-blur-xl',
       )}
     >
-      <div className="flex h-full items-center gap-6 px-5 md:px-8 lg:grid lg:grid-cols-[1fr_auto_1fr] xl:px-10">
-        <Logo className={cn('justify-self-start', !scrolled && 'text-[var(--hero-ink)]')} />
-        <nav aria-label={t('main')} className="hidden lg:block">
+      <div className="flex h-full items-center gap-6 px-5 md:px-8 xl:px-10">
+        <Logo className={cn(!scrolled && 'text-[var(--hero-ink)]')} />
+        <nav aria-label={t('main')} className="mr-auto hidden lg:ml-2 lg:block">
           <ul className="flex items-center lg:gap-0 xl:gap-1">
             {NAV.map((n) => (
               <li key={n.id} className="group relative">
@@ -137,14 +109,13 @@ export function SiteHeader() {
                 )}
                 {n.items && (
                   <div className="invisible absolute left-0 top-full z-50 -translate-y-1 pt-2.5 opacity-0 transition-[opacity,transform,visibility] duration-200 ease-[cubic-bezier(.22,1,.36,1)] group-focus-within:visible group-focus-within:translate-y-0 group-focus-within:opacity-100 group-hover:visible group-hover:translate-y-0 group-hover:opacity-100">
-                    <ul className="min-w-52 rounded-2xl border border-white/10 bg-[linear-gradient(180deg,rgba(30,26,44,0.96),rgba(16,14,24,0.96))] p-1.5 shadow-[0_24px_48px_-16px_rgba(0,0,0,0.7),inset_0_1px_0_rgba(255,255,255,0.08)] backdrop-blur-xl">
+                    <ul className="min-w-[184px] rounded-2xl border border-white/10 bg-[linear-gradient(180deg,rgba(30,26,44,0.96),rgba(16,14,24,0.96))] p-1.5 shadow-[0_24px_48px_-16px_rgba(0,0,0,0.7),inset_0_1px_0_rgba(255,255,255,0.08)] backdrop-blur-xl">
                       {n.items.map((it) => (
                         <li key={it.id}>
                           <NavLeaf
                             item={it}
                             label={t(it.id)}
-                            withIcon
-                            className="flex h-12 items-center gap-3 whitespace-nowrap rounded-xl px-2.5 text-sm font-medium text-white/90 transition-colors hover:bg-white/[0.06] hover:text-white"
+                            className="flex h-11 items-center whitespace-nowrap rounded-xl px-3.5 text-sm font-medium text-white/90 transition-colors hover:bg-white/[0.06] hover:text-white"
                           />
                         </li>
                       ))}
@@ -155,38 +126,26 @@ export function SiteHeader() {
             ))}
           </ul>
         </nav>
-        <div className="ml-auto flex items-center gap-2 lg:ml-0 lg:justify-self-end">
+        <div className="ml-auto flex items-center gap-1.5 lg:ml-0">
+          <LangMenu className="hidden lg:block" />
           <a
             href={site.links.login}
-            className={cn(
-              'hidden whitespace-nowrap rounded-btn px-3 text-sm transition-colors lg:inline-flex',
-              scrolled
-                ? 'text-muted-foreground hover:text-foreground'
-                : 'text-[var(--hero-ink-muted)] hover:text-[var(--hero-ink)]',
-            )}
+            className="hidden h-9 items-center whitespace-nowrap rounded-[10px] px-3 text-sm font-medium text-white/80 transition-colors hover:bg-white/[0.08] hover:text-white lg:inline-flex"
           >
             {c('login')}
           </a>
           <ButtonLink
-            href={site.links.console}
+            href="/for-agent"
             variant="outline"
             size="sm"
-            className={cn(
-              'hidden lg:inline-flex',
-              !scrolled &&
-                'border-[var(--chip-border)] text-[var(--hero-ink)] hover:bg-[var(--chip-bg)] hover:text-[var(--hero-ink)]',
-            )}
+            className="ml-1 hidden h-9 rounded-[10px] border-white/20 bg-white/[0.04] px-4 text-white hover:bg-white/[0.1] hover:text-white lg:inline-flex"
           >
-            {c('getApi')}
+            {c('connectAgent')}
           </ButtonLink>
           <ButtonLink
             href={site.links.app}
             size="sm"
-            className={cn(
-              'hidden lg:inline-flex',
-              !scrolled &&
-                'bg-[var(--hero-cta-bg)] text-[var(--hero-cta-ink)] hover:bg-[var(--hero-cta-bg)] hover:brightness-95',
-            )}
+            className="hidden h-9 rounded-[10px] bg-[linear-gradient(90deg,#a684ff,#fff)] px-4 font-semibold text-[#171717] hover:brightness-105 lg:inline-flex"
           >
             {c('startCreating')}
           </ButtonLink>
@@ -242,8 +201,8 @@ export function SiteHeader() {
                 <ButtonLink href={site.links.login} variant="ghost" className="w-full">
                   {c('login')}
                 </ButtonLink>
-                <ButtonLink href={site.links.console} variant="outline" className="w-full">
-                  {c('getApi')}
+                <ButtonLink href="/for-agent" variant="outline" className="w-full">
+                  {c('connectAgent')}
                 </ButtonLink>
                 <ButtonLink href={site.links.app} className="w-full">
                   {c('startCreating')}

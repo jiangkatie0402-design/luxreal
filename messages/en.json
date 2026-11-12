@@ -13,7 +13,8 @@
     "copied": "Copied",
     "menu": "Menu",
     "close": "Close",
-    "language": "Language"
+    "language": "Language",
+    "connectAgent": "Connect agent"
   },
   "home": {
     "cover": {
@@ -44,17 +45,20 @@
       "main": "Main",
       "products": "Products",
       "editor": "Editor",
-      "forAgents": "For agents",
+      "forAgents": "For Agents",
       "features": "Features",
       "imageTo3d": "Image to 3D",
-      "retexture": "Re-texture",
+      "retexture": "Retexture",
       "solutions": "Solutions",
       "game": "Game",
       "film": "Film",
       "community": "Community",
       "gallery": "Gallery",
       "discord": "Discord / Group",
-      "pricing": "Pricing"
+      "pricing": "Pricing",
+      "animate": "Animate",
+      "printing": "Printing",
+      "architecture": "Architecture"
     },
     "core": {
       "title": "Core capabilities",

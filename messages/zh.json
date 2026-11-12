@@ -13,7 +13,8 @@
     "copied": "已复制",
     "menu": "菜单",
     "close": "关闭",
-    "language": "语言"
+    "language": "语言",
+    "connectAgent": "接入 Agent"
   },
   "home": {
     "cover": {
@@ -54,7 +55,10 @@
       "community": "社区",
       "gallery": "作品库",
       "discord": "Discord / 社群",
-      "pricing": "定价"
+      "pricing": "定价",
+      "animate": "动画",
+      "printing": "3D 打印",
+      "architecture": "建筑"
     },
     "core": {
       "title": "核心能力",
