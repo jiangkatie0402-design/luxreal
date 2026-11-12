@@ -1696,3 +1696,64 @@ main .t-h2 + .t-lead {
     opacity: 0.75;
   }
 }
+/* cards carry the copy: small index, large title, description; the left keeps only title + lead */
+.agx-left {
+  justify-content: center;
+}
+.agx-now {
+  display: none !important;
+}
+.agx-num {
+  font-size: 14px !important;
+  line-height: 20px !important;
+  font-weight: 500 !important;
+  letter-spacing: 0.08em !important;
+  margin-top: 0 !important;
+  opacity: 0.55;
+  background: none !important;
+  -webkit-background-clip: border-box !important;
+  color: inherit !important;
+}
+.agx-tag {
+  margin-top: auto !important;
+  max-width: 30rem !important;
+  font-size: clamp(28px, 2.6vw, 40px) !important;
+  line-height: 1.2 !important;
+  font-weight: 600 !important;
+  letter-spacing: -0.01em;
+  text-wrap: balance;
+}
+.agx-desc {
+  margin: 16px 0 0;
+  max-width: 30rem;
+  font-size: 18px;
+  line-height: 30px;
+  opacity: 0.75;
+}
+.agx-card:nth-child(3) .agx-tag {
+  background: linear-gradient(90deg, #fff, #c9b6ff);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+@media (max-width: 1023px) {
+  .agx-card::after {
+    display: none;
+  }
+  .agx-tag {
+    font-size: 26px !important;
+  }
+  .agx-desc {
+    font-size: 16px;
+    line-height: 28px;
+  }
+}
+/* copy sits at the top of each card so a half-covered card still reads; shorter cards */
+.agx-card {
+  bottom: 14% !important;
+  padding: 40px 48px !important;
+}
+.agx-tag {
+  margin-top: 40px !important;
+  padding-right: 56px;
+}

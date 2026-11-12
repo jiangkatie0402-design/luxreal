@@ -53,7 +53,7 @@ export function AgentsShowcase() {
       cards.forEach((c, i) => {
         const k = i === 0 ? 1 : smooth(p * (N - 1) * 1.15 - (i - 1));
         const cover = i < N - 1 ? smooth(p * (N - 1) * 1.15 - i) : 0;
-        c.style.setProperty('--ty', `calc(${(1 - k) * 110}% + ${cover * 3}%)`);
+        c.style.setProperty('--ty', `calc(${(1 - k) * 170}% + ${cover * 3}%)`);
         c.style.setProperty('--rot', `${ROT[i] * (1 - k * 0.6)}deg`);
         if (k > 0.5) on = i;
       });
@@ -118,9 +118,10 @@ export function AgentsShowcase() {
                   <Icon strokeWidth={1.8} />
                 </span>
                 <span className="agx-num" aria-hidden>
-                  0{i + 1}
+                  0{i + 1} / 0{n}
                 </span>
                 <p className="agx-tag">{it.t}</p>
+                <p className="agx-desc">{it.d}</p>
               </div>
             );
           })}
