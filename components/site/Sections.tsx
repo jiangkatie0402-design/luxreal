@@ -5,8 +5,6 @@ import { ButtonLink } from '@/components/ui/button';
 import { site } from '@/config/site';
 import { FinalReveal } from './FinalReveal';
 import { AgentsShowcase } from './AgentsShowcase';
-import { AgentMcp } from './AgentMcp';
-import { AgentMarquee } from './AgentMarquee';
 
 /**
  * 四、专为 Agent 设计 — the capability orbit, then the MCP install strip.
@@ -16,12 +14,6 @@ export function ForAgents() {
     <section aria-labelledby="agents-title" id="agents" className="section-y scroll-mt-20">
       <div className="container-x">
         <AgentsShowcase />
-
-        {/* MCP install */}
-        <div id="agents-mcp" className="mt-10">
-          <AgentMcp />
-        </div>
-        <AgentMarquee />
       </div>
     </section>
   );

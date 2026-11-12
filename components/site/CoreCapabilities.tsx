@@ -2,6 +2,8 @@
 import * as TabsPrimitive from '@radix-ui/react-tabs';
 import { ArrowRight, Plus } from 'lucide-react';
 import { useLocale, useTranslations } from 'next-intl';
+import { AgentMcp } from './AgentMcp';
+import { AgentMarquee } from './AgentMarquee';
 import { useEffect, useRef, useState } from 'react';
 import { ButtonLink } from '@/components/ui/button';
 import { site } from '@/config/site';
@@ -228,6 +230,7 @@ export function Showcase({
   footer,
   hideTitle = false,
   media,
+  extra,
 }: {
   ns: string;
   id: string;
@@ -238,6 +241,8 @@ export function Showcase({
   hideTitle?: boolean;
   /** per-item looping clip in the window: path without extension (".mp4", "-poster.jpg") */
   media?: Partial<Record<string, string>>;
+  /** rendered under the card (e.g. the MCP install strip) */
+  extra?: React.ReactNode;
 }) {
   const t = useTranslations(ns);
   const locale = useLocale();
@@ -385,6 +390,7 @@ export function Showcase({
             {footer}
           </p>
         )}
+        {extra}
       </div>
     </section>
   );
@@ -400,6 +406,14 @@ export function CoreCapabilities() {
       media={{ image: 'videos/core-image' }}
       cta
       hideTitle
+      extra={
+        <>
+          <div id="agents-mcp" className="mt-10">
+            <AgentMcp />
+          </div>
+          <AgentMarquee />
+        </>
+      }
     />
   );
 }
