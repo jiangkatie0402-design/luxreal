@@ -1408,15 +1408,26 @@ main .t-h2 + .t-lead {
   left: auto;
   right: 12px;
 }
-
-/* text-to-3D window: the send button presses once the prompt is typed */
-.tx-done .tx-send {
-  animation: tx-press 0.5s ease-out;
+/* Why section: the same fine dot grid as the agents notes, with a soft violet glow behind the cards */
+.aholo-why .scene {
+  background:
+    linear-gradient(#0b0b0d, rgba(11, 11, 13, 0) 16%, rgba(11, 11, 13, 0) 84%, #0b0b0d),
+    radial-gradient(60% 55% at 50% 50%, rgba(110, 80, 200, 0.22), transparent 70%),
+    radial-gradient(circle, rgba(255, 255, 255, 0.16) 1px, transparent 1.3px) 0 0/20px 20px,
+    #08070c !important;
 }
-@keyframes tx-press {
-  40% {
-    transform: scale(0.86);
-  }
+.aholo-why .scene::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background: radial-gradient(75% 75% at 50% 50%, transparent 45%, #08070c 100%);
+}
+.aholo-why .scene > :not(.progress) {
+  position: relative;
+}
+.aholo-why .stage {
+  position: relative;
 }
 
 /* "Built for agents" — sticky split: title + lead fixed top-left, the current capability's copy
