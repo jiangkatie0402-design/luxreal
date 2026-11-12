@@ -131,24 +131,18 @@ export function SiteHeader() {
             href="/for-agent"
             variant="outline"
             size="sm"
-            className="hidden h-9 rounded-[10px] border-white/20 bg-white/[0.04] px-4 text-white hover:bg-white/[0.1] hover:text-white lg:inline-flex"
+            className="hidden h-8 rounded-[9px] border-white/[0.16] bg-transparent px-3.5 text-[13px] text-white hover:bg-white/[0.08] hover:text-white lg:inline-flex"
           >
             {c('connectAgent')}
           </ButtonLink>
           <ButtonLink
             href={site.links.app}
             size="sm"
-            className="hidden h-9 rounded-[10px] bg-[linear-gradient(90deg,#a684ff,#fff)] px-4 font-semibold text-[#171717] hover:brightness-105 lg:inline-flex"
+            className="btn-sheen hidden h-8 rounded-[9px] bg-[linear-gradient(90deg,#a684ff,#fff)] px-3.5 text-[13px] font-semibold text-[#171717] hover:brightness-105 lg:inline-flex"
           >
             {c('startCreating')}
           </ButtonLink>
-          <a
-            href={site.links.login}
-            className="hidden h-9 items-center whitespace-nowrap rounded-[10px] px-3 text-sm font-medium text-white/80 transition-colors hover:bg-white/[0.08] hover:text-white lg:inline-flex"
-          >
-            {c('login')}
-          </a>
-          <span aria-hidden className="mx-2 hidden h-4 w-px bg-white/[0.18] lg:block" />
+          <span aria-hidden className="mx-2 hidden h-3.5 w-px bg-white/[0.18] lg:block" />
           <LangMenu className="hidden lg:block" />
           <Sheet>
             <SheetTrigger asChild>
@@ -199,9 +193,6 @@ export function SiteHeader() {
                 ))}
               </ul>
               <div className="mt-auto grid gap-3">
-                <ButtonLink href={site.links.login} variant="ghost" className="w-full">
-                  {c('login')}
-                </ButtonLink>
                 <ButtonLink href="/for-agent" variant="outline" className="w-full">
                   {c('connectAgent')}
                 </ButtonLink>
