@@ -1,63 +1,64 @@
 'use client';
 import { useTranslations } from 'next-intl';
-import { useEffect, useRef, useState } from 'react';
-import {
-  Boxes,
-  ClipboardCheck,
-  CloudUpload,
-  GraduationCap,
-  ListTree,
-  type LucideIcon,
-} from 'lucide-react';
+import { useEffect, useRef } from 'react';
 
-const ICONS: LucideIcon[] = [Boxes, ClipboardCheck, ListTree, CloudUpload, GraduationCap];
-const ROT = [0, 3, -2.5, 2, -1.5];
+const BASE = process.env.NEXT_PUBLIC_ASSET_BASE ?? '/';
+/** note positions on the stage (left %, top %, rotation) */
+const POS: [number, number, number][] = [
+  [36, 26, -3],
+  [61, 30, 4],
+  [48, 64, -1.5],
+  [22, 60, 5],
+  [76, 64, -4],
+];
 const clamp = (n: number) => Math.min(1, Math.max(0, n));
 const smooth = (n: number) => {
   const t = clamp(n);
   return t * t * (3 - 2 * t);
 };
 
+/** "Lead. rest" → the lead highlighted like a marker */
+function Title({ text }: { text: string }) {
+  const m = text.match(/^(.+?[.，,])\s*(.*)$/);
+  return m ? (
+    <>
+      <mark>{m[1]}</mark> {m[2]}
+    </>
+  ) : (
+    text
+  );
+}
+
 /**
- * "Built for agents" — sticky split. Title and lead stay put top-left; below them the copy of
- * whichever capability is on top swaps in; on the right numbered cards slide up over each other
- * as you scroll. Static stack on narrow screens or with reduced motion.
+ * "Built for agents" — big centred title with the mascot stickers on a dot grid; on scroll five
+ * purple notes pop in one by one, scattered over it. Static list on narrow screens / reduced motion.
  */
 export function AgentsShowcase() {
   const t = useTranslations('site.agents');
   const items = t.raw('items') as { t: string; d: string }[];
   const root = useRef<HTMLDivElement>(null);
-  const [active, setActive] = useState(0);
 
   useEffect(() => {
     const el = root.current;
     if (!el) return;
-    const scene = el.querySelector<HTMLElement>('.agx-scene')!;
-    const cards = [...el.querySelectorAll<HTMLElement>('.agx-card')];
+    const scene = el.querySelector<HTMLElement>('.agy-scene')!;
+    const notes = [...el.querySelectorAll<HTMLElement>('.agy-note')];
     const wide = window.matchMedia('(min-width:1024px)');
     const reduce = window.matchMedia('(prefers-reduced-motion:reduce)');
-    const N = cards.length;
     const render = () => {
       if (!wide.matches || reduce.matches) {
-        cards.forEach((c) => {
-          c.style.removeProperty('--ty');
-          c.style.removeProperty('--rot');
-        });
+        notes.forEach((n) => ['--o', '--s'].forEach((k) => n.style.removeProperty(k)));
         return;
       }
       const top = parseFloat(getComputedStyle(scene).top) || 0;
       const p = clamp(
         (top - el.getBoundingClientRect().top) / Math.max(1, el.offsetHeight - scene.offsetHeight),
       );
-      let on = 0;
-      cards.forEach((c, i) => {
-        const k = i === 0 ? 1 : smooth(p * (N - 1) * 1.15 - (i - 1));
-        const cover = i < N - 1 ? smooth(p * (N - 1) * 1.15 - i) : 0;
-        c.style.setProperty('--ty', `calc(${(1 - k) * 170}% + ${cover * 3}%)`);
-        c.style.setProperty('--rot', `${ROT[i] * (1 - k * 0.6)}deg`);
-        if (k > 0.5) on = i;
+      notes.forEach((n, i) => {
+        const k = smooth((p - (0.06 + i * 0.16)) / 0.1);
+        n.style.setProperty('--o', k.toFixed(3));
+        n.style.setProperty('--s', (0.7 + 0.3 * k + 0.07 * Math.sin(Math.PI * k)).toFixed(3));
       });
-      setActive(on);
     };
     let f = 0;
     const schedule = () => {
@@ -69,62 +70,52 @@ export function AgentsShowcase() {
     };
     window.addEventListener('scroll', schedule, { passive: true });
     window.addEventListener('resize', schedule);
-    wide.addEventListener('change', schedule);
-    schedule();
+    render();
     return () => {
       window.removeEventListener('scroll', schedule);
       window.removeEventListener('resize', schedule);
-      wide.removeEventListener('change', schedule);
       cancelAnimationFrame(f);
     };
   }, []);
 
-  const n = items.length;
   return (
-    <div ref={root} className="agx">
-      <div className="agx-scene">
-        <div className="agx-left">
-          <h2 id="agents-title" className="t-h2">
-            {t('titleA')}
-            <em>{t('titleB')}</em>
+    <div ref={root} className="agy" data-v="a">
+      <div className="agy-scene">
+        <div className="agy-hero">
+          <h2 id="agents-title" className="t-h2 agy-title">
+            <span>
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img className="agy-st s2" src={`${BASE}works/agent-sticker-2.webp`} alt="" />
+              {t('titleA').trim()}
+            </span>
+            <span>
+              <em>{t('titleB')}</em>
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img className="agy-st" src={`${BASE}works/agent-sticker-1.webp`} alt="" />
+            </span>
           </h2>
-          <p className="agx-lead">{t('lead')}</p>
-          <div className="agx-now">
-            <p className="agx-count">
-              <b>0{active + 1}</b>
-              <span className="agx-bar">
-                <i style={{ width: `${((active + 1) / n) * 100}%` }} />
-              </span>
-              <span>0{n}</span>
-            </p>
-            {items.map((it, i) => (
-              <div
-                key={it.t}
-                className={`agx-item${i === active ? ' on' : ''}`}
-                aria-hidden={i !== active}
-              >
-                <h3>{it.t}</h3>
-                <p>{it.d}</p>
-              </div>
-            ))}
-          </div>
+          <p className="agy-lead">{t('lead')}</p>
         </div>
-        <div className="agx-deck">
-          {items.map((it, i) => {
-            const Icon = ICONS[i];
-            return (
-              <div key={it.t} className="agx-card" data-d={it.d}>
-                <span className="agx-ic" aria-hidden>
-                  <Icon strokeWidth={1.8} />
-                </span>
-                <span className="agx-num" aria-hidden>
-                  0{i + 1} / 0{n}
-                </span>
-                <p className="agx-tag">{it.t}</p>
-                <p className="agx-desc">{it.d}</p>
-              </div>
-            );
-          })}
+        <div className="agy-notes">
+          {items.map((it, i) => (
+            <div
+              key={it.t}
+              className="agy-note"
+              style={
+                {
+                  left: `${POS[i][0]}%`,
+                  top: `${POS[i][1]}%`,
+                  '--r': `${POS[i][2]}deg`,
+                } as React.CSSProperties
+              }
+            >
+              <span className="agy-num">0{i + 1}</span>
+              <h3>
+                <Title text={it.t} />
+              </h3>
+              <p>{it.d}</p>
+            </div>
+          ))}
         </div>
       </div>
     </div>

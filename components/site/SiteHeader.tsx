@@ -78,9 +78,9 @@ export function SiteHeader() {
         scrolled && 'border-border bg-background/75 backdrop-blur-xl',
       )}
     >
-      <div className="flex h-full items-center gap-6 px-5 md:px-8 xl:px-10">
+      <div className="flex h-full items-center gap-6 px-5 md:px-8 lg:grid lg:grid-cols-[1fr_auto_1fr] xl:px-10">
         <Logo className={cn(!scrolled && 'text-[var(--hero-ink)]')} />
-        <nav aria-label={t('main')} className="mr-auto hidden lg:ml-2 lg:block">
+        <nav aria-label={t('main')} className="hidden lg:block">
           <ul className="flex items-center lg:gap-0 xl:gap-1">
             {NAV.map((n) => (
               <li key={n.id} className="group relative">
@@ -126,19 +126,12 @@ export function SiteHeader() {
             ))}
           </ul>
         </nav>
-        <div className="ml-auto flex items-center gap-1.5 lg:ml-0">
-          <LangMenu className="hidden lg:block" />
-          <a
-            href={site.links.login}
-            className="hidden h-9 items-center whitespace-nowrap rounded-[10px] px-3 text-sm font-medium text-white/80 transition-colors hover:bg-white/[0.08] hover:text-white lg:inline-flex"
-          >
-            {c('login')}
-          </a>
+        <div className="ml-auto flex items-center gap-1.5 lg:ml-0 lg:justify-self-end">
           <ButtonLink
             href="/for-agent"
             variant="outline"
             size="sm"
-            className="ml-1 hidden h-9 rounded-[10px] border-white/20 bg-white/[0.04] px-4 text-white hover:bg-white/[0.1] hover:text-white lg:inline-flex"
+            className="hidden h-9 rounded-[10px] border-white/20 bg-white/[0.04] px-4 text-white hover:bg-white/[0.1] hover:text-white lg:inline-flex"
           >
             {c('connectAgent')}
           </ButtonLink>
@@ -149,6 +142,14 @@ export function SiteHeader() {
           >
             {c('startCreating')}
           </ButtonLink>
+          <a
+            href={site.links.login}
+            className="hidden h-9 items-center whitespace-nowrap rounded-[10px] px-3 text-sm font-medium text-white/80 transition-colors hover:bg-white/[0.08] hover:text-white lg:inline-flex"
+          >
+            {c('login')}
+          </a>
+          <span aria-hidden className="mx-1.5 hidden h-5 w-px bg-white/15 lg:block" />
+          <LangMenu className="hidden lg:block" />
           <Sheet>
             <SheetTrigger asChild>
               <Button
