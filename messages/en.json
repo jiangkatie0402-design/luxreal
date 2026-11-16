@@ -14,7 +14,7 @@
     "menu": "Menu",
     "close": "Close",
     "language": "Language",
-    "connectAgent": "Connect agent",
+    "connectAgent": "Use with Your Agent",
     "signUpLogIn": "Sign up / Log in"
   },
   "home": {
@@ -33,7 +33,7 @@
       "titleA": "AI 3D for ",
       "titleYou": "You and Your",
       "titleB": "<Agents>",
-      "subtitle": "Type text, add an image, or hand it to an AI agent — and get 3D models, fast."
+      "subtitle": "Text or images to ready-to-use 3D in under a minute. Start for free."
     }
   },
   "notFound": {
