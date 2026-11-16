@@ -1727,3 +1727,42 @@ main .t-h2 + .t-lead {
     animation: none;
   }
 }
+
+/* Cover title: "<Agents>" with the mascot hugging it from the right */
+#hero-title .ht-l1 {
+  white-space: nowrap;
+}
+#hero-title .ht-ag {
+  position: relative;
+  display: inline-block;
+  margin-right: 1.1em;
+  white-space: nowrap;
+  isolation: isolate;
+}
+#hero-title .ht-word {
+  position: relative;
+  z-index: 1;
+  background: linear-gradient(90deg, #d6c8ff, #a684ff 70%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  -webkit-text-fill-color: transparent;
+}
+#hero-title .ht-m {
+  position: absolute;
+  right: -1.06em;
+  bottom: -0.1em;
+  height: 1.12em;
+  width: auto;
+  max-width: none;
+  pointer-events: none;
+  user-select: none;
+  filter: brightness(1.45) saturate(0.85) drop-shadow(0 6px 14px rgba(80, 30, 160, 0.3));
+}
+#hero-title .ht-hug.back {
+  z-index: 0;
+}
+#hero-title .ht-hug.front {
+  z-index: 2;
+  clip-path: inset(0 63% 0 0);
+}

@@ -30,8 +30,8 @@
       }
     },
     "viewport": {
-      "titleA": "你和 AI Agent 的",
-      "titleB": "3D 创作工具",
+      "titleA": "AI 3D，为你和你的",
+      "titleB": "<Agent>",
       "subtitle": "输入文字、图片，或直接交给 AI Agent，高效生成 3D 模型。"
     }
   },

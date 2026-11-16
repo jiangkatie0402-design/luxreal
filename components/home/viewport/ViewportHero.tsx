@@ -1,6 +1,6 @@
 'use client';
 import { useTranslations } from 'next-intl';
-import { useEffect, type CSSProperties, type ReactNode } from 'react';
+import { useEffect, type CSSProperties } from 'react';
 import { heroTitle } from '@/components/site/fonts';
 import { HERO_SETS, useHeroSet } from '@/lib/heroPalettes';
 import { usePerfStore } from '@/lib/perf';
@@ -14,16 +14,6 @@ import { CoverUpload } from '../cover/CoverUpload';
 
 /** Public asset base: "/" in the app, overridable for static previews. */
 const BASE = process.env.NEXT_PUBLIC_ASSET_BASE ?? '/';
-
-function Grad({ children, className = 'block' }: { children: ReactNode; className?: string }) {
-  return (
-    <span
-      className={`block [background-image:var(--title-accent)] bg-clip-text text-transparent ${className}`}
-    >
-      {children}
-    </span>
-  );
-}
 
 export function ViewportHero({ locale }: { locale: string }) {
   const t = useTranslations('home.viewport');
@@ -100,8 +90,25 @@ export function ViewportHero({ locale }: { locale: string }) {
           id="hero-title"
           className={`${brush} t-display [text-shadow:var(--title-shadow)] ${locale === 'zh' ? '' : 'font-bold tracking-[-0.01em] text-balance max-md:text-[2rem] max-md:leading-[1.15]'}`}
         >
-          {t('titleA')}{' '}
-          <Grad className={locale === 'zh' ? 'md:inline' : 'block'}>{t('titleB')}</Grad>
+          <span className="ht-l1">{t('titleA')}</span>{' '}
+          {/* the mascot hugs the word from the right: one copy behind it, its arm in front */}
+          <span className="ht-ag">
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img
+              className="ht-m ht-hug back"
+              src={`${BASE}works/hero-mascot.webp`}
+              alt=""
+              aria-hidden
+            />
+            <span className="ht-word">{t('titleB')}</span>
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img
+              className="ht-m ht-hug front"
+              src={`${BASE}works/hero-mascot.webp`}
+              alt=""
+              aria-hidden
+            />
+          </span>
         </h1>
         <p className="t-lead mx-auto mt-4 hidden max-w-[680px] text-[var(--hero-ink-muted)] sm:block">
           {t('subtitle')}
