@@ -30,7 +30,8 @@
       }
     },
     "viewport": {
-      "titleA": "AI 3D，为你和你的",
+      "titleA": "AI 3D，为",
+      "titleYou": "你和你的",
       "titleB": "<Agent>",
       "subtitle": "输入文字、图片，或直接交给 AI Agent，高效生成 3D 模型。"
     }

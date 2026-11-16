@@ -30,7 +30,8 @@
       }
     },
     "viewport": {
-      "titleA": "AI 3D for You and Your",
+      "titleA": "AI 3D for ",
+      "titleYou": "You and Your",
       "titleB": "<Agents>",
       "subtitle": "Type text, add an image, or hand it to an AI agent — and get 3D models, fast."
     }

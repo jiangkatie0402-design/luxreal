@@ -1766,3 +1766,10 @@ main .t-h2 + .t-lead {
   z-index: 2;
   clip-path: inset(0 63% 0 0);
 }
+#hero-title .ht-you {
+  background: linear-gradient(90deg, #fff, #e4dbff);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  -webkit-text-fill-color: transparent;
+}

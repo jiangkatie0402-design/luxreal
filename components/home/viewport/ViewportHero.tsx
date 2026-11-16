@@ -90,7 +90,10 @@ export function ViewportHero({ locale }: { locale: string }) {
           id="hero-title"
           className={`${brush} t-display [text-shadow:var(--title-shadow)] ${locale === 'zh' ? '' : 'font-bold tracking-[-0.01em] text-balance max-md:text-[2rem] max-md:leading-[1.15]'}`}
         >
-          <span className="ht-l1">{t('titleA')}</span>{' '}
+          <span className="ht-l1">
+            {t('titleA')}
+            <span className="ht-you">{t('titleYou')}</span>
+          </span>{' '}
           {/* the mascot hugs the word from the right: one copy behind it, its arm in front */}
           <span className="ht-ag">
             {/* eslint-disable-next-line @next/next/no-img-element */}
