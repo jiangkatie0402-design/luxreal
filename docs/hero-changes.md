@@ -95,7 +95,7 @@
   display: inline-block;
   white-space: nowrap;
   isolation: isolate;
-  margin-right: 1.1em; /* 给右侧的小精灵留位置，保证整行居中 */
+  margin-right: 0.55em; /* 只给小精灵留一半位置，让文字视觉上居中 */
 }
 
 #hero-title .ht-word {
@@ -134,3 +134,4 @@
 - 窄屏放不下一行时，`<Agents>` 会连同小精灵整体换到第二行。第 1、2 段不会被拆开。
 - 两张图都是装饰，加 `alt=""` 和 `aria-hidden`，读屏只读标题文字。
 - 小精灵没有动画。
+- `.ht-ag` 的右边距只给小精灵留一半位置（0.55em）：文字比页面中线略偏左、整行（含小精灵）略偏右，两者折中后视觉上居中。这是设计确认的效果（方案 A），不要改回整体居中。

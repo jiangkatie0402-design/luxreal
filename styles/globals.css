@@ -1735,7 +1735,7 @@ main .t-h2 + .t-lead {
 #hero-title .ht-ag {
   position: relative;
   display: inline-block;
-  margin-right: 1.1em;
+  margin-right: 0.55em;
   white-space: nowrap;
   isolation: isolate;
 }
