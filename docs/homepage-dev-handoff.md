@@ -8,11 +8,11 @@
 
 ### 以哪份为准
 
-| 来源 | 内容 | 用法 |
-|---|---|---|
-| **代码仓库**（本分支） | Next.js 16 App Router + next-intl，首页所有板块的正式实现 | **开发以此为准**，可直接合并或对照 |
-| **设计预览页**（上面的链接） | 静态 HTML，在仓库构建产物上叠加了若干 CSS/JS 补丁 | 看最终视觉和动效；有一部分只在预览里，见第 4 节 |
-| 本文档 | 改动说明、规格、待定项 | 对照用 |
+| 来源                         | 内容                                                      | 用法                                            |
+| ---------------------------- | --------------------------------------------------------- | ----------------------------------------------- |
+| **代码仓库**（本分支）       | Next.js 16 App Router + next-intl，首页所有板块的正式实现 | **开发以此为准**，可直接合并或对照              |
+| **设计预览页**（上面的链接） | 静态 HTML，在仓库构建产物上叠加了若干 CSS/JS 补丁         | 看最终视觉和动效；有一部分只在预览里，见第 4 节 |
+| 本文档                       | 改动说明、规格、待定项                                    | 对照用                                          |
 
 ### 本地运行
 
@@ -30,21 +30,21 @@ npm run build && npx next start -p 3000
 
 ### 文件地图
 
-| 内容 | 文件 |
-|---|---|
-| 首页板块顺序 | `app/[locale]/page.tsx` |
-| 顶部导航 | `components/site/SiteHeader.tsx`、`components/site/LangMenu.tsx` |
-| 首屏 | `components/home/viewport/ViewportHero.tsx`、`components/home/cover/CoverUpload.tsx`、`components/home/cover/coverIntro.ts` |
-| 核心能力 | `components/site/CoreCapabilities.tsx`、`AgentMcp.tsx`、`AgentMarquee.tsx` |
-| 专为 Agent 设计 | `components/site/AgentsShowcase.tsx`（由 `Sections.tsx › ForAgents` 挂载） |
-| 应用场景 | `components/site/UseCaseStack.tsx` |
-| 为什么选择 | `components/site/WhyStack.tsx` |
-| 用户证言 / 收尾引导 | `components/site/Sections.tsx`、`FinalReveal.tsx` |
-| 社区作品 | `components/site/CommunityWall.tsx` |
-| 全部文案（中 / 英） | `messages/zh.json`、`messages/en.json` |
-| 字体 | `components/site/fonts.ts` |
-| 样式、动效 | `styles/globals.css` |
-| 外链配置 | `config/site.ts`（`links.app`、`links.login` 等，由环境变量覆盖） |
+| 内容                | 文件                                                                                                                        |
+| ------------------- | --------------------------------------------------------------------------------------------------------------------------- |
+| 首页板块顺序        | `app/[locale]/page.tsx`                                                                                                     |
+| 顶部导航            | `components/site/SiteHeader.tsx`、`components/site/LangMenu.tsx`                                                            |
+| 首屏                | `components/home/viewport/ViewportHero.tsx`、`components/home/cover/CoverUpload.tsx`、`components/home/cover/coverIntro.ts` |
+| 核心能力            | `components/site/CoreCapabilities.tsx`、`AgentMcp.tsx`、`AgentMarquee.tsx`                                                  |
+| 专为 Agent 设计     | `components/site/AgentsShowcase.tsx`（由 `Sections.tsx › ForAgents` 挂载）                                                  |
+| 应用场景            | `components/site/UseCaseStack.tsx`                                                                                          |
+| 为什么选择          | `components/site/WhyStack.tsx`                                                                                              |
+| 用户证言 / 收尾引导 | `components/site/Sections.tsx`、`FinalReveal.tsx`                                                                           |
+| 社区作品            | `components/site/CommunityWall.tsx`                                                                                         |
+| 全部文案（中 / 英） | `messages/zh.json`、`messages/en.json`                                                                                      |
+| 字体                | `components/site/fonts.ts`                                                                                                  |
+| 样式、动效          | `styles/globals.css`                                                                                                        |
+| 外链配置            | `config/site.ts`（`links.app`、`links.login` 等，由环境变量覆盖）                                                           |
 
 ---
 
@@ -52,14 +52,14 @@ npm run build && npx next start -p 3000
 
 截图里的版本：导航右侧是 `Connect Your Agent` 和 `Sign Up / Log In`；标题是 “AI 3D for You and Your Agents”，“for You and Your Agents” 整段粉色。
 
-| # | 位置 | 截图里 | 现在 | 实现位置 |
-|---|---|---|---|---|
-| 1 | 导航右侧主按钮 | Sign Up / Log In | **开始创作 / Start creating**，跳 `site.links.app`（创作平台首页） | `SiteHeader.tsx`，文案 `common.startCreating` |
-| 2 | 导航右侧次按钮 | Connect Your Agent | **接入 Agent / Connect agent**（描边按钮），跳 `/for-agent` | `SiteHeader.tsx`，文案 `common.connectAgent`。英文措辞待定，见第 5 节 |
-| 3 | 主标题文案 | AI 3D for You and Your Agents | 中：`AI 3D，为你和你的 <Agent>`；英：`AI 3D for You and Your <Agents>`，带尖括号 | `messages/*.json › home.viewport.titleA / titleYou / titleB` |
-| 4 | 主标题配色 | 后半段整段粉色 | 三段颜色：`AI 3D for` 用白色；`You and Your`（中文「你和你的」）是白 → `#e4dbff` 的轻微渐变；`<Agents>` 是 `#d6c8ff` → `#a684ff`（70%）的渐变，是唯一的重点 | `globals.css` 里的 `#hero-title .ht-you` 和 `.ht-word` |
-| 5 | 吉祥物 | 无 | 紫色小精灵从右侧抱住 `<Agents>`，手臂搭在 `>` 上 | 见下面 1.1 |
-| 6 | 英文标题字体 | — | 英文标题用 **Pontano Sans**，中文用 Geist（中文字回退到苹方 / MiSans）。仓库里之前漏加载了 Pontano Sans，已修复（提交 `2423a2c`） | `components/site/fonts.ts` |
+| #   | 位置           | 截图里                        | 现在                                                                                                                                                        | 实现位置                                                              |
+| --- | -------------- | ----------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------- |
+| 1   | 导航右侧主按钮 | Sign Up / Log In              | **开始创作 / Start creating**，跳 `site.links.app`（创作平台首页）                                                                                          | `SiteHeader.tsx`，文案 `common.startCreating`                         |
+| 2   | 导航右侧次按钮 | Connect Your Agent            | **接入 Agent / Connect agent**（描边按钮），跳 `/for-agent`                                                                                                 | `SiteHeader.tsx`，文案 `common.connectAgent`。英文措辞待定，见第 5 节 |
+| 3   | 主标题文案     | AI 3D for You and Your Agents | 中：`AI 3D，为你和你的 <Agent>`；英：`AI 3D for You and Your <Agents>`，带尖括号                                                                            | `messages/*.json › home.viewport.titleA / titleYou / titleB`          |
+| 4   | 主标题配色     | 后半段整段粉色                | 三段颜色：`AI 3D for` 用白色；`You and Your`（中文「你和你的」）是白 → `#e4dbff` 的轻微渐变；`<Agents>` 是 `#d6c8ff` → `#a684ff`（70%）的渐变，是唯一的重点 | `globals.css` 里的 `#hero-title .ht-you` 和 `.ht-word`                |
+| 5   | 吉祥物         | 无                            | 紫色小精灵从右侧抱住 `<Agents>`，手臂搭在 `>` 上                                                                                                            | 见下面 1.1                                                            |
+| 6   | 英文标题字体   | —                             | 英文标题用 **Pontano Sans**，中文用 Geist（中文字回退到苹方 / MiSans）。仓库里之前漏加载了 Pontano Sans，已修复（提交 `2423a2c`）                           | `components/site/fonts.ts`                                            |
 
 ### 1.1 抱住 `<Agents>` 的小精灵
 
@@ -70,9 +70,9 @@ npm run build && npx next start -p 3000
   <h1 id="hero-title">
     <span class="ht-l1">AI 3D for <span class="ht-you">You and Your</span></span>
     <span class="ht-ag">
-      <img class="ht-m ht-hug back" src="/works/hero-mascot.webp" alt="" aria-hidden>
+      <img class="ht-m ht-hug back" src="/works/hero-mascot.webp" alt="" aria-hidden />
       <span class="ht-word">&lt;Agents&gt;</span>
-      <img class="ht-m ht-hug front" src="/works/hero-mascot.webp" alt="" aria-hidden>
+      <img class="ht-m ht-hug front" src="/works/hero-mascot.webp" alt="" aria-hidden />
     </span>
   </h1>
   ```
@@ -80,6 +80,7 @@ npm run build && npx next start -p 3000
   同一张图放两份：
   - `back`（z-index 0）放在文字后面；
   - `front`（z-index 2）用 `clip-path: inset(0 63% 0 0)` 只露出左侧 37%，也就是手臂。这样看起来是“手臂压在字上、身体在字后”。
+
 - **尺寸和位置**（单位 em，跟着标题字号缩放）：
   - `height: 1.12em; right: -1.06em; bottom: -0.1em`；
   - `.ht-ag { margin-right: 1.1em }`，给小精灵留出位置。
@@ -103,21 +104,21 @@ npm run build && npx next start -p 3000
 
 ### 2.1 字体
 
-| | 标题 | 正文 |
-|---|---|---|
+|              | 标题                              | 正文                                |
+| ------------ | --------------------------------- | ----------------------------------- |
 | 中文页 `/zh` | Geist（西文和数字）+ 苹方（中文） | Geist + 苹方，非苹果系统回退 MiSans |
-| 英文页 `/en` | **Pontano Sans** | **Geist** |
+| 英文页 `/en` | **Pontano Sans**                  | **Geist**                           |
 
 - 首屏主标题字重 600，`letter-spacing: -0.02em`。
 - 中文主标题字号 `clamp(2.4rem, 4.45vw, 4rem)`，全宽时约 64px。
 
 ### 2.2 字号（首屏以下各板块统一，只用三档，全是偶数）
 
-| 用途 | 字号 / 行高 |
-|---|---|
-| 板块大标题 | **50 / 56**（英文 40 / 48） |
-| 卡片标题 | **18 / 26** |
-| 说明文字（含板块副标题、卡片说明） | **16 / 28** |
+| 用途                               | 字号 / 行高                 |
+| ---------------------------------- | --------------------------- |
+| 板块大标题                         | **50 / 56**（英文 40 / 48） |
+| 卡片标题                           | **18 / 26**                 |
+| 说明文字（含板块副标题、卡片说明） | **16 / 28**                 |
 
 间距只用这几档：48、32、24、20、16、8。
 
@@ -135,16 +136,16 @@ npm run build && npx next start -p 3000
 
 板块顺序见 `app/[locale]/page.tsx`：
 
-| 顺序 | 板块 | 组件 |
-|---|---|---|
-| 1 | 首屏 | `ViewportHero` |
-| 2 | 核心能力 | `CoreCapabilities`（`#core`） |
-| 3 | 专为 Agent 设计 | `ForAgents`（`#agents`） |
-| 4 | 应用场景 | `UseCaseStack`（`#scenes`） |
-| 5 | 为什么选择 Aholo 3D | `WhyUs`（`#why`） |
-| 6 | 用户证言 | `Testimonials`（`#voices`） |
-| 7 | 社区作品 | `Community`（`#community`） |
-| 8 | 收尾引导 | `FinalCta`（`#start`） |
+| 顺序 | 板块                | 组件                          |
+| ---- | ------------------- | ----------------------------- |
+| 1    | 首屏                | `ViewportHero`                |
+| 2    | 核心能力            | `CoreCapabilities`（`#core`） |
+| 3    | 专为 Agent 设计     | `ForAgents`（`#agents`）      |
+| 4    | 应用场景            | `UseCaseStack`（`#scenes`）   |
+| 5    | 为什么选择 Aholo 3D | `WhyUs`（`#why`）             |
+| 6    | 用户证言            | `Testimonials`（`#voices`）   |
+| 7    | 社区作品            | `Community`（`#community`）   |
+| 8    | 收尾引导            | `FinalCta`（`#start`）        |
 
 ### 3.1 顶部导航 `SiteHeader`
 
@@ -153,22 +154,23 @@ npm run build && npx next start -p 3000
   - 移动端用汉堡菜单打开侧边抽屉。
 - **菜单树**：下拉面板是毛玻璃样式，菜单项不带图标。
 
-  | 一级 | 二级 | 链接 |
-  |---|---|---|
-  | Products 产品 | Editor 编辑器 | `/editor` |
-  | | For Agents 面向 Agent | `/for-agent` |
-  | Features 功能 | Image to 3D 图生 3D | `/features/image-to-3d` |
-  | | Retexture 重新贴图 | `/features/retexture` |
-  | | Animate 动画 | `/features/animate` |
-  | Solutions 解决方案 | Game 游戏 | `/solutions/game` |
-  | | Film 影视 | `/solutions/film` |
-  | | Printing 3D 打印 | `/solutions/printing` |
-  | | Architecture 建筑 | `/solutions/architecture` |
-  | Community 社区 | Gallery 作品库 | `/workspace/gallery` |
-  | | Discord / 社群 | 暂无链接（不可点击） |
-  | Pricing 定价 | — | `/pricing` |
+  | 一级               | 二级                  | 链接                      |
+  | ------------------ | --------------------- | ------------------------- |
+  | Products 产品      | Editor 编辑器         | `/editor`                 |
+  |                    | For Agents 面向 Agent | `/for-agent`              |
+  | Features 功能      | Image to 3D 图生 3D   | `/features/image-to-3d`   |
+  |                    | Retexture 重新贴图    | `/features/retexture`     |
+  |                    | Animate 动画          | `/features/animate`       |
+  | Solutions 解决方案 | Game 游戏             | `/solutions/game`         |
+  |                    | Film 影视             | `/solutions/film`         |
+  |                    | Printing 3D 打印      | `/solutions/printing`     |
+  |                    | Architecture 建筑     | `/solutions/architecture` |
+  | Community 社区     | Gallery 作品库        | `/workspace/gallery`      |
+  |                    | Discord / 社群        | 暂无链接（不可点击）      |
+  | Pricing 定价       | —                     | `/pricing`                |
 
   以上子页面都还没建，目前点进去是 404。
+
 - **右侧操作区**，从左到右：
   1. 「接入 Agent」描边按钮；
   2. 「开始创作」主按钮；
@@ -235,21 +237,26 @@ npm run build && npx next start -p 3000
 
 - **滚动动画**，三张卡片，按滚动进度（0 到 1）推进：
 
-  | 滚动进度 | 发生什么 |
-  |---|---|
-  | .10–.27 | 第一张卡片左移 |
-  | .27–.44 | 第二张卡片进到中间，停住 |
-  | .56–.76 | 第三张卡片直接进到右边的位置 |
-  | .86–.96 | 只有遮罩和文案变化，变成最终的三栏 |
+  | 滚动进度 | 发生什么                           |
+  | -------- | ---------------------------------- |
+  | .10–.27  | 第一张卡片左移                     |
+  | .27–.44  | 第二张卡片进到中间，停住           |
+  | .56–.76  | 第三张卡片直接进到右边的位置       |
+  | .86–.96  | 只有遮罩和文案变化，变成最终的三栏 |
 
 - 宽度不到 560px 或开启“减少动态效果”时，改成静态堆叠。
 - **卡片宽度**：
 
   ```css
-  --w: min(1100px, calc(100vw - 64px), max(720px, calc((100svh - var(--header-h, 64px) - 400px) / .27)));
+  --w: min(
+    1100px,
+    calc(100vw - 64px),
+    max(720px, calc((100svh - var(--header-h, 64px) - 400px) / 0.27))
+  );
   ```
 
   这样在较矮的窗口里，卡片也不会缩得太小。
+
 - **其他**：
   - 背景是点阵；
   - 每张卡片左上角有一个小标签（`.tile-tag`：制作成本 / 制作简便 / 生成质量），不带数字。
@@ -282,14 +289,14 @@ npm run build && npx next start -p 3000
 
 可以在预览页上按 F12 查看。部分补丁是单独的 CSS/JS 文件（通过 Artifact 的 files 列表能拿到）；另一部分直接内联在预览 HTML 里。
 
-| 内容 | 预览里的样子 |
-|---|---|
-| 页脚 | 整站页脚 |
-| 导航社区图标 | 位于地球图标左边：英文页是 Discord 链接（`DISCORD_URL` 还是占位）；中文页悬停弹出社群二维码卡片（`media/community-qr.svg`，二维码是占位） |
-| 支持的 Agent 滚动条 | 换成了真实 logo |
-| 文生 3D 面板 | 基于 `works/text-panel.svg` 的面板 |
-| 图生 3D 面板 | 左侧拆件面板 `media/split-panel.svg` |
-| 其他 | 首屏按钮填充 `media/hero-cta-fill.svg`；Why 区卡片发光；应用场景面板柔光；页面底色改为 `#08070c` |
+| 内容                | 预览里的样子                                                                                                                              |
+| ------------------- | ----------------------------------------------------------------------------------------------------------------------------------------- |
+| 页脚                | 整站页脚                                                                                                                                  |
+| 导航社区图标        | 位于地球图标左边：英文页是 Discord 链接（`DISCORD_URL` 还是占位）；中文页悬停弹出社群二维码卡片（`media/community-qr.svg`，二维码是占位） |
+| 支持的 Agent 滚动条 | 换成了真实 logo                                                                                                                           |
+| 文生 3D 面板        | 基于 `works/text-panel.svg` 的面板                                                                                                        |
+| 图生 3D 面板        | 左侧拆件面板 `media/split-panel.svg`                                                                                                      |
+| 其他                | 首屏按钮填充 `media/hero-cta-fill.svg`；Why 区卡片发光；应用场景面板柔光；页面底色改为 `#08070c`                                          |
 
 ---
 
@@ -311,10 +318,10 @@ npm run build && npx next start -p 3000
 
 ## 6. 最近的相关提交（本分支）
 
-| 提交 | 说明 |
-|---|---|
-| `2423a2c` | 加载 Pontano Sans，修复英文标题字体 |
-| `4d5f242` | 标题 “You and Your” 轻微渐变 |
-| `38005f4` | 导航主按钮改为「开始创作」 |
-| `99db559` | 新主标题 + 抱住 `<Agents>` 的小精灵 |
+| 提交             | 说明                                                          |
+| ---------------- | ------------------------------------------------------------- |
+| `2423a2c`        | 加载 Pontano Sans，修复英文标题字体                           |
+| `4d5f242`        | 标题 “You and Your” 轻微渐变                                  |
+| `38005f4`        | 导航主按钮改为「开始创作」                                    |
+| `99db559`        | 新主标题 + 抱住 `<Agents>` 的小精灵                           |
 | `113aa3d` 及更早 | 导航居中、菜单树、按钮扫光、各板块改版，可以用 `git log` 查看 |
