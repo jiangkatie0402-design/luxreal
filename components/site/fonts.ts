@@ -42,6 +42,7 @@ export const inter = Inter({ subsets: ['latin'], display: 'swap', variable: '--f
 export const fontVariables = [
   titleEn.variable,
   heroTitle.variable,
+  headingEn.variable,
   sans.variable,
   inter.variable,
 ].join(' ');
